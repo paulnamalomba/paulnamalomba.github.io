@@ -1,8 +1,8 @@
-# Paul Namalomba - Software Engineer & Computational Scientist
+# Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/paulnamalomba)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/diversecellar)
-[![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:paul.namalomba@example.com)
+[![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
 > Computational Engineer specializing in materials testing analysis, data engineering, and full-stack development
 
@@ -10,12 +10,13 @@
 
 ## 🚀 About Me
 
-I'm a passionate software engineer and computational scientist with expertise in materials analysis, data engineering, and backend development. Currently working as a **SESKA Computational Engineer** developing advanced material analysis software and **SEAT Backend Developer** building robust Django applications for educational enrollment systems.
+I'm a passionate software engineer and computational engineer with expertise in materials analysis, data engineering, and backend development. Currently working as a **SESKA Computational Engineer** developing advanced material analysis software and **SEAT Backend Developer** building robust Django applications for educational enrollment systems.
 
 ### 🎯 Current Focus
-- **Materials Science Computing**: Developing sophisticated algorithms for LVDT sensor data analysis and materials testing
-- **Backend Development**: Building scalable Django applications with PostgreSQL databases
-- **Data Engineering**: Creating robust pipelines for scientific data processing and analysis
+- **Computational Engineering & Materials Engineering**: Developing finite element analysis tools for advanced materials testing. Computational mechanics, viscoplasticity, and composite materials
+- **Machine Learning & Data Science**: Implementing clustering algorithms, outlier detection, and regression analysis for scientific data
+- **Backend Development**: Building scalable Django applications with PostgreSQL databases. Building Python apps and modules for data processing and analysis
+- **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization
 
 ---
 
@@ -45,6 +46,14 @@ I'm a passionate software engineer and computational scientist with expertise in
 
 ## 🛠️ Technical Skills
 
+### **System Architecture and Operating Systems**
+
+![MinGW64](https://img.shields.io/badge/-MinGW64-54A0FF?style=flat-square)
+![MSYS2](https://img.shields.io/badge/-MSYS2-1E90FF?style=flat-square&logo=windows&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/-Ubuntu-E95420?style=flat-square&logo=ubuntu&logoColor=white)
+![WSL](https://img.shields.io/badge/-WSL-4ECDC4?style=flat-square&logo=windows&logoColor=white)
+![Windows](https://img.shields.io/badge/-Windows-0078D6?style=flat-square&logo=windows&logoColor=white)
+
 ### **Programming Languages**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![C++](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
@@ -66,7 +75,6 @@ I'm a passionate software engineer and computational scientist with expertise in
 ![ScaLAPACK](https://img.shields.io/badge/-ScaLAPACK-96CEB4?style=flat-square)
 ![MUMPS](https://img.shields.io/badge/-MUMPS-FECA57?style=flat-square)
 ![METIS](https://img.shields.io/badge/-METIS-FF9FF3?style=flat-square)
-![MinGW64](https://img.shields.io/badge/-MinGW64-54A0FF?style=flat-square)
 
 ### **Databases & Tools**
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
@@ -86,18 +94,25 @@ I'm a passionate software engineer and computational scientist with expertise in
 
 ## 🔬 Featured Projects
 
-### **Advanced Materials Testing Data Processor**
+### **SESKA Finite Element Analysis Tool**
 *Professional Project - SESKA*
-A comprehensive Python application for analyzing materials testing data with LVDT sensors and strain measurements.
+A sophisticated finite element analysis software written in C++ and Fortran for advanced materials testing and computational mechanics applications.
 
 **Key Features:**
-- Advanced outlier detection using DBSCAN and Isolation Forest
-- Spatial segmentation with slope-change detection
-- LOWESS smoothing with gradient analysis
-- Comprehensive visualization pipeline
-- Robust error handling for real-world data
+- **Material Damage Mechanics**: Advanced algorithms for material failure analysis and damage progression
+- **Viscoplasticity Modeling**: Time-dependent plastic deformation analysis for complex materials
+- **Composite Mechanics**: Specialized routines for multi-phase and fiber-reinforced materials
+- **High-Performance Computing**: Parallel processing with OpenMPI for large-scale simulations
+- **Cross-Platform Support**: Successfully ported to Windows using MSVC++ and MinGW64
+- **HPC Integration**: Deployed and optimized for UCT's High-Performance Computing cluster
 
-**Technologies**: Python, NumPy, SciPy, Pandas, Matplotlib, Seaborn, Scikit-learn, LOWESS
+**Technical Achievements:**
+- **Unique Windows Port**: Challenging implementation leveraging PETSc on Windows with MinGW64
+- **Full-Stack Development**: Complete pipeline from scientific research to programming to computational optimization
+- **CI/CD Management**: Comprehensive version control and deployment on Bitbucket
+- **Library Integration**: Advanced use of OpenMPI, PETSc, MUMPS, ScaLAPACK for parallel computation
+
+**Technologies**: C++, Fortran, PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64, MSVC++, Bitbucket CI/CD, HPC Systems
 
 ---
 
@@ -117,83 +132,130 @@ Django-based web application for managing student enrollment and academic data.
 
 ## 🌟 Personal Projects
 
+### **[Datashadric - Data Science Toolkit](https://github.com/diversecellar/datashadric)**
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyPI](https://img.shields.io/badge/-PyPI-3775A9?style=flat-square&logo=pypi&logoColor=white)
+
+A comprehensive Python package for data science, machine learning, statistical analysis, and visualization. Modularly organized for easy use and pip installation.
+
+**Features:**
+- **Machine Learning**: Naive Bayes models, logistic regression, model evaluation
+- **Statistical Analysis**: Normality testing, confidence intervals, hypothesis testing
+- **Data Manipulation**: Missing value analysis, data cleaning, one-hot encoding
+- **Regression Analysis**: OLS modeling with diagnostic checks
+- **Visualization**: Box plots, histograms, scatter plots, pairplots
+
+**Technologies**: Python, Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, SciPy, Statsmodels
+
+---
+
+### **[Custom IP Masks - Privacy Proxy Server](https://github.com/diversecellar/custom-ip-masks)**
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
+
+A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web browsing and IP masking with advanced privacy features.
+
+**Features:**
+- **IP Masking**: Hide real IP address from target servers
+- **Header Sanitization**: Remove privacy-revealing headers automatically
+- **User-Agent Rotation**: Automatic rotation to avoid detection
+- **Proxy Chaining**: Route traffic through multiple proxy servers
+- **Rate Limiting**: Built-in abuse prevention and stability
+- **SSL/TLS Support**: Secure encrypted connection handling
+
+**Technologies**: Python, Flask, HTTP/HTTPS Protocols, SSL/TLS, Network Security
+
+---
+
+### **[Basketball Scores - Stochastic and Regression-Based Predictor](https://github.com/diversecellar/basketPredictor)**
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+
+Data science project combining **web scraping**, **regression analysis**, and **visualization** for NBA basketball game prediction.
+
+**Features:**
+- **Web scraping** for real-time NBA data
+- **Advanced statistical analysis**
+- **Machine learning regression models**
+- **Data visualization** and analysis
+- **Investment decision support** tools
+
+**Technologies**: Python, Pandas, Scikit-learn, Matplotlib, Web Scraping
+
+---
+
 ### **[Sequential PDF Merger](https://github.com/diversecellar/sequential-pdf-merger)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 
-A sophisticated PDF processing tool with GUI interface for merging multiple PDF files with advanced sorting and organization features.
+A sophisticated **PDF processing tool** with **GUI interface** for merging multiple PDF files with advanced sorting and organization features.
 
 **Features:**
-- Intelligent file sorting algorithms
-- User-friendly Tkinter GUI
-- Batch processing capabilities
-- PowerShell automation support
+- **Intelligent file sorting** algorithms
+- User-friendly **Tkinter GUI**
+- **Batch processing** capabilities
+- **PowerShell automation** support and implementation, for producing .exe files for Windows users
+- **Cross-platform compatibility**: Works on Windows, Linux, and macOS through the shell as well.
+
+**Technologies**: Python, PyMuPDF, PyPDF2, Tkinter
 
 ---
 
 ### **[A3 to A4 Converter](https://github.com/diversecellar/a3toa4-converter)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 
-Automated document processing tool for converting scanned A3 pages to A4 format with intelligent page detection and splitting.
+Automated **document processing tool** for converting scanned A3 pages to A4 format with **intelligent page detection** and splitting.
 
 **Features:**
-- Automated page size detection
-- Smart splitting algorithms
-- Batch processing for large documents
-- Image processing optimization
+- **Automated page size detection**
+- **Smart splitting algorithms** based on page size and content-placement
+- **Batch processing** for large documents
+- **Image processing optimization**
 
----
-
-### **[Basketball Game Predictor](https://github.com/diversecellar/basketPredictor)**
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-
-Data science project combining web scraping, regression analysis, and visualization for NBA basketball game prediction.
-
-**Features:**
-- Web scraping for real-time NBA data
-- Machine learning regression models
-- Data visualization and analysis
-- Investment decision support tools
-
-**Technologies**: Python, Pandas, Scikit-learn, Matplotlib, Web Scraping
+**Technologies**: Python, PyMuPDF, PyPDF2, Tkinter
 
 ---
 
 ### **[Python Data Engineering Collection](https://github.com/diversecellar/python-data-engineering)**
 ![Jupyter](https://img.shields.io/badge/-Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
 
-Comprehensive repository of data engineering projects including SQL, machine learning, AI, and data analysis implementations.
+Comprehensive repository of **data engineering projects** including **SQL**, **machine learning**, **AI**, and **data analysis** implementations.
 
 **Includes:**
-- SQL database design and optimization
-- Machine learning model implementations
-- Data pipeline architectures
-- Analysis notebooks and tutorials
+- **SQL database design** and optimization
+- **Machine learning model** implementations and examples
+- **Data pipeline architectures**
+- **Analysis notebooks** and tutorials
+
+**Technologies**: Python, SQL
 
 ---
 
 ### **[System Management Scripts](https://github.com/diversecellar/system-management_scripts)**
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
 
-Collection of automation scripts for Linux, Windows, and MSYS64 system administration and management.
+Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** system administration and management.
 
 **Features:**
-- Cross-platform compatibility
-- Automated system maintenance
-- Performance monitoring tools
-- Development environment setup
+- **Cross-platform compatibility**
+- **Automated system maintenance**
+- **Performance monitoring** tools
+- **Development environment setup**
+
+**Technologies**: Windows Powershell, Powershell 7+, Bourne-Again Shell
 
 ---
 
 ### **[Simultaneous Equations Solver](https://github.com/diversecellar/simple-simutaneous-equations)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 
-Educational mathematical tool for solving systems of simultaneous equations with user-friendly input interface.
+Educational **mathematical tool** for solving systems of **simultaneous equations** with user-friendly input interface.
 
 **Features:**
-- Multiple equation solving methods
-- Step-by-step solution display
-- Error handling and validation
-- Educational mathematics tool
+- **Multiple equation solving methods** two-variable and three-variable, multiple equation types 
+- **Step-by-step solution display**
+- **Error handling** and validation
+- Cross-platform **Mathematics tool** interactable through shell
+
+**Technologies**: Python Math, NumPy, Linear Algebra
 
 ---
 
