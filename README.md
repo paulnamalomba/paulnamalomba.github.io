@@ -62,6 +62,8 @@ I'm a passionate software engineer and computational engineer with expertise in 
 ![Fortran](https://img.shields.io/badge/-Fortran-734F96?style=flat-square&logo=fortran&logoColor=white)
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
 ![SQL](https://img.shields.io/badge/-SQL-336791?style=flat-square&logo=postgresql&logoColor=white)
+![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
+![Markdown](https://img.shields.io/badge/-Markdown-000000?style=flat-square&logo=markdown&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
 ### **Frameworks & Libraries**
@@ -202,6 +204,9 @@ A comprehensive Python package for data science, machine learning, statistical a
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
+![HTTP](https://img.shields.io/badge/-HTTP-E34F26?style=flat-square&logo=http&logoColor=white)
+![HTTPS](https://img.shields.io/badge/-HTTPS-4CAF50?style=flat-square&logo=https&logoColor=white)
+![Proxy Server](https://img.shields.io/badge/-Proxy%20Server-FF6F61?style=flat-square&logo=proxy&logoColor=white)
 
 A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web browsing and IP masking with advanced privacy features.
 
@@ -270,6 +275,8 @@ Automated **document processing tool** for converting scanned A3 pages to A4 for
 
 ### **[System Management Scripts](https://github.com/paulnamalomba/system-management_scripts)**
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
+![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
+![Windows Batch](https://img.shields.io/badge/-Windows%20Batch-0078D6?style=flat-square&logo=windows&logoColor=white)
 
 Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** system administration and management.
 
@@ -285,6 +292,8 @@ Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** 
 
 ### **[Simultaneous Equations Solver](https://github.com/paulnamalomba/simple-simutaneous-equations)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy)
+![SciPy](https://img.shields.io/badge/-SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white)
 
 Educational **mathematical tool** for solving systems of **simultaneous equations** with user-friendly input interface.
 
