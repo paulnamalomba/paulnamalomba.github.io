@@ -70,11 +70,13 @@ I'm a passionate software engineer and computational engineer with expertise in 
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
 ![Scikit-learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
 ![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557C?style=flat-square&logo=matplotlib&logoColor=white)
-![Seaborn](https://img.shields.io/badge/-Seaborn-4C72B0?style=flat-square)
+![Seaborn](https://img.shields.io/badge/-Seaborn-4C72B0?style=flat-square)</br>
 ![SciPy](https://img.shields.io/badge/-SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white)
 ![Statsmodels](https://img.shields.io/badge/-Statsmodels-4C72B0?style=flat-square)
 ![Apache Superset](https://img.shields.io/badge/-Apache%20Superset-1E90FF?style=flat-square&logo=apache&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
+![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
+![Requests](https://img.shields.io/badge/-Requests-0052CC?style=flat-square&logo=python&logoColor=white)
 
 ### **APIs, Protocols and Endpoints**
 ![REST API](https://img.shields.io/badge/-REST%20API-FF6C37?style=flat-square&logo=rest-api&logoColor=white)
@@ -162,6 +164,7 @@ Django-based web application for managing student enrollment and academic data.
 ![Google Generative AI](https://img.shields.io/badge/-Google%20Generative%20AI-4285F4?style=flat-square&logo=google&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/-OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
 ![Multimodal AI](https://img.shields.io/badge/-Multimodal%20AI-FF6F61?style=flat-square)
+![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
 
 AI-powered data collection and analysis toolkit for stock market investment research using Google Generative AI and OpenAI APIs. Organised to maximise data insights for investment decision-making. Aiming to give the user an interactive AI assistant and DASHBOARD for stock market data analysis.
 
@@ -176,6 +179,10 @@ AI-powered data collection and analysis toolkit for stock market investment rese
 ### **[Datashadric - Data Science Toolkit](https://github.com/paulnamalomba/datashadric)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![PyPI](https://img.shields.io/badge/-PyPI-3775A9?style=flat-square&logo=pypi&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
+![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
+![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557C?style=flat-square&logo=matplotlib&logoColor=white)
+![Seaborn](https://img.shields.io/badge/-Seaborn-4C72B0?style=flat-square)
 
 A comprehensive Python package for data science, machine learning, statistical analysis, and visualization. Modularly organized for easy use and pip installation.
 
@@ -194,6 +201,7 @@ A comprehensive Python package for data science, machine learning, statistical a
 ### **[Custom IP Masks - Privacy Proxy Server](https://github.com/paulnamalomba/custom-ip-masks)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
+![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 
 A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web browsing and IP masking with advanced privacy features.
 
@@ -211,6 +219,10 @@ A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web
 
 ### **[basketPredictor - Stochastic and Regression-Based Predictor](https://github.com/paulnamalomba/basketPredictor)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
+![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
+![Requests](https://img.shields.io/badge/-Requests-0052CC?style=flat-square&logo=python&logoColor=white)
+![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 
 Data science project combining **web scraping**, **regression analysis**, and **visualization** for NBA basketball game prediction.
 
