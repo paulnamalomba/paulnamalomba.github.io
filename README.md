@@ -276,7 +276,7 @@ A comprehensive Python package for data science, machine learning, statistical a
 
 ---
 
-### **[IP-Masquerade - Privacy Proxy Server](https://github.com/paulnamalomba/IP-Masquerade)**
+### **[IP Masquerade - Privacy Proxy Server](https://github.com/paulnamalomba/IP-Masquerade)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
