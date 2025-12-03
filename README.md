@@ -152,6 +152,7 @@ I'm a passionate software engineer and computational engineer with expertise in 
 - **System Administration**: Windows, Linux, automation scripting
 - **Data Engineering**: ETL pipelines, data validation, processing optimization
 - **Backend Development**: Django applications, API-access and integration, PostgreSQL databases
+- **Frontend and Web Development**: React applications, TypeScript, modern UI/UX design with Tailwind CSS
 
 ---
 
@@ -275,7 +276,7 @@ A comprehensive Python package for data science, machine learning, statistical a
 
 ---
 
-### **[Custom IP Masks - Privacy Proxy Server](https://github.com/paulnamalomba/custom-ip-masks)**
+### **[IP-Masquerade - Privacy Proxy Server](https://github.com/paulnamalomba/IP-Masquerade)**
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
