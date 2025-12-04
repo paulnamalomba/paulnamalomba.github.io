@@ -19,11 +19,14 @@ CACHE_FILE = OUTPUT_DIR / 'cache.json'
 # Create output directory
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-# GitHub API headers
-HEADERS = {
-    'Authorization': f'token {GITHUB_TOKEN}',
-    'Accept': 'application/vnd.github.v3+json'
-}
+# GitHub API headers - only include Authorization if token is available
+HEADERS = {'Accept': 'application/vnd.github.v3+json'}
+if GITHUB_TOKEN:
+    HEADERS['Authorization'] = f'token {GITHUB_TOKEN}'
+    print("✓ Using authenticated GitHub API (5,000 req/hour)")
+else:
+    print("⚠️  No GITHUB_TOKEN found - using unauthenticated API (60 req/hour)")
+    print("   Set GITHUB_TOKEN environment variable for higher rate limits")
 
 
 def get_github_stats():
