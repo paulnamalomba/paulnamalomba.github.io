@@ -398,19 +398,13 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ## 📊 GitHub Statistics
 
-<div align="center">
-
 <!-- Self-hosted stats generated daily via GitHub Actions -->
 ![Paul's GitHub Stats](https://raw.githubusercontent.com/paulnamalomba/paulnamalomba.github.io/main/stats/github-stats.svg)
-
 ![Paul's Top Languages](https://raw.githubusercontent.com/paulnamalomba/paulnamalomba.github.io/main/stats/top-languages.svg)
 
 <!-- Fallback to external services -->
 [![Paul's GitHub Streak](https://streak-stats.demolab.com/?user=paulnamalomba&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
-    
 [![Paul's GitHub Trophies](https://github-profile-trophy.vercel.app/?username=paulnamalomba&theme=darkhub&no-frame=true&row=1&column=7)](https://github.com/paulnamalomba)
-
-</div>
 
 ---
 
