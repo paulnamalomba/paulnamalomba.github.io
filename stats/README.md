@@ -36,12 +36,21 @@ To manually trigger stats generation:
 # Install dependencies
 pip install requests Pillow
 
-# Set environment variables
+# Run script (works without token, but has lower rate limits)
+python scripts/generate_stats.py
+
+# OR with token for higher rate limits (optional)
+# Linux/Mac:
 export GITHUB_TOKEN="your_token_here"
 export GITHUB_USERNAME="paulnamalomba"
+python scripts/generate_stats.py
 
-# Run script
+# Windows PowerShell:
+$env:GITHUB_TOKEN="your_token_here"
+$env:GITHUB_USERNAME="paulnamalomba"
 python scripts/generate_stats.py
 ```
 
 The generated SVG files will be in the `stats/` directory.
+
+**Note**: The script works without a token (60 requests/hour) but using a token increases the limit to 5,000 requests/hour.
