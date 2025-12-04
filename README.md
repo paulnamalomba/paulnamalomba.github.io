@@ -398,9 +398,17 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ## 📊 GitHub Statistics
 
-[![My GitHub Stats](https://github-readme-stats.vercel.app/api?username=paulnamalomba&show_icons=true&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
+<div align="center">
+  
+[![GitHub Streak](https://streak-stats.demolab.com/?user=paulnamalomba&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
 
-[![My Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=paulnamalomba&layout=compact&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
+[![Paul's GitHub stats](https://github-readme-stats.vercel.app/api?username=paulnamalomba&show_icons=true&theme=dark&hide_border=true&count_private=true)](https://github.com/paulnamalomba)
+
+[![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=paulnamalomba&layout=compact&theme=dark&hide_border=true&langs_count=8)](https://github.com/paulnamalomba)
+
+[![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=paulnamalomba&theme=darkhub&no-frame=true&row=1&column=7)](https://github.com/paulnamalomba)
+
+</div>
 
 ---
 
