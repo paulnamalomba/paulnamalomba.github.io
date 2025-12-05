@@ -1,26 +1,43 @@
 # Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
 
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/paulnamalomba)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
+[![Resume (CV)](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
-> Computational Engineer specializing in materials testing analysis, data engineering, and full-stack development
+![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square)
+
+> Computational Engineer specializing in Finite Element Analysis R&D, Backend and API Engineering, Data Engineering and Data Science, and most recently Web-stack Development.
+
+## Table of Contents
+
+- [About Me](#about-me)
+- [Professional Experience](#professional-experience)
+- [Technical Skills](#technical-skills)
+- [Featured Projects](#featured-projects)
+- [Personal Projects](#-personal-projects)
+- [Current Learning & Development](#current-learning--development)
+- [Technical Expertise Areas](#technical-expertise-areas)
+- [Additional Resources](#additional-resources)
 
 ---
 
-## 🚀 About Me!
+## About Me!
 
-I'm a passionate software engineer and computational engineer with expertise in materials analysis, data engineering, and backend development. Currently working as a **SESKA Computational Engineer** developing advanced material analysis software and **SEAT Backend Developer** building robust Django applications for educational enrollment systems.
+I'm a passionate Computational Engineer & Software Engineer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel and Netlify.
+
+I am Currently working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
 
 ### 🎯 Current Focus
-- **Computational Engineering & Materials Engineering**: Developing finite element analysis tools for advanced materials testing. Computational mechanics, viscoplasticity, and composite materials
-- **Machine Learning & Data Science**: Implementing clustering algorithms, outlier detection, and regression analysis for scientific data
-- **Backend Development**: Building scalable Django applications with PostgreSQL databases. Building Python apps and modules for data processing and analysis
-- **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization
+
+- **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
+- **Machine Learning & Data Science**: Implementing *machine learning*-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using *Google Generative AI* and *OpenAI* APIs.
+- **Backend Development**: Building scalable *Django* applications with *PostgreSQL* databases. Building *Python* apps and modules for data processing and analysis. Building *RESTful APIs* for data access and integration with *C#*.
+- **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization.
 
 ---
 
-## 💼 Professional Experience
+## Professional Experience
 
 ### **SESKA Computational Engineer**
 
@@ -50,7 +67,7 @@ I'm a passionate software engineer and computational engineer with expertise in 
 
 ---
 
-## 🛠️ Technical Skills
+## Technical Skills
 
 ### **System Architecture and Operating Systems**
 
@@ -156,7 +173,7 @@ I'm a passionate software engineer and computational engineer with expertise in 
 
 ---
 
-## 🔬 Featured Projects
+## Featured Projects
 
 ### **SESKA Finite Element Analysis Software**
 
@@ -398,21 +415,14 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ## 📊 GitHub Statistics
 
-<div align="center">
-  
 [![GitHub Streak](https://streak-stats.demolab.com/?user=paulnamalomba&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
-
 [![Paul's GitHub stats](https://github-readme-stats.vercel.app/api?username=paulnamalomba&show_icons=true&theme=dark&hide_border=true&count_private=true)](https://github.com/paulnamalomba)
-
 [![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=paulnamalomba&layout=compact&theme=dark&hide_border=true&langs_count=8)](https://github.com/paulnamalomba)
-
 [![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=paulnamalomba&theme=darkhub&no-frame=true&row=1&column=7)](https://github.com/paulnamalomba)
-
-</div>
 
 ---
 
-## 🎓 Technical Expertise Areas
+## Technical Expertise Areas
 
 ### **Computational Science**
 - Materials testing and analysis
@@ -440,7 +450,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## 📈 Current Learning & Development
+## Current Learning & Development
 
 - Advanced machine learning techniques for materials science
 - Cloud computing platforms (AWS, Azure)
@@ -456,6 +466,7 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 **Professional Interests:**
 - Materials science computing
+- Backend and API development
 - Data engineering and analytics
 - Scientific software development
 - Educational technology solutions
@@ -463,14 +474,14 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
-## 📄 Additional Resources
+## Additional Resources
 
-- **[📋 Download My CV](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
+- **[📋 Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
 - **[🔗 GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
-- **[💼 LinkedIn](https://linkedin.com/in/paulnamalomba)** - Professional network and updates, and also as a professional instant messaging platform...
+- **[💼 LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional network and updates, and also as a professional instant messaging platform...
 
 ---
 
 *"Combining computational science with practical software engineering to solve real-world problems in materials testing, education, and data analysis."*
 
-![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square)
+<!-- ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square) -->
