@@ -43,8 +43,12 @@ jobs:
       
       - name: Prepare docs directory
         run: |
+          # Remove symlink and create real directory
+          rm -rf main-repo/docs/guides
           mkdir -p main-repo/docs/guides
           cp -r system-management_scripts/guides/* main-repo/docs/guides/ || true
+          # Disable Jekyll processing
+          touch main-repo/.nojekyll
           
       - name: Generate HTML from Markdown
         run: |
