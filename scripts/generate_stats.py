@@ -34,13 +34,18 @@ def get_github_stats():
     
     # Check cache first
     if CACHE_FILE.exists():
-        with open(CACHE_FILE, 'r') as f:
-            cache = json.load(f)
-            cache_time = datetime.fromisoformat(cache['timestamp'])
-            # Use cache if less than 1 hour old
-            if (datetime.now() - cache_time).seconds < 3600:
-                print("Using cached data")
-                return cache['data']
+        try:
+            with open(CACHE_FILE, 'r') as f:
+                cache = json.load(f)
+                cache_time = datetime.fromisoformat(cache['timestamp'])
+                # Use cache if less than 1 hour old
+                if (datetime.now() - cache_time).seconds < 3600:
+                    print("Using cached data")
+                    return cache['data']
+        except (json.JSONDecodeError, KeyError, ValueError) as e:
+            print(f"⚠️  Cache file corrupted, ignoring: {e}")
+            # Delete corrupted cache file
+            CACHE_FILE.unlink()
     
     print("Fetching fresh data from GitHub API...")
     
