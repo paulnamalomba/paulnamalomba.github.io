@@ -5,11 +5,24 @@
 [![Resume (CV)](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
+![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square)
+
 > Computational Engineer specializing in Finite Element Analysis R&D, Backend and API Engineering, Data Engineering and Data Science, and most recently Web-stack Development.
+
+## Table of Contents
+
+- [About Me](#about-me)
+- [Professional Experience](#professional-experience)
+- [Technical Skills](#technical-skills)
+- [Featured Projects](#featured-projects)
+- [Personal Projects](#-personal-projects)
+- [Current Learning & Development](#current-learning--development)
+- [Technical Expertise Areas](#technical-expertise-areas)
+- [Additional Resources](#additional-resources)
 
 ---
 
-## 🚀 About Me!
+## About Me!
 
 I'm a passionate Computational Engineer & Software Engineer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel and Netlify.
 
@@ -24,7 +37,7 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 
 ---
 
-## 💼 Professional Experience
+## Professional Experience
 
 ### **SESKA Computational Engineer**
 
@@ -54,7 +67,7 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 
 ---
 
-## 🛠️ Technical Skills
+## Technical Skills
 
 ### **System Architecture and Operating Systems**
 
@@ -160,7 +173,7 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 
 ---
 
-## 🔬 Featured Projects
+## Featured Projects
 
 ### **SESKA Finite Element Analysis Software**
 
@@ -409,7 +422,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## 🎓 Technical Expertise Areas
+## Technical Expertise Areas
 
 ### **Computational Science**
 - Materials testing and analysis
@@ -437,7 +450,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## 📈 Current Learning & Development
+## Current Learning & Development
 
 - Advanced machine learning techniques for materials science
 - Cloud computing platforms (AWS, Azure)
@@ -453,6 +466,7 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 **Professional Interests:**
 - Materials science computing
+- Backend and API development
 - Data engineering and analytics
 - Scientific software development
 - Educational technology solutions
@@ -460,7 +474,7 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
-## 📄 Additional Resources
+## Additional Resources
 
 - **[📋 Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
 - **[🔗 GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
@@ -470,4 +484,4 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 *"Combining computational science with practical software engineering to solve real-world problems in materials testing, education, and data analysis."*
 
-![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square)
+<!-- ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square) -->
