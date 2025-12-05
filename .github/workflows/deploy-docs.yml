@@ -351,6 +351,101 @@ jobs:
               f.write(full_html)
           PYTHON_SCRIPT
       
+      - name: Generate docs/index.html
+        run: |
+          cd main-repo/docs
+          python3 << 'PYTHON_SCRIPT'
+          import markdown
+          import os
+          
+          # Check if index.md exists
+          if os.path.exists('index.md'):
+              with open('index.md', 'r', encoding='utf-8') as f:
+                  content = f.read()
+              
+              # Remove front matter if present
+              if content.startswith('---'):
+                  parts = content.split('---', 2)
+                  if len(parts) >= 3:
+                      content = parts[2].strip()
+              
+              # Convert markdown links to .html
+              content = content.replace('.md)', '.html)')
+              
+              # Convert to HTML
+              html_content = markdown.markdown(
+                  content, 
+                  extensions=['fenced_code', 'tables', 'toc']
+              )
+              
+              # Create full HTML page
+              full_html = f'''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Technical Documentation - Paul Namalomba</title>
+              <style>
+                  body {{
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                      max-width: 900px;
+                      margin: 0 auto;
+                      padding: 20px;
+                      line-height: 1.6;
+                      color: #24292e;
+                  }}
+                  .nav {{
+                      margin-bottom: 30px;
+                      padding: 10px 0;
+                      border-bottom: 2px solid #0366d6;
+                  }}
+                  .nav a {{
+                      color: #0366d6;
+                      text-decoration: none;
+                      margin-right: 20px;
+                      font-weight: 500;
+                  }}
+                  .nav a:hover {{ text-decoration: underline; }}
+                  h1, h2, h3, h4 {{ 
+                      color: #24292e;
+                      margin-top: 24px;
+                      margin-bottom: 16px;
+                      font-weight: 600;
+                  }}
+                  h1 {{ 
+                      padding-bottom: 0.3em;
+                      border-bottom: 1px solid #eaecef;
+                      font-size: 2em;
+                  }}
+                  h2 {{
+                      padding-bottom: 0.3em;
+                      border-bottom: 1px solid #eaecef;
+                      font-size: 1.5em;
+                  }}
+                  a {{ color: #0366d6; text-decoration: none; }}
+                  a:hover {{ text-decoration: underline; }}
+                  ul {{
+                      padding-left: 2em;
+                  }}
+                  li {{
+                      margin: 0.5em 0;
+                  }}
+              </style>
+          </head>
+          <body>
+              <div class="nav">
+                  <a href="/">Home</a>
+                  <a href="/docs/guides/">Technical Guides</a>
+                  <a href="https://github.com/paulnamalomba" target="_blank">GitHub</a>
+              </div>
+              {html_content}
+          </body>
+          </html>'''
+              
+              with open('index.html', 'w', encoding='utf-8') as f:
+                  f.write(full_html)
+          PYTHON_SCRIPT
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
