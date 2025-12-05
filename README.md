@@ -1,8 +1,6 @@
 # Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
-
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
 [![Resume (CV)](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
