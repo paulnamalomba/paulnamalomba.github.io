@@ -1,9 +1,9 @@
 # Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
 
-[![💼 LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
-[![🔗 GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
-[![📋 Resume](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
-[![📧 Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
+[![Resume (CV)](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
+[![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
 > Computational Engineer specializing in materials testing analysis, data engineering, and full-stack development
 
@@ -14,6 +14,7 @@
 I'm a passionate software engineer and computational engineer with expertise in materials analysis, data engineering, and backend development. Currently working as a **SESKA Computational Engineer** developing advanced material analysis software and **SEAT Backend Developer** building robust Django applications for educational enrollment systems.
 
 ### 🎯 Current Focus
+
 - **Computational Engineering & Materials Engineering**: Developing finite element analysis tools for advanced materials testing. Computational mechanics, viscoplasticity, and composite materials
 - **Machine Learning & Data Science**: Implementing clustering algorithms, outlier detection, and regression analysis for scientific data
 - **Backend Development**: Building scalable Django applications with PostgreSQL databases. Building Python apps and modules for data processing and analysis
@@ -466,7 +467,7 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ## 📄 Additional Resources
 
-- **[📋 Download My Resume](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
+- **[📋 Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
 - **[🔗 GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
 - **[💼 LinkedIn](https://linkedin.com/in/paulnamalomba)** - Professional network and updates, and also as a professional instant messaging platform...
 
