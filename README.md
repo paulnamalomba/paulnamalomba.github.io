@@ -1,6 +1,8 @@
 # Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
+<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
 [![Resume (CV)](https://img.shields.io/badge/-Resume-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
@@ -469,7 +471,7 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 - **[📋 Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
 - **[🔗 GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
-- **[💼 LinkedIn](https://linkedin.com/in/paulnamalomba)** - Professional network and updates, and also as a professional instant messaging platform...
+- **[💼 LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional network and updates, and also as a professional instant messaging platform...
 
 ---
 
