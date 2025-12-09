@@ -18,6 +18,16 @@ Comprehensive power user guides for developers and system administrators coverin
 - **[AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md](guides/AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md)**  
   Azure AD management with Microsoft Graph; service principal automation; conditional access policies; certificate-based auth
 
+### Django Development
+- **[DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md)**  
+  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
+
+- **[DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.md)**  
+  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
+
+- **[DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md)**  
+  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
+
 ### .NET Development
 - **[DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md](guides/DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md)**  
   Password hashing with BCrypt.Net-Next; secure authentication patterns; work factor tuning; ASP.NET Core integration
