@@ -217,8 +217,6 @@ A sophisticated finite element analysis software written in C++ and Fortran for 
 **HPC Libraries**: PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64 
 **Frameworks & Tools**: MSVC++, Bitbucket CI/CD
 
----
-
 ### **SEAT Enrollment Management System**
 
 *Professional Project - Backend Development*
@@ -236,6 +234,27 @@ Django-based web application for managing student enrollment and academic data.
 **Architectures & Technologies**: Rocky Linux, Windows
 **Back-end**: Python, Django
 **Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Celery
+
+### **Ecoride Ride-Sharing App (Android + iOS)**
+
+*Professional Project - Backend & API Development*
+C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
+
+**Key Features:**
+
+- User authentication and role management, custom Auth API with JWT
+- API documentation with Swagger UI
+- API endpoints for ride management with full, hard Google Maps API integration
+- SignalR for real-time ride tracking and updates across driver and user clients 
+- RESTful API design for enrollment management
+- PostgreSQL database with optimized schemas
+- Data validation and integrity checks
+- Scalability with Kubernetes and Docker CI/CD pipelines
+- Plan to push up to Google Cloud run + SQL for production deployment
+
+**Architectures & Technologies**: Windows, Docker, Google Cloud Run
+**Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core
+**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR
 
 ---
 
