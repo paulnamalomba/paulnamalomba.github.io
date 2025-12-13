@@ -161,7 +161,6 @@ function Invoke-GitCommit {
     Write-Host "  ..." -ForegroundColor DarkGray
     Write-Host ""
     
-<<<<<<< HEAD
     # Ensure there are staged changes. If none, stage all changes automatically.
     git diff --staged --quiet
     if ($LASTEXITCODE -eq 0) {
@@ -177,24 +176,16 @@ function Invoke-GitCommit {
     $exit = $LASTEXITCODE
 
     if ($exit -eq 0) {
-=======
-    git commit -F $commitMessageFile
-    
-    if ($LASTEXITCODE -eq 0) {
->>>>>>> 13bd65141442a3ae7f1df2086d1d3cbdb9d336a3
         Write-Success "Commit created successfully"
         return $true
     } else {
         Write-Error "Failed to create commit"
-<<<<<<< HEAD
         Write-Host "--- git commit output ---" -ForegroundColor DarkGray
         Write-Host $commitCmdOutput
         Write-Host "--- git status ---" -ForegroundColor DarkGray
         git status --short
         Write-Host "--- staged diff ---" -ForegroundColor DarkGray
         git diff --staged --name-only
-=======
->>>>>>> 13bd65141442a3ae7f1df2086d1d3cbdb9d336a3
         return $false
     }
 }
