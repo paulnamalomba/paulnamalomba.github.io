@@ -161,13 +161,31 @@ function Invoke-GitCommit {
     Write-Host "  ..." -ForegroundColor DarkGray
     Write-Host ""
     
-    git commit -F $commitMessageFile
-    
+    # Ensure there are staged changes. If none, stage all changes automatically.
+    git diff --staged --quiet
     if ($LASTEXITCODE -eq 0) {
+        Write-Warning "No staged changes detected. Staging all changes before commit."
+        if (-not (Invoke-GitAdd)) {
+            Write-Error "Failed to stage changes; aborting commit."
+            return $false
+        }
+    }
+
+    # Quote the commit message file path to handle spaces
+    $commitCmdOutput = & git commit -F "$commitMessageFile" 2>&1
+    $exit = $LASTEXITCODE
+
+    if ($exit -eq 0) {
         Write-Success "Commit created successfully"
         return $true
     } else {
         Write-Error "Failed to create commit"
+        Write-Host "--- git commit output ---" -ForegroundColor DarkGray
+        Write-Host $commitCmdOutput
+        Write-Host "--- git status ---" -ForegroundColor DarkGray
+        git status --short
+        Write-Host "--- staged diff ---" -ForegroundColor DarkGray
+        git diff --staged --name-only
         return $false
     }
 }
