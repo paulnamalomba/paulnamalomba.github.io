@@ -9,17 +9,20 @@
 
 > Computational Engineer specializing in Finite Element Analysis R&D, Backend and API Engineering, Data Engineering and Data Science, and most recently Web-stack Development.
 
-## Table of Contents
+## Contents
 
 - [About Me](#about-me)
 - [Professional Experience](#professional-experience)
 - [Technical Skills](#technical-skills)
 - [Featured Projects](#featured-projects)
 - [Personal Projects](#-personal-projects)
+- [System Management Scripts & Guides](#system-management_scripts)
 - [Current Learning & Development](#current-learning--development)
 - [Technical Expertise Areas](#technical-expertise-areas)
+- [Referees](#referees)
 - [Additional Resources](#additional-resources)
-
+- [Let's Connect](#lets-connect)
+  
 ---
 
 ## About Me!
@@ -28,7 +31,7 @@ I'm a passionate Computational Engineer & Software Engineer with expertise in Fi
 
 I am Currently working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
 
-### 🎯 Current Focus
+### Current Focus!
 
 - **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
 - **Machine Learning & Data Science**: Implementing *machine learning*-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using *Google Generative AI* and *OpenAI* APIs.
@@ -64,6 +67,19 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 - Implement data validation and integrity checks
 
 **Key Technologies**: Python, Django, PostgreSQL, REST APIs, Git
+
+### **Lead Backend Developer - Ecoride Malawi**
+
+*Previous Position* (<span style="color:green">[**Dec 2025 - Jan 2026**]</span>)
+
+- Developed backend services for ride-sharing application
+- OpenAPI compliant RESTful API development
+- API docs served with Swagger UI, with COMPLETE test coverage and documentation
+- Implemented JWT authentication and role-based access control
+- Database schema design and optimization for ride and user data
+- Collaborated with front-end developers for seamless integration
+
+**Key Technologies**: C#, .NET 8/9, .NET ASP and EF Core, PostgreSQL, REST APIs, JWT, Swagger, Git, Docker CI/CD
 
 ---
 
@@ -223,9 +239,10 @@ Django-based web application for managing student enrollment and academic data.
 
 ---
 
-## 🌟 Personal Projects
+## Personal Projects
 
 ### **[Smart Lame Parameter Calculator](https://github.com/paulnamalomba/SmartLameParameters)**
+
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
@@ -253,6 +270,7 @@ A production-ready React web application that **smartly cross-calculates linear 
 **Deployment**: Vercel, GitHub Actions CI/CD, Netlify
 
 ### **[MSE AI Agents - AI-Driven Data Collection and Analysis for Stock Market Investment](https://github.com/paulnamalomba/mse-ai-agents)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Google Generative AI](https://img.shields.io/badge/-Google%20Generative%20AI-4285F4?style=flat-square&logo=google&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/-OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
@@ -271,6 +289,7 @@ AI-powered data collection and analysis toolkit for stock market investment rese
 - **Investment Insights**: Tailored insights to support informed investment decisions
 
 ### **[Datashadric - Data Science Toolkit](https://github.com/paulnamalomba/datashadric)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![PyPI](https://img.shields.io/badge/-PyPI-3775A9?style=flat-square&logo=pypi&logoColor=white)
 ![Scikit-learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
@@ -294,6 +313,7 @@ A comprehensive Python package for data science, machine learning, statistical a
 ---
 
 ### **[IP Masquerade - Privacy Proxy Server](https://github.com/paulnamalomba/IP-Masquerade)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
@@ -317,6 +337,7 @@ A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web
 ---
 
 ### **[basketPredictor - Stochastic and Regression-Based Predictor](https://github.com/paulnamalomba/basketPredictor)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
 ![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
@@ -338,6 +359,7 @@ Data science project combining **web scraping**, **regression analysis**, and **
 ---
 
 ### **[Sequential PDF Merger](https://github.com/paulnamalomba/sequential-pdf-merger)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/-Tkinter-FF6F61?style=flat-square)
 ![PyMuPDF](https://img.shields.io/badge/-PyMuPDF-FF6F61?style=flat-square)
@@ -359,6 +381,7 @@ A sophisticated **PDF processing tool** with **GUI interface** for merging multi
 ---
 
 ### **[A3 to A4 Converter](https://github.com/paulnamalomba/a3toa4-converter)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/-Tkinter-FF6F61?style=flat-square)
 ![PyMuPDF](https://img.shields.io/badge/-PyMuPDF-FF6F61?style=flat-square)
@@ -379,6 +402,7 @@ Automated **document processing tool** for converting scanned A3 pages to A4 for
 ---
 
 ### **[System Management Scripts](https://github.com/paulnamalomba/system-management_scripts)**
+
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
 ![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
 ![Windows Batch](https://img.shields.io/badge/-Windows%20Batch-0078D6?style=flat-square&logo=windows&logoColor=white)
@@ -394,9 +418,18 @@ Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** 
 
 **Technologies**: Windows Powershell, Powershell 7+, Bourne-Again Shell
 
+**Related Guides:**
+You can find my guides and scripts regarding system management and automation in the following categories:
+
+1. **Technical Documentation**: Comprehensive power user guides for backend engineers, platform engineers, security engineers, and SREs covering enterprise-level technologies. DIRECT LINK: [Technical Documentation Repository](https://paulnamalomba.github.io/docs/guides/)
+2. **Automation Scripts**: Production-ready PowerShell scripts for Windows system management, file operations, GitHub workflows, and development automation. DIRECT LINK: [Automation Scripts Repository](https://paulnamalomba.github.io/docs/system-scripts/)
+
+All guides follow a consistent template with quickstart instructions, key concepts, configuration best practices, security considerations, detailed examples, troubleshooting tips, and performance tuning recommendations.
+
 ---
 
 ### **[Simultaneous Equations Solver](https://github.com/paulnamalomba/simple-simutaneous-equations)**
+
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy)
 ![SciPy](https://img.shields.io/badge/-SciPy-8CAAE6?style=flat-square&logo=scipy&logoColor=white)
@@ -460,7 +493,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## 📞 Let's Connect
+## Let's Connect
 
 I'm always interested in discussing new opportunities, collaboration on interesting projects, or sharing knowledge about computational science and software development.
 
@@ -474,11 +507,58 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
+## Referees
+
+### **Prof. Sebastian Skatulla**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  - Professor of Computational Mechanics (UCT)
+  - Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT)
+  - Director at Polar Engineering Research Group (UCT)
+- **Email:**
+  - `sebastian.skatulla@uct.ac.za`
+
+### **Mr. Mphatso Zangalama**
+
+- **Institution:** Ecoride Malawi
+- **Roles:**
+  - Operations Manager (Ecoride Malawi)
+- **Email:**
+  - `mzangalama@gmail.com`
+
+### **Mr. Theo Armstrong**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  - Laboratory Administrator (UCT)
+- **Email:**
+  - `theo.armstrong@uct.ac.za`
+
+### **Ms. Ayesha Dalwai**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  - Departmental Manager (UCT)
+- **Email:**
+  - `ayesha.dalwai@uct.ac.za`
+
+### **Dr. John Okedi**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  - Senior Lecturer (UCT)
+  - Programme Convenor (UCT Civil Engineering)
+- **Email:**
+  - `john.okedi@uct.ac.za`
+
+---
+
 ## Additional Resources
 
-- **[📋 Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
-- **[🔗 GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
-- **[💼 LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional network and updates, and also as a professional instant messaging platform...
+- **[Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
+- **[GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
+- **[LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional network and updates, and also as a professional instant messaging platform...
 
 ---
 
