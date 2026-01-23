@@ -1,4 +1,4 @@
-# Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist
+# Paul Namalomba - Computational Engineer, Full-Stack Software Developer & Materials Scientist
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
@@ -11,36 +11,51 @@
 
 ## Contents
 
-- [About Me](#about-me)
-- [Professional Experience](#professional-experience)
-- [Technical Skills](#technical-skills)
-- [Featured Projects](#featured-projects)
-- [Personal Projects](#-personal-projects)
-- [System Management Scripts & Guides](#system-management_scripts)
-- [Current Learning & Development](#current-learning--development)
-- [Technical Expertise Areas](#technical-expertise-areas)
-- [Referees](#referees)
-- [Additional Resources](#additional-resources)
-- [Let's Connect](#lets-connect)
+- [Paul Namalomba - Computational Engineer, Full-Stack Software Developer & Materials Scientist](#paul-namalomba---computational-engineer-full-stack-software-developer--materials-scientist)
+  - [Contents](#contents)
+  - [About Me!](#about-me)
+  - [Current Focus!](#current-focus)
+  - [Professional Experience](#professional-experience)
+  - [Technical Skills](#technical-skills)
+  - [Featured Projects](#featured-projects)
+  - [Personal Projects](#personal-projects)
+  - [📊 GitHub Statistics](#-github-statistics)
+  - [Technical Expertise Areas](#technical-expertise-areas)
+  - [Current Learning & Development](#current-learning--development)
   
 ---
 
 ## About Me!
 
-I'm a passionate Computational Engineer & Software Engineer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel and Netlify.
+I'm a passionate Computational Engineer & Full-Stack Software Developer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel, Cloud Deplyment with Google Cloud Run, Azure Virtual Machines and Netlify. have experience with **High-Performance Computing (HPC)**, having developed and optimized scientific computing software using **PETSc**, **OpenMPI**, **MUMPS**, **ScaLAPACK**, and other HPC libraries for parallel processing of large-scale simulations. As I am currently.
 
-I am Currently working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
+I currently asm working for a startup called ComputeMore Africa as a **Lead Backend Developer & Chief Innovation Officer** on contract basis, building and maintaining robust C# .NET backend services and APIs for their ride-sharing mobile application, with full Google Maps API integration, JWT authentication, and real-time ride tracking using SignalR. Also working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
 
-### Current Focus!
+---
 
-- **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
-- **Machine Learning & Data Science**: Implementing *machine learning*-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using *Google Generative AI* and *OpenAI* APIs.
+## Current Focus!
+
 - **Backend Development**: Building scalable *Django* applications with *PostgreSQL* databases. Building *Python* apps and modules for data processing and analysis. Building *RESTful APIs* for data access and integration with *C#*.
+- **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
 - **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization.
+- **Machine Learning & Data Science**: Implementing *machine learning*-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using *Google Generative AI* and *OpenAI* APIs.
 
 ---
 
 ## Professional Experience
+
+### **Chief Innovation Officer & Lead Backend Engineer - ComputeMore Africa Technologies**
+
+*Current Position* (<span style="color:green">[**Oct 2025 - present**]</span>)
+
+- Developed backend services for ride-sharing application
+- OpenAPI compliant RESTful API development
+- API docs served with Swagger UI, with COMPLETE test coverage and documentation
+- Implemented JWT authentication and role-based access control
+- Database schema design and optimization for ride and user data
+- Collaborated with front-end developers for seamless integration
+
+**Key Technologies**: C#, .NET 8/9, .NET ASP and EF Core, PostgreSQL, REST APIs, JWT, Swagger, Git, Docker CI/CD
 
 ### **SESKA Computational Engineer**
 
@@ -55,7 +70,7 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 
 **Key Technologies**: C++, Fortran, PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64, Bitbucket CI/CD
 
-### **SEAT Backend Developer**
+### **SEAT Backend Developer | SEAT Backend Development Consultant**
 
 *Current Position* (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 - July 2025, Nov 2025 - Feb 2026**]</span>)
 
@@ -67,19 +82,6 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 - Implement data validation and integrity checks
 
 **Key Technologies**: Python, Django, PostgreSQL, REST APIs, Git
-
-### **Lead Backend Developer - Ecoride Malawi**
-
-*Previous Position* (<span style="color:green">[**Dec 2025 - Jan 2026**]</span>)
-
-- Developed backend services for ride-sharing application
-- OpenAPI compliant RESTful API development
-- API docs served with Swagger UI, with COMPLETE test coverage and documentation
-- Implemented JWT authentication and role-based access control
-- Database schema design and optimization for ride and user data
-- Collaborated with front-end developers for seamless integration
-
-**Key Technologies**: C#, .NET 8/9, .NET ASP and EF Core, PostgreSQL, REST APIs, JWT, Swagger, Git, Docker CI/CD
 
 ---
 
@@ -106,6 +108,8 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![C++](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
 ![C#](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=c-sharp&logoColor=white)
+![ASP.NET](https://img.shields.io/badge/-ASP.NET-512BD4?style=flat-square&logo=aspdotnet&logoColor=white)
+![SignalR](https://img.shields.io/badge/-SignalR-512BD4?style=flat-square&logo=signalr&logoColor=white)
 ![Fortran](https://img.shields.io/badge/-Fortran-734F96?style=flat-square&logo=fortran&logoColor=white)
 ![SQL](https://img.shields.io/badge/-SQL-336791?style=flat-square&logo=postgresql&logoColor=white)
 
@@ -120,10 +124,11 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 
 ### **Frameworks & Libraries**
 
-![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F61?style=flat-square&logo=tensorflow&logoColor=white)
+<!-- ![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F61?style=flat-square&logo=tensorflow&logoColor=white) -->
 ![Django](https://img.shields.io/badge/-Django-092E20?style=flat-square&logo=django)
 ![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy)
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
+![RabbitMQ](https://img.shields.io/badge/-RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
 ![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557C?style=flat-square&logo=matplotlib&logoColor=white)
 ![Seaborn](https://img.shields.io/badge/-Seaborn-4C72B0?style=flat-square)</br>
@@ -163,6 +168,7 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
 ![pgAdmin](https://img.shields.io/badge/-pgAdmin-336791?style=flat-square&logo=postgresql&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)
+![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 ![Apache Kafka](https://img.shields.io/badge/-Apache%20Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
 
 ### **Containerization, Integration & Deployment**
@@ -190,6 +196,27 @@ I am Currently working as **SESKA Computational Engineer** at University of Cape
 ---
 
 ## Featured Projects
+
+### **Ecoride Ride-Sharing App (Android + iOS + Admin Dashboard + Web Services)**
+
+*Professional Project - Backend & API Development*
+C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
+
+**Key Features:**
+
+- User authentication and role management, custom Auth API with JWT
+- API documentation with Swagger UI
+- API endpoints for ride management with full, hard Google Maps API integration
+- SignalR for real-time ride tracking and updates across driver and user clients 
+- RESTful API design for enrollment management
+- PostgreSQL database with optimized schemas
+- Data validation and integrity checks
+- Scalability with Kubernetes and Docker CI/CD pipelines
+- Plan to push up to Google Cloud run + SQL for production deployment
+
+**Architectures & Technologies**: Windows, Docker, Google Cloud Run
+**Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core
+**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR
 
 ### **SESKA Finite Element Analysis Software**
 
@@ -234,27 +261,6 @@ Django-based web application for managing student enrollment and academic data.
 **Architectures & Technologies**: Rocky Linux, Windows
 **Back-end**: Python, Django
 **Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Celery
-
-### **Ecoride Ride-Sharing App (Android + iOS)**
-
-*Professional Project - Backend & API Development*
-C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
-
-**Key Features:**
-
-- User authentication and role management, custom Auth API with JWT
-- API documentation with Swagger UI
-- API endpoints for ride management with full, hard Google Maps API integration
-- SignalR for real-time ride tracking and updates across driver and user clients 
-- RESTful API design for enrollment management
-- PostgreSQL database with optimized schemas
-- Data validation and integrity checks
-- Scalability with Kubernetes and Docker CI/CD pipelines
-- Plan to push up to Google Cloud run + SQL for production deployment
-
-**Architectures & Technologies**: Windows, Docker, Google Cloud Run
-**Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core
-**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR
 
 ---
 
