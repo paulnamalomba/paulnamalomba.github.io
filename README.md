@@ -11,18 +11,17 @@
 
 ## Contents
 
-- [Paul Namalomba - Computational Engineer, Full-Stack Software Developer & Materials Scientist](#paul-namalomba---computational-engineer-full-stack-software-developer--materials-scientist)
-  - [Contents](#contents)
-  - [About Me!](#about-me)
-  - [Current Focus!](#current-focus)
-  - [Professional Experience](#professional-experience)
-  - [Technical Skills](#technical-skills)
-  - [Featured Projects](#featured-projects)
-  - [Personal Projects](#personal-projects)
-  - [📊 GitHub Statistics](#-github-statistics)
-  - [Technical Expertise Areas](#technical-expertise-areas)
-  - [Current Learning & Development](#current-learning--development)
-  
+- [Contents](#contents)
+- [About Me!](#about-me)
+- [Current Focus!](#current-focus)
+- [Professional Experience](#professional-experience)
+- [Technical Skills](#technical-skills)
+- [Featured Projects](#featured-projects)
+- [Personal Projects](#personal-projects)
+- [📊 GitHub Statistics](#-github-statistics)
+- [Technical Expertise Areas](#technical-expertise-areas)
+- [Current Learning & Development](#current-learning--development)
+
 ---
 
 ## About Me!
@@ -538,44 +537,44 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  - Professor of Computational Mechanics (UCT)
-  - Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT)
-  - Director at Polar Engineering Research Group (UCT)
+  > Professor of Computational Mechanics (UCT)
+  > Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT)
+  > Director at Polar Engineering Research Group (UCT)
 - **Email:**
-  - `sebastian.skatulla@uct.ac.za`
+  > `sebastian.skatulla@uct.ac.za`
 
 ### **Mr. Mphatso Zangalama**
 
 - **Institution:** Ecoride Malawi
 - **Roles:**
-  - Operations Manager (Ecoride Malawi)
+  > Operations Manager (Ecoride Malawi)
 - **Email:**
-  - `mzangalama@gmail.com`
+  > `mzangalama@gmail.com`
 
 ### **Mr. Theo Armstrong**
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  - Laboratory Administrator (UCT)
+  > Laboratory Administrator (UCT)
 - **Email:**
-  - `theo.armstrong@uct.ac.za`
+  > `theo.armstrong@uct.ac.za`
 
 ### **Ms. Ayesha Dalwai**
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  - Departmental Manager (UCT)
+  > Departmental Manager (UCT)
 - **Email:**
-  - `ayesha.dalwai@uct.ac.za`
+  > `ayesha.dalwai@uct.ac.za`
 
 ### **Dr. John Okedi**
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  - Senior Lecturer (UCT)
-  - Programme Convenor (UCT Civil Engineering)
+  > Senior Lecturer (UCT)
+  > Programme Convenor (UCT Civil Engineering)
 - **Email:**
-  - `john.okedi@uct.ac.za`
+  > `john.okedi@uct.ac.za`
 
 ---
 
@@ -587,6 +586,6 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
-*"Combining computational science with practical software engineering to solve real-world problems in materials testing, education, and data analysis."*
+*"Combining computational science with practical software engineering to solve real-world problems and drive digital innovation."*
 
 <!-- ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square) -->
