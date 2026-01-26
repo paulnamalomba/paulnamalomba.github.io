@@ -101,6 +101,8 @@ I currently asm working for a startup called ComputeMore Africa as a **Lead Back
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
 ![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
 ![Markdown](https://img.shields.io/badge/-Markdown-000000?style=flat-square&logo=markdown&logoColor=white)
+![YAML](https://img.shields.io/badge/-YAML-000000?style=flat-square&logo=yaml&logoColor=white)
+![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)
 
 ### **Back-end Programming Languages**
 
@@ -198,7 +200,7 @@ I currently asm working for a startup called ComputeMore Africa as a **Lead Back
 
 ### **Ecoride Ride-Sharing App (Android + iOS + Admin Dashboard + Web Services)**
 
-*Professional Project - Backend & API Development*
+*Professional Project - Backend & API Development, Flutter Apps for Android and iOS*
 C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
 
 **Key Features:**
@@ -213,9 +215,11 @@ C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL
 - Scalability with Kubernetes and Docker CI/CD pipelines
 - Plan to push up to Google Cloud run + SQL for production deployment
 
-**Architectures & Technologies**: Windows, Docker, Google Cloud Run
+**Architectures & Technologies**: Windows, Docker, Google Cloud Run, Azure VM
 **Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core
+**Notifications**: Firebase Cloud Messaging (FCM), Resend, AfricasTalking
 **Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR
+**Demo Video**: [Ecoride Rider & Driver Apps v 1.0.03](https://youtu.be/8YTFLHxE1Is)
 
 ### **SESKA Finite Element Analysis Software**
 
@@ -507,39 +511,19 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## Current Learning & Development
-
-- Advanced machine learning techniques for materials science
-- Cloud computing platforms (AWS, Azure)
-- Microservices architecture
-- DevOps and CI/CD pipelines
-- Advanced PostgreSQL optimization
-
----
-
-## Let's Connect
-
-I'm always interested in discussing new opportunities, collaboration on interesting projects, or sharing knowledge about computational science and software development.
-
-**Professional Interests:**
-- Materials science computing
-- Backend and API development
-- Data engineering and analytics
-- Scientific software development
-- Educational technology solutions
-- Open source contributions
-
----
-
 ## Referees
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
 
 ### **Prof. Sebastian Skatulla**
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  > Professor of Computational Mechanics (UCT)
-  > Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT)
-  > Director at Polar Engineering Research Group (UCT)
+  > Professor of Computational Mechanics (UCT Civil Engineering)
+  > Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT Civil Engineering)
+  > Director at Polar Engineering Research Group (UCT Civil Engineering)
 - **Email:**
   > `sebastian.skatulla@uct.ac.za`
 
@@ -555,9 +539,28 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  > Laboratory Administrator (UCT)
+  > Laboratory Administrator (Student Computing Services UCT)
 - **Email:**
   > `theo.armstrong@uct.ac.za`
+
+### **Mr. Sibonelo Twala**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  > Senior Systems Engineer (Workplace Services UCT)
+- **Email:**
+  > `sibonelo.twala@uct.ac.za`
+
+    </td>
+    <td width="50%" valign="top">
+
+### **Ms. Celeste Wilson**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  > Deputy Faculty Manager (UCT)
+- **Email:**
+  > `celeste.wilson@uct.ac.za`
 
 ### **Ms. Ayesha Dalwai**
 
@@ -567,14 +570,60 @@ I'm always interested in discussing new opportunities, collaboration on interest
 - **Email:**
   > `ayesha.dalwai@uct.ac.za`
 
+### **Dr. Maxime Nutte**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  > Postdoctoral Fellow(UCT Civil Engineering)
+- **Email:**
+  > `maxime.nutte@uct.ac.za`
+
 ### **Dr. John Okedi**
 
 - **Institution:** University of Cape Town (UCT)
 - **Roles:**
-  > Senior Lecturer (UCT)
+  > Senior Lecturer (UCT Civil Engineering)
   > Programme Convenor (UCT Civil Engineering)
 - **Email:**
   > `john.okedi@uct.ac.za`
+
+### **Dr. Keith MacHutchon**
+
+- **Institution:** University of Cape Town (UCT)
+- **Roles:**
+  > Senior Lecturer (UCT Civil Engineering)
+  > Programme Convenor (UCT Civil Engineering)
+- **Email:**
+  > `keith.machutchon@uct.ac.za`
+
+    </td>
+  </tr>
+</table>
+
+---
+
+## Current Learning & Development
+
+- Advanced machine learning techniques for materials science (Google Gemma Visual Data Analysis and Exploration)
+- Cloud computing platforms (AWS, Azure, Google Cloud, Cloudflare)
+- Microservices architecture and distributed systems
+- DevOps and CI/CD pipelines for C#/.NET applications
+- Advanced Docker and Kubernetes orchestration
+- Advanced PostgreSQL workflow optimization with *MPI*
+
+---
+
+## Let's Connect
+
+I'm always interested in discussing new opportunities, collaboration on interesting projects, or sharing knowledge about computational science and software development.
+
+**Professional Interests:**
+- Materials science computing
+- Backend and API development
+- Data engineering and analytics
+- Scientific software development
+- Educational technology solutions
+- Open source contributions
 
 ---
 
