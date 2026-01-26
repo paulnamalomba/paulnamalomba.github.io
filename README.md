@@ -215,10 +215,10 @@ C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL
 - Scalability with Kubernetes and Docker CI/CD pipelines
 - Plan to push up to Google Cloud run + SQL for production deployment
 
-**Architectures & Technologies**: Windows, Docker, Google Cloud Run, Azure VM
-**Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core
-**Notifications**: Firebase Cloud Messaging (FCM), Resend, AfricasTalking
-**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR
+**Architectures & Technologies**: Windows, Docker, Google Cloud Run, Azure VM<br>
+**Back-end**: C#, .NET 8/9, ASP.NET Core, EF Core<br>
+**Notifications**: Firebase Cloud Messaging (FCM), Resend, AfricasTalking<br>
+**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR<br>
 **Demo Video**: [Ecoride Rider & Driver Apps v 1.0.03](https://youtu.be/8YTFLHxE1Is)
 
 ### **SESKA Finite Element Analysis Software**
@@ -242,10 +242,10 @@ A sophisticated finite element analysis software written in C++ and Fortran for 
 - **CI/CD Management**: Comprehensive version control and deployment on Bitbucket
 - **Library Integration**: Advanced use of OpenMPI, PETSc, MUMPS, ScaLAPACK for parallel computation
 
-**Architecture & Technologies:** Windows, Linux, Cygwin64
-**Back-end**: C++, Fortran, 
-**HPC Libraries**: PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64 
-**Frameworks & Tools**: MSVC++, Bitbucket CI/CD
+**Architecture & Technologies:** Windows, Linux, Cygwin64<br>
+**Back-end**: C++, Fortran, <br>
+**HPC Libraries**: PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64 <br>
+**Frameworks & Tools**: MSVC++, Bitbucket CI/CD<br>
 
 ### **SEAT Enrollment Management System**
 
@@ -261,9 +261,9 @@ Django-based web application for managing student enrollment and academic data.
 - Data validation and integrity checks
 - Scalable architecture for educational institutions
 
-**Architectures & Technologies**: Rocky Linux, Windows
-**Back-end**: Python, Django
-**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Celery
+**Architectures & Technologies**: Rocky Linux, Windows<br>
+**Back-end**: Python, Django<br>
+**Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Celery<br>
 
 ---
 
@@ -293,9 +293,9 @@ A production-ready React web application that **smartly cross-calculates linear 
 - **100% TypeScript** with comprehensive type safety
 - **80%+ test coverage** with Jest and React Testing Library
 
-**Front-End Technologies**: TypeScript, React, Vite, Tailwind CSS
-**Testing**: Jest, React Testing Library
-**Deployment**: Vercel, GitHub Actions CI/CD, Netlify
+**Front-End Technologies**: TypeScript, React, Vite, Tailwind CSS<br>
+**Testing**: Jest, React Testing Library<br>
+**Deployment**: Vercel, GitHub Actions CI/CD, Netlify<br>
 
 ### **[MSE AI Agents - AI-Driven Data Collection and Analysis for Stock Market Investment](https://github.com/paulnamalomba/mse-ai-agents)**
 
@@ -513,88 +513,82 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ## Referees
 
-<table>
+## Referees
+
+<!-- NOTE: GitHub does not render Markdown inside HTML blocks like <table>. Use HTML inside the <td> cells. -->
+<table width="100%">
   <tr>
     <td width="50%" valign="top">
 
-### **Prof. Sebastian Skatulla**
+      <h3><strong>Prof. Sebastian Skatulla</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Professor of Computational Mechanics (UCT Civil Engineering)<br>
+        Principal Innovator and Lead Developer, <em>SESKA</em> and <em>SEAT</em> (UCT Civil Engineering)<br>
+        Director at Polar Engineering Research Group (UCT Civil Engineering)
+      </p>
+      <p><strong>Email:</strong> <code>sebastian.skatulla@uct.ac.za</code></p>
 
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Professor of Computational Mechanics (UCT Civil Engineering)
-  > Principal Innovator and Lead Developer, *SESKA* and *SEAT* (UCT Civil Engineering)
-  > Director at Polar Engineering Research Group (UCT Civil Engineering)
-- **Email:**
-  > `sebastian.skatulla@uct.ac.za`
+      <h3><strong>Mr. Mphatso Zangalama</strong></h3>
+      <p><strong>Institution:</strong> Ecoride Malawi</p>
+      <p><strong>Roles:</strong><br>
+        Operations Manager (Ecoride Malawi)
+      </p>
+      <p><strong>Email:</strong> <code>mzangalama@gmail.com</code></p>
 
-### **Mr. Mphatso Zangalama**
+      <h3><strong>Mr. Theo Armstrong</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Laboratory Administrator (Student Computing Services UCT)
+      </p>
+      <p><strong>Email:</strong> <code>theo.armstrong@uct.ac.za</code></p>
 
-- **Institution:** Ecoride Malawi
-- **Roles:**
-  > Operations Manager (Ecoride Malawi)
-- **Email:**
-  > `mzangalama@gmail.com`
-
-### **Mr. Theo Armstrong**
-
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Laboratory Administrator (Student Computing Services UCT)
-- **Email:**
-  > `theo.armstrong@uct.ac.za`
-
-### **Mr. Sibonelo Twala**
-
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Senior Systems Engineer (Workplace Services UCT)
-- **Email:**
-  > `sibonelo.twala@uct.ac.za`
+      <h3><strong>Mr. Sibonelo Twala</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Senior Systems Engineer (Workplace Services UCT)
+      </p>
+      <p><strong>Email:</strong> <code>sibonelo.twala@uct.ac.za</code></p>
 
     </td>
+
     <td width="50%" valign="top">
 
-### **Ms. Celeste Wilson**
+      <h3><strong>Ms. Celeste Wilson</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Deputy Faculty Manager (UCT EBE Faculty)
+      </p>
+      <p><strong>Email:</strong> <code>celeste.wilson@uct.ac.za</code></p>
 
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Deputy Faculty Manager (UCT)
-- **Email:**
-  > `celeste.wilson@uct.ac.za`
+      <h3><strong>Ms. Ayesha Dalwai</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Departmental Manager (UCT EBE, Civil Engineering)
+      </p>
+      <p><strong>Email:</strong> <code>ayesha.dalwai@uct.ac.za</code></p>
 
-### **Ms. Ayesha Dalwai**
+      <h3><strong>Dr. Maxime Nutte</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Postdoctoral Fellow (UCT Civil Engineering)
+      </p>
+      <p><strong>Email:</strong> <code>maxime.nutte@uct.ac.za</code></p>
 
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Departmental Manager (UCT)
-- **Email:**
-  > `ayesha.dalwai@uct.ac.za`
+      <h3><strong>Dr. John Okedi</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Senior Lecturer (UCT Civil Engineering)<br>
+        Programme Convenor (UCT Civil Engineering)
+      </p>
+      <p><strong>Email:</strong> <code>john.okedi@uct.ac.za</code></p>
 
-### **Dr. Maxime Nutte**
-
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Postdoctoral Fellow(UCT Civil Engineering)
-- **Email:**
-  > `maxime.nutte@uct.ac.za`
-
-### **Dr. John Okedi**
-
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Senior Lecturer (UCT Civil Engineering)
-  > Programme Convenor (UCT Civil Engineering)
-- **Email:**
-  > `john.okedi@uct.ac.za`
-
-### **Dr. Keith MacHutchon**
-
-- **Institution:** University of Cape Town (UCT)
-- **Roles:**
-  > Senior Lecturer (UCT Civil Engineering)
-  > Programme Convenor (UCT Civil Engineering)
-- **Email:**
-  > `keith.machutchon@uct.ac.za`
+      <h3><strong>Dr. Keith MacHutchon</strong></h3>
+      <p><strong>Institution:</strong> University of Cape Town (UCT)</p>
+      <p><strong>Roles:</strong><br>
+        Honorary Research Associate Lecturer (UCT Civil Engineering)
+      </p>
+      <p><strong>Email:</strong> <code>keith.machutchon@uct.ac.za</code></p>
 
     </td>
   </tr>
