@@ -54,302 +54,123 @@ jobs:
         run: |
           cd main-repo/docs/guides
           python3 << 'PYTHON_SCRIPT'
-          import markdown
           import os
-          
+          import markdown
+
+          def to_title(filename: str) -> str:
+              return filename[:-3].replace('_', ' ').title()
+
           guides = []
           for md_file in sorted(os.listdir('.')):
-              if md_file.endswith('.md'):
-                  guides.append(md_file)
-                  html_file = md_file[:-3] + '.html'
-                  
-                  with open(md_file, 'r', encoding='utf-8') as f:
-                      content = f.read()
-                  
-                  html_content = markdown.markdown(
-                      content, 
-                      extensions=['fenced_code', 'codehilite', 'tables', 'toc']
-                  )
-                  
-                  title = md_file[:-3].replace('_', ' ').title()
-                  
-                  full_html = f'''<!DOCTYPE html>
+              if not md_file.endswith('.md'):
+                  continue
+
+              guides.append(md_file)
+              html_file = md_file[:-3] + '.html'
+
+              with open(md_file, 'r', encoding='utf-8') as f:
+                  content = f.read()
+
+              # Convert intra-doc links that point at .md files to .html
+              content = content.replace('.md)', '.html)')
+
+              html_content = markdown.markdown(
+                  content,
+                  extensions=['fenced_code', 'codehilite', 'tables', 'toc']
+              )
+
+              title = to_title(md_file)
+
+              full_html = f'''<!DOCTYPE html>
           <html lang="en">
           <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>{title} - Paul Namalomba</title>
-              <style>
-                  body {{
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                      max-width: 900px;
-                      margin: 0 auto;
-                      padding: 20px;
-                      line-height: 1.6;
-                      color: #24292e;
-                  }}
-                  .nav {{ 
-                      margin-bottom: 30px;
-                      padding-bottom: 10px;
-                      border-bottom: 1px solid #e1e4e8;
-                  }}
-                  .nav a {{
-                      color: #0366d6;
-                      text-decoration: none;
-                  }}
-                  .nav a:hover {{ text-decoration: underline; }}
-                  h1, h2, h3, h4 {{ 
-                      color: #24292e;
-                      margin-top: 24px;
-                      margin-bottom: 16px;
-                      font-weight: 600;
-                  }}
-                  h1 {{ 
-                      padding-bottom: 0.3em;
-                      border-bottom: 1px solid #eaecef;
-                  }}
-                  code {{
-                      background: #f6f8fa;
-                      padding: 0.2em 0.4em;
-                      border-radius: 3px;
-                      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-                      font-size: 85%;
-                  }}
-                  pre {{
-                      background: #f6f8fa;
-                      padding: 16px;
-                      border-radius: 6px;
-                      overflow-x: auto;
-                      line-height: 1.45;
-                  }}
-                  pre code {{
-                      background: none;
-                      padding: 0;
-                      font-size: 100%;
-                  }}
-                  a {{ color: #0366d6; text-decoration: none; }}
-                  a:hover {{ text-decoration: underline; }}
-                  table {{
-                      border-collapse: collapse;
-                      width: 100%;
-                      margin: 20px 0;
-                  }}
-                  th, td {{
-                      border: 1px solid #d0d7de;
-                      padding: 6px 13px;
-                      text-align: left;
-                  }}
-                  th {{
-                      background-color: #f6f8fa;
-                      font-weight: 600;
-                  }}
-                  tr:nth-child(2n) {{
-                      background-color: #f6f8fa;
-                  }}
-                  blockquote {{
-                      padding: 0 1em;
-                      color: #57606a;
-                      border-left: 0.25em solid #d0d7de;
-                      margin: 0 0 16px 0;
-                  }}
-              </style>
+              <link rel="stylesheet" href="/styles.css">
           </head>
-          <body>
-              <div class="nav">
-                  <a href="index.html">← Back to Guides</a> | 
-                  <a href="../index.html">Home</a>
-              </div>
-              {html_content}
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
+
+              <main class="container docs-container">
+                  <div class="card docs-card">
+                      <div class="docs-breadcrumb">
+                          <a href="index.html">← Back to Guides</a>
+                          <span>|</span>
+                          <a href="/">Home</a>
+                      </div>
+                      <article class="docs-content">{html_content}</article>
+                  </div>
+              </main>
+
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
           </body>
           </html>'''
-                  
-                  with open(html_file, 'w', encoding='utf-8') as f:
-                      f.write(full_html)
-          
-          # Create index page
+
+              with open(html_file, 'w', encoding='utf-8') as f:
+                  f.write(full_html)
+
+          # Guides index
           index_html = '''<!DOCTYPE html>
           <html lang="en">
           <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Technical Guides - Paul Namalomba</title>
-              <style>
-                  body {
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                      max-width: 800px;
-                      margin: 50px auto;
-                      padding: 20px;
-                      line-height: 1.6;
-                      color: #24292e;
-                  }
-                  h1 { 
-                      color: #24292e;
-                      border-bottom: 1px solid #eaecef;
-                      padding-bottom: 0.3em;
-                  }
-                  .nav {
-                      margin-bottom: 30px;
-                  }
-                  .nav a {
-                      color: #0366d6;
-                      text-decoration: none;
-                  }
-                  .nav a:hover { text-decoration: underline; }
-                  ul { 
-                      list-style: none; 
-                      padding: 0; 
-                  }
-                  li { 
-                      margin: 15px 0;
-                      padding: 10px;
-                      background: #f6f8fa;
-                      border-radius: 6px;
-                  }
-                  li:hover {
-                      background: #eef2f5;
-                  }
-                  a.guide-link { 
-                      color: #0366d6; 
-                      text-decoration: none;
-                      font-size: 1.1em;
-                      font-weight: 500;
-                  }
-                  a.guide-link:hover { text-decoration: underline; }
-              </style>
+              <link rel="stylesheet" href="/styles.css">
           </head>
-          <body>
-              <div class="nav">
-                  <a href="../index.html">← Home</a>
-              </div>
-              <h1>📚 Technical Guides</h1>
-              <p>Power user guides and technical documentation for system administration and development.</p>
-              <ul>
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
+
+              <main class="container docs-container">
+                  <h2>Technical Guides</h2>
+                  <div class="grid">\
           '''
-          
+
           for guide in guides:
               html_name = guide[:-3] + '.html'
-              title = guide[:-3].replace('_', ' ').title()
-              index_html += f'        <li><a class="guide-link" href="{html_name}">{title}</a></li>\n'
-          
-          index_html += '''    </ul>
+              title = to_title(guide)
+              index_html += f'''                      <div class="card">
+                          <h3><a href="{html_name}">{title}</a></h3>
+                      </div>\n'''
+
+          index_html += '''                  </div>
+              </main>
+
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
           </body>
           </html>'''
-          
+
           with open('index.html', 'w', encoding='utf-8') as f:
               f.write(index_html)
-          PYTHON_SCRIPT
-      
-      - name: Generate root index.html from README
-        run: |
-          cd main-repo
-          python3 << 'PYTHON_SCRIPT'
-          import markdown
-          
-          # Read README.md
-          with open('README.md', 'r', encoding='utf-8') as f:
-              content = f.read()
-          
-          # Convert to HTML
-          html_content = markdown.markdown(
-              content, 
-              extensions=['fenced_code', 'tables', 'toc']
-          )
-          
-          # Create full HTML page
-          full_html = f'''<!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <meta name="description" content="Paul Namalomba - Computational Engineer, Software Engineer & Materials Scientist">
-              <title>Paul Namalomba - Computational Engineer</title>
-              <style>
-                  body {{
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                      max-width: 900px;
-                      margin: 0 auto;
-                      padding: 20px;
-                      line-height: 1.6;
-                      color: #24292e;
-                  }}
-                  .nav {{
-                      margin-bottom: 30px;
-                      padding: 10px 0;
-                      border-bottom: 2px solid #0366d6;
-                  }}
-                  .nav a {{
-                      color: #0366d6;
-                      text-decoration: none;
-                      margin-right: 20px;
-                      font-weight: 500;
-                  }}
-                  .nav a:hover {{ text-decoration: underline; }}
-                  h1, h2, h3, h4 {{ 
-                      color: #24292e;
-                      margin-top: 24px;
-                      margin-bottom: 16px;
-                      font-weight: 600;
-                  }}
-                  h1 {{ 
-                      padding-bottom: 0.3em;
-                      border-bottom: 1px solid #eaecef;
-                      font-size: 2em;
-                  }}
-                  h2 {{
-                      padding-bottom: 0.3em;
-                      border-bottom: 1px solid #eaecef;
-                      font-size: 1.5em;
-                  }}
-                  code {{
-                      background: #f6f8fa;
-                      padding: 0.2em 0.4em;
-                      border-radius: 3px;
-                      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-                      font-size: 85%;
-                  }}
-                  pre {{
-                      background: #f6f8fa;
-                      padding: 16px;
-                      border-radius: 6px;
-                      overflow-x: auto;
-                      line-height: 1.45;
-                  }}
-                  pre code {{
-                      background: none;
-                      padding: 0;
-                      font-size: 100%;
-                  }}
-                  a {{ color: #0366d6; text-decoration: none; }}
-                  a:hover {{ text-decoration: underline; }}
-                  img {{ max-width: 100%; height: auto; }}
-                  blockquote {{
-                      padding: 0 1em;
-                      color: #57606a;
-                      border-left: 0.25em solid #d0d7de;
-                      margin: 0 0 16px 0;
-                  }}
-                  ul, ol {{
-                      padding-left: 2em;
-                  }}
-                  li {{
-                      margin: 0.5em 0;
-                  }}
-              </style>
-          </head>
-          <body>
-              <div class="nav">
-                  <a href="/">Home</a>
-                  <a href="https://github.com/paulnamalomba" target="_blank">GitHub</a>
-                  <a href="https://paulnamalomba.github.io/Paul-Namalomba_Curriculum-Vitae.pdf" target="_blank">Resume (CV)</a>
-                  <a href="https://www.linkedin.com/in/paul-namalomba" target="_blank">LinkedIn</a>
-                  <a href="/docs/guides/">Technical Guides</a>
-              </div>
-              {html_content}
-          </body>
-          </html>'''
-          
-          with open('index.html', 'w', encoding='utf-8') as f:
-              f.write(full_html)
           PYTHON_SCRIPT
       
       - name: Generate docs/index.html
@@ -386,65 +207,114 @@ jobs:
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <title>Technical Documentation - Paul Namalomba</title>
-              <style>
-                  body {{
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                      max-width: 900px;
-                      margin: 0 auto;
-                      padding: 20px;
-                      line-height: 1.6;
-                      color: #24292e;
-                  }}
-                  .nav {{
-                      margin-bottom: 30px;
-                      padding: 10px 0;
-                      border-bottom: 2px solid #0366d6;
-                  }}
-                  .nav a {{
-                      color: #0366d6;
-                      text-decoration: none;
-                      margin-right: 20px;
-                      font-weight: 500;
-                  }}
-                  .nav a:hover {{ text-decoration: underline; }}
-                  h1, h2, h3, h4 {{ 
-                      color: #24292e;
-                      margin-top: 24px;
-                      margin-bottom: 16px;
-                      font-weight: 600;
-                  }}
-                  h1 {{ 
-                      padding-bottom: 0.3em;
-                      border-bottom: 1px solid #eaecef;
-                      font-size: 2em;
-                  }}
-                  h2 {{
-                      padding-bottom: 0.3em;
-                      border-bottom: 1px solid #eaecef;
-                      font-size: 1.5em;
-                  }}
-                  a {{ color: #0366d6; text-decoration: none; }}
-                  a:hover {{ text-decoration: underline; }}
-                  ul {{
-                      padding-left: 2em;
-                  }}
-                  li {{
-                      margin: 0.5em 0;
-                  }}
-              </style>
+              <link rel="stylesheet" href="/styles.css">
           </head>
-          <body>
-              <div class="nav">
-                  <a href="/">Home</a>
-                  <a href="/docs/guides/">Technical Guides</a>
-                  <a href="https://github.com/paulnamalomba" target="_blank">GitHub</a>
-              </div>
-              {html_content}
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
+
+              <main class="container docs-container">
+                  <div class="card docs-card">
+                      <div class="docs-breadcrumb">
+                          <a href="/">Home</a>
+                          <span>|</span>
+                          <a href="/docs/guides/">Tech Guides</a>
+                          <span>|</span>
+                          <a href="/docs/system-scripts/">System Scripts</a>
+                      </div>
+                      <article class="docs-content">{html_content}</article>
+                  </div>
+              </main>
+
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
           </body>
           </html>'''
               
               with open('index.html', 'w', encoding='utf-8') as f:
                   f.write(full_html)
+          PYTHON_SCRIPT
+
+      - name: Generate docs/system-scripts/index.html
+        run: |
+          mkdir -p main-repo/docs/system-scripts
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          import re
+          import markdown
+
+          readme_path = os.path.join('system-management_scripts', 'README.md')
+          with open(readme_path, 'r', encoding='utf-8') as f:
+              content = f.read()
+
+          # Fix email markdown link to be a proper mailto
+          content = content.replace('](kabwenzenamalomba@gmail.com)', '](mailto:kabwenzenamalomba@gmail.com)')
+
+          # Rewrite repo-relative guide links to the deployed docs HTML pages
+          content = re.sub(r'\(guides/([^\)]+?)\.md\)', r'(/docs/guides/\1.html)', content)
+
+          html_content = markdown.markdown(
+              content,
+              extensions=['fenced_code', 'codehilite', 'tables', 'toc']
+          )
+
+          full_html = f'''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>System Scripts - Paul Namalomba</title>
+              <link rel="stylesheet" href="/styles.css">
+          </head>
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
+
+              <main class="container docs-container">
+                  <div class="card docs-card">
+                      <div class="docs-breadcrumb">
+                          <a href="/docs/system-scripts/">System Scripts</a>
+                          <span>|</span>
+                          <a href="/docs/guides/">Tech Guides</a>
+                          <span>|</span>
+                          <a href="/">Home</a>
+                      </div>
+                      <article class="docs-content">{html_content}</article>
+                  </div>
+              </main>
+
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
+          </body>
+          </html>'''
+
+          out_path = os.path.join('main-repo', 'docs', 'system-scripts', 'index.html')
+          with open(out_path, 'w', encoding='utf-8') as f:
+              f.write(full_html)
           PYTHON_SCRIPT
       
       - name: Upload artifact

@@ -28,7 +28,7 @@
 
 I'm a passionate Computational Engineer & Full-Stack Software Developer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel, Cloud Deplyment with Google Cloud Run, Azure Virtual Machines and Netlify. have experience with **High-Performance Computing (HPC)**, having developed and optimized scientific computing software using **PETSc**, **OpenMPI**, **MUMPS**, **ScaLAPACK**, and other HPC libraries for parallel processing of large-scale simulations. As I am currently.
 
-I currently asm working for a startup called ComputeMore Africa as a **Lead Backend Developer & Chief Innovation Officer** on contract basis, building and maintaining robust C# .NET backend services and APIs for their ride-sharing mobile application, with full Google Maps API integration, JWT authentication, and real-time ride tracking using SignalR. Also working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
+I currently am working for a startup called ComputeMore Africa as a **Lead Backend Developer & Chief Innovation Officer** on contract basis, building and maintaining robust C# .NET backend services and APIs for their ride-sharing mobile application, with full Google Maps API integration, JWT authentication, and real-time ride tracking using SignalR. Also working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
 
 ---
 
@@ -54,6 +54,7 @@ I currently asm working for a startup called ComputeMore Africa as a **Lead Back
 - Database schema design and optimization for ride and user data
 - Collaborated with front-end developers for seamless integration
 
+**Referees:** Mr. Thanthwe Kalonga (Managing Director, ComputeMore Africa) <br>
 **Key Technologies**: C#, .NET 8/9, .NET ASP and EF Core, PostgreSQL, REST APIs, JWT, Swagger, Git, Docker CI/CD
 
 ### **SESKA Computational Engineer**
@@ -510,8 +511,6 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 - Data visualization and interpretation
 
 ---
-
-## Referees
 
 ## Referees
 
