@@ -7,7 +7,7 @@ title: Documentation
 
 Comprehensive power user guides for developers and system administrators covering databases, containers, messaging, security, and development tools.
 
-[Browse All Guides →](guides/)
+[Browse All Guides →](guides/) · [System Scripts →](system-scripts/) · [Guide Home →](guide-home/)
 
 ## Power User Guides
 

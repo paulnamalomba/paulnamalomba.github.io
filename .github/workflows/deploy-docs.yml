@@ -47,10 +47,12 @@ jobs:
           rm -rf main-repo/docs/guides
           mkdir -p main-repo/docs/guides
           cp -r system-management_scripts/guides/* main-repo/docs/guides/ || true
-          # Copy system scripts
-          rm -rf main-repo/docs/system-scripts/scripts
-          mkdir -p main-repo/docs/system-scripts/scripts
-          cp -r system-management_scripts/windows/*.ps1 main-repo/docs/system-scripts/scripts/ || true
+          # Copy system scripts into system-scripts directory (flat, alongside index)
+          rm -rf main-repo/docs/system-scripts
+          mkdir -p main-repo/docs/system-scripts
+          cp -r system-management_scripts/windows/*.ps1 main-repo/docs/system-scripts/ || true
+          # Guide home (README overview)
+          mkdir -p main-repo/docs/guide-home
           # Disable Jekyll processing
           touch main-repo/.nojekyll
           
@@ -100,6 +102,7 @@ jobs:
                           <div class="logo"><a href="/">Paul Namalomba</a></div>
                           <ul class="nav-links">
                               <li><a href="https://paulnamalomba.github.io/">Site Home</a></li>
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
                               <li><a href="/docs/guides/">Tech Guides</a></li>
                               <li><a href="/docs/system-scripts/">System Scripts</a></li>
                           </ul>
@@ -144,6 +147,7 @@ jobs:
                       <nav>
                           <div class="logo"><a href="/">Paul Namalomba</a></div>
                           <ul class="nav-links">
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
                               <li><a href="/docs/guides/">Tech Guides</a></li>
                               <li><a href="/docs/system-scripts/">System Scripts</a></li>
                           </ul>
@@ -220,6 +224,7 @@ jobs:
                       <nav>
                           <div class="logo"><a href="/">Paul Namalomba</a></div>
                           <ul class="nav-links">
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
                               <li><a href="/docs/guides/">Tech Guides</a></li>
                               <li><a href="/docs/system-scripts/">System Scripts</a></li>
                           </ul>
@@ -231,6 +236,8 @@ jobs:
                   <div class="card docs-card">
                       <div class="docs-breadcrumb">
                           <a href="/">Site Home</a>
+                          <span>|</span>
+                          <a href="/docs/guide-home/">Guide Home</a>
                           <span>|</span>
                           <a href="/docs/guides/">Tech Guides</a>
                           <span>|</span>
@@ -252,9 +259,9 @@ jobs:
                   f.write(full_html)
           PYTHON_SCRIPT
 
-      - name: Generate docs/system-scripts/index.html
+      - name: Generate docs/guide-home/index.html from README
         run: |
-          mkdir -p main-repo/docs/system-scripts
+          mkdir -p main-repo/docs/guide-home
           python3 << 'PYTHON_SCRIPT'
           import os
           import re
@@ -270,6 +277,9 @@ jobs:
           # Rewrite repo-relative guide links to the deployed docs HTML pages
           content = re.sub(r'\(guides/([^\)]+?)\.md\)', r'(/docs/guides/\1.html)', content)
 
+          # Rewrite repo-relative script links to the deployed script HTML pages
+          content = re.sub(r'\(windows/([^\)]+?)\.ps1\)', r'(/docs/system-scripts/\1.html)', content)
+
           html_content = markdown.markdown(
               content,
               extensions=['fenced_code', 'codehilite', 'tables', 'toc']
@@ -280,7 +290,7 @@ jobs:
           <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>System Scripts - Paul Namalomba</title>
+              <title>Guide Home - Paul Namalomba</title>
               <link rel="stylesheet" href="/styles.css">
           </head>
           <body class="docs-page">
@@ -289,6 +299,7 @@ jobs:
                       <nav>
                           <div class="logo"><a href="/">Paul Namalomba</a></div>
                           <ul class="nav-links">
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
                               <li><a href="/docs/guides/">Tech Guides</a></li>
                               <li><a href="/docs/system-scripts/">System Scripts</a></li>
                           </ul>
@@ -299,11 +310,11 @@ jobs:
               <main class="container docs-container">
                   <div class="card docs-card">
                       <div class="docs-breadcrumb">
-                          <a href="/docs/system-scripts/">System Scripts</a>
+                          <a href="/">Site Home</a>
                           <span>|</span>
                           <a href="/docs/guides/">Tech Guides</a>
                           <span>|</span>
-                          <a href="/">Site Home</a>
+                          <a href="/docs/system-scripts/">System Scripts</a>
                       </div>
                       <article class="docs-content">{html_content}</article>
                   </div>
@@ -317,14 +328,14 @@ jobs:
           </body>
           </html>'''
 
-          out_path = os.path.join('main-repo', 'docs', 'system-scripts', 'index.html')
+          out_path = os.path.join('main-repo', 'docs', 'guide-home', 'index.html')
           with open(out_path, 'w', encoding='utf-8') as f:
               f.write(full_html)
           PYTHON_SCRIPT
 
-      - name: Generate HTML pages for system scripts
+      - name: Generate system-scripts index and individual script pages
         run: |
-          cd main-repo/docs/system-scripts/scripts
+          cd main-repo/docs/system-scripts
           python3 << 'PYTHON_SCRIPT'
           import os
           from pygments import highlight
@@ -353,6 +364,19 @@ jobs:
               with open(ps1_file, 'r', encoding='utf-8') as f:
                   source = f.read()
 
+              # Extract first comment block as description
+              desc_lines = []
+              for line in source.splitlines():
+                  stripped = line.strip()
+                  if stripped.startswith('#'):
+                      desc_lines.append(stripped.lstrip('# ').strip())
+                  elif stripped == '':
+                      if desc_lines:
+                          break
+                  else:
+                      break
+              description = ' — '.join(desc_lines[:2]) if desc_lines else ''
+
               highlighted = highlight(source, lexer, formatter)
               title = to_title(ps1_file)
 
@@ -371,7 +395,7 @@ jobs:
                       <nav>
                           <div class="logo"><a href="/">Paul Namalomba</a></div>
                           <ul class="nav-links">
-                              <li><a href="https://paulnamalomba.github.io/">Site Home</a></li>
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
                               <li><a href="/docs/guides/">Tech Guides</a></li>
                               <li><a href="/docs/system-scripts/">System Scripts</a></li>
                           </ul>
@@ -382,15 +406,15 @@ jobs:
               <main class="container docs-container">
                   <div class="card docs-card">
                       <div class="docs-breadcrumb">
-                          <a href="../">← Back to System Scripts</a>
+                          <a href="index.html">← Back to System Scripts</a>
                           <span>|</span>
-                          <a href="/docs/guides/">Tech Guides</a>
+                          <a href="/docs/guide-home/">Guide Home</a>
                           <span>|</span>
                           <a href="/">Site Home</a>
                       </div>
                       <article class="docs-content">
                           <h1>{title}</h1>
-                          <p><code>{ps1_file}</code></p>
+                          <p><code>{ps1_file}</code> · <a href="{ps1_file}" download>Download Script</a></p>
                           {highlighted}
                       </article>
                   </div>
@@ -407,35 +431,72 @@ jobs:
               with open(html_file, 'w', encoding='utf-8') as f:
                   f.write(full_html)
 
-          # Now regenerate the system-scripts index to include script cards
-          index_path = os.path.join('..', 'index.html')
+          # ── Build card-based index page (like /docs/guides/) ──
 
-          # Read existing index to extract the README content
-          with open(index_path, 'r', encoding='utf-8') as f:
-              existing = f.read()
-
-          # Build a script listing section
-          script_cards = ''
+          cards_html = ''
           for script in scripts:
-              html_name = 'scripts/' + script[:-4] + '.html'
+              html_name = script[:-4] + '.html'
               title = to_title(script)
-              script_cards += f'''                      <div class="card">
+
+              # Re-extract description for the card
+              with open(script, 'r', encoding='utf-8') as f:
+                  lines = f.read().splitlines()
+              desc_parts = []
+              for line in lines:
+                  stripped = line.strip()
+                  if stripped.startswith('#'):
+                      desc_parts.append(stripped.lstrip('# ').strip())
+                  elif stripped == '':
+                      if desc_parts:
+                          break
+                  else:
+                      break
+              desc = desc_parts[0] if desc_parts else script
+
+              cards_html += f'''                      <div class="card">
                           <h3><a href="{html_name}">{title}</a></h3>
+                          <p>{desc}</p>
                           <p><code>{script}</code></p>
                       </div>\n'''
 
-          # Insert script cards before the closing </main>
-          script_section = f'''
-              <h2>Browse Scripts</h2>
-              <div class="grid">
-          {script_cards}                  </div>'''
+          index_html = f'''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>System Scripts - Paul Namalomba</title>
+              <link rel="stylesheet" href="/styles.css">
+          </head>
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="/docs/guide-home/">Guide Home</a></li>
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
 
-          # Insert before </main>
-          if '<h2>Browse Scripts</h2>' not in existing:
-              existing = existing.replace('</main>', script_section + '\n            </main>')
+              <main class="container docs-container">
+                  <h2>System Scripts</h2>
+                  <div class="grid">
+          {cards_html}                  </div>
+              </main>
 
-          with open(index_path, 'w', encoding='utf-8') as f:
-              f.write(existing)
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
+          </body>
+          </html>'''
+
+          with open('index.html', 'w', encoding='utf-8') as f:
+              f.write(index_html)
           PYTHON_SCRIPT
       
       - name: Upload artifact
