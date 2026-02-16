@@ -47,6 +47,10 @@ jobs:
           rm -rf main-repo/docs/guides
           mkdir -p main-repo/docs/guides
           cp -r system-management_scripts/guides/* main-repo/docs/guides/ || true
+          # Copy system scripts
+          rm -rf main-repo/docs/system-scripts/scripts
+          mkdir -p main-repo/docs/system-scripts/scripts
+          cp -r system-management_scripts/windows/*.ps1 main-repo/docs/system-scripts/scripts/ || true
           # Disable Jekyll processing
           touch main-repo/.nojekyll
           
@@ -316,6 +320,122 @@ jobs:
           out_path = os.path.join('main-repo', 'docs', 'system-scripts', 'index.html')
           with open(out_path, 'w', encoding='utf-8') as f:
               f.write(full_html)
+          PYTHON_SCRIPT
+
+      - name: Generate HTML pages for system scripts
+        run: |
+          cd main-repo/docs/system-scripts/scripts
+          python3 << 'PYTHON_SCRIPT'
+          import os
+          from pygments import highlight
+          from pygments.lexers import PowerShellLexer
+          from pygments.formatters import HtmlFormatter
+
+          def to_title(filename: str) -> str:
+              return filename[:-4].replace('-', ' ').replace('_', ' ').title()
+
+          lexer = PowerShellLexer()
+          formatter = HtmlFormatter(
+              linenos=True,
+              cssclass='codehilite',
+              style='default',
+          )
+          highlight_css = formatter.get_style_defs('.codehilite')
+
+          scripts = []
+          for ps1_file in sorted(os.listdir('.')):
+              if not ps1_file.endswith('.ps1'):
+                  continue
+
+              scripts.append(ps1_file)
+              html_file = ps1_file[:-4] + '.html'
+
+              with open(ps1_file, 'r', encoding='utf-8') as f:
+                  source = f.read()
+
+              highlighted = highlight(source, lexer, formatter)
+              title = to_title(ps1_file)
+
+              full_html = f'''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>{title} - Paul Namalomba</title>
+              <link rel="stylesheet" href="/styles.css">
+              <style>{highlight_css}</style>
+          </head>
+          <body class="docs-page">
+              <header>
+                  <div class="container">
+                      <nav>
+                          <div class="logo"><a href="/">Paul Namalomba</a></div>
+                          <ul class="nav-links">
+                              <li><a href="https://paulnamalomba.github.io/">Site Home</a></li>
+                              <li><a href="/docs/guides/">Tech Guides</a></li>
+                              <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                          </ul>
+                      </nav>
+                  </div>
+              </header>
+
+              <main class="container docs-container">
+                  <div class="card docs-card">
+                      <div class="docs-breadcrumb">
+                          <a href="../">← Back to System Scripts</a>
+                          <span>|</span>
+                          <a href="/docs/guides/">Tech Guides</a>
+                          <span>|</span>
+                          <a href="/">Site Home</a>
+                      </div>
+                      <article class="docs-content">
+                          <h1>{title}</h1>
+                          <p><code>{ps1_file}</code></p>
+                          {highlighted}
+                      </article>
+                  </div>
+              </main>
+
+              <footer>
+                  <div class="container">
+                      <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+                  </div>
+              </footer>
+          </body>
+          </html>'''
+
+              with open(html_file, 'w', encoding='utf-8') as f:
+                  f.write(full_html)
+
+          # Now regenerate the system-scripts index to include script cards
+          index_path = os.path.join('..', 'index.html')
+
+          # Read existing index to extract the README content
+          with open(index_path, 'r', encoding='utf-8') as f:
+              existing = f.read()
+
+          # Build a script listing section
+          script_cards = ''
+          for script in scripts:
+              html_name = 'scripts/' + script[:-4] + '.html'
+              title = to_title(script)
+              script_cards += f'''                      <div class="card">
+                          <h3><a href="{html_name}">{title}</a></h3>
+                          <p><code>{script}</code></p>
+                      </div>\n'''
+
+          # Insert script cards before the closing </main>
+          script_section = f'''
+              <h2>Browse Scripts</h2>
+              <div class="grid">
+          {script_cards}                  </div>'''
+
+          # Insert before </main>
+          if '<h2>Browse Scripts</h2>' not in existing:
+              existing = existing.replace('</main>', script_section + '\n            </main>')
+
+          with open(index_path, 'w', encoding='utf-8') as f:
+              f.write(existing)
           PYTHON_SCRIPT
       
       - name: Upload artifact

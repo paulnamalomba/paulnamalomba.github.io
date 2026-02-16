@@ -19,6 +19,7 @@ Comprehensive power user guides for developers and system administrators coverin
   Azure AD management with Microsoft Graph; service principal automation; conditional access policies; certificate-based auth
 
 ### Django Development
+
 - **[DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md)**  
   Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
 
