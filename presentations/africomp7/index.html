@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AfriComp7 — Extended Hyper-viscoelastic Framework for Antarctic Ice Sheet Dynamics</title>
+    <title>AfriComp7 — Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</title>
 
     <!-- KaTeX for equations -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -67,6 +67,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
+            transition: transform 0.4s ease, opacity 0.4s ease;
         }
 
         .nav-brand {
@@ -105,6 +106,13 @@
         }
 
         /* ============================================================
+           SCROLL-SNAP CONTAINER
+           ============================================================ */
+        body {
+            scroll-snap-type: y proximity;
+        }
+
+        /* ============================================================
            SLIDE SECTIONS
            ============================================================ */
         .slide {
@@ -114,6 +122,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            scroll-snap-align: start;
         }
 
         .slide-inner {
@@ -133,88 +142,102 @@
         }
 
         /* ============================================================
-           TITLE SLIDE
+           TITLE SLIDE — full-bleed white cover
            ============================================================ */
         .slide-title {
-            background: linear-gradient(135deg, var(--uct-blue) 0%, var(--uct-blue-light) 40%, var(--glacier-teal) 100%);
-            color: white;
-            text-align: center;
-            padding: 4rem 2rem;
+            background: #ffffff;
+            color: var(--text-primary);
+            text-align: left;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
         }
 
-        .slide-title .slide-number { color: rgba(255,255,255,0.08); }
+        .slide-title .slide-inner {
+            max-width: 1000px;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .slide-title .slide-number { display: none; }
 
         .conference-badge {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.25);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
+            background: var(--uct-blue);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(4px);
+            margin-bottom: 2.5rem;
+            width: fit-content;
         }
 
         .slide-title h1 {
-            font-size: clamp(1.6rem, 3.5vw, 2.8rem);
-            font-weight: 800;
-            line-height: 1.2;
-            max-width: 900px;
-            margin: 0 auto 1.5rem;
-        }
-
-        .slide-title .subtitle {
-            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
-            font-weight: 300;
-            opacity: 0.9;
-            max-width: 750px;
-            margin: 0 auto 2rem;
-            line-height: 1.6;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: #000000;
+            margin: 0 0 2rem;
+            max-width: 850px;
         }
 
         .author-block {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
+            align-items: flex-start;
+            gap: 0.25rem;
+            margin-top: 0;
         }
 
         .author-name {
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
         .author-affiliation {
-            font-size: 0.85rem;
-            opacity: 0.8;
+            font-size: 0.95rem;
+            color: var(--uct-blue);
+            font-style: italic;
         }
 
         .author-affiliation a {
-            color: var(--ice-cyan);
+            color: var(--glacier-teal);
             text-decoration: none;
         }
 
-        .title-keywords {
+        /* Logo strip at the bottom of the title slide */
+        .title-logos {
             display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            margin-top: auto;
+            padding: 2rem 4rem 3rem;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 2rem;
         }
 
-        .title-keywords span {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
+        .title-logos img {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            filter: grayscale(0);
+            transition: filter 0.3s ease;
+        }
+
+        .title-keywords {
+            display: none;
         }
 
         /* ============================================================
@@ -375,10 +398,77 @@
             gap: 1.5rem;
         }
 
-        @media (max-width: 768px) {
+        /* ============================================================
+           RESPONSIVE — MOBILE (≤ 480px)
+           ============================================================ */
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            .slide { padding: 4.5rem 1rem 1.5rem; }
+            .slide-title .slide-inner { padding: 2rem 1.5rem; }
+            .slide-title h1 { font-size: 1.8rem; }
+            .title-logos { padding: 1.5rem 1.5rem 2rem; gap: 1.5rem; }
+            .title-logos img { height: 32px; }
             .two-col, .three-col { grid-template-columns: 1fr; }
-            .slide { padding: 5rem 1rem 2rem; }
             .nav-links { display: none; }
+            .card { padding: 1.25rem; }
+            .equation-block { padding: 1rem 1.2rem; }
+            .innovation-highlight { padding: 1.5rem; }
+            .pipeline { flex-direction: column; gap: 0.5rem; }
+            .pipeline-arrow { transform: rotate(90deg); }
+            .pipeline-step { min-width: unset; width: 100%; }
+            .slide-number { font-size: 2.5rem; top: 4rem; right: 1rem; }
+            .styled-table { font-size: 0.78rem; }
+            .styled-table th, .styled-table td { padding: 0.5rem 0.6rem; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — SMALL TABLET (481–768px)
+           ============================================================ */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .slide { padding: 5rem 1.25rem 2rem; }
+            .slide-title .slide-inner { padding: 2.5rem 2rem; }
+            .slide-title h1 { font-size: 2.2rem; }
+            .title-logos { padding: 1.5rem 2rem 2.5rem; gap: 2rem; }
+            .title-logos img { height: 38px; }
+            .two-col, .three-col { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .pipeline { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+            .pipeline-step { min-width: 140px; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — TABLET (769–1024px)
+           ============================================================ */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .slide { padding: 5rem 1.5rem 2rem; }
+            .slide-title .slide-inner { padding: 3rem 3rem; }
+            .two-col { gap: 1.5rem; }
+            .nav-links a { font-size: 0.68rem; padding: 0.25rem 0.4rem; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — LARGE / PROJECTOR (≥ 1600px)
+           ============================================================ */
+        @media (min-width: 1600px) {
+            html { font-size: 18px; }
+            :root { --slide-max-width: 1400px; }
+            .slide-title h1 { font-size: 4.2rem; }
+            .title-logos img { height: 60px; }
+            .slide-number { font-size: 5rem; }
+            .section-header h2 { font-size: 2.8rem; }
+            .card { padding: 2.5rem; }
+        }
+
+        /* ============================================================
+           RESPONSIVE — ULTRA-WIDE / PROJECTOR (≥ 2000px)
+           ============================================================ */
+        @media (min-width: 2000px) {
+            html { font-size: 20px; }
+            :root { --slide-max-width: 1600px; }
+            .slide-title h1 { font-size: 5rem; }
+            .title-logos img { height: 72px; }
+            .slide-title .slide-inner { padding: 4rem 6rem; }
+            .title-logos { padding: 3rem 6rem 4rem; }
         }
 
         /* ============================================================
@@ -547,7 +637,7 @@
             background: var(--snow-white);
         }
 
-        .slide-title { background: linear-gradient(135deg, var(--uct-blue), var(--glacier-teal)); }
+        .slide-title { background: #ffffff; }
         .slide-closing { background: linear-gradient(135deg, var(--glacier-dark), var(--uct-blue)); color: white; }
         .slide-closing h2 { color: var(--ice-cyan); }
         .slide-closing p, .slide-closing li { color: rgba(255,255,255,0.9); }
@@ -626,35 +716,25 @@
      SLIDE 1 — TITLE
      ================================================================ -->
 <section id="title" class="slide slide-title">
-    <div class="slide-inner" style="max-width: 900px;">
+    <div class="slide-inner">
         <div class="conference-badge">
             <i class="fas fa-globe-africa"></i>
-            AfriComp7 · 25–27 February 2026
+            AfriComp7 · 25–27 February 2026 · Cape Town
         </div>
 
-        <h1>A Thermodynamically Consistent Finite-Strain Hyper-Viscoelastic Framework for Antarctic Ice Sheet Dynamics</h1>
-
-        <p class="subtitle">
-            Logarithmic strain measures, material velocity gradient rates, and exponential map integration for glaciological mechanics
-        </p>
+        <h1>Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</h1>
 
         <div class="author-block">
-            <div class="author-name">Paul K. Namalomba &amp; Sebastian Skatulla</div>
-            <div class="author-affiliation">
-                Department of Civil Engineering, University of Cape Town<br>
-                <a href="https://paulnamalomba.github.io" target="_blank">paulnamalomba.github.io</a>
-            </div>
+            <div class="author-name">Mr. Paul Namalomba</div>
+            <div class="author-affiliation">BSc(Hons) <em>Civil</em>, MScEng <em>Structures</em></div>
         </div>
+    </div>
 
-        <div class="title-keywords">
-            <span>Viscoelasticity</span>
-            <span>Antarctic Ice Sheets</span>
-            <span>Logarithmic Strain</span>
-            <span>Glen's Flow Law</span>
-            <span>Exponential Map</span>
-            <span>Finite Element Method</span>
-            <span>MPI / PETSc</span>
-        </div>
+    <div class="title-logos">
+        <img src="assets/uct.png" alt="University of Cape Town">
+        <img src="assets/dresden.png" alt="Technische Universität Dresden">
+        <img src="assets/seska.png" alt="SESKA Framework">
+        <img src="assets/nrf.png" alt="National Research Foundation">
     </div>
 </section>
 
@@ -1266,6 +1346,22 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ---- Nav auto-hide on title slide ----
+    const nav = document.querySelector('.slide-nav');
+    const titleSection = document.getElementById('title');
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                nav.style.transform = 'translateY(-100%)';
+                nav.style.opacity = '0';
+            } else {
+                nav.style.transform = 'translateY(0)';
+                nav.style.opacity = '1';
+            }
+        });
+    }, { threshold: 0.5 });
+    navObserver.observe(titleSection);
 
     // ---- Active nav link ----
     const sections = document.querySelectorAll('.slide[id]');
