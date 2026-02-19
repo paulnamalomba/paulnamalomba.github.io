@@ -288,29 +288,156 @@ footer a:hover {
     color: white;
 }
 
-/* Responsive */
+/* ============================================================
+   HAMBURGER BUTTON (hidden on desktop)
+   ============================================================ */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 1100;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger span {
+    display: block;
+    width: 26px;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE & SMALL SCREENS (≤ 768px)
+   ============================================================ */
 @media (max-width: 768px) {
-    .nav-links {
-        display: none; /* Simple hide for mobile for now, can be improved */
+    /* — Hamburger visible — */
+    .hamburger {
+        display: flex;
     }
-    
-    .hero h1 {
-        font-size: 2rem;
+
+    /* — Nav drawer — */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 260px;
+        height: 100vh;
+        background: var(--header-bg);
+        box-shadow: -4px 0 20px rgba(0,0,0,0.12);
+        padding: 5rem 1.5rem 2rem;
+        gap: 0;
+        z-index: 1050;
+        transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .nav-links.open {
+        right: 0;
+    }
+
+    .nav-links li {
+        list-style: none;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 0.75rem 0;
+        font-size: 1.05rem;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+
+    /* — Overlay when menu is open — */
+    .nav-links.open::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.3);
+        z-index: -1;
+    }
+
+    /* — Hero — match container padding so it doesn't bleed — */
+    .hero {
+        padding: 2rem 0;
+        margin-bottom: 0;
+    }
+
+    .hero .container {
+        padding: 0 20px;
     }
 
     .hero-layout {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 1.25rem;
+    }
+
+    .hero-photo img {
+        width: 160px;
+        height: 160px;
     }
 
     .hero-content {
         text-align: center;
     }
 
-    .hero p {
-        margin: 0 auto 1.5rem;
+    .hero h1 {
+        font-size: 1.75rem;
     }
 
+    .hero p {
+        font-size: 0.9rem;
+        margin: 0 auto 1.25rem;
+    }
+
+    .social-links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .social-links.align-left {
+        justify-content: center;
+    }
+
+    .social-links img {
+        height: 24px;
+    }
+
+    /* — Sections — */
+    section {
+        padding: 2rem 0;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    /* — About layout — */
     .about-layout {
         grid-template-columns: 1fr;
         gap: 1.25rem;
@@ -319,19 +446,89 @@ footer a:hover {
     .about-skills-card {
         position: static;
     }
+
+    /* — Grid cards — */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    /* — Referees — */
+    .referees-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
-/* Referees Table */
+/* ============================================================
+   RESPONSIVE — SMALL PHONE (≤ 400px)
+   ============================================================ */
+@media (max-width: 400px) {
+    .hero-photo img {
+        width: 130px;
+        height: 130px;
+    }
+
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero p {
+        font-size: 0.85rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .social-links {
+        gap: 8px;
+    }
+
+    .social-links img {
+        height: 20px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .card {
+        padding: 0.85rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (769px – 1024px)
+   ============================================================ */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero-layout {
+        grid-template-columns: 180px 1fr;
+        gap: 1.5rem;
+    }
+
+    .hero-photo img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .nav-links {
+        gap: 12px;
+    }
+
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+}
+
+/* Referees Table (desktop default) */
 .referees-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.2rem;
-}
-
-@media (max-width: 768px) {
-    .referees-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .referee-item {

@@ -12,6 +12,11 @@
         <div class="container">
             <nav>
                 <div class="logo">Paul Namalomba</div>
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <ul class="nav-links">
                     <li><a href="https://paulnamalomba.github.io/docs/guide-home/" target="_blank" rel="noopener noreferrer">Tech Guides</a></li>
                     <li><a href="#about">About</a></li>
@@ -659,5 +664,23 @@
             <p style="font-size: 0.8rem; margin-top: 0.5rem;">Built with HTML5 & CSS3</p>
         </div>
     </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
 </body>
 </html>
