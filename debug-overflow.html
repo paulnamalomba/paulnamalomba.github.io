@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Debug - Overflow Detector</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 1rem;
+            max-width: 100%;
+        }
+        .panel {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .panel h3 { margin-bottom: 0.5rem; color: #333; }
+        iframe {
+            width: 100%;
+            height: 700px;
+            border: 2px solid #0077B5;
+            border-radius: 4px;
+        }
+        .controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        button {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background: #f0f0f0; }
+        button.active { background: #0077B5; color: #fff; border-color: #0077B5; }
+        #overflow-results {
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+        .offender { color: #d63384; font-weight: bold; }
+        .ok { color: green; }
+    </style>
+</head>
+<body>
+    <h1>📱 Mobile Overflow Debugger</h1>
+    <p>This page loads your site in an iframe at various mobile widths and detects which elements overflow the viewport.</p>
+
+    <div class="panel">
+        <h3>Device Presets</h3>
+        <div class="controls">
+            <button onclick="setWidth(320)">iPhone SE (320px)</button>
+            <button onclick="setWidth(375)">iPhone 12 (375px)</button>
+            <button onclick="setWidth(390)">iPhone 14 (390px)</button>
+            <button onclick="setWidth(412)">Galaxy S21 (412px)</button>
+            <button onclick="setWidth(768)">iPad (768px)</button>
+            <button onclick="setWidth(1024)">iPad Pro (1024px)</button>
+        </div>
+        <p>Current width: <strong id="current-width">375px</strong></p>
+    </div>
+
+    <div class="panel">
+        <h3>🔍 Scan for Overflowing Elements</h3>
+        <button onclick="scanOverflow()" style="background:#0077B5; color:#fff; margin-bottom:0.5rem;">
+            Run Overflow Scan
+        </button>
+        <div id="overflow-results">Click "Run Overflow Scan" after selecting a device width...</div>
+    </div>
+
+    <div class="panel">
+        <h3>Preview</h3>
+        <iframe id="preview" src="index.html"></iframe>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('preview');
+        const widthLabel = document.getElementById('current-width');
+        const results = document.getElementById('overflow-results');
+
+        function setWidth(w) {
+            iframe.style.width = w + 'px';
+            widthLabel.textContent = w + 'px';
+            // Update active button
+            document.querySelectorAll('.controls button').forEach(b => {
+                b.classList.toggle('active', b.textContent.includes(w + 'px'));
+            });
+        }
+
+        function scanOverflow() {
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                const viewportWidth = iframe.clientWidth;
+                const allElements = doc.querySelectorAll('*');
+                let offenders = [];
+
+                allElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.right > viewportWidth + 1) {
+                        const overflow = Math.round(rect.right - viewportWidth);
+                        const tag = el.tagName.toLowerCase();
+                        const id = el.id ? `#${el.id}` : '';
+                        const cls = el.className && typeof el.className === 'string'
+                            ? '.' + el.className.split(' ').join('.')
+                            : '';
+                        offenders.push({
+                            selector: `${tag}${id}${cls}`,
+                            overflow: overflow,
+                            width: Math.round(rect.width),
+                            text: (el.textContent || '').substring(0, 60).trim()
+                        });
+                    }
+                });
+
+                if (offenders.length === 0) {
+                    results.innerHTML = '<span class="ok">✅ No overflowing elements found at ' + viewportWidth + 'px!</span>';
+                } else {
+                    // De-duplicate and sort by overflow amount
+                    const unique = [];
+                    const seen = new Set();
+                    offenders.sort((a, b) => b.overflow - a.overflow);
+                    offenders.forEach(o => {
+                        const key = o.selector;
+                        if (!seen.has(key)) {
+                            seen.add(key);
+                            unique.push(o);
+                        }
+                    });
+
+                    let html = `<span class="offender">⚠️ ${unique.length} overflowing element(s) at ${viewportWidth}px:</span>\n\n`;
+                    unique.forEach((o, i) => {
+                        html += `<span class="offender">${i + 1}. ${o.selector}</span>\n`;
+                        html += `   Overflows by: ${o.overflow}px  (element width: ${o.width}px)\n`;
+                        if (o.text) html += `   Text: "${o.text.substring(0, 50)}..."\n`;
+                        html += '\n';
+                    });
+                    results.innerHTML = html;
+                }
+            } catch (e) {
+                results.innerHTML = 'Error: ' + e.message;
+            }
+        }
+
+        // Default to iPhone 12
+        setWidth(375);
+    </script>
+</body>
+</html>
