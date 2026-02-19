@@ -1,13 +1,11 @@
 name: Generate GitHub Stats
 
 on:
-  schedule:
-    # Run every day at midnight UTC
-    - cron: '0 0 * * *'
   workflow_dispatch: # Allow manual trigger
-  push:
-    branches:
-      - main
+  # NOTE:
+  # Automatic runs are disabled so this workflow doesn't fail repeatedly
+  # when GitHub Actions is blocked (e.g., billing/account restrictions).
+  # Re-enable schedule/push once Actions is healthy again.
 
 permissions:
   contents: write
