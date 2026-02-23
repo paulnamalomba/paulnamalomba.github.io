@@ -160,9 +160,15 @@ em { color: var(--accent-soft); font-style: italic; }
   margin-bottom: 1.5rem;
 }
 
-.login-input-group input {
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
   width: 100%;
-  padding: 0.85rem 1.2rem;
+  padding: 0.85rem 3rem 0.85rem 1.2rem; /* Added right padding for icon */
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -173,12 +179,30 @@ em { color: var(--accent-soft); font-style: italic; }
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.login-input-group input:focus {
+.pass-toggle {
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  transition: color var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.pass-toggle:hover {
+  color: var(--accent);
+}
+
+.password-wrapper input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-.login-input-group input::placeholder { color: var(--text-muted); }
+.password-wrapper input::placeholder { color: var(--text-muted); }
 
 .login-btn {
   width: 100%;

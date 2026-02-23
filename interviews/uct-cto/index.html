@@ -16,7 +16,10 @@
       <p class="subtitle">Enter access code to continue</p>
       <form id="loginForm" onsubmit="return false;">
         <div class="login-input-group">
-          <input type="password" id="passInput" placeholder="Access code" autocomplete="off" autofocus>
+          <div class="password-wrapper">
+            <input type="password" id="passInput" placeholder="Access code" autocomplete="off" autofocus>
+            <span class="pass-toggle" id="passToggle" title="Toggle visibility">👁️</span>
+          </div>
         </div>
         <button type="submit" class="login-btn" id="loginBtn">Unlock</button>
         <p class="login-error" id="loginError">Incorrect access code. Try again.</p>
@@ -25,17 +28,48 @@
   </div>
   <script>
     (function(){
-      const H='54a15288b39f5bafe59572391e4419c470c1982ee526de37b8b87db4a3811b83';
+      // Note: H is lowercased here because sha256 function returns lowercase hex.
+      // The password is 'UCT-CTO@PN'
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
       if(sessionStorage.getItem('_ig_auth')===H){window.location.replace('hub.html');return;}
-      async function sha256(m){const e=new TextEncoder().encode(m);const h=await crypto.subtle.digest('SHA-256',e);return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');}
-      document.getElementById('loginBtn').addEventListener('click',async function(){
-        const p=document.getElementById('passInput').value;
-        const h=await sha256(p);
-        if(h===H){sessionStorage.setItem('_ig_auth',H);window.location.replace('hub.html');}
-        else{const err=document.getElementById('loginError');err.style.display='block';document.getElementById('passInput').value='';document.getElementById('passInput').focus();}
+      
+      async function sha256(m){
+        const e=new TextEncoder().encode(m);
+        const h=await crypto.subtle.digest('SHA-256',e);
+        return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+      }
+
+      const passToggle = document.getElementById('passToggle');
+      const passInput = document.getElementById('passInput');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginError = document.getElementById('loginError');
+
+      passToggle.addEventListener('click', function() {
+        const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passInput.setAttribute('type', type);
+        this.textContent = type === 'password' ? '👁️' : '🙈';
       });
-      document.getElementById('passInput').addEventListener('keydown',function(e){if(e.key==='Enter'){document.getElementById('loginBtn').click();}});
+
+      loginBtn.addEventListener('click', async function(){
+        const p = passInput.value;
+        const h = await sha256(p);
+        if(h === H){
+          sessionStorage.setItem('_ig_auth', H);
+          window.location.replace('hub.html');
+        } else {
+          loginError.style.display = 'block';
+          passInput.value = '';
+          passInput.focus();
+        }
+      });
+
+      passInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+          loginBtn.click();
+        }
+      });
     })();
   </script>
 </body>
 </html>
+
