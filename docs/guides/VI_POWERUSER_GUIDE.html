@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vi Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="vivim-power-user-guide">VI/VIM Power User Guide</h1>
+<p><strong>Last updated</strong>: December 12, 2025
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://www.vim.org/"><img alt="Editor: Vi/Vim" src="https://img.shields.io/badge/Editor-Vi%2FVim-2C4F4F.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide provides a comprehensive overview of Vi/Vim text editors, focusing on advanced navigation, editing techniques, and customization options. It is designed for power users who want to enhance their productivity and efficiency while working with text files in Vi/Vim.</p>
+<h1 id="contents">Contents</h1>
+<ul>
+<li><a href="#vivim-power-user-guide">VI/VIM Power User Guide</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#mode-system">Mode System</a></li>
+<li><a href="#basic-navigation">Basic Navigation</a><ul>
+<li><a href="#character-movement">Character Movement</a></li>
+<li><a href="#word-movement">Word Movement</a></li>
+<li><a href="#line-movement">Line Movement</a></li>
+</ul>
+</li>
+<li><a href="#advanced-navigation">Advanced Navigation</a><ul>
+<li><a href="#screen-movement">Screen Movement</a></li>
+<li><a href="#scrolling">Scrolling</a></li>
+<li><a href="#file-movement">File Movement</a></li>
+<li><a href="#jump-commands">Jump Commands</a></li>
+<li><a href="#marks">Marks</a></li>
+</ul>
+</li>
+<li><a href="#searching">Searching</a><ul>
+<li><a href="#basic-search">Basic Search</a></li>
+<li><a href="#search-options">Search Options</a></li>
+</ul>
+</li>
+<li><a href="#editing-commands">Editing Commands</a><ul>
+<li><a href="#insert-mode">Insert Mode</a></li>
+<li><a href="#delete-commands">Delete Commands</a></li>
+<li><a href="#copy-yank-commands">Copy (Yank) Commands</a></li>
+<li><a href="#paste-commands">Paste Commands</a></li>
+<li><a href="#undoredo">Undo/Redo</a></li>
+</ul>
+</li>
+<li><a href="#visual-mode">Visual Mode</a><ul>
+<li><a href="#entering-visual-mode">Entering Visual Mode</a></li>
+<li><a href="#visual-mode-operations">Visual Mode Operations</a></li>
+</ul>
+</li>
+<li><a href="#text-objects">Text Objects</a><ul>
+<li><a href="#inner-vs-around">Inner vs Around</a></li>
+<li><a href="#paired-objects">Paired Objects</a></li>
+</ul>
+</li>
+<li><a href="#command-line-mode-ex-commands">Command-Line Mode (Ex Commands)</a><ul>
+<li><a href="#file-operations">File Operations</a></li>
+<li><a href="#line-numbers-and-ranges">Line Numbers and Ranges</a></li>
+<li><a href="#search-and-replace">Search and Replace</a></li>
+<li><a href="#multiple-files">Multiple Files</a></li>
+<li><a href="#windows-splits">Windows (Splits)</a></li>
+<li><a href="#tabs">Tabs</a></li>
+</ul>
+</li>
+<li><a href="#advanced-features">Advanced Features</a><ul>
+<li><a href="#macros">Macros</a></li>
+<li><a href="#registers">Registers</a></li>
+<li><a href="#folding">Folding</a></li>
+<li><a href="#indentation">Indentation</a></li>
+<li><a href="#case-manipulation">Case Manipulation</a></li>
+<li><a href="#incrementdecrement-numbers">Increment/Decrement Numbers</a></li>
+</ul>
+</li>
+<li><a href="#configuration">Configuration</a><ul>
+<li><a href="#settings">Settings</a></li>
+<li><a href="#common-settings">Common Settings</a></li>
+</ul>
+</li>
+<li><a href="#power-user-combinations">Power User Combinations</a><ul>
+<li><a href="#quick-navigation-patterns">Quick Navigation Patterns</a></li>
+<li><a href="#efficient-editing">Efficient Editing</a></li>
+<li><a href="#multiple-operations">Multiple Operations</a></li>
+<li><a href="#complex-commands">Complex Commands</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet-quick-reference">Cheat Sheet Quick Reference</a><ul>
+<li><a href="#essential-commands">Essential Commands</a></li>
+<li><a href="#speed-tips">Speed Tips</a></li>
+</ul>
+</li>
+<li><a href="#help-system">Help System</a></li>
+</ul>
+<hr />
+<h2 id="mode-system">Mode System</h2>
+<p>Vi/Vim operates in different modes:
+- <strong>Normal Mode</strong> (Command Mode) - Default mode for navigation and commands
+- <strong>Insert Mode</strong> - For typing text
+- <strong>Visual Mode</strong> - For selecting text
+- <strong>Command-Line Mode</strong> - For executing ex commands</p>
+<p>Press <code>Esc</code> to return to Normal Mode from any other mode.</p>
+<hr />
+<h2 id="basic-navigation">Basic Navigation</h2>
+<h3 id="character-movement">Character Movement</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>h</code></td>
+<td>Move left one character</td>
+</tr>
+<tr>
+<td><code>j</code></td>
+<td>Move down one line</td>
+</tr>
+<tr>
+<td><code>k</code></td>
+<td>Move up one line</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>Move right one character</td>
+</tr>
+<tr>
+<td>Arrow keys</td>
+<td>Also work for movement</td>
+</tr>
+</tbody>
+</table>
+<h3 id="word-movement">Word Movement</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>w</code></td>
+<td>Move forward to start of next word</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Move forward to start of next WORD (whitespace-delimited)</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Move forward to end of word</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>Move forward to end of WORD</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Move backward to start of word</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>Move backward to start of WORD</td>
+</tr>
+<tr>
+<td><code>ge</code></td>
+<td>Move backward to end of previous word</td>
+</tr>
+<tr>
+<td><code>gE</code></td>
+<td>Move backward to end of previous WORD</td>
+</tr>
+</tbody>
+</table>
+<h3 id="line-movement">Line Movement</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Move to beginning of line (column 0)</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Move to first non-blank character of line</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>Move to end of line</td>
+</tr>
+<tr>
+<td><code>g_</code></td>
+<td>Move to last non-blank character of line</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>Move to column 0</td>
+</tr>
+<tr>
+<td><code>5|</code></td>
+<td>Move to column 5</td>
+</tr>
+<tr>
+<td><code>f{char}</code></td>
+<td>Move forward to next occurrence of {char} on line</td>
+</tr>
+<tr>
+<td><code>F{char}</code></td>
+<td>Move backward to previous occurrence of {char} on line</td>
+</tr>
+<tr>
+<td><code>t{char}</code></td>
+<td>Move forward to character before next {char}</td>
+</tr>
+<tr>
+<td><code>T{char}</code></td>
+<td>Move backward to character after previous {char}</td>
+</tr>
+<tr>
+<td><code>;</code></td>
+<td>Repeat last f, F, t, or T command forward</td>
+</tr>
+<tr>
+<td><code>,</code></td>
+<td>Repeat last f, F, t, or T command backward</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="advanced-navigation">Advanced Navigation</h2>
+<h3 id="screen-movement">Screen Movement</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>H</code></td>
+<td>Move to top of screen (High)</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Move to middle of screen (Middle)</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>Move to bottom of screen (Low)</td>
+</tr>
+<tr>
+<td><code>zt</code></td>
+<td>Scroll current line to top of screen</td>
+</tr>
+<tr>
+<td><code>zz</code></td>
+<td>Scroll current line to center of screen</td>
+</tr>
+<tr>
+<td><code>zb</code></td>
+<td>Scroll current line to bottom of screen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scrolling">Scrolling</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl-f</code></td>
+<td>Scroll forward one full screen (Page Down)</td>
+</tr>
+<tr>
+<td><code>Ctrl-b</code></td>
+<td>Scroll backward one full screen (Page Up)</td>
+</tr>
+<tr>
+<td><code>Ctrl-d</code></td>
+<td>Scroll down half screen</td>
+</tr>
+<tr>
+<td><code>Ctrl-u</code></td>
+<td>Scroll up half screen</td>
+</tr>
+<tr>
+<td><code>Ctrl-e</code></td>
+<td>Scroll down one line (cursor stays)</td>
+</tr>
+<tr>
+<td><code>Ctrl-y</code></td>
+<td>Scroll up one line (cursor stays)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-movement">File Movement</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gg</code></td>
+<td>Go to first line of file</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>Go to last line of file</td>
+</tr>
+<tr>
+<td><code>50G</code></td>
+<td>Go to line 50</td>
+</tr>
+<tr>
+<td><code>:50</code></td>
+<td>Go to line 50 (command mode)</td>
+</tr>
+<tr>
+<td><code>:$</code></td>
+<td>Go to last line</td>
+</tr>
+<tr>
+<td><code>50%</code></td>
+<td>Go to 50% through file</td>
+</tr>
+<tr>
+<td><code>1G</code></td>
+<td>Go to first line</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jump-commands">Jump Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl-o</code></td>
+<td>Jump to older position in jump list</td>
+</tr>
+<tr>
+<td><code>Ctrl-i</code></td>
+<td>Jump to newer position in jump list</td>
+</tr>
+<tr>
+<td><code>`</code></td>
+<td>Jump to last cursor position</td>
+</tr>
+<tr>
+<td><code>''</code></td>
+<td>Jump to beginning of last line</td>
+</tr>
+<tr>
+<td><code>`[</code></td>
+<td>Jump to beginning of last changed/yanked text</td>
+</tr>
+<tr>
+<td><code>`]</code></td>
+<td>Jump to end of last changed/yanked text</td>
+</tr>
+<tr>
+<td><code>`&lt;</code></td>
+<td>Jump to beginning of last visual selection</td>
+</tr>
+<tr>
+<td><code>`&gt;</code></td>
+<td>Jump to end of last visual selection</td>
+</tr>
+<tr>
+<td><code>g;</code></td>
+<td>Jump to position of last change</td>
+</tr>
+<tr>
+<td><code>g,</code></td>
+<td>Jump forward through change list</td>
+</tr>
+</tbody>
+</table>
+<h3 id="marks">Marks</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ma</code></td>
+<td>Set mark 'a' at current position</td>
+</tr>
+<tr>
+<td><code>`a</code></td>
+<td>Jump to mark 'a'</td>
+</tr>
+<tr>
+<td><code>'a</code></td>
+<td>Jump to beginning of line with mark 'a'</td>
+</tr>
+<tr>
+<td><code>:marks</code></td>
+<td>List all marks</td>
+</tr>
+<tr>
+<td><code>mA</code></td>
+<td>Set global mark 'A' (works across files)</td>
+</tr>
+<tr>
+<td><code>`.</code></td>
+<td>Jump to position of last change</td>
+</tr>
+<tr>
+<td><code>`"</code></td>
+<td>Jump to position when last exited file</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="searching">Searching</h2>
+<h3 id="basic-search">Basic Search</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/pattern</code></td>
+<td>Search forward for pattern</td>
+</tr>
+<tr>
+<td><code>?pattern</code></td>
+<td>Search backward for pattern</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>Repeat search in same direction</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>Repeat search in opposite direction</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>Search forward for word under cursor</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td>Search backward for word under cursor</td>
+</tr>
+<tr>
+<td><code>g*</code></td>
+<td>Search forward for partial word under cursor</td>
+</tr>
+<tr>
+<td><code>g#</code></td>
+<td>Search backward for partial word under cursor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search-options">Search Options</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/pattern/e</code></td>
+<td>Search and place cursor at end of match</td>
+</tr>
+<tr>
+<td><code>/pattern/+2</code></td>
+<td>Search and place cursor 2 lines below match</td>
+</tr>
+<tr>
+<td><code>:set ic</code></td>
+<td>Ignore case in searches</td>
+</tr>
+<tr>
+<td><code>:set noic</code></td>
+<td>Case-sensitive searches</td>
+</tr>
+<tr>
+<td><code>:set hls</code></td>
+<td>Highlight search matches</td>
+</tr>
+<tr>
+<td><code>:noh</code></td>
+<td>Clear search highlighting</td>
+</tr>
+<tr>
+<td><code>:set incsearch</code></td>
+<td>Incremental search (search as you type)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="editing-commands">Editing Commands</h2>
+<h3 id="insert-mode">Insert Mode</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i</code></td>
+<td>Insert before cursor</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>Insert at beginning of line</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>Append after cursor</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>Append at end of line</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>Open new line below</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>Open new line above</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>Substitute character (delete char and insert)</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>Substitute line (delete line and insert)</td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>Change to end of line</td>
+</tr>
+<tr>
+<td><code>cc</code></td>
+<td>Change entire line</td>
+</tr>
+<tr>
+<td><code>cw</code></td>
+<td>Change word</td>
+</tr>
+<tr>
+<td><code>ciw</code></td>
+<td>Change inner word</td>
+</tr>
+<tr>
+<td><code>ci"</code></td>
+<td>Change text inside quotes</td>
+</tr>
+<tr>
+<td><code>ci(</code></td>
+<td>Change text inside parentheses</td>
+</tr>
+<tr>
+<td><code>cit</code></td>
+<td>Change text inside HTML/XML tag</td>
+</tr>
+</tbody>
+</table>
+<h3 id="delete-commands">Delete Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>Delete character under cursor</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>Delete character before cursor</td>
+</tr>
+<tr>
+<td><code>dw</code></td>
+<td>Delete word</td>
+</tr>
+<tr>
+<td><code>dW</code></td>
+<td>Delete WORD</td>
+</tr>
+<tr>
+<td><code>dd</code></td>
+<td>Delete line</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>Delete to end of line</td>
+</tr>
+<tr>
+<td><code>d$</code></td>
+<td>Delete to end of line</td>
+</tr>
+<tr>
+<td><code>d0</code></td>
+<td>Delete to beginning of line</td>
+</tr>
+<tr>
+<td><code>dgg</code></td>
+<td>Delete to beginning of file</td>
+</tr>
+<tr>
+<td><code>dG</code></td>
+<td>Delete to end of file</td>
+</tr>
+<tr>
+<td><code>d50G</code></td>
+<td>Delete to line 50</td>
+</tr>
+<tr>
+<td><code>dt{char}</code></td>
+<td>Delete until {char}</td>
+</tr>
+<tr>
+<td><code>df{char}</code></td>
+<td>Delete including {char}</td>
+</tr>
+<tr>
+<td><code>diw</code></td>
+<td>Delete inner word</td>
+</tr>
+<tr>
+<td><code>di"</code></td>
+<td>Delete inside quotes</td>
+</tr>
+<tr>
+<td><code>da"</code></td>
+<td>Delete around quotes (including quotes)</td>
+</tr>
+<tr>
+<td><code>dap</code></td>
+<td>Delete around paragraph</td>
+</tr>
+</tbody>
+</table>
+<h3 id="copy-yank-commands">Copy (Yank) Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>yw</code></td>
+<td>Yank word</td>
+</tr>
+<tr>
+<td><code>yy</code></td>
+<td>Yank line</td>
+</tr>
+<tr>
+<td><code>Y</code></td>
+<td>Yank line (same as yy)</td>
+</tr>
+<tr>
+<td><code>y$</code></td>
+<td>Yank to end of line</td>
+</tr>
+<tr>
+<td><code>y0</code></td>
+<td>Yank to beginning of line</td>
+</tr>
+<tr>
+<td><code>ygg</code></td>
+<td>Yank to beginning of file</td>
+</tr>
+<tr>
+<td><code>yG</code></td>
+<td>Yank to end of file</td>
+</tr>
+<tr>
+<td><code>yiw</code></td>
+<td>Yank inner word</td>
+</tr>
+<tr>
+<td><code>yi"</code></td>
+<td>Yank inside quotes</td>
+</tr>
+<tr>
+<td><code>yap</code></td>
+<td>Yank around paragraph</td>
+</tr>
+</tbody>
+</table>
+<h3 id="paste-commands">Paste Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>Paste after cursor/below line</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Paste before cursor/above line</td>
+</tr>
+<tr>
+<td><code>gp</code></td>
+<td>Paste and move cursor after pasted text</td>
+</tr>
+<tr>
+<td><code>gP</code></td>
+<td>Paste before and move cursor</td>
+</tr>
+<tr>
+<td><code>]p</code></td>
+<td>Paste and adjust indentation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="undoredo">Undo/Redo</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>u</code></td>
+<td>Undo last change</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>Undo all changes on line</td>
+</tr>
+<tr>
+<td><code>Ctrl-r</code></td>
+<td>Redo</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>Repeat last change</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>Repeat last :substitute</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="visual-mode">Visual Mode</h2>
+<h3 id="entering-visual-mode">Entering Visual Mode</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td>Enter character-wise visual mode</td>
+</tr>
+<tr>
+<td><code>V</code></td>
+<td>Enter line-wise visual mode</td>
+</tr>
+<tr>
+<td><code>Ctrl-v</code></td>
+<td>Enter block-wise visual mode</td>
+</tr>
+<tr>
+<td><code>gv</code></td>
+<td>Reselect last visual selection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visual-mode-operations">Visual Mode Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>o</code></td>
+<td>Move to other end of selection</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>Move to other corner (block mode)</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>Delete selection</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>Change selection</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>Yank selection</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>Indent selection</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>Unindent selection</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>Auto-indent selection</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>Toggle case</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>Make lowercase</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>Make uppercase</td>
+</tr>
+<tr>
+<td><code>J</code></td>
+<td>Join lines</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="text-objects">Text Objects</h2>
+<p>Text objects work with operator commands (d, c, y, etc.)</p>
+<h3 id="inner-vs-around">Inner vs Around</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iw</code></td>
+<td>Inner word</td>
+</tr>
+<tr>
+<td><code>aw</code></td>
+<td>Around word (includes whitespace)</td>
+</tr>
+<tr>
+<td><code>iW</code></td>
+<td>Inner WORD</td>
+</tr>
+<tr>
+<td><code>aW</code></td>
+<td>Around WORD</td>
+</tr>
+<tr>
+<td><code>is</code></td>
+<td>Inner sentence</td>
+</tr>
+<tr>
+<td><code>as</code></td>
+<td>Around sentence</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>Inner paragraph</td>
+</tr>
+<tr>
+<td><code>ap</code></td>
+<td>Around paragraph</td>
+</tr>
+</tbody>
+</table>
+<h3 id="paired-objects">Paired Objects</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i"</code></td>
+<td>Inside double quotes</td>
+</tr>
+<tr>
+<td><code>a"</code></td>
+<td>Around double quotes</td>
+</tr>
+<tr>
+<td><code>i'</code></td>
+<td>Inside single quotes</td>
+</tr>
+<tr>
+<td><code>a'</code></td>
+<td>Around single quotes</td>
+</tr>
+<tr>
+<td><code>i`</code></td>
+<td>Inside backticks</td>
+</tr>
+<tr>
+<td><code>a`</code></td>
+<td>Around backticks</td>
+</tr>
+<tr>
+<td><code>i(</code> or <code>i)</code> or <code>ib</code></td>
+<td>Inside parentheses</td>
+</tr>
+<tr>
+<td><code>a(</code> or <code>a)</code> or <code>ab</code></td>
+<td>Around parentheses</td>
+</tr>
+<tr>
+<td><code>i{</code> or <code>i}</code> or <code>iB</code></td>
+<td>Inside braces</td>
+</tr>
+<tr>
+<td><code>a{</code> or <code>a}</code> or <code>aB</code></td>
+<td>Around braces</td>
+</tr>
+<tr>
+<td><code>i[</code> or <code>i]</code></td>
+<td>Inside brackets</td>
+</tr>
+<tr>
+<td><code>a[</code> or <code>a]</code></td>
+<td>Around brackets</td>
+</tr>
+<tr>
+<td><code>i&lt;</code> or <code>i&gt;</code></td>
+<td>Inside angle brackets</td>
+</tr>
+<tr>
+<td><code>a&lt;</code> or <code>a&gt;</code></td>
+<td>Around angle brackets</td>
+</tr>
+<tr>
+<td><code>it</code></td>
+<td>Inside tag (HTML/XML)</td>
+</tr>
+<tr>
+<td><code>at</code></td>
+<td>Around tag</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="command-line-mode-ex-commands">Command-Line Mode (Ex Commands)</h2>
+<p>Enter with <code>:</code> from Normal mode</p>
+<h3 id="file-operations">File Operations</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:w</code></td>
+<td>Write (save) file</td>
+</tr>
+<tr>
+<td><code>:w filename</code></td>
+<td>Save as filename</td>
+</tr>
+<tr>
+<td><code>:q</code></td>
+<td>Quit</td>
+</tr>
+<tr>
+<td><code>:q!</code></td>
+<td>Quit without saving</td>
+</tr>
+<tr>
+<td><code>:wq</code></td>
+<td>Write and quit</td>
+</tr>
+<tr>
+<td><code>:x</code></td>
+<td>Write and quit (only if changes)</td>
+</tr>
+<tr>
+<td><code>ZZ</code></td>
+<td>Write and quit (normal mode)</td>
+</tr>
+<tr>
+<td><code>ZQ</code></td>
+<td>Quit without saving (normal mode)</td>
+</tr>
+<tr>
+<td><code>:e filename</code></td>
+<td>Edit (open) file</td>
+</tr>
+<tr>
+<td><code>:e!</code></td>
+<td>Reload current file (discard changes)</td>
+</tr>
+<tr>
+<td><code>:saveas filename</code></td>
+<td>Save as and continue editing new file</td>
+</tr>
+<tr>
+<td><code>:r filename</code></td>
+<td>Read file and insert below cursor</td>
+</tr>
+<tr>
+<td><code>:r !command</code></td>
+<td>Read command output and insert</td>
+</tr>
+</tbody>
+</table>
+<h3 id="line-numbers-and-ranges">Line Numbers and Ranges</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:set nu</code></td>
+<td>Show line numbers</td>
+</tr>
+<tr>
+<td><code>:set nonu</code></td>
+<td>Hide line numbers</td>
+</tr>
+<tr>
+<td><code>:set rnu</code></td>
+<td>Show relative line numbers</td>
+</tr>
+<tr>
+<td><code>:50</code></td>
+<td>Go to line 50</td>
+</tr>
+<tr>
+<td><code>:$</code></td>
+<td>Go to last line</td>
+</tr>
+<tr>
+<td><code>:+5</code></td>
+<td>Go 5 lines down</td>
+</tr>
+<tr>
+<td><code>:-3</code></td>
+<td>Go 3 lines up</td>
+</tr>
+<tr>
+<td><code>:.</code></td>
+<td>Current line</td>
+</tr>
+<tr>
+<td><code>:%</code></td>
+<td>All lines</td>
+</tr>
+<tr>
+<td><code>:1,50</code></td>
+<td>Lines 1 to 50</td>
+</tr>
+<tr>
+<td><code>:'a,'b</code></td>
+<td>From mark a to mark b</td>
+</tr>
+</tbody>
+</table>
+<h3 id="search-and-replace">Search and Replace</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:s/old/new/</code></td>
+<td>Substitute first occurrence on line</td>
+</tr>
+<tr>
+<td><code>:s/old/new/g</code></td>
+<td>Substitute all occurrences on line</td>
+</tr>
+<tr>
+<td><code>:s/old/new/gc</code></td>
+<td>Substitute with confirmation</td>
+</tr>
+<tr>
+<td><code>:%s/old/new/g</code></td>
+<td>Substitute in entire file</td>
+</tr>
+<tr>
+<td><code>:%s/old/new/gi</code></td>
+<td>Substitute case-insensitive</td>
+</tr>
+<tr>
+<td><code>:5,12s/old/new/g</code></td>
+<td>Substitute in lines 5-12</td>
+</tr>
+<tr>
+<td><code>:'&lt;,'&gt;s/old/new/g</code></td>
+<td>Substitute in visual selection</td>
+</tr>
+<tr>
+<td><code>:g/pattern/d</code></td>
+<td>Delete all lines matching pattern</td>
+</tr>
+<tr>
+<td><code>:g!/pattern/d</code> or <code>:v/pattern/d</code></td>
+<td>Delete non-matching lines</td>
+</tr>
+<tr>
+<td><code>:g/pattern/m$</code></td>
+<td>Move matching lines to end</td>
+</tr>
+<tr>
+<td><code>:g/pattern/t$</code></td>
+<td>Copy matching lines to end</td>
+</tr>
+</tbody>
+</table>
+<h3 id="multiple-files">Multiple Files</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:bn</code></td>
+<td>Next buffer</td>
+</tr>
+<tr>
+<td><code>:bp</code></td>
+<td>Previous buffer</td>
+</tr>
+<tr>
+<td><code>:bd</code></td>
+<td>Delete buffer (close file)</td>
+</tr>
+<tr>
+<td><code>:ls</code> or <code>:buffers</code></td>
+<td>List buffers</td>
+</tr>
+<tr>
+<td><code>:b5</code></td>
+<td>Switch to buffer 5</td>
+</tr>
+<tr>
+<td><code>:b filename</code></td>
+<td>Switch to buffer (tab completion)</td>
+</tr>
+<tr>
+<td><code>:ball</code></td>
+<td>Open all buffers in windows</td>
+</tr>
+<tr>
+<td><code>:e#</code></td>
+<td>Switch to alternate file</td>
+</tr>
+</tbody>
+</table>
+<h3 id="windows-splits">Windows (Splits)</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:sp filename</code></td>
+<td>Split window horizontally</td>
+</tr>
+<tr>
+<td><code>:vs filename</code></td>
+<td>Split window vertically</td>
+</tr>
+<tr>
+<td><code>Ctrl-w s</code></td>
+<td>Split current window horizontally</td>
+</tr>
+<tr>
+<td><code>Ctrl-w v</code></td>
+<td>Split current window vertically</td>
+</tr>
+<tr>
+<td><code>Ctrl-w q</code></td>
+<td>Close current window</td>
+</tr>
+<tr>
+<td><code>Ctrl-w w</code></td>
+<td>Switch to next window</td>
+</tr>
+<tr>
+<td><code>Ctrl-w h/j/k/l</code></td>
+<td>Move to window (left/down/up/right)</td>
+</tr>
+<tr>
+<td><code>Ctrl-w H/J/K/L</code></td>
+<td>Move window to edge</td>
+</tr>
+<tr>
+<td><code>Ctrl-w =</code></td>
+<td>Make all windows equal size</td>
+</tr>
+<tr>
+<td><code>Ctrl-w +</code></td>
+<td>Increase window height</td>
+</tr>
+<tr>
+<td><code>Ctrl-w -</code></td>
+<td>Decrease window height</td>
+</tr>
+<tr>
+<td><code>Ctrl-w &gt;</code></td>
+<td>Increase window width</td>
+</tr>
+<tr>
+<td><code>Ctrl-w &lt;</code></td>
+<td>Decrease window width</td>
+</tr>
+<tr>
+<td><code>Ctrl-w _</code></td>
+<td>Maximize window height</td>
+</tr>
+<tr>
+<td><code>Ctrl-w |</code></td>
+<td>Maximize window width</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tabs">Tabs</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:tabnew</code></td>
+<td>New tab</td>
+</tr>
+<tr>
+<td><code>:tabe filename</code></td>
+<td>Edit file in new tab</td>
+</tr>
+<tr>
+<td><code>:tabc</code></td>
+<td>Close current tab</td>
+</tr>
+<tr>
+<td><code>:tabo</code></td>
+<td>Close all other tabs</td>
+</tr>
+<tr>
+<td><code>gt</code> or <code>:tabn</code></td>
+<td>Next tab</td>
+</tr>
+<tr>
+<td><code>gT</code> or <code>:tabp</code></td>
+<td>Previous tab</td>
+</tr>
+<tr>
+<td><code>5gt</code></td>
+<td>Go to tab 5</td>
+</tr>
+<tr>
+<td><code>:tabs</code></td>
+<td>List all tabs</td>
+</tr>
+<tr>
+<td><code>:tabm 3</code></td>
+<td>Move tab to position 3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="advanced-features">Advanced Features</h2>
+<h3 id="macros">Macros</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qa</code></td>
+<td>Record macro in register 'a'</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>Stop recording</td>
+</tr>
+<tr>
+<td><code>@a</code></td>
+<td>Execute macro 'a'</td>
+</tr>
+<tr>
+<td><code>@@</code></td>
+<td>Repeat last macro</td>
+</tr>
+<tr>
+<td><code>5@a</code></td>
+<td>Execute macro 'a' 5 times</td>
+</tr>
+<tr>
+<td><code>qA</code></td>
+<td>Append to macro 'a'</td>
+</tr>
+<tr>
+<td><code>:reg</code></td>
+<td>View register contents</td>
+</tr>
+</tbody>
+</table>
+<h3 id="registers">Registers</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>"ayy</code></td>
+<td>Yank line into register 'a'</td>
+</tr>
+<tr>
+<td><code>"ap</code></td>
+<td>Paste from register 'a'</td>
+</tr>
+<tr>
+<td><code>"Ayy</code></td>
+<td>Append line to register 'a'</td>
+</tr>
+<tr>
+<td><code>"+y</code></td>
+<td>Yank to system clipboard</td>
+</tr>
+<tr>
+<td><code>"+p</code></td>
+<td>Paste from system clipboard</td>
+</tr>
+<tr>
+<td><code>"*y</code></td>
+<td>Yank to selection clipboard (Linux)</td>
+</tr>
+<tr>
+<td><code>"*p</code></td>
+<td>Paste from selection clipboard</td>
+</tr>
+<tr>
+<td><code>"0p</code></td>
+<td>Paste from yank register (not delete)</td>
+</tr>
+<tr>
+<td><code>"1p</code></td>
+<td>Paste from delete register</td>
+</tr>
+<tr>
+<td><code>:reg</code></td>
+<td>View all registers</td>
+</tr>
+</tbody>
+</table>
+<h3 id="folding">Folding</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zf</code></td>
+<td>Create fold (in visual mode)</td>
+</tr>
+<tr>
+<td><code>zf50j</code></td>
+<td>Create fold for 50 lines</td>
+</tr>
+<tr>
+<td><code>za</code></td>
+<td>Toggle fold</td>
+</tr>
+<tr>
+<td><code>zo</code></td>
+<td>Open fold</td>
+</tr>
+<tr>
+<td><code>zc</code></td>
+<td>Close fold</td>
+</tr>
+<tr>
+<td><code>zO</code></td>
+<td>Open all folds recursively</td>
+</tr>
+<tr>
+<td><code>zC</code></td>
+<td>Close all folds recursively</td>
+</tr>
+<tr>
+<td><code>zM</code></td>
+<td>Close all folds in file</td>
+</tr>
+<tr>
+<td><code>zR</code></td>
+<td>Open all folds in file</td>
+</tr>
+<tr>
+<td><code>zd</code></td>
+<td>Delete fold</td>
+</tr>
+<tr>
+<td><code>zE</code></td>
+<td>Delete all folds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="indentation">Indentation</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>Indent line</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>Unindent line</td>
+</tr>
+<tr>
+<td><code>5&gt;&gt;</code></td>
+<td>Indent 5 lines</td>
+</tr>
+<tr>
+<td><code>&gt;%</code></td>
+<td>Indent block (cursor on bracket)</td>
+</tr>
+<tr>
+<td><code>=%</code></td>
+<td>Auto-indent block</td>
+</tr>
+<tr>
+<td><code>gg=G</code></td>
+<td>Auto-indent entire file</td>
+</tr>
+<tr>
+<td><code>=ap</code></td>
+<td>Auto-indent paragraph</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>Auto-indent current line</td>
+</tr>
+</tbody>
+</table>
+<h3 id="case-manipulation">Case Manipulation</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~</code></td>
+<td>Toggle case of character</td>
+</tr>
+<tr>
+<td><code>g~~</code></td>
+<td>Toggle case of line</td>
+</tr>
+<tr>
+<td><code>gUU</code></td>
+<td>Uppercase line</td>
+</tr>
+<tr>
+<td><code>guu</code></td>
+<td>Lowercase line</td>
+</tr>
+<tr>
+<td><code>gUw</code></td>
+<td>Uppercase word</td>
+</tr>
+<tr>
+<td><code>guw</code></td>
+<td>Lowercase word</td>
+</tr>
+<tr>
+<td><code>gUiw</code></td>
+<td>Uppercase inner word</td>
+</tr>
+<tr>
+<td><code>guiw</code></td>
+<td>Lowercase inner word</td>
+</tr>
+</tbody>
+</table>
+<h3 id="incrementdecrement-numbers">Increment/Decrement Numbers</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl-a</code></td>
+<td>Increment number under cursor</td>
+</tr>
+<tr>
+<td><code>Ctrl-x</code></td>
+<td>Decrement number under cursor</td>
+</tr>
+<tr>
+<td><code>5 Ctrl-a</code></td>
+<td>Add 5 to number</td>
+</tr>
+<tr>
+<td><code>g Ctrl-a</code></td>
+<td>Increment sequence (visual mode)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<h3 id="settings">Settings</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:set all</code></td>
+<td>Show all settings</td>
+</tr>
+<tr>
+<td><code>:set</code></td>
+<td>Show modified settings</td>
+</tr>
+<tr>
+<td><code>:set option?</code></td>
+<td>Show value of option</td>
+</tr>
+<tr>
+<td><code>:set option</code></td>
+<td>Enable boolean option</td>
+</tr>
+<tr>
+<td><code>:set nooption</code></td>
+<td>Disable boolean option</td>
+</tr>
+<tr>
+<td><code>:set option=value</code></td>
+<td>Set option value</td>
+</tr>
+<tr>
+<td><code>:set option+=value</code></td>
+<td>Append to option</td>
+</tr>
+</tbody>
+</table>
+<h3 id="common-settings">Common Settings</h3>
+<div class="codehilite"><pre><span></span><code><span class="p">:</span><span class="k">set</span> <span class="k">number</span>              <span class="c">&quot; Show line numbers</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">relativenumber</span>      <span class="c">&quot; Show relative line numbers</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">ignorecase</span>          <span class="c">&quot; Case-insensitive search</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">smartcase</span>           <span class="c">&quot; Case-sensitive if uppercase used</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">hlsearch</span>            <span class="c">&quot; Highlight search results</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">incsearch</span>           <span class="c">&quot; Incremental search</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">expandtab</span>           <span class="c">&quot; Use spaces instead of tabs</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">tabstop</span><span class="p">=</span><span class="m">4</span>           <span class="c">&quot; Tab width</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">shiftwidth</span><span class="p">=</span><span class="m">4</span>        <span class="c">&quot; Indent width</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">autoindent</span>          <span class="c">&quot; Auto-indent new lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">smartindent</span>         <span class="c">&quot; Smart auto-indent</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">wrap</span>                <span class="c">&quot; Wrap long lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">nowrap</span>              <span class="c">&quot; Don&#39;t wrap lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">mouse</span><span class="p">=</span><span class="k">a</span>             <span class="c">&quot; Enable mouse</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>unnamed   <span class="c">&quot; Use system clipboard</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">syntax</span><span class="p">=</span><span class="k">on</span>           <span class="c">&quot; Enable syntax highlighting</span>
+</code></pre></div>
+
+<hr />
+<h2 id="power-user-combinations">Power User Combinations</h2>
+<h3 id="quick-navigation-patterns">Quick Navigation Patterns</h3>
+<div class="codehilite"><pre><span></span><code><span class="mf">5</span><span class="n">j</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="n">Move</span><span class="w"> </span><span class="n">down</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="n">lines</span>
+<span class="mf">10</span><span class="n">k</span><span class="w">         </span><span class="o">-</span><span class="w"> </span><span class="n">Move</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="mf">10</span><span class="w"> </span><span class="n">lines</span>
+<span class="mf">3</span><span class="n">w</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="n">Move</span><span class="w"> </span><span class="kr">for</span><span class="n">ward</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="n">words</span>
+<span class="mf">2</span><span class="n">b</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="n">Move</span><span class="w"> </span><span class="n">back</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="n">words</span>
+<span class="mf">5</span><span class="n">G</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="kr">Go</span><span class="w"> </span><span class="kr">to</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mf">5</span>
+<span class="o">/</span><span class="n">pattern</span><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">Search</span><span class="w"> </span><span class="kr">for</span><span class="n">ward</span><span class="p">,</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="kr">to</span><span class="w"> </span><span class="n">jump</span><span class="w"> </span><span class="n">through</span><span class="w"> </span><span class="n">matches</span>
+<span class="err">?</span><span class="n">pattern</span><span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="n">Search</span><span class="w"> </span><span class="n">backward</span>
+<span class="o">*</span><span class="w">           </span><span class="o">-</span><span class="w"> </span><span class="n">Search</span><span class="w"> </span><span class="n">word</span><span class="w"> </span><span class="n">under</span><span class="w"> </span><span class="n">cursor</span><span class="p">,</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="n">n</span><span class="o">/</span><span class="n">N</span><span class="w"> </span><span class="kr">to</span><span class="w"> </span><span class="n">navigate</span>
+</code></pre></div>
+
+<h3 id="efficient-editing">Efficient Editing</h3>
+<div class="codehilite"><pre><span></span><code>ciw         - Change inner word (cursor anywhere in word)
+ci&quot;         - Change text inside quotes
+ca&quot;         - Change text and quotes
+dap         - Delete paragraph
+yap         - Yank paragraph
+&gt;ap         - Indent paragraph
+=ap         - Auto-indent paragraph
+gqap        - Format/wrap paragraph
+</code></pre></div>
+
+<h3 id="multiple-operations">Multiple Operations</h3>
+<div class="codehilite"><pre><span></span><code>d3w         - Delete 3 words
+c2j         - Change current and next 2 lines
+y5k         - Yank current and previous 5 lines
+5dd         - Delete 5 lines
+3p          - Paste 3 times
+10i*&lt;Esc&gt;   - Insert 10 asterisks
+</code></pre></div>
+
+<h3 id="complex-commands">Complex Commands</h3>
+<div class="codehilite"><pre><span></span><code><span class="err">:</span><span class="o">%</span><span class="n">s</span><span class="o">/</span><span class="err">\</span><span class="n">s</span><span class="err">\</span><span class="o">+</span><span class="err">$</span><span class="o">//</span><span class="n">g</span><span class="w">              </span><span class="o">-</span><span class="w"> </span><span class="n">Remove</span><span class="w"> </span><span class="k">trailing</span><span class="w"> </span><span class="n">whitespace</span>
+<span class="err">:</span><span class="n">g</span><span class="o">/^</span><span class="err">$</span><span class="o">/</span><span class="n">d</span><span class="w">                   </span><span class="o">-</span><span class="w"> </span><span class="k">Delete</span><span class="w"> </span><span class="n">empty</span><span class="w"> </span><span class="n">lines</span>
+<span class="err">:</span><span class="n">g</span><span class="o">/</span><span class="n">pattern</span><span class="o">/</span><span class="n">normal</span><span class="w"> </span><span class="nv">@a</span><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="k">Execute</span><span class="w"> </span><span class="n">macro</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matching</span><span class="w"> </span><span class="n">lines</span>
+<span class="err">:</span><span class="p">.,</span><span class="o">+</span><span class="mi">5</span><span class="n">s</span><span class="o">/</span><span class="k">old</span><span class="o">/</span><span class="k">new</span><span class="o">/</span><span class="n">g</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="n">Substitute</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">lines</span>
+<span class="err">:</span><span class="s1">&#39;&lt;,&#39;</span><span class="o">&gt;</span><span class="n">normal</span><span class="w"> </span><span class="n">I</span><span class="err">#</span><span class="w">           </span><span class="o">-</span><span class="w"> </span><span class="n">Comment</span><span class="w"> </span><span class="n">visual</span><span class="w"> </span><span class="n">selection</span>
+<span class="err">:</span><span class="o">%</span><span class="err">!</span><span class="n">sort</span><span class="w">                   </span><span class="o">-</span><span class="w"> </span><span class="n">Sort</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="k">file</span>
+<span class="err">:</span><span class="n">r</span><span class="w"> </span><span class="err">!</span><span class="nc">date</span><span class="w">                  </span><span class="o">-</span><span class="w"> </span><span class="k">Insert</span><span class="w"> </span><span class="k">current</span><span class="w"> </span><span class="nc">date</span>
+</code></pre></div>
+
+<hr />
+<h2 id="cheat-sheet-quick-reference">Cheat Sheet Quick Reference</h2>
+<h3 id="essential-commands">Essential Commands</h3>
+<ul>
+<li><strong>Exit</strong>: <code>:q</code> (quit), <code>:wq</code> (save and quit), <code>:q!</code> (force quit)</li>
+<li><strong>Save</strong>: <code>:w</code> (write)</li>
+<li><strong>Navigate</strong>: <code>h j k l</code> (left, down, up, right)</li>
+<li><strong>Go to line</strong>: <code>:50</code> or <code>50G</code></li>
+<li><strong>Go to start</strong>: <code>gg</code></li>
+<li><strong>Go to end</strong>: <code>G</code></li>
+<li><strong>Search</strong>: <code>/pattern</code> then <code>n</code> (next), <code>N</code> (previous)</li>
+<li><strong>Undo</strong>: <code>u</code></li>
+<li><strong>Redo</strong>: <code>Ctrl-r</code></li>
+<li><strong>Delete line</strong>: <code>dd</code></li>
+<li><strong>Copy line</strong>: <code>yy</code></li>
+<li><strong>Paste</strong>: <code>p</code></li>
+<li><strong>Insert mode</strong>: <code>i</code></li>
+<li><strong>Exit insert mode</strong>: <code>Esc</code></li>
+</ul>
+<h3 id="speed-tips">Speed Tips</h3>
+<ol>
+<li>Use relative line numbers (<code>:set rnu</code>) for quick jumps</li>
+<li>Use <code>*</code> to search word under cursor</li>
+<li>Use <code>.</code> to repeat last change</li>
+<li>Use text objects: <code>ciw</code>, <code>ci"</code>, <code>dap</code> etc.</li>
+<li>Record macros for repetitive tasks</li>
+<li>Use marks (<code>ma</code>, <code>`a</code>) for quick navigation</li>
+<li>Use <code>:noh</code> to clear search highlighting</li>
+<li>Use <code>Ctrl-o</code> and <code>Ctrl-i</code> to jump back and forward</li>
+<li>Use visual block mode (<code>Ctrl-v</code>) for column editing</li>
+<li>Use <code>:earlier 5m</code> to go back 5 minutes in undo history</li>
+</ol>
+<hr />
+<h2 id="help-system">Help System</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:help</code></td>
+<td>Open help</td>
+</tr>
+<tr>
+<td><code>:help topic</code></td>
+<td>Help on specific topic</td>
+</tr>
+<tr>
+<td><code>:help :command</code></td>
+<td>Help on ex command</td>
+</tr>
+<tr>
+<td><code>:help 'option'</code></td>
+<td>Help on option</td>
+</tr>
+<tr>
+<td><code>Ctrl-]</code></td>
+<td>Jump to tag under cursor (in help)</td>
+</tr>
+<tr>
+<td><code>Ctrl-o</code></td>
+<td>Jump back</td>
+</tr>
+<tr>
+<td><code>:q</code></td>
+<td>Close help window</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example help topics:</strong>
+- <code>:help navigation</code>
+- <code>:help motion</code>
+- <code>:help text-objects</code>
+- <code>:help registers</code>
+- <code>:help patterns</code></p>
+<hr />
+<p><em>This guide covers vi/vim commands. Most commands work in both vi and vim, though vim has additional features.</em></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

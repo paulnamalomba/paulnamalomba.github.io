@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Operations - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
+.codehilite .c { color: #3D7B7B; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #9C6500 } /* Comment.Preproc */
+.codehilite .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #E40000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #008400 } /* Generic.Inserted */
+.codehilite .go { color: #717171 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #687822 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #00F; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #800 } /* Name.Constant */
+.codehilite .nd { color: #A2F } /* Name.Decorator */
+.codehilite .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #00F } /* Name.Function */
+.codehilite .nl { color: #767600 } /* Name.Label */
+.codehilite .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #A45A77 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #00F } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666 } /* Literal.Number.Integer.Long */</style>
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to System Scripts</a>
+            <span>|</span>
+            <a href="/docs/guide-home/">Guides &amp; Scripts</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+            <h1>File Operations</h1>
+            <p><code>file-operations.ps1</code> · <a href="file-operations.ps1" download>Download Script</a></p>
+            <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span></pre></div></td><td class="code"><div><pre><span></span><span class="c"># File Operations Functions</span>
+<span class="c"># Collection of functions for file and folder operations</span>
+
+<span class="k">function</span> <span class="n">MoveItem-Overwrite</span> <span class="p">{</span>
+    <span class="cm">&lt;#</span>
+<span class="cm">    </span><span class="sd">.SYNOPSIS</span>
+<span class="cm">    Moves an item with overwrite capability</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.DESCRIPTION</span>
+<span class="cm">    Removes the destination if it exists, then moves the source to destination</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> Src</span>
+<span class="cm">    Source path (can be file or folder)</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> Dest</span>
+<span class="cm">    Destination path</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.EXAMPLE</span>
+<span class="cm">    MoveItem-Overwrite -Src &quot;C:\Source\File.txt&quot; -Dest &quot;C:\Destination\File.txt&quot;</span>
+<span class="cm">    #&gt;</span>
+    <span class="k">param</span> <span class="p">(</span>
+        <span class="no">[string]</span><span class="nv">$Src</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$Dest</span>
+    <span class="p">)</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="c"># 1. Remove existing folder (if present)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$Dest</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Remove-Item</span> <span class="p">`</span>
+            <span class="n">-LiteralPath</span> <span class="nv">$Dest</span> <span class="p">`</span>
+            <span class="n">-Recurse</span> <span class="p">`</span>
+            <span class="n">-Force</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Removed existing folder/file at &#39;$Dest&#39;.&quot;</span>
+    <span class="p">}</span>
+
+    <span class="c"># 2. Move the source folder</span>
+    <span class="nb">Move-Item</span> <span class="p">`</span>
+        <span class="n">-LiteralPath</span> <span class="nv">$Src</span> <span class="p">`</span>
+        <span class="n">-Destination</span> <span class="nv">$Dest</span> <span class="p">`</span>
+        <span class="n">-Force</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$Dest</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Move operation successful.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Moved folder from &#39;$Src&#39; to &#39;$Dest&#39;.&quot;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Move operation failed.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="p">}</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="n">RenameFolders-FirstLetterUppercase</span> <span class="p">{</span>
+    <span class="cm">&lt;#</span>
+<span class="cm">    </span><span class="sd">.SYNOPSIS</span>
+<span class="cm">    Renames all folders to have first letter uppercase</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.DESCRIPTION</span>
+<span class="cm">    Enumerates all directories and renames them with first letter capitalized</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> Path</span>
+<span class="cm">    The path to process (default is current directory)</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.EXAMPLE</span>
+<span class="cm">    RenameFolders-FirstLetterUppercase -Path &quot;C:\MyFolder&quot;</span>
+<span class="cm">    #&gt;</span>
+    <span class="p">[</span><span class="k">CmdletBinding</span><span class="p">(</span><span class="n">SupportsShouldProcess</span><span class="p">=</span><span class="nv">$true</span><span class="p">,</span> <span class="n">ConfirmImpact</span><span class="p">=</span><span class="s1">&#39;Medium&#39;</span><span class="p">)]</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$Path</span> <span class="p">=</span> <span class="s1">&#39;.&#39;</span>
+    <span class="p">)</span>
+
+    <span class="c"># Enumerate all directories under the specified path</span>
+    <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$Path</span> <span class="n">-Directory</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+        <span class="nv">$oldName</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
+        <span class="nv">$parentPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">FullName</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Processing folder: $oldName&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$oldName</span><span class="p">.</span><span class="n">Length</span> <span class="o">-ge</span> <span class="n">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c"># Construct the new folder name</span>
+            <span class="nv">$newName</span> <span class="p">=</span> <span class="nv">$oldName</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="n">0</span><span class="p">,</span><span class="n">1</span><span class="p">).</span><span class="n">ToUpper</span><span class="p">()</span> <span class="p">+</span> <span class="nv">$oldName</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
+            <span class="nb">Write-Host</span> <span class="s2">&quot;New folder name will be: $newName&quot;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$newName</span> <span class="o">-cne</span> <span class="nv">$oldName</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$oldFullPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
+                <span class="nv">$newFullPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="n">-Path</span> <span class="nv">$parentPath</span> <span class="n">-ChildPath</span> <span class="nv">$newName</span>
+                <span class="nb">Write-Host</span> <span class="s2">&quot;Old full path: $oldFullPath&quot;</span>
+                <span class="nb">Write-Host</span> <span class="s2">&quot;New full path: $newFullPath&quot;</span>
+                <span class="nb">Write-Host</span> <span class="s2">&quot;Considering rename of $oldName to $newName&quot;</span>
+                <span class="c"># Handle case-only on NTFS</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$oldName</span><span class="p">.</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="nv">$newName</span><span class="p">.</span><span class="n">ToLower</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="nv">$tmpName</span>     <span class="p">=</span> <span class="s2">&quot;{0}_tmp_{1}&quot;</span> <span class="o">-f</span> <span class="nv">$newName</span><span class="p">,</span> <span class="p">(</span><span class="no">[guid]</span><span class="p">::</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">))</span>
+                    <span class="nv">$tmpFullPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$parentPath</span> <span class="nv">$tmpName</span>
+
+                    <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$oldFullPath</span> <span class="n">-Destination</span> <span class="nv">$tmpFullPath</span> <span class="n">-Force</span>
+                    <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$tmpFullPath</span> <span class="n">-Destination</span> <span class="nv">$newFullPath</span> <span class="n">-Force</span>
+
+                    <span class="nb">Write-Host</span> <span class="s2">&quot;Case-only rename: &#39;$oldName&#39; → &#39;$newName&#39; via temp &#39;$tmpName&#39;&quot;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$oldFullPath</span> <span class="n">-Destination</span> <span class="nv">$newFullPath</span> <span class="n">-Force</span>
+                    <span class="nb">Write-Host</span> <span class="s2">&quot;Renamed &#39;$oldName&#39; to &#39;$newName&#39;&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">function</span> <span class="n">ListSize-Directory</span> <span class="p">{</span>
+    <span class="cm">&lt;#</span>
+<span class="cm">    </span><span class="sd">.SYNOPSIS</span>
+<span class="cm">    Lists all directories and their sizes in GB</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.DESCRIPTION</span>
+<span class="cm">    Suitable for locating where data storage is centralized</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> Path</span>
+<span class="cm">    The parent directory to analyze (default is current directory)</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.EXAMPLE</span>
+<span class="cm">    ListSize-Directory</span>
+<span class="cm">    ListSize-Directory -Path &quot;C:\MyFolder&quot;</span>
+<span class="cm">    #&gt;</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="no">[string]</span><span class="nv">$Path</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Location</span><span class="p">).</span><span class="n">Path</span>
+    <span class="p">)</span>
+    
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Parent-Dir ${Path}&quot;</span>
+    <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$Path</span> <span class="n">-Directory</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+        <span class="nv">$folderPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
+        <span class="nv">$lastElement</span> <span class="p">=</span> <span class="nb">Split-Path</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Leaf</span>
+        <span class="nv">$sizeInBytes</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Recurse</span> <span class="o">-File</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Property</span> <span class="n">Length</span> <span class="n">-Sum</span><span class="p">).</span><span class="n">Sum</span>
+        <span class="nv">$sizeInGB</span> <span class="p">=</span> <span class="nv">$sizeInBytes</span> <span class="p">/</span> <span class="n">1GB</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Child-Dir ${lastElement}: </span><span class="p">$(</span><span class="s2">&quot;{0:N2}&quot;</span> <span class="o">-f</span> <span class="nv">$sizeInGB</span><span class="p">)</span><span class="s2"> GB&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c"># Export functions</span>
+<span class="nb">Export-ModuleMember</span> <span class="n">-Function</span> <span class="n">MoveItem-Overwrite</span><span class="p">,</span> <span class="n">RenameFolders-FirstLetterUppercase</span><span class="p">,</span> <span class="n">ListSize-Directory</span>
+</pre></div></td></tr></table></div>
+
+        </article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

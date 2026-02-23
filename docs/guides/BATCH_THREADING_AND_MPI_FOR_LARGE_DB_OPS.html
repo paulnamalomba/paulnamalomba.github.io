@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Threading And Mpi For Large Db Ops - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database Operations</h1>
+<p><br>
+<strong>Last updated</strong>: February 16, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://www.python.org/"><img alt="Language: Python" src="https://img.shields.io/badge/Language-Python-3776AB.svg" /></a></p>
+<!-- [![Language: C++](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://learn.microsoft.com/cpp) -->
+<p><a href="https://www.mpi-forum.org/"><img alt="HPC: MPI" src="https://img.shields.io/badge/HPC-MPI-orange.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a>
+<br>
+<em>C++ will come in a future update. For now, the Python implementation demonstrates the core algorithm effectively.</em></p>
+<h2 id="context">Context</h2>
+<p>We innovated this idea at database-level for our platform (SEAT) backend. That platform is written in Python with the Django framework, and uses PostgreSQL as the database engine. We had to perform bulk updates on tables with millions of rows, and found that naive/server-native/pessimistic approaches either exhausted RAM, underutilised the CPU, or saturated server disk I/O leading to quite frankly, insane performance inefficiencies that trickle down into affecting platform availability and uptime. This guide distills our solution into a general-purpose algorithm that can be applied in any language or database context. With examples given in both Python and C++, and a detailed numerical breakdown of how the algorithm adapts to different RAM profiles and data sizes, this guide is a practical resource for developers facing similar challenges with large database operations. The three-stage pipeline we present — <em>Memory-Aware Batching → Thread-Level Buffering → MPI Core-Level Chunking</em> — is designed to dynamically adapt to available system resources, ensuring efficient processing without overwhelming the server.</p>
+<h2 id="foundational-assumptions">Foundational Assumptions</h2>
+<p>The algorithm presented here is a self-tuning algorithm with respect to the host machine characteristics: it reads total <strong>available physical RAM</strong>, reserves a <strong>10% safety overhead</strong>, <strong>partitions the remaining budget into lightweight thread buffers</strong>, and then <strong>distributes each buffer's workload across logical cores via MPI scatter/gather</strong>. We assume disk I/O throughput is that of a PCIe Gen 4 NVMe at ~5.5 GB/s maximum. This is factored into the algorithm so that neither the storage subsystem nor the memory subsystem becomes the bottleneck.</p>
+<p>Two real-world scenarios are analysed in detail:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Total data</th>
+<th>Row size</th>
+<th>Row count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong> — Heavy update</td>
+<td>10 GB</td>
+<td>5 KB</td>
+<td>2 097 152 rows</td>
+</tr>
+<tr>
+<td><strong>B</strong> — Moderate update</td>
+<td>3 GB</td>
+<td>20 KB</td>
+<td>157 286 rows</td>
+</tr>
+</tbody>
+</table>
+<p>Each scenario is evaluated against three theoretical RAM profiles: <strong>24 GB</strong>, <strong>8 GB</strong>, and <strong>4 GB</strong>.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#memory-aware-batching-threading--mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading \&amp; MPI Chunking for Large Database Operations</a></li>
+<li><a href="#context">Context</a></li>
+<li><a href="#foundational-assumptions">Foundational Assumptions</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#1-problem-statement--hardware-model">1) Problem Statement \&amp; Hardware Model</a></li>
+<li><a href="#2-the-three-stage-pipeline">2) The Three-Stage Pipeline</a></li>
+<li><a href="#3-stage-1--memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</a></li>
+<li><a href="#4-stage-2--thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</a></li>
+<li><a href="#5-stage-3--mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</a></li>
+<li><a href="#6-disk-io-constraint--nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</a></li>
+<li><a href="#7-worked-scenarios--numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</a><ul>
+<li><a href="#scenario-a--heavy-update-10-gb--5-kb-rows--2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</a></li>
+<li><a href="#scenario-b--moderate-update-3-gb--20-kb-rows--157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</a></li>
+<li><a href="#discussion--why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</a></li>
+</ul>
+</li>
+<li><a href="#8-python-reference-implementation">8) Python Reference Implementation</a></li>
+<li><a href="#9-performance-notes--pitfalls">9) Performance Notes \&amp; Pitfalls</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="1-problem-statement-hardware-model">1) Problem Statement &amp; Hardware Model</h2>
+<p>You have a database with <code>N</code> rows, each of size <code>R</code> bytes, requiring a bulk update of total size <code>D = N × R</code>. The machine has:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Symbol</th>
+<th>Typical values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total physical RAM</td>
+<td><code>RAM_total</code></td>
+<td>4 GB / 8 GB / 24 GB</td>
+</tr>
+<tr>
+<td>OS + base process overhead</td>
+<td><code>RAM_os</code></td>
+<td>~1.5 GB (Windows), ~0.8 GB (Linux)</td>
+</tr>
+<tr>
+<td>Safety overhead (always reserved)</td>
+<td><code>α</code></td>
+<td>10 % of <code>RAM_total</code></td>
+</tr>
+<tr>
+<td>Logical CPU cores</td>
+<td><code>C</code></td>
+<td>4 / 8 / 16</td>
+</tr>
+<tr>
+<td>Disk sequential read/write</td>
+<td><code>IO_max</code></td>
+<td>~5.5 GB/s (PCIe Gen 4 NVMe SSD)</td>
+</tr>
+<tr>
+<td>Disk queue depth (NVMe)</td>
+<td><code>QD</code></td>
+<td>32–64</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>usable budget</strong> or in other words <strong>maximum expendable data-effort</strong> for the batcher is:</p>
+<div class="codehilite"><pre><span></span><code>RAM_usable = RAM_total − RAM_os − (α × RAM_total)
+</code></pre></div>
+
+<p>This is the ceiling the algorithm must never exceed.</p>
+<hr />
+<h2 id="2-the-three-stage-pipeline">2) The Three-Stage Pipeline</h2>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        DATA SOURCE  (D bytes)                       │
+└───────────────────────────────┬─────────────────────────────────────┘
+                                │
+                 ┌──────────────▼──────────────┐
+                 │      STAGE 1: BATCHER       │   ← RAM-aware
+                 │    Splits D into N_batch    │     batch_size ≤ RAM_usable
+                 │     sequential batches      │
+                 └──────────────┬──────────────┘
+                                │  one batch at a time
+                    ┌───────────▼───────────┐
+                    │   STAGE 2: THREADER   │   ← buffer partitioning
+                    │   Splits batch into   │     T lightweight threads
+                    │  thread_buf = batch/T │
+                    └───────────┬───────────┘
+                                │  T concurrent buffers (lightweight threads)
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+    ┌─────────▼──────┐ ┌───────▼────────┐ ┌──────▼─────────┐
+    │  STAGE 3: MPI  │ │  STAGE 3: MPI  │ │  STAGE 3: MPI  │
+    │  chunk = buf/C │ │  chunk = buf/C │ │  chunk = buf/C │
+    │  → core 0..C-1 │ │  → core 1..C-1 │ │  → core 2..C-1 │
+    └────────────────┘ └────────────────┘ └────────────────┘
+              │                 │                 │
+              └─────────────────┼─────────────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │   COMMIT / WRITE-BACK │   ← disk I/O gated
+                    └───────────────────────┘
+</code></pre></div>
+
+<p>Each stage enforces a different resource constraint:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Governs</th>
+<th>Constraint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Batcher</td>
+<td>RAM ceiling</td>
+<td><code>batch_size ≤ RAM_usable</code></td>
+</tr>
+<tr>
+<td>Threader</td>
+<td>Concurrency</td>
+<td><code>thread_buffer = batch_size / T</code></td>
+</tr>
+<tr>
+<td>MPI Chunker</td>
+<td>Core utilisation</td>
+<td><code>chunk = thread_buffer / C</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-stage-1-memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</h2>
+<p>The batcher answers one question: <em>how many rows can I hold in RAM at once without exceeding the usable budget?</em></p>
+<p><strong>Algorithm:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">RAM_total</span><span class="o">,</span><span class="w"> </span><span class="n">RAM_os</span><span class="o">,</span><span class="w"> </span><span class="err">α</span><span class="o">,</span><span class="w"> </span><span class="n">row_size</span><span class="o">,</span><span class="w"> </span><span class="n">total_rows</span>
+<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">(</span><span class="n">bytes</span><span class="o">),</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">,</span><span class="w"> </span><span class="n">num_batches</span>
+
+<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">RAM_usable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">RAM_total</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">RAM_os</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="o">(</span><span class="err">α</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="n">RAM_total</span><span class="o">)</span>
+<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">batch_size</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">RAM_usable</span><span class="w">                            </span><span class="err">#</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">budget</span>
+<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
+<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">num_batches</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ceil</span><span class="o">(</span><span class="n">total_rows</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">)</span>
+<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">batch_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">,</span><span class="w"> </span><span class="n">num_batches</span>
+</code></pre></div>
+
+<p>The batch size dynamically adapts: on a 24 GB machine you get large batches (few iterations), on a 4 GB machine you get small batches (many iterations). The total work is identical; only the iteration count changes.</p>
+<p>Notes:
+- <code>RAM_os</code> should be measured, not assumed. On Windows, use <code>GlobalMemoryStatusEx</code>; on Linux, read <code>/proc/meminfo</code>. In Python, <code>psutil.virtual_memory()</code> provides this portably.
+- The 10 % overhead (<code>α = 0.10</code>) absorbs transient allocations: serialisation buffers, ORM object headers, GC pressure spikes.</p>
+<hr />
+<h2 id="4-stage-2-thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</h2>
+<p>Once a batch is loaded into RAM, it is subdivided into <code>T</code> independent thread buffers. Each thread operates on a non-overlapping slice of the batch.</p>
+<p><strong>Algorithm:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">batch_size</span><span class="o">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">(</span><span class="n">num</span><span class="w"> </span><span class="n">threads</span><span class="o">)</span>
+<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_thread</span>
+
+<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">T</span><span class="o">)</span>
+<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_thread</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
+<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">remainder_rows</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="o">(</span><span class="n">T</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="n">rows_per_thread</span><span class="o">)</span>
+<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">Assign</span><span class="w"> </span><span class="n">remainder_rows</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">thread</span><span class="w"> </span><span class="o">(</span><span class="n">or</span><span class="w"> </span><span class="n">distribute</span><span class="w"> </span><span class="n">round</span><span class="o">-</span><span class="n">robin</span><span class="o">)</span>
+<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_thread</span>
+</code></pre></div>
+
+<p>T must either be chosen based on your target buffer size (<code>thread_buffer_size</code>) of scaled by number of logical cores or simply an arbitrary number as per your choice. How to choose <code>T</code>:</p>
+<ul>
+<li><code>T</code> should not exceed the logical core count <code>C</code>; going beyond causes context-switch overhead.</li>
+<li>For I/O-bound workloads (database writes), <code>T = 2 × C</code> can be acceptable because threads spend time waiting on I/O.</li>
+<li>For CPU-bound transforms, <code>T = C</code> is optimal.</li>
+</ul>
+<p>A better way would be to choose <code>thread_buffer_size</code> first (e.g. 50 MB), then derive <code>T = floor(batch_size / thread_buffer_size)</code>, capping at <code>C</code>.</p>
+<p>Notes:
+- In <code>Python</code>, the GIL prevents true parallel CPU execution across threads. Use <code>multiprocessing</code> or <code>concurrent.futures.ProcessPoolExecutor</code> for CPU-bound work. For I/O-bound database calls, <code>threading</code> / <code>ThreadPoolExecutor</code> is effective because the GIL is released during I/O waits.
+- In <code>C++</code>, <code>std::thread</code> or OpenMP libraries give true shared-memory parallelism without a GIL.
+- GIL: Global Interpreter Lock disallows more than 1 thread to control the process <a href="https://realpython.com/python-gil">read more @ https://realpython.com/python-gil/</a>.</p>
+<hr />
+<h2 id="5-stage-3-mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</h2>
+<p>Each thread buffer is further decomposed into <code>C</code> chunks, one per logical core, distributed via MPI <code>Scatter</code> / <code>Gather</code> (or in a shared-memory context, via OpenMP work-sharing).</p>
+<p><strong>Algorithm:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">(</span><span class="n">logical</span><span class="w"> </span><span class="n">cores</span><span class="o">)</span>
+<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">chunk_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_chunk</span>
+
+<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">chunk_size</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">C</span><span class="o">)</span>
+<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_chunk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">chunk_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
+<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">MPI_Scatter</span><span class="o">(</span><span class="n">thread_buffer</span><span class="o">,</span><span class="w"> </span><span class="n">chunk_size</span><span class="o">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="o">)</span>
+<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">Each</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="n">processes</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">chunk</span><span class="w"> </span><span class="n">independently</span>
+<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">MPI_Gather</span><span class="o">(</span><span class="n">results</span><span class="o">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="o">)</span>
+<span class="mi">6</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">aggregated</span><span class="w"> </span><span class="n">results</span>
+</code></pre></div>
+
+<p>Example — if <code>thread_buffer_size = 50 MB</code> and <code>C = 10</code>:</p>
+<div class="codehilite"><pre><span></span><code>chunk_size = 50 MB / 10 = 5 MB per core
+</code></pre></div>
+
+<p><strong>All 10 cores execute concurrently. Wall-clock time for this thread's work drops to ≈ 1/10th of sequential.</strong></p>
+<p>Notes:
+- MPI ranks can span multiple nodes (distributed memory) or be confined to a single node (shared memory). For database batching on a single server, <code>MPI_COMM_WORLD</code> maps to local cores.
+- Prefer <code>MPI_Scatterv</code> / <code>MPI_Gatherv</code> when chunk sizes are uneven (remainder rows).
+- In Python, <code>mpi4py</code> provides full MPI bindings. In C++, use the native MPI C API or Boost.MPI.</p>
+<hr />
+<h2 id="6-disk-io-constraint-nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</h2>
+<p>Even with unlimited RAM and cores, the disk is the final bottleneck. A PCIe Gen 4 NVMe SSD delivers:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequential read</td>
+<td>~5.5 GB/s</td>
+</tr>
+<tr>
+<td>Sequential write</td>
+<td>~5.0 GB/s</td>
+</tr>
+<tr>
+<td>Random 4K read (QD32)</td>
+<td>~700K IOPS → ~2.7 GB/s</td>
+</tr>
+<tr>
+<td>Random 4K write (QD32)</td>
+<td>~500K IOPS → ~1.9 GB/s</td>
+</tr>
+</tbody>
+</table>
+<p>Database writes are typically <strong>random</strong> (updating rows at arbitrary offsets), so effective throughput may drop to ~1.5–2.5 GB/s depending on the database engine and WAL configuration.</p>
+<p><strong>I/O gate rule:</strong> the batcher should not produce batches faster than the disk can absorb them. If <code>batch_size / IO_effective &gt; batch_compute_time</code>, insert a throttle:</p>
+<div class="codehilite"><pre><span></span><code>IO_time_estimate = batch_size / IO_effective
+if compute_time &lt; IO_time_estimate:
+    sleep(IO_time_estimate − compute_time)   # or use backpressure
+</code></pre></div>
+
+<p>In practice, the database engine's write-ahead log (WAL) and <code>fsync</code> latency naturally throttle throughput. The batcher simply needs to avoid queuing dozens of batches in memory while the disk is still flushing earlier ones — hence the single-batch-at-a-time design in Stage 1.</p>
+<hr />
+<h2 id="7-worked-scenarios-numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</h2>
+<p>Assumptions for all scenarios:
+- <code>RAM_os</code> = 1.5 GB (Windows with typical services)
+- <code>α</code> = 0.10 (10 % safety overhead)
+- <code>C</code> = 8 logical cores
+- <code>T</code> = 8 threads (1 thread per core, CPU-bound model)
+- <code>thread_buffer_size</code> = 50 MB</p>
+<h3 id="scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</h3>
+<table>
+<thead>
+<tr>
+<th>Machine</th>
+<th>RAM_total</th>
+<th>RAM_usable</th>
+<th>batch_size</th>
+<th>rows/batch</th>
+<th>num_batches</th>
+<th>thread_buf</th>
+<th>chunk/core</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>24 GB</strong></td>
+<td>24 GB</td>
+<td>24 − 1.5 − 2.4 = <strong>20.1 GB</strong></td>
+<td>10 GB (data fits ×2)</td>
+<td>2 097 152 (all)</td>
+<td><strong>1</strong></td>
+<td>1.25 GB</td>
+<td>160 MB</td>
+</tr>
+<tr>
+<td><strong>8 GB</strong></td>
+<td>8 GB</td>
+<td>8 − 1.5 − 0.8 = <strong>5.7 GB</strong></td>
+<td>5.7 GB</td>
+<td>1 196 236</td>
+<td><strong>2</strong></td>
+<td>731 MB</td>
+<td>91.4 MB</td>
+</tr>
+<tr>
+<td><strong>4 GB</strong></td>
+<td>4 GB</td>
+<td>4 − 1.5 − 0.4 = <strong>2.1 GB</strong></td>
+<td>2.1 GB</td>
+<td>440 401</td>
+<td><strong>5</strong></td>
+<td>268 MB</td>
+<td>33.6 MB</td>
+</tr>
+</tbody>
+</table>
+<p>Observations (Different Buffer Sizes &amp; Iteration Counts):
+- The 24 GB machine loads the entire 10 GB dataset in a single batch with ~10 GB headroom remaining. No iteration needed.
+- The 8 GB machine runs 2 batches. Each batch fills ~5.7 GB, processes it across 8 cores, commits, then loads the next.
+- The 4 GB machine runs 5 batches of ~2.1 GB each. More iterations but each is fully parallelised.</p>
+<p>I/O check (worst case, random writes at ~2 GB/s):
+- 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
+- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>. 
+- 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
+<p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
+<p>Observations (Same Buffer Sizes):
+- The 24 GB machine loads the entire 10 GB dataset in 25 batches (<code>8 x 50 MB = 400 MB</code> each) with ~10 GB headroom remaining. No iteration needed.
+- The 8 GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each). but can only load 14 batches at a time. Means 1 iterations of 14 batches then another of 11 batches.
+- The 4 GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each), but can only load 5 batches at a time. Means 5 iterations of 5 batches each.</p>
+<p>I/O check (worst case, random writes at ~2 GB/s):
+- 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
+- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>. 
+- 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
+<p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
+<h3 id="scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</h3>
+<table>
+<thead>
+<tr>
+<th>Machine</th>
+<th>RAM_total</th>
+<th>RAM_usable</th>
+<th>batch_size</th>
+<th>rows/batch</th>
+<th>num_batches</th>
+<th>thread_buf</th>
+<th>chunk/core</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>24 GB</strong></td>
+<td>24 GB</td>
+<td>20.1 GB</td>
+<td>3 GB (all)</td>
+<td>157 286 (all)</td>
+<td><strong>1</strong></td>
+<td>384 MB</td>
+<td>48 MB</td>
+</tr>
+<tr>
+<td><strong>8 GB</strong></td>
+<td>8 GB</td>
+<td>5.7 GB</td>
+<td>3 GB (all)</td>
+<td>157 286 (all)</td>
+<td><strong>1</strong></td>
+<td>384 MB</td>
+<td>48 MB</td>
+</tr>
+<tr>
+<td><strong>4 GB</strong></td>
+<td>4 GB</td>
+<td>2.1 GB</td>
+<td>2.1 GB</td>
+<td>110 100</td>
+<td><strong>2</strong></td>
+<td>268 MB</td>
+<td>33.6 MB</td>
+</tr>
+</tbody>
+</table>
+<p>Observations:
+- Both the 24 GB and 8 GB machines fit the entire 3 GB payload in one batch.
+- Only the 4 GB machine needs 2 batches.
+- Larger row sizes (20 KB) mean fewer rows and lower ORM overhead per row.</p>
+<h3 id="discussion-why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</h3>
+<p>This is the most important insight in the entire guide. Notice that whether we use 24 GB, 8 GB, or 4 GB of RAM — and whether we use variable or fixed buffer sizes — the total wall-clock time for disk writes always lands at roughly <strong>5 seconds</strong> for Scenario A. This is not a coincidence. It is a mathematical inevitability. So you do not have to have a MEGA RAM machine to achieve good performance on large database operations. The algorithm adapts to the RAM you have, and the disk I/O time converges to the same value, based on smart batching and parallelism. The key would actually be a faster SSD and faster RAM, perhaps faster PostgreSQL configuration such as dedicated RAM pool (e.g. WAL settings, checkpoint intervals) to reduce the I/O bottleneck.</p>
+<p><strong>The total bytes written to disk is constant.</strong> The disk does not care how you partition the work in RAM. It receives the same 10 GB of row updates regardless of batching strategy:</p>
+<div class="codehilite"><pre><span></span><code> 24 GB machine:   1 batch  × 10.0 GB  =  10 GB hits the disk
+  8 GB machine:   2 batches ×  5.7 GB ≈  10 GB hits the disk
+  4 GB machine:   5 batches ×  2.1 GB ≈  10 GB hits the disk
+</code></pre></div>
+
+<p>The disk writes at ~2 GB/s (random 4K writes on NVMe). Therefore:</p>
+<div class="codehilite"><pre><span></span><code>Total I/O time  =  Total data  ÷  Disk throughput
+                =  10 GB       ÷  2 GB/s
+                ≈  5.0 s          (always)
+</code></pre></div>
+
+<p>This holds no matter how you slice the data. Think of it as a funnel:</p>
+<div class="codehilite"><pre><span></span><code><span class="w">        </span><span class="err">┌──────────────────────┐</span>
+<span class="w">        </span><span class="err">│</span><span class="w">    </span><span class="n">RAM</span><span class="w"> </span><span class="p">(</span><span class="n">wide</span><span class="w"> </span><span class="n">top</span><span class="p">)</span><span class="w">    </span><span class="err">│</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="n">batching</span><span class="p">:</span><span class="w"> </span><span class="n">variable</span><span class="p">,</span><span class="w"> </span><span class="n">adapts</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">machine</span>
+<span class="w">        </span><span class="err">│</span><span class="w">  </span><span class="err">████████████████</span><span class="w">    </span><span class="err">│</span>
+<span class="w">        </span><span class="err">└──────────┬───────────┘</span>
+<span class="w">                   </span><span class="err">│</span>
+<span class="w">           </span><span class="err">┌───────▼───────┐</span>
+<span class="w">           </span><span class="err">│</span><span class="w">  </span><span class="n">CPU</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Cores</span><span class="w">  </span><span class="err">│</span><span class="w">       </span><span class="err">←</span><span class="w"> </span><span class="n">threading</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">MPI</span><span class="p">:</span><span class="w"> </span><span class="n">fast</span><span class="p">,</span><span class="w"> </span><span class="n">parallel</span>
+<span class="w">           </span><span class="err">│</span><span class="w">  </span><span class="err">████████████</span><span class="w"> </span><span class="err">│</span>
+<span class="w">           </span><span class="err">└───────┬───────┘</span>
+<span class="w">                   </span><span class="err">│</span>
+<span class="w">              </span><span class="err">┌────▼────┐</span>
+<span class="w">              </span><span class="err">│</span><span class="w">  </span><span class="n">DISK</span><span class="w">   </span><span class="err">│</span><span class="w">          </span><span class="err">←</span><span class="w"> </span><span class="n">fixed</span><span class="w"> </span><span class="n">throughput</span><span class="p">:</span><span class="w"> </span><span class="o">~</span><span class="mi">2</span><span class="w"> </span><span class="n">GB</span><span class="o">/</span><span class="n">s</span>
+<span class="w">              </span><span class="err">│</span><span class="w">  </span><span class="err">█████</span><span class="w">  </span><span class="err">│</span><span class="w">            </span><span class="n">this</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">narrow</span><span class="w"> </span><span class="n">spout</span>
+<span class="w">              </span><span class="err">└─────────┘</span>
+</code></pre></div>
+
+<p>RAM and cores control how fast you <em>prepare</em> data (compute phase: ORM serialisation, row transforms, query construction). But for database bulk writes, compute cost is microseconds-per-row while disk I/O is the dominant wall-clock cost by orders of magnitude. The compute phase is effectively instantaneous relative to the I/O phase.</p>
+<p><strong>Where more RAM does provide a measurable (but small) advantage:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Benefit</th>
+<th>Mechanism</th>
+<th>Magnitude</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fewer <code>COMMIT</code> / <code>fsync</code> round-trips</td>
+<td>Each transaction commit forces a WAL flush; fewer batches = fewer flushes</td>
+<td>~0.1–5 ms per commit</td>
+</tr>
+<tr>
+<td>Less orchestration overhead</td>
+<td>Fewer batch loop iterations, fewer <code>ProcessPoolExecutor</code> startups</td>
+<td>~10–50 ms per batch</td>
+</tr>
+<tr>
+<td>Better CPU cache locality</td>
+<td>One large contiguous buffer vs many small ones reduces L2/L3 cache misses</td>
+<td>Marginal for I/O-bound work</td>
+</tr>
+<tr>
+<td>Reduced context switching</td>
+<td>Fewer batch transitions = fewer OS scheduler interruptions</td>
+<td>~1–10 ms per switch</td>
+</tr>
+</tbody>
+</table>
+<p>These savings total perhaps <strong>50–200 ms</strong> across the entire 10 GB operation — negligible against <strong>5 000 ms</strong> of disk I/O. The disk is the equaliser.</p>
+<p><strong>When does more RAM actually matter?</strong> When the <em>compute</em> phase is expensive relative to I/O — for example, if each row requires a heavy cryptographic hash, a machine learning inference, or a complex geometric transform before writing. In that case, larger batches mean fewer re-initialisations of the compute pipeline, and the CPU (not the disk) becomes the bottleneck. For straightforward database <code>UPDATE</code> / <code>INSERT</code> operations, the disk dominates.</p>
+<p><strong>Scaling context — per-process view:</strong> The numbers above are for a single process (i.e. one function call writing row-level data in bulk to the database). In a real system with a module that performs hundreds of Django <code>filter → update → save</code> operations, each call independently hits this same I/O floor. If you have 100 such calls each writing 10 GB, the total time is ~100 × 5 s = <strong>500 s</strong> (~8.3 minutes), regardless of RAM. The only way to reduce this is to upgrade the disk (PCIe Gen 5, RAID-0 striping) or reduce the total data volume.</p>
+<hr />
+<h2 id="8-python-reference-implementation">8) Python Reference Implementation</h2>
+<p>A minimal, platform-agnostic implementation demonstrating the three-stage algorithm. Uses <code>psutil</code> for RAM detection and <code>multiprocessing</code> for core-level parallelism (substituting for MPI in single-node deployments).</p>
+<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">memory_aware_batcher.py</span>
+<span class="sd">Demonstrates the Memory-Aware Batcher algorithm.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessPoolExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">psutil</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="c1">#  Stage 1 — Memory-Aware Batch Sizing</span>
+<span class="c1"># ──────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_batch_params</span><span class="p">(</span>
+    <span class="n">total_data_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">row_size_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">ram_total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ram_os</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_500_000_000</span><span class="p">,</span>       <span class="c1"># 1.5 GB default</span>
+    <span class="n">overhead_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.10</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns (batch_size_bytes, rows_per_batch, num_batches).</span>
+<span class="sd">    Dynamically sizes batches to fit within usable RAM.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ram_total</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">psutil</span><span class="p">:</span>
+            <span class="n">ram_total</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;psutil not available; pass ram_total explicitly&quot;</span><span class="p">)</span>
+
+    <span class="n">ram_usable</span> <span class="o">=</span> <span class="n">ram_total</span> <span class="o">-</span> <span class="n">ram_os</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">overhead_fraction</span> <span class="o">*</span> <span class="n">ram_total</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ram_usable</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usable RAM is non-positive: </span><span class="si">{</span><span class="n">ram_usable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Batch size is the smaller of usable RAM and total data</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ram_usable</span><span class="p">,</span> <span class="n">total_data_bytes</span><span class="p">)</span>
+    <span class="n">rows_per_batch</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">//</span> <span class="n">row_size_bytes</span>
+    <span class="k">if</span> <span class="n">rows_per_batch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Row size exceeds usable RAM&quot;</span><span class="p">)</span>
+
+    <span class="n">total_rows</span> <span class="o">=</span> <span class="n">total_data_bytes</span> <span class="o">//</span> <span class="n">row_size_bytes</span>
+    <span class="n">num_batches</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_rows</span> <span class="o">/</span> <span class="n">rows_per_batch</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">rows_per_batch</span><span class="p">,</span> <span class="n">num_batches</span>
+
+
+<span class="c1">#  Stage 2 — Thread-Level Buffer Partitioning</span>
+<span class="c1"># ──────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">partition_into_threads</span><span class="p">(</span>
+    <span class="n">rows_per_batch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits rows_per_batch into non-overlapping slices.</span>
+<span class="sd">    Returns list of (start_row, end_row) tuples.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">num_threads</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">num_threads</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
+
+    <span class="n">base</span> <span class="o">=</span> <span class="n">rows_per_batch</span> <span class="o">//</span> <span class="n">num_threads</span>
+    <span class="n">remainder</span> <span class="o">=</span> <span class="n">rows_per_batch</span> <span class="o">%</span> <span class="n">num_threads</span>
+    <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_threads</span><span class="p">):</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">remainder</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">offset</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">count</span><span class="p">))</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">count</span>
+    <span class="k">return</span> <span class="n">slices</span>
+
+<span class="c1">#  Stage 3 — Core-Level Chunking (MPI-style)</span>
+<span class="c1"># ──────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_process_chunk</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Worker function executed on a single core.</span>
+<span class="sd">    Receives (chunk_start, chunk_end, batch_id).</span>
+<span class="sd">    Returns number of rows processed (placeholder).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">chunk_start</span><span class="p">,</span> <span class="n">chunk_end</span><span class="p">,</span> <span class="n">batch_id</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">rows_processed</span> <span class="o">=</span> <span class="n">chunk_end</span> <span class="o">-</span> <span class="n">chunk_start</span>
+    <span class="c1"># ── replace with actual DB update logic ──</span>
+    <span class="c1">#   e.g. UPDATE table SET ... WHERE id BETWEEN chunk_start AND chunk_end</span>
+    <span class="k">return</span> <span class="n">rows_processed</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scatter_to_cores</span><span class="p">(</span>
+    <span class="n">thread_start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">thread_end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">batch_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Distributes a thread-buffer&#39;s row range across logical cores</span>
+<span class="sd">    using multiprocessing (single-node MPI equivalent).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">num_cores</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">num_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
+
+    <span class="n">total_rows</span> <span class="o">=</span> <span class="n">thread_end</span> <span class="o">-</span> <span class="n">thread_start</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">total_rows</span> <span class="o">//</span> <span class="n">num_cores</span>
+    <span class="n">remainder</span> <span class="o">=</span> <span class="n">total_rows</span> <span class="o">%</span> <span class="n">num_cores</span>
+
+    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">thread_start</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_cores</span><span class="p">):</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">remainder</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">offset</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">count</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">))</span>
+        <span class="n">offset</span> <span class="o">+=</span> <span class="n">count</span>
+
+    <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">num_cores</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_process_chunk</span><span class="p">,</span> <span class="n">chunks</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="c1">#  Orchestrator</span>
+<span class="c1"># ──────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_batcher</span><span class="p">(</span>
+    <span class="n">total_data_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">row_size_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">ram_total</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">batch_size</span><span class="p">,</span> <span class="n">rows_per_batch</span><span class="p">,</span> <span class="n">num_batches</span> <span class="o">=</span> <span class="n">compute_batch_params</span><span class="p">(</span>
+        <span class="n">total_data_bytes</span><span class="p">,</span> <span class="n">row_size_bytes</span><span class="p">,</span> <span class="n">ram_total</span><span class="o">=</span><span class="n">ram_total</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">total_rows</span> <span class="o">=</span> <span class="n">total_data_bytes</span> <span class="o">//</span> <span class="n">row_size_bytes</span>
+    <span class="n">num_threads</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
+    <span class="n">num_cores</span> <span class="o">=</span> <span class="n">num_threads</span>  <span class="c1"># 1:1 thread-to-core mapping</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RAM total       : </span><span class="si">{</span><span class="p">(</span><span class="n">ram_total</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Batch size      : </span><span class="si">{</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Rows per batch  : </span><span class="si">{</span><span class="n">rows_per_batch</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Num batches     : </span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Threads         : </span><span class="si">{</span><span class="n">num_threads</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cores per thread: </span><span class="si">{</span><span class="n">num_cores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">processed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">batch_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
+        <span class="n">batch_start</span> <span class="o">=</span> <span class="n">batch_id</span> <span class="o">*</span> <span class="n">rows_per_batch</span>
+        <span class="n">batch_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">batch_start</span> <span class="o">+</span> <span class="n">rows_per_batch</span><span class="p">,</span> <span class="n">total_rows</span><span class="p">)</span>
+        <span class="n">current_batch_rows</span> <span class="o">=</span> <span class="n">batch_end</span> <span class="o">-</span> <span class="n">batch_start</span>
+
+        <span class="c1"># Stage 2 — partition into thread buffers</span>
+        <span class="n">slices</span> <span class="o">=</span> <span class="n">partition_into_threads</span><span class="p">(</span><span class="n">current_batch_rows</span><span class="p">,</span> <span class="n">num_threads</span><span class="p">)</span>
+
+        <span class="c1"># Stage 3 — scatter each thread buffer across cores</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">t_start</span><span class="p">,</span> <span class="n">t_end</span><span class="p">)</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
+            <span class="n">absolute_start</span> <span class="o">=</span> <span class="n">batch_start</span> <span class="o">+</span> <span class="n">t_start</span>
+            <span class="n">absolute_end</span> <span class="o">=</span> <span class="n">batch_start</span> <span class="o">+</span> <span class="n">t_end</span>
+            <span class="n">processed</span> <span class="o">+=</span> <span class="n">scatter_to_cores</span><span class="p">(</span>
+                <span class="n">absolute_start</span><span class="p">,</span> <span class="n">absolute_end</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">num_cores</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Batch </span><span class="si">{</span><span class="n">batch_id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2"> committed &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">current_batch_rows</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> rows)&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Total rows processed: </span><span class="si">{</span><span class="n">processed</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">#  Entry point — run all scenarios</span>
+<span class="c1"># ──────────────────────────────────────────────</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">GB</span> <span class="o">=</span> <span class="mi">1_073_741_824</span>  <span class="c1"># 1 GiB in bytes</span>
+    <span class="n">KB</span> <span class="o">=</span> <span class="mi">1_024</span>
+
+    <span class="n">scenarios</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;A: 10 GB / 5 KB rows&quot;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;B: 3 GB / 20 KB rows&quot;</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">ram_profiles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">24</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">GB</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">scenarios</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ram</span> <span class="ow">in</span> <span class="n">ram_profiles</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Scenario </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> | RAM = </span><span class="si">{</span><span class="n">ram</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">GB</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+            <span class="n">run_batcher</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">ram_total</span><span class="o">=</span><span class="n">ram</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Run:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<p>Notes:
+- <code>ProcessPoolExecutor</code> sidesteps the GIL for CPU-bound chunk processing.
+- For true MPI across nodes, replace <code>ProcessPoolExecutor</code> with <code>mpi4py.MPI.COMM_WORLD.Scatter</code> / <code>Gather</code>.
+- The <code>_process_chunk</code> worker is the integration point — plug in your ORM / raw SQL update logic there.</p>
+<!-- ---
+
+## 9) C++ Reference Implementation
+
+A minimal C++ implementation using MPI for core-level distribution. Compile with an MPI-aware compiler (`mpicxx`).
+
+
+<div class="codehilite"><pre><span></span><code><span class="cm">/*</span>
+<span class="cm"> * memory_aware_batcher.cpp</span>
+<span class="cm"> * Demonstrates the three-stage Memory-Aware Batcher with MPI.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Compile:  mpicxx -O2 -o batcher memory_aware_batcher.cpp</span>
+<span class="cm"> * Run:      mpirun -np 8 ./batcher</span>
+<span class="cm"> */</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cmath&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// ── Platform-specific RAM detection ──</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="nf">get_total_ram</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="w">    </span><span class="n">MEMORYSTATUSEX</span><span class="w"> </span><span class="n">ms</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ms</span><span class="p">.</span><span class="n">dwLength</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">GlobalMemoryStatusEx</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ms</span><span class="p">.</span><span class="n">ullTotalPhys</span><span class="p">);</span>
+<span class="cp">#else</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">pages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_PHYS_PAGES</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">page_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_PAGE_SIZE</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">pages</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">page_size</span><span class="p">;</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+
+<span class="c1">// ── Stage 1: Batch sizing ──</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">BatchParams</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">batch_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">num_batches</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BatchParams</span><span class="w"> </span><span class="n">compute_batch_params</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">total_data</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">row_size</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">ram_total</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">ram_os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1&#39;500&#39;000&#39;000</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.10</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">ram_usable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ram_total</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ram_os</span>
+<span class="w">                       </span><span class="o">-</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ram_total</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">ram_usable</span><span class="p">,</span><span class="w"> </span><span class="n">total_data</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">total_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total_data</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">num_batches</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">total_rows</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">batch_size</span><span class="p">,</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="p">,</span><span class="w"> </span><span class="n">num_batches</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="c1">// ── Stage 3 worker: process a chunk ──</span>
+<span class="kt">int64_t</span><span class="w"> </span><span class="n">process_chunk</span><span class="p">(</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Replace with actual DB update logic</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// ── Main ──</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">world_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rank</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">world_size</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1&#39;073&#39;741&#39;824L</span><span class="n">L</span><span class="p">;</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">KB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1&#39;024L</span><span class="n">L</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">total_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">GB</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">row_size</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">KB</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">ram_total</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">get_total_ram</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">bp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compute_batch_params</span><span class="p">(</span><span class="n">total_data</span><span class="p">,</span><span class="w"> </span><span class="n">row_size</span><span class="p">,</span><span class="w"> </span><span class="n">ram_total</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">total_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total_data</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;RAM: %.1f GB | batch: %.2f GB | &quot;</span>
+<span class="w">                    </span><span class="s">&quot;rows/batch: %lld | batches: %lld | ranks: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">ram_total</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="p">,</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">bp</span><span class="p">.</span><span class="n">rows_per_batch</span><span class="p">,</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">num_batches</span><span class="p">,</span><span class="w"> </span><span class="n">world_size</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">num_batches</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">batch_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">rows_per_batch</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">batch_end</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">batch_start</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">rows_per_batch</span><span class="p">,</span>
+<span class="w">                                       </span><span class="n">total_rows</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">batch_rows</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">batch_end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">batch_start</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Stage 2+3: distribute rows across MPI ranks</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">base</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">batch_rows</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">world_size</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch_rows</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">world_size</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">my_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">my_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">batch_start</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">rank</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">r</span><span class="p">)</span>
+<span class="w">            </span><span class="n">my_start</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">extra</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">local_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">process_chunk</span><span class="p">(</span><span class="n">my_start</span><span class="p">,</span>
+<span class="w">                                             </span><span class="n">my_start</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">my_count</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">global_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">MPI_Reduce</span><span class="p">(</span><span class="o">&amp;</span><span class="n">local_result</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">global_result</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">MPI_INT64_T</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_SUM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;  Batch %lld/%lld done — %lld rows</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">bp</span><span class="p">.</span><span class="n">num_batches</span><span class="p">,</span><span class="w"> </span><span class="n">global_result</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="err">```</span><span class="w"> </span><span class="o">--&gt;</span>
+
+<span class="o">&lt;!--</span><span class="w"> </span><span class="n">Compile</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">run</span><span class="o">:</span>
+
+<span class="err">```</span><span class="n">powershell</span>
+<span class="cp"># Linux / WSL</span>
+<span class="n">mpicxx</span><span class="w"> </span><span class="o">-</span><span class="n">O2</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="n">batcher</span><span class="w"> </span><span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">cpp</span>
+<span class="n">mpirun</span><span class="w"> </span><span class="o">-</span><span class="n">np</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">batcher</span>
+
+<span class="cp"># Windows with MS-MPI</span>
+<span class="n">cl</span><span class="w"> </span><span class="o">/</span><span class="n">EHsc</span><span class="w"> </span><span class="o">/</span><span class="n">O2</span><span class="w"> </span><span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">cpp</span><span class="w"> </span><span class="o">/</span><span class="n">I</span><span class="s">&quot;%MSMPI_INC%&quot;</span><span class="w"> </span><span class="o">/</span><span class="n">link</span><span class="w"> </span><span class="n">msmpi</span><span class="p">.</span><span class="n">lib</span>
+<span class="n">mpiexec</span><span class="w"> </span><span class="o">-</span><span class="n">n</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">batcher</span><span class="p">.</span><span class="n">exe</span>
+</code></pre></div>
+
+
+
+Notes:
+- `MPI_Reduce` with `MPI_SUM` aggregates per-rank results back to rank 0.
+- For uneven distributions, `MPI_Scatterv` / `MPI_Gatherv` with per-rank displacement arrays is preferred.
+- The `process_chunk` function is the integration point — plug in your database driver calls there. -->
+
+<hr />
+<h2 id="9-performance-notes-pitfalls">9) Performance Notes &amp; Pitfalls</h2>
+<p><strong>RAM management:</strong>
+- Always measure, never assume. <code>import psutil; psutil.virtual_memory()</code> (Python) give live values.
+- The 10 % overhead (<code>α</code>) is a conservative default. In garbage-in-garbage-out style runtimes like Python, consider 25–30 %.
+- Monitor RSS (Resident Set Size) at runtime. If it approaches <code>RAM_usable</code>, reduce <code>batch_size</code> dynamically.</p>
+<p><strong>Threading:</strong>
+- CPython's GIL prevents parallel CPU-bound threads. Use <code>multiprocessing</code> or <code>ProcessPoolExecutor</code>.</p>
+<!-- - In C++, `std::thread` or OpenMP provide true parallelism. Avoid false sharing on cache lines (64-byte alignment). -->
+<ul>
+<li>Thread count beyond core count is only beneficial for I/O-bound workloads.</li>
+</ul>
+<p><strong>MPI considerations:</strong>
+- <code>MPI_Init</code> / <code>MPI_Finalize</code> must bracket all MPI calls.
+- Prefer non-blocking collectives (<code>MPI_Iscatter</code>, <code>MPI_Igather</code>) for overlapping computation and communication.
+- On a single node, MPI over shared memory (<code>--mca btl sm,self</code> in OpenMPI) avoids network stack overhead.</p>
+<p><strong>Disk I/O:</strong>
+- NVMe sequential throughput (5.5 GB/s) applies only to large contiguous reads/writes. Database row updates are random-access.
+- Effective random write throughput on NVMe is typically 1.5–2.5 GB/s depending on block size and queue depth.
+- Batch commits should align with database page sizes (typically 8 KB for PostgreSQL, 16 KB for InnoDB) to minimise write amplification.
+- Disk WAL (Write-Ahead Log) flushes are the true bottleneck for transactional databases. Tuning <code>wal_buffers</code> (PostgreSQL) or <code>innodb_log_buffer_size</code> (MySQL) can help --- logs are huge-space eaters, to keep it stupid and simple.</p>
+<p><strong>Database-specific tips:</strong>
+- Use <code>COPY</code> (PostgreSQL) or <code>LOAD DATA INFILE</code> (MySQL) for bulk inserts — orders of magnitude faster than row-by-row <code>INSERT</code>.
+- Wrap each batch in a single transaction. Committing per-row is catastrophically slow.
+- Disable indexes and constraints during bulk loads, rebuild afterwards.
+- Use <code>UNLOGGED</code> tables (PostgreSQL) for intermediate staging if crash-safety is not required during the load.</p>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>MPI Forum specification: <a href="https://www.mpi-forum.org/docs/">https://www.mpi-forum.org/docs/</a></li>
+<li>mpi4py documentation: <a href="https://mpi4py.readthedocs.io/">https://mpi4py.readthedocs.io/</a></li>
+<li>Python <code>multiprocessing</code> module: <a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a></li>
+<li>NVMe specification (NVM Express): <a href="https://nvmexpress.org/specifications/">https://nvmexpress.org/specifications/</a></li>
+<li>PostgreSQL bulk loading: <a href="https://www.postgresql.org/docs/current/populate.html">https://www.postgresql.org/docs/current/populate.html</a></li>
+<li>psutil — cross-platform system monitoring: <a href="https://psutil.readthedocs.io/">https://psutil.readthedocs.io/</a></li>
+<li>Python GIL explained: <a href="https://realpython.com/python-gil/">https://realpython.com/python-gil/</a></li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

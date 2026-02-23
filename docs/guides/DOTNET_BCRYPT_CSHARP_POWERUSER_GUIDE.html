@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dotnet Bcrypt Csharp Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="dotnet-bcrypt-poweruser-guide-c">DOTNET BCrypt PowerUser Guide (C#)</h1>
+<p><strong>Last updated</strong>: December 05, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://github.com/BcryptNet/bcrypt.net"><img alt="Framework" src="https://img.shields.io/badge/.NET-BCrypt-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>BCrypt.Net-Next is a robust password hashing library for .NET implementing the OpenBSD bcrypt algorithm with adaptive cost factors for future-proof security. This guide covers password hashing, verification, work factor selection, salt generation, and secure defaults for authentication systems. Power users need to understand computational cost tuning, hash format compatibility, and migration strategies for production applications.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#dotnet-bcrypt-poweruser-guide-c">DOTNET BCrypt PowerUser Guide (C#)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#key-concepts">Key Concepts</a></li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#basic-password-hashing-and-verification">Basic Password Hashing and Verification</a></li>
+<li><a href="#custom-work-factor-and-enhanced-entropy">Custom Work Factor and Enhanced Entropy</a></li>
+<li><a href="#aspnet-core-authentication-implementation">ASP.NET Core Authentication Implementation</a></li>
+<li><a href="#password-migration-and-rehashing-strategy">Password Migration and Rehashing Strategy</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<ol>
+<li><strong>Install package</strong>: <code>dotnet add package BCrypt.Net-Next</code></li>
+<li><strong>Hash password</strong>: <code>string hash = BCrypt.Net.BCrypt.HashPassword("password123");</code></li>
+<li><strong>Verify password</strong>: <code>bool isValid = BCrypt.Net.BCrypt.Verify("password123", hash);</code></li>
+<li><strong>Use in ASP.NET Core</strong>: Add to dependency injection and use in user registration/login endpoints</li>
+</ol>
+<h2 id="key-concepts">Key Concepts</h2>
+<ul>
+<li><strong>Work Factor (Cost)</strong>: Number of hashing rounds (2^cost); default is 11, recommended range 10-12 for production; higher values increase security but slow down hashing</li>
+<li><strong>Salt</strong>: Random data automatically generated and embedded in hash output; prevents rainbow table attacks and ensures identical passwords produce different hashes</li>
+<li><strong>Hash Format</strong>: Output format is <code>$2a$[cost]$[22-char salt][31-char hash]</code>; compatible with bcrypt implementations across languages</li>
+<li><strong>Enhanced Entropy</strong>: BCrypt.Net supports enhanced hashing with SHA-384 pre-hashing for passwords &gt;72 bytes to overcome bcrypt's built-in length limitation</li>
+<li><strong>Verification</strong>: Constant-time comparison prevents timing attacks; always use <code>Verify()</code> method instead of string comparison</li>
+<li><strong>Hash Revision</strong>: <code>$2a$</code> is standard; <code>$2b$</code> fixes rare edge cases; <code>$2y$</code> is PHP-specific; stick with <code>$2a$</code> or <code>$2b$</code> for interoperability</li>
+</ul>
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<p><strong>ASP.NET Core Dependency Injection Setup</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Program.cs or Startup.cs</span>
+<span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IPasswordHasher</span><span class="p">,</span><span class="w"> </span><span class="n">BcryptPasswordHasher</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IPasswordHasher</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="nf">HashPassword</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">VerifyPassword</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BcryptPasswordHasher</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IPasswordHasher</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WorkFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span><span class="w"> </span><span class="c1">// Adjust based on performance requirements</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">HashPassword</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">WorkFactor</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">VerifyPassword</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Best Practices</strong>:
+- Use work factor 11-12 for web applications; 13-14 for high-security systems
+- Never store plaintext passwords or use reversible encryption
+- Hash passwords on server-side only; never send hashes from client
+- Implement rate limiting on login endpoints to prevent brute-force attacks
+- Use <code>EnhancedEntropy</code> for passwords that may exceed 72 bytes
+- Store hashes in NVARCHAR(60) or VARCHAR(60) database columns
+- Implement password complexity requirements before hashing</p>
+<h2 id="security-considerations">Security Considerations</h2>
+<ol>
+<li><strong>Work Factor Selection</strong>: Balance security and performance; benchmark on production hardware to ensure &lt;250ms hashing time</li>
+<li><strong>Timing Attacks</strong>: Always use <code>BCrypt.Verify()</code> which implements constant-time comparison; never compare hash strings directly</li>
+<li><strong>Password Migration</strong>: When updating work factors, rehash passwords on successful login rather than forcing password resets</li>
+<li><strong>Memory Security</strong>: Clear sensitive data from memory after hashing; use <code>SecureString</code> for password input when possible</li>
+<li><strong>Distributed Systems</strong>: Ensure consistent work factors across all authentication servers to avoid confusion and security gaps</li>
+<li><strong>Audit Logging</strong>: Log failed login attempts with rate limiting; avoid logging successful authentication details</li>
+<li><strong>Hash Storage</strong>: Store in binary format or base64 to avoid encoding issues; never truncate hash values</li>
+</ol>
+<p><strong>Secure User Registration Example</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IPasswordHasher</span><span class="w"> </span><span class="n">_passwordHasher</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">UserService</span><span class="p">(</span><span class="n">IPasswordHasher</span><span class="w"> </span><span class="n">passwordHasher</span><span class="p">,</span><span class="w"> </span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">userRepository</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_passwordHasher</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordHasher</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_userRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userRepository</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;</span><span class="w"> </span><span class="n">RegisterUser</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Validate password complexity before hashing</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">password</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">&quot;Password must be at least 12 characters&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">HasComplexity</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">&quot;Password must contain uppercase, lowercase, digit, and symbol&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Check if user exists</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">EmailExists</span><span class="p">(</span><span class="n">email</span><span class="p">))</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">&quot;Email already registered&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Hash password</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">passwordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_passwordHasher</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Store user with hash</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="w"> </span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span>
+<span class="w">            </span><span class="n">Email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">PasswordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordHash</span><span class="p">,</span>
+<span class="w">            </span><span class="n">CreatedAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">CreateUser</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="n">Success</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">HasComplexity</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">password</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="kt">char</span><span class="p">.</span><span class="n">IsUpper</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">               </span><span class="n">password</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="kt">char</span><span class="p">.</span><span class="n">IsLower</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">               </span><span class="n">password</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="kt">char</span><span class="p">.</span><span class="n">IsDigit</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">               </span><span class="n">password</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="kt">char</span><span class="p">.</span><span class="n">IsLetterOrDigit</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="examples">Examples</h2>
+<h3 id="basic-password-hashing-and-verification">Basic Password Hashing and Verification</h3>
+<p>Hash user passwords during registration and verify them during login with automatic salt generation.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PasswordExample</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BasicHashingExample</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Hash a password with default work factor (11)</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;MySecurePassword123!&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Hash: {hash}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// Output: $2a$11$randomsalt...hashvalue</span>
+
+<span class="w">        </span><span class="c1">// Verify correct password</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isValid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Password valid: {isValid}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// True</span>
+
+<span class="w">        </span><span class="c1">// Verify incorrect password</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isInvalid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="s">&quot;WrongPassword&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Wrong password: {isInvalid}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// False</span>
+
+<span class="w">        </span><span class="c1">// Each hash is unique due to random salt</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hash2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Hashes equal: {hash == hash2}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// False</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Both verify: {BCrypt.Net.BCrypt.Verify(password, hash2)}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// True</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="custom-work-factor-and-enhanced-entropy">Custom Work Factor and Enhanced Entropy</h3>
+<p>Configure work factors for different security requirements and handle long passwords with enhanced entropy mode.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AdvancedHashingExample</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CustomWorkFactorExample</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;SecurePassword123!&quot;</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Low work factor (faster, less secure) - use for testing only</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hashFast</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Fast hash (work factor 4): {hashFast}&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Standard work factor (recommended for production)</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hashStandard</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Standard hash (work factor 11): {hashStandard}&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// High work factor (slower, more secure)</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hashSecure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Secure hash (work factor 13): {hashSecure}&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Benchmark hashing time</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">stopwatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Diagnostics</span><span class="p">.</span><span class="n">Stopwatch</span><span class="p">.</span><span class="n">StartNew</span><span class="p">();</span>
+<span class="w">        </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">);</span>
+<span class="w">        </span><span class="n">stopwatch</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Hashing time (factor 12): {stopwatch.ElapsedMilliseconds}ms&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Enhanced entropy for long passwords (&gt;72 bytes)</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">longPassword</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">string</span><span class="p">(</span><span class="sc">&#39;x&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">hashEnhanced</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">EnhancedHashPassword</span><span class="p">(</span><span class="n">longPassword</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Enhanced hash: {hashEnhanced}&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">verifyEnhanced</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">EnhancedVerify</span><span class="p">(</span><span class="n">longPassword</span><span class="p">,</span><span class="w"> </span><span class="n">hashEnhanced</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Enhanced verify: {verifyEnhanced}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// True</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="aspnet-core-authentication-implementation">ASP.NET Core Authentication Implementation</h3>
+<p>Implement complete user authentication with registration, login, and password change functionality in ASP.NET Core.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="na">[ApiController]</span>
+<span class="na">[Route(&quot;api/[controller]</span><span class="s">&quot;)]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AuthController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ControllerBase</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">AuthController</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_logger</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">WorkFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">AuthController</span><span class="p">(</span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">userRepository</span><span class="p">,</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">AuthController</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_userRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userRepository</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logger</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[HttpPost(&quot;register&quot;)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Register</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">RegisterRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Validate input</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">))</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">&quot;Email and password are required&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Check password strength</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">&quot;Password must be at least 12 characters&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Check if email exists</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">existingUser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetByEmail</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">existingUser</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">Conflict</span><span class="p">(</span><span class="s">&quot;Email already registered&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Hash password</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">passwordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">,</span><span class="w"> </span><span class="n">WorkFactor</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Create user</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">Email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">,</span>
+<span class="w">            </span><span class="n">PasswordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passwordHash</span><span class="p">,</span>
+<span class="w">            </span><span class="n">CreatedAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;User registered: {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Registration successful&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">Id</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[HttpPost(&quot;login&quot;)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Login</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">LoginRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Get user by email</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetByEmail</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogWarning</span><span class="p">(</span><span class="s">&quot;Login attempt for non-existent email: {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">Unauthorized</span><span class="p">(</span><span class="s">&quot;Invalid credentials&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Verify password</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isValid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isValid</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogWarning</span><span class="p">(</span><span class="s">&quot;Failed login attempt for user: {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">Unauthorized</span><span class="p">(</span><span class="s">&quot;Invalid credentials&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// Check if work factor needs update (optional migration)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">NeedsRehash</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="p">,</span><span class="w"> </span><span class="n">WorkFactor</span><span class="p">))</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">,</span><span class="w"> </span><span class="n">WorkFactor</span><span class="p">);</span>
+<span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Password rehashed for user: {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;User logged in: {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">request</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Generate JWT or session token here</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Login successful&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">Id</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[HttpPost(&quot;change-password&quot;)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ChangePassword</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">ChangePasswordRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Get user</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetById</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">UserId</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">NotFound</span><span class="p">(</span><span class="s">&quot;User not found&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Verify current password</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isValid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">CurrentPassword</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isValid</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">Unauthorized</span><span class="p">(</span><span class="s">&quot;Current password is incorrect&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Validate new password</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">NewPassword</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">&quot;New password must be at least 12 characters&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Hash new password</span>
+<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">NewPassword</span><span class="p">,</span><span class="w"> </span><span class="n">WorkFactor</span><span class="p">);</span>
+<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordChangedAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Password changed for user: {UserId}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Password changed successfully&quot;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">NeedsRehash</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">targetWorkFactor</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Extract work factor from hash (format: $2a$[workfactor]$...)</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hash</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="sc">&#39;$&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parts</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">.</span><span class="n">TryParse</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">currentWorkFactor</span><span class="p">))</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">currentWorkFactor</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">targetWorkFactor</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">RegisterRequest</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="p">);</span>
+<span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">LoginRequest</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="p">);</span>
+<span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">ChangePasswordRequest</span><span class="p">(</span><span class="n">Guid</span><span class="w"> </span><span class="n">UserId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">CurrentPassword</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">NewPassword</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="password-migration-and-rehashing-strategy">Password Migration and Rehashing Strategy</h3>
+<p>Migrate existing password hashes to updated work factors without forcing password resets for active users.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PasswordMigrationService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">TargetWorkFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MinimumWorkFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">PasswordMigrationService</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_logger</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">PasswordMigrationService</span><span class="p">(</span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">userRepository</span><span class="p">,</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">PasswordMigrationService</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_userRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">userRepository</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logger</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Opportunistic rehashing on successful login</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AuthenticateAndRehash</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Verify password</span>
+<span class="w">        </span><span class="kt">bool</span><span class="w"> </span><span class="n">isValid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isValid</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Check if rehashing is needed</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">currentWorkFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ExtractWorkFactor</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">currentWorkFactor</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">TargetWorkFactor</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span>
+<span class="w">                </span><span class="s">&quot;Rehashing password for user {Email} (current factor: {Current}, target: {Target})&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">currentWorkFactor</span><span class="p">,</span><span class="w"> </span><span class="n">TargetWorkFactor</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Rehash with target work factor</span>
+<span class="w">            </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordHash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">TargetWorkFactor</span><span class="p">);</span>
+<span class="w">            </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordChangedAt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">;</span>
+<span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Batch migration for inactive users (run as background job)</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">MigrateWeakHashes</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">usersWithWeakHashes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetUsersWithWorkFactorBelow</span><span class="p">(</span><span class="n">MinimumWorkFactor</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Found {Count} users with weak password hashes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">usersWithWeakHashes</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">usersWithWeakHashes</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// For inactive users, force password reset</span>
+<span class="w">            </span><span class="n">user</span><span class="p">.</span><span class="n">RequiresPasswordReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">user</span><span class="p">.</span><span class="n">ResetReason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;Security upgrade required (work factor {ExtractWorkFactor(user.PasswordHash)} &lt; {MinimumWorkFactor})&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Password reset required for user {Email}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="n">Email</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Extract work factor from bcrypt hash</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">ExtractWorkFactor</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Hash format: $2a$[workfactor]$[salt][hash]</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">parts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hash</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="sc">&#39;$&#39;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">parts</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">TryParse</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">workFactor</span><span class="p">))</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">workFactor</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to extract work factor from hash&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Generate password reset token with expiration</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GeneratePasswordResetToken</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">email</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">GetByEmail</span><span class="p">(</span><span class="n">email</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="s">&quot;User not found&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Generate secure random token</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Cryptography</span><span class="p">.</span><span class="n">RandomNumberGenerator</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">));</span>
+
+<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordResetToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// Lower work factor for tokens</span>
+<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="n">PasswordResetTokenExpiry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">AddHours</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">.</span><span class="n">Update</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">token</span><span class="p">;</span><span class="w"> </span><span class="c1">// Send this to user via email</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>Hash Verification Fails</strong>:
+- <strong>Error</strong>: <code>Verify()</code> returns false for correct password
+  - <strong>Check encoding</strong>: Ensure consistent UTF-8 encoding for password strings
+  - <strong>Verify hash format</strong>: Hash must start with <code>$2a$</code>, <code>$2b$</code>, or <code>$2y$</code>
+  - <strong>Check truncation</strong>: Verify hash string is not truncated in database (should be 60 characters)
+  - <strong>Test hash generation</strong>: Generate new hash and verify immediately to isolate issue</p>
+<p><strong>Performance Issues</strong>:
+- <strong>Error</strong>: Hashing takes too long (&gt;500ms)
+  - <strong>Reduce work factor</strong>: Lower from 12 to 11 or 10 based on requirements
+  - <strong>Benchmark hardware</strong>: Test on production-equivalent hardware before deployment
+  - <strong>Use async operations</strong>: Implement async hashing for web applications to avoid blocking
+  - <strong>Monitor CPU usage</strong>: High work factors increase CPU load; consider load balancing</p>
+<p><strong>Enhanced Entropy Errors</strong>:
+- <strong>Error</strong>: <code>EnhancedVerify()</code> fails for passwords hashed with <code>EnhancedHashPassword()</code>
+  - <strong>Consistency required</strong>: Must use Enhanced methods for both hashing and verification
+  - <strong>Password length</strong>: Enhanced mode is for passwords &gt;72 bytes; unnecessary for shorter passwords
+  - <strong>Migration</strong>: Cannot mix standard and enhanced hashes without tracking mode per user</p>
+<p><strong>Database Storage Issues</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Common database column configurations</span>
+<span class="c1">// SQL Server</span>
+<span class="n">CREATE</span><span class="w"> </span><span class="n">TABLE</span><span class="w"> </span><span class="nf">Users</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="n">UNIQUEIDENTIFIER</span><span class="w"> </span><span class="n">PRIMARY</span><span class="w"> </span><span class="n">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Email</span><span class="w"> </span><span class="nf">NVARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span><span class="w"> </span><span class="n">UNIQUE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PasswordHash</span><span class="w"> </span><span class="nf">NVARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span><span class="p">,</span><span class="w">  </span><span class="o">--</span><span class="w"> </span><span class="n">Must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="mi">60</span><span class="o">+</span><span class="w"> </span><span class="n">chars</span>
+<span class="w">    </span><span class="n">CreatedAt</span><span class="w"> </span><span class="n">DATETIME2</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span>
+<span class="p">);</span>
+
+<span class="c1">// PostgreSQL</span>
+<span class="n">CREATE</span><span class="w"> </span><span class="n">TABLE</span><span class="w"> </span><span class="nf">users</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="n">UUID</span><span class="w"> </span><span class="n">PRIMARY</span><span class="w"> </span><span class="n">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">email</span><span class="w"> </span><span class="nf">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span><span class="w"> </span><span class="n">UNIQUE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">password_hash</span><span class="w"> </span><span class="nf">VARCHAR</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span><span class="p">,</span><span class="w">  </span><span class="o">--</span><span class="w"> </span><span class="n">Must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="mi">60</span><span class="o">+</span><span class="w"> </span><span class="n">chars</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="n">TIMESTAMPTZ</span><span class="w"> </span><span class="n">NOT</span><span class="w"> </span><span class="n">NULL</span>
+<span class="p">);</span>
+
+<span class="c1">// Entity Framework Core configuration</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">User</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">Id</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[Required]</span>
+<span class="w">    </span><span class="na">[StringLength(255)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[Required]</span>
+<span class="w">    </span><span class="na">[StringLength(60)]</span><span class="w">  </span><span class="c1">// Exactly 60 characters for bcrypt</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">PasswordHash</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DateTime</span><span class="w"> </span><span class="n">CreatedAt</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<p><strong>Work Factor Benchmarking</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Diagnostics</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BcryptBenchmark</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">BenchmarkWorkFactors</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;TestPassword123!&quot;</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">workFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">workFactor</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span><span class="w"> </span><span class="n">workFactor</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">stopwatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Stopwatch</span><span class="p">.</span><span class="n">StartNew</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">iterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">workFactor</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">(</span><span class="n">workFactor</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">iterations</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">workFactor</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">stopwatch</span><span class="p">.</span><span class="n">Stop</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">avgTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stopwatch</span><span class="p">.</span><span class="n">ElapsedMilliseconds</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">iterations</span><span class="p">;</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Work Factor {workFactor}: {avgTime:F2}ms per hash&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;  Iterations per second: {1000 / avgTime:F0}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;  Security: 2^{workFactor} = {Math.Pow(2, workFactor):N0} iterations&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Example output:</span>
+<span class="c1">// Work Factor 10: 55ms per hash</span>
+<span class="c1">// Work Factor 11: 110ms per hash (recommended minimum)</span>
+<span class="c1">// Work Factor 12: 220ms per hash (recommended production)</span>
+<span class="c1">// Work Factor 13: 440ms per hash (high security)</span>
+</code></pre></div>
+
+<p><strong>Async Hashing for Web Applications</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AsyncPasswordService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Offload CPU-intensive hashing to thread pool</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">HashPasswordAsync</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">workFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">workFactor</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">VerifyPasswordAsync</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage in ASP.NET Core controller</span>
+<span class="na">[HttpPost(&quot;register&quot;)]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Register</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">RegisterRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">passwordService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AsyncPasswordService</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">passwordService</span><span class="p">.</span><span class="n">HashPasswordAsync</span><span class="p">(</span><span class="n">request</span><span class="p">.</span><span class="n">Password</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Save user with hash</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Memory and Resource Optimization</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedPasswordService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxConcurrentHashOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">SemaphoreSlim</span><span class="w"> </span><span class="n">_semaphore</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">OptimizedPasswordService</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_semaphore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SemaphoreSlim</span><span class="p">(</span><span class="n">MaxConcurrentHashOperations</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Limit concurrent hashing operations to prevent CPU saturation</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">HashPasswordWithThrottling</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">workFactor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_semaphore</span><span class="p">.</span><span class="n">WaitAsync</span><span class="p">();</span>
+<span class="w">        </span><span class="k">try</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">HashPassword</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">workFactor</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">finally</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_semaphore</span><span class="p">.</span><span class="n">Release</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Recommended Work Factors by Use Case</strong>:
+- <strong>Development/Testing</strong>: 4-6 (fast feedback)
+- <strong>Low-security applications</strong>: 10 (~60ms)
+- <strong>Standard web applications</strong>: 11-12 (~120-220ms)
+- <strong>High-security systems</strong>: 13-14 (~440-880ms)
+- <strong>Offline/batch processing</strong>: 15+ (multiple seconds)</p>
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ul>
+<li><a href="https://github.com/BcryptNet/bcrypt.net">BCrypt.Net-Next GitHub Repository</a> - Official library source code and documentation</li>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a> - Industry best practices for password hashing</li>
+<li><a href="https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf">Original BCrypt Paper</a> - "A Future-Adaptable Password Scheme" by Niels Provos</li>
+<li><a href="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/">Microsoft Identity Best Practices</a> - ASP.NET Core authentication patterns</li>
+<li><a href="https://bcrypt-generator.com/">Bcrypt Calculator</a> - Online tool to test bcrypt hashing and work factors</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

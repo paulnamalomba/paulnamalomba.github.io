@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Multi Authentication Python Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="django-multi-authentication-poweruser-guide-python">DJANGO Multi-Authentication PowerUser Guide (Python)</h1>
+<p><strong>Last updated</strong>: December 09, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://docs.djangoproject.com/en/4.2/"><img alt="Framework" src="https://img.shields.io/badge/Django-4.x-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide focuses on implementing robust multi-authentication in Django using Python: combining username/password, OAuth2/OIDC (Google, Azure AD, GitHub), JWT for APIs, and optional SAML and MFA. It shows how to structure settings, authentication backends, URL routing, and views so that you can safely support multiple identity providers in one project.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#django-multi-authentication-poweruser-guide-python">DJANGO Multi-Authentication PowerUser Guide (Python)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a><ul>
+<li><a href="#install-and-scaffold-project">Install and Scaffold Project</a></li>
+<li><a href="#core-dependencies">Core Dependencies</a></li>
+</ul>
+</li>
+<li><a href="#key-concepts">Key Concepts</a><ul>
+<li><a href="#authentication-backends">Authentication Backends</a></li>
+<li><a href="#session-vs-token-auth">Session vs Token Auth</a></li>
+</ul>
+</li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a><ul>
+<li><a href="#settings-layout">Settings Layout</a></li>
+<li><a href="#environment-variables">Environment Variables</a></li>
+</ul>
+</li>
+<li><a href="#security-considerations">Security Considerations</a><ul>
+<li><a href="#password-storage-and-mfa">Password Storage and MFA</a></li>
+<li><a href="#token-handling">Token Handling</a></li>
+</ul>
+</li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#example-1-base-auth-setup">Example 1: Base Auth Setup</a></li>
+<li><a href="#example-2-oauth2oidc-with-social-login">Example 2: OAuth2/OIDC with Social Login</a></li>
+<li><a href="#example-3-jwt-for-apis">Example 3: JWT for APIs</a></li>
+<li><a href="#example-4-mfa-with-django-otp">Example 4: MFA with django-otp</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a><ul>
+<li><a href="#common-configuration-errors">Common Configuration Errors</a></li>
+<li><a href="#debugging-tips">Debugging Tips</a></li>
+</ul>
+</li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a><ul>
+<li><a href="#scaling-auth-heavy-apis">Scaling Auth-heavy APIs</a></li>
+</ul>
+</li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<h3 id="install-and-scaffold-project">Install and Scaffold Project</h3>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># Windows: .venv\Scripts\activate</span>
+
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;Django&gt;=4.2,&lt;5&quot;</span><span class="w"> </span>djangorestframework
+
+django-admin<span class="w"> </span>startproject<span class="w"> </span>config<span class="w"> </span>.
+python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span class="w"> </span>accounts
+</code></pre></div>
+
+<h3 id="core-dependencies">Core Dependencies</h3>
+<p>For multi-auth, you commonly combine:</p>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>django-allauth<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>djangorestframework-simplejwt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>django-otp<span class="w"> </span>django-otp-yubikey<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python3-saml
+</code></pre></div>
+
+<hr />
+<h2 id="key-concepts">Key Concepts</h2>
+<h3 id="authentication-backends">Authentication Backends</h3>
+<p>In <code>settings.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">AUTHENTICATION_BACKENDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;django.contrib.auth.backends.ModelBackend&quot;</span><span class="p">,</span>           <span class="c1"># Username/password</span>
+    <span class="s2">&quot;allauth.account.auth_backends.AuthenticationBackend&quot;</span><span class="p">,</span>  <span class="c1"># Social auth (Google, GitHub, etc.)</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<ul>
+<li>Order matters; Django will try backends sequentially.</li>
+<li>Custom backends can enforce additional constraints (tenant, domain, flags).</li>
+</ul>
+<h3 id="session-vs-token-auth">Session vs Token Auth</h3>
+<ul>
+<li><strong>Session auth</strong>: Browser-centric; server-side session and CSRF protection.</li>
+<li><strong>Token/JWT auth</strong>: API-centric; stateless bearer tokens with short lifetimes.</li>
+<li><strong>Hybrid</strong>: Same user base, multiple auth methods (session for UI, JWT for API).</li>
+</ul>
+<hr />
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<h3 id="settings-layout">Settings Layout</h3>
+<p>A typical production layout:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># config/settings/base.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;DJANGO_SECRET_KEY&quot;</span><span class="p">]</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DJANGO_DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span>
+
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DJANGO_ALLOWED_HOSTS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;django.contrib.admin&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.auth&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.contenttypes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.sessions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.messages&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.staticfiles&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Third-party</span>
+    <span class="s2">&quot;rest_framework&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rest_framework_simplejwt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allauth&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allauth.account&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allauth.socialaccount&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;allauth.socialaccount.providers.google&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;otp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;otp_totp&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Local</span>
+    <span class="s2">&quot;accounts&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>REST framework and JWT:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;DEFAULT_AUTHENTICATION_CLASSES&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;rest_framework_simplejwt.authentication.JWTAuthentication&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rest_framework.authentication.SessionAuthentication&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;DEFAULT_PERMISSION_CLASSES&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;rest_framework.permissions.IsAuthenticated&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+
+<span class="n">SIMPLE_JWT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ACCESS_TOKEN_LIFETIME&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+    <span class="s2">&quot;REFRESH_TOKEN_LIFETIME&quot;</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">),</span>
+    <span class="s2">&quot;ROTATE_REFRESH_TOKENS&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;BLACKLIST_AFTER_ROTATION&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="environment-variables">Environment Variables</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">DJANGO_SECRET_KEY</span><span class="o">=</span><span class="s2">&quot;&lt;long-random-secret&gt;&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DJANGO_DEBUG</span><span class="o">=</span><span class="s2">&quot;False&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DJANGO_ALLOWED_HOSTS</span><span class="o">=</span><span class="s2">&quot;localhost,api.example.com&quot;</span>
+
+<span class="c1"># Google OAuth2</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOCIAL_AUTH_GOOGLE_CLIENT_ID</span><span class="o">=</span><span class="s2">&quot;&lt;client-id&gt;&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOCIAL_AUTH_GOOGLE_CLIENT_SECRET</span><span class="o">=</span><span class="s2">&quot;&lt;client-secret&gt;&quot;</span>
+
+<span class="c1"># Azure AD</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOCIAL_AUTH_AZUREAD_TENANT_ID</span><span class="o">=</span><span class="s2">&quot;&lt;tenant-id&gt;&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOCIAL_AUTH_AZUREAD_CLIENT_ID</span><span class="o">=</span><span class="s2">&quot;&lt;client-id&gt;&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOCIAL_AUTH_AZUREAD_CLIENT_SECRET</span><span class="o">=</span><span class="s2">&quot;&lt;client-secret&gt;&quot;</span>
+
+<span class="c1"># JWT</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">JWT_SIGNING_KEY</span><span class="o">=</span><span class="s2">&quot;&lt;jwt-signing-key&gt;&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<h3 id="password-storage-and-mfa">Password Storage and MFA</h3>
+<ul>
+<li>Always use Django’s built-in password hashing (<code>PBKDF2</code> by default) or stronger algorithms (<code>Argon2</code>).</li>
+<li>Enforce strong password policies and rate limit login attempts.</li>
+<li>Use MFA for admin and privileged roles (via <code>django-otp</code> or external IdPs).</li>
+</ul>
+<p>Example: enabling Argon2:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">PASSWORD_HASHERS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;django.contrib.auth.hashers.Argon2PasswordHasher&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.auth.hashers.PBKDF2PasswordHasher&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<h3 id="token-handling">Token Handling</h3>
+<ul>
+<li>Keep access tokens short-lived; use refresh tokens for continuity.</li>
+<li>Use HTTPS everywhere; never transmit tokens over HTTP.</li>
+<li>Store JWT signing keys securely (Key Vault, environment variables, or files with restricted permissions).</li>
+</ul>
+<hr />
+<h2 id="examples">Examples</h2>
+<h3 id="example-1-base-auth-setup">Example 1: Base Auth Setup</h3>
+<p><code>accounts/models.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractUser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+    <span class="c1"># Example extension: tenant field</span>
+    <span class="n">tenant_id</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>config/settings/base.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s2">&quot;accounts.User&quot;</span>
+<span class="n">LOGIN_REDIRECT_URL</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
+<span class="n">LOGOUT_REDIRECT_URL</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span>
+</code></pre></div>
+
+<p>URLs:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># config/urls.py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;admin/&quot;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;accounts/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;allauth.urls&quot;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;api/auth/&quot;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">&quot;accounts.api_urls&quot;</span><span class="p">)),</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<h3 id="example-2-oauth2oidc-with-social-login">Example 2: OAuth2/OIDC with Social Login</h3>
+<p><code>config/settings/base.py</code> (allauth configuration):</p>
+<div class="codehilite"><pre><span></span><code><span class="n">SITE_ID</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">ACCOUNT_EMAIL_REQUIRED</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">ACCOUNT_EMAIL_VERIFICATION</span> <span class="o">=</span> <span class="s2">&quot;mandatory&quot;</span>
+<span class="n">ACCOUNT_AUTHENTICATION_METHOD</span> <span class="o">=</span> <span class="s2">&quot;username_email&quot;</span>
+
+<span class="n">SOCIALACCOUNT_PROVIDERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;google&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;APP&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SOCIAL_AUTH_GOOGLE_CLIENT_ID&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;secret&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SOCIAL_AUTH_GOOGLE_CLIENT_SECRET&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Template snippet for login options:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% provider_login_url &#39;google&#39; %}&quot;</span><span class="p">&gt;</span>Sign in with Google<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<h3 id="example-3-jwt-for-apis">Example 3: JWT for APIs</h3>
+<p><code>accounts/api_urls.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework_simplejwt.views</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TokenObtainPairView</span><span class="p">,</span>
+    <span class="n">TokenRefreshView</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;token/&quot;</span><span class="p">,</span> <span class="n">TokenObtainPairView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;token_obtain_pair&quot;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">&quot;token/refresh/&quot;</span><span class="p">,</span> <span class="n">TokenRefreshView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;token_refresh&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>Example API view:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.response</span><span class="w"> </span><span class="kn">import</span> <span class="n">Response</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.permissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsAuthenticated</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ProfileView</span><span class="p">(</span><span class="n">APIView</span><span class="p">):</span>
+    <span class="n">permission_classes</span> <span class="o">=</span> <span class="p">[</span><span class="n">IsAuthenticated</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">({</span>
+            <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+            <span class="s2">&quot;auth&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">auth</span> <span class="k">else</span> <span class="s2">&quot;session&quot;</span><span class="p">,</span>
+        <span class="p">})</span>
+</code></pre></div>
+
+<h3 id="example-4-mfa-with-django-otp">Example 4: MFA with django-otp</h3>
+<p><code>config/settings/base.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;django.middleware.security.SecurityMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.sessions.middleware.SessionMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.middleware.common.CommonMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.middleware.csrf.CsrfViewMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.auth.middleware.AuthenticationMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.contrib.messages.middleware.MessageMiddleware&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;django.middleware.clickjacking.XFrameOptionsMiddleware&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;otp.middleware.OTPMiddleware&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<p>Simple view enforcing OTP:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django_otp.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">otp_required</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpResponse</span>
+
+
+<span class="nd">@otp_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sensitive_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;You passed MFA and can access this sensitive view.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="common-configuration-errors">Common Configuration Errors</h3>
+<ul>
+<li><strong>Improper redirect URIs</strong>: Ensure configured redirect URIs at the IdP match Django’s URLs.</li>
+<li><strong>CSRF token missing</strong>: For session-based auth, ensure CSRF middleware and template tags are correctly set up.</li>
+<li><strong>JWT not accepted</strong>: Check audience (<code>aud</code>) and issuer (<code>iss</code>) claims, and that signing keys match.</li>
+</ul>
+<h3 id="debugging-tips">Debugging Tips</h3>
+<ul>
+<li>Enable Django’s debug toolbar in non-production environments.</li>
+<li>Log authentication attempts and failures with enough context (user, provider, IP).</li>
+<li>Use <code>python -m http.server</code> or tools like <code>httpie</code> to simulate callback requests.</li>
+</ul>
+<hr />
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<h3 id="scaling-auth-heavy-apis">Scaling Auth-heavy APIs</h3>
+<ul>
+<li>Cache frequently accessed user/permission data in Redis.</li>
+<li>Use database connection pooling for high login volumes.</li>
+<li>Offload authentication to an external gateway (e.g. API Gateway or identity proxy) where appropriate.</li>
+</ul>
+<hr />
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ul>
+<li>Django Authentication: https://docs.djangoproject.com/en/4.2/topics/auth/</li>
+<li>Django REST Framework: https://www.django-rest-framework.org/</li>
+<li>django-allauth: https://django-allauth.readthedocs.io/</li>
+<li>django-otp: https://django-otp-official.readthedocs.io/</li>
+<li>SimpleJWT: https://django-rest-framework-simplejwt.readthedocs.io/</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

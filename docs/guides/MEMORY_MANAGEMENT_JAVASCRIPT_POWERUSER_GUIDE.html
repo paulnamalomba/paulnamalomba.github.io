@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management Javascript Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="memory-management-and-execution-on-windows-javascript-nodejs">Memory Management and Execution on Windows — JavaScript (Node.js)</h1>
+<p><strong>Last updated</strong>: December 13, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img alt="Language: JavaScript" src="https://img.shields.io/badge/Language-JavaScript-yellow.svg" /></a>
+<a href="https://nodejs.org/"><img alt="Runtime: Node.js" src="https://img.shields.io/badge/Runtime-Node.js-339933.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide explains how JavaScript handles memory and execution semantics on Windows using the Node.js runtime (V8 engine). It covers value vs reference types, memory allocation (heap-managed objects), copy semantics (shallow vs deep), and nullability (<code>undefined</code>/<code>null</code>). Examples are provided for typical Node.js usage.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#memory-management-and-execution-on-windows--javascript-nodejs">Memory Management and Execution on Windows — JavaScript (Node.js)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#windows--run-powershell--command-prompt">Windows — Run (PowerShell / Command Prompt)</a></li>
+<li><a href="#overview-1">Overview</a></li>
+<li><a href="#contents-1">Contents</a></li>
+<li><a href="#1-data-structures--primitive-vs-object">1) Data Structures — Primitive vs Object</a></li>
+<li><a href="#2-storage--v8-heap--stack">2) Storage — V8 Heap \&amp; Stack</a></li>
+<li><a href="#3-copy-semantics--shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</a></li>
+<li><a href="#4-nullability--undefined-vs-null">4) Nullability — <code>undefined</code> vs <code>null</code></a></li>
+<li><a href="#examples--runnable-snippets">Examples — Runnable Snippets</a></li>
+<li><a href="#windows--nodejs-specific-notes">Windows / Node.js Specific Notes</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="windows-run-powershell-command-prompt">Windows — Run (PowerShell / Command Prompt)</h2>
+<ul>
+<li>Install Node.js and run <code>main.js</code>:</li>
+</ul>
+<p><code>powershell
+  node main.js</code></p>
+<ul>
+<li>If using Deno or other runtimes, adjust commands accordingly.</li>
+</ul>
+<hr />
+<h2 id="overview_1">Overview</h2>
+<p>This guide explains how JavaScript (Node.js V8 engine) handles memory and execution semantics on Windows: value vs reference types, memory allocation (heap-managed objects), copy semantics (shallow vs deep), and nullability (<code>undefined</code>/<code>null</code>). Examples are provided for typical Node.js usage.</p>
+<hr />
+<h2 id="contents_1">Contents</h2>
+<ul>
+<li>Data Structures: primitive vs object types</li>
+<li>Storage: V8 heap and stack, hidden classes, optimization</li>
+<li>Copy semantics: assignment, shallow vs deep copies</li>
+<li>Nullability: <code>undefined</code> vs <code>null</code>, safety patterns</li>
+<li>Examples &amp; Best Practices</li>
+<li>Windows/Node.js specifics</li>
+</ul>
+<hr />
+<h2 id="1-data-structures-primitive-vs-object">1) Data Structures — Primitive vs Object</h2>
+<ul>
+<li>Primitives: <code>number</code>, <code>string</code>, <code>boolean</code>, <code>null</code>, <code>undefined</code>, <code>symbol</code>, <code>bigint</code> — stored by value.</li>
+<li>Objects: <code>Object</code>, <code>Array</code>, <code>Function</code> — stored as references on the V8 heap.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">10</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">a</span><span class="p">;</span><span class="w"> </span><span class="c1">// value copy</span>
+<span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">20</span><span class="p">;</span><span class="w"> </span><span class="c1">// a remains 10</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">obj1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">obj2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">obj1</span><span class="p">;</span><span class="w"> </span><span class="c1">// reference copy</span>
+<span class="nx">obj2</span><span class="p">.</span><span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// obj1.x also 5</span>
+</code></pre></div>
+
+<p>Notes:
+- Strings are immutable; operations create new strings.</p>
+<hr />
+<h2 id="2-storage-v8-heap-stack">2) Storage — V8 Heap &amp; Stack</h2>
+<ul>
+<li>Primitive values may be stored on the stack or in registers for performance.</li>
+<li>Objects are allocated on the V8 heap, which is garbage-collected (Mark-and-Sweep, generational).</li>
+<li>V8 optimizes objects with hidden classes and inline caches to improve property access performance.</li>
+</ul>
+<p>Windows/Node specifics:
+- Node.js uses V8's memory management; adjust <code>--max-old-space-size</code> to change heap size.
+- The event loop drives execution; asynchronous I/O operations do not block JS thread.</p>
+<hr />
+<h2 id="3-copy-semantics-shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</h2>
+<ul>
+<li>Assignment: primitives copied by value; objects copied by reference.</li>
+<li>Shallow copy: <code>Object.assign({}, obj)</code> or spread <code>{...obj}</code> duplicates top-level properties. Nested objects still shared.</li>
+<li>Deep copy: structured cloning (<code>structuredClone</code>), <code>JSON.parse(JSON.stringify(obj))</code> (limitations), or utility libraries like <code>lodash.cloneDeep</code>.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">orig</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">shallow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="nx">orig</span><span class="w"> </span><span class="p">};</span>
+<span class="nx">shallow</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// orig.a.b also 2</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">deep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">structuredClone</span><span class="p">(</span><span class="nx">orig</span><span class="p">);</span>
+<span class="nx">deep</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3</span><span class="p">;</span><span class="w"> </span><span class="c1">// orig unchanged</span>
+</code></pre></div>
+
+<p>Pitfalls:
+- <code>JSON</code>-based cloning loses functions, <code>undefined</code>, and special types (Date, Map, Set).</p>
+<hr />
+<h2 id="4-nullability-undefined-vs-null">4) Nullability — <code>undefined</code> vs <code>null</code></h2>
+<ul>
+<li><code>undefined</code> indicates missing value (variable declared but not assigned). <code>null</code> is an explicit assignment meaning "no value".</li>
+<li>Use optional chaining (<code>?.</code>) and nullish coalescing (<code>??</code>) to guard against <code>undefined</code>/<code>null</code>.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">undefined</span><span class="p">);</span><span class="w"> </span><span class="c1">// true</span>
+<span class="nx">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w"> </span><span class="c1">// true</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">user</span><span class="o">?</span><span class="p">.</span><span class="nx">profile</span><span class="o">?</span><span class="p">.</span><span class="nx">name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">&#39;anonymous&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Best practices:
+- Prefer <code>undefined</code> for absent values internally and <code>null</code> for intentionally empty API responses, or pick a consistent convention in your codebase.</p>
+<hr />
+<h2 id="examples-runnable-snippets">Examples — Runnable Snippets</h2>
+<p><code>main.js</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// primitives vs objects</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n</span><span class="p">;</span>
+<span class="nx">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">);</span><span class="w"> </span><span class="c1">// 1 2</span>
+
+<span class="kd">let</span><span class="w"> </span><span class="nx">o1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">v</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">o2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">o1</span><span class="p">;</span>
+<span class="nx">o2</span><span class="p">.</span><span class="nx">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">9</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">o1</span><span class="p">.</span><span class="nx">v</span><span class="p">);</span><span class="w"> </span><span class="c1">// 9</span>
+
+<span class="c1">// shallow vs deep</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">y</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">shallow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="nx">a</span><span class="w"> </span><span class="p">};</span>
+<span class="nx">shallow</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// 5</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">deep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">structuredClone</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+<span class="nx">deep</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">7</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// still 5</span>
+
+<span class="c1">// nullish</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">maybe</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">maybe</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">&#39;default&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Run with <code>node main.js</code>.</p>
+<hr />
+<h2 id="windows-nodejs-specific-notes">Windows / Node.js Specific Notes</h2>
+<ul>
+<li>Increase memory: <code>node --max-old-space-size=4096 main.js</code> (MB) for large data workloads.</li>
+<li>Use <code>--trace-gc</code> and <code>--inspect</code> for GC and profiler diagnostics.</li>
+<li>Native modules: <code>node-gyp</code> builds native addons; watch memory and lifecycle in native code.</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>V8 blog and docs: https://v8.dev/</li>
+<li>Node.js docs: https://nodejs.org/</li>
+</ul>
+<p><em>End of JavaScript guide.</em></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

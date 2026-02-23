@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Services Powershell Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="auth_services-poweruser-guide-powershell">AUTH_SERVICES PowerUser Guide (PowerShell)</h1>
+<p><strong>Last updated</strong>: December 05, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols for securing distributed systems at scale. This guide covers operational tasks using PowerShell 7+ on Windows for managing Azure AD, Active Directory Federation Services (AD FS), certificate authorities, token lifecycle automation, user provisioning via Microsoft Graph API, and security auditing. Power users need to understand certificate management, service principal automation, conditional access policies, and high-availability monitoring for production authentication infrastructure.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#auth_services-poweruser-guide-powershell">AUTH_SERVICES PowerUser Guide (PowerShell)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#key-concepts">Key Concepts</a></li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#example-1-automated-user-provisioning-with-microsoft-graph-api">Example 1: Automated User Provisioning with Microsoft Graph API</a></li>
+<li><a href="#example-2-service-principal-creation-and-permission-management">Example 2: Service Principal Creation and Permission Management</a></li>
+<li><a href="#example-3-certificate-management-and-rotation">Example 3: Certificate Management and Rotation</a></li>
+<li><a href="#example-4-group-based-license-assignment-automation">Example 4: Group-Based License Assignment Automation</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<ol>
+<li><strong>Install modules</strong>: <code>Install-Module -Name Microsoft.Graph -Scope CurrentUser -Force</code></li>
+<li><strong>Connect to Azure AD</strong>: <code>Connect-MgGraph -Scopes "User.Read.All","Application.Read.All"</code></li>
+<li><strong>List users</strong>: <code>Get-MgUser -Top 10 | Select-Object DisplayName, UserPrincipalName</code></li>
+<li><strong>Create service principal</strong>: <code>New-MgServicePrincipal -AppId &lt;app-id&gt; -DisplayName "MyApp"</code></li>
+<li><strong>Generate certificate</strong>: <code>New-SelfSignedCertificate -Subject "CN=MyAppCert" -CertStoreLocation Cert:\CurrentUser\My</code></li>
+<li><strong>Export certificate</strong>: <code>Export-Certificate -Cert $cert -FilePath .\cert.cer</code></li>
+</ol>
+<h2 id="key-concepts">Key Concepts</h2>
+<ul>
+<li><strong>Azure Active Directory (Azure AD)</strong>: Cloud-based identity and access management service providing authentication, authorization, and SSO for Microsoft 365 and Azure resources</li>
+<li><strong>Service Principal</strong>: Identity for applications and services in Azure AD; used for authentication and authorization in automated workflows</li>
+<li><strong>Managed Identity</strong>: Azure-managed service principal that eliminates need for credential management; assigned to Azure resources for accessing other resources</li>
+<li><strong>Conditional Access</strong>: Policy-based access control evaluating signals (user, location, device, risk) to enforce MFA, block access, or require compliant devices</li>
+<li><strong>Certificate-Based Authentication</strong>: Uses X.509 certificates instead of passwords for authentication; common for service accounts and federated scenarios</li>
+<li><strong>Microsoft Graph API</strong>: RESTful API for accessing Azure AD, Microsoft 365, and other Microsoft cloud services; supports user/group management, mail, calendar, and more</li>
+<li><strong>App Registration</strong>: Process of registering applications in Azure AD to enable authentication and authorization; generates client ID and allows configuring permissions</li>
+<li><strong>OAuth 2.0 Flows</strong>: Authorization code (web apps), client credentials (daemon apps), on-behalf-of (middle-tier services), device code (input-constrained devices)</li>
+<li><strong>Token Lifetime</strong>: Configurable duration for access tokens (default 1 hour) and refresh tokens (default 90 days); can be customized per application or tenant-wide</li>
+<li><strong>Emergency Access Accounts</strong>: Break-glass accounts with highest privileges, excluded from conditional access policies, used only in emergencies</li>
+</ul>
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<div class="codehilite"><pre><span></span><code><span class="c"># Install and import Microsoft Graph PowerShell SDK</span>
+<span class="nb">Install-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-AllowClobber</span> <span class="n">-Force</span>
+<span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Authentication</span>
+<span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Users</span>
+<span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Applications</span>
+
+<span class="c"># Connect with delegated permissions (interactive)</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;Application.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;Directory.ReadWrite.All&quot;</span>
+
+<span class="c"># Connect with application permissions (service principal)</span>
+<span class="nv">$clientId</span> <span class="p">=</span> <span class="nv">$env:AZURE_CLIENT_ID</span>
+<span class="nv">$tenantId</span> <span class="p">=</span> <span class="nv">$env:AZURE_TENANT_ID</span>
+<span class="nv">$clientSecret</span> <span class="p">=</span> <span class="nv">$env:AZURE_CLIENT_SECRET</span> <span class="p">|</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span>
+<span class="nv">$credential</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">System</span><span class="p">.</span><span class="n">Management</span><span class="p">.</span><span class="n">Automation</span><span class="p">.</span><span class="n">PSCredential</span><span class="p">(</span><span class="nv">$clientId</span><span class="p">,</span> <span class="nv">$clientSecret</span><span class="p">)</span>
+
+<span class="nb">Connect-MgGraph</span> <span class="n">-ClientSecretCredential</span> <span class="nv">$credential</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span>
+
+<span class="c"># Verify connection</span>
+<span class="nb">Get-MgContext</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Scopes</span><span class="p">,</span> <span class="n">Account</span><span class="p">,</span> <span class="n">TenantId</span>
+</code></pre></div>
+
+<p><strong>Best Practices</strong>:
+- Use managed identities for Azure resources instead of storing credentials
+- Store client secrets in Azure Key Vault; retrieve via PowerShell with <code>Get-AzKeyVaultSecret</code>
+- Use certificate-based authentication for service principals in production (more secure than secrets)
+- Implement least privilege principle; grant only required Graph API permissions
+- Enable MFA for all admin accounts; exclude only emergency access accounts
+- Set conditional access policies to require compliant devices for sensitive operations
+- Implement automated certificate rotation before expiration (90 days notice)
+- Use separate service principals per application/environment (dev, staging, production)
+- Enable audit logging for all authentication events; export logs to SIEM/Log Analytics
+- Implement monitoring and alerts for failed sign-ins, suspicious activities, and certificate expiration</p>
+<h2 id="security-considerations">Security Considerations</h2>
+<p><strong>Certificate-Based Service Principal Authentication</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Generate self-signed certificate for service principal (development only)</span>
+<span class="nv">$cert</span> <span class="p">=</span> <span class="nb">New-SelfSignedCertificate</span> <span class="p">`</span>
+    <span class="n">-Subject</span> <span class="s2">&quot;CN=MyApp-ServicePrincipal&quot;</span> <span class="p">`</span>
+    <span class="n">-CertStoreLocation</span> <span class="s2">&quot;Cert:\CurrentUser\My&quot;</span> <span class="p">`</span>
+    <span class="n">-KeyExportPolicy</span> <span class="n">Exportable</span> <span class="p">`</span>
+    <span class="n">-KeySpec</span> <span class="n">Signature</span> <span class="p">`</span>
+    <span class="n">-KeyLength</span> <span class="n">2048</span> <span class="p">`</span>
+    <span class="n">-KeyAlgorithm</span> <span class="n">RSA</span> <span class="p">`</span>
+    <span class="n">-HashAlgorithm</span> <span class="n">SHA256</span> <span class="p">`</span>
+    <span class="n">-NotAfter</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddMonths</span><span class="p">(</span><span class="n">12</span><span class="p">)</span>
+
+<span class="c"># Export certificate (public key only)</span>
+<span class="nv">$certPath</span> <span class="p">=</span> <span class="s2">&quot;.\MyApp-ServicePrincipal.cer&quot;</span>
+<span class="nb">Export-Certificate</span> <span class="n">-Cert</span> <span class="nv">$cert</span> <span class="n">-FilePath</span> <span class="nv">$certPath</span>
+
+<span class="c"># Upload certificate to app registration</span>
+<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">&quot;your-app-id&quot;</span>
+<span class="nv">$certBytes</span> <span class="p">=</span> <span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">ReadAllBytes</span><span class="p">(</span><span class="nv">$certPath</span><span class="p">)</span>
+<span class="nv">$certBase64</span> <span class="p">=</span> <span class="no">[System.Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$certBytes</span><span class="p">)</span>
+
+<span class="nb">Update-MgApplication</span> <span class="n">-ApplicationId</span> <span class="nv">$appId</span> <span class="n">-KeyCredentials</span> <span class="p">@{</span>
+    <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;AsymmetricX509Cert&quot;</span>
+    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">&quot;Verify&quot;</span>
+    <span class="n">Key</span> <span class="p">=</span> <span class="nv">$certBase64</span>
+<span class="p">}</span>
+
+<span class="c"># Connect using certificate authentication</span>
+<span class="nv">$tenantId</span> <span class="p">=</span> <span class="s2">&quot;your-tenant-id&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-ClientId</span> <span class="nv">$appId</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span> <span class="n">-CertificateThumbprint</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span>
+
+<span class="c"># Production: Use Azure Key Vault for certificate storage</span>
+<span class="c"># Import certificate from Key Vault</span>
+<span class="nv">$keyVaultName</span> <span class="p">=</span> <span class="s2">&quot;your-keyvault&quot;</span>
+<span class="nv">$certName</span> <span class="p">=</span> <span class="s2">&quot;MyAppCert&quot;</span>
+<span class="nv">$kvCert</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificate</span> <span class="n">-VaultName</span> <span class="nv">$keyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
+
+<span class="c"># Retrieve certificate from local store (imported from Key Vault)</span>
+<span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Thumbprint</span> <span class="o">-eq</span> <span class="nv">$kvCert</span><span class="p">.</span><span class="n">Thumbprint</span> <span class="p">}</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-ClientId</span> <span class="nv">$appId</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span> <span class="n">-Certificate</span> <span class="nv">$cert</span>
+</code></pre></div>
+
+<p><strong>Conditional Access Policy Automation</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Create conditional access policy requiring MFA for admin roles</span>
+<span class="nv">$policy</span> <span class="p">=</span> <span class="p">@{</span>
+    <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;Require MFA for Admins&quot;</span>
+    <span class="n">State</span> <span class="p">=</span> <span class="s2">&quot;enabled&quot;</span>
+    <span class="n">Conditions</span> <span class="p">=</span> <span class="p">@{</span>
+        <span class="n">Users</span> <span class="p">=</span> <span class="p">@{</span>
+            <span class="n">IncludeRoles</span> <span class="p">=</span> <span class="p">@(</span>
+                <span class="s2">&quot;62e90394-69f5-4237-9190-012177145e10&quot;</span>  <span class="c"># Global Administrator</span>
+                <span class="s2">&quot;194ae4cb-b126-40b2-bd5b-6091b380977d&quot;</span>  <span class="c"># Security Administrator</span>
+            <span class="p">)</span>
+            <span class="n">ExcludeUsers</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;emergency-access-account@domain.com&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">Applications</span> <span class="p">=</span> <span class="p">@{</span>
+            <span class="n">IncludeApplications</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;All&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">ClientAppTypes</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;browser&quot;</span><span class="p">,</span> <span class="s2">&quot;mobileAppsAndDesktopClients&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">GrantControls</span> <span class="p">=</span> <span class="p">@{</span>
+        <span class="n">Operator</span> <span class="p">=</span> <span class="s2">&quot;OR&quot;</span>
+        <span class="n">BuiltInControls</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;mfa&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nb">New-MgIdentityConditionalAccessPolicy</span> <span class="n">-BodyParameter</span> <span class="nv">$policy</span>
+
+<span class="c"># List all conditional access policies</span>
+<span class="nb">Get-MgIdentityConditionalAccessPolicy</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">CreatedDateTime</span>
+</code></pre></div>
+
+<p><strong>Security Monitoring and Audit Logs</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Query sign-in logs for failed authentication attempts</span>
+<span class="nv">$startDate</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(-</span><span class="n">7</span><span class="p">)</span>
+<span class="nv">$endDate</span> <span class="p">=</span> <span class="nb">Get-Date</span>
+
+<span class="nv">$failedSignIns</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogSignIn</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Top</span> <span class="n">100</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span> 
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ErrorCode&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span> 
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;FailureReason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}},</span>
+                  <span class="n">IpAddress</span><span class="p">,</span> <span class="n">Location</span>
+
+<span class="nv">$failedSignIns</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+
+<span class="c"># Export to CSV for analysis</span>
+<span class="nv">$failedSignIns</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\failed-signins.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+
+<span class="c"># Query directory audit logs for privileged operations</span>
+<span class="nv">$auditLogs</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogDirectoryAudit</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">&quot;activityDisplayName eq &#39;Add member to role&#39; and activityDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Top</span> <span class="n">50</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">ActivityDateTime</span><span class="p">,</span> <span class="n">ActivityDisplayName</span><span class="p">,</span> 
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;InitiatedBy&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">InitiatedBy</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;TargetUser&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">TargetResources</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Result&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Result</span><span class="p">}}</span>
+
+<span class="nv">$auditLogs</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p><strong>Key Security Measures</strong>:
+- Rotate service principal secrets/certificates every 90 days; automate with Azure Automation
+- Use Azure Key Vault for storing and managing certificates, secrets, and keys
+- Enable Azure AD Identity Protection for risk-based conditional access policies
+- Implement just-in-time admin access with Privileged Identity Management (PIM)
+- Configure Azure AD Connect Health for monitoring on-premises AD FS infrastructure
+- Enable security defaults for new tenants (enforces MFA, blocks legacy authentication)
+- Implement named locations for trusted IP ranges to reduce MFA prompts
+- Use application consent policies to prevent users from granting excessive permissions
+- Enable continuous access evaluation (CAE) for real-time token revocation
+- Configure token lifetime policies to balance security (shorter) and usability (longer)</p>
+<h2 id="examples">Examples</h2>
+<h3 id="example-1-automated-user-provisioning-with-microsoft-graph-api">Example 1: Automated User Provisioning with Microsoft Graph API</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Function to create bulk users from CSV</span>
+<span class="k">function</span> <span class="nb">New-BulkUsers</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$CsvPath</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$DefaultPassword</span> <span class="p">=</span> <span class="s2">&quot;ChangeMe@123!&quot;</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$UsageLocation</span> <span class="p">=</span> <span class="s2">&quot;US&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c"># Import users from CSV (columns: FirstName, LastName, Email, Department)</span>
+    <span class="nv">$users</span> <span class="p">=</span> <span class="nb">Import-Csv</span> <span class="n">-Path</span> <span class="nv">$CsvPath</span>
+    <span class="nv">$results</span> <span class="p">=</span> <span class="p">@()</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$user</span> <span class="k">in</span> <span class="nv">$users</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nv">$passwordProfile</span> <span class="p">=</span> <span class="p">@{</span>
+                <span class="n">ForceChangePasswordNextSignIn</span> <span class="p">=</span> <span class="nv">$true</span>
+                <span class="n">Password</span> <span class="p">=</span> <span class="nv">$DefaultPassword</span>
+            <span class="p">}</span>
+
+            <span class="nv">$newUser</span> <span class="p">=</span> <span class="p">@{</span>
+                <span class="n">AccountEnabled</span> <span class="p">=</span> <span class="nv">$true</span>
+                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">&quot;</span>
+                <span class="n">GivenName</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span>
+                <span class="n">Surname</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span>
+                <span class="n">UserPrincipalName</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span>
+                <span class="n">MailNickname</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)[</span><span class="n">0</span><span class="p">]</span>
+                <span class="n">PasswordProfile</span> <span class="p">=</span> <span class="nv">$passwordProfile</span>
+                <span class="n">UsageLocation</span> <span class="p">=</span> <span class="nv">$UsageLocation</span>
+                <span class="n">Department</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Department</span>
+            <span class="p">}</span>
+
+            <span class="nv">$createdUser</span> <span class="p">=</span> <span class="nb">New-MgUser</span> <span class="n">-BodyParameter</span> <span class="nv">$newUser</span>
+
+            <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created user: </span><span class="p">$(</span><span class="nv">$createdUser</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+
+            <span class="nv">$results</span> <span class="p">+=</span> <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+                <span class="n">Email</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">UserPrincipalName</span>
+                <span class="n">DisplayName</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">DisplayName</span>
+                <span class="n">UserId</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">Id</span>
+                <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Success&quot;</span>
+                <span class="n">Message</span> <span class="p">=</span> <span class="s2">&quot;User created successfully&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">{</span>
+            <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Failed to create user: </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+
+            <span class="nv">$results</span> <span class="p">+=</span> <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+                <span class="n">Email</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span>
+                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">&quot;</span>
+                <span class="n">UserId</span> <span class="p">=</span> <span class="nv">$null</span>
+                <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Failed&quot;</span>
+                <span class="n">Message</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c"># Export results</span>
+    <span class="nv">$results</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\user-creation-results.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+
+    <span class="c"># Summary</span>
+    <span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Success&quot;</span> <span class="p">}).</span><span class="n">Count</span>
+    <span class="nv">$failCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Failed&quot;</span> <span class="p">}).</span><span class="n">Count</span>
+
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">Summary: $successCount succeeded, $failCount failed&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Results exported to: user-creation-results.csv&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+<span class="p">}</span>
+
+<span class="c"># Usage</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.ReadWrite.All&quot;</span>
+<span class="nb">New-BulkUsers</span> <span class="n">-CsvPath</span> <span class="s2">&quot;.\users.csv&quot;</span>
+</code></pre></div>
+
+<h3 id="example-2-service-principal-creation-and-permission-management">Example 2: Service Principal Creation and Permission Management</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Function to create service principal with Graph API permissions</span>
+<span class="k">function</span> <span class="nb">New-ServicePrincipalWithPermissions</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$DisplayName</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[string[]]</span><span class="nv">$Permissions</span>  <span class="c"># e.g., &quot;User.Read.All&quot;, &quot;Mail.Send&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c"># Get Microsoft Graph service principal</span>
+    <span class="nv">$graphSp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">&quot;appId eq &#39;00000003-0000-0000-c000-000000000000&#39;&quot;</span>
+
+    <span class="c"># Create app registration</span>
+    <span class="nv">$app</span> <span class="p">=</span> <span class="nb">New-MgApplication</span> <span class="n">-DisplayName</span> <span class="nv">$DisplayName</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created app registration: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (AppId: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">)&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+
+    <span class="c"># Create service principal</span>
+    <span class="nv">$sp</span> <span class="p">=</span> <span class="nb">New-MgServicePrincipal</span> <span class="n">-AppId</span> <span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span> <span class="n">-DisplayName</span> <span class="nv">$DisplayName</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created service principal: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+
+    <span class="c"># Map permission names to IDs</span>
+    <span class="nv">$requiredResourceAccess</span> <span class="p">=</span> <span class="p">@()</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$permission</span> <span class="k">in</span> <span class="nv">$Permissions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$graphPermission</span> <span class="p">=</span> <span class="nv">$graphSp</span><span class="p">.</span><span class="n">AppRoles</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Value</span> <span class="o">-eq</span> <span class="nv">$permission</span> <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$graphPermission</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$requiredResourceAccess</span> <span class="p">+=</span> <span class="p">@{</span>
+                <span class="n">Id</span> <span class="p">=</span> <span class="nv">$graphPermission</span><span class="p">.</span><span class="n">Id</span>
+                <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;Role&quot;</span>
+            <span class="p">}</span>
+            <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Added permission: $permission&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Permission not found: $permission&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c"># Update app with required permissions</span>
+    <span class="nb">Update-MgApplication</span> <span class="n">-ApplicationId</span> <span class="nv">$app</span><span class="p">.</span><span class="n">Id</span> <span class="n">-RequiredResourceAccess</span> <span class="p">@{</span>
+        <span class="n">ResourceAppId</span> <span class="p">=</span> <span class="nv">$graphSp</span><span class="p">.</span><span class="n">AppId</span>
+        <span class="n">ResourceAccess</span> <span class="p">=</span> <span class="nv">$requiredResourceAccess</span>
+    <span class="p">}</span>
+
+    <span class="c"># Generate client secret (valid for 1 year)</span>
+    <span class="nv">$secretName</span> <span class="p">=</span> <span class="s2">&quot;Auto-generated-secret&quot;</span>
+    <span class="nv">$secretEnd</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddYears</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
+
+    <span class="nv">$passwordCred</span> <span class="p">=</span> <span class="nb">Add-MgApplicationPassword</span> <span class="n">-ApplicationId</span> <span class="nv">$app</span><span class="p">.</span><span class="n">Id</span> <span class="n">-PasswordCredential</span> <span class="p">@{</span>
+        <span class="n">DisplayName</span> <span class="p">=</span> <span class="nv">$secretName</span>
+        <span class="n">EndDateTime</span> <span class="p">=</span> <span class="nv">$secretEnd</span>
+    <span class="p">}</span>
+
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Service Principal Details:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Display Name: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Application ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Object ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Service Principal ID: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Client Secret: </span><span class="p">$(</span><span class="nv">$passwordCred</span><span class="p">.</span><span class="n">SecretText</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Secret Expires: </span><span class="p">$(</span><span class="nv">$secretEnd</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd HH:mm:ss&#39;</span><span class="p">))</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;⚠️  Save the client secret now! It won&#39;t be shown again.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">⚠️  Admin consent required! Grant permissions in Azure Portal:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/</span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+
+    <span class="k">return</span> <span class="p">@{</span>
+        <span class="n">AppId</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span>
+        <span class="n">ObjectId</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">Id</span>
+        <span class="n">ServicePrincipalId</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span>
+        <span class="n">ClientSecret</span> <span class="p">=</span> <span class="nv">$passwordCred</span><span class="p">.</span><span class="n">SecretText</span>
+        <span class="n">SecretExpiry</span> <span class="p">=</span> <span class="nv">$secretEnd</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c"># Usage</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Application.ReadWrite.All&quot;</span>
+<span class="nv">$sp</span> <span class="p">=</span> <span class="nb">New-ServicePrincipalWithPermissions</span> <span class="p">`</span>
+    <span class="n">-DisplayName</span> <span class="s2">&quot;MyAutomation-ServicePrincipal&quot;</span> <span class="p">`</span>
+    <span class="n">-Permissions</span> <span class="p">@(</span><span class="s2">&quot;User.Read.All&quot;</span><span class="p">,</span> <span class="s2">&quot;Mail.Send&quot;</span><span class="p">,</span> <span class="s2">&quot;Group.Read.All&quot;</span><span class="p">)</span>
+
+<span class="c"># Store credentials in environment variables or Key Vault</span>
+<span class="nv">$env:AZURE_CLIENT_ID</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">AppId</span>
+<span class="nv">$env:AZURE_CLIENT_SECRET</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">ClientSecret</span>
+</code></pre></div>
+
+<h3 id="example-3-certificate-management-and-rotation">Example 3: Certificate Management and Rotation</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Function to monitor and rotate expiring certificates</span>
+<span class="k">function</span> <span class="nb">Update-ExpiringCertificates</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[int]</span><span class="nv">$DaysBeforeExpiry</span> <span class="p">=</span> <span class="n">30</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$KeyVaultName</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[switch]</span><span class="nv">$AutoRotate</span>
+    <span class="p">)</span>
+
+    <span class="c"># Get all app registrations</span>
+    <span class="nv">$apps</span> <span class="p">=</span> <span class="nb">Get-MgApplication</span> <span class="n">-All</span>
+    <span class="nv">$expiringCerts</span> <span class="p">=</span> <span class="p">@()</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$app</span> <span class="k">in</span> <span class="nv">$apps</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$app</span><span class="p">.</span><span class="n">KeyCredentials</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span> <span class="k">continue</span> <span class="p">}</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$cert</span> <span class="k">in</span> <span class="nv">$app</span><span class="p">.</span><span class="n">KeyCredentials</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$daysUntilExpiry</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$daysUntilExpiry</span> <span class="o">-le</span> <span class="nv">$DaysBeforeExpiry</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$expiringCerts</span> <span class="p">+=</span> <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+                    <span class="n">AppName</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span>
+                    <span class="n">AppId</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span>
+                    <span class="n">ApplicationObjectId</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">Id</span>
+                    <span class="n">CertThumbprint</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">CustomKeyIdentifier</span>
+                    <span class="n">ExpiryDate</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">EndDateTime</span>
+                    <span class="n">DaysRemaining</span> <span class="p">=</span> <span class="nv">$daysUntilExpiry</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$daysUntilExpiry</span> <span class="o">-le</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span> <span class="s2">&quot;EXPIRED&quot;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;EXPIRING&quot;</span> <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$expiringCerts</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;✓ No expiring certificates found&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="c"># Display expiring certificates</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">Expiring Certificates:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+
+    <span class="c"># Auto-rotate if enabled</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$AutoRotate</span> <span class="o">-and</span> <span class="nv">$KeyVaultName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">🔄 Auto-rotating certificates...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$item</span> <span class="k">in</span> <span class="nv">$expiringCerts</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">try</span> <span class="p">{</span>
+                <span class="c"># Generate new certificate in Key Vault</span>
+                <span class="nv">$certName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span> <span class="o">-replace</span> <span class="s1">&#39;[^a-zA-Z0-9-]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="s2">-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
+
+                <span class="nv">$policy</span> <span class="p">=</span> <span class="nb">New-AzKeyVaultCertificatePolicy</span> <span class="p">`</span>
+                    <span class="n">-SubjectName</span> <span class="s2">&quot;CN=</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="p">`</span>
+                    <span class="n">-ValidityInMonths</span> <span class="n">12</span> <span class="p">`</span>
+                    <span class="n">-ReuseKeyOnRenewal</span> <span class="p">`</span>
+                    <span class="n">-KeyType</span> <span class="n">RSA</span> <span class="p">`</span>
+                    <span class="n">-KeySize</span> <span class="n">2048</span>
+
+                <span class="nv">$newCert</span> <span class="p">=</span> <span class="nb">Add-AzKeyVaultCertificate</span> <span class="p">`</span>
+                    <span class="n">-VaultName</span> <span class="nv">$KeyVaultName</span> <span class="p">`</span>
+                    <span class="n">-Name</span> <span class="nv">$certName</span> <span class="p">`</span>
+                    <span class="n">-CertificatePolicy</span> <span class="nv">$policy</span>
+
+                <span class="c"># Wait for certificate creation</span>
+                <span class="k">do</span> <span class="p">{</span>
+                    <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
+                    <span class="nv">$certStatus</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificateOperation</span> <span class="n">-VaultName</span> <span class="nv">$KeyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
+                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$certStatus</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;inProgress&quot;</span><span class="p">)</span>
+
+                <span class="c"># Get certificate and upload to app registration</span>
+                <span class="nv">$kvCert</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificate</span> <span class="n">-VaultName</span> <span class="nv">$KeyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
+                <span class="nv">$certBytes</span> <span class="p">=</span> <span class="no">[System.Convert]</span><span class="p">::</span><span class="n">FromBase64String</span><span class="p">(</span><span class="nv">$kvCert</span><span class="p">.</span><span class="n">Certificate</span><span class="p">)</span>
+                <span class="nv">$certBase64</span> <span class="p">=</span> <span class="no">[System.Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$certBytes</span><span class="p">)</span>
+
+                <span class="nb">Update-MgApplication</span> <span class="n">-ApplicationId</span> <span class="nv">$item</span><span class="p">.</span><span class="n">ApplicationObjectId</span> <span class="n">-KeyCredentials</span> <span class="p">@{</span>
+                    <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;AsymmetricX509Cert&quot;</span>
+                    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">&quot;Verify&quot;</span>
+                    <span class="n">Key</span> <span class="p">=</span> <span class="nv">$certBase64</span>
+                <span class="p">}</span>
+
+                <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Rotated certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">{</span>
+                <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Failed to rotate certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c"># Export report</span>
+    <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\expiring-certificates-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd&#39;</span><span class="p">)</span><span class="s2">.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+<span class="p">}</span>
+
+<span class="c"># Usage - Check for certificates expiring in next 60 days</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Application.Read.All&quot;</span>
+<span class="nb">Connect-AzAccount</span>
+<span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">60</span>
+
+<span class="c"># Auto-rotate expiring certificates using Key Vault</span>
+<span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">30</span> <span class="n">-KeyVaultName</span> <span class="s2">&quot;my-keyvault&quot;</span> <span class="n">-AutoRotate</span>
+</code></pre></div>
+
+<h3 id="example-4-group-based-license-assignment-automation">Example 4: Group-Based License Assignment Automation</h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Function to assign licenses based on group membership</span>
+<span class="k">function</span> <span class="nb">Set-GroupBasedLicensing</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$GroupId</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[string]</span><span class="nv">$SkuId</span><span class="p">,</span>  <span class="c"># e.g., &quot;c42b9cae-ea4f-4ab7-9717-81576235ccac&quot; for Office 365 E3</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[string[]]</span><span class="nv">$DisabledPlans</span> <span class="p">=</span> <span class="p">@()</span>
+    <span class="p">)</span>
+
+    <span class="c"># Prepare license configuration</span>
+    <span class="nv">$disabledPlansArray</span> <span class="p">=</span> <span class="p">@()</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$plan</span> <span class="k">in</span> <span class="nv">$DisabledPlans</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$disabledPlansArray</span> <span class="p">+=</span> <span class="nv">$plan</span>
+    <span class="p">}</span>
+
+    <span class="nv">$licenseOptions</span> <span class="p">=</span> <span class="p">@{</span>
+        <span class="n">SkuId</span> <span class="p">=</span> <span class="nv">$SkuId</span>
+        <span class="n">DisabledPlans</span> <span class="p">=</span> <span class="nv">$disabledPlansArray</span>
+    <span class="p">}</span>
+
+    <span class="c"># Assign license to group</span>
+    <span class="nb">Update-MgGroup</span> <span class="n">-GroupId</span> <span class="nv">$GroupId</span> <span class="n">-AssignedLicenses</span> <span class="p">@{</span>
+        <span class="n">AddLicenses</span> <span class="p">=</span> <span class="p">@(</span><span class="nv">$licenseOptions</span><span class="p">)</span>
+        <span class="n">RemoveLicenses</span> <span class="p">=</span> <span class="p">@()</span>
+    <span class="p">}</span>
+
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ License assigned to group: $GroupId&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+
+    <span class="c"># Monitor processing status</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">🔄 Monitoring license assignment...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+
+    <span class="nv">$members</span> <span class="p">=</span> <span class="nb">Get-MgGroupMember</span> <span class="n">-GroupId</span> <span class="nv">$GroupId</span> <span class="n">-All</span>
+    <span class="nv">$totalMembers</span> <span class="p">=</span> <span class="nv">$members</span><span class="p">.</span><span class="n">Count</span>
+    <span class="nv">$processedCount</span> <span class="p">=</span> <span class="n">0</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$member</span> <span class="k">in</span> <span class="nv">$members</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-UserId</span> <span class="nv">$member</span><span class="p">.</span><span class="n">Id</span> <span class="n">-Property</span> <span class="s2">&quot;DisplayName,UserPrincipalName,AssignedLicenses,LicenseAssignmentStates&quot;</span>
+
+        <span class="nv">$licenseState</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LicenseAssignmentStates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> 
+            <span class="nv">$_</span><span class="p">.</span><span class="n">SkuId</span> <span class="o">-eq</span> <span class="nv">$SkuId</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">AssignedByGroup</span> <span class="o">-eq</span> <span class="nv">$GroupId</span> 
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$licenseState</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$processedCount</span><span class="p">++</span>
+            <span class="nv">$status</span> <span class="p">=</span> <span class="k">switch</span> <span class="p">(</span><span class="nv">$licenseState</span><span class="p">.</span><span class="n">State</span><span class="p">)</span> <span class="p">{</span>
+                <span class="s2">&quot;Active&quot;</span> <span class="p">{</span> <span class="s2">&quot;✓ Assigned&quot;</span> <span class="p">}</span>
+                <span class="s2">&quot;ActiveWithError&quot;</span> <span class="p">{</span> <span class="s2">&quot;✗ Error&quot;</span> <span class="p">}</span>
+                <span class="k">default</span> <span class="p">{</span> <span class="s2">&quot;⏳ Processing&quot;</span> <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="nb">Write-Host</span> <span class="s2">&quot;$status - </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">)&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">License assignment complete: $processedCount / $totalMembers users processed&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+<span class="p">}</span>
+
+<span class="c"># Get available licenses in tenant</span>
+<span class="k">function</span> <span class="nb">Get-TenantLicenses</span> <span class="p">{</span>
+    <span class="nv">$subscribedSkus</span> <span class="p">=</span> <span class="nb">Get-MgSubscribedSku</span>
+
+    <span class="nv">$licenses</span> <span class="p">=</span> <span class="nv">$subscribedSkus</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;LicenseName&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SkuPartNumber</span><span class="p">}},</span>
+        <span class="n">SkuId</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;TotalLicenses&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span><span class="p">}},</span>
+        <span class="n">ConsumedUnits</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AvailableLicenses&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">-</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ConsumedUnits</span><span class="p">}}</span>
+
+    <span class="nv">$licenses</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+    <span class="k">return</span> <span class="nv">$licenses</span>
+<span class="p">}</span>
+
+<span class="c"># Usage</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Group.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;User.Read.All&quot;</span><span class="p">,</span><span class="s2">&quot;Organization.Read.All&quot;</span>
+
+<span class="c"># List available licenses</span>
+<span class="nb">Get-TenantLicenses</span>
+
+<span class="c"># Assign Office 365 E3 to a group (disable Exchange Online and SharePoint)</span>
+<span class="nv">$groupId</span> <span class="p">=</span> <span class="s2">&quot;your-group-object-id&quot;</span>
+<span class="nv">$e3SkuId</span> <span class="p">=</span> <span class="s2">&quot;c42b9cae-ea4f-4ab7-9717-81576235ccac&quot;</span>  <span class="c"># Office 365 E3</span>
+<span class="nv">$disabledPlans</span> <span class="p">=</span> <span class="p">@(</span>
+    <span class="s2">&quot;efb87545-963c-4e0d-99df-69c6916d9eb0&quot;</span><span class="p">,</span>  <span class="c"># Exchange Online (Plan 2)</span>
+    <span class="s2">&quot;5dbe027f-2339-4123-9542-606e4d348a72&quot;</span>   <span class="c"># SharePoint Online (Plan 2)</span>
+<span class="p">)</span>
+
+<span class="nb">Set-GroupBasedLicensing</span> <span class="n">-GroupId</span> <span class="nv">$groupId</span> <span class="n">-SkuId</span> <span class="nv">$e3SkuId</span> <span class="n">-DisabledPlans</span> <span class="nv">$disabledPlans</span>
+</code></pre></div>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>Authentication and Connection Issues</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Clear cached credentials and reconnect</span>
+<span class="nb">Disconnect-MgGraph</span>
+<span class="nb">Clear-MgContext</span>
+
+<span class="c"># Reconnect with verbose logging</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.Read.All&quot;</span> <span class="n">-Verbose</span>
+
+<span class="c"># Check current context</span>
+<span class="nv">$context</span> <span class="p">=</span> <span class="nb">Get-MgContext</span>
+<span class="nv">$context</span> <span class="p">|</span> <span class="nb">Format-List</span>
+
+<span class="c"># Test Graph API access</span>
+<span class="k">try</span> <span class="p">{</span>
+    <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-Top</span> <span class="n">1</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Graph API connection successful&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Graph API connection failed: </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+<span class="p">}</span>
+
+<span class="c"># Verify token expiration</span>
+<span class="nv">$tokenExpiry</span> <span class="p">=</span> <span class="nv">$context</span><span class="p">.</span><span class="n">TokenExpiresOn</span>
+<span class="nv">$minutesRemaining</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$tokenExpiry</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">TotalMinutes</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;Token expires in </span><span class="p">$(</span><span class="no">[Math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$minutesRemaining</span><span class="p">,</span> <span class="n">2</span><span class="p">))</span><span class="s2"> minutes&quot;</span>
+
+<span class="c"># Force token refresh</span>
+<span class="nb">Disconnect-MgGraph</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.Read.All&quot;</span> <span class="n">-ForceRefresh</span>
+</code></pre></div>
+
+<p><strong>Common Issues</strong>:
+- <strong>Insufficient privileges</strong>: Verify required Graph API permissions granted with admin consent
+- <strong>Token expired</strong>: Reconnect with <code>Connect-MgGraph</code> to refresh access token
+- <strong>403 Forbidden</strong>: Check conditional access policies blocking automation accounts; add service principal to exclusion list
+- <strong>Certificate not found</strong>: Ensure certificate exists in specified store with <code>Get-ChildItem Cert:\CurrentUser\My</code>
+- <strong>App registration missing</strong>: Verify app exists with <code>Get-MgApplication -Filter "appId eq '&lt;app-id&gt;'"</code>
+- <strong>Quota exceeded</strong>: Check API rate limits; implement exponential backoff and retry logic
+- <strong>Group not found</strong>: Ensure group type is correct (Security vs Microsoft 365); use <code>Get-MgGroup -Filter "displayName eq '&lt;name&gt;'"</code></p>
+<p><strong>Diagnostic Commands</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Check installed module versions</span>
+<span class="nb">Get-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">*</span> <span class="n">-ListAvailable</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Version</span>
+
+<span class="c"># Update to latest version</span>
+<span class="nb">Update-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span> <span class="n">-Force</span>
+
+<span class="c"># Check API permissions for service principal</span>
+<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">&quot;your-app-id&quot;</span>
+<span class="nv">$sp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">&quot;appId eq &#39;$appId&#39;&quot;</span>
+<span class="nb">Get-MgServicePrincipalAppRoleAssignment</span> <span class="n">-ServicePrincipalId</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span> <span class="p">|</span> 
+    <span class="nb">Select-Object</span> <span class="n">AppRoleId</span><span class="p">,</span> <span class="n">PrincipalDisplayName</span><span class="p">,</span> <span class="n">ResourceDisplayName</span>
+
+<span class="c"># Test certificate authentication</span>
+<span class="nv">$certThumbprint</span> <span class="p">=</span> <span class="s2">&quot;your-cert-thumbprint&quot;</span>
+<span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span><span class="p">\</span><span class="nv">$certThumbprint</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$cert</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Certificate found: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Subject</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;  Expires: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">NotAfter</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;  Thumbprint: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">)</span><span class="s2">&quot;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Certificate not found&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+<span class="p">}</span>
+
+<span class="c"># Check Azure AD sign-in logs for errors</span>
+<span class="nb">Get-MgAuditLogSignIn</span> <span class="n">-Top</span> <span class="n">10</span> <span class="n">-OrderBy</span> <span class="s2">&quot;createdDateTime desc&quot;</span> <span class="p">|</span>
+    <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">-ne</span> <span class="n">0</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span> 
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Error&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span> 
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Reason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}}</span>
+</code></pre></div>
+
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<p><strong>Batch Operations and Pagination</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Efficient bulk user retrieval with pagination</span>
+<span class="k">function</span> <span class="nb">Get-AllUsersEfficiently</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[int]</span><span class="nv">$PageSize</span> <span class="p">=</span> <span class="n">999</span>  <span class="c"># Max allowed by Graph API</span>
+    <span class="p">)</span>
+
+    <span class="nv">$allUsers</span> <span class="p">=</span> <span class="p">@()</span>
+    <span class="nv">$uri</span> <span class="p">=</span> <span class="s2">&quot;https://graph.microsoft.com/v1.0/users?</span><span class="se">`$</span><span class="s2">top=$PageSize&amp;</span><span class="se">`$</span><span class="s2">select=id,displayName,userPrincipalName,mail&quot;</span>
+
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="nv">$response</span> <span class="p">=</span> <span class="nb">Invoke-MgGraphRequest</span> <span class="n">-Method</span> <span class="n">GET</span> <span class="n">-Uri</span> <span class="nv">$uri</span>
+        <span class="nv">$allUsers</span> <span class="p">+=</span> <span class="nv">$response</span><span class="p">.</span><span class="n">Value</span>
+
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Retrieved </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+
+        <span class="nv">$uri</span> <span class="p">=</span> <span class="nv">$response</span><span class="p">.</span><span class="s1">&#39;@odata.nextLink&#39;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$uri</span><span class="p">)</span>
+
+    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Total users retrieved: </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="k">return</span> <span class="nv">$allUsers</span>
+<span class="p">}</span>
+
+<span class="c"># Batch operations with error handling</span>
+<span class="k">function</span> <span class="nb">Invoke-BatchOperation</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span>
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[array]</span><span class="nv">$Items</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
+        <span class="no">[scriptblock]</span><span class="nv">$ScriptBlock</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[int]</span><span class="nv">$BatchSize</span> <span class="p">=</span> <span class="n">20</span><span class="p">,</span>
+
+        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
+        <span class="no">[int]</span><span class="nv">$ThrottleLimit</span> <span class="p">=</span> <span class="n">5</span>
+    <span class="p">)</span>
+
+    <span class="nv">$results</span> <span class="p">=</span> <span class="p">@()</span>
+    <span class="nv">$batches</span> <span class="p">=</span> <span class="no">[Math]</span><span class="p">::</span><span class="n">Ceiling</span><span class="p">(</span><span class="nv">$Items</span><span class="p">.</span><span class="n">Count</span> <span class="p">/</span> <span class="nv">$BatchSize</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="p">=</span> <span class="n">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">-lt</span> <span class="nv">$batches</span><span class="p">;</span> <span class="nv">$i</span><span class="p">++)</span> <span class="p">{</span>
+        <span class="nv">$start</span> <span class="p">=</span> <span class="nv">$i</span> <span class="p">*</span> <span class="nv">$BatchSize</span>
+        <span class="nv">$end</span> <span class="p">=</span> <span class="no">[Math]</span><span class="p">::</span><span class="n">Min</span><span class="p">(</span><span class="nv">$start</span> <span class="p">+</span> <span class="nv">$BatchSize</span> <span class="p">-</span> <span class="n">1</span><span class="p">,</span> <span class="nv">$Items</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="n">1</span><span class="p">)</span>
+        <span class="nv">$batch</span> <span class="p">=</span> <span class="nv">$Items</span><span class="p">[</span><span class="nv">$start</span><span class="p">..</span><span class="nv">$end</span><span class="p">]</span>
+
+        <span class="nb">Write-Host</span> <span class="s2">&quot;Processing batch </span><span class="p">$(</span><span class="nv">$i</span> <span class="p">+</span> <span class="n">1</span><span class="p">)</span><span class="s2"> of $batches...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+
+        <span class="c"># Process batch in parallel</span>
+        <span class="nv">$batchResults</span> <span class="p">=</span> <span class="nv">$batch</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="n">-ThrottleLimit</span> <span class="nv">$ThrottleLimit</span> <span class="n">-Parallel</span> <span class="p">{</span>
+            <span class="nv">$item</span> <span class="p">=</span> <span class="nv">$_</span>
+            <span class="nv">$sb</span> <span class="p">=</span> <span class="nv">$using</span><span class="p">:</span><span class="n">ScriptBlock</span>
+
+            <span class="k">try</span> <span class="p">{</span>
+                <span class="nv">$result</span> <span class="p">=</span> <span class="p">&amp;</span> <span class="nv">$sb</span> <span class="nv">$item</span>
+                <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+                    <span class="n">Item</span> <span class="p">=</span> <span class="nv">$item</span>
+                    <span class="n">Result</span> <span class="p">=</span> <span class="nv">$result</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Success&quot;</span>
+                    <span class="n">Error</span> <span class="p">=</span> <span class="nv">$null</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">{</span>
+                <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+                    <span class="n">Item</span> <span class="p">=</span> <span class="nv">$item</span>
+                    <span class="n">Result</span> <span class="p">=</span> <span class="nv">$null</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Failed&quot;</span>
+                    <span class="n">Error</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nv">$results</span> <span class="p">+=</span> <span class="nv">$batchResults</span>
+
+        <span class="c"># Throttle between batches to respect rate limits</span>
+        <span class="nb">Start-Sleep</span> <span class="n">-Milliseconds</span> <span class="n">500</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$results</span>
+<span class="p">}</span>
+
+<span class="c"># Usage - Bulk user property update</span>
+<span class="nv">$users</span> <span class="p">=</span> <span class="nb">Get-AllUsersEfficiently</span>
+<span class="nv">$updates</span> <span class="p">=</span> <span class="nb">Invoke-BatchOperation</span> <span class="n">-Items</span> <span class="nv">$users</span> <span class="n">-BatchSize</span> <span class="n">20</span> <span class="n">-ScriptBlock</span> <span class="p">{</span>
+    <span class="k">param</span><span class="p">(</span><span class="nv">$user</span><span class="p">)</span>
+    <span class="nb">Update-MgUser</span> <span class="n">-UserId</span> <span class="nv">$user</span><span class="p">.</span><span class="n">id</span> <span class="n">-Department</span> <span class="s2">&quot;Engineering&quot;</span>
+<span class="p">}</span>
+
+<span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$updates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Success&quot;</span> <span class="p">}).</span><span class="n">Count</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;✓ Updated $successCount users successfully&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+</code></pre></div>
+
+<p><strong>Performance Optimizations</strong>:
+- Use <code>-Select</code> parameter to retrieve only required properties; reduces response size
+- Implement pagination with <code>-Top</code> and <code>-Skip</code> for large datasets (default page size: 100)
+- Use <code>-Filter</code> for server-side filtering instead of client-side <code>Where-Object</code>
+- Cache frequently accessed data (users, groups, apps) in memory or Redis with TTL
+- Use batch requests for multiple operations; reduces HTTP round-trips (Graph API supports batching)
+- Implement exponential backoff with jitter for rate limit (429) errors
+- Run operations in parallel with <code>ForEach-Object -Parallel</code> (PowerShell 7+)
+- Use <code>-ConsistencyLevel eventual</code> for faster queries on large datasets
+- Store credentials in Azure Key Vault; retrieve once at script start
+- Use delta queries to retrieve only changed entities since last query</p>
+<p><strong>Monitoring and Alerting</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Monitor service principal certificate expiration</span>
+<span class="nv">$threshold</span> <span class="p">=</span> <span class="n">30</span>  <span class="c"># days</span>
+<span class="nv">$apps</span> <span class="p">=</span> <span class="nb">Get-MgApplication</span> <span class="n">-All</span>
+
+<span class="nv">$expiringCerts</span> <span class="p">=</span> <span class="nv">$apps</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$app</span> <span class="p">=</span> <span class="nv">$_</span>
+    <span class="nv">$app</span><span class="p">.</span><span class="n">KeyCredentials</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
+        <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span> <span class="o">-le</span> <span class="nv">$threshold</span>
+    <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AppName&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AppId&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ExpiryDate&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;DaysRemaining&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={(</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span><span class="p">}}</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$expiringCerts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c"># Send alert (integrate with Azure Monitor, email, Teams, etc.)</span>
+    <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;⚠️  </span><span class="p">$(</span><span class="nv">$expiringCerts</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> certificates expiring soon!&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+<span class="p">}</span>
+
+<span class="c"># Monitor failed sign-ins (security alerting)</span>
+<span class="nv">$recentFailures</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogSignIn</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$((</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddHours</span><span class="p">(-</span><span class="n">1</span><span class="p">).</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-ddTHH:mm:ssZ&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Top</span> <span class="n">100</span>
+
+<span class="nv">$suspiciousActivity</span> <span class="p">=</span> <span class="nv">$recentFailures</span> <span class="p">|</span> <span class="nb">Group-Object</span> <span class="n">UserPrincipalName</span> <span class="p">|</span> 
+    <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Count</span> <span class="o">-ge</span> <span class="n">5</span> <span class="p">}</span>  <span class="c"># 5+ failures in 1 hour</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$suspiciousActivity</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;🚨 Suspicious activity detected for </span><span class="p">$(</span><span class="nv">$suspiciousActivity</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users!&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="c"># Implement automated response (e.g., enable conditional access, revoke tokens)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<p><strong>Official Documentation</strong>:
+- <a href="https://learn.microsoft.com/en-us/powershell/microsoftgraph/">Microsoft Graph PowerShell SDK</a>
+- <a href="https://learn.microsoft.com/en-us/powershell/module/azuread/">Azure AD PowerShell Reference</a>
+- <a href="https://learn.microsoft.com/en-us/graph/api/overview">Microsoft Graph API Reference</a>
+- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/">Azure AD Authentication Documentation</a>
+- <a href="https://learn.microsoft.com/en-us/azure/active-directory/conditional-access/">Conditional Access Documentation</a>
+- <a href="https://learn.microsoft.com/en-us/azure/active-directory/authentication/certificate-based-authentication">Certificate-Based Authentication</a></p>
+<p><strong>PowerShell Resources</strong>:
+- <a href="https://github.com/microsoftgraph/msgraph-sdk-powershell/tree/dev/samples">Microsoft Graph PowerShell Samples</a>
+- <a href="https://github.com/microsoft/AzureAD-Scripts">Azure AD Scripts Gallery</a>
+- <a href="https://www.powershellgallery.com/packages/Microsoft.Graph">PowerShell Gallery - Microsoft.Graph</a></p>
+<p><strong>Security Best Practices</strong>:
+- <a href="https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/security-operations-introduction">Azure AD Security Operations Guide</a>
+- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist">Microsoft Identity Platform Best Practices</a>
+- <a href="https://pages.nist.gov/800-63-3/">NIST Digital Identity Guidelines</a>
+- <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html">OWASP Authentication Cheat Sheet</a></p>
+<p><strong>Community Resources</strong>:
+- <a href="https://docs.microsoft.com/en-us/microsoft-365/community/">Microsoft 365 Community</a>
+- <a href="https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/discussions">Azure AD GitHub Discussions</a>
+- <a href="https://devblogs.microsoft.com/powershell/">PowerShell Community Blog</a></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

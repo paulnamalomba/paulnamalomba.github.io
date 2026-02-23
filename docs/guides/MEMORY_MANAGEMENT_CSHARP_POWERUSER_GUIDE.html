@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management Csharp Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="memory-management-and-execution-on-windows-c-net">Memory Management and Execution on Windows — C# (.NET)</h1>
+<p><strong>Last updated</strong>: December 13, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://learn.microsoft.com/dotnet/csharp/"><img alt="Language: C#" src="https://img.shields.io/badge/Language-C%23-blue.svg" /></a>
+<a href="https://learn.microsoft.com/dotnet/"><img alt="Runtime: .NET" src="https://img.shields.io/badge/Runtime-.NET-512BD4.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory management and execution semantics on Windows. Covering value vs reference types, stack vs heap storage, copy semantics, and nullability features (nullable reference types, <code>Nullable&lt;T&gt;</code>), plus examples and best practices.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#memory-management-and-execution-on-windows--c-net">Memory Management and Execution on Windows — C# (.NET)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#windows--build--run-powershell--command-prompt">Windows — Build \&amp; Run (PowerShell / Command Prompt)</a></li>
+<li><a href="#overview-1">Overview</a></li>
+<li><a href="#contents-1">Contents</a></li>
+<li><a href="#1-data-structures--value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</a></li>
+<li><a href="#2-storage--stack-vs-heap--garbage-collector">2) Storage — Stack vs Heap \&amp; Garbage Collector</a></li>
+<li><a href="#3-copy-semantics--shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</a></li>
+<li><a href="#4-nullability">4) Nullability</a></li>
+<li><a href="#examples--runnable-snippets">Examples — Runnable Snippets</a></li>
+<li><a href="#windowsnet-specific-notes">Windows/.NET Specific Notes</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="windows-build-run-powershell-command-prompt">Windows — Build &amp; Run (PowerShell / Command Prompt)</h2>
+<ul>
+<li>Create project and run (dotnet SDK required):</li>
+</ul>
+<p><code>powershell
+  # Create console project
+  dotnet new console -n MemoryDemo
+  cd MemoryDemo
+  # Replace Program.cs with main.cs if needed, then run
+  dotnet run</code></p>
+<ul>
+<li>To build and run specific file you can create <code>Program.cs</code> with <code>Main</code> method and run <code>dotnet run</code> in the project directory.</li>
+</ul>
+<hr />
+<h2 id="overview_1">Overview</h2>
+<p>This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory management and execution semantics on Windows. Covering value vs reference types, stack vs heap storage, copy semantics, and nullability features (nullable reference types, <code>Nullable&lt;T&gt;</code>), plus examples and best practices.</p>
+<hr />
+<h2 id="contents_1">Contents</h2>
+<ul>
+<li>Data Structures: value types (<code>struct</code>) vs reference types (<code>class</code>)</li>
+<li>Storage: stack vs heap under CLR; GC generations and finalizers</li>
+<li>Copy semantics: shallow vs deep, <code>ICloneable</code>, copy constructors</li>
+<li>Nullability: <code>null</code>, nullable reference types, <code>Nullable&lt;T&gt;</code></li>
+<li>Examples &amp; Best Practices</li>
+<li>Windows/.NET specific notes</li>
+</ul>
+<hr />
+<h2 id="1-data-structures-value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</h2>
+<ul>
+<li>Value types: primitives (<code>int</code>, <code>double</code>), <code>struct</code>, <code>enum</code>. Stored inline where declared (stack or inside objects). Passed by value by default.</li>
+<li>Reference types: <code>class</code>, <code>interface</code>, <code>delegate</code>, <code>object</code>, arrays — variables hold a reference to the object on the managed heap.</li>
+</ul>
+<p>Table comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Value Types</th>
+<th>Reference Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Examples</td>
+<td><code>int</code>, <code>struct Point</code></td>
+<td><code>class Person</code>, <code>string</code></td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Inline (stack or embedded)</td>
+<td>Managed heap (GC)</td>
+</tr>
+<tr>
+<td>Passing</td>
+<td>Copy of value</td>
+<td>Copy of reference</td>
+</tr>
+<tr>
+<td>Nullability</td>
+<td><code>Nullable&lt;T&gt;</code> (<code>int?</code>)</td>
+<td>Can be null, but nullable reference types provide annotations</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">X</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Y</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Person</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">void</span><span class="w"> </span><span class="nf">Demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p1</span><span class="p">;</span><span class="w"> </span><span class="c1">// copy</span>
+
+<span class="w">    </span><span class="n">Person</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Paul&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">Person</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="c1">// reference copy</span>
+<span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Changed&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// a.Name == &quot;Changed&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Notes:
+- <code>string</code> is a reference type but immutable: assignment yields reference copy; modifications produce new strings.</p>
+<hr />
+<h2 id="2-storage-stack-vs-heap-garbage-collector">2) Storage — Stack vs Heap &amp; Garbage Collector</h2>
+<ul>
+<li>CLR allocates value types on the stack (for local variables) or inline within objects. Reference type instances allocated on managed heap.</li>
+<li>Garbage Collector: generational (Gen0/Gen1/Gen2), background GC, server GC. GC reclaims unreachable objects; finalizers (<code>~Type()</code>) run on separate finalizer thread.</li>
+</ul>
+<p>Windows/.NET specifics:
+- The CLR uses the OS virtual memory and the GC has options (Workstation vs Server) and settings in <code>runtimeconfig.json</code>.
+- Use <code>GC.Collect</code> only in rare cases; prefer letting runtime manage memory.</p>
+<p>Example demonstrating GC behavior:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Demo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">CreateObjects</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">100000</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">object</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">CreateObjects</span><span class="p">();</span>
+<span class="w">        </span><span class="n">GC</span><span class="p">.</span><span class="n">Collect</span><span class="p">();</span><span class="w"> </span><span class="c1">// forces collection (not usually recommended)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Tips:
+- Implement <code>IDisposable</code> and <code>using</code> for deterministic unmanaged resource cleanup.
+- Use <code>WeakReference&lt;T&gt;</code> for cache-like scenarios where you don't want to keep objects alive.</p>
+<hr />
+<h2 id="3-copy-semantics-shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</h2>
+<ul>
+<li>Assigning reference variables copies the reference (shallow).</li>
+<li>For deep copy, implement cloning (manual or <code>ICloneable</code>) or serialization-based copy.</li>
+<li>Value types are copied by value (deep copy of fields).</li>
+</ul>
+<p>Example (shallow vs deep):</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Title</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">void</span><span class="w"> </span><span class="nf">Demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">b1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Book</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;A&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">{</span><span class="s">&quot;X&quot;</span><span class="p">}</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">b2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b1</span><span class="p">;</span><span class="w"> </span><span class="c1">// shallow (reference copy)</span>
+<span class="w">    </span><span class="n">b2</span><span class="p">.</span><span class="n">Authors</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Y&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// b1.Authors also changed</span>
+
+<span class="w">    </span><span class="c1">// Deep copy (manual)</span>
+<span class="w">    </span><span class="kt">var</span><span class="w"> </span><span class="n">b3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Book</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b1</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span><span class="w"> </span><span class="n">Authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">b1</span><span class="p">.</span><span class="n">Authors</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Best practices:
+- Prefer immutable types or make deep copies when necessary.
+- Use <code>MemberwiseClone</code> carefully; implement custom cloning when needed.</p>
+<hr />
+<h2 id="4-nullability">4) Nullability</h2>
+<ul>
+<li>C# supports <code>null</code> for reference types; C#8 introduced nullable reference types (<code>string?</code>) and static analysis to reduce null-related bugs.</li>
+<li><code>Nullable&lt;T&gt;</code> (<code>int?</code>) wraps value types to allow null.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">#</span><span class="n">nullable</span><span class="w"> </span><span class="n">enable</span>
+<span class="kt">string?</span><span class="w"> </span><span class="n">maybe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">maybe</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">maybe</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+
+<span class="kt">int?</span><span class="w"> </span><span class="n">maybeInt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">maybeInt</span><span class="p">.</span><span class="n">HasValue</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">maybeInt</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Tips:
+- Enable nullable reference types in <code>csproj</code> (<code>&lt;Nullable&gt;enable&lt;/Nullable&gt;</code>).
+- Use null-coalescing <code>??</code> and <code>?.</code> for safe access.</p>
+<hr />
+<h2 id="examples-runnable-snippets">Examples — Runnable Snippets</h2>
+<p><code>Program.cs</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Program</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Value vs Reference</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p1</span><span class="p">;</span><span class="w"> </span><span class="c1">// copied</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">book1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Book</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;C#&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">book2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">book1</span><span class="p">;</span><span class="w"> </span><span class="c1">// reference copy</span>
+<span class="w">        </span><span class="n">book2</span><span class="p">.</span><span class="n">Title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Changed&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">book1</span><span class="p">.</span><span class="n">Title</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;Changed&quot;</span>
+
+<span class="w">        </span><span class="c1">// Nullable</span>
+<span class="w">        </span><span class="kt">string?</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;(null)&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">X</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Y</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Book</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Title</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Authors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>Run with <code>dotnet run</code> in project folder.</p>
+<hr />
+<h2 id="windowsnet-specific-notes">Windows/.NET Specific Notes</h2>
+<ul>
+<li>Tuning GC settings: <code>DOTNET_gcServer</code>, <code>DOTNET_gcConcurrent</code> environment variables.</li>
+<li>Memory dumps: use <code>dotnet-dump</code>, <code>procdump</code>, <code>WinDbg</code> for post-mortem analysis.</li>
+<li>Use <code>dotnet-gcdump</code> and <code>dotnet-trace</code> for diagnostics.</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>Microsoft docs: https://learn.microsoft.com/dotnet/  </li>
+<li>.NET GC: https://learn.microsoft.com/dotnet/standard/garbage-collection/</li>
+</ul>
+<p><em>End of C# guide.</em></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management Python Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="memory-management-and-execution-on-windows-python-cpython">Memory Management and Execution on Windows — Python (CPython)</h1>
+<p><strong>Last updated</strong>: December 13, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://www.python.org/"><img alt="Language: Python" src="https://img.shields.io/badge/Language-Python-3776AB.svg" /></a>
+<a href="https://docs.python.org/3/c-api/intro.html"><img alt="Interpreter: CPython" src="https://img.shields.io/badge/Interpreter-CPython-FFD43B.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide explains how Python (CPython on Windows) handles key memory and execution concepts: value vs reference semantics, heap storage, copy semantics (deep vs shallow), and nullability. The content focuses on what actually happens under the hood on Windows using CPython, with short, runnable examples and Windows-specific notes.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#memory-management-and-execution-on-windows--python-cpython">Memory Management and Execution on Windows — Python (CPython)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#windows--run-powershell--command-prompt">Windows — Run (PowerShell / Command Prompt)</a></li>
+<li><a href="#overview-1">Overview</a></li>
+<li><a href="#contents-1">Contents</a></li>
+<li><a href="#1-data-structures--value-vs-reference-in-python">1) Data Structures — "Value" vs "Reference" in Python</a></li>
+<li><a href="#2-storage--heap-object-layout-and-cpython-internals">2) Storage — Heap, Object Layout, and CPython Internals</a></li>
+<li><a href="#3-copy-semantics--shallow-vs-deep-copy">3) Copy Semantics — Shallow vs Deep Copy</a></li>
+<li><a href="#4-nullability--none-and-safe-usage">4) Nullability — <code>None</code> and Safe Usage</a></li>
+<li><a href="#examples--runnable-snippets">Examples — Runnable Snippets</a></li>
+<li><a href="#windows--cpython-specific-notes">Windows / CPython Specific Notes</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="windows-run-powershell-command-prompt">Windows — Run (PowerShell / Command Prompt)</h2>
+<ul>
+<li>Run <code>main.py</code> with your installed Python interpreter:</li>
+</ul>
+<p>```powershell
+  # PowerShell
+  python main.py</p>
+<p># If multiple versions installed, use py launcher
+  py -3 main.py
+  ```</p>
+<ul>
+<li>Ensure your PATH includes the Python installation or use the <code>py</code> launcher which is installed by default on Windows.</li>
+</ul>
+<hr />
+<h2 id="overview_1">Overview</h2>
+<p>Python (CPython) provides high-level memory management with automatic memory allocation, reference counting, and a cyclic garbage collector. This guide explains how Python handles value vs reference semantics (always objects), memory allocation (heap-managed objects), copy semantics (shallow vs deep), and nullability (<code>None</code>). Examples demonstrate behaviour and best practices for Windows environments.</p>
+<hr />
+<h2 id="contents_1">Contents</h2>
+<ul>
+<li>Data Structures: all objects, value vs reference interpretation</li>
+<li>Storage: heap allocation, object layout in CPython, small object allocator</li>
+<li>Copy Semantics: assignment, shallow copy, deep copy</li>
+<li>Nullability: <code>None</code> and safety patterns</li>
+<li>Examples &amp; Best Practices</li>
+<li>Windows/CPython specifics</li>
+</ul>
+<hr />
+<h2 id="1-data-structures-value-vs-reference-in-python">1) Data Structures — "Value" vs "Reference" in Python</h2>
+<ul>
+<li>In Python, <em>everything is an object</em>. Names (variables) are labels bound to object references.</li>
+<li>Immutable types (e.g., <code>int</code>, <code>str</code>, <code>tuple</code>) behave like values semantically — operations produce new objects. Mutable types (<code>list</code>, <code>dict</code>, <code>set</code>) allow in-place changes.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># assignment binds names to objects</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>  <span class="c1"># both names point to same int object</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1"># b now points to new int object; a unchanged</span>
+
+<span class="n">lst1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">lst2</span> <span class="o">=</span> <span class="n">lst1</span>
+<span class="n">lst2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst1</span><span class="p">)</span>  <span class="c1"># [1,2,3,4]</span>
+</code></pre></div>
+
+<p>Notes:
+- Understanding mutability is essential: immutable types are safe to share, mutable types require attention.</p>
+<hr />
+<h2 id="2-storage-heap-object-layout-and-cpython-internals">2) Storage — Heap, Object Layout, and CPython Internals</h2>
+<ul>
+<li>CPython allocates objects on the heap. The interpreter uses a small-object allocator (<code>pymalloc</code>) optimized for small objects.</li>
+<li>Each object has a header including reference count and a pointer to type object (<code>PyObject_HEAD</code>).</li>
+<li>Memory for large objects (arrays, bytes) is allocated separately.</li>
+</ul>
+<p>Reference counting &amp; GC:
+- CPython primarily uses reference counting (immediate deallocation when refcount drops to zero).
+- It also has a cyclic garbage collector (<code>gc</code> module) to detect and collect reference cycles.</p>
+<p>Windows specifics:
+- CPython uses the Windows heap API under-the-hood; performance tuning is limited compared to native languages.</p>
+<hr />
+<h2 id="3-copy-semantics-shallow-vs-deep-copy">3) Copy Semantics — Shallow vs Deep Copy</h2>
+<ul>
+<li>Assignment copies references (no object duplication).</li>
+<li><code>copy.copy()</code> performs a shallow copy: top-level container duplicated, inner references copied.</li>
+<li><code>copy.deepcopy()</code> produces deep copy recursively.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">orig</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">orig</span><span class="p">)</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">orig</span><span class="p">)</span>
+<span class="n">orig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">shallow</span><span class="p">)</span> <span class="c1"># shares nested lists -&gt; shows change</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deep</span><span class="p">)</span>    <span class="c1"># independent copy -&gt; no change</span>
+</code></pre></div>
+
+<p>Tips:
+- Prefer immutable objects for safety.
+- Use <code>deepcopy</code> cautiously — expensive for large structures.</p>
+<hr />
+<h2 id="4-nullability-none-and-safe-usage">4) Nullability — <code>None</code> and Safe Usage</h2>
+<ul>
+<li><code>None</code> is the singleton null value in Python. Any variable can be set to <code>None</code>.</li>
+<li>Use <code>is None</code> / <code>is not None</code> for checks.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;no value&#39;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Pitfalls:
+- Do not use <code>== None</code>; use <code>is None</code> for identity.
+- Be careful with mutable default arguments in function signatures; use <code>None</code> sentinel.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">append_to</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">to</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">to</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">to</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">to</span>
+</code></pre></div>
+
+<hr />
+<h2 id="examples-runnable-snippets">Examples — Runnable Snippets</h2>
+<p><code>main.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="c1"># Data structure behavior</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">alias</span> <span class="o">=</span> <span class="n">lst</span>
+<span class="n">alias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;alias modifies original:&#39;</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
+
+<span class="c1"># Shallow vs deep copy</span>
+<span class="n">orig</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">],[</span><span class="mi">2</span><span class="p">]]</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">orig</span><span class="p">)</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">orig</span><span class="p">)</span>
+<span class="n">orig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;shallow:&#39;</span><span class="p">,</span> <span class="n">shallow</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;deep   :&#39;</span><span class="p">,</span> <span class="n">deep</span><span class="p">)</span>
+
+<span class="c1"># None usage</span>
+<span class="n">maybe</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;maybe is None -&gt;&#39;</span><span class="p">,</span> <span class="n">maybe</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Run with <code>python main.py</code> or <code>py -3 main.py</code> on Windows.</p>
+<hr />
+<h2 id="windows-cpython-specific-notes">Windows / CPython Specific Notes</h2>
+<ul>
+<li>Use <code>py</code> launcher to select Python version on Windows.</li>
+<li>CPython's GIL (Global Interpreter Lock) affects multi-threaded CPU-bound programs; prefer multiprocessing for CPU work.</li>
+<li>For native performance, consider C extensions, <code>cython</code>, or <code>multiprocessing</code>.</li>
+<li>Use <code>tracemalloc</code>, <code>objgraph</code>, <code>gc</code> module for memory diagnostics.</li>
+</ul>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>CPython internals: https://github.com/python/cpython</li>
+<li>Python memory management: https://docs.python.org/3/c-api/memory.html</li>
+<li><code>gc</code> module docs: https://docs.python.org/3/library/gc.html</li>
+</ul>
+<p><em>End of Python guide.</em></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

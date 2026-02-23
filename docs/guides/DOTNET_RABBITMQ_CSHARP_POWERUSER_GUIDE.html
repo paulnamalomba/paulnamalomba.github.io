@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dotnet Rabbitmq Csharp Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="dotnet-rabbitmq-poweruser-guide-c">DOTNET RabbitMQ PowerUser Guide (C#)</h1>
+<p><strong>Last updated</strong>: December 05, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://www.rabbitmq.com/dotnet.html"><img alt="Framework" src="https://img.shields.io/badge/.NET-RabbitMQ-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol for asynchronous communication between distributed systems. This guide covers connection management, queue/exchange configuration, message publishing/consuming, acknowledgements, prefetch settings, and TLS security using the official .NET client library. Power users need to understand durability, routing patterns, dead-letter queues, and high-availability strategies for production message-driven architectures.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#dotnet-rabbitmq-poweruser-guide-c">DOTNET RabbitMQ PowerUser Guide (C#)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#key-concepts">Key Concepts</a></li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#basic-message-publishing-and-consuming">Basic Message Publishing and Consuming</a></li>
+<li><a href="#exchange-routing-patterns">Exchange Routing Patterns</a></li>
+<li><a href="#aspnet-core-integration-with-dependency-injection">ASP.NET Core Integration with Dependency Injection</a></li>
+<li><a href="#dead-letter-exchange-and-retry-strategy">Dead Letter Exchange and Retry Strategy</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<ol>
+<li><strong>Install package</strong>: <code>dotnet add package RabbitMQ.Client</code></li>
+<li><strong>Create connection factory</strong>: Configure hostname, port, and credentials</li>
+<li><strong>Publish message</strong>: Create channel, declare queue, publish byte array with routing key</li>
+<li><strong>Consume message</strong>: Create consumer, bind to queue, process messages with manual acknowledgement</li>
+<li><strong>Enable durability</strong>: Set durable flags on queues and persistent delivery mode on messages</li>
+</ol>
+<h2 id="key-concepts">Key Concepts</h2>
+<ul>
+<li><strong>Connection</strong>: Long-lived TCP connection to RabbitMQ broker; expensive to create, should be reused across application</li>
+<li><strong>Channel</strong>: Lightweight virtual connection multiplexed over a single TCP connection; used for all AMQP operations</li>
+<li><strong>Exchange</strong>: Message routing component that receives messages and routes to queues based on bindings and routing keys; types include direct, topic, fanout, headers</li>
+<li><strong>Queue</strong>: Buffer that stores messages until consumed; can be durable (survives broker restart) or transient</li>
+<li><strong>Binding</strong>: Link between exchange and queue with optional routing key pattern for message filtering</li>
+<li><strong>Acknowledgement (Ack)</strong>: Consumer confirms message processing; manual ack provides at-least-once delivery guarantee</li>
+<li><strong>Prefetch (QoS)</strong>: Limits number of unacknowledged messages per consumer; prevents overwhelming slow consumers</li>
+</ul>
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<p><strong>Connection Factory Configuration</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5672</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// Connection pooling and timeout settings</span>
+<span class="w">    </span><span class="n">RequestedHeartbeat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span>
+<span class="w">    </span><span class="n">NetworkRecoveryInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">TopologyRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// Performance tuning</span>
+<span class="w">    </span><span class="n">RequestedChannelMax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2047</span><span class="p">,</span>
+<span class="w">    </span><span class="n">RequestedFrameMax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">131072</span><span class="p">,</span>
+
+<span class="w">    </span><span class="c1">// TLS/SSL configuration</span>
+<span class="w">    </span><span class="n">Ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SslOption</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.example.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">AcceptablePolicyErrors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SslPolicyErrors</span><span class="p">.</span><span class="n">RemoteCertificateNameMismatch</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><strong>Best Practices</strong>:
+- Create one connection per application; share across threads
+- Use one channel per thread; channels are not thread-safe
+- Always declare queues and exchanges before publishing to ensure they exist
+- Set <code>durable = true</code> for queues and <code>persistent = true</code> for messages in production
+- Implement manual acknowledgements with proper error handling
+- Use prefetch (QoS) to limit unacknowledged messages per consumer
+- Enable automatic recovery for connection failures
+- Set heartbeat interval to detect network failures quickly</p>
+<h2 id="security-considerations">Security Considerations</h2>
+<ol>
+<li><strong>Authentication</strong>: Use strong credentials; avoid default <code>guest/guest</code> in production; integrate with LDAP or OAuth</li>
+<li><strong>TLS Encryption</strong>: Enable SSL/TLS for all connections; use valid certificates; disable weak cipher suites</li>
+<li><strong>Virtual Hosts</strong>: Isolate environments using virtual hosts; restrict user permissions per vhost</li>
+<li><strong>Access Control</strong>: Use fine-grained permissions (configure, write, read) per user and resource</li>
+<li><strong>Message Validation</strong>: Sanitize and validate all message payloads; implement schema validation</li>
+<li><strong>Network Security</strong>: Bind RabbitMQ to specific interfaces; use firewall rules; avoid exposing management plugin publicly</li>
+<li><strong>Audit Logging</strong>: Enable audit logs for security events; monitor failed login attempts and permission violations</li>
+</ol>
+<p><strong>Secure Connection Setup</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.production.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5671</span><span class="p">,</span><span class="w"> </span><span class="c1">// TLS port</span>
+<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;RABBITMQ_USER&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;RABBITMQ_PASSWORD&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/production&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="n">Ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SslOption</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.production.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls12</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls13</span><span class="p">,</span>
+<span class="w">        </span><span class="n">AcceptablePolicyErrors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SslPolicyErrors</span><span class="p">.</span><span class="n">None</span><span class="p">,</span><span class="w"> </span><span class="c1">// Strict certificate validation</span>
+<span class="w">        </span><span class="n">CertPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/client-cert.pfx&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">CertPassphrase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;CERT_PASSWORD&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">},</span>
+
+<span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">    </span><span class="n">NetworkRecoveryInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<h2 id="examples">Examples</h2>
+<h3 id="basic-message-publishing-and-consuming">Basic Message Publishing and Consuming</h3>
+<p>Create durable queues, publish messages with persistence, and consume with manual acknowledgements for reliable delivery.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client.Events</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BasicMessagingExample</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishMessage</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare durable queue (survives broker restart)</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello RabbitMQ!&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Publish persistent message</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
+<span class="w">        </span><span class="n">properties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"> </span><span class="c1">// Survive broker restart</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">properties</span><span class="p">,</span>
+<span class="w">            </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent: {message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ConsumeMessages</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare queue (idempotent operation)</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Set prefetch count (QoS) - process one message at a time</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Waiting for messages...&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Received: {message}&quot;</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Simulate work</span>
+<span class="w">                </span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Manual acknowledgement (confirms successful processing)</span>
+<span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [x] Done&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [!] Error: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="c1">// Reject and requeue message on failure</span>
+<span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicNack</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">requeue</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="c1">// Start consuming with manual ack</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="c1">// Manual acknowledgement for reliability</span>
+<span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Press [enter] to exit.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="exchange-routing-patterns">Exchange Routing Patterns</h3>
+<p>Implement direct, topic, and fanout exchange patterns for flexible message routing across multiple consumers.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ExchangeRoutingExample</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Direct Exchange: Route based on exact routing key match</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">DirectExchangePublisher</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare direct exchange</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_direct&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">severities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;warning&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">severity</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">severities</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;Log message with severity: {severity}&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_direct&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">severity</span><span class="p">,</span>
+<span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">            </span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent &#39;{severity}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Topic Exchange: Route based on pattern matching (wildcard routing keys)</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">TopicExchangePublisher</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare topic exchange</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;kern.critical&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Kernel critical error&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;kern.info&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Kernel info message&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;app.error&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Application error&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;app.debug&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Application debug info&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="p">(</span><span class="n">routingKey</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">routingKey</span><span class="p">,</span>
+<span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">            </span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent &#39;{routingKey}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Topic Exchange Consumer with wildcard binding</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">TopicExchangeConsumer</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">bindingKey</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Create exclusive queue for this consumer</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">queueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">().</span><span class="n">QueueName</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// Bind with wildcard pattern</span>
+<span class="w">        </span><span class="c1">// &quot;kern.*&quot; matches all kern messages</span>
+<span class="w">        </span><span class="c1">// &quot;*.critical&quot; matches all critical messages</span>
+<span class="w">        </span><span class="c1">// &quot;#&quot; matches all messages</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueBind</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">bindingKey</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [*] Waiting for messages matching &#39;{bindingKey}&#39;...&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">routingKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">RoutingKey</span><span class="p">;</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Received &#39;{routingKey}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Fanout Exchange: Broadcast to all bound queues (pub/sub pattern)</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">FanoutExchangePublisher</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare fanout exchange</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;notifications&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Fanout</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">false</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;System notification: Server maintenance in 5 minutes&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Routing key is ignored for fanout exchanges</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;notifications&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
+<span class="w">            </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Broadcast: {message}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="aspnet-core-integration-with-dependency-injection">ASP.NET Core Integration with Dependency Injection</h3>
+<p>Implement RabbitMQ producer and consumer services with proper connection management and graceful shutdown in ASP.NET Core.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.DependencyInjection</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.Hosting</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.Options</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client.Events</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
+
+<span class="c1">// Configuration model</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqSettings</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5672</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">UserName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">VirtualHost</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Connection provider (singleton)</span>
+<span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IRabbitMqConnectionProvider</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IDisposable</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">IConnection</span><span class="w"> </span><span class="nf">GetConnection</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqConnectionProvider</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IRabbitMqConnectionProvider</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IConnection</span><span class="w"> </span><span class="n">_connection</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">_disposed</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">RabbitMqConnectionProvider</span><span class="p">(</span><span class="n">IOptions</span><span class="o">&lt;</span><span class="n">RabbitMqSettings</span><span class="o">&gt;</span><span class="w"> </span><span class="n">settings</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">HostName</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Port</span><span class="p">,</span>
+<span class="w">            </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">UserName</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Password</span><span class="p">,</span>
+<span class="w">            </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">settings</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">VirtualHost</span><span class="p">,</span>
+<span class="w">            </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">NetworkRecoveryInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="w">            </span><span class="n">RequestedHeartbeat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">_connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">IConnection</span><span class="w"> </span><span class="nf">GetConnection</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_connection</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Dispose</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_disposed</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_connection</span><span class="o">?.</span><span class="n">Close</span><span class="p">();</span>
+<span class="w">        </span><span class="n">_connection</span><span class="o">?.</span><span class="n">Dispose</span><span class="p">();</span>
+<span class="w">        </span><span class="n">_disposed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Message publisher service</span>
+<span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IMessagePublisher</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">PublishAsync</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">class</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqPublisher</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IMessagePublisher</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IRabbitMqConnectionProvider</span><span class="w"> </span><span class="n">_connectionProvider</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">RabbitMqPublisher</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_logger</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">RabbitMqPublisher</span><span class="p">(</span>
+<span class="w">        </span><span class="n">IRabbitMqConnectionProvider</span><span class="w"> </span><span class="n">connectionProvider</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">RabbitMqPublisher</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_connectionProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connectionProvider</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logger</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="n">PublishAsync</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">class</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_connectionProvider</span><span class="p">.</span><span class="n">GetConnection</span><span class="p">().</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">            </span><span class="c1">// Declare durable queue</span>
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">                </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
+<span class="w">                </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">                </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">                </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">                </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
+<span class="w">            </span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Serialize message to JSON</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Serialize</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Set persistent delivery mode</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
+<span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">ContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AmqpTimestamp</span><span class="p">(</span><span class="n">DateTimeOffset</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">ToUnixTimeSeconds</span><span class="p">());</span>
+
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
+<span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">properties</span><span class="p">,</span>
+<span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">            </span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span>
+<span class="w">                </span><span class="s">&quot;Published message to queue {Queue}: {Message}&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Background consumer service</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqConsumerService</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">BackgroundService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IRabbitMqConnectionProvider</span><span class="w"> </span><span class="n">_connectionProvider</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">RabbitMqConsumerService</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_logger</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">_serviceProvider</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="n">IModel</span><span class="w"> </span><span class="n">_channel</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">RabbitMqConsumerService</span><span class="p">(</span>
+<span class="w">        </span><span class="n">IRabbitMqConnectionProvider</span><span class="w"> </span><span class="n">connectionProvider</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">RabbitMqConsumerService</span><span class="o">&gt;</span><span class="w"> </span><span class="n">logger</span><span class="p">,</span>
+<span class="w">        </span><span class="n">IServiceProvider</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_connectionProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connectionProvider</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">logger</span><span class="p">;</span>
+<span class="w">        </span><span class="n">_serviceProvider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">serviceProvider</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">protected</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">ExecuteAsync</span><span class="p">(</span><span class="n">CancellationToken</span><span class="w"> </span><span class="n">stoppingToken</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_connectionProvider</span><span class="p">.</span><span class="n">GetConnection</span><span class="p">().</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">_channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">_channel</span><span class="p">);</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Received message from {Queue}: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Process message using scoped service</span>
+<span class="w">                </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_serviceProvider</span><span class="p">.</span><span class="n">CreateScope</span><span class="p">();</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">orderService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scope</span><span class="p">.</span><span class="n">ServiceProvider</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">IOrderService</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Deserialize</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">                </span><span class="k">await</span><span class="w"> </span><span class="n">orderService</span><span class="p">.</span><span class="n">ProcessOrderAsync</span><span class="p">(</span><span class="n">order</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Acknowledge successful processing</span>
+<span class="w">                </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Message processed successfully&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error processing message&quot;</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Reject and requeue on failure</span>
+<span class="w">                </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicNack</span><span class="p">(</span>
+<span class="w">                    </span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">requeue</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Consumer service started for queue {Queue}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Dispose</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_channel</span><span class="o">?.</span><span class="n">Close</span><span class="p">();</span>
+<span class="w">        </span><span class="n">_channel</span><span class="o">?.</span><span class="n">Dispose</span><span class="p">();</span>
+<span class="w">        </span><span class="k">base</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Startup configuration</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WebApplication</span><span class="p">.</span><span class="n">CreateBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Register RabbitMQ services</span>
+<span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">RabbitMqSettings</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">            </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">&quot;RabbitMq&quot;</span><span class="p">));</span>
+
+<span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddSingleton</span><span class="o">&lt;</span><span class="n">IRabbitMqConnectionProvider</span><span class="p">,</span><span class="w"> </span><span class="n">RabbitMqConnectionProvider</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IMessagePublisher</span><span class="p">,</span><span class="w"> </span><span class="n">RabbitMqPublisher</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddHostedService</span><span class="o">&lt;</span><span class="n">RabbitMqConsumerService</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Register application services</span>
+<span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IOrderService</span><span class="p">,</span><span class="w"> </span><span class="n">OrderService</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
+<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Models</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Order</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Guid</span><span class="w"> </span><span class="n">Id</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">CustomerName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">TotalAmount</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DateTime</span><span class="w"> </span><span class="n">CreatedAt</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IOrderService</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="nf">ProcessOrderAsync</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="dead-letter-exchange-and-retry-strategy">Dead Letter Exchange and Retry Strategy</h3>
+<p>Implement dead letter queues for handling failed messages with automatic retry logic and exponential backoff.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client.Events</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DeadLetterExchangeExample</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetupQueuesWithDLX</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Declare dead letter exchange</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Declare dead letter queue</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueBind</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed&quot;</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Declare main queue with DLX configuration</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">arguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-exchange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;failed&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-message-ttl&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">60000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// 60 seconds TTL (optional)</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="n">arguments</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Queues and DLX configured successfully&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ConsumeWithRetryLogic</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Get retry count from headers</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">retryCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">                </span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">&quot;x-retry-count&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">retryObj</span><span class="p">))</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">retryCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToInt32</span><span class="p">(</span><span class="n">retryObj</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Processing (attempt {retryCount + 1}): {message}&quot;</span><span class="p">);</span>
+
+<span class="w">            </span><span class="k">try</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// Simulate processing that might fail</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Random</span><span class="p">().</span><span class="n">Next</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="s">&quot;Simulated processing error&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="c1">// Successful processing</span>
+<span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [x] Message processed successfully&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [!] Error: {ex.Message}&quot;</span><span class="p">);</span>
+
+<span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxRetries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">retryCount</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">maxRetries</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// Retry with exponential backoff</span>
+<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">delay</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">retryCount</span><span class="p">));</span>
+
+<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryProperties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
+<span class="w">                    </span><span class="n">retryProperties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">                    </span><span class="n">retryProperties</span><span class="p">.</span><span class="n">Headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-retry-count&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">retryCount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-original-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">RoutingKey</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">};</span>
+
+<span class="w">                    </span><span class="c1">// Publish to retry queue with delay</span>
+<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryQueueArgs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-message-ttl&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">delay</span><span class="p">.</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-exchange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                    </span><span class="p">};</span>
+
+<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryQueueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;retry_{delay.TotalSeconds}s&quot;</span><span class="p">;</span>
+<span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
+<span class="w">                        </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">retryQueueName</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="n">retryQueueArgs</span>
+<span class="w">                    </span><span class="p">);</span>
+
+<span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
+<span class="w">                        </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">retryQueueName</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">retryProperties</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
+<span class="w">                    </span><span class="p">);</span>
+
+<span class="w">                    </span><span class="c1">// Ack original message (moved to retry queue)</span>
+<span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Scheduled retry in {delay.TotalSeconds}s (attempt {retryCount + 2}/{maxRetries + 1})&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// Max retries exceeded - send to DLX</span>
+<span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicReject</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">requeue</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Max retries exceeded. Message sent to dead letter queue.&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Waiting for messages. Press [enter] to exit.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Monitor and process failed messages</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessDeadLetterQueue</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [DLQ] Failed message: {message}&quot;</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Log to monitoring system, alert ops team, store for manual review</span>
+<span class="w">            </span><span class="n">LogFailedMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="p">);</span>
+
+<span class="w">            </span><span class="c1">// Acknowledge DLQ message</span>
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
+<span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
+<span class="w">        </span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Monitoring dead letter queue...&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">LogFailedMessage</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">IDictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span><span class="w"> </span><span class="n">headers</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">headers</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RabbitMQ Dead Letter Queue&quot;</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Serialize</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JsonSerializerOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">WriteIndented</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="p">}));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p><strong>Connection Refused</strong>:
+- <strong>Error</strong>: "None of the specified endpoints were reachable"
+  - <strong>Check service</strong>: Verify RabbitMQ is running: <code>rabbitmqctl status</code>
+  - <strong>Check firewall</strong>: Ensure port 5672 (AMQP) or 5671 (AMQPS) is open
+  - <strong>Check hostname</strong>: Verify DNS resolution or use IP address
+  - <strong>Check credentials</strong>: Test with <code>rabbitmqctl authenticate_user username password</code></p>
+<p><strong>Channel Shutdown Errors</strong>:
+- <strong>Error</strong>: "Channel shutdown: PRECONDITION_FAILED"
+  - <strong>Queue mismatch</strong>: Declaring queue with different parameters than existing
+  - <strong>Fix</strong>: Delete queue or use matching parameters (durable, exclusive, autodelete)
+  - <strong>Check</strong>: Use RabbitMQ management UI to inspect queue configuration</p>
+<p><strong>Memory/Disk Alarms</strong>:
+- <strong>Error</strong>: "Connection blocked: LOW on memory/disk"
+  - <strong>Check status</strong>: <code>rabbitmqctl status</code> to see alarm details
+  - <strong>Clear disk</strong>: Free up disk space (RabbitMQ needs 50MB minimum)
+  - <strong>Increase memory</strong>: Configure <code>vm_memory_high_watermark</code> in rabbitmq.conf
+  - <strong>Temporary fix</strong>: Clear alarms with <code>rabbitmqctl eval 'rabbit_alarm:clear_alarm(disk_limit).'</code></p>
+<p><strong>Message Loss</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Ensure durability at all levels</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="c1">// Recover connections automatically</span>
+<span class="w">    </span><span class="n">TopologyRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w">   </span><span class="c1">// Recreate queues/exchanges on recovery</span>
+<span class="p">};</span>
+
+<span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+
+<span class="c1">// Durable queue</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;important_queue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+
+<span class="c1">// Persistent messages</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
+<span class="n">properties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="n">properties</span><span class="p">.</span><span class="n">DeliveryMode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Persistent</span>
+
+<span class="c1">// Manual acknowledgements</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Process message</span>
+<span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><strong>Common Logs</strong>:
+- RabbitMQ logs: <code>/var/log/rabbitmq/rabbit@hostname.log</code>
+- Check with: <code>rabbitmqctl log_tail</code>
+- Management UI: <code>http://localhost:15672</code> (default guest/guest)</p>
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<p><strong>Connection and Channel Pooling</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqChannelPool</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IConnection</span><span class="w"> </span><span class="n">_connection</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ConcurrentBag</span><span class="o">&lt;</span><span class="n">IModel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">SemaphoreSlim</span><span class="w"> </span><span class="n">_semaphore</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">RabbitMqChannelPool</span><span class="p">(</span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="n">factory</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxChannels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
+<span class="w">        </span><span class="n">_semaphore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SemaphoreSlim</span><span class="p">(</span><span class="n">maxChannels</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IModel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AcquireChannelAsync</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_semaphore</span><span class="p">.</span><span class="n">WaitAsync</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_channels</span><span class="p">.</span><span class="n">TryTake</span><span class="p">(</span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">IsOpen</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">channel</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">_connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ReleaseChannel</span><span class="p">(</span><span class="n">IModel</span><span class="w"> </span><span class="n">channel</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">.</span><span class="n">IsOpen</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">_channels</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">_semaphore</span><span class="p">.</span><span class="n">Release</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Prefetch (QoS) Configuration</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Low prefetch (1-10) for slow/CPU-intensive consumers</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+
+<span class="c1">// Medium prefetch (20-50) for balanced workloads</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+
+<span class="c1">// High prefetch (100+) for fast/I/O-bound consumers</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
+</code></pre></div>
+
+<p><strong>Batch Publishing</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishBatch</span><span class="p">(</span><span class="n">IModel</span><span class="w"> </span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Use transactions for batching (slower but atomic)</span>
+<span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">TxSelect</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">TxCommit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">// OR use publisher confirms (faster, eventual consistency)</span>
+<span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">ConfirmSelect</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">WaitForConfirmsOrDie</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Monitoring Metrics</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// Get queue message count</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">queueInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclarePassive</span><span class="p">(</span><span class="s">&quot;my_queue&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Messages: {queueInfo.MessageCount}&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Consumers: {queueInfo.ConsumerCount}&quot;</span><span class="p">);</span>
+
+<span class="c1">// Use RabbitMQ Management API for detailed metrics</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">httpClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpClient</span><span class="p">();</span>
+<span class="n">httpClient</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">&quot;Basic&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;guest:guest&quot;</span><span class="p">)));</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">httpClient</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">&quot;http://localhost:15672/api/queues&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
+</code></pre></div>
+
+<p><strong>Performance Recommendations</strong>:
+- <strong>Connections</strong>: 1 per application (shared, thread-safe)
+- <strong>Channels</strong>: 1 per thread or use pooling (not thread-safe)
+- <strong>Prefetch</strong>: Start with 10-30, tune based on consumer performance
+- <strong>Message size</strong>: Keep &lt;128KB; use external storage for large payloads
+- <strong>Durability</strong>: Trade-off with throughput; use transient queues for non-critical data
+- <strong>Clustering</strong>: Use mirrored queues for HA; avoid clustering across WANs</p>
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ul>
+<li><a href="https://www.rabbitmq.com/dotnet.html">RabbitMQ .NET Client Documentation</a> - Official .NET client library guide</li>
+<li><a href="https://www.rabbitmq.com/getstarted.html">RabbitMQ Tutorials</a> - Step-by-step tutorials covering all patterns</li>
+<li><a href="https://www.rabbitmq.com/amqp-0-9-1-reference.html">AMQP 0-9-1 Protocol Reference</a> - Complete AMQP protocol specification</li>
+<li><a href="https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html">RabbitMQ Best Practices</a> - Production deployment patterns</li>
+<li><a href="https://www.rabbitmq.com/blog/2012/04/25/rabbitmq-performance-measurements-part-2">RabbitMQ Performance Testing</a> - Benchmarking and tuning guide</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
