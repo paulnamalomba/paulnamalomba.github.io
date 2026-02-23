@@ -810,11 +810,32 @@
                     $$\mathbf{C} = \mathbf{F}^T \mathbf{F} = \mathbf{F}_v^T \, \mathbf{C}_e \, \mathbf{F}_v$$
                 </div>
 
+                <div class="equation-block">
+                    <div class="equation-label">Elastic Right Cauchy-Green Tensor</div>
+                    $$\mathbf{C}_e = \mathbf{F}_e^T \, \mathbf{F}_e \quad \in \mathcal{B}_{\text{int}}$$
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.5rem;">
+                    $\mathbf{C}_e$ is naturally associated with the intermediate configuration $\mathcal{B}_{\text{int}}$ and encodes relative elastic deformation in a Lagrangian setting.
+                </p>
+
                 <div class="innovation-highlight" style="margin-top: 1.5rem;">
                     <h3><i class="fas fa-check-circle"></i> Frame Objectivity</h3>
                     <p>Under a superposed rigid rotation $\mathbf{Q}$:</p>
                     <p style="text-align: center; margin: 0.75rem 0;">$\mathbf{F}^* = \mathbf{Q}\mathbf{F}_e \cdot \mathbf{F}_v$</p>
                     <p>$\mathbf{Q}$ acts only on the elastic part — the viscous deformation and intermediate configuration are unaffected.</p>
+                </div>
+
+                <div class="card mt-2" style="border-left: 4px solid var(--glacier-teal);">
+                    <h3>Total Material Velocity Gradient</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">The material velocity gradient $\mathbf{L}$ is defined as:</p>
+                    <div class="equation-block" style="margin: 0.75rem 0;">
+                        $$\mathbf{L} = \mathbf{F}^{-1} \dot{\mathbf{F}} \in \mathfrak{gl}(3)$$
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Under a superposed rotation $\mathbf{Q}$, the total rate transforms as:</p>
+                    <div class="equation-block" style="margin: 0.75rem 0;">
+                        $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}$$
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">The spin term $\mathbf{Q}^T \dot{\mathbf{Q}}$ shows $\mathbf{L}$ is <strong>not</strong> objective — motivating the need for $\mathbf{L}_v$ as the constitutive rate variable.</p>
                 </div>
             </div>
 
@@ -854,8 +875,11 @@
                     <ul class="mt-1">
                         <li>Repeated occurrence of $\mathbf{F}_v$ causes numerical stiffness</li>
                         <li>Same issue afflicts $\dot{\mathbf{b}}_v$ (left Cauchy-Green rate)</li>
-                        <li>$\dot{\mathbf{F}}_v$ is a two-point tensor without clear intermediate-configuration interpretation</li>
+                        <li>$\dot{\mathbf{F}}_v$ is a two-point tensor — conjugate to $\mathbf{P}$ which is <strong>not objective</strong></li>
                     </ul>
+                    <div style="background: rgba(231,76,60,0.08); padding: 0.75rem 1rem; border-radius: 0.5rem; margin-top: 0.75rem; font-size: 0.88rem;">
+                        <strong>Conjugate stress issue:</strong> $\dot{\mathbf{C}}_v$ and Oldroyd rates of $\mathbf{E},\mathbf{C}$ are conjugate to $\mathbf{S}$ — for <em>inelastic</em> effects, $\mathbf{S}$ takes on a meaning beyond reasonable abstraction in terms of physical relevance. We need a <strong>real material stress</strong> for inelasticity.
+                    </div>
                 </div>
             </div>
 
@@ -865,6 +889,10 @@
                     <div class="equation-block" style="margin: 1rem 0;">
                         $$\mathbf{L}_v = \mathbf{F}_v^{-1} \dot{\mathbf{F}}_v \in \mathfrak{sl}^+(3)$$
                     </div>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">The total rate decomposes via the multiplicative split:</p>
+                    <div class="equation-block" style="margin: 0.5rem 0;">
+                        $$\mathbf{L} = \mathbf{F}_v^{-1} \mathbf{L}_e \mathbf{F}_v + \mathbf{L}_v$$
+                    </div>
                     <ul>
                         <li><strong>Objective:</strong> invariant under superposed rotations</li>
                         <li><strong>Low-order:</strong> linear in the deformation rate (no quadratic $\mathbf{F}_v$ dependence)</li>
@@ -872,6 +900,9 @@
                         <li><strong>Isochoric:</strong> $\text{tr}(\mathbf{L}_v) = 0$ &rArr; purely deviatoric/shearing</li>
                         <li><strong>Lie-algebraic:</strong> element of $\mathfrak{sl}^+(3)$, enabling exponential map integration</li>
                     </ul>
+                    <div style="background: rgba(26,163,163,0.08); padding: 0.75rem 1rem; border-radius: 0.5rem; margin-top: 0.75rem; font-size: 0.88rem;">
+                        <strong>Conjugate stress:</strong> $\mathbf{L}_v$ is work-conjugate to the material stress $\boldsymbol{\Sigma} = \mathbf{C}\mathbf{S}$, yielding $\mathcal{D} = \boldsymbol{\Sigma} : \mathbf{L}_v \geq 0$ — a proper dissipation inequality for inelasticity.
+                    </div>
                 </div>
             </div>
         </div>
@@ -967,7 +998,7 @@
                 <p style="color: var(--text-secondary); margin-bottom: 1rem;">The Maxwell viscoelastic solid relates deviatoric stress to the viscous strain rate:</p>
                 <div class="equation-block">
                     <div class="equation-label">Maxwell Constitutive Relation</div>
-                    $$\text{dev}(\boldsymbol{\Sigma}) = \eta \cdot \mathbf{L}_v^T = \mu \cdot \text{dev}(\overline{\boldsymbol{\alpha}})$$
+                    $$\text{dev}(\boldsymbol{\Sigma}) = \eta_\text{Glen} \cdot \mathbf{L}_v^T = \mu \cdot \text{dev}(\overline{\boldsymbol{\alpha}})$$
                 </div>
 
                 <p style="color: var(--text-secondary); margin: 1rem 0;">Glen's flow law introduces a <strong>stress-dependent, non-linear viscosity</strong>:</p>
@@ -976,7 +1007,10 @@
                     $$\eta_\text{Glen} = \frac{1}{2A\,\tau_e^{m-1}}$$
                 </div>
 
-                <p style="color: var(--text-secondary); margin-top: 1rem;">where $A = A(z,T)$ is the depth- and temperature-dependent rate factor, $\tau_e$ is the effective shear stress, and $m \approx 3$ for ice.</p>
+                <div class="equation-block">
+                    <div class="equation-label">Effective Shear Stress</div>
+                    $$\tau_e = \frac{\|\text{dev}(\boldsymbol{\Sigma})\|}{\sqrt{2}} = \sqrt{\frac{\text{dev}(\boldsymbol{\Sigma}) : \text{dev}(\boldsymbol{\Sigma})}{2}}$$
+                </div>
             </div>
 
             <div>
@@ -988,16 +1022,19 @@
 
                 <div class="equation-block">
                     <div class="equation-label">Arrhenius Temperature Dependence</div>
-                    $$A = A_0 \exp\!\left(\frac{Q(T_0 - T(z))}{R\,T(z)\,T_0}\right)$$
+                    $$A = A_0 \exp\!\left(\frac{Q(T_0 - T(h))}{R\,T(h)\,T_0}\right)$$
                 </div>
 
-                <div class="innovation-highlight mt-2">
-                    <h3>Physical Corollaries</h3>
-                    <ul>
-                        <li>Higher viscosity $\eta$ &rArr; lower strain rate for constant stress</li>
-                        <li>Higher strain rate &rArr; higher shear stresses for constant material properties</li>
-                        <li>Lower $\Delta t$ causes an increase in viscous strain rate (temporal regularisation)</li>
-                    </ul>
+                <div class="card mt-2" style="border-left: 4px solid var(--glacier-teal); font-size: 0.88rem;">
+                    <h4 style="margin-bottom: 0.5rem;">Arrhenius Parameters</h4>
+                    <table style="width:100%; border-collapse: collapse; color: var(--text-secondary);">
+                        <tr><td style="padding:0.25rem 0;">$R = 8.314\,\text{J mol}^{-1}\text{K}^{-1}$</td><td>Universal gas constant</td></tr>
+                        <tr><td style="padding:0.25rem 0;">$A_0$</td><td>Reference rate factor at $T_0$</td></tr>
+                        <tr><td style="padding:0.25rem 0;">$T_0$</td><td>Reference temperature</td></tr>
+                        <tr><td style="padding:0.25rem 0;">$T(h)$</td><td>Temperature at depth $h$ in ice</td></tr>
+                        <tr><td style="padding:0.25rem 0;">$Q$</td><td>Activation energy for ice deformation</td></tr>
+                        <tr><td style="padding:0.25rem 0;">$m \approx 3$</td><td>Glen stress exponent</td></tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1052,7 +1089,12 @@
                     <div class="equation-label">Viscous Deformation Gradient Update</div>
                     $$(\mathbf{F}_v)_{n+1} = (\mathbf{F}_v)_n \, \exp(\Delta t \cdot \mathbf{L}_v)$$
                 </div>
-                <p style="color: var(--text-secondary);">Since $\text{tr}(\mathbf{L}_v) = 0$, the exponential update <strong>exactly preserves</strong> $\det(\Delta\mathbf{F}_v) = 1$ — the viscous incompressibility constraint.</p>
+                <div class="innovation-highlight" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-check-circle"></i> Incompressibility Preservation</h4>
+                    <p>Since $\mathbf{L}_v \in \mathfrak{sl}(3)$, i.e. $\text{tr}(\mathbf{L}_v) = 0$, the exponential map <strong>exactly preserves</strong> the viscous incompressibility constraint:</p>
+                    <p style="text-align:center; margin: 0.75rem 0;">$\det(\Delta\mathbf{F}_v) = \det(\exp(\Delta t \cdot \mathbf{L}_v)) = \exp(\Delta t \cdot \text{tr}(\mathbf{L}_v)) = 1$</p>
+                    <p style="font-size: 0.85rem;">This is a <strong>natural consequence</strong> of the glaciological rheology and the Lie-group structure — not a prescribed computational condition.</p>
+                </div>
 
                 <h3 style="color: var(--uct-blue); margin: 1.5rem 0 1rem;">Logarithmic Strain Correction</h3>
                 <div class="equation-block">
@@ -1076,9 +1118,18 @@
 
                 <div class="equation-block">
                     <div class="equation-label">Implicit Viscous Rate</div>
-                    $$\mathbf{L}_v^T = \frac{\text{dev}(\boldsymbol{\Sigma}^\text{trial})}{\eta + 2\mu\Delta t}$$
+                    $$\mathbf{L}_v^T = \frac{\text{dev}(\boldsymbol{\Sigma}^\text{trial})}{\eta_\text{Glen} + 2\mu\Delta t}$$
                 </div>
-                <p style="color: var(--text-secondary);">$\eta$ is locally determined from $\|\text{dev}(\boldsymbol{\Sigma}^\text{trial})\|$ — no iterative local solve required.</p>
+                <p style="color: var(--text-secondary);">$\eta_\text{Glen}$ is locally determined from $\|\text{dev}(\boldsymbol{\Sigma}^\text{trial})\|$ — no iterative local solve required.</p>
+
+                <div class="innovation-highlight mt-2">
+                    <h4><i class="fas fa-star"></i> Physical Corollaries</h4>
+                    <ul>
+                        <li>Higher viscosity $\eta_\text{Glen}$ &rArr; lower strain rate for constant stress</li>
+                        <li>Higher strain rate &rArr; higher shear stresses for constant material properties</li>
+                        <li>Constant load &rArr; constant strain rate (steady-state creep)</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -1227,7 +1278,7 @@
                         <tr><td>Density $\rho$</td><td>$917\,\text{kg/m}^3$</td></tr>
                         <tr><td>Bulk modulus $\kappa$</td><td>$7.92\,\text{GPa}$</td></tr>
                         <tr><td>Shear modulus $\mu$</td><td>$4.15\,\text{GPa}$</td></tr>
-                        <tr><td>Viscosity $\eta$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr>
+                        <tr><td>Viscosity $\eta_\text{Glen}$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr>
                         <tr><td>Glen exponent $m$</td><td>$3$</td></tr>
                         <tr><td>Rate factor $A$</td><td>$10^{-25}\,\text{s}^{-1}\text{Pa}^{-3}$</td></tr>
                     </tbody>
@@ -1255,24 +1306,34 @@
                     <img src="assets/case-study-model-2_geometry-and-bcs-schematic.png" alt="Ice sheet model schematic">
                     <p class="figure-caption">Idealised shelf: $L = 6000\,\text{m}$, $H = 120\,\text{m}$. Self-weight + buoyancy loading with depth-dependent material properties.</p>
                 </div>
+
+                <div class="card mt-1" style="font-size: 0.88rem;">
+                    <h4>Boundary Conditions & Loading</h4>
+                    <ul>
+                        <li><strong>Hydrostatic pressure load:</strong> $p_w = \rho_w \cdot g \cdot h_w$ applied on the submerged right face and bottom boundary, where $h_w \approx 70\,\text{m}$ is the submersion depth</li>
+                        <li><strong>Buttressed left edge:</strong> roller boundary condition (horizontal displacement constrained, vertical free)</li>
+                        <li><strong>Gravitational acceleration:</strong> $g = 9.81\,\text{m/s}^2$; body force $\mathbf{b}_\text{ice} = \rho_\text{ice}(z) \cdot g$</li>
+                        <li><strong>Pressure distribution:</strong> vertical pressure arrows extend uniformly to indicate the same hydrostatic pressure on both the bottom and right-side submerged boundaries</li>
+                    </ul>
+                </div>
             </div>
 
             <div>
                 <div class="card">
                     <h3>Depth-Dependent Features</h3>
                     <ul>
-                        <li><strong>Density:</strong> $\rho = \rho(z)$ — firn densification profile calibrated against empirical data</li>
-                        <li><strong>Elastic moduli:</strong> $\kappa(z),\,\mu(z)$ — graded with overburden pressure</li>
-                        <li><strong>Viscosity:</strong> depth-varying Glen-type viscosity capturing structural stratification</li>
-                        <li><strong>Body force:</strong> $\mathbf{b}(z) = \rho(z)\,\mathbf{g}$</li>
+                        <li><strong>Density:</strong> $\rho_\text{ice} = \rho_\text{ice}(z)$ — firn densification profile calibrated against empirical data</li>
+                        <li><strong>Elastic moduli:</strong> $\kappa_\text{ice}(z),\,\mu_\text{ice}(z)$ — graded with overburden pressure</li>
+                        <li><strong>Viscosity:</strong> depth-varying Glen-type viscosity $\eta_\text{Glen}$ capturing structural stratification</li>
+                        <li><strong>Body force:</strong> $\mathbf{b}_\text{ice}(z) = \rho_\text{ice}(z)\,\mathbf{g}$</li>
                     </ul>
                 </div>
                 <div class="card mt-1">
                     <h3>Extended Weak Form</h3>
                     <div class="equation-block" style="margin: 0.5rem 0;">
-                        $$\int_\mathcal{B} \mathbf{F}\mathbf{S} : \delta\mathbf{u}\,dV - \int_\mathcal{B} \mathbf{b}(z)\cdot\delta\mathbf{u}\,dV - \int_{\partial\mathcal{B}_N} \mathbf{t}^{\mathbf{n}}\cdot\delta\mathbf{u}\,dA = 0$$
+                        $$\int_\mathcal{B} \mathbf{F}\mathbf{S} : \delta\mathbf{u}\,dV - \int_\mathcal{B} \mathbf{b}_\text{ice}(z)\cdot\delta\mathbf{u}\,dV - \int_{\partial\mathcal{B}_N} \mathbf{t}^{\mathbf{n}}\cdot\delta\mathbf{u}\,dA = 0$$
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent moduli $\kappa(z), \mu(z)$ with the same elastic-viscous update algorithm.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent ice moduli $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ with the same elastic-viscous update algorithm.</p>
                 </div>
             </div>
         </div>
