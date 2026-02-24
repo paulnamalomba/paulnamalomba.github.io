@@ -161,12 +161,91 @@
         }
 
         .slide-title .slide-inner {
-            max-width: 1000px;
+            max-width: 1400px;
             padding: 3rem 4rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            gap: 2rem;
+        }
+
+        .title-left {
+            max-width: 750px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            flex: 1;
+        }
+
+        .title-right {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .supervisor-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .supervisor-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            padding-left: 0.5rem;
+        }
+
+        .supervisor-profile {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background: var(--snow-white);
+            padding: 0.6rem 1.5rem 0.6rem 0.6rem;
+            border-radius: 50px;
+            border: 1px solid rgba(0,59,92,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-width: 360px;
+        }
+
+        .supervisor-profile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,59,92,0.08);
+            border-color: rgba(137,207,240,0.4);
+        }
+
+        .supervisor-profile img {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .supervisor-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.3;
+        }
+
+        .supervisor-name-txt {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .supervisor-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
         .slide-title .slide-number { display: none; }
@@ -231,6 +310,16 @@
             flex-wrap: wrap;
         }
 
+        /* Logo strip at the bottom of the title slide */
+        .title-logos {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            margin-top: auto;
+            padding: 2rem 4rem 3rem;
+            flex-wrap: wrap;
+        }
+
         .title-logos img {
             height: 48px;
             width: auto;
@@ -241,6 +330,32 @@
 
         .title-keywords {
             display: none;
+        }
+
+        /* Supervisor/Co-author block */
+        .supervisor-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.15rem;
+            margin-left: auto;
+            padding-left: 2rem;
+            border-left: 2px solid var(--ice-cyan);
+        }
+
+        .supervisor-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--uct-blue);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .supervisor-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
         }
 
         /* ============================================================
@@ -717,12 +832,12 @@
         }
         body.pdf-export-mode .slide {
             page-break-after: always;
-            page-break-inside: avoid;
+            page-break-inside: auto;
             min-height: 1080px !important;
-            height: 1080px !important;
-            max-height: 1080px !important;
+            height: auto !important;
+            max-height: none !important;
             padding: 4rem 6rem !important;
-            overflow: hidden !important;
+            overflow: visible !important;
         }
         body.pdf-export-mode .slide:last-child {
             page-break-after: auto;
@@ -764,16 +879,56 @@
      ================================================================ -->
 <section id="title" class="slide slide-title">
     <div class="slide-inner">
-        <div class="conference-badge">
-            <i class="fas fa-globe-africa"></i>
-            AfriComp7 · 25–27 February 2026 · Cape Town
+        <div class="title-left">
+            <div class="conference-badge">
+                <i class="fas fa-globe-africa"></i>
+                AfriComp7 · 25–27 February 2026 · Cape Town
+            </div>
+
+            <h1>Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</h1>
+
+            <div class="author-block">
+                <div class="author-name">Mr. Paul Namalomba</div>
+                <div class="author-affiliation">BSc(Hons) <em>Civil</em>, MScEng <em>Structures</em></div>
+            </div>
         </div>
 
-        <h1>Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</h1>
+        <div class="title-right">
+            <div class="supervisor-block">
+                <div class="supervisor-label">Co-Auhtors</div>
 
-        <div class="author-block">
-            <div class="author-name">Mr. Paul Namalomba</div>
-            <div class="author-affiliation">BSc(Hons) <em>Civil</em>, MScEng <em>Structures</em></div>
+                <div class="supervisor-profile">
+                    <img src="assets/skatulla-portrait.png" alt="Prof. Sebastian Skatulla">
+                    <div class="supervisor-info">
+                        <div class="supervisor-name-txt">Prof. Sebastian Skatulla</div>
+                        <div class="supervisor-title">University of Cape Town</div>
+                    </div>
+                </div>
+
+                <div class="supervisor-profile">
+                    <img src="assets/sansour-portrait.png" alt="Prof. Carlo Sansour">
+                    <div class="supervisor-info">
+                        <div class="supervisor-name-txt">Prof. Carlo Sansour</div>
+                        <div class="supervisor-title">Bethlehem University</div>
+                    </div>
+                </div>
+
+                <div class="supervisor-profile">
+                    <img src="assets/kaliske-portrait.png" alt="Prof. Michael Kaliske">
+                    <div class="supervisor-info">
+                        <div class="supervisor-name-txt">Prof. Michael Kaliske</div>
+                        <div class="supervisor-title">TU Dresden</div>
+                    </div>
+                </div>
+
+                <div class="supervisor-profile">
+                    <img src="assets/nutte-portrait.png" alt="Dr. Maxime Nutte">
+                    <div class="supervisor-info">
+                        <div class="supervisor-name-txt">Dr. Maxime Nutte</div>
+                        <div class="supervisor-title">University of Cape Town</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -809,8 +964,7 @@
                 <div class="card-icon teal"><i class="fas fa-exclamation-triangle"></i></div>
                 <h3>Review of Existing Approaches</h3>
                 <ul>
-                    <li>Lie/Oldroyd rates of Cauchy-Green tensors correlate to the the 2nd Piola-Kirchhoff stress, which is not a strong descriptor of inelasticity, where a true meterial stress fits better 
-                        <!-- <strong>quadratic nonlinearity</strong> via $\mathbf{F}_v$</li> -->
+                    <li>Lie/Oldroyd rates of Cauchy-Green tensors correlate to the the 2nd Piola-Kirchhoff stress, which is not a strong descriptor of inelasticity, where a true meterial stress fits better</li>
                     <li>Additional numerical stiffness and compromised algorithmic robustness</li>
                     <li>Constraint drift in $\det\mathbf{F}_v = 1$ over long time horizons</li>
                 </ul>
@@ -916,20 +1070,7 @@
         </div>
 
         <div class="one-col">
-            <!-- <div>
-                <div class="card" style="border-left: 4px solid #e74c3c;">
-                    <h3 style="color: #e74c3c;"><i class="fas fa-times-circle"></i> Classical Rates — The Problem</h3>
-                    <p>The viscous right Cauchy-Green rate $\dot{\mathbf{C}}_v = \dot{\mathbf{F}}_v^T \mathbf{F}_v + \mathbf{F}_v^T \dot{\mathbf{F}}_v$ introduces <strong>quadratic nonlinearity</strong> w.r.t. $\mathbf{F}_v$:</p>
-                    <ul class="mt-1">
-                        <li>Repeated occurrence of $\mathbf{F}_v$ causes numerical stiffness</li>
-                        <!-- <li>Same issue afflicts $\dot{\mathbf{b}}_v$ (left Cauchy-Green rate)</li> -->
-                        <!-- <li>$\dot{\mathbf{F}}_v$ is a two-point tensor — conjugate to $\mathbf{P}$ which is <strong>not objective</strong></li>
-                    </ul>
-                    <div style="background: rgba(231,76,60,0.08); padding: 0.75rem 1rem; border-radius: 0.5rem; margin-top: 0.75rem; font-size: 0.88rem;">
-                        <strong>Conjugate stress issue:</strong> $\dot{\mathbf{C}}_v$ and Oldroyd rates of $\mathbf{E},\mathbf{C}$ are conjugate to $\mathbf{S}$ — for <em>inelastic</em> effects, $\mathbf{S}$ takes on a meaning beyond reasonable abstraction in terms of physical relevance. We need a <strong>real material stress</strong> for inelasticity.
-                    </div>
-                </div> -->
-            <!-- </div> -->
+            <!-- Left card removed -->
 
             <div>
                 <div class="card" style="border-left: 4px solid var(--glacier-teal);">
@@ -938,13 +1079,8 @@
                         $$\mathbf{L}_v = \mathbf{F}_v^{-1} \dot{\mathbf{F}}_v \in \mathfrak{sl}^+(3)$$
                     </div>
                     <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">The material velocity by demand we want inelastic effects to render as isochoric</p>
-                    <!-- <div class="equation-block" style="margin: 0.5rem 0;">
-                        $$\mathbf{L} = \mathbf{F}_v^{-1} \mathbf{L}_e \mathbf{F}_v + \mathbf{L}_v$$
-                    </div> --> -->
+                    
                     <ul>
-                        <!-- <li><strong>Objective:</strong> invariant under superposed rotations</li> -->
-                        <!-- <li><strong>Low-order:</strong> linear in the deformation rate (no quadratic $\mathbf{F}_v$ dependence)</li> -->
-                        <!-- <li><strong>Symmetric:</strong> within the Maxwell model constraints</li> -->
                         <li><strong>Volume-preserving:</strong> $\text{tr}(\mathbf{L}_v) = 0$ &rArr; purely deviatoric/shearing which corresponds to the fact that $\mathrm{det}(\mathbf{F}_v) = 1$</li>
                         <li><strong>Lie-algebraic:</strong> element of $\mathfrak{sl}^+(3)$, enabling exponential map integration for $\mathbf{F}_v$</li>
                     </ul>
@@ -954,12 +1090,7 @@
                 </div>
             </div>
         </div>
-<!-- KEY insight taken out
-        <div class="innovation-highlight mt-2">
-            <h3><i class="fas fa-star"></i> Key Insight</h3>
-            <p>$\mathbf{L}_v$ acts as a "true" viscous strain-rate measure that directly corresponds to the deviatoric physical nature of ice creep. Under the rotated frame $\mathbf{F}^* = \mathbf{Q}\mathbf{F}$, the total material velocity gradient picks up spin terms, but $\mathbf{L}_v$ remains isolated and invariant:</p>
-            <p style="text-align:center; margin: 1rem 0;">$\mathbf{L}^* = \mathbf{F}_v^{-1}\bigl[\mathbf{L}_e + \mathbf{F}_e^{-1}(\mathbf{Q}^T\dot{\mathbf{Q}})\mathbf{F}_e\bigr]\mathbf{F}_v + \mathbf{L}_v$</p>
-        </div> -->
+        <!-- Key insight removed -->
     </div>
 </section>
 
@@ -1366,6 +1497,26 @@
                         <li><strong>Pressure distribution:</strong> vertical pressure arrows extend uniformly to indicate the same hydrostatic pressure on both the bottom and right-side submerged boundaries</li>
                     </ul>
                 </div>
+
+                <table class="styled-table">
+                    <thead>
+                        <tr><th>Parameter</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Density, $\rho_{base} = \rho_{ice}$</td><td>$917\,\text{kg/m}^3$</td></tr>
+                        <tr><td>Bulk modulus, $\kappa_{base} = \kappa_{ice}$</td><td>$7.92\,\text{GPa}$</td></tr>
+                        <tr><td>Shear modulus, $\mu_{base} = \mu_{ice}$</td><td>$4.15\,\text{GPa}$</td></tr>
+                        <!-- <tr><td>Viscosity $\eta_\text{Glen}$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr> -->
+                        <tr><td>Glen exponent, $m$</td><td>$3$</td></tr>
+                        <tr><td>Reference rate factor @ 263.15K, $A_0$</td><td>$3.15 \times 10^{0}\,\text{a}^{-1}\text{MPa}^{-3}$</td></tr>
+                        <tr><td>Activation energy @ $T > T_0$, $Q$</td><td>$120 \times 10^{3}\,\text{J/mol}$</td></tr>
+                        <tr><td>Activation energy @ $T < T_0$, $Q$</td><td>$60 \times 10^{3}\,\text{J/mol}$</td></tr>
+                        <tr><td>Universal gas constant, $R$</td><td>$8.314\,\text{J/mol}\cdot\text{K}$</td></tr>
+                        <tr><td>Reference temperature, $T_0$</td><td>$263.15\,\text{K}$</td></tr>
+                        <tr><td>Time step interval, $\Delta t$</td><td>$1 \times 10^{-3}\,\text{a}$</td></tr>
+                    </tbody>
+                </table>
+
             </div>
 
             <div>
@@ -1380,7 +1531,7 @@
                         $$\eta_\text{Glen} = \frac{1}{2 A(z, T) \tau_e^{m-1}}, \quad A(z, T) = A_{0} \exp\!\left(\frac{-Q (T_0 - T(z))}{R T(z) T_0}\right)$$
                     </div>
                     <div class="figure-container" style="margin: 0.75rem 0; padding: 0.75rem;">
-                        <img src="assets/temperature_distribution_plot.png" alt="Temperature field variations (Humbert, 2011)" style="max-height: 500px; width: auto; object-fit: contain;">
+                        <img src="assets/temperature_distribution_plot.png" alt="Temperature field variations (Humbert, 2011)" style="max-height: 550px; width: auto; object-fit: contain;">
                         <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Temperature field variations (Humbert, 2011). This thermal profile $T(z)$ critically governs the viscosity variation $\eta_\text{Glen}$ throughout the ice shelf.</p>
                     </div>
                 </div>
