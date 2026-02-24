@@ -1320,20 +1320,26 @@
 
             <div>
                 <div class="card">
-                    <h3>Depth-Dependent Features</h3>
+                    <h3>Depth &amp; Temperature Dynamics</h3>
                     <ul>
-                        <li><strong>Density:</strong> $\rho_\text{ice} = \rho_\text{ice}(z)$ — firn densification profile calibrated against empirical data</li>
+                        <li><strong>Density &amp; Body Force:</strong> $\rho_\text{ice} = \rho_\text{ice}(z)$ firn profile; $\mathbf{b}_\text{ice}(z) = \rho_\text{ice}(z)\,\mathbf{g}$</li>
                         <li><strong>Elastic moduli:</strong> $\kappa_\text{ice}(z),\,\mu_\text{ice}(z)$ — graded with overburden pressure</li>
-                        <li><strong>Viscosity:</strong> depth-varying Glen-type viscosity $\eta_\text{Glen}$ capturing structural stratification</li>
-                        <li><strong>Body force:</strong> $\mathbf{b}_\text{ice}(z) = \rho_\text{ice}(z)\,\mathbf{g}$</li>
+                        <li><strong>Viscosity Stratification:</strong> The non-linear Glen's flow law incorporates a strong temperature dependence where the rate factor $A(z, T)$ is affected by temperature field variations $T(z)$:</li>
                     </ul>
+                    <div class="equation-block" style="margin: 0.75rem 0; padding: 0.85rem 1rem;">
+                        $$\eta_\text{Glen} = \frac{1}{2 A(z, T) \tau_e^{m-1}}, \quad A(z, T) = A_{0} \exp\!\left(\frac{-Q (T_0 - T(z))}{R T(z) T_0}\right)$$
+                    </div>
+                    <div class="figure-container" style="margin: 0.75rem 0; padding: 0.75rem;">
+                        <img src="assets/temperature_distribution_plot.png" alt="Temperature field variations (Humbert, 2011)" style="max-height: 180px; width: auto; object-fit: contain;">
+                        <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Temperature field variations (Humbert, 2011). This thermal profile $T(z)$ critically governs the viscosity variation $\eta_\text{Glen}$ throughout the ice shelf.</p>
+                    </div>
                 </div>
                 <div class="card mt-1">
                     <h3>Extended Weak Form</h3>
                     <div class="equation-block" style="margin: 0.5rem 0;">
                         $$\int_\mathcal{B} \mathbf{F}\mathbf{S} : \delta\mathbf{u}\,dV - \int_\mathcal{B} \mathbf{b}_\text{ice}(z)\cdot\delta\mathbf{u}\,dV - \int_{\partial\mathcal{B}_N} \mathbf{t}^{\mathbf{n}}\cdot\delta\mathbf{u}\,dA = 0$$
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent ice moduli $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ with the same elastic-viscous update algorithm.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent ice moduli $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ and temperature-dependent viscosity.</p>
                 </div>
             </div>
         </div>
