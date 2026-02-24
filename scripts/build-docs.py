@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+Restart-Service vmcompute -Force#!/usr/bin/env python3
 """
 build-docs.py — Local build script for paulnamalomba.github.io docs pages.
 
