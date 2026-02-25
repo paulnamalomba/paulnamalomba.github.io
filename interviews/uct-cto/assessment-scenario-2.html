@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Assessment Scenario 2 — Systems Development & Django (SEAT Tool)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    pre {
+        background: var(--bg-surface);
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        overflow-x: auto;
+        color: var(--accent-secondary);
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        margin: 1rem 0;
+    }
+    code {
+        font-family: var(--font-mono);
+        color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav>
+        <a href="hub.html">Hub</a>
+        <a href="level1-overview.html">Overview</a>
+        <a href="level2-technical.html">Technical</a>
+        <a href="level3-competency.html">Competency</a>
+        <a href="level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Assessments ▼</button>
+          <div class="dropdown-content">
+            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="assessment-scenario-2.html">Scenario 2 (Django & SEAT)</a>
+            <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
+          </div>
+        </div>
+        <a href="level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb"><a href="hub.html">Hub</a> <span>›</span> Assessment Scenario 2: Deep Dive into SEAT</div>
+
+    <h1 class="fade-in">Assessment Scenario 2: Deep Dive into Systems Development & Django (SEAT Tool)</h1>
+    <p class="fade-in fade-in-d1">Advanced, practical interview questions and technical tasks specifically focusing on Django, ORM optimization, and system integration.</p>
+
+    <!-- TASK 1: ORM OPTIMIZATION -->
+    <div class="section-card fade-in fade-in-d2">
+      <h2 style="margin-top:0;">🚀 Task 1: Optimizing a Slow SQL Query</h2>
+      
+      <div class="qa-group">
+        <button class="qa-question" onclick="toggleQA(this)">Problem Statement: The SEAT dashboard takes 8 seconds to load the 'Enrolled Students' view for the Civil Engineering department. We have 3,000 students, each linked to numerous 'Course Registrations' and a 'Faculty Advisor'. Diagnosing via the Django Debug Toolbar shows 3,001 separate SQL queries are executing. How do you fix this at the ORM level?</button>
+        <div class="qa-answer">
+          <p><strong>Gold Standard Solution:</strong></p>
+          <p>The system is suffering from the classic <strong>"N+1 Database Query Problem."</strong> Because Django querysets are lazy and retrieve related objects on-demand, executing a loop over 3,000 students to print their Advisor's name will trigger 1 query to get the students, and 3,000 additional queries to fetch each individual Advisor's details.</p>
+          
+          <pre><code class="language-python"># INELLIGENT/NAIVE APPROACH (Triggers N+1)
+# 1 query for students + 3000 queries for advisors
+students = Student.objects.filter(department='CIV')
+for student in students:
+    print(student.advisor.name) 
+
+# GOLD STANDARD OPTIMIZATION (2 DB hits total)
+# 1. select_related() forces a SQL SQL INNER/LEFT JOIN to fetch ForeignKeys instantly.
+# 2. prefetch_related() executes a separate query for reverse/Many-To-Many relations 
+#    and does the "join" efficiently in Python memory.
+students = Student.objects.filter(department='CIV').select_related('advisor').prefetch_related('course_registrations')
+
+for student in students:
+    print(student.advisor.name) # No DB hit required!
+    for course in student.course_registrations.all():
+        print(course.code) # No DB hit required!</code></pre>
+
+          <p><strong>Bonus Deep-Technical Points to Mention:</strong></p>
+          <ul>
+            <li><strong>Pagination:</strong> 3,000 records should never be shipped to the frontend simultaneously. Implement <code>django.core.paginator.Paginator</code> to fetch records in chunks of 50.</li>
+            <li><strong>.values() or .values_list():</strong> If the frontend only needs raw data (e.g., student ID and name) for an API response, using <code>.values('student_number', 'first_name')</code> skips the massive overhead of instantiating thousands of complex Django Model Objects in Python memory, returning lightweight dictionaries instead.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK 2: UTILITY SCRIPT -->
+    <div class="section-card fade-in">
+      <h2 style="margin-top:0;">🔄 Task 2: Python Utility Script for Legacy Integration</h2>
+      
+      <div class="qa-group">
+        <button class="qa-question" onclick="toggleQA(this)">Problem Statement: The main university system (PeopleSoft) dumps a massive 50MB CSV file of student records onto a secure internal FTP server every night at 2:00 AM. Write the architecture and core Python script to pull this file, parse it, and securely dump it into SEAT's PostgreSQL database without crashing the application memory. How could message queuing improve this architecture?</button>
+        <div class="qa-answer">
+          <p><strong>Gold Standard Solution (Batch Processing vs. Event-Driven Architecture):</strong></p>
+          <p><strong>1. Traditional Batch Architecture:</strong> I would write a Custom Django Management Command (e.g., <code>python manage.py sync_peoplesoft</code>) and execute it via a Linux <code>cron</code> job. Because the file is large, I will not load the whole CSV into Python memory at once.</p>
+
+          <pre><code class="language-python">import csv
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from myapp.models import Student
+
+class Command(BaseCommand):
+    help = 'Syncs nightly CSV from legacy FTP'
+
+    def handle(self, *args, **kwargs):
+        # In actual prod, retrieve file via ftplib here
+        file_path = '/tmp/nightly_dump.csv'
+        
+        batch_size = 2000
+        batch = []
+        
+        # 1. Use memory-efficient generators/iterators to read massive files line-by-line
+        with open(file_path, 'r') as file:
+            reader = csv.DictReader(file)
+            
+            for row in reader:
+                # 2. Clean inputs using Python dictionary parsing 
+                student = Student(
+                    student_number=row['std_id'].strip(),
+                    email=row['email'].lower().strip(),
+                    is_active=row['status'] == 'ENROLLED'
+                )
+                batch.append(student)
+                
+                # 3. Insert in safe chunks to prevent DB RAM overflow
+                if len(batch) >= batch_size:
+                    # 4. Wrap inserts in atomic Transactions to prevent partial ghost data
+                    with transaction.atomic():
+                        # Use bulk_create() instead of saving row-by-row (massively faster)
+                        Student.objects.bulk_create(batch, ignore_conflicts=True)
+                    batch = [] # Reset memory chunk
+            
+            # Catch remaining records outside the loop multiplier
+            if batch:
+                with transaction.atomic():
+                    Student.objects.bulk_create(batch, ignore_conflicts=True)
+                    
+        self.stdout.write(self.style.SUCCESS("Nightly Sync Complete!"))</code></pre>
+
+          <p><strong>2. Event-Driven Architecture (Applying Message Queuing):</strong></p>
+          <p>A more robust, distributed approach utilizes <strong>Apache Kafka</strong> or <strong>Apache ActiveMQ</strong>. Rather than a monolithic <code>cron</code> script handling file parsing and DB inserting synchronously, we decouple the tasks:</p>
+          <ul>
+            <li><strong>Producer:</strong> A lightweight service detects the FTP drop, reads the CSV via stream, and publishes each row as a JSON event to an ActiveMQ/Kafka topic (e.g., <code>student.records.incoming</code>).</li>
+            <li><strong>Consumer (Celery Worker Daemons):</strong> Dedicated Celery worker processes (running independently from the Gunicorn application server) subscribe to this topic. As messages arrive, Celery workers—configured with specific <code>worker_prefetch_multiplier</code> limits to govern memory flow—deserialize the JSON and aggressively use <code>bulk_create</code> to insert into PostgreSQL. This guarantees the Gunicorn web threads are never blocked by heavy data ingestion.</li>
+          </ul>
+          <p><strong>Benefit:</strong> This message queuing architecture enables decoupled scaling. If the DB is locked or slow, Kafka perfectly buffers the data flow safely on disk, eliminating the risk of a timeout crashing a 50MB bulk script halfway through.</p>
+
+          <p><em>(Equivalent JS approach: Utilize <code>fs.createReadStream</code> to pipe the CSV data, parse it row-by-row, and use Prisma's <code>createMany</code> or distribute JSON payloads to a Kafka producer using <code>kafkajs</code>.)</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK 3: SECURITY & COMPLIANCE -->
+    <div class="section-card fade-in">
+      <h2 style="margin-top:0;">🛡️ Task 3: Application Security & Compliance</h2>
+      
+      <div class="qa-group">
+        <button class="qa-question" onclick="toggleQA(this)">Problem Statement: SEAT handles incredibly sensitive student records (grades, demographics, financial standing). As CTO, how would you secure this Django application and its PostgreSQL database against common vulnerabilities to ensure strict compliance with UCT ICTS policies and POPIA?</button>
+        <div class="qa-answer">
+          <p><strong>Gold Standard Solution:</strong></p>
+
+          <h4>1. Environmental Separation & Secrets Management</h4>
+          <ul>
+            <li><strong>No Hardcoded Secrets:</strong> Django's <code>SECRET_KEY</code>, DB credentials, and external API keys must be loaded purely via environment variables (e.g., python-dotenv) or a secrets manager like HashiCorp Vault. Under no circumstances should they be committed to GitHub.</li>
+            <li><strong>Production Toggles:</strong> Ensure <code>DEBUG = False</code> in production. Having DEBUG on leaks detailed server stack traces to users on error, essentially providing attackers a map of the backend architecture.</li>
+          </ul>
+
+          <h4>2. Network Level Security</h4>
+          <ul>
+            <li><strong>Database Isolation:</strong> PostgreSQL should never be exposed to the public internet. It should bind only to <code>localhost (127.0.0.1)</code> or be isolated within a private Virtual Private Cloud (VPC), allowing only inbound connections from the specific IP address of the App Server.</li>
+            <li><strong>Reverse Proxy Constraints:</strong> Configure a Reverse Proxy (such as Apache2/Nginx) to intercept all incoming traffic. This proxy sits at the edge of the network, protecting the App Server's IP address, providing load balancing, and handling CPU-intensive SSL/TLS decryption (SSL Termination). It must serve Django exclusively over HTTPS (TLS 1.2+). Set Django's <code>SECURE_SSL_REDIRECT = True</code>, <code>SESSION_COOKIE_SECURE = True</code>, and enforce HSTS (HTTP Strict Transport Security).</li>
+          </ul>
+
+          <h4>3. Application Level Security (The OWASP Top 10)</h4>
+          <ul>
+            <li><strong>SQL Injection:</strong> Django's ORM inherently prevents SQL injection by parameterizing underlying database queries via psycopg2. However, I would strictly forbid the use of Django's <code>.raw()</code> SQL method in the codebase without rigorous peer review.</li>
+            <li><strong>XSS (Cross-Site Scripting):</strong> Django templates auto-escape variables. I would audit the codebase to ensure developers are not recklessly bypassing this protection using the <code>|safe</code> filter on user-provided inputs.</li>
+            <li><strong>CSRF (Cross-Site Request Forgery):</strong> Ensure <code>CsrfViewMiddleware</code> is active and that all forms mutating data (POST, PUT, DELETE) include the <code>{% csrf_token %}</code> template tag.</li>
+          </ul>
+
+          <h4>4. Authentication & Auditing (POPIA Defense)</h4>
+          <ul>
+            <li><strong>LDAP Binding:</strong> Authentication should rely entirely on UCT's Active Directory. Using local database passwords for staff is a liability if a staff member gets terminated. LDAP handles instantaneous lockouts.</li>
+            <li><strong>Audit Logging:</strong> For highly sensitive data (like altering a student's grade status), implement a library like <code>django-simple-history</code>. This tracks exactly <em>who</em> changed a record and <em>when</em>, establishing an immutable paper trail crucial for POPIA compliance forensic audits.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
+    </div>
+  </div>
+  <button class="back-to-top" id="btt" title="Back to top">↑</button>
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+      var btt=document.getElementById('btt');
+      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
+      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    })();
+    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
+  </script>
+</body>
+</html>
