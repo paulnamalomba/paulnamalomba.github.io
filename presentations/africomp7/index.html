@@ -1027,23 +1027,23 @@
 
                 <div class="innovation-highlight" style="margin-top: 1.5rem;">
                     <h3><i class="fas fa-check-circle"></i> Frame Objectivity</h3>
-                    <p>Under a superposed rigid rotation $\mathbf{Q}$:</p>
+                    <p>Under a superposed rigid rotation on the entire solid body $\mathbf{Q}$:</p>
                     <p style="text-align: center; margin: 0.75rem 0;">$\mathbf{F}^* = \mathbf{Q}\mathbf{F}_e \cdot \mathbf{F}_v$</p>
                     <p>$\mathbf{Q}$ acts only on the elastic part — the viscous deformation and intermediate configuration are unaffected.</p>
                 </div>
-
+<!-- 
                 <div class="card mt-2" style="border-left: 4px solid var(--glacier-teal);">
                     <h3>Total Material Velocity Gradient</h3>
                     <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">The material velocity gradient $\mathbf{L}$ is defined as:</p>
                     <div class="equation-block" style="margin: 0.75rem 0;">
                         $$\mathbf{L} = \mathbf{F}^{-1} \dot{\mathbf{F}} \in \mathfrak{gl}(3)$$
                     </div>
-                    <!-- <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Under a superposed rotation $\mathbf{Q}$, the total rate transforms as:</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Under a superposed rotation $\mathbf{Q}$, the total rate transforms as:</p>
                     <div class="equation-block" style="margin: 0.75rem 0;">
                         $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}$$
                     </div>
                     <p style="color: var(--text-secondary); font-size: 0.85rem;">The spin term $\mathbf{Q}^T \dot{\mathbf{Q}}$ shows $\mathbf{L}$ is <strong>not</strong> objective — motivating the need for $\mathbf{L}_v$ as the constitutive rate variable.</p> -->
-                </div>
+                <!-- </div> -->
             </div>
 
             <div>
@@ -1083,14 +1083,47 @@
                     <div class="equation-block" style="margin: 1rem 0;">
                         $$\mathbf{L}_v = \mathbf{F}_v^{-1} \dot{\mathbf{F}}_v \in \mathfrak{sl}^+(3)$$
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">The material velocity by demand we want inelastic effects to render as isochoric</p>
+                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">The material velocity by demand (given the viscous deformation is purely shearing), we will have inelastic effects render as isochoric</p>
                     
                     <ul>
                         <li><strong>Volume-preserving:</strong> $\text{tr}(\mathbf{L}_v) = 0$ &rArr; purely deviatoric/shearing which corresponds to the fact that $\mathrm{det}(\mathbf{F}_v) = 1$</li>
                         <li><strong>Lie-algebraic:</strong> element of $\mathfrak{sl}^+(3)$, enabling exponential map integration for $\mathbf{F}_v$</li>
                     </ul>
                     <div style="background: rgba(26,163,163,0.08); padding: 0.75rem 1rem; border-radius: 0.5rem; margin-top: 0.75rem; font-size: 0.88rem;">
-                        <strong>Conjugate stress:</strong> $\mathbf{L}_v$ is work-conjugate to the material stress $\boldsymbol{\Xi} = \mathbf{C}\mathbf{S}$, yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$ — a proper dissipation inequality for inelasticity. *Write $\boldsymbol{\Xi} = \mathbf{F}^{-1} \boldsymbol{\tau} \mathbf{F}^{-T}$ instead $\boldsymbol{\Xi} $, as pullback of $\boldsymbol{\tau}$ and this will be proof enough of physical relevance of $\boldsymbol{\Xi}$. $\mathbf{S}$ is the 2nd Piola-Kirchhoff Stress
+                        <strong>Conjugate stress to $\mathbf{L}_v$:</strong> $\mathbf{L}_v$ is power-conjugate to the material stress $\boldsymbol{\Xi} = \mathbf{C}\mathbf{S}$, yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$ — a proper dissipation inequality for inelasticity. *Write $\boldsymbol{\Xi} = \mathbf{F}^{-1} \boldsymbol{\tau} \mathbf{F}^{-T}$ instead $\boldsymbol{\Xi} $, as pullback of $\boldsymbol{\tau}$ and this will be proof enough of physical relevance of $\boldsymbol{\Xi}$. $\mathbf{S}$ is the 2nd Piola-Kirchhoff Stress
+                    </div>
+
+                    <!-- ── Objectivity Proof of L_v ── -->
+                    <div style="border-left: 4px solid var(--warm-accent); background: rgba(232,152,63,0.06); padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin-top: 1.25rem;">
+                        <h4 style="color: var(--warm-accent); margin-bottom: 0.75rem;"><i class="fas fa-shield-alt"></i> Proof — Frame Objectivity of $\mathbf{L}_v$</h4>
+
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            The total material velocity gradient $\mathbf{L} = \mathbf{F}^{-1}\dot{\mathbf{F}}$ is <strong>not</strong> objective. Under a superposed rotation $\mathbf{Q}$:
+                        </p>
+                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.92rem;">
+                            $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}$$
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            where $\mathbf{Q}^T\dot{\mathbf{Q}}$ is the skew-symmetric angular velocity (spin) of the frame. However, substitute $\mathbf{F} = \mathbf{F}_e \mathbf{F}_v$ into the spin term:
+                        </p>
+                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem;">
+                            $$\mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F} = \mathbf{F}_v^{-1}\!\left[\mathbf{F}_e^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v$$
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            Simultaneously, from the multiplicative split we derive the additive decomposition of $\mathbf{L}$:
+                        </p>
+                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem;">
+                            $$\mathbf{L} = \mathbf{F}_v^{-1}\mathbf{L}_e\,\mathbf{F}_v + \underbrace{\mathbf{F}_v^{-1}\dot{\mathbf{F}}_v}_{\mathbf{L}_v}$$
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            Combining, the transformed rate $\mathbf{L}^*$ decomposes as:
+                        </p>
+                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem; border-left: 3px solid var(--warm-accent); padding-left: 0.75rem;">
+                            $$\boxed{\;\mathbf{L}^* = \mathbf{F}_v^{-1}\!\left[\mathbf{L}_e + \mathbf{F}_e^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v + \mathbf{L}_v\;}$$
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem;">
+                            <strong>Result:</strong> The rotation-dependent spin terms are entirely absorbed by the elastic component. $\mathbf{L}_v$ is <strong>additively isolated</strong> and therefore <strong>frame-objective</strong> — it is unaffected by superposed rigid body rotations $\mathbf{Q}$.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -1111,55 +1144,57 @@
             <h2>Logarithmic Strain &amp; Thermodynamic Consistency</h2>
         </div>
 
-        <div class="two-col">
+        <div class="one-col">
             <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Logarithmic Strain Measure</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Defined in the intermediate configuration:</p>
+                <h3 style="color: var(--uct-blue); margin-bottom: 0.75rem;">Logarithmic Strain Measure</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Defined in the intermediate configuration $\mathcal{B}_\text{int}$:</p>
                 <div class="equation-block">
                     <div class="equation-label">Hencky Strain</div>
-                    $$\boldsymbol{\alpha} = \ln(\mathbf{C}_e)$$
+                    $$\boldsymbol{\alpha} = \ln(\mathbf{C}_e), \quad \mathbf{C}_e = \exp(\boldsymbol{\alpha})$$
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">$\boldsymbol{\alpha}$ and $\mathbf{C}_e$ share the same eigenvectors $\mathbf{z}_i$, with eigenvalues $\lambda_i = \exp(\epsilon_i)$. For any isotropic energy $\Psi(\boldsymbol{\alpha}) = \Psi(\mathbf{C}_e)$, the key differential identity is:</p>
+                <div class="equation-block" style="font-size: 0.92rem;">
+                    $$\frac{\partial \Psi}{\partial \boldsymbol{\alpha}} = \mathbf{C}_e \frac{\partial \Psi}{\partial \mathbf{C}_e}$$
                 </div>
 
-                <p style="color: var(--text-secondary); margin: 1rem 0;">Modified strain in the material configuration (mixed contravariant-covariant push-forward):</p>
+                <h3 style="color: var(--uct-blue); margin: 1.25rem 0 0.75rem;">Thermodynamic Proof</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">The Clausius–Duhem inequality requires:</p>
+                <div class="equation-block">
+                    <div class="equation-label">Dissipation Inequality</div>
+                    $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L} - \rho_0 \cdot \dot{\Psi}(\mathbf{C}_e) \geq 0$$
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">Taking the material time derivative and expressing $\dot{\mathbf{C}}_e$ via the elastic-viscous decomposition yields:</p>
+                <div class="equation-block" style="font-size: 0.92rem;">
+                    $$\dot{\Psi} = 2 \mathbf{F}_v^T \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T} : (\mathbf{L} - \mathbf{L}_v)$$
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">Substituting back and applying the Coleman–Noll argument (coefficient of $\mathbf{L}$ vanishes identically):</p>
+                <div class="equation-block" style="border-left: 3px solid var(--glacier-teal); padding-left: 0.75rem;">
+                    <div class="equation-label">Constitutive Relation</div>
+                    $$\boxed{\;\boldsymbol{\Xi} = 2\rho_0 \cdot \mathbf{F}_v^T \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T}\;}$$
+                </div>
+
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.75rem 0 0.5rem;">As a natural consequence of this constitutive relation, a <strong>modified</strong> logarithmic strain $\overline{\boldsymbol{\alpha}}$ emerges in the material configuration $\mathcal{B}_0$:</p>
                 <div class="equation-block">
                     <div class="equation-label">Modified Logarithmic Strain</div>
                     $$\overline{\boldsymbol{\alpha}} = \mathbf{F}_v^T \boldsymbol{\alpha} \, \mathbf{F}_v^{-T} = \ln(\mathbf{C}\,\mathbf{C}_v^{-1})$$
                 </div>
-
-                <div class="card mt-2">
-                    <h3>Advantages of $\boldsymbol{\alpha}$</h3>
-                    <ul>
-                        <li>Additive structure in finite inelasticity</li>
-                        <li>Shares eigenvectors with $\mathbf{C}_e$</li>
-                        <li>Numerically favorable spectral representations</li>
-                        <li>Compatible with material velocity gradient formulation</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Clausius-Duhem Inequality</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">The power-conjugate constitutive pair $(\boldsymbol{\Xi}, \mathbf{L})$ satisfies:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Dissipation Inequality</div>
-                    $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L} - \rho_\text{ref} \cdot \dot{\Psi}(\mathbf{C}_e) \geq 0$$
-                </div>
-
-                <p style="color: var(--text-secondary); margin: 1rem 0;">where $\boldsymbol{\Xi} = \mathbf{C}\mathbf{S}$ is the material stress (reparametrisation of the 2nd Piola-Kirchhoff stress).</p>
-
-                <div class="equation-block">
-                    <div class="equation-label">Constitutive Relation (from thermodynamics)</div>
-                <p style="color: var(--text-secondary); margin: 1rem 0;">
-                    *Write here C_e as function of alpha ain the derivative form here in the consitutive relation.</p>
-                    $$\boldsymbol{\Xi} = 2\rho_\text{ref} \cdot \mathbf{F}_v^T \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T}$$.
-                </div>
-
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">$\overline{\boldsymbol{\alpha}}$ characterises elastic strains in $\mathcal{B}_0$ and is power-conjugate to $\boldsymbol{\Xi}$. In the small-strain limit $\boldsymbol{\alpha} \approx 2\mathbf{E}$, so Lamé parameters scale as $\lambda \to \tfrac{\lambda}{2},\; \mu \to \tfrac{\mu}{2}$. The reduced dissipation reads:</p>
                 <div class="equation-block">
                     <div class="equation-label">Reduced Dissipation</div>
                     $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$$
                 </div>
 
-                <p style="color: var(--text-secondary); margin-top: 1rem;"><strong>Result:</strong> Viscous dissipation is driven entirely by $\mathbf{L}_v$, confirming its role as the constitutive rate variable.</p>
+                <div class="innovation-highlight" style="margin-top: 1rem;">
+                    <h4><i class="fas fa-star"></i> Hyperelastic Constitutive Law (Maxwell Reformulation)</h4>
+                    <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem;">
+                        $$\boldsymbol{\Xi} = \frac{\kappa}{2}\,\text{tr}(\overline{\boldsymbol{\alpha}})\cdot\mathbf{1} + \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
+                    </p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">with the Maxwell viscoelastic balance:</p>
+                    <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem;">
+                        $$\text{dev}(\boldsymbol{\Xi}) = \eta_\text{Glen}\cdot\mathbf{L}_v^T = \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
+                    </p>
+                    <p style="font-size: 0.82rem; color: rgba(255,255,255,0.85);">Valid provided $\overline{\boldsymbol{\alpha}}$ and $\mathbf{L}_v$ are co-axial, which holds for the isotropic case.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -1325,7 +1360,7 @@
 <!-- ================================================================
      SLIDE 8 — SESKA FRAMEWORK
      ================================================================ -->
-<section id="seska" class="slide">
+<!-- <section id="seska" class="slide">
     <span class="slide-number">07</span>
     <div class="slide-inner reveal">
         <div class="section-header">
@@ -1433,14 +1468,14 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 
 <!-- ================================================================
      SLIDE 9 — NUMERICAL RESULTS
      ================================================================ -->
 <section id="results" class="slide">
-    <span class="slide-number">08</span>
+    <span class="slide-number">07</span>
     <div class="slide-inner reveal">
         <div class="section-header">
             <div class="section-label"><i class="fas fa-chart-bar"></i> Numerical Examples</div>
@@ -1548,6 +1583,12 @@
                     <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent ice moduli $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ and temperature-dependent viscosity.</p>
                 </div>
             </div>
+        </div>
+
+        <h4 style="color: var(--glacier-teal); margin-top: 1.5rem;"><i class="fas fa-flask"></i> Uniform Viscosity Example</h4>
+        <div class="figure-container" style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%;">
+            <img src="assets/case-study-model_uniform-viscosity.png" alt="Uniform viscosity numerical results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results under uniform (non-stratified) viscosity — isolating the purely mechanical response as a baseline comparison against the temperature-dependent Glen's flow law simulation.</p>
         </div>
     </div>
 </section>
