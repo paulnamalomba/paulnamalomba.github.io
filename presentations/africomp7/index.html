@@ -1346,7 +1346,7 @@
                 <div class="innovation-highlight mt-2">
                     <h4><i class="fas fa-star"></i> Physical Corollaries</h4>
                     <ul>
-                        <li>Higher viscosity $\eta_\text{Glen}$ &rArr; lower strain rate for constant stress</li>
+                        <!-- <li>Higher viscosity $\eta_\text{Glen}$ &rArr; lower strain rate for constant stress</li> -->
                         <li>Higher strain rate &rArr; higher shear stresses for constant material properties</li>
                         <li>Constant load &rArr; constant strain rate (steady-state creep)</li>
                     </ul>
@@ -1588,7 +1588,13 @@
         <h4 style="color: var(--glacier-teal); margin-top: 1.5rem;"><i class="fas fa-flask"></i> Uniform Viscosity Example</h4>
         <div class="figure-container" style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%;">
             <img src="assets/case-study-model_uniform-viscosity.png" alt="Uniform viscosity numerical results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results under uniform (non-stratified) viscosity — isolating the purely mechanical response as a baseline comparison against the temperature-dependent Glen's flow law simulation.</p>
+            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results under uniform (non-stratified) viscosity — isolating the purely mechanical response as a baseline for the internal bending moment analysis at the calving front.</p>
+        </div>
+
+        <h4 style="color: var(--warm-accent); margin-top: 1.5rem;"><i class="fas fa-temperature-high"></i> Variable (Temperature-Dependent) Viscosity Example</h4>
+        <div class="figure-container" style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%;">
+            <img src="assets/case-study-model_variable-viscosity.png" alt="Variable viscosity numerical results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
+            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results with depth- and temperature-stratified viscosity via the Arrhenius-type Glen's flow law. The non-uniform $\eta_\text{Glen}(z, T)$ introduces asymmetric stress redistribution near the calving front, consistent with observed shelf dynamics.</p>
         </div>
     </div>
 </section>
@@ -1597,43 +1603,44 @@
 <!-- ================================================================
      SLIDE 10 — CONCLUSIONS
      ================================================================ -->
-<section id="conclusions" class="slide slide-closing">
-    <span class="slide-number" style="color: rgba(255,255,255,0.06);">09</span>
-    <div class="slide-inner reveal" style="max-width: 900px;">
+<section id="conclusions" class="slide slide-closing" style="background: linear-gradient(135deg, #0a1628 0%, #132a4a 40%, #1a3a5c 100%); color: #fff;">
+    <span class="slide-number" style="color: rgba(255,255,255,0.06);">08</span>
+    <div class="slide-inner reveal" style="max-width: 1000px;">
         <div class="section-header text-center">
             <div class="section-label" style="color: var(--ice-cyan); justify-content: center;"><i class="fas fa-flag-checkered"></i> Summary</div>
             <h2>Conclusions &amp; Outlook</h2>
         </div>
 
-        <div class="card-grid" style="margin-top: 2rem;">
+        <div class="card-grid" style="margin-top: 1.5rem;">
             <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-cog"></i></div>
-                <h3 style="color: var(--ice-cyan);">Mechanical Innovation</h3>
-                <p style="color: rgba(255,255,255,0.85);">Material velocity gradient $\mathbf{L}_v \in \mathfrak{sl}^+(3)$ as a low-order, objective, isochoric viscous strain rate — replacing problematic Cauchy-Green rates.</p>
-            </div>
-
-            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-ruler-combined"></i></div>
-                <h3 style="color: var(--ice-cyan);">Logarithmic Coupling</h3>
-                <p style="color: rgba(255,255,255,0.85);">Modified Hencky strain $\overline{\boldsymbol{\alpha}} = \ln(\mathbf{C}\mathbf{C}_v^{-1})$ captures nonlinear elastic effects with additive updates and consistent linearisation.</p>
+                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-shield-alt"></i></div>
+                <h3 style="color: var(--ice-cyan);">Provably Objective Rate Variable</h3>
+                <p style="color: rgba(255,255,255,0.85);">The viscous material velocity gradient $\mathbf{L}_v = \mathbf{F}_v^{-1}\dot{\mathbf{F}}_v$ is additively isolated from all rotation-dependent spin terms under superposed rigid rotations. Within the Maxwell element formulation, $\mathbf{L}_v$ is an objective, symmetric, and isochoric strain-rate measure — replacing higher-order Lie/Oldroyd rates of $\mathbf{C}_e$ that couple poorly to inelastic constitutive behaviour.</p>
             </div>
 
             <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
                 <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-check-circle"></i></div>
-                <h3 style="color: var(--ice-cyan);">Thermodynamic Rigour</h3>
-                <p style="color: rgba(255,255,255,0.85);">Full Clausius-Duhem proof: $\mathcal{D} = \boldsymbol{\Xi}:\mathbf{L}_v \geq 0$. Glen's flow law embedded without ad hoc overstress potentials.</p>
+                <h3 style="color: var(--ice-cyan);">Thermodynamic Consistency</h3>
+                <p style="color: rgba(255,255,255,0.85);">A complete Clausius–Duhem dissipation inequality was derived, yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$. The constitutive relation $\boldsymbol{\Xi} = 2\rho_0 \mathbf{F}_v^T \frac{\partial \Psi}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T}$ emerges naturally from the Coleman–Noll procedure — Glen's flow law is embedded directly without ad hoc overstress potentials or penalty formulations.</p>
             </div>
 
             <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-laptop-code"></i></div>
-                <h3 style="color: var(--ice-cyan);">Numerical Robustness</h3>
-                <p style="color: rgba(255,255,255,0.85);">Exponential map preserves $\det(\Delta\mathbf{F}_v)=1$ to $\mathcal{O}(10^{-6})$. No local iterative solve needed — explicit viscous rate from trial stress.</p>
+                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-chart-area"></i></div>
+                <h3 style="color: var(--ice-cyan);">Near-Front Bending Dynamics</h3>
+                <p style="color: rgba(255,255,255,0.85);">Both the uniform and variable (temperature-stratified) viscosity simulations capture the expected internal bending moment at the calving front of the Fimbulisen ice shelf. The variable viscosity model, driven by the Arrhenius-type Humbert temperature profile $T(z)$, produces an asymmetric stress redistribution through the shelf thickness — consistent with the depth-dependent creep rates observed in Antarctic field measurements.</p>
+            </div>
+
+            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
+                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-road"></i></div>
+                <h3 style="color: var(--ice-cyan);">Future Work</h3>
+                <p style="color: rgba(255,255,255,0.85);">Extension of the formulation to incorporate damage mechanics — coupling viscoelastic creep with phase-field or continuum damage models to capture crevasse propagation, rift initiation, and eventual calving events at ice-shelf fronts. The Lie-group structure of the exponential map update provides a natural framework for this coupling.</p>
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.15);">
+        <div style="text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15);">
+            <img src="../../assets/paul.jpg" alt="Paul K. Namalomba" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--ice-cyan); margin-bottom: 0.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
             <p style="font-size: 1.2rem; font-weight: 600; color: var(--ice-cyan); margin-bottom: 0.5rem;">Thank You</p>
-            <p style="font-size: 0.9rem;">Paul K. Namalomba &amp; Sebastian Skatulla</p>
+            <p style="font-size: 0.9rem;">Paul K. Namalomba, Sebastian Skatulla, Carlo Sansour, Michael Kaliske &amp; Maxime Nutte</p>
             <p style="font-size: 0.85rem; margin-top: 0.5rem;">
                 <i class="fas fa-envelope" style="margin-right: 0.3rem;"></i> <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a> &nbsp;|&nbsp;
                 <i class="fab fa-github" style="margin-right: 0.3rem;"></i> <a href="https://paulnamalomba.github.io" target="_blank">paulnamalomba.github.io</a>
