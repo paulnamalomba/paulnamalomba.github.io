@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Servers Proxies - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="web-servers-proxies-apache2-nginx-and-ngrok">Web Servers &amp; Proxies: Apache2, Nginx, and ngrok</h1>
+<p><br>
+<strong>Last updated</strong>: February 26, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://nginx.org/"><img alt="Nginx" src="https://img.shields.io/badge/Server-Nginx-green.svg" /></a>
+<a href="https://httpd.apache.org/"><img alt="Apache" src="https://img.shields.io/badge/Server-Apache2-red.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>A robust application exists exclusively at localhost until explicitly routed through a web server or reverse proxy. This guide addresses the foundational configuration syntax necessary for architecting robust Virtual Hosts (<code>.conf</code> files), routing localized traffic securely outside complex firewalls via ngrok, and managing the fundamental daemonization of web traffic controllers on Unix systems.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#web-servers--proxies-apache2-nginx-and-ngrok">Web Servers &amp; Proxies: Apache2, Nginx, and ngrok</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#1-configuration-windows--linux">1. Configuration (Windows &amp; Linux)</a></li>
+<li><a href="#2-writing-basic-codescripts-virtual-hosts--proxies">2. Writing Basic Code/Scripts (Virtual Hosts &amp; Proxies)</a></li>
+<li><a href="#3-compile-time-commands-syntax-verification">3. Compile-time Commands (Syntax Verification)</a></li>
+<li><a href="#4-runtime-commands-daemonization--ngrok">4. Runtime Commands (Daemonization &amp; ngrok)</a></li>
+<li><a href="#5-debugging-502-bad-gateway--port-conflicts">5. Debugging (502 Bad Gateway &amp; Port Conflicts)</a></li>
+</ul>
+<hr />
+<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
+<p>Production-grade web servers are primarily hosted on Unix variants. </p>
+<h3 id="linux-environment-architecture">Linux Environment Architecture</h3>
+<p>Nginx and Apache distribute their configurations across globally recognized directories (<code>/etc/nginx</code> and <code>/etc/apache2</code>).</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Ubuntu/Debian Installation</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>nginx<span class="w"> </span>apache2
+
+<span class="c1"># Ngrok Installation via Snap</span>
+sudo<span class="w"> </span>snap<span class="w"> </span>install<span class="w"> </span>ngrok<span class="w"> </span>
+ngrok<span class="w"> </span>config<span class="w"> </span>add-authtoken<span class="w"> </span>&lt;your-auth-token&gt;
+</code></pre></div>
+
+<p><strong>Directory Structure (The Debian Standard):</strong>
+Configurations are explicitly delineated between <code>sites-available</code> (staging) and <code>sites-enabled</code> (active via symbolic links).
+* <code>/etc/nginx/sites-available/</code> -&gt; Source of truth <code>.conf</code> files.
+* <code>/etc/nginx/sites-enabled/</code> -&gt; Active configurations.</p>
+<hr />
+<h2 id="2-writing-basic-codescripts-virtual-hosts-proxies">2. Writing Basic Code/Scripts (Virtual Hosts &amp; Proxies)</h2>
+<p>Web server configurations act strictly as traffic controllers. They rarely execute application code directly, instead mapping public domains to local unprivileged ports (Reverse Proxying) or serving static HTML/CSS files directly from disk.</p>
+<h3 id="nginx-the-reverse-proxy">Nginx: The Reverse Proxy</h3>
+<p>Nginx dominates the industry via its extremely fast asynchronous event-driven architecture. The standard syntax for heavily routing public HTTP traffic on port 80 to a deeply nested Node.js or .NET API running internally on port <code>5000</code>.</p>
+<p><em>Create <code>/etc/nginx/sites-available/api.example.com.conf</code>:</em></p>
+<div class="codehilite"><pre><span></span><code><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">api.example.com</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1"># Static File Routing (Frontend React/Angular)</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w"> </span><span class="s">/var/www/html/frontend</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w"> </span><span class="s">index.html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">try_files</span><span class="w"> </span><span class="nv">$uri</span><span class="w"> </span><span class="nv">$uri/</span><span class="w"> </span><span class="s">/index.html</span><span class="p">;</span><span class="w"> </span><span class="c1"># Solves SPA routing 404s</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1"># Reverse Proxying the Backend API</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/api/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://localhost:5000/</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1"># Enforce Forwarded Headers so backend knows the REAL client IP</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Host</span><span class="w"> </span><span class="nv">$host</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Real-IP</span><span class="w"> </span><span class="nv">$remote_addr</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">X-Forwarded-For</span><span class="w"> </span><span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1"># Handling WebSocket Persistence</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Upgrade</span><span class="w"> </span><span class="nv">$http_upgrade</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_set_header</span><span class="w"> </span><span class="s">Connection</span><span class="w"> </span><span class="s">&quot;upgrade&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="apache2-directory-virtual-hosting">Apache2: Directory Virtual Hosting</h3>
+<p>Apache's process-driven architecture handles heavy <code>.htaccess</code> runtime overriding, preferred heavily by complex PHP applications (like WordPress).</p>
+<p><em>Create <code>/etc/apache2/sites-available/app.example.com.conf</code>:</em></p>
+<div class="codehilite"><pre><span></span><code><span class="nt">&lt;VirtualHost</span><span class="w"> </span><span class="s">*:80</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nb">ServerName</span><span class="w"> </span>app.example.com
+<span class="w">    </span><span class="nb">DocumentRoot</span><span class="w"> </span><span class="sx">/var/www/html/application</span>
+
+<span class="w">    </span><span class="nt">&lt;Directory</span><span class="w"> </span><span class="s">/var/www/html/application</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nb">Options</span><span class="w"> </span>Indexes<span class="w"> </span>FollowSymLinks
+<span class="w">        </span><span class="nb">AllowOverride</span><span class="w"> </span><span class="k">All</span><span class="w">   </span>#<span class="w"> </span>Enables<span class="w"> </span>runtime<span class="w"> </span>.htaccess<span class="w"> </span>routing<span class="w"> </span>overrides
+<span class="w">        </span><span class="nb">Require</span><span class="w"> </span><span class="k">all</span><span class="w"> </span>granted
+<span class="w">    </span><span class="nt">&lt;/Directory&gt;</span>
+
+<span class="w">    </span><span class="nb">ErrorLog</span><span class="w"> </span>${APACHE_LOG_DIR}/app_error.log
+<span class="w">    </span><span class="nb">CustomLog</span><span class="w"> </span>${APACHE_LOG_DIR}/app_access.log<span class="w"> </span>combined
+<span class="nt">&lt;/VirtualHost&gt;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3-compile-time-commands-syntax-verification">3. Compile-time Commands (Syntax Verification)</h2>
+<p>Neither server compiles into binary code, but both demand strict preliminary configuration checks. Failing to verify configuration syntax before restarting a daemon <em>will</em> result in catastrophic downtime for all virtual hosts on the machine.</p>
+<h3 id="nginx-syntax-tester">Nginx Syntax Tester</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Symlink your configuration to enabled</span>
+sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/api.example.com.conf<span class="w"> </span>/etc/nginx/sites-enabled/
+
+<span class="c1"># CRITICAL: Verify syntax WITHOUT disrupting active traffic</span>
+sudo<span class="w"> </span>nginx<span class="w"> </span>-t
+
+<span class="c1"># Outputs:</span>
+<span class="c1"># nginx: the configuration file /etc/nginx/nginx.conf syntax is ok</span>
+<span class="c1"># nginx: configuration file /etc/nginx/nginx.conf test is successful</span>
+</code></pre></div>
+
+<h3 id="apache2-syntax-tester">Apache2 Syntax Tester</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Enable the site module natively</span>
+sudo<span class="w"> </span>a2ensite<span class="w"> </span>app.example.com.conf
+
+<span class="c1"># Verify Syntax</span>
+sudo<span class="w"> </span>apache2ctl<span class="w"> </span>configtest
+</code></pre></div>
+
+<hr />
+<h2 id="4-runtime-commands-daemonization-ngrok">4. Runtime Commands (Daemonization &amp; ngrok)</h2>
+<p>Execution strictly involves signaling the system supervisor (<code>systemd</code>) to reload the configuration into memory.</p>
+<h3 id="service-management-nginx-apache">Service Management (Nginx / Apache)</h3>
+<p>Reloading gracefully switches configurations without dropping active client connections.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Graceful daemon reload after successful syntax checks</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
+sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>apache2
+
+<span class="c1"># Full restart (Forces TCP disconnections - Use cautiously)</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nginx
+</code></pre></div>
+
+<h3 id="ngrok-tunneling-local-environments-to-the-public-web">Ngrok: Tunneling Local Environments to the Public Web</h3>
+<p>Exposing local Webhooks (Stripe, GitHub) or demonstrating APIs to remote teams requires bypassing NAT routers. <code>ngrok</code> establishes an aggressive persistent outward tunnel to remote infrastructure, mapping their public URL directly back to your local port.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Expose your local Node.js API sitting on port 5000 directly to the internet</span>
+ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</span>
+
+<span class="c1"># Expected output provides a live Forwarding URL:</span>
+<span class="c1"># Forwarding  https://abc-123.ngrok-free.app -&gt; http://localhost:5000</span>
+</code></pre></div>
+
+<p><em>Note for APIs:</em> Ensure the backend strictly accepts <code>Host: localhost</code> overrides when accessed via ngrok, or configure ngrok to spoof the host header: <code>ngrok http 5000 --host-header="localhost:5000"</code>.</p>
+<hr />
+<h2 id="5-debugging-502-bad-gateway-port-conflicts">5. Debugging (502 Bad Gateway &amp; Port Conflicts)</h2>
+<p>Reverse proxies orchestrating web traffic introduce significant complexity. Understanding the standard error codes quickly isolates whether the problem sits at the network layer or the application codebase.</p>
+<h3 id="the-infamous-502-bad-gateway">The Infamous 502 Bad Gateway</h3>
+<p>If Nginx returns a <code>502</code>, the Nginx daemon correctly caught the public internet request, attempted to <code>proxy_pass</code> it to your internal application at <code>localhost:5000</code>, and hit a literal wall. 
+* <strong>The Fix:</strong> The internal application is dead. Nginx is completely innocent. Ensure the backend (Node, .NET, Python) is actually running and listening on port <code>5000</code>.
+* <strong>The Log Investigation:</strong> 
+  <code>bash
+  sudo tail -f /var/log/nginx/error.log
+  # Expected trace: "connect() failed (111: Connection refused) while connecting to upstream"</code></p>
+<h3 id="binding-tcp-port-conflicts">Binding TCP Port Conflicts</h3>
+<p>You cannot run Apache2 and Nginx concurrently on port 80 or 443 without nested reverse proxying. Attempting to start the second service triggers a catastrophic binding failure.
+* <strong>The Fix:</strong> Identify which daemon stole your ports natively via the kernel networking tables.
+  <code>bash
+  sudo netstat -tulpn | grep :80
+  # Output specifically tags the PID and process name holding the port HOSTAGE.</code></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

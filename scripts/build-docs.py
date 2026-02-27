@@ -1,4 +1,4 @@
-Restart-Service vmcompute -Force#!/usr/bin/env python3
+#!/usr/bin/env python3
 """
 build-docs.py — Local build script for paulnamalomba.github.io docs pages.
 
@@ -117,7 +117,7 @@ def sync_files(src_dir: str, dst_dir: str, ext: str) -> None:
         if name.endswith(ext):
             shutil.copy2(os.path.join(src_dir, name), os.path.join(dst_dir, name))
             count += 1
-    print(f"  Synced {count} {ext} files  {src_dir}  →  {dst_dir}")
+    print(f"  Synced {count} {ext} files  {src_dir}  ->  {dst_dir}")
 
 
 # ──────────────────────────────────────────────
@@ -181,7 +181,7 @@ def build_guides(guides_dir: str) -> None:
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(page_shell("Technical Guides", body))
 
-    print(f"  Built {len(guides)} guide pages + index  →  {guides_dir}")
+    print(f"  Built {len(guides)} guide pages + index  ->  {guides_dir}")
 
 
 # ──────────────────────────────────────────────
@@ -378,7 +378,7 @@ def build_system_scripts(scripts_dir: str) -> None:
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(page_shell("System Scripts", body))
 
-    print(f"  Built {len(scripts)} script pages + index  →  {scripts_dir}")
+    print(f"  Built {len(scripts)} script pages + index  ->  {scripts_dir}")
 
 
 # ──────────────────────────────────────────────

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Ml - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="python-for-machine-learning-engineering-the-ai-pipeline">Python for Machine Learning: Engineering the AI Pipeline</h1>
+<p><br>
+<strong>Last updated</strong>: February 26, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://www.python.org/"><img alt="Language" src="https://img.shields.io/badge/Language-Python_3.11-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>Python's dominance in Machine Learning stems not from its inherent execution speed, but from its role as an elegant API wrapping highly optimized C/C++ libraries. This guide bypasses generic Python syntax and focuses exclusively on constructing, vectorizing, and deploying real-world AI pipelines using NumPy, Pandas, Scikit-Learn, and PyTorch.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#python-for-machine-learning-engineering-the-ai-pipeline">Python for Machine Learning: Engineering the AI Pipeline</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#1-configuration-windows--linux">1. Configuration (Windows &amp; Linux)</a></li>
+<li><a href="#2-writing-basic-codescripts-core-ml-frameworks">2. Writing Basic Code/Scripts (Core ML Frameworks)</a></li>
+<li><a href="#3-compile-time-commands-bytecode--linting">3. Compile-time Commands (Bytecode &amp; Linting)</a></li>
+<li><a href="#4-runtime-commands-execution--serving">4. Runtime Commands (Execution &amp; Serving)</a></li>
+<li><a href="#5-debugging-tensor-mismatches--oom-kernels">5. Debugging (Tensor Mismatches &amp; OOM Kernels)</a></li>
+</ul>
+<hr />
+<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
+<p>Machine Learning development requires strict isolation of massive, often conflicting dependency graphs (e.g., CUDA toolkits).</p>
+<h3 id="dependency-environment-management">Dependency &amp; Environment Management</h3>
+<p>Never install ML packages globally. Always use <code>venv</code> or <code>conda</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Initialize an isolated virtual environment</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># Linux/Mac</span>
+<span class="c1"># .venv\Scripts\activate   # Windows PowerShell</span>
+
+<span class="c1"># Install the foundational ML stack</span>
+pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>pandas<span class="w"> </span>scikit-learn<span class="w"> </span>jupyterlab
+
+<span class="c1"># Install PyTorch (The command varies severely based on target GPU compute capability)</span>
+<span class="c1"># Example for Linux with CUDA 11.8:</span>
+pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu118
+</code></pre></div>
+
+<h3 id="windows-path-and-gpu-drivers">Windows PATH and GPU Drivers</h3>
+<p>On Windows, ensuring CUDA functionality dictates installing the NVIDIA CUDA Toolkit. The environment variable <code>PATH</code> must explicitly contain <code>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin</code> or Python will default to crawling on the CPU.</p>
+<hr />
+<h2 id="2-writing-basic-codescripts-core-ml-frameworks">2. Writing Basic Code/Scripts (Core ML Frameworks)</h2>
+<p>Writing efficient ML Python means completely abandoning standard explicit <code>for</code>-loops in favor of vectorized operations executed asynchronously in C block memory.</p>
+<h3 id="data-manipulation-numpy-pandas">Data Manipulation: NumPy &amp; Pandas</h3>
+<p>Data streams enter as raw text. Pandas organizes this chaos into tabular DataFrames, while NumPy underlying it handles strict contiguous memory arrays.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Load 1M rows of chaotic CSV telemetry data into RAM</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;sensor_telemetry.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Feature extraction: Drop missing data and isolate the target variable</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;vibration&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Casts to a strict NumPy array</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;failure_status&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1"># Vectorization replaces iterating row by row. This is executed in C, 100x faster than pure Python.</span>
+<span class="n">X_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="classical-ml-scikit-learn">Classical ML: Scikit-Learn</h3>
+<p>Scikit-Learn implements the standard transformer-estimator <code>fit()</code>, <code>transform()</code>, and <code>predict()</code> API, rendering algorithm swapping heavily standardized.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">classification_report</span>
+
+<span class="c1"># Split tensors into train and test blocks</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_normalized</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1"># Instantiate and fit the model on CPU</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># -1 utilizes all CPU cores</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Extrapolate predictions</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
+</code></pre></div>
+
+<h3 id="deep-learning-pytorch">Deep Learning: PyTorch</h3>
+<p>When the feature complexity outstrips classical trees, PyTorch tensors take over, shifting linear algebra calculations natively to the GPU (CUDA).</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
+
+<span class="c1"># Enforce hardware acceleration</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SensorNeuralNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SensorNeuralNet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+
+<span class="c1"># Ship the model to VRAM</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SensorNeuralNet</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="c1"># Ship the data to VRAM as FloatTensors</span>
+<span class="n">X_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">y_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">BCELoss</span><span class="p">()</span>
+
+<span class="c1"># Training Loop</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>           <span class="c1"># Clear last gradient calculations</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">X_tensor</span><span class="p">)</span>       <span class="c1"># Forward pass</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">y_tensor</span><span class="p">)</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>                 <span class="c1"># Backpropagation</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>                <span class="c1"># Adjust weights</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3-compile-time-commands-bytecode-linting">3. Compile-time Commands (Bytecode &amp; Linting)</h2>
+<p>Python is interpreted, so it skips the traditional C++/Java linkage compilation phase. However, pre-execution bytecode caching (<code>.pyc</code> files in <code>__pycache__</code>) dramatically speeds up subsequent imports.</p>
+<p>For production integrity, strict syntax checking and type hinting (via <code>mypy</code> or <code>ruff</code>) are paramount before serving an inference model.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Enforce PEP8 and catch syntax anomalies</span>
+pip<span class="w"> </span>install<span class="w"> </span>ruff
+ruff<span class="w"> </span>check<span class="w"> </span>model_pipeline.py
+
+<span class="c1"># Type checking to prevent passing a string into a PyTorch FloatTensor</span>
+pip<span class="w"> </span>install<span class="w"> </span>mypy
+mypy<span class="w"> </span>model_pipeline.py
+</code></pre></div>
+
+<hr />
+<h2 id="4-runtime-commands-execution-serving">4. Runtime Commands (Execution &amp; Serving)</h2>
+<p>Model training is a massive blocking script, usually orchestrated by <code>nohup</code> or a workload manager. Once serialized to disk (e.g., <code>model.pt</code>), inference occurs via high-performance ASGI servers bridging to the model.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Training Execution (Server) - Detaches the process to survive SSH drops</span>
+nohup<span class="w"> </span>python<span class="w"> </span>train_resnet.py<span class="w"> </span>&gt;<span class="w"> </span>/var/log/training_output.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+
+<span class="c1"># Monitoring the GPU memory allocation continuously</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>nvidia-smi
+</code></pre></div>
+
+<p>For serving the model as an API inference node using FastAPI:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Daemonize the REST endpoint to receive prediction requests</span>
+uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--workers<span class="w"> </span><span class="m">4</span>
+</code></pre></div>
+
+<hr />
+<h2 id="5-debugging-tensor-mismatches-oom-kernels">5. Debugging (Tensor Mismatches &amp; OOM Kernels)</h2>
+<p>Debugging ML pipelines is an exercise in matrix algebra alignment and managing physical VRAM limits. Nothing destroys morale faster than a training loop crashing on epoch 99.</p>
+<h3 id="common-pitfalls">Common Pitfalls</h3>
+<ul>
+<li><strong>Shape Mismatches:</strong> Trying to multiply a <code>[32, 64]</code> tensor by a <code>[128, 64]</code> tensor dynamically. PyTorch throws <code>RuntimeError: mat1 and mat2 shapes cannot be multiplied</code>. Fix this by applying <code>.view()</code>, <code>.unsqueeze()</code>, or explicitly verifying dimensions with <code>.shape</code>.</li>
+<li><strong>CUDA Out of Memory (OOM):</strong> Loading too large a batch size into your GPU. PyTorch will panic. You must either reduce <code>batch_size</code> or utilize mixed-precision training (<code>torch.cuda.amp</code>).</li>
+</ul>
+<h3 id="profiling">Profiling</h3>
+<p>To figure out exactly which layer of your neural network is bottlenecking the compute:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch.autograd.profiler</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">profiler</span>
+
+<span class="k">with</span> <span class="n">profiler</span><span class="o">.</span><span class="n">profile</span><span class="p">(</span><span class="n">use_cuda</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">prof</span><span class="p">:</span>
+    <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">prof</span><span class="o">.</span><span class="n">key_averages</span><span class="p">()</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;cuda_time_total&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<ul>
+<li><strong>Tracebacks:</strong> Pay heavy attention to whether a tensor is on CPU or GPU. You cannot perform operations if one tensor acts locally and the other sits in physical GPU memory. PyTorch throws the infamous <code>Expected all tensors to be on the same device.</code> Fix with <code>.to(device)</code>.</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>

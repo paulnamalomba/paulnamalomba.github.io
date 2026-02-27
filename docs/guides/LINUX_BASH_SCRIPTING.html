@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Bash Scripting - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="linux-bash-shell-automation-execution-and-daemons">Linux Bash Shell: Automation, Execution, and Daemons</h1>
+<p><br>
+<strong>Last updated</strong>: February 26, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://www.kernel.org/"><img alt="OS" src="https://img.shields.io/badge/System-Linux_GNU-black.svg" /></a>
+<a href="https://www.gnu.org/software/bash/"><img alt="CLI" src="https://img.shields.io/badge/Interpreter-Bash-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>A profound understanding of the Linux shell differentiates a standard programmer from a true systems engineer. This architecture guide dissects bash scripting, emphasizing the manipulation of the operating system's standard text streams (<code>stdin</code>, <code>stdout</code>, <code>stderr</code>), automating deeply nested background jobs via <code>cron</code>, and securely chaining complex logic via explicit piping.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#linux-bash-shell-automation-execution-and-daemons">Linux Bash Shell: Automation, Execution, and Daemons</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#1-configuration-windows--linux">1. Configuration (Windows &amp; Linux)</a></li>
+<li><a href="#2-writing-basic-scripts-piping--execution-logic">2. Writing Basic Scripts (Piping &amp; Execution Logic)</a></li>
+<li><a href="#3-pre-execution-commands-permissions--validation">3. Pre-execution Commands (Permissions &amp; Validation)</a></li>
+<li><a href="#4-runtime-commands-cron-automation--daemons">4. Runtime Commands (Cron Automation &amp; Daemons)</a></li>
+<li><a href="#5-debugging-trace-output--path-traps">5. Debugging (Trace Output &amp; Path Traps)</a></li>
+</ul>
+<hr />
+<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
+<p>The <code>bash</code> interpreter executes line-level commands natively interacting with the Linux Kernel.</p>
+<h3 id="unixlinux-environments">Unix/Linux Environments</h3>
+<p>Bash is natively pre-installed on virtually all modern Linux distributions. Verify the specific binary path heavily utilized in script Shebang definitions.</p>
+<div class="codehilite"><pre><span></span><code>which<span class="w"> </span>bash
+<span class="c1"># Output typically identifies exclusively as /bin/bash or /usr/bin/bash</span>
+</code></pre></div>
+
+<h3 id="windows-wsl-convergence">Windows (WSL Convergence)</h3>
+<p>Windows relies explicitly on the Windows Subsystem for Linux (WSL) to operate a native bash interpreter. Executing a standard terminal window is insufficient.</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Open an elevated PowerShell terminal and install real Linux kernels directly</span>
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span> 
+<span class="c"># Proceed to spawn native Bash sessions inside the Windows Host natively</span>
+<span class="n">wsl</span>
+</code></pre></div>
+
+<hr />
+<h2 id="2-writing-basic-scripts-piping-execution-logic">2. Writing Basic Scripts (Piping &amp; Execution Logic)</h2>
+<p>Unix strongly adheres to a modular operational logic—every functional program exists to do one singular thing perfectly and output standard text strings capable of chaining downstream into subsequent programs.</p>
+<h3 id="standard-streams-and-piping">Standard Streams and Piping</h3>
+<p>Every bash process boots with three strictly enforced file descriptors:
+1. <code>stdin (0)</code>: Input stream via keyboard or incoming pipe logic.
+2. <code>stdout (1)</code>: Successful execution output text.
+3. <code>stderr (2)</code>: Catastrophic failure messages and localized errors.</p>
+<p>The Pipe operator (<code>|</code>) routes the <code>stdout</code> of the left process identically into the <code>stdin</code> of the right process.</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># Shebang line enforces interpreter targeting regardless of terminal state</span>
+
+<span class="c1"># Example: Read a 5GB log, pipe it to grep filtering strictly for &quot;ERROR&quot;, </span>
+<span class="c1"># then pipe to wc to count the absolute numerical volume of failures.</span>
+cat<span class="w"> </span>/var/log/syslog<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;ERROR&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+
+<span class="c1"># Appending logic onto the end of a physical file</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Automation process concluded at </span><span class="k">$(</span>date<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/opt/scripts/status.log
+
+<span class="c1"># Rerouting catastrophic errors (stderr descriptor 2) silently into the void (/dev/null) </span>
+<span class="c1"># to ensure cleaner explicit terminal interfaces.</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>/tmp/orphaned_cache<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>/dev/null
+</code></pre></div>
+
+<h3 id="strict-mode-scripts">Strict Mode Scripts</h3>
+<p>Industrial scripts MUST exit sequentially upon failure explicitly to prevent cascading infrastructure damage.</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="nb">set</span><span class="w"> </span>-e<span class="w">  </span><span class="c1"># Immediate exit if any downstream command returns a non-zero exit code.</span>
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail<span class="w"> </span><span class="c1"># Catch failures buried recursively inside complex pipe strings.</span>
+<span class="nb">set</span><span class="w"> </span>-u<span class="w">  </span><span class="c1"># Throw hard errors upon evaluating undefined environment variables.</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3-pre-execution-commands-permissions-validation">3. Pre-execution Commands (Permissions &amp; Validation)</h2>
+<p>Bash scripts generated natively on text editors or Windows physical machines possess heavily flawed operational constraints preventing immediate execution. </p>
+<h3 id="the-execution-bit-constraints">The Execution Bit Constraints</h3>
+<p>By default, creating a raw file mandates the file purely act as raw text devoid of program authorization. The physical execution bit must be mapped over via the Kernel.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Verify absolute permissions</span>
+ls<span class="w"> </span>-la<span class="w"> </span>script.sh
+<span class="c1"># Requires +x execution bindings logically </span>
+chmod<span class="w"> </span>+x<span class="w"> </span>script.sh
+</code></pre></div>
+
+<h3 id="carriage-return-translation">Carriage Return Translation</h3>
+<p>Files originating heavily localized on Windows architecture retain <code>\r\n</code> line endings. Linux strictly executes based on <code>\n</code>. Executing Windows-made bash scripts routinely throws explicit invisible character evaluations: <code>bash: ./script.sh: /bin/bash^M: bad interpreter</code>. </p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Install tool capable of ripping Windows formatting off natively</span>
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>dos2unix
+dos2unix<span class="w"> </span>script.sh
+</code></pre></div>
+
+<hr />
+<h2 id="4-runtime-commands-cron-automation-daemons">4. Runtime Commands (Cron Automation &amp; Daemons)</h2>
+<p>Deploying a bash script operationally relies on abstracting its execution out to the system supervisor background processes.</p>
+<h3 id="daemon-execution-management">Daemon Execution Management</h3>
+<p>Executing a heavy logic background script physically disconnected from the SSH terminal limits exposure to random drops.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Execute independent physical processes dropping SIGHUP triggers</span>
+nohup<span class="w"> </span>./long_running_job.sh<span class="w"> </span>&gt;<span class="w"> </span>process.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p><em>The <code>2&gt;&amp;1</code> operator merges <code>stderr</code> actively back into <code>stdout</code> for unified single-file log streaming.</em></p>
+<h3 id="the-cron-scheduler">The Cron Scheduler</h3>
+<p>System automation operates completely heavily relying on <code>crond</code>. Modifying the execution tables dictates explicit frequency.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Access user-specific tables natively</span>
+crontab<span class="w"> </span>-e
+</code></pre></div>
+
+<p><em>The strict syntax evaluates purely chronologically:</em> <code>[Minute] [Hour] [Day of Month] [Month] [Day of Week]</code></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Execute strictly at 3:00 AM absolutely every single day.</span>
+<span class="m">0</span><span class="w"> </span><span class="m">3</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/opt/scripts/database_backup.sh<span class="w"> </span>&gt;&gt;<span class="w"> </span>/var/log/db_backup.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+<span class="c1"># Execute strictly every 15 minutes globally.</span>
+*/15<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/opt/scripts/health_check.sh
+</code></pre></div>
+
+<hr />
+<h2 id="5-debugging-trace-output-path-traps">5. Debugging (Trace Output &amp; Path Traps)</h2>
+<p>Due to its interpreted nature lacking dynamic breakpoints within CLI terminals natively, testing logic strictly demands raw variable outputting execution tracing. </p>
+<h3 id="internal-environment-tracing">Internal Environment Tracing</h3>
+<p>Adding <code>-x</code> physically forces the Bash engine to broadcast the absolute evaluation of every single line directly onto standard output dynamically alongside the execution.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Execute in explicit trace mode over standard script logic</span>
+bash<span class="w"> </span>-x<span class="w"> </span>script.sh
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># Expected output behavior exposing the dynamic variable binding directly:</span>
+<span class="o">+</span><span class="w"> </span><span class="n">DB_HOST</span><span class="o">=</span><span class="n">postgres</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">net</span>
+<span class="o">+</span><span class="w"> </span><span class="n">echo</span><span class="w"> </span><span class="s1">&#39;Connecting strictly to postgres.internal.net&#39;</span>
+<span class="n">Connecting</span><span class="w"> </span><span class="n">strictly</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">postgres</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">net</span>
+</code></pre></div>
+
+<h3 id="path-variables-cron-failures">Path Variables &amp; Cron Failures</h3>
+<p>The absolute classic pitfall associated exclusively with automation natively involves executing flawlessly from the SSH console, yet strictly failing when queued locally by <code>cron</code>. 
+* <strong>The Root Cause:</strong> The interactive shell dynamically maps <code>/usr/local/bin</code> via <code>.bashrc</code>. The isolated local <code>cron</code> daemon natively executes explicitly mapping a heavily stripped <code>$PATH</code>, completely omitting locally installed tools (like Node, Python packages, etc.).
+* <strong>The Resolution:</strong> Absolute operational paths must be implemented uniformly across the bash file natively.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># FAILURE PRONE (Assumes &#39;python3&#39; and &#39;docker&#39; map cleanly to PATH)</span>
+python3<span class="w"> </span>manage.py
+docker<span class="w"> </span>restart<span class="w"> </span>web_server
+
+<span class="c1"># OPERATIONAL STANDARD (Absolute binaries physically referenced)</span>
+/usr/bin/python3<span class="w"> </span>/opt/app/manage.py
+/usr/bin/docker<span class="w"> </span>restart<span class="w"> </span>web_server
+</code></pre></div></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
