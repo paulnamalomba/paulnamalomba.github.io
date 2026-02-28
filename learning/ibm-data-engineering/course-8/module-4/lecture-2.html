@@ -28,7 +28,9 @@
           primaryBorderColor: '#2a4080',
           lineColor: '#f0b429',
           secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340'
+          tertiaryColor: '#1a2340',
+          fontSize: '16px',
+          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
         }
       });
     });
@@ -40,9 +42,30 @@
       <span class="brand">IBM Data Engineering</span>
       <nav>
         <a href="../../index.html">Hub</a>
-        <a href="../index.html">Course 8</a>
-        <a href="index.html">Module 4</a>
-        <a href="#" class="active">Lecture 2</a>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Course 8: ETL and Data Pipelines ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/index.html" class="active">Course 8: ETL and Data Pipelines</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Module 4 ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/module-4/index.html" class="active">Module 4</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#"  class="active">Lecture 2 ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/module-4/lecture-1.html">Lecture 1: Apache Kafka Overview & Architecture</a>
+            <a href="../../course-8/module-4/lecture-2.html" class="active">Lecture 2: Distributed Event Streaming Platform Components</a>
+            <a href="../../course-8/module-4/lecture-3.html">Lecture 3: Building Event Streaming Pipelines Using Kafka</a>
+            <a href="../../course-8/module-4/lecture-4.html">Lecture 4: Kafka Streaming Process & Stream Topology</a>
+          </div>
+        </div>
       </nav>
     </div>
 
@@ -94,7 +117,7 @@ public record PatientVitalsEvent(
 <p>Event streaming is the continuous transportation of these events from a source (sensors, databases, applications) to a destination (data warehouses, file systems, other applications).</p>
 <p>In a naive architecture, engineers might build direct ETL pipelines between every source and destination using various protocols (HTTP, FTP, JDBC). As the system scales, this results in an unmaintainable "spaghetti" architecture.</p>
 <h3>Architectural Comparison</h3>
-<div class="mermaid-container" style="background:var(--bg-surface); padding:1rem; border-radius:var(--radius); margin: 1rem 0; overflow-x: auto; display:flex; justify-content:center;"><pre class="mermaid">graph TD
+<div class="mermaid-container"><pre class="mermaid">graph TD
     subgraph "The N-to-N Problem (Without ESP)"
         Source1 --&gt; Dest1
         Source1 --&gt; Dest2
@@ -159,7 +182,7 @@ public record PatientVitalsEvent(
 <p><strong>Consumption (Dispatcher):</strong> Manages subscriber offsets and efficiently pushes or allows pulling of events to the destinations.</p>
 </li>
 </ol>
-<div class="mermaid-container" style="background:var(--bg-surface); padding:1rem; border-radius:var(--radius); margin: 1rem 0; overflow-x: auto; display:flex; justify-content:center;"><pre class="mermaid">sequenceDiagram
+<div class="mermaid-container"><pre class="mermaid">sequenceDiagram
     participant Producer (Source)
     box Event Broker
         participant Ingester
