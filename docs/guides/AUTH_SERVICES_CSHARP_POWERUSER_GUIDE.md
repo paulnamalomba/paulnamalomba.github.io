@@ -21,7 +21,7 @@ Enterprise authentication services provide centralized identity management, sing
 - [AUTH\_SERVICES PowerUser Guide (C#)](#auth_services-poweruser-guide-c)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Quickstart](#quickstart)
+  - [Quickstarts](#quickstarts)
   - [Key Concepts](#key-concepts)
   - [Configuration and Best Practices](#configuration-and-best-practices)
   - [Security Considerations](#security-considerations)
@@ -36,7 +36,7 @@ Enterprise authentication services provide centralized identity management, sing
 
 ---
 
-## Quickstart
+## Quickstarts
 
 1. **Install packages**: `dotnet add package Microsoft.Identity.Web` and `dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer`
 2. **Configure identity provider**: Register application in Azure AD, Okta, Auth0, or Keycloak; obtain client ID, tenant ID, and client secret

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 4: Kafka Streaming Process & Stream Topology</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style.css">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+  
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      hljs.highlightAll();
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#131a2e',
+          primaryTextColor: '#e8edf5',
+          primaryBorderColor: '#2a4080',
+          lineColor: '#f0b429',
+          secondaryColor: '#0d1321',
+          tertiaryColor: '#1a2340'
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="page-wrapper" id="content">
+    <div class="header-bar">
+      <span class="brand">IBM Data Engineering</span>
+      <nav>
+        <a href="../../index.html">Hub</a>
+        <a href="../index.html">Course 8</a>
+        <a href="index.html">Module 4</a>
+        <a href="#" class="active">Lecture 4</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
+      <a href="../index.html">Course 8</a> <span>&rsaquo;</span> 
+      <a href="index.html">Module 4</a> <span>&rsaquo;</span> 
+      Lecture 4
+    </div>
+
+    <h1 class="fade-in">Kafka Streaming Process & Stream Topology</h1>
+    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
+      Module 4, Lecture 4
+    </p>
+
+
+<p class="fade-in fade-in-d2">While transporting data from Point A to Point B is a foundational engineering task, real-world systems—whether it’s parsing complex finite element data or handling university enrollments—rarely just <em>move</em> data. They must transform, aggregate, and enhance it in transit.</p>
+<p class="fade-in fade-in-d2">This lecture shifts the focus from "dumb pipes" to smart, real-time computational pipelines using the <strong>Kafka Streams API</strong>.</p>
+<hr/>
+<div class="section-card fade-in fade-in-d2"><h2>1. The "Ad Hoc" Anti-Pattern</h2>
+<p>Before adopting a dedicated stream processing framework, engineers often default to the "Ad Hoc" approach.</p>
+<p>Suppose you need to read raw weather JSON, filter out normal temperatures, and publish only "extreme weather" events to a dashboard.</p>
+<ul>
+<li><strong>The Naive Design:</strong> You write a background service with a <code>while(true)</code> loop. It spins up a Kafka Consumer to read from <code>raw_weather_topic</code>, applies an <code>if</code> statement to check the temperature, and uses a Kafka Producer to send the result to <code>processed_weather_topic</code>.</li>
+</ul>
+<p>Writing bespoke consumer-producer loops for every data transformation works for a single topic, but it is a fantastic way to introduce unmanageable tech debt when scaling an engineering team. Handling failure states, stateful aggregations (like "average temperature over the last 5 minutes"), and exactly-once processing becomes an algorithmic nightmare.</p>
+<hr/>
+</div><div class="section-card fade-in fade-in-d3"><h2>2. Enter Kafka Streams API</h2>
+<p>The Kafka Streams API is a client library designed specifically to solve the complexities of event-driven data processing.</p>
+<ul>
+<li><strong>Native Integration:</strong> Both its input and output are strictly Kafka topics.</li>
+<li><strong>Record-by-Record:</strong> It processes events individually as they arrive (millisecond latency), rather than waiting for micro-batches.</li>
+<li><strong>Exactly-Once Semantics (EOS):</strong> Through a combination of transactional producers and consumer offset management, it guarantees that even if a node crashes mid-computation, a record is processed and reflected in the state store exactly once.</li>
+</ul>
+<hr/>
+</div><div class="section-card fade-in fade-in-d4"><h2>3. Stream Processing Topology (The DAG)</h2>
+<p>At its core, the Kafka Streams API abstracts your processing logic into a <strong>computational graph</strong> called a Stream Processing Topology.</p>
+<p>Mathematically, this topology is a Directed Acyclic Graph (DAG), denoted as $G = (V, E)$, where:</p>
+<ul>
+<li>The vertices $V$ are the <strong>Stream Processors</strong> (the computational logic).</li>
+<li>The edges $E$ are the <strong>I/O Streams</strong> (the data flowing between nodes).</li>
+</ul>
+<p>There are three primary types of processors in this DAG:</p>
+<ol>
+<li><strong>Source Processor:</strong> The entry point. It has no upstream nodes. It acts as an embedded consumer, continuously reading records from one or more Kafka topics and pushing them into the topology.</li>
+<li><strong>Stream Processor:</strong> The intermediary nodes. These apply data transformations—mapping, filtering, formatting, or joining streams together.</li>
+<li><strong>Sink Processor:</strong> The exit point. It has no downstream nodes. It acts as an embedded producer, publishing the final transformed records back into a new Kafka topic.</li>
+</ol>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>4. Technical Implementation in .NET/C</h2>
+<p>Natively, Kafka Streams is a Java library. However, in the .NET ecosystem, the gold standard for achieving the exact same topological processing is <strong><code>Streamiz.Kafka.Net</code></strong> (a highly mature, open-source C# port of the Kafka Streams API).</p>
+<p>Here is how you would programmatically construct the extreme weather topology using C#:</p>
+<pre><code class="language-csharp">using System;
+using System.Threading.Tasks;
+using Streamiz.Kafka.Net;
+using Streamiz.Kafka.Net.SerDes;
+using Streamiz.Kafka.Net.Stream;
+
+public class WeatherTopologyManager
+{
+    public static async Task StartTopologyAsync()
+    {
+        // 1. Configure the Stream Application
+        var config = new StreamConfig&lt;StringSerDes, StringSerDes&gt;
+        {
+            ApplicationId = "weather-processor-app",
+            BootstrapServers = "localhost:9092",
+            AutoOffsetReset = Confluent.Kafka.AutoOffsetReset.Earliest
+        };
+
+        // 2. Build the DAG Topology
+        StreamBuilder builder = new StreamBuilder();
+
+        // SOURCE NODE: Consume from raw_weather_topic
+        builder.Stream&lt;string, string&gt;("raw_weather_topic")
+
+               // STREAM PROCESSOR NODE: Filter logic
+               .Filter((key, weatherJson) =&gt; 
+               {
+                   // Assume a hypothetical ParseAndCheck method
+                   return ParseAndCheckHighTemp(weatherJson); 
+               })
+
+               // SINK NODE: Publish to processed_weather_topic
+               .To("processed_weather_topic");
+
+        Topology topology = builder.Build();
+
+        // 3. Execute the Stream
+        KafkaStream stream = new KafkaStream(topology, config);
+
+        Console.CancelKeyPress += (o, e) =&gt; { stream.Dispose(); };
+        await stream.StartAsync();
+    }
+
+    private static bool ParseAndCheckHighTemp(string json)
+    {
+        // Implementation to deserialize JSON and check temp &gt; threshold
+        return true; 
+    }
+}
+
+</code></pre>
+<hr/>
+<h3>Architectural Synthesis</h3>
+<p>By utilizing a Stream Builder topology, you offload the heavy lifting of network I/O, threading models, and fault tolerance to the underlying library. You define the <em>logic</em> of the pipeline, and the API manages the <em>execution</em>.</p>
+<p>When transitioning from the high-throughput batch runs of your structural engineering software to the real-time needs of web systems, this DAG-based streaming model is what prevents database locks and API timeouts.</p></div>
+
+    <div class="page-footer fade-in fade-in-d5">
+      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+    </div>
+  </div>
+</body>
+</html>

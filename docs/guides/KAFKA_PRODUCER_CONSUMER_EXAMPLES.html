@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kafka Producer Consumer Examples - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="distributed-event-streaming-platform-components">Distributed Event Streaming Platform Components</h1>
+<p><br>
+<strong>Last updated</strong>: February 28, 2025<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>this document serves to ddescribe the instantiation of prudoducer consumer archetecture for Apache Kafka, which is a distributed message/streaming platform.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#distributed-event-streaming-platform-components">Distributed Event Streaming Platform Components</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a><ul>
+<li><a href="#1-prerequisites">1. Prerequisites</a></li>
+<li><a href="#2-the-producer-fire-and-forget-or-acknowledge">2. The Producer: Fire and Forget (or Acknowledge)</a></li>
+<li><a href="#3-the-consumer-the-infinite-polling-loop">3. The Consumer: The Infinite Polling Loop</a></li>
+<li><a href="#architectural-considerations-for-the-pipeline">Architectural Considerations for the Pipeline</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="1-prerequisites">1. Prerequisites</h3>
+<h1 id="implementing-a-robust-event-streaming-layer-in-c-relies-almost-exclusively-on-the-confluentkafka-library-it-is-a-highly-optimized-net-wrapper-around-the-native-c-librdkafka-library-meaning-it-delivers-the-raw-throughput-required-for-high-volume-backend-systems-while-exposing-a-clean-asynchronous-c-api">Implementing a robust event streaming layer in C# relies almost exclusively on the <code>Confluent.Kafka</code> library. It is a highly optimized .NET wrapper around the native C <code>librdkafka</code> library, meaning it delivers the raw throughput required for high-volume backend systems while exposing a clean, asynchronous C# API.</h1>
+<p>First, you need the NuGet package.</p>
+<div class="codehilite"><pre><span></span><code>dotnet<span class="w"> </span>add<span class="w"> </span>package<span class="w"> </span>Confluent.Kafka
+</code></pre></div>
+
+<p>To keep the data model immutable and thread-safe, we will define our event using a C# <code>record</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">EnrollmentEvent</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">StudentId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">CourseCode</span><span class="p">,</span><span class="w"> </span><span class="n">DateTimeOffset</span><span class="w"> </span><span class="n">Timestamp</span><span class="p">);</span>
+</code></pre></div>
+
+<hr />
+<h3 id="2-the-producer-fire-and-forget-or-acknowledge">2. The Producer: Fire and Forget (or Acknowledge)</h3>
+<p>The Producer's job is to serialize the event and route it to the correct Kafka broker and topic. For critical backend pipelines, we use <code>ProduceAsync</code> to ensure we receive a delivery acknowledgment (an offset) from the broker without blocking the calling thread.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Confluent.Kafka</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">KafkaEventProducer</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">_topic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;enrollment-requests&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ProducerConfig</span><span class="w"> </span><span class="n">_config</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">KafkaEventProducer</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">bootstrapServers</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ProducerConfig</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">BootstrapServers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bootstrapServers</span><span class="p">,</span>
+<span class="w">            </span><span class="c1">// Acks.All ensures the leader AND all replicas acknowledge the message.</span>
+<span class="w">            </span><span class="c1">// Slower, but prevents data loss in a distributed cluster.</span>
+<span class="w">            </span><span class="n">Acks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Acks</span><span class="p">.</span><span class="n">All</span><span class="w"> </span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">PublishEnrollmentAsync</span><span class="p">(</span><span class="n">EnrollmentEvent</span><span class="w"> </span><span class="n">evt</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// The producer handles unmanaged resources, so &#39;using&#39; is mandatory </span>
+<span class="w">        </span><span class="c1">// to prevent catastrophic memory leaks in a long-running service.</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">producer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ProducerBuilder</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_config</span><span class="p">).</span><span class="n">Build</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">try</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Message</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">evt</span><span class="p">.</span><span class="n">StudentId</span><span class="p">,</span><span class="w"> </span><span class="c1">// Hashing by StudentId ensures chronological order per student</span>
+<span class="w">                </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Serialize</span><span class="p">(</span><span class="n">evt</span><span class="p">)</span>
+<span class="w">            </span><span class="p">};</span>
+
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">deliveryResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">producer</span><span class="p">.</span><span class="n">ProduceAsync</span><span class="p">(</span><span class="n">_topic</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Delivered &#39;{deliveryResult.Value}&#39; to &#39;{deliveryResult.TopicPartitionOffset}&#39;&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">ProduceException</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Delivery failed: {e.Error.Reason}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// In a production pipeline, this is where you route to a Dead Letter Queue (DLQ)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h3 id="3-the-consumer-the-infinite-polling-loop">3. The Consumer: The Infinite Polling Loop</h3>
+<p>Unlike HTTP endpoints that passively wait for requests, Kafka Consumers actively poll the broker for new data. They are designed to run continuously in a background service.</p>
+<p>A critical concept here is the <code>GroupId</code>. Kafka tracks which messages have been read based on this group ID. If a consumer crashes and restarts, it resumes from the last committed offset for its group.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Confluent.Kafka</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">KafkaEventConsumer</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">_topic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;enrollment-requests&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ConsumerConfig</span><span class="w"> </span><span class="n">_config</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">KafkaEventConsumer</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">bootstrapServers</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">groupId</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConsumerConfig</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">BootstrapServers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bootstrapServers</span><span class="p">,</span>
+<span class="w">            </span><span class="n">GroupId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">groupId</span><span class="p">,</span>
+<span class="w">            </span><span class="c1">// If there is no previous offset, start reading from the earliest available message</span>
+<span class="w">            </span><span class="n">AutoOffsetReset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AutoOffsetReset</span><span class="p">.</span><span class="n">Earliest</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">EnableAutoCommit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="c1">// For absolute control, set to false and commit manually after processing</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">StartConsuming</span><span class="p">(</span><span class="n">CancellationToken</span><span class="w"> </span><span class="n">cancellationToken</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConsumerBuilder</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_config</span><span class="p">).</span><span class="n">Build</span><span class="p">();</span>
+<span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">_topic</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">try</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">IsCancellationRequested</span><span class="p">)</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// The Consume method blocks until a message is available or the token is canceled.</span>
+<span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">consumeResult</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">consumer</span><span class="p">.</span><span class="n">Consume</span><span class="p">(</span><span class="n">cancellationToken</span><span class="p">);</span>
+
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Processing enrollment for Student: {consumeResult.Message.Key}&quot;</span><span class="p">);</span>
+
+<span class="w">                </span><span class="c1">// Processing logic goes here...</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">OperationCanceledException</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// Graceful exit triggered by the cancellation token.</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Closing consumer gracefully.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">finally</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// This ensures the consumer leaves the group cleanly and partition locks are released.</span>
+<span class="w">            </span><span class="c1">// Without this, the broker waits for a timeout before reassigning partitions.</span>
+<span class="w">            </span><span class="n">consumer</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span><span class="w"> </span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h3 id="architectural-considerations-for-the-pipeline">Architectural Considerations for the Pipeline</h3>
+<ul>
+<li><strong>Partitioning Keys:</strong> In the producer code, <code>evt.StudentId</code> is explicitly set as the <code>Key</code>. Kafka guarantees order <em>only</em> within a specific partition. By keying on the <code>StudentId</code>, you ensure that all events for a specific student go to the same partition and are processed sequentially.</li>
+<li><strong>Idempotency:</strong> A dry reality of distributed systems is that the network will eventually lie to you. The producer might send a message, the broker might save it, but the acknowledgment fails. The producer will retry, resulting in a duplicate. Your downstream database logic must be idempotent (e.g., using <code>UPSERT</code> statements) to handle this gracefully.</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
