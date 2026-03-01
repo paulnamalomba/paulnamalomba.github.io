@@ -665,13 +665,15 @@ git stash apply stash@{1}
 ### 7.7 Clean (remove untracked files/directories)
 
 Preview what would be removed:
+
 ```bash
 git clean -nd
 ```
 
 Remove untracked files + directories:
+
 ```bash
-git clean -fd
+git clean -fd 
 ```
 
 ---
@@ -679,25 +681,31 @@ git clean -fd
 ## 8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)
 
 ### 8.1 Remotes
+
 ```bash
-git remote -v
+git remote -v # list remotes and URLs
 
-git remote add upstream git@github.com:UPSTREAM_OWNER/REPO.git
+git remote add origin git@github.com:OWNER/REPO.git # add a remote named "origin"
 
-git remote set-url origin git@github.com:OWNER/REPO.git
+git remote add upstream git@github.com:UPSTREAM_OWNER/REPO.git # if you forked and want to track the main repo
+
+git remote set-url origin git@github.com:OWNER/REPO.git # change URL of origin
 ```
 
 Rename a remote:
+
 ```bash
 git remote rename origin github
 ```
 
 Remove a remote:
+
 ```bash
 git remote remove upstream
 ```
 
 Prune deleted remote branches:
+
 ```bash
 git fetch --prune
 ```
@@ -708,27 +716,30 @@ git fetch --prune
 - `git pull`: fetch + integrate (merge or rebase depending on config)
 
 ```bash
-git fetch origin
+git fetch origin # get latest from origin, but stay on current branch
 
-git pull
-# or explicitly
-git pull --rebase
+git pull # implicitly does fetch + merge/rebase based on config
+
+git pull --rebase # explicitly
 ```
 
 ### 8.3 Fork workflow
 
 When working on a fork:
+
 - `origin`: your fork
 - `upstream`: the main repository
 
 ```bash
-git fetch upstream
-git switch main
-git merge upstream/main
-# or
-git rebase upstream/main
+git fetch upstream # get latest from main repo
 
-git push origin main
+git switch main # or master, depending on default branch name
+
+git merge upstream/main # or rebase if you prefer a cleaner history
+
+git rebase upstream/main # or keep your commits on top of the latest main
+
+git push origin main # update your fork's main branch
 ```
 
 ---
@@ -738,23 +749,27 @@ git push origin main
 ### 9.1 Tags
 
 Lightweight tag:
+
 ```bash
-git tag v1.2.3
+git tag v1.2.3 
 ```
 
 Annotated tag (recommended):
+
 ```bash
 git tag -a v1.2.3 -m "Release v1.2.3"
 ```
 
 Push tags:
+
 ```bash
-git push --tags
-# or a specific tag
-git push origin v1.2.3
+git push --tags # pushes all tags
+
+git push origin v1.2.3 # push a specific tag
 ```
 
 Describe the current commit using the nearest tag:
+
 ```bash
 git describe --tags --always
 ```
@@ -762,21 +777,25 @@ git describe --tags --always
 ### 9.2 GitHub releases (gh)
 
 Create a release (can upload assets too):
+
 ```bash
 gh release create v1.2.3 --title "v1.2.3" --notes "Key changes..."
 ```
 
 List releases:
+
 ```bash
 gh release list
 ```
 
 Upload an asset:
+
 ```bash
 gh release upload v1.2.3 ./dist/app.zip
 ```
 
 Download release assets:
+
 ```bash
 gh release download v1.2.3
 ```
@@ -788,59 +807,56 @@ gh release download v1.2.3
 ### 10.1 Worktrees (multiple branches, one clone)
 
 Worktrees let you check out multiple branches in parallel without stashing:
+
 ```bash
-# from repo root
-git worktree add ../my-repo-hotfix hotfix/urgent
+git worktree add ../my-repo-hotfix hotfix/urgent # from repo root
 
-# list worktrees
-git worktree list
+git worktree list # list worktrees
 
-# remove when done
-git worktree remove ../my-repo-hotfix
+git worktree remove ../my-repo-hotfix # remove when done
 ```
 
 ### 10.2 Submodules (use only if necessary)
 
 Add a submodule:
+
 ```bash
 git submodule add git@github.com:OWNER/dep-repo.git deps/dep-repo
 ```
 
 Clone repo with submodules:
+
 ```bash
 git clone --recurse-submodules git@github.com:OWNER/REPO.git
 ```
 
 Update submodules:
+
 ```bash
 git submodule update --init --recursive
 ```
 
 ### 10.3 Sparse checkout (huge monorepos)
+
 ```bash
 git clone --filter=blob:none --no-checkout git@github.com:OWNER/REPO.git
 cd REPO
 
-git sparse-checkout init --cone
-git sparse-checkout set path/to/subdir another/subdir
+git sparse-checkout init --cone # use cone mode for simple directory patterns
+git sparse-checkout set path/to/subdir another/subdir # 
 
-git checkout
+git checkout # checkout the default branch with only the specified paths
 ```
 
 ### 10.4 Bisect (find the commit that broke something)
 
 ```bash
-git bisect start
-git bisect bad
-# choose a known good commit
-git bisect good <good_commit_sha>
+git bisect start # start bisect session
+git bisect bad # (HEAD is bad; the bug is present here)
 
-# Git checks out a midpoint; test it, then mark:
-# git bisect good
-# or git bisect bad
+git bisect good <good_commit_sha> # choose a known good commit
 
-# When finished:
-git bisect reset
+git bisect reset # end bisect session and return to original HEAD when finished
 ```
 
 ### 10.5 Rewrite history (danger zone)
@@ -867,14 +883,14 @@ git config core.hooksPath .githooks
 If you must version large binaries (datasets, PSDs, large media), use Git LFS instead of bloating normal Git history.
 
 ```bash
-# one-time install per machine (requires git-lfs installed)
-git lfs install
+git lfs install # one-time install per machine (requires git-lfs installed)
 
-# track patterns (writes to .gitattributes)
+# below: track patterns (writes to .gitattributes)
 git lfs track "*.psd"
 git lfs track "*.mp4"
 
-git add .gitattributes
+# below: add to gitattributes and commit
+git add .gitattributes 
 git commit -m "Configure Git LFS"
 ```
 
@@ -883,91 +899,95 @@ git commit -m "Configure Git LFS"
 ## 11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)
 
 ### 11.1 Repo operations
+
 ```bash
-# view repo in browser
-gh repo view --web
+gh repo view --web # view repo in browser
 
-# clone via gh (uses your auth settings)
-gh repo clone OWNER/REPO
+gh repo clone OWNER/REPO # clone via gh (uses your auth settings)
 
-# list your repos
-gh repo list --limit 50
+gh repo list --limit 50 # list your repos
 
-# sync a fork from upstream (default branch)
-gh repo sync OWNER/FORK_REPO
+gh repo sync OWNER/FORK_REPO # sync a fork from upstream (default branch)
 ```
 
 ### 11.2 Pull Requests
+
 ```bash
-# create PR from current branch
-gh pr create
+gh pr create # create PR from current branch
 
-# list PRs
-gh pr list
+gh pr list # list PRs
 
-# view PR details
-gh pr view 123
+gh pr view 123 # view PR details
 
-# checkout a PR locally
-gh pr checkout 123
+gh pr checkout 123 # checkout a PR locally
 
-# merge a PR (respects repo settings)
-gh pr merge 123
+gh pr merge 123 # merge a PR (respects repo settings)
 ```
 
 Review a PR:
+
 ```bash
 gh pr review 123 --approve
+
 # or request changes
 # gh pr review 123 --request-changes -b "Reason..."
 ```
 
 See PR status for your branches:
+
 ```bash
 gh pr status
 ```
 
 ### 11.3 Issues
-```bash
-gh issue create
 
-gh issue list
+```bash 
+gh issue create # create a new issue interactively
 
-gh issue view 42
+gh issue list # list issues
+
+gh issue view 42 # view issue details
 ```
 
 ### 11.4 Workflows and runs (GitHub Actions)
 
 List workflows:
+
 ```bash
 gh workflow list
 ```
 
 View a workflow definition:
+
 ```bash
 gh workflow view "Deploy" --yaml
 ```
 
 Run a workflow manually (workflow_dispatch):
+
 ```bash
 gh workflow run "Deploy" -f environment=prod
 ```
 
 Watch runs:
+
 ```bash
 gh run list --limit 20
 
 gh run watch
+
 # or view a specific run
 gh run view <run_id> --log
 ```
 
 Re-run a failed workflow:
+
 ```bash
 gh run rerun <run_id>
 ```
 
 Cancel a run:
+
 ```bash
 gh run cancel <run_id>
 ```
@@ -975,12 +995,14 @@ gh run cancel <run_id>
 ### 11.5 Secrets and variables (for CI/CD)
 
 Set a repository secret:
+
 ```bash
 # reads from stdin
 printf "%s" "MY_SECRET_VALUE" | gh secret set MY_SECRET
 ```
 
 List secrets:
+
 ```bash
 gh secret list
 ```

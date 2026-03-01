@@ -611,17 +611,19 @@ git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre></div>
 
 <p>Remove untracked files + directories:</p>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clean<span class="w"> </span>-fd
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clean<span class="w"> </span>-fd<span class="w"> </span>
 </code></pre></div>
 
 <hr />
 <h2 id="8-remotes-and-collaboration-fetchpullpush-forks-upstream">8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)</h2>
 <h3 id="81-remotes">8.1 Remotes</h3>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>-v
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>-v<span class="w"> </span><span class="c1"># list remotes and URLs</span>
 
-git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:UPSTREAM_OWNER/REPO.git
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git<span class="w"> </span><span class="c1"># add a remote named &quot;origin&quot;</span>
 
-git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:UPSTREAM_OWNER/REPO.git<span class="w"> </span><span class="c1"># if you forked and want to track the main repo</span>
+
+git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git<span class="w"> </span><span class="c1"># change URL of origin</span>
 </code></pre></div>
 
 <p>Rename a remote:</p>
@@ -641,31 +643,35 @@ git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w">
 <li><code>git fetch</code>: update your view of the remote; does not change your working files</li>
 <li><code>git pull</code>: fetch + integrate (merge or rebase depending on config)</li>
 </ul>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>origin
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>origin<span class="w"> </span><span class="c1"># get latest from origin, but stay on current branch</span>
 
-git<span class="w"> </span>pull
-<span class="c1"># or explicitly</span>
-git<span class="w"> </span>pull<span class="w"> </span>--rebase
+git<span class="w"> </span>pull<span class="w"> </span><span class="c1"># implicitly does fetch + merge/rebase based on config</span>
+
+git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span><span class="c1"># explicitly</span>
 </code></pre></div>
 
 <h3 id="83-fork-workflow">8.3 Fork workflow</h3>
-<p>When working on a fork:
-- <code>origin</code>: your fork
-- <code>upstream</code>: the main repository</p>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>upstream
-git<span class="w"> </span>switch<span class="w"> </span>main
-git<span class="w"> </span>merge<span class="w"> </span>upstream/main
-<span class="c1"># or</span>
-git<span class="w"> </span>rebase<span class="w"> </span>upstream/main
+<p>When working on a fork:</p>
+<ul>
+<li><code>origin</code>: your fork</li>
+<li><code>upstream</code>: the main repository</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>upstream<span class="w"> </span><span class="c1"># get latest from main repo</span>
 
-git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main
+git<span class="w"> </span>switch<span class="w"> </span>main<span class="w"> </span><span class="c1"># or master, depending on default branch name</span>
+
+git<span class="w"> </span>merge<span class="w"> </span>upstream/main<span class="w"> </span><span class="c1"># or rebase if you prefer a cleaner history</span>
+
+git<span class="w"> </span>rebase<span class="w"> </span>upstream/main<span class="w"> </span><span class="c1"># or keep your commits on top of the latest main</span>
+
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span><span class="c1"># update your fork&#39;s main branch</span>
 </code></pre></div>
 
 <hr />
 <h2 id="9-tags-releases-and-versioning">9. Tags, Releases, and Versioning</h2>
 <h3 id="91-tags">9.1 Tags</h3>
 <p>Lightweight tag:</p>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>v1.2.3
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>v1.2.3<span class="w"> </span>
 </code></pre></div>
 
 <p>Annotated tag (recommended):</p>
@@ -673,9 +679,9 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 </code></pre></div>
 
 <p>Push tags:</p>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--tags
-<span class="c1"># or a specific tag</span>
-git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.2.3
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--tags<span class="w"> </span><span class="c1"># pushes all tags</span>
+
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.2.3<span class="w"> </span><span class="c1"># push a specific tag</span>
 </code></pre></div>
 
 <p>Describe the current commit using the nearest tag:</p>
@@ -703,14 +709,11 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 <h2 id="10-advanced-git-worktrees-submodules-sparse-checkout-bisect">10. Advanced Git (Worktrees, Submodules, Sparse Checkout, Bisect)</h2>
 <h3 id="101-worktrees-multiple-branches-one-clone">10.1 Worktrees (multiple branches, one clone)</h3>
 <p>Worktrees let you check out multiple branches in parallel without stashing:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># from repo root</span>
-git<span class="w"> </span>worktree<span class="w"> </span>add<span class="w"> </span>../my-repo-hotfix<span class="w"> </span>hotfix/urgent
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>worktree<span class="w"> </span>add<span class="w"> </span>../my-repo-hotfix<span class="w"> </span>hotfix/urgent<span class="w"> </span><span class="c1"># from repo root</span>
 
-<span class="c1"># list worktrees</span>
-git<span class="w"> </span>worktree<span class="w"> </span>list
+git<span class="w"> </span>worktree<span class="w"> </span>list<span class="w"> </span><span class="c1"># list worktrees</span>
 
-<span class="c1"># remove when done</span>
-git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"> </span>../my-repo-hotfix
+git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"> </span>../my-repo-hotfix<span class="w"> </span><span class="c1"># remove when done</span>
 </code></pre></div>
 
 <h3 id="102-submodules-use-only-if-necessary">10.2 Submodules (use only if necessary)</h3>
@@ -730,24 +733,19 @@ git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"
 <div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--filter<span class="o">=</span>blob:none<span class="w"> </span>--no-checkout<span class="w"> </span>git@github.com:OWNER/REPO.git
 <span class="nb">cd</span><span class="w"> </span>REPO
 
-git<span class="w"> </span>sparse-checkout<span class="w"> </span>init<span class="w"> </span>--cone
-git<span class="w"> </span>sparse-checkout<span class="w"> </span><span class="nb">set</span><span class="w"> </span>path/to/subdir<span class="w"> </span>another/subdir
+git<span class="w"> </span>sparse-checkout<span class="w"> </span>init<span class="w"> </span>--cone<span class="w"> </span><span class="c1"># use cone mode for simple directory patterns</span>
+git<span class="w"> </span>sparse-checkout<span class="w"> </span><span class="nb">set</span><span class="w"> </span>path/to/subdir<span class="w"> </span>another/subdir<span class="w"> </span><span class="c1"># </span>
 
-git<span class="w"> </span>checkout
+git<span class="w"> </span>checkout<span class="w"> </span><span class="c1"># checkout the default branch with only the specified paths</span>
 </code></pre></div>
 
 <h3 id="104-bisect-find-the-commit-that-broke-something">10.4 Bisect (find the commit that broke something)</h3>
-<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>bisect<span class="w"> </span>start
-git<span class="w"> </span>bisect<span class="w"> </span>bad
-<span class="c1"># choose a known good commit</span>
-git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span>&lt;good_commit_sha&gt;
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>bisect<span class="w"> </span>start<span class="w"> </span><span class="c1"># start bisect session</span>
+git<span class="w"> </span>bisect<span class="w"> </span>bad<span class="w"> </span><span class="c1"># (HEAD is bad; the bug is present here)</span>
 
-<span class="c1"># Git checks out a midpoint; test it, then mark:</span>
-<span class="c1"># git bisect good</span>
-<span class="c1"># or git bisect bad</span>
+git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span>&lt;good_commit_sha&gt;<span class="w"> </span><span class="c1"># choose a known good commit</span>
 
-<span class="c1"># When finished:</span>
-git<span class="w"> </span>bisect<span class="w"> </span>reset
+git<span class="w"> </span>bisect<span class="w"> </span>reset<span class="w"> </span><span class="c1"># end bisect session and return to original HEAD when finished</span>
 </code></pre></div>
 
 <h3 id="105-rewrite-history-danger-zone">10.5 Rewrite history (danger zone)</h3>
@@ -767,52 +765,44 @@ git<span class="w"> </span>bisect<span class="w"> </span>reset
 
 <h3 id="107-git-lfs-large-files">10.7 Git LFS (large files)</h3>
 <p>If you must version large binaries (datasets, PSDs, large media), use Git LFS instead of bloating normal Git history.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># one-time install per machine (requires git-lfs installed)</span>
-git<span class="w"> </span>lfs<span class="w"> </span>install
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>lfs<span class="w"> </span>install<span class="w"> </span><span class="c1"># one-time install per machine (requires git-lfs installed)</span>
 
-<span class="c1"># track patterns (writes to .gitattributes)</span>
+<span class="c1"># below: track patterns (writes to .gitattributes)</span>
 git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.psd&quot;</span>
 git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.mp4&quot;</span>
 
-git<span class="w"> </span>add<span class="w"> </span>.gitattributes
+<span class="c1"># below: add to gitattributes and commit</span>
+git<span class="w"> </span>add<span class="w"> </span>.gitattributes<span class="w"> </span>
 git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Configure Git LFS&quot;</span>
 </code></pre></div>
 
 <hr />
 <h2 id="11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow">11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)</h2>
 <h3 id="111-repo-operations">11.1 Repo operations</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1"># view repo in browser</span>
-gh<span class="w"> </span>repo<span class="w"> </span>view<span class="w"> </span>--web
+<div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>view<span class="w"> </span>--web<span class="w"> </span><span class="c1"># view repo in browser</span>
 
-<span class="c1"># clone via gh (uses your auth settings)</span>
-gh<span class="w"> </span>repo<span class="w"> </span>clone<span class="w"> </span>OWNER/REPO
+gh<span class="w"> </span>repo<span class="w"> </span>clone<span class="w"> </span>OWNER/REPO<span class="w"> </span><span class="c1"># clone via gh (uses your auth settings)</span>
 
-<span class="c1"># list your repos</span>
-gh<span class="w"> </span>repo<span class="w"> </span>list<span class="w"> </span>--limit<span class="w"> </span><span class="m">50</span>
+gh<span class="w"> </span>repo<span class="w"> </span>list<span class="w"> </span>--limit<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="c1"># list your repos</span>
 
-<span class="c1"># sync a fork from upstream (default branch)</span>
-gh<span class="w"> </span>repo<span class="w"> </span>sync<span class="w"> </span>OWNER/FORK_REPO
+gh<span class="w"> </span>repo<span class="w"> </span>sync<span class="w"> </span>OWNER/FORK_REPO<span class="w"> </span><span class="c1"># sync a fork from upstream (default branch)</span>
 </code></pre></div>
 
 <h3 id="112-pull-requests">11.2 Pull Requests</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1"># create PR from current branch</span>
-gh<span class="w"> </span>pr<span class="w"> </span>create
+<div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span><span class="c1"># create PR from current branch</span>
 
-<span class="c1"># list PRs</span>
-gh<span class="w"> </span>pr<span class="w"> </span>list
+gh<span class="w"> </span>pr<span class="w"> </span>list<span class="w"> </span><span class="c1"># list PRs</span>
 
-<span class="c1"># view PR details</span>
-gh<span class="w"> </span>pr<span class="w"> </span>view<span class="w"> </span><span class="m">123</span>
+gh<span class="w"> </span>pr<span class="w"> </span>view<span class="w"> </span><span class="m">123</span><span class="w"> </span><span class="c1"># view PR details</span>
 
-<span class="c1"># checkout a PR locally</span>
-gh<span class="w"> </span>pr<span class="w"> </span>checkout<span class="w"> </span><span class="m">123</span>
+gh<span class="w"> </span>pr<span class="w"> </span>checkout<span class="w"> </span><span class="m">123</span><span class="w"> </span><span class="c1"># checkout a PR locally</span>
 
-<span class="c1"># merge a PR (respects repo settings)</span>
-gh<span class="w"> </span>pr<span class="w"> </span>merge<span class="w"> </span><span class="m">123</span>
+gh<span class="w"> </span>pr<span class="w"> </span>merge<span class="w"> </span><span class="m">123</span><span class="w"> </span><span class="c1"># merge a PR (respects repo settings)</span>
 </code></pre></div>
 
 <p>Review a PR:</p>
 <div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>review<span class="w"> </span><span class="m">123</span><span class="w"> </span>--approve
+
 <span class="c1"># or request changes</span>
 <span class="c1"># gh pr review 123 --request-changes -b &quot;Reason...&quot;</span>
 </code></pre></div>
@@ -822,11 +812,11 @@ gh<span class="w"> </span>pr<span class="w"> </span>merge<span class="w"> </span
 </code></pre></div>
 
 <h3 id="113-issues">11.3 Issues</h3>
-<div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>issue<span class="w"> </span>create
+<div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>issue<span class="w"> </span>create<span class="w"> </span><span class="c1"># create a new issue interactively</span>
 
-gh<span class="w"> </span>issue<span class="w"> </span>list
+gh<span class="w"> </span>issue<span class="w"> </span>list<span class="w"> </span><span class="c1"># list issues</span>
 
-gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </span><span class="m">42</span>
+gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </span><span class="m">42</span><span class="w"> </span><span class="c1"># view issue details</span>
 </code></pre></div>
 
 <h3 id="114-workflows-and-runs-github-actions">11.4 Workflows and runs (GitHub Actions)</h3>
@@ -846,6 +836,7 @@ gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </sp
 <div class="codehilite"><pre><span></span><code>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--limit<span class="w"> </span><span class="m">20</span>
 
 gh<span class="w"> </span>run<span class="w"> </span>watch
+
 <span class="c1"># or view a specific run</span>
 gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>--log
 </code></pre></div>
