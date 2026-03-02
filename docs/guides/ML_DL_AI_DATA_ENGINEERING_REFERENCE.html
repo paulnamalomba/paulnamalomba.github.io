@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ml Dl Ai Data Engineering Reference - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="machine-learning-deep-learning-ai-methods-for-data-analysis-processing-engineering">Machine Learning, Deep Learning &amp; AI Methods for Data Analysis, Processing &amp; Engineering</h1>
+<p><br>
+<strong>Last updated</strong>: March 2, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://www.python.org/"><img alt="Language: Python" src="https://img.shields.io/badge/Language-Python_3.11-3776AB.svg" /></a>
+<a href="https://docs.microsoft.com/dotnet/csharp/"><img alt="Language: C#" src="https://img.shields.io/badge/Language-C%23_12-239120.svg" /></a>
+<a href="https://scikit-learn.org/"><img alt="Domain: ML/DL/AI" src="https://img.shields.io/badge/Domain-ML%2FDL%2FAI-blueviolet.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This document is an exhaustive technical reference cataloguing every significant Machine Learning (ML), Deep Learning (DL), and Artificial Intelligence (AI) method currently utilized in production data analysis, data processing, and data engineering pipelines. Each method is presented with its mathematical foundation, its specific role in data workflows, and its computational complexity profile.</p>
+<p>The target reader holds fluency in linear algebra, multivariate calculus, probability theory, and systems architecture. Elementary explanations are intentionally omitted. If a concept here is unfamiliar, consult Bishop (2006), Goodfellow et al. (2016), or Murphy (2022) before proceeding.</p>
+<p>Phase 1 provides the algorithmic taxonomy. Phase 2 maps these algorithms to the concrete library and framework landscape in <strong>Python</strong> and <strong>C# / .NET</strong>, covering hardware acceleration, API philosophy, and production integration patterns.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#machine-learning-deep-learning--ai-methods-for-data-analysis-processing--engineering">Machine Learning, Deep Learning \&amp; AI Methods for Data Analysis, Processing \&amp; Engineering</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#phase-1--comprehensive-taxonomy-of-mldl-methods-in-data-analysis">Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis</a><ul>
+<li><a href="#1-data-preprocessing--feature-engineering">1) Data Preprocessing \&amp; Feature Engineering</a></li>
+<li><a href="#11-multiple-imputation-by-chained-equations-mice">1.1 Multiple Imputation by Chained Equations (MICE)</a></li>
+<li><a href="#12-knn-imputation">1.2 KNN Imputation</a></li>
+<li><a href="#13-matrix-completion-via-nuclear-norm-minimization">1.3 Matrix Completion via Nuclear Norm Minimization</a></li>
+<li><a href="#14-isolation-forest-anomaly-detection">1.4 Isolation Forest (Anomaly Detection)</a></li>
+<li><a href="#15-one-class-svm-anomaly-detection">1.5 One-Class SVM (Anomaly Detection)</a></li>
+<li><a href="#16-local-outlier-factor-lof">1.6 Local Outlier Factor (LOF)</a></li>
+<li><a href="#17-scaling-transformations">1.7 Scaling Transformations</a></li>
+<li><a href="#18-feature-hashing-hashing-trick">1.8 Feature Hashing (Hashing Trick)</a></li>
+<li><a href="#19-target-encoding">1.9 Target Encoding</a></li>
+<li><a href="#2-dimensionality-reduction--manifold-learning">2) Dimensionality Reduction \&amp; Manifold Learning</a></li>
+<li><a href="#21-principal-component-analysis-pca">2.1 Principal Component Analysis (PCA)</a></li>
+<li><a href="#22-kernel-pca">2.2 Kernel PCA</a></li>
+<li><a href="#23-sparse-pca">2.3 Sparse PCA</a></li>
+<li><a href="#24-t-distributed-stochastic-neighbor-embedding-t-sne">2.4 t-Distributed Stochastic Neighbor Embedding (t-SNE)</a></li>
+<li><a href="#25-uniform-manifold-approximation-and-projection-umap">2.5 Uniform Manifold Approximation and Projection (UMAP)</a></li>
+<li><a href="#26-autoencoders-vanilla">2.6 Autoencoders (Vanilla)</a></li>
+<li><a href="#27-variational-autoencoders-vae">2.7 Variational Autoencoders (VAE)</a></li>
+<li><a href="#28-sparse-autoencoders">2.8 Sparse Autoencoders</a></li>
+<li><a href="#3-supervised-learning--regression--classification">3) Supervised Learning — Regression \&amp; Classification</a></li>
+<li><a href="#31-gradient-boosted-decision-trees--xgboost">3.1 Gradient Boosted Decision Trees — XGBoost</a></li>
+<li><a href="#32-lightgbm">3.2 LightGBM</a></li>
+<li><a href="#33-catboost">3.3 CatBoost</a></li>
+<li><a href="#34-support-vector-machines-svm">3.4 Support Vector Machines (SVM)</a></li>
+<li><a href="#35-elastic-net-l1--l2-regularized-regression">3.5 Elastic Net (L1 + L2 Regularized Regression)</a></li>
+<li><a href="#36-random-forests">3.6 Random Forests</a></li>
+<li><a href="#4-unsupervised-learning--clustering--density-estimation">4) Unsupervised Learning — Clustering \&amp; Density Estimation</a></li>
+<li><a href="#41-dbscan">4.1 DBSCAN</a></li>
+<li><a href="#42-hdbscan">4.2 HDBSCAN</a></li>
+<li><a href="#43-gaussian-mixture-models-gmm--expectation-maximization">4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization</a></li>
+<li><a href="#44-agglomerative-hierarchical-clustering">4.4 Agglomerative Hierarchical Clustering</a></li>
+<li><a href="#45-spectral-clustering">4.5 Spectral Clustering</a></li>
+<li><a href="#5-deep-learning-for-data">5) Deep Learning for Data</a></li>
+<li><a href="#51-feedforward-networks-mlp">5.1 Feedforward Networks (MLP)</a></li>
+<li><a href="#52-long-short-term-memory-lstm">5.2 Long Short-Term Memory (LSTM)</a></li>
+<li><a href="#53-gated-recurrent-unit-gru">5.3 Gated Recurrent Unit (GRU)</a></li>
+<li><a href="#54-convolutional-neural-networks-cnn-on-structured-data">5.4 Convolutional Neural Networks (CNN) on Structured Data</a></li>
+<li><a href="#55-attention-mechanisms--transformers-for-structured-data">5.5 Attention Mechanisms \&amp; Transformers for Structured Data</a></li>
+<li><a href="#56-temporal-fusion-transformers-tft">5.6 Temporal Fusion Transformers (TFT)</a></li>
+<li><a href="#57-neural-ordinary-differential-equations-neural-odes">5.7 Neural Ordinary Differential Equations (Neural ODEs)</a></li>
+<li><a href="#6-generative-ai-in-data-processing">6) Generative AI in Data Processing</a></li>
+<li><a href="#61-generative-adversarial-networks-gans">6.1 Generative Adversarial Networks (GANs)</a></li>
+<li><a href="#62-conditional-gans-ctgan-for-tabular-data">6.2 Conditional GANs (CTGAN) for Tabular Data</a></li>
+<li><a href="#63-variational-autoencoders-vae-for-data-augmentation">6.3 Variational Autoencoders (VAE) for Data Augmentation</a></li>
+<li><a href="#64-diffusion-models-for-tabular-synthesis">6.4 Diffusion Models for Tabular Synthesis</a></li>
+<li><a href="#65-smote-and-its-neural-successors">6.5 SMOTE and Its Neural Successors</a></li>
+</ul>
+</li>
+<li><a href="#phase-2--the-production-ecosystem-python-and-c">Phase 2 — The Production Ecosystem (Python and C#)</a><ul>
+<li><a href="#7-python-ecosystem">7) Python Ecosystem</a></li>
+<li><a href="#71-pytorch">7.1 PyTorch</a></li>
+<li><a href="#72-tensorflow--keras">7.2 TensorFlow / Keras</a></li>
+<li><a href="#73-jax">7.3 JAX</a></li>
+<li><a href="#74-scikit-learn">7.4 Scikit-Learn</a></li>
+<li><a href="#75-xgboost--lightgbm--catboost-native-libraries">7.5 XGBoost / LightGBM / CatBoost (Native Libraries)</a></li>
+<li><a href="#76-high-performance-data-backends--polars--cudf">7.6 High-Performance Data Backends — Polars \&amp; cuDF</a></li>
+<li><a href="#77-supplementary-ecosystem">7.7 Supplementary Ecosystem</a></li>
+<li><a href="#8-c--net-ecosystem">8) C# / .NET Ecosystem</a></li>
+<li><a href="#81-mlnet">8.1 ML.NET</a></li>
+<li><a href="#82-torchsharp">8.2 TorchSharp</a></li>
+<li><a href="#83-tensorflownet">8.3 TensorFlow.NET</a></li>
+<li><a href="#84-scisharp-stack">8.4 SciSharp Stack</a></li>
+<li><a href="#85-accordnet-legacy">8.5 Accord.NET (Legacy)</a></li>
+<li><a href="#86-production-integration-patterns">8.6 Production Integration Patterns</a></li>
+<li><a href="#9-cross-language-interop--serving-architecture">9) Cross-Language Interop \&amp; Serving Architecture</a></li>
+</ul>
+</li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="phase-1-comprehensive-taxonomy-of-mldl-methods-in-data-analysis">Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis</h2>
+<hr />
+<h3 id="1-data-preprocessing-feature-engineering">1) Data Preprocessing &amp; Feature Engineering</h3>
+<p>The quality of any downstream model is bounded by the quality of the data entering it. The methods in this section address the three cardinal sins of raw data: missingness, contamination (outliers), and scale heterogeneity.</p>
+<hr />
+<h4 id="11-multiple-imputation-by-chained-equations-mice">1.1 Multiple Imputation by Chained Equations (MICE)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>MICE (also called Fully Conditional Specification) treats each feature with missing values as a dependent variable and imputes it using the remaining features as predictors in a round-robin fashion. For $p$ features with missingness, MICE iterates:</p>
+<p>$$
+X_j^{(t+1)} \sim P\left(X_j \mid X_{-j}^{(t)}, \theta_j\right) \quad \forall\, j \in {1, \ldots, p}
+$$</p>
+<p>where $X_{-j}^{(t)}$ denotes all features except $j$ at iteration $t$, and $\theta_j$ parameterizes the conditional model for feature $j$ (typically linear regression for continuous, logistic for binary, polytomous for categorical). The process converges when the joint distribution $P(X_{\text{miss}} \mid X_{\text{obs}})$ stabilizes. Convergence is assessed via trace plots of imputed statistics across iterations.</p>
+<p>Critically, MICE does <strong>not</strong> assume a joint multivariate distribution. It operates purely on conditionals, which makes it both flexible and theoretically fragile — there is no guarantee the conditional models are compatible with a coherent joint distribution. In practice, this rarely matters. In theory, it should keep you awake at night.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>MICE is the default advanced imputation strategy for tabular datasets in which missingness is MAR (Missing At Random) or MCAR (Missing Completely At Random). It preserves inter-feature correlations and distributional properties far better than mean/median imputation or simple regression imputation. It generates $m$ completed datasets, enabling Rubin's rules for pooled inference that correctly propagates imputation uncertainty into downstream confidence intervals.</p>
+<ul>
+<li>ETL pipelines with structured clinical, financial, or sensor data</li>
+<li>Upstream of any supervised learner where listwise deletion would decimate the training set</li>
+<li>Feature engineering stages where imputed features feed into interaction terms or polynomial expansions</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per iteration (one feature)</td>
+<td>$O(n \cdot p)$ for linear regression; $O(n \cdot p^2)$ if OLS closed-form</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Full MICE (T iterations, p features)</td>
+<td>$O(T \cdot p \cdot n \cdot p) = O(T \cdot p^2 \cdot n)$</td>
+<td>$O(m \cdot n \cdot p)$ for $m$ imputations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="12-knn-imputation">1.2 KNN Imputation</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>For a sample $\mathbf{x}_i$ with missing feature $j$, KNN imputation identifies the $k$ nearest neighbors of $\mathbf{x}_i$ in the observed feature subspace using a distance metric (typically Euclidean, Nan-Euclidean, or Gower for mixed types), then imputes:</p>
+<p>$$
+\hat{x}<em>{ij} = \frac{\sum</em>{l \in \mathcal{N}<em>k(i)} w_l \cdot x</em>{lj}}{\sum_{l \in \mathcal{N}_k(i)} w_l}
+$$</p>
+<p>where $w_l = 1/d(\mathbf{x}_i, \mathbf{x}_l)$ for distance-weighted variants, or $w_l = 1$ for uniform weighting. Distance computation over incomplete vectors uses only mutually observed dimensions, then rescales:</p>
+<p>$$
+d(\mathbf{x}<em>i, \mathbf{x}_l) = \sqrt{\frac{p}{p</em>{\text{obs}}}} \cdot \sqrt{\sum_{j \in \text{obs}} (x_{ij} - x_{lj})^2}
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<p>KNN imputation is non-parametric - it makes no distributional assumptions about the features. This makes it suitable for datasets with complex, non-linear inter-feature relationships where MICE's conditional models (linear/logistic) might be misspecified. It is particularly effective when:</p>
+<ul>
+<li>Feature distributions are heavily multimodal</li>
+<li>The dataset is moderate-sized (KNN is memory-bound for large $n$)</li>
+<li>Mixed-type features are present (with Gower distance)</li>
+<li>Imputation must respect local data geometry</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brute-force</td>
+<td>$O(n^2 \cdot p)$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>With KD-Tree (dense, low-$p$)</td>
+<td>$O(n \cdot p \cdot \log n)$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>With Ball-Tree (metric spaces)</td>
+<td>$O(n \cdot p \cdot \log n)$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<p>KNN imputation does not scale gracefully. For $n &gt; 10^5$, approximate nearest neighbors (FAISS, Annoy) should replace exact search, or MICE should be preferred outright.</p>
+<hr />
+<h4 id="13-matrix-completion-via-nuclear-norm-minimization">1.3 Matrix Completion via Nuclear Norm Minimization</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Given partially observed matrix $M \in \mathbb{R}^{n \times p}$ with observed entries indexed by $\Omega$, the goal is to recover the full low-rank matrix:</p>
+<p>$$
+\min_X | X |<em>* \quad \text{subject to} \quad X</em>{ij} = M_{ij} \quad \forall (i,j) \in \Omega
+$$</p>
+<p>where $| X |_*$ is the nuclear norm (sum of singular values), serving as the convex relaxation of the rank function. The optimization is typically solved via proximal gradient descent or Alternating Direction Method of Multipliers (ADMM). The proximal operator of the nuclear norm is the singular value thresholding operator:</p>
+<p>$$
+\text{prox}<em>{\lambda | \cdot |</em>*}(X) = U \cdot \text{diag}\left(\max(\sigma_i - \lambda, 0)\right) \cdot V^T
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<p>Matrix completion is the mathematically principled approach to imputation when the data matrix is genuinely low-rank (or approximately so). This assumption holds in recommendation systems, sensor networks with correlated channels, and any dataset where latent factors drive the observed variables. It is distinct from MICE in that it operates on the entire matrix simultaneously rather than column-by-column.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVD per iteration</td>
+<td>$O(\min(n^2 p, n p^2))$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Full optimization (T iterations)</td>
+<td>$O(T \cdot \min(n^2 p, n p^2))$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Truncated SVD (rank-$r$)</td>
+<td>$O(n \cdot p \cdot r)$ per iteration</td>
+<td>$O((n + p) \cdot r)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="14-isolation-forest-anomaly-detection">1.4 Isolation Forest (Anomaly Detection)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Isolation Forest exploits the principle that anomalies are <em>few and different</em>, making them easier to isolate via random partitioning. The algorithm constructs an ensemble of $T$ isolation trees (iTrees), each built by:</p>
+<ol>
+<li>Randomly selecting a feature $q$ from the feature set</li>
+<li>Randomly selecting a split value $s$ uniformly between the feature's min and max in the current node</li>
+<li>Recursing until the point is isolated (node size = 1) or tree height reaches $\lceil \log_2 n \rceil$</li>
+</ol>
+<p>The <strong>anomaly score</strong> for point $\mathbf{x}$ is:</p>
+<p>$$
+s(\mathbf{x}, n) = 2^{-\frac{E[h(\mathbf{x})]}{c(n)}}
+$$</p>
+<p>where $E[h(\mathbf{x})]$ is the average path length over $T$ trees, and $c(n)$ is the expected path length of unsuccessful search in a Binary Search Tree:</p>
+<p>$$
+c(n) = 2H(n-1) - \frac{2(n-1)}{n}, \quad H(k) = \ln(k) + \gamma \quad (\text{Euler-Mascheroni})
+$$</p>
+<p>Scores near 1 indicate anomaly; near 0.5 indicate normal.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>Isolation Forest is the workhorse anomaly detector for high-dimensional tabular data in production. Unlike distance-based methods, it does not suffer from the curse of dimensionality. It is used for:</p>
+<ul>
+<li>Pre-training data cleansing (removing corrupted records)</li>
+<li>Real-time fraud detection in streaming pipelines</li>
+<li>Sensor data quality gates in IoT ETL</li>
+<li>Identifying data drift samples in model monitoring</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training ($T$ trees, $\psi$ subsamples)</td>
+<td>$O(T \cdot \psi \cdot \log \psi)$</td>
+<td>$O(T \cdot \psi)$</td>
+</tr>
+<tr>
+<td>Scoring (single point)</td>
+<td>$O(T \cdot \log \psi)$</td>
+<td>$O(1)$</td>
+</tr>
+<tr>
+<td>Scoring (all $n$ points)</td>
+<td>$O(n \cdot T \cdot \log \psi)$</td>
+<td>$O(n)$</td>
+</tr>
+</tbody>
+</table>
+<p>The subsampling parameter $\psi$ (default 256) decouples training cost from $n$, making Isolation Forest one of the few anomaly detectors that genuinely scales to $10^7+$ rows.</p>
+<hr />
+<h4 id="15-one-class-svm-anomaly-detection">1.5 One-Class SVM (Anomaly Detection)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>One-Class SVM (Schölkopf et al., 2001) maps the data into a feature space $\mathcal{H}$ via kernel $\phi$ and finds the hyperplane that separates the data from the origin with maximum margin:</p>
+<p>$$
+\min_{w, \xi, \rho} \frac{1}{2}|w|^2 + \frac{1}{\nu n}\sum_{i=1}^n \xi_i - \rho
+$$</p>
+<p>subject to $\langle w, \phi(\mathbf{x}_i) \rangle \geq \rho - \xi_i$, $\xi_i \geq 0$. Here $\nu \in (0, 1]$ upper-bounds the fraction of outliers and lower-bounds the fraction of support vectors. The dual formulation yields:</p>
+<p>$$
+\max_\alpha -\frac{1}{2}\sum_{i,j} \alpha_i \alpha_j K(\mathbf{x}_i, \mathbf{x}_j)
+$$</p>
+<p>subject to $0 \leq \alpha_i \leq \frac{1}{\nu n}$, $\sum_i \alpha_i = 1$. The decision function is:</p>
+<p>$$
+f(\mathbf{x}) = \text{sgn}\left(\sum_{i=1}^n \alpha_i K(\mathbf{x}_i, \mathbf{x}) - \rho\right)
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<p>One-Class SVM is preferred when the "normal" class has complex, non-convex boundaries in feature space. The RBF kernel $K(\mathbf{x}, \mathbf{y}) = \exp(-\gamma |\mathbf{x} - \mathbf{y}|^2)$ enables it to capture arbitrary decision boundaries. It is used for:</p>
+<ul>
+<li>Novelty detection (the model sees only "normal" data during training)</li>
+<li>Manufacturing defect detection where defective samples are scarce</li>
+<li>Network intrusion detection</li>
+</ul>
+<p>Its fatal weakness: it does not scale. The kernel matrix is $O(n^2)$ in memory. For $n &gt; 10^4$, Isolation Forest or deep one-class methods (Deep SVDD) are categorically superior.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (kernel matrix + QP)</td>
+<td>$O(n^2 \cdot p)$ to $O(n^3)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Inference (per point)</td>
+<td>$O(n_{\text{SV}} \cdot p)$</td>
+<td>$O(n_{\text{SV}} \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="16-local-outlier-factor-lof">1.6 Local Outlier Factor (LOF)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>LOF (Breunig et al., 2000) quantifies the local density deviation of a point relative to its neighbors. For point $\mathbf{x}$:</p>
+<ol>
+<li><strong>$k$-distance</strong>: distance to the $k$-th nearest neighbor</li>
+<li><strong>Reachability distance</strong>: $\text{rd}_k(\mathbf{x}, \mathbf{y}) = \max(k\text{-dist}(\mathbf{y}), \, d(\mathbf{x}, \mathbf{y}))$</li>
+<li><strong>Local reachability density</strong>: $\text{lrd}<em>k(\mathbf{x}) = \left(\frac{1}{k}\sum</em>{\mathbf{y} \in \mathcal{N}_k(\mathbf{x})} \text{rd}_k(\mathbf{x}, \mathbf{y})\right)^{-1}$</li>
+<li><strong>LOF score</strong>: $\text{LOF}<em>k(\mathbf{x}) = \frac{1}{k}\sum</em>{\mathbf{y} \in \mathcal{N}_k(\mathbf{x})} \frac{\text{lrd}_k(\mathbf{y})}{\text{lrd}_k(\mathbf{x})}$</li>
+</ol>
+<p>$\text{LOF} \approx 1$ means normal density; $\text{LOF} \gg 1$ means locally anomalous.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>LOF excels at detecting <strong>local</strong> anomalies — points that are outliers relative to their neighborhood but not necessarily globally extreme. This is critical in datasets with clusters of varying density, where global methods (Isolation Forest, One-Class SVM) may fail. Applications:</p>
+<ul>
+<li>Geospatial anomaly detection (e.g., GPS trajectories with localized deviations)</li>
+<li>Multi-modal distributions where each mode has distinct density</li>
+<li>Quality control in manufacturing with multiple product lines</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KNN graph construction</td>
+<td>$O(n^2 \cdot p)$ brute-force; $O(n \cdot p \cdot \log n)$ with KD-Tree</td>
+<td>$O(n \cdot k)$</td>
+</tr>
+<tr>
+<td>LOF computation</td>
+<td>$O(n \cdot k)$</td>
+<td>$O(n)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="17-scaling-transformations">1.7 Scaling Transformations</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Scaling is not optional — it is a mathematical prerequisite for any method involving distance metrics, gradient descent, or regularization penalties:</p>
+<table>
+<thead>
+<tr>
+<th>Transform</th>
+<th>Formula</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard (Z-score)</strong></td>
+<td>$z = \frac{x - \mu}{\sigma}$</td>
+<td>Centers at 0, unit variance. Assumes Gaussian.</td>
+</tr>
+<tr>
+<td><strong>Min-Max</strong></td>
+<td>$z = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$</td>
+<td>Maps to $[0, 1]$. Preserves zero entries in sparse data.</td>
+</tr>
+<tr>
+<td><strong>Robust</strong></td>
+<td>$z = \frac{x - \text{median}}{\text{IQR}}$</td>
+<td>Median-centered, IQR-scaled. Resistant to outliers.</td>
+</tr>
+<tr>
+<td><strong>Max-Abs</strong></td>
+<td>$z = \frac{x}{</td>
+<td>x_{\max}</td>
+</tr>
+<tr>
+<td><strong>Quantile (Uniform)</strong></td>
+<td>$z = F_n(x)$</td>
+<td>Maps to $\text{Uniform}(0, 1)$ via empirical CDF. Non-linear.</td>
+</tr>
+<tr>
+<td><strong>Quantile (Gaussian)</strong></td>
+<td>$z = \Phi^{-1}(F_n(x))$</td>
+<td>Forces Gaussianity. Non-linear. Destroys multimodality.</td>
+</tr>
+<tr>
+<td><strong>Power (Yeo-Johnson)</strong></td>
+<td>$z = \frac{(x+1)^\lambda - 1}{\lambda}$ (if $\lambda \neq 0$, $x \geq 0$)</td>
+<td>Stabilizes variance. Handles negatives (unlike Box-Cox).</td>
+</tr>
+<tr>
+<td><strong>Log / Log1p</strong></td>
+<td>$z = \log(1 + x)$</td>
+<td>Compresses right-skewed distributions. Requires $x \geq 0$.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li><strong>Z-score</strong>: Default for SVM, logistic regression, neural networks, PCA</li>
+<li><strong>Min-Max</strong>: Image pixel normalization, features feeding into sigmoid activations</li>
+<li><strong>Robust</strong>: Any pipeline where outlier rows cannot be dropped (clinical, financial)</li>
+<li><strong>Quantile-Gaussian</strong>: Forcing normality assumptions for methods like LDA or naive Bayes</li>
+<li><strong>Yeo-Johnson</strong>: Preprocessing for linear models on heteroscedastic features</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>All scaling transforms are $O(n)$ time, $O(1)$ to $O(n)$ space (quantile requires sorting: $O(n \log n)$).</p>
+<hr />
+<h4 id="18-feature-hashing-hashing-trick">1.8 Feature Hashing (Hashing Trick)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Given a categorical feature with cardinality $C$ (potentially $C &gt; 10^6$), feature hashing maps categories to a fixed-size vector of dimension $m \ll C$ using a hash function $h: \text{categories} \to {0, 1, \ldots, m-1}$ and an optional sign function $\xi: \text{categories} \to {-1, +1}$:</p>
+<p>$$
+\phi(\mathbf{x})<em>j = \sum</em>{i: h(x_i) = j} \xi(x_i) \cdot v_i
+$$</p>
+<p>The sign function $\xi$ ensures that the inner product is preserved in expectation: $E[\langle \phi(\mathbf{x}), \phi(\mathbf{y}) \rangle] = \langle \mathbf{x}, \mathbf{y} \rangle$. Collisions introduce noise but the expected error shrinks as $O(1/\sqrt{m})$.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Real-time feature encoding for streaming data where the category vocabulary is unbounded (URLs, user-agents, IP address prefixes)</li>
+<li>NLP pipelines: hashing n-grams instead of maintaining a vocabulary dictionary</li>
+<li>Memory-constrained environments where one-hot encoding is infeasible</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encoding</td>
+<td>$O(n \cdot \text{nnz})$</td>
+<td>$O(m)$ per sample (fixed, independent of $C$)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="19-target-encoding">1.9 Target Encoding</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>For categorical feature $x$ with levels ${c_1, \ldots, c_C}$ and target variable $y$, target encoding replaces each level with a smoothed estimate of the conditional expectation:</p>
+<p>$$
+\hat{y}<em>{c_k} = \lambda(n_k) \cdot \bar{y}</em>{c_k} + (1 - \lambda(n_k)) \cdot \bar{y}_{\text{global}}
+$$</p>
+<p>where $\bar{y}<em>{c_k}$ is the mean target for level $c_k$, $n_k$ is the count, and $\lambda(n_k) = \frac{n_k}{n_k + \alpha}$ is a shrinkage factor (empirical Bayes smoothing). The hyperparameter $\alpha$ controls regularization toward the global mean $\bar{y}</em>{\text{global}}$.</p>
+<p>To prevent target leakage, target encoding <strong>must</strong> be computed using leave-one-out or $k$-fold strategies within the training set.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>High-cardinality categorical features ($C &gt; 100$) where one-hot encoding induces sparsity and dimensionality explosion</li>
+<li>Tree-based model pipelines (CatBoost internalizes a variant of this)</li>
+<li>Ordinal encoding is inadequate because the categories have no natural ordering</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>$O(n)$ time, $O(C)$ space.</p>
+<hr />
+<h3 id="2-dimensionality-reduction-manifold-learning">2) Dimensionality Reduction &amp; Manifold Learning</h3>
+<p>High-dimensional data is not merely inconvenient — it is pathological. Distances concentrate, volumes explode, and models overfit catastrophically. The methods below compress data into lower-dimensional representations while preserving specific geometric or statistical properties.</p>
+<hr />
+<h4 id="21-principal-component-analysis-pca">2.1 Principal Component Analysis (PCA)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>PCA finds the orthogonal directions of maximum variance. Given centered data matrix $X \in \mathbb{R}^{n \times p}$, PCA solves:</p>
+<p>$$
+\max_{w: |w|=1} w^T \Sigma w \quad \text{where} \quad \Sigma = \frac{1}{n-1}X^T X
+$$</p>
+<p>The solution is the eigendecomposition $\Sigma = W \Lambda W^T$ where columns of $W$ are eigenvectors (principal components) and $\Lambda = \text{diag}(\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p)$ are eigenvalues (variance captured per component). The projection to $d$ dimensions is:</p>
+<p>$$
+Z = X W_d \quad \text{where} \quad W_d = [w_1 \mid w_2 \mid \cdots \mid w_d]
+$$</p>
+<p>Equivalently, PCA minimizes reconstruction error $|X - ZW_d^T|_F^2$, establishing its connection to the truncated SVD: $X \approx U_d \Sigma_d V_d^T$.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Decorrelation of multicollinear features prior to regression</li>
+<li>Noise reduction by projecting onto top-$d$ components (discarding low-variance noise dimensions)</li>
+<li>Visualization (projecting to $d=2$ or $d=3$)</li>
+<li>Compression of high-dimensional sensor data in streaming pipelines</li>
+<li>Eigenfaces-style feature extraction for image pipelines</li>
+</ul>
+<p>Variance retention criterion: choose $d$ such that $\frac{\sum_{i=1}^d \lambda_i}{\sum_{i=1}^p \lambda_i} \geq \tau$ (typically $\tau = 0.95$).</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full SVD</td>
+<td>$O(\min(n^2 p, n p^2))$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Truncated SVD (rank-$d$, randomized)</td>
+<td>$O(n \cdot p \cdot d)$</td>
+<td>$O((n + p) \cdot d)$</td>
+</tr>
+<tr>
+<td>Incremental PCA (mini-batch)</td>
+<td>$O(n \cdot p \cdot d)$ total</td>
+<td>$O(b \cdot p)$ per batch of size $b$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="22-kernel-pca">2.2 Kernel PCA</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Kernel PCA performs PCA in a reproducing kernel Hilbert space (RKHS) $\mathcal{H}$ induced by kernel function $K$. The kernel matrix $K_{ij} = \kappa(\mathbf{x}_i, \mathbf{x}_j)$ replaces the covariance matrix. After centering $\tilde{K} = K - \frac{1}{n}\mathbf{1}K - K\frac{1}{n}\mathbf{1} + \frac{1}{n}\mathbf{1}K\frac{1}{n}\mathbf{1}$, we solve:</p>
+<p>$$
+\tilde{K} \alpha^{(k)} = \lambda_k \alpha^{(k)}
+$$</p>
+<p>Projection of new point $\mathbf{x}$: $z_k = \sum_{i=1}^n \alpha_i^{(k)} \kappa(\mathbf{x}_i, \mathbf{x})$.</p>
+<p>Common kernels:
+- RBF: $\kappa(\mathbf{x}, \mathbf{y}) = \exp(-\gamma |\mathbf{x} - \mathbf{y}|^2)$
+- Polynomial: $\kappa(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^T \mathbf{y} + c)^d$
+- Sigmoid: $\kappa(\mathbf{x}, \mathbf{y}) = \tanh(\alpha \mathbf{x}^T \mathbf{y} + c)$</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Nonlinear dimensionality reduction where the data manifold is curved (e.g., the "Swiss roll")</li>
+<li>Feature extraction for downstream classifiers when linear PCA discards discriminative nonlinear structure</li>
+<li>Pre-processing for One-Class SVM (using the same kernel for geometric consistency)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kernel matrix computation</td>
+<td>$O(n^2 \cdot p)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Eigendecomposition of $K$</td>
+<td>$O(n^3)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Projection (new point)</td>
+<td>$O(n \cdot p)$</td>
+<td>$O(n)$</td>
+</tr>
+</tbody>
+</table>
+<p>The $O(n^2)$ memory requirement is the kill shot. For large $n$, use Nyström approximation (subsample $m \ll n$ landmarks) reducing cost to $O(n \cdot m^2)$.</p>
+<hr />
+<h4 id="23-sparse-pca">2.3 Sparse PCA</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Sparse PCA trades explained variance for interpretability by enforcing sparsity (L1 penalty) on the loadings:</p>
+<p>$$
+\min_{W, Z} \frac{1}{2}|X - ZW^T|_F^2 + \alpha |W|_1
+$$</p>
+<p>subject to $|z_k|_2 \leq 1$. This yields components that load on only a subset of original features. The elastic net variant adds an L2 term:</p>
+<p>$$
+\min_W \frac{1}{2}|X - XW\tilde{W}^T|_F^2 + \alpha_1 |W|_1 + \alpha_2 |W|_F^2
+$$</p>
+<p>Solved via coordinate descent or ADMM.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Genomics (identifying which genes drive principal variation from $p &gt; 10^4$ features)</li>
+<li>Financial factor modeling where interpretable factors are regulatory requirements</li>
+<li>Any domain where "the first PC is a linear combination of all 500 features" is unacceptable</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per component (coordinate descent)</td>
+<td>$O(p^2 \cdot n)$ per iteration</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>$d$ components, $T$ iterations</td>
+<td>$O(d \cdot T \cdot p^2 \cdot n)$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="24-t-distributed-stochastic-neighbor-embedding-t-sne">2.4 t-Distributed Stochastic Neighbor Embedding (t-SNE)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>t-SNE (van der Maaten &amp; Hinton, 2008) constructs two probability distributions: one over pairs in high-dimensional space (Gaussian kernel), one over pairs in the low-dimensional embedding (Student-t with 1 DOF):</p>
+<p>High-dimensional affinity:
+$$
+p_{j|i} = \frac{\exp(-|\mathbf{x}<em>i - \mathbf{x}_j|^2 / 2\sigma_i^2)}{\sum</em>{k \neq i}\exp(-|\mathbf{x}<em>i - \mathbf{x}_k|^2 / 2\sigma_i^2)}, \quad p</em>{ij} = \frac{p_{j|i} + p_{i|j}}{2n}
+$$</p>
+<p>Low-dimensional affinity (heavy-tailed Student-t):
+$$
+q_{ij} = \frac{(1 + |\mathbf{y}<em>i - \mathbf{y}_j|^2)^{-1}}{\sum</em>{k \neq l}(1 + |\mathbf{y}_k - \mathbf{y}_l|^2)^{-1}}
+$$</p>
+<p>Objective (KL divergence):
+$$
+\mathcal{L} = \text{KL}(P | Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}
+$$</p>
+<p>Minimized via gradient descent with momentum. The bandwidth $\sigma_i$ per point is set by binary search to match a specified perplexity: $\text{Perp}(P_i) = 2^{H(P_i)}$ where $H$ is Shannon entropy.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li><strong>Visualization only</strong>. t-SNE is not a general-purpose dimensionality reduction method — the mapping is non-parametric (no out-of-sample extension), the KL divergence is asymmetric (penalizes placing distant points close, not the reverse), and global structure is not preserved.</li>
+<li>Cluster visualization for quality inspection of embeddings</li>
+<li>EDA on high-dimensional datasets (genomics, NLP embeddings)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exact</td>
+<td>$O(n^2)$ per gradient step</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Barnes-Hut approximation</td>
+<td>$O(n \log n)$ per step</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>FFT-accelerated (FIt-SNE)</td>
+<td>$O(n \log n)$ per step</td>
+<td>$O(n)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="25-uniform-manifold-approximation-and-projection-umap">2.5 Uniform Manifold Approximation and Projection (UMAP)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>UMAP (McInnes et al., 2018) constructs a weighted $k$-nearest-neighbor graph in high dimensions, interprets it as a fuzzy simplicial set (via Riemannian geometry on the data manifold), then optimizes a low-dimensional layout to preserve the topological structure. The key equations:</p>
+<p>High-dimensional fuzzy membership:
+$$
+\mu_{ij} = \exp\left(-\frac{d(\mathbf{x}_i, \mathbf{x}_j) - \rho_i}{\sigma_i}\right)
+$$</p>
+<p>where $\rho_i$ is the distance to the nearest neighbor (local connectivity guarantee), and $\sigma_i$ is calibrated to achieve $\log_2(k)$ effective neighbors.</p>
+<p>Symmetrization: $\mu_{ij}^{\text{sym}} = \mu_{ij} + \mu_{ji} - \mu_{ij} \cdot \mu_{ji}$ (fuzzy set union, not average).</p>
+<p>Low-dimensional affinity:
+$$
+\nu_{ij} = \left(1 + a |\mathbf{y}_i - \mathbf{y}_j|^{2b}\right)^{-1}
+$$</p>
+<p>with $a, b$ fitted to approximate a smooth approximation of the target distribution. Optimization via stochastic gradient descent on the cross-entropy:</p>
+<p>$$
+\mathcal{L} = \sum_{(i,j)} \left[\mu_{ij} \log \frac{\mu_{ij}}{\nu_{ij}} + (1 - \mu_{ij}) \log \frac{1 - \mu_{ij}}{1 - \nu_{ij}}\right]
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<p>UMAP supersedes t-SNE for most practical purposes:</p>
+<ul>
+<li>Preserves both local and (approximate) global structure</li>
+<li>Supports out-of-sample transforms via <code>transform()</code> (parametric UMAP uses a neural network)</li>
+<li>Directly usable as a dimensionality reduction step upstream of classifiers (unlike t-SNE)</li>
+<li>Scales to $n &gt; 10^6$ via approximate nearest neighbors (Annoy, NN-Descent)</li>
+</ul>
+<p>Applications: scRNA-seq visualization, embedding space exploration, outlier detection in reduced space.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KNN graph (NN-Descent)</td>
+<td>$O(n^{1.14})$ empirical</td>
+<td>$O(n \cdot k)$</td>
+</tr>
+<tr>
+<td>Optimization (SGD)</td>
+<td>$O(n \cdot E)$ for $E$ epochs</td>
+<td>$O(n \cdot d)$</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>$O(n^{1.14} + n \cdot E)$</td>
+<td>$O(n \cdot k + n \cdot d)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="26-autoencoders-vanilla">2.6 Autoencoders (Vanilla)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>An autoencoder is a neural network trained to reconstruct its input through a bottleneck. Given encoder $f_\theta: \mathbb{R}^p \to \mathbb{R}^d$ and decoder $g_\phi: \mathbb{R}^d \to \mathbb{R}^p$ (where $d \ll p$):</p>
+<p>$$
+\min_{\theta, \phi} \frac{1}{n}\sum_{i=1}^n \mathcal{L}(\mathbf{x}<em>i, g</em>\phi(f_\theta(\mathbf{x}_i)))
+$$</p>
+<p>For continuous data: $\mathcal{L} = |\mathbf{x} - \hat{\mathbf{x}}|_2^2$ (MSE). For binary data: $\mathcal{L} = -\sum_j [x_j \log \hat{x}_j + (1-x_j)\log(1-\hat{x}_j)]$ (binary cross-entropy).</p>
+<p>With linear activations, the autoencoder learns a subspace identical to PCA. Nonlinear activations (ReLU, GELU) enable learning of curved manifolds.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Nonlinear dimensionality reduction (the latent vector $\mathbf{z} = f_\theta(\mathbf{x})$ is the compressed representation)</li>
+<li>Denoising (Denoising Autoencoders: train on corrupted input $\tilde{\mathbf{x}}$, reconstruct clean $\mathbf{x}$)</li>
+<li>Anomaly detection via reconstruction error: if $|\mathbf{x} - g_\phi(f_\theta(\mathbf{x}))|^2 &gt; \tau$, flag as anomaly</li>
+<li>Feature extraction for downstream supervised models</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Depends on architecture. For a single hidden layer of width $h$:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (per sample)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward pass</td>
+<td>$O(p \cdot h + h \cdot d + d \cdot h + h \cdot p) = O(p \cdot h)$</td>
+<td>$O(p + h + d)$</td>
+</tr>
+<tr>
+<td>Backward pass</td>
+<td>$\approx 2\times$ forward</td>
+<td>+ gradient buffers</td>
+</tr>
+<tr>
+<td>Training ($n$ samples, $E$ epochs)</td>
+<td>$O(E \cdot n \cdot p \cdot h)$</td>
+<td>$O(\text{params})$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="27-variational-autoencoders-vae">2.7 Variational Autoencoders (VAE)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>VAEs (Kingma &amp; Welling, 2014) impose a probabilistic structure on the latent space. The generative model assumes $\mathbf{z} \sim \mathcal{N}(0, I)$ and $\mathbf{x} | \mathbf{z} \sim p_\theta(\mathbf{x}|\mathbf{z})$. Since the true posterior $p(\mathbf{z}|\mathbf{x})$ is intractable, we approximate it with $q_\phi(\mathbf{z}|\mathbf{x}) = \mathcal{N}(\mu_\phi(\mathbf{x}), \text{diag}(\sigma_\phi^2(\mathbf{x})))$.</p>
+<p>The training objective maximizes the Evidence Lower Bound (ELBO):</p>
+<p>$$
+\mathcal{L}<em>{\text{ELBO}} = \mathbb{E}</em>{q_\phi(\mathbf{z}|\mathbf{x})}[\log p_\theta(\mathbf{x}|\mathbf{z})] - D_{\text{KL}}(q_\phi(\mathbf{z}|\mathbf{x}) | p(\mathbf{z}))
+$$</p>
+<p>The first term is reconstruction quality. The second term regularizes the encoder to stay near the prior. Training uses the reparameterization trick: $\mathbf{z} = \mu + \sigma \odot \epsilon$, $\epsilon \sim \mathcal{N}(0, I)$, enabling backpropagation through the stochastic node.</p>
+<p>The KL term has a closed-form solution for Gaussian posteriors against a Gaussian prior:</p>
+<p>$$
+D_{\text{KL}} = -\frac{1}{2}\sum_{j=1}^d \left(1 + \log \sigma_j^2 - \mu_j^2 - \sigma_j^2\right)
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Generative modeling: sampling $\mathbf{z} \sim \mathcal{N}(0, I)$ and decoding produces novel data points</li>
+<li>Disentangled representation learning ($\beta$-VAE penalizes the KL term more heavily)</li>
+<li>Semi-supervised learning: partially labeled data leverages both reconstruction and classification losses</li>
+<li>Data augmentation for imbalanced datasets (generate minority-class synthetic samples by conditioning the latent space)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Same as vanilla autoencoder + cost of sampling and KL computation ($O(d)$ per sample). The reparameterization trick adds negligible overhead.</p>
+<hr />
+<h4 id="28-sparse-autoencoders">2.8 Sparse Autoencoders</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Sparse autoencoders add a sparsity constraint to the latent representation. The loss function augments reconstruction error with a sparsity penalty:</p>
+<p>$$
+\mathcal{L} = \frac{1}{n}\sum_{i=1}^n |\mathbf{x}<em>i - \hat{\mathbf{x}}_i|^2 + \beta \sum</em>{j=1}^d \text{KL}(\rho | \hat{\rho}_j)
+$$</p>
+<p>where $\hat{\rho}<em>j = \frac{1}{n}\sum</em>{i=1}^n h_j(\mathbf{x}_i)$ is the average activation of hidden unit $j$, $\rho$ is the target sparsity (e.g., 0.05), and:</p>
+<p>$$
+\text{KL}(\rho | \hat{\rho}) = \rho \log \frac{\rho}{\hat{\rho}} + (1-\rho) \log \frac{1-\rho}{1-\hat{\rho}}
+$$</p>
+<p>This forces most hidden units to be inactive for any given input, yielding overcomplete but sparse representations.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Feature extraction where the latent dimension $d &gt; p$ (overcomplete), but each sample activates only a sparse subset</li>
+<li>Interpretability: active units form a "parts-based" decomposition (analogous to NMF)</li>
+<li>Pre-training layer-wise in deep networks (historically important, now largely superseded by batch normalization and residual connections)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Same as vanilla autoencoder. The sparsity penalty adds $O(n \cdot d)$ per epoch for computing mean activations.</p>
+<hr />
+<h3 id="3-supervised-learning-regression-classification">3) Supervised Learning — Regression &amp; Classification</h3>
+<hr />
+<h4 id="31-gradient-boosted-decision-trees-xgboost">3.1 Gradient Boosted Decision Trees — XGBoost</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>XGBoost (Chen &amp; Guestrin, 2016) implements gradient boosting with second-order Taylor expansion of the loss function. Given ensemble prediction $\hat{y}_i^{(t)} = \hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)$ at round $t$, the objective is:</p>
+<p>$$
+\mathcal{L}^{(t)} \approx \sum_{i=1}^n \left[g_i f_t(\mathbf{x}_i) + \frac{1}{2}h_i f_t^2(\mathbf{x}_i)\right] + \Omega(f_t)
+$$</p>
+<p>where $g_i = \partial_{\hat{y}^{(t-1)}} \ell(y_i, \hat{y}<em>i^{(t-1)})$ and $h_i = \partial^2</em>{\hat{y}^{(t-1)}} \ell(y_i, \hat{y}_i^{(t-1)})$ are the first and second derivatives of the loss function evaluated at the current prediction. The regularization term:</p>
+<p>$$
+\Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2
+$$</p>
+<p>penalizes number of leaves $T$ and leaf weight magnitudes $w_j$.</p>
+<p><strong>Split finding</strong>: For each leaf node, XGBoost evaluates the gain of splitting on feature $k$ at threshold $v$:</p>
+<p>$$
+\text{Gain} = \frac{1}{2}\left[\frac{G_L^2}{H_L + \lambda} + \frac{G_R^2}{H_R + \lambda} - \frac{(G_L + G_R)^2}{H_L + H_R + \lambda}\right] - \gamma
+$$</p>
+<p>where $G_L = \sum_{i \in I_L} g_i$, $H_L = \sum_{i \in I_L} h_i$ are the gradient and Hessian sums for the left child. The optimal leaf weight is $w_j^* = -\frac{G_j}{H_j + \lambda}$.</p>
+<p><strong>Approximate split finding</strong>: For large datasets, XGBoost uses a weighted quantile sketch to propose candidate split points, then greedily evaluates gains at these candidates only.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>XGBoost is the de facto standard for structured/tabular prediction tasks. Its dominance in Kaggle competitions is not accidental — it handles:</p>
+<ul>
+<li>Mixed feature types (continuous, ordinal, categorical via one-hot)</li>
+<li>Missing values natively (learns optimal default direction at each split)</li>
+<li>Feature interactions automatically (depth controls interaction order)</li>
+<li>Non-linear relationships without feature engineering</li>
+<li>Class imbalance via <code>scale_pos_weight</code> parameter</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (exact greedy, $T$ trees, depth $D$)</td>
+<td>$O(T \cdot D \cdot n \cdot p \cdot \log n)$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Training (histogram approx., $B$ bins)</td>
+<td>$O(T \cdot D \cdot n \cdot p + T \cdot D \cdot B \cdot p)$</td>
+<td>$O(n \cdot p + B \cdot p)$</td>
+</tr>
+<tr>
+<td>Inference (single sample)</td>
+<td>$O(T \cdot D)$</td>
+<td>$O(1)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="32-lightgbm">3.2 LightGBM</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>LightGBM (Ke et al., 2017) introduces two critical innovations over XGBoost:</p>
+<p><strong>1. Gradient-based One-Side Sampling (GOSS):</strong> Instead of using all $n$ samples to estimate split gains, GOSS keeps all samples with large gradients (top-$a$ fraction) and randomly samples from the rest (fraction $b$). The gradient sums are corrected:</p>
+<p>$$
+\tilde{G}<em>j = \sum</em>{i \in A_j} g_i + \frac{1-a}{b}\sum_{i \in B_j} g_i
+$$</p>
+<p>where $A$ is the top-$a$ set and $B$ is the random subsample of the complement.</p>
+<p><strong>2. Exclusive Feature Bundling (EFB):</strong> Mutually exclusive features (features that rarely take non-zero values simultaneously) are bundled into a single feature via offset encoding, reducing effective dimensionality from $p$ to $p'$ where $p' \ll p$ for sparse data.</p>
+<p><strong>Leaf-wise (best-first) growth</strong>: Unlike XGBoost's level-wise growth, LightGBM grows the leaf with the highest gain reduction, producing asymmetric trees that reduce loss faster with fewer leaves.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>LightGBM dominates when:
+- $n$ is very large ($&gt; 10^6$) — GOSS dramatically reduces per-iteration cost
+- $p$ is high with sparsity (NLP feature counts, one-hot explosions) — EFB compresses effectively
+- Training time is a constraint (2-10x faster than XGBoost on equivalent configurations)
+- Native categorical feature support (optimal split finding without one-hot encoding)</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (GOSS + EFB, $T$ trees, max leaves $L$)</td>
+<td>$O(T \cdot L \cdot (a \cdot n + b \cdot n) \cdot p')$</td>
+<td>$O(n \cdot p' + B \cdot p')$</td>
+</tr>
+<tr>
+<td>Inference</td>
+<td>$O(T \cdot L)$ worst case</td>
+<td>$O(1)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="33-catboost">3.3 CatBoost</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>CatBoost (Prokhorenkova et al., 2018) addresses <strong>prediction shift</strong> — a subtle form of target leakage in gradient boosting where residuals used to fit tree $t$ are computed on the same data used to find splits, causing overfitting.</p>
+<p><strong>Ordered Boosting</strong>: CatBoost trains on a random permutation of the data. For sample $i$ (in permutation order), the model used to compute gradients is trained only on samples ${1, \ldots, i-1}$. This eliminates the conditional bias $E[\hat{y}_i | \mathbf{x}_i] \neq f(\mathbf{x}_i)$ that plagues standard boosting.</p>
+<p><strong>Ordered Target Encoding</strong>: For categorical feature $c$ and target $y$, the encoding for sample $\sigma(i)$ (the $i$-th sample in permutation $\sigma$) is:</p>
+<p>$$
+\hat{x}<em>{\sigma(i)} = \frac{\sum</em>{j &lt; i: x_{\sigma(j)} = x_{\sigma(i)}} y_{\sigma(j)} + a \cdot P}{|{j &lt; i: x_{\sigma(j)} = x_{\sigma(i)}}| + a}
+$$</p>
+<p>where $P$ is the global target prior and $a$ is a smoothing parameter. This is target encoding with a built-in leave-future-out guarantee.</p>
+<p><strong>Oblivious trees</strong>: CatBoost uses symmetric (oblivious) decision trees where the same splitting condition is applied at each level. This constrains the tree but enables SIMD-vectorized inference and acts as regularization.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>CatBoost is the correct choice when:
+- Categorical features are abundant and high-cardinality (no manual encoding needed)
+- Prediction shift is a concern (small datasets, few boosting rounds)
+- Inference latency matters (oblivious trees are extremely cache-friendly)
+- Production deployment targets CPUs (CatBoost's SIMD inference is among the fastest)</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training ($T$ trees, depth $D$, ordered boosting)</td>
+<td>$O(T \cdot n \cdot D \cdot p)$</td>
+<td>$O(n \cdot p + T \cdot 2^D)$</td>
+</tr>
+<tr>
+<td>Inference (oblivious tree, single sample)</td>
+<td>$O(T \cdot D)$ (bit operations, SIMD)</td>
+<td>$O(1)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="34-support-vector-machines-svm">3.4 Support Vector Machines (SVM)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>The SVM dual formulation for the soft-margin classifier:</p>
+<p>$$
+\max_\alpha \sum_{i=1}^n \alpha_i - \frac{1}{2}\sum_{i,j} \alpha_i \alpha_j y_i y_j K(\mathbf{x}_i, \mathbf{x}_j)
+$$</p>
+<p>subject to $0 \leq \alpha_i \leq C$, $\sum_i \alpha_i y_i = 0$.</p>
+<p><strong>The Kernel Trick</strong> replaces $\langle \mathbf{x}_i, \mathbf{x}_j \rangle$ with $K(\mathbf{x}_i, \mathbf{x}_j) = \langle \phi(\mathbf{x}_i), \phi(\mathbf{x}_j) \rangle$ where $\phi$ maps to a (potentially infinite-dimensional) RKHS. All operations depend only on pairwise kernel evaluations — $\phi$ itself is never computed.</p>
+<p>For the RBF kernel, $\phi$ maps to an infinite-dimensional space, yet the kernel evaluation is $O(p)$:
+$$
+K(\mathbf{x}, \mathbf{y}) = \exp(-\gamma |\mathbf{x} - \mathbf{y}|^2) = \exp\left(-\gamma \sum_{k=1}^p (x_k - y_k)^2\right)
+$$</p>
+<p>The SMO (Sequential Minimal Optimization) algorithm solves the QP by iteratively optimizing pairs of $\alpha_i$.</p>
+<p>For <strong>SVM regression</strong> ($\epsilon$-SVR), the loss is the $\epsilon$-insensitive tube:
+$$
+\ell(y, \hat{y}) = \max(0, |y - \hat{y}| - \epsilon)
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Small to medium datasets ($n &lt; 10^4$) with complex decision boundaries</li>
+<li>Text classification with TF-IDF features (linear SVM is competitive with deep models)</li>
+<li>Bioinformatics (protein classification, gene expression analysis)</li>
+</ul>
+<p>SVMs are not used in modern large-scale data engineering. They are mathematically elegant and practically deprecated for $n &gt; 10^5$. The kernel matrix doesn't fit in memory, and tree ensembles match or exceed accuracy on tabular data.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (SMO, RBF kernel)</td>
+<td>$O(n^2 \cdot p)$ to $O(n^3)$</td>
+<td>$O(n^2)$ kernel matrix</td>
+</tr>
+<tr>
+<td>Training (linear, LIBLINEAR)</td>
+<td>$O(n \cdot p \cdot \text{nnz})$</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Inference (per sample)</td>
+<td>$O(n_{\text{SV}} \cdot p)$ RBF; $O(p)$ linear</td>
+<td>$O(p)$ or $O(n_{\text{SV}})$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="35-elastic-net-l1-l2-regularized-regression">3.5 Elastic Net (L1 + L2 Regularized Regression)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Elastic Net combines Lasso (L1) and Ridge (L2) penalties:</p>
+<p>$$
+\min_\beta \frac{1}{2n}|y - X\beta|_2^2 + \alpha \left[\rho |\beta|_1 + \frac{1-\rho}{2}|\beta|_2^2\right]
+$$</p>
+<p>where $\alpha &gt; 0$ controls overall regularization and $\rho \in [0,1]$ interpolates between Ridge ($\rho=0$) and Lasso ($\rho=1$).</p>
+<p>The L1 term induces sparsity (drives coefficients to exactly zero). The L2 term handles correlated features (Lasso alone arbitrarily selects one from a correlated group; Elastic Net shrinks them together).</p>
+<p>Solved via coordinate descent, cycling through features:</p>
+<p>$$
+\beta_j \leftarrow \frac{S(r_j^T X_j / n, \, \alpha \rho)}{X_j^T X_j / n + \alpha(1-\rho)}
+$$</p>
+<p>where $S(z, \gamma) = \text{sign}(z) \cdot \max(|z| - \gamma, 0)$ is the soft-thresholding operator and $r_j = y - X_{-j}\beta_{-j}$ is the partial residual.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Feature selection with multicollinearity (genomics: $p \gg n$, features correlated in blocks)</li>
+<li>Interpretable models with provably sparse coefficient vectors</li>
+<li>Baseline regression before escalating to gradient boosting</li>
+<li>Regularization path computation via warm starts for model selection</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coordinate descent (single $\alpha$)</td>
+<td>$O(n \cdot p)$ per pass, typically $O(n \cdot p \cdot T)$ for convergence</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+<tr>
+<td>Full regularization path ($K$ values)</td>
+<td>$O(K \cdot n \cdot p \cdot T)$ with warm starts</td>
+<td>$O(n \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="36-random-forests">3.6 Random Forests</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Random Forest (Breiman, 2001) constructs an ensemble of $T$ decision trees, each trained on a bootstrap sample of the data. At each split, a random subset of $m = \lfloor\sqrt{p}\rfloor$ features (classification) or $m = \lfloor p/3 \rfloor$ (regression) is considered. The ensemble prediction:</p>
+<p>$$
+\hat{y}(\mathbf{x}) = \frac{1}{T}\sum_{t=1}^T f_t(\mathbf{x}) \quad \text{(regression)}
+$$</p>
+<p>$$
+\hat{y}(\mathbf{x}) = \text{mode}{f_t(\mathbf{x})}_{t=1}^T \quad \text{(classification)}
+$$</p>
+<p>The generalization error bound (Breiman):</p>
+<p>$$
+\text{PE}^* \leq \bar{\rho} \cdot \frac{s^2(1 - s^2)}{s^2}
+$$</p>
+<p>where $\bar{\rho}$ is the average correlation between trees and $s$ is the average margin strength. The key insight: reducing tree correlation (via feature subsampling and bagging) drives down ensemble error, even if individual tree error remains constant.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Robust baseline for any tabular task (classification or regression)</li>
+<li>Feature importance estimation (permutation importance, impurity decrease)</li>
+<li>Missing value proximity-based imputation (missForest)</li>
+<li>Out-of-bag error estimation eliminates the need for a validation set</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training ($T$ trees, max depth $D$)</td>
+<td>$O(T \cdot n \cdot m \cdot \log^2 n)$</td>
+<td>$O(T \cdot n)$ leaf storage</td>
+</tr>
+<tr>
+<td>Inference (single sample)</td>
+<td>$O(T \cdot D)$</td>
+<td>$O(1)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="4-unsupervised-learning-clustering-density-estimation">4) Unsupervised Learning — Clustering &amp; Density Estimation</h3>
+<hr />
+<h4 id="41-dbscan">4.1 DBSCAN</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>DBSCAN (Ester et al., 1996) defines clusters as connected components of <strong>density-reachable</strong> points. Parameters: $\epsilon$ (neighborhood radius), $\text{minPts}$ (minimum neighbors).</p>
+<ul>
+<li><strong>Core point</strong>: $|\mathcal{N}_\epsilon(\mathbf{x})| \geq \text{minPts}$</li>
+<li><strong>Border point</strong>: within $\epsilon$ of a core point, but not core itself</li>
+<li><strong>Noise</strong>: neither core nor border</li>
+</ul>
+<p>Two points $\mathbf{x}$ and $\mathbf{y}$ are <strong>density-reachable</strong> if there exists a chain of core points from $\mathbf{x}$ to $\mathbf{y}$, each within $\epsilon$ of the next. A cluster is the maximal set of density-connected points.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Discovering clusters of arbitrary shape (DBSCAN does not assume convexity or Gaussianity)</li>
+<li>Geospatial clustering (GPS coordinate grouping with Haversine distance)</li>
+<li>Noise/outlier labeling is a native feature (points labeled as -1)</li>
+<li>Preprocessing: identifying dense regions in feature space to guide feature engineering</li>
+</ul>
+<p>The critical weakness: DBSCAN cannot handle clusters of varying density. A single $\epsilon$ that captures dense clusters will merge sparse ones, and vice versa.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>With spatial index (KD-Tree/Ball-Tree)</td>
+<td>$O(n \log n)$ average</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Brute-force (high-dimensional)</td>
+<td>$O(n^2)$</td>
+<td>$O(n^2)$ distance matrix</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="42-hdbscan">4.2 HDBSCAN</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>HDBSCAN (Campello et al., 2013) extends DBSCAN by eliminating the $\epsilon$ parameter entirely. The algorithm:</p>
+<ol>
+<li>
+<p>Compute the <strong>mutual reachability distance</strong>: $d_{\text{mreach}}(\mathbf{x}_i, \mathbf{x}_j) = \max(\text{core}_k(\mathbf{x}_i), \text{core}_k(\mathbf{x}_j), d(\mathbf{x}_i, \mathbf{x}_j))$ where $\text{core}_k(\mathbf{x}) = d(\mathbf{x}, \mathbf{x}^{(k)})$ is the distance to the $k$-th nearest neighbor.</p>
+</li>
+<li>
+<p>Build the <strong>minimum spanning tree</strong> of the mutual reachability graph.</p>
+</li>
+<li>
+<p>Construct a <strong>cluster hierarchy</strong> (dendrogram) by removing edges in decreasing weight order.</p>
+</li>
+<li>
+<p><strong>Condense the hierarchy</strong> using minimum cluster size $m_{\text{clSize}}$: components smaller than $m_{\text{clSize}}$ at a split become noise, not subclusters.</p>
+</li>
+<li>
+<p><strong>Extract the optimal flat clustering</strong> by maximizing cluster stability: $S(C) = \sum_{\mathbf{x} \in C}(\lambda_{\text{death}}(\mathbf{x}) - \lambda_{\text{birth}}(C))$ where $\lambda = 1/\epsilon$.</p>
+</li>
+</ol>
+<p><strong>Data Processing Application</strong></p>
+<p>HDBSCAN is the correct default choice for density-based clustering in production:</p>
+<ul>
+<li>Handles varying-density clusters (fundamentally fixes DBSCAN's weakness)</li>
+<li>Provides cluster membership probabilities (soft assignment)</li>
+<li>The condensed tree is a rich multi-scale representation of data structure</li>
+<li>Robust to noise — noisy points are explicitly identified, not forced into clusters</li>
+</ul>
+<p>Applications: customer segmentation, document clustering, spatial event detection, anomaly detection (low-stability points).</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mutual reachability distances</td>
+<td>$O(n^2)$ brute-force; $O(n \log n)$ with spatial index</td>
+<td>$O(n^2)$ or $O(n \cdot k)$</td>
+</tr>
+<tr>
+<td>MST (Prim's)</td>
+<td>$O(n^2)$ or $O(E \log n)$ with sparse graph</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Hierarchy + extraction</td>
+<td>$O(n \log n)$</td>
+<td>$O(n)$</td>
+</tr>
+<tr>
+<td>Total (with KD-Tree)</td>
+<td>$O(n \log n)$ best, $O(n^2)$ worst (high $p$)</td>
+<td>$O(n \cdot k)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="43-gaussian-mixture-models-gmm-expectation-maximization">4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>A GMM models data as a mixture of $K$ Gaussian components:</p>
+<p>$$
+p(\mathbf{x}) = \sum_{k=1}^K \pi_k \, \mathcal{N}(\mathbf{x} \mid \mu_k, \Sigma_k)
+$$</p>
+<p>where $\pi_k$ are mixing weights ($\sum_k \pi_k = 1$), $\mu_k$ are means, and $\Sigma_k$ are covariance matrices.</p>
+<p>The EM algorithm iterates:</p>
+<p><strong>E-step</strong> — compute responsibilities:
+$$
+\gamma_{ik} = \frac{\pi_k \, \mathcal{N}(\mathbf{x}<em>i \mid \mu_k, \Sigma_k)}{\sum</em>{j=1}^K \pi_j \, \mathcal{N}(\mathbf{x}_i \mid \mu_j, \Sigma_j)}
+$$</p>
+<p><strong>M-step</strong> — update parameters:
+$$
+N_k = \sum_{i=1}^n \gamma_{ik}, \quad \mu_k = \frac{1}{N_k}\sum_{i=1}^n \gamma_{ik} \mathbf{x}_i
+$$</p>
+<p>$$
+\Sigma_k = \frac{1}{N_k}\sum_{i=1}^n \gamma_{ik}(\mathbf{x}_i - \mu_k)(\mathbf{x}_i - \mu_k)^T, \quad \pi_k = \frac{N_k}{n}
+$$</p>
+<p>EM monotonically increases the log-likelihood $\sum_i \log p(\mathbf{x}_i)$ and converges to a local maximum. Model selection (choosing $K$) uses BIC:</p>
+<p>$$
+\text{BIC} = -2\log \mathcal{L} + k \log n
+$$</p>
+<p>where $k$ is the number of free parameters: $k = K \cdot p + K \cdot p(p+1)/2 + K - 1$ for full covariance.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Soft clustering (probabilistic assignment to each cluster)</li>
+<li>Density estimation for anomaly detection (low-likelihood points are anomalies)</li>
+<li>Modeling heterogeneous populations (e.g., multi-modal sensor distributions)</li>
+<li>Initialization for more complex models (GMM priors in Bayesian methods)</li>
+<li>Covariance regularization variants: <code>full</code>, <code>tied</code>, <code>diag</code>, <code>spherical</code> trade flexibility for stability</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (per iteration)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E-step</td>
+<td>$O(n \cdot K \cdot p^2)$ (Mahalanobis distance)</td>
+<td>$O(n \cdot K)$</td>
+</tr>
+<tr>
+<td>M-step</td>
+<td>$O(n \cdot K \cdot p^2)$ (covariance updates)</td>
+<td>$O(K \cdot p^2)$</td>
+</tr>
+<tr>
+<td>Total ($T$ iterations)</td>
+<td>$O(T \cdot n \cdot K \cdot p^2)$</td>
+<td>$O(n \cdot K + K \cdot p^2)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="44-agglomerative-hierarchical-clustering">4.4 Agglomerative Hierarchical Clustering</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Bottom-up clustering: each point starts as its own cluster. At each step, merge the two clusters minimizing a linkage criterion:</p>
+<table>
+<thead>
+<tr>
+<th>Linkage</th>
+<th>Formula</th>
+<th>Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Single</strong></td>
+<td>$\min_{a \in A, b \in B} d(a, b)$</td>
+<td>Chaining effect. Finds elongated clusters.</td>
+</tr>
+<tr>
+<td><strong>Complete</strong></td>
+<td>$\max_{a \in A, b \in B} d(a, b)$</td>
+<td>Compact, spherical clusters. Sensitive to outliers.</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>$\frac{1}{</td>
+<td>A</td>
+</tr>
+<tr>
+<td><strong>Ward</strong></td>
+<td>$\Delta(\text{SSE}) = \text{SSE}_{A \cup B} - \text{SSE}_A - \text{SSE}_B$</td>
+<td>Minimizes within-cluster variance. Produces balanced trees.</td>
+</tr>
+</tbody>
+</table>
+<p>Ward's method is equivalent to merging the pair that minimizes the increase in the total $\sum_k \sum_{i \in C_k} |\mathbf{x}_i - \mu_k|^2$.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Dendrograms for multi-scale cluster exploration (no need to pre-specify $K$)</li>
+<li>Taxonomy construction (hierarchical relationships are the output, not a nuisance)</li>
+<li>Connectivity-constrained clustering (only merge spatially adjacent clusters via a connectivity matrix)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Naive (full distance matrix)</td>
+<td>$O(n^3)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>With nearest-neighbor chain (Ward, complete, average)</td>
+<td>$O(n^2)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Single linkage (via MST)</td>
+<td>$O(n^2)$ or $O(n \log n)$ with spatial index</td>
+<td>$O(n)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="45-spectral-clustering">4.5 Spectral Clustering</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Spectral clustering reformulates the clustering problem as a graph partitioning problem. Given affinity matrix $W$ (e.g., $W_{ij} = \exp(-\gamma |\mathbf{x}_i - \mathbf{x}_j|^2)$):</p>
+<ol>
+<li>Compute degree matrix $D = \text{diag}(\sum_j W_{ij})$</li>
+<li>Form the normalized Laplacian: $L_{\text{sym}} = I - D^{-1/2}WD^{-1/2}$ (or $L_{\text{rw}} = I - D^{-1}W$)</li>
+<li>Compute the bottom-$K$ eigenvectors $U \in \mathbb{R}^{n \times K}$ of $L$</li>
+<li>Row-normalize $U$ and run $K$-means on the rows</li>
+</ol>
+<p>The spectral embedding maps points into a space where cluster structure is linearly separable, even if the original clusters are non-convex. The number of connected components equals the multiplicity of eigenvalue 0 in the Laplacian; for approximately separated clusters, the bottom-$K$ eigenvectors capture this near-disconnection.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Image segmentation (pixels as nodes, affinity from spatial proximity and intensity)</li>
+<li>Community detection in graphs (social networks, citation networks)</li>
+<li>Non-convex cluster shapes where $K$-means and GMMs fail</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Affinity matrix</td>
+<td>$O(n^2 \cdot p)$</td>
+<td>$O(n^2)$</td>
+</tr>
+<tr>
+<td>Eigen decomposition (bottom-$K$)</td>
+<td>$O(n^2 \cdot K)$ via Lanczos</td>
+<td>$O(n \cdot K)$</td>
+</tr>
+<tr>
+<td>K-means on embedding</td>
+<td>$O(n \cdot K^2 \cdot T_{\text{km}})$</td>
+<td>$O(n \cdot K)$</td>
+</tr>
+</tbody>
+</table>
+<p>For large $n$: use sparse affinity (KNN graph), then <code>scipy.sparse.linalg.eigsh</code> or LOBPCG.</p>
+<hr />
+<h3 id="5-deep-learning-for-data">5) Deep Learning for Data</h3>
+<hr />
+<h4 id="51-feedforward-networks-mlp">5.1 Feedforward Networks (MLP)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>A multilayer perceptron with $L$ hidden layers computes:</p>
+<p>$$
+\mathbf{h}^{(0)} = \mathbf{x}, \quad \mathbf{h}^{(\ell)} = \sigma(W^{(\ell)} \mathbf{h}^{(\ell-1)} + \mathbf{b}^{(\ell)}), \quad \hat{y} = W^{(L+1)} \mathbf{h}^{(L)} + \mathbf{b}^{(L+1)}
+$$</p>
+<p>Activation functions:
+- <strong>ReLU</strong>: $\sigma(z) = \max(0, z)$. Sparse activation. Dead neuron problem.
+- <strong>GELU</strong>: $\sigma(z) = z \cdot \Phi(z)$. Smooth approximation to ReLU. Default in Transformers.
+- <strong>SiLU (Swish)</strong>: $\sigma(z) = z \cdot \text{sigmoid}(z)$. Non-monotonic. Used in EfficientNet.</p>
+<p><strong>Loss functions</strong>:
+- Regression: MSE $= \frac{1}{n}\sum_i (y_i - \hat{y}<em>i)^2$, Huber loss for robustness
+- Binary classification: BCE $= -\frac{1}{n}\sum_i [y_i \log \hat{y}_i + (1-y_i)\log(1-\hat{y}_i)]$
+- Multi-class: Cross-entropy $= -\frac{1}{n}\sum_i \sum_c y</em>{ic}\log \hat{y}_{ic}$</p>
+<p><strong>Optimization</strong>: Adam (Kingma &amp; Ba, 2015) with adaptive learning rates:
+$$
+m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t, \quad v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2
+$$
+$$
+\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
+$$</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Universal function approximator for tabular data (when tree methods plateau)</li>
+<li>Entity embedding layers for categorical features (learned dense representations)</li>
+<li>Multi-task learning (shared trunk with task-specific heads)</li>
+<li>Recent work (TabNet, FT-Transformer) shows MLPs with proper regularization competitive with XGBoost on tabular benchmarks</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>For layer widths $[p, h_1, h_2, \ldots, h_L, c]$:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (per sample)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward</td>
+<td>$O(\sum_{\ell} h_\ell \cdot h_{\ell-1})$</td>
+<td>$O(\sum_\ell h_\ell)$ activations</td>
+</tr>
+<tr>
+<td>Backward</td>
+<td>$\approx 2\times$ forward</td>
+<td>+ gradient buffers</td>
+</tr>
+<tr>
+<td>Total training</td>
+<td>$O(E \cdot n \cdot \sum h_\ell \cdot h_{\ell-1})$</td>
+<td>$O(\text{params} + \text{activations})$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="52-long-short-term-memory-lstm">5.2 Long Short-Term Memory (LSTM)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>LSTM (Hochreiter &amp; Schmidhuber, 1997) addresses the vanishing gradient problem in RNNs by introducing a gated cell state $\mathbf{c}_t$:</p>
+<p><strong>Forget gate</strong>: $\mathbf{f}<em>t = \sigma(W_f [\mathbf{h}</em>{t-1}, \mathbf{x}_t] + \mathbf{b}_f)$</p>
+<p><strong>Input gate</strong>: $\mathbf{i}<em>t = \sigma(W_i [\mathbf{h}</em>{t-1}, \mathbf{x}_t] + \mathbf{b}_i)$</p>
+<p><strong>Candidate cell</strong>: $\tilde{\mathbf{c}}<em>t = \tanh(W_c [\mathbf{h}</em>{t-1}, \mathbf{x}_t] + \mathbf{b}_c)$</p>
+<p><strong>Cell state update</strong>: $\mathbf{c}<em>t = \mathbf{f}_t \odot \mathbf{c}</em>{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{c}}_t$</p>
+<p><strong>Output gate</strong>: $\mathbf{o}<em>t = \sigma(W_o [\mathbf{h}</em>{t-1}, \mathbf{x}_t] + \mathbf{b}_o)$</p>
+<p><strong>Hidden state</strong>: $\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{c}_t)$</p>
+<p>The cell state $\mathbf{c}_t$ acts as a "conveyor belt" — information flows across time steps with only multiplicative interactions (no matrix multiplications), enabling gradient flow over hundreds of steps.</p>
+<p>Parameter count: $4(p \cdot h + h^2 + h)$ for input dim $p$, hidden dim $h$.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Time-series forecasting (sensor data, financial markers, demand prediction)</li>
+<li>Sequential anomaly detection (learn normal sequence patterns, flag deviations)</li>
+<li>Log sequence analysis (IT operations, event correlation)</li>
+<li>Encoder-decoder architectures for sequence-to-sequence data transformation</li>
+</ul>
+<p>Note: For most time-series tasks, Transformers and temporal CNNs have overtaken LSTMs in accuracy. LSTMs remain relevant for streaming inference where the hidden state provides a natural incremental computation.</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (sequence length $T$)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward (single sequence)</td>
+<td>$O(T \cdot (p \cdot h + h^2))$</td>
+<td>$O(T \cdot h)$ (store states for BPTT)</td>
+</tr>
+<tr>
+<td>BPTT</td>
+<td>$O(T \cdot (p \cdot h + h^2))$</td>
+<td>$O(T \cdot h)$</td>
+</tr>
+<tr>
+<td>Truncated BPTT (window $\tau$)</td>
+<td>$O(T \cdot (p \cdot h + h^2))$ fwd, $O(\tau \cdot (p \cdot h + h^2))$ bwd</td>
+<td>$O(\tau \cdot h)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="53-gated-recurrent-unit-gru">5.3 Gated Recurrent Unit (GRU)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>GRU (Cho et al., 2014) simplifies the LSTM by merging the cell state and hidden state, and combining the forget and input gates into a single <strong>update gate</strong>:</p>
+<p><strong>Update gate</strong>: $\mathbf{z}<em>t = \sigma(W_z [\mathbf{h}</em>{t-1}, \mathbf{x}_t])$</p>
+<p><strong>Reset gate</strong>: $\mathbf{r}<em>t = \sigma(W_r [\mathbf{h}</em>{t-1}, \mathbf{x}_t])$</p>
+<p><strong>Candidate hidden</strong>: $\tilde{\mathbf{h}}<em>t = \tanh(W [\mathbf{r}_t \odot \mathbf{h}</em>{t-1}, \mathbf{x}_t])$</p>
+<p><strong>Hidden state</strong>: $\mathbf{h}<em>t = (1 - \mathbf{z}_t) \odot \mathbf{h}</em>{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t$</p>
+<p>Parameter count: $3(p \cdot h + h^2 + h)$ — 25% fewer parameters than LSTM.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Same as LSTM with empirically similar (sometimes better) performance on shorter sequences</li>
+<li>Preferred when parameter budget is constrained (edge devices, embedded inference)</li>
+<li>Streaming telemetry analysis where model size affects deployment cost</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Same asymptotic as LSTM but with a smaller constant factor (3 gates vs. 4).</p>
+<hr />
+<h4 id="54-convolutional-neural-networks-cnn-on-structured-data">5.4 Convolutional Neural Networks (CNN) on Structured Data</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>1D convolution applies a filter $\mathbf{w} \in \mathbb{R}^{k \times c_{\text{in}}}$ across consecutive positions:</p>
+<p>$$
+(\mathbf{x} * \mathbf{w})<em>t = \sum</em>{\tau=0}^{k-1} \sum_{c=1}^{c_{\text{in}}} w_{\tau,c} \cdot x_{t+\tau, c}
+$$</p>
+<p>For 2D data (images, spectrograms, or tabular data reshaped as a matrix):</p>
+<p>$$
+(X * W)<em>{i,j} = \sum</em>{m=0}^{k_h-1}\sum_{n=0}^{k_w-1}\sum_{c} W_{m,n,c} \cdot X_{i+m, j+n, c}
+$$</p>
+<p><strong>Dilated (atrous) convolutions</strong> insert gaps of size $d-1$ between filter taps, expanding the receptive field to $k + (k-1)(d-1)$ without increasing parameters.</p>
+<p><strong>Data Processing Application</strong></p>
+<p>CNNs are not limited to images. On structured data:
+- <strong>1D-CNN on time series</strong>: WaveNet-style dilated causal convolutions for temporal modeling (faster than RNNs, parallelizable)
+- <strong>2D-CNN on tabular data</strong>: Reshape feature vectors into a 2D grid (e.g., by correlation-based ordering), then apply standard CV architectures. SuperTML and DeepInsight use this approach.
+- <strong>Spectral analysis</strong>: FFT of time series → spectrogram → 2D-CNN for frequency-domain pattern recognition
+- <strong>Log/event sequence classification</strong>: Treat tokenized log lines as 1D signals</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>For input size $n$, $c_{\text{in}}$ channels, filter size $k$, $c_{\text{out}}$ filters:</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (per layer)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward (1D)</td>
+<td>$O(n \cdot k \cdot c_{\text{in}} \cdot c_{\text{out}})$</td>
+<td>$O(n \cdot c_{\text{out}})$</td>
+</tr>
+<tr>
+<td>Forward (2D, $H \times W$)</td>
+<td>$O(H \cdot W \cdot k^2 \cdot c_{\text{in}} \cdot c_{\text{out}})$</td>
+<td>$O(H \cdot W \cdot c_{\text{out}})$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="55-attention-mechanisms-transformers-for-structured-data">5.5 Attention Mechanisms &amp; Transformers for Structured Data</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p><strong>Scaled Dot-Product Attention</strong> (Vaswani et al., 2017):</p>
+<p>$$
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
+$$</p>
+<p>where $Q, K, V \in \mathbb{R}^{n \times d_k}$ are queries, keys, and values respectively. The $1/\sqrt{d_k}$ scaling prevents softmax saturation.</p>
+<p><strong>Multi-Head Attention</strong> runs $h$ parallel attention heads with different learned projections:
+$$
+\text{MHA}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O
+$$
+$$
+\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
+$$</p>
+<p>A <strong>transformer block</strong> = LayerNorm → MHA → Residual → LayerNorm → FFN → Residual.</p>
+<p><strong>For tabular data</strong> (FT-Transformer, TabTransformer):
+- Categorical features → learned embeddings
+- Numerical features → linear projection (or periodic encoding)
+- Feature tokens attend to each other via self-attention
+- [CLS] token aggregates for prediction</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li><strong>Feature interaction modeling</strong>: Self-attention explicitly learns pairwise and higher-order feature interactions without manual engineering</li>
+<li><strong>Handling heterogeneous features</strong>: Embedding layers handle mixed types naturally</li>
+<li><strong>Time series with irregular sampling</strong>: Positional encodings can encode actual timestamps, handling gaps gracefully</li>
+<li><strong>Tabular data</strong>: FT-Transformer matches or beats XGBoost on some benchmarks, particularly with large $n$ and complex interactions</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-attention (sequence/features = $L$)</td>
+<td>$O(L^2 \cdot d)$</td>
+<td>$O(L^2 + L \cdot d)$</td>
+</tr>
+<tr>
+<td>FFN block</td>
+<td>$O(L \cdot d \cdot d_{\text{ff}})$</td>
+<td>$O(L \cdot d_{\text{ff}})$</td>
+</tr>
+<tr>
+<td>Full transformer ($N$ layers)</td>
+<td>$O(N \cdot (L^2 d + L d \cdot d_{\text{ff}}))$</td>
+<td>$O(N \cdot (L^2 + L \cdot d_{\text{ff}}))$</td>
+</tr>
+</tbody>
+</table>
+<p>For long sequences: linear attention variants (Performer, Linformer) reduce to $O(L \cdot d^2)$.</p>
+<hr />
+<h4 id="56-temporal-fusion-transformers-tft">5.6 Temporal Fusion Transformers (TFT)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>TFT (Lim et al., 2021) is purpose-built for multi-horizon time-series forecasting with heterogeneous inputs. Architecture components:</p>
+<ol>
+<li>
+<p><strong>Variable Selection Networks (VSN)</strong>: Gated Residual Networks (GRN) with softmax attention over input features, learning which variables matter at each time step:
+$$
+\text{VSN}(\mathbf{x}<em>t) = \sum</em>{j=1}^p v_j(t) \cdot \tilde{x}_j(t), \quad v_j(t) = \text{softmax}(\text{GRN}(\mathbf{x}_t))_j
+$$</p>
+</li>
+<li>
+<p><strong>Static covariate encoders</strong>: Entity-level features (e.g., store ID) are encoded once and injected into temporal processing via context vectors.</p>
+</li>
+<li>
+<p><strong>Temporal self-attention</strong> with a decoder mask (causal attention for future steps).</p>
+</li>
+<li>
+<p><strong>Quantile output</strong>: Predicts quantiles $\hat{y}<em>{t+\tau}^{(q)}$ for each forecast horizon $\tau$, trained with quantile loss:
+$$
+\mathcal{L}_q = \sum</em>{\tau} \sum_i \left[q \cdot (y_{i,t+\tau} - \hat{y}<em>{i,t+\tau}^{(q)})^+ + (1-q) \cdot (\hat{y}</em>{i,t+\tau}^{(q)} - y_{i,t+\tau})^+\right]
+$$</p>
+</li>
+</ol>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Multi-step probabilistic time-series forecasting with exogenous variables</li>
+<li>Demand forecasting (retail, energy) where known future inputs (holidays, promotions) exist</li>
+<li>Interpretable attention weights reveal which time steps and features drive predictions</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward (lookback $T_{\text{enc}}$, horizon $T_{\text{dec}}$)</td>
+<td>$O((T_{\text{enc}} + T_{\text{dec}})^2 \cdot d + p \cdot d)$</td>
+<td>$O((T_{\text{enc}} + T_{\text{dec}}) \cdot d)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="57-neural-ordinary-differential-equations-neural-odes">5.7 Neural Ordinary Differential Equations (Neural ODEs)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Neural ODEs (Chen et al., 2018) replace discrete hidden layers with a continuous dynamics parameterization:</p>
+<p>$$
+\frac{d\mathbf{h}(t)}{dt} = f_\theta(\mathbf{h}(t), t)
+$$</p>
+<p>The hidden state at any time is obtained by solving the ODE: $\mathbf{h}(t_1) = \mathbf{h}(t_0) + \int_{t_0}^{t_1} f_\theta(\mathbf{h}(t), t) \, dt$, computed via adaptive ODE solvers (Dormand-Prince, RK45). Gradients are computed via the <strong>adjoint method</strong>, avoiding backpropagation through solver steps:</p>
+<p>$$
+\frac{d\mathcal{L}}{d\theta} = -\int_{t_1}^{t_0} \mathbf{a}(t)^T \frac{\partial f}{\partial \theta} dt, \quad \mathbf{a}(t) = \frac{d\mathcal{L}}{d\mathbf{h}(t)}
+$$</p>
+<p>Memory cost is $O(1)$ in depth (only the final state and adjoint are stored, not intermediate activations).</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li><strong>Irregularly sampled time series</strong>: The ODE solver naturally handles non-uniform time gaps (no padding, no interpolation)</li>
+<li><strong>Physics-informed modeling</strong>: $f_\theta$ can encode known dynamics with learnable corrections</li>
+<li><strong>Continuous normalizing flows</strong>: Generative modeling with exact log-likelihood computation</li>
+<li><strong>Latent ODE models</strong>: Encode irregular sequences into a latent state, evolve with Neural ODE, decode at arbitrary query times</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forward (adaptive solver, $S$ steps)</td>
+<td>$O(S \cdot \text{cost}(f_\theta))$</td>
+<td>$O(\text{params})$ (adjoint: constant in depth)</td>
+</tr>
+<tr>
+<td>Backward (adjoint method)</td>
+<td>$O(S \cdot \text{cost}(f_\theta))$</td>
+<td>$O(\text{params})$</td>
+</tr>
+</tbody>
+</table>
+<p>$S$ is adaptive — stiff dynamics or tight tolerances increase $S$ dramatically. This makes training time hard to predict, which is exactly the kind of thing that delights no one in production.</p>
+<hr />
+<h3 id="6-generative-ai-in-data-processing">6) Generative AI in Data Processing</h3>
+<p>Generative models in data engineering serve a specific, pragmatic purpose: manufacturing data that doesn't exist or augmenting data that is pathologically imbalanced. This is not about generating art — it is about generating rows.</p>
+<hr />
+<h4 id="61-generative-adversarial-networks-gans">6.1 Generative Adversarial Networks (GANs)</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>GANs (Goodfellow et al., 2014) train two networks in a minimax game:</p>
+<p><strong>Generator</strong> $G: \mathbf{z} \to \mathbf{x}_{\text{fake}}$ maps noise $\mathbf{z} \sim p_z$ to data space.</p>
+<p><strong>Discriminator</strong> $D: \mathbf{x} \to [0, 1]$ classifies real vs. generated samples.</p>
+<p>$$
+\min_G \max_D \, V(D, G) = \mathbb{E}<em>{\mathbf{x} \sim p</em>{\text{data}}}[\log D(\mathbf{x})] + \mathbb{E}_{\mathbf{z} \sim p_z}[\log(1 - D(G(\mathbf{z})))]
+$$</p>
+<p>At the Nash equilibrium, $G$ generates samples indistinguishable from real data, and $D$ outputs 0.5 everywhere. In practice, GANs suffer from:
+- <strong>Mode collapse</strong>: $G$ generates a narrow subset of the data distribution
+- <strong>Training instability</strong>: The discriminator may overpower the generator (or vice versa), collapsing the gradient signal
+- <strong>Evaluation difficulty</strong>: No tractable likelihood; FID and IS are approximate metrics</p>
+<p>Wasserstein GAN (WGAN) addresses instability by replacing the JS divergence with the Earth Mover distance:
+$$
+W(p_{\text{data}}, p_G) = \sup_{|f|<em>L \leq 1} \mathbb{E}</em>{\mathbf{x} \sim p_{\text{data}}}[f(\mathbf{x})] - \mathbb{E}_{\mathbf{x} \sim p_G}[f(\mathbf{x})]
+$$</p>
+<p>enforcing the Lipschitz constraint via gradient penalty (WGAN-GP) or spectral normalization.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Synthetic data generation for privacy-preserving data sharing (generate statistically equivalent datasets without exposing individual records)</li>
+<li>Data augmentation for severely imbalanced classes (generate minority samples)</li>
+<li>Simulation of rare events (fraud, equipment failure, natural disasters) for model training</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time (per iteration)</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generator forward + backward</td>
+<td>$O(B \cdot \text{params}_G)$</td>
+<td>$O(\text{params}_G + B \cdot p)$</td>
+</tr>
+<tr>
+<td>Discriminator forward + backward</td>
+<td>$O(B \cdot \text{params}_D)$</td>
+<td>$O(\text{params}_D + B \cdot p)$</td>
+</tr>
+<tr>
+<td>Total ($E$ epochs, $n/B$ batches)</td>
+<td>$O(E \cdot n \cdot (\text{params}_G + \text{params}_D))$</td>
+<td>$O(\text{params}_G + \text{params}_D)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="62-conditional-gans-ctgan-for-tabular-data">6.2 Conditional GANs (CTGAN) for Tabular Data</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>CTGAN (Xu et al., 2019) addresses the unique challenges of tabular data generation:</p>
+<ol>
+<li>
+<p><strong>Mode-specific normalization</strong>: Continuous columns are modeled as mixtures of Gaussians (via VGM — Variational Gaussian Mixture). Each value is represented as a (mode, normalized_value) pair, preventing mode collapse across multi-modal distributions.</p>
+</li>
+<li>
+<p><strong>Conditional generator</strong>: The generator is conditioned on a one-hot vector indicating which column/category to generate, with a <strong>training-by-sampling</strong> strategy that ensures balanced representation of all category values:
+$$
+G(\mathbf{z}, \mathbf{cond}) \to \mathbf{x}_{\text{fake}}
+$$</p>
+</li>
+<li>
+<p><strong>PacGAN discriminator</strong>: Operates on "pacs" of multiple generated rows simultaneously to detect mode collapse.</p>
+</li>
+</ol>
+<p><strong>Data Processing Application</strong></p>
+<p>CTGAN is the primary method for synthetic tabular data generation:
+- Generating realistic training data when original data is under privacy restrictions (GDPR, HIPAA)
+- Augmenting minority classes in imbalanced tabular datasets
+- Creating realistic test/staging datasets for data pipeline development
+- Statistical disclosure control (releasing synthetic data instead of anonymized real data)</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Same as standard GAN with additional overhead for VGM fitting ($O(n \cdot K_{\text{modes}})$ per continuous column) and conditional vector sampling ($O(C)$ per batch).</p>
+<hr />
+<h4 id="63-variational-autoencoders-vae-for-data-augmentation">6.3 Variational Autoencoders (VAE) for Data Augmentation</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>See <a href="#27-variational-autoencoders-vae">Section 2.7</a> for the full VAE formulation. For data augmentation specifically:</p>
+<ol>
+<li>Train VAE on the underrepresented class $C_{\text{min}}$</li>
+<li>Sample $\mathbf{z} \sim q_\phi(\mathbf{z} | \mathbf{x})$ for observed minority samples → interpolate in latent space</li>
+<li>Decode: $\hat{\mathbf{x}} = g_\theta(\mathbf{z})$ → generate new synthetic minority samples</li>
+<li>Alternatively: sample $\mathbf{z} \sim \mathcal{N}(0, I)$ from the prior → decode → filter via discriminative quality check</li>
+</ol>
+<p><strong>Data Processing Application</strong></p>
+<p>VAEs produce smoother, less artifact-prone synthetic data than GANs due to the continuous, regularized latent space. Preferred when:
+- Data fidelity is less critical than latent space regularity (e.g., for downstream model training, not privacy)
+- The data has meaningful continuous structure in latent space
+- Stable training is prioritized (VAEs converge reliably; GANs may not)</p>
+<p><strong>Algorithmic Complexity</strong></p>
+<p>Same as Section 2.7. Augmentation adds $O(m \cdot d)$ for sampling $m$ new points from the latent space and $O(m \cdot \text{decoder_cost})$ for decoding.</p>
+<hr />
+<h4 id="64-diffusion-models-for-tabular-synthesis">6.4 Diffusion Models for Tabular Synthesis</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>Denoising Diffusion Probabilistic Models (DDPM, Ho et al., 2020) define a forward process that gradually adds Gaussian noise over $T$ steps:</p>
+<p>$$
+q(\mathbf{x}<em>t | \mathbf{x}</em>{t-1}) = \mathcal{N}(\mathbf{x}<em>t; \sqrt{1-\beta_t}\mathbf{x}</em>{t-1}, \beta_t I)
+$$</p>
+<p>and a learnable reverse process:</p>
+<p>$$
+p_\theta(\mathbf{x}<em>{t-1} | \mathbf{x}_t) = \mathcal{N}(\mathbf{x}</em>{t-1}; \mu_\theta(\mathbf{x}_t, t), \sigma_t^2 I)
+$$</p>
+<p>The training objective reduces to predicting the noise:</p>
+<p>$$
+\mathcal{L} = \mathbb{E}<em>{t, \mathbf{x}_0, \epsilon}\left[|\epsilon - \epsilon</em>\theta(\mathbf{x}_t, t)|^2\right]
+$$</p>
+<p>where $\mathbf{x}<em>t = \sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1-\bar{\alpha}_t}\epsilon$, $\bar{\alpha}_t = \prod</em>{s=1}^t (1-\beta_s)$.</p>
+<p>For <strong>tabular data</strong> (TabDDPM, Kotelnikov et al., 2023): continuous features use Gaussian diffusion; categorical features use multinomial diffusion (discrete state transitions via transition matrices). The denoiser is typically an MLP with time embedding.</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>Emerging as superior to GANs for tabular synthesis (better density estimation, fewer mode collapse artifacts)</li>
+<li>Privacy-preserving synthetic data (differential privacy guarantees can be integrated into the training)</li>
+<li>Data augmentation with controllable diversity (noise schedule controls generation fidelity vs. novelty trade-off)</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (per step)</td>
+<td>$O(B \cdot \text{params}_\theta)$</td>
+<td>$O(\text{params}_\theta + B \cdot p)$</td>
+</tr>
+<tr>
+<td>Sampling ($T$ denoising steps)</td>
+<td>$O(T \cdot B \cdot \text{params}_\theta)$</td>
+<td>$O(B \cdot p)$</td>
+</tr>
+<tr>
+<td>DDIM (accelerated, $S \ll T$ steps)</td>
+<td>$O(S \cdot B \cdot \text{params}_\theta)$</td>
+<td>$O(B \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<p>Sampling is the bottleneck — $T = 1000$ denoising steps is standard. DDIM reduces this to $\sim 50$ steps with minimal quality loss.</p>
+<hr />
+<h4 id="65-smote-and-its-neural-successors">6.5 SMOTE and Its Neural Successors</h4>
+<p><strong>Theoretical Foundation</strong></p>
+<p>SMOTE (Chawla et al., 2002) generates synthetic minority samples by interpolating between existing minority class samples and their KNN neighbors:</p>
+<p>$$
+\mathbf{x}<em>{\text{new}} = \mathbf{x}_i + \lambda \cdot (\mathbf{x}</em>{nn} - \mathbf{x}_i), \quad \lambda \sim \text{Uniform}(0, 1)
+$$</p>
+<p>Variants address specific failure modes:
+- <strong>Borderline-SMOTE</strong>: Only oversamples points near the decision boundary
+- <strong>ADASYN</strong>: Weights oversampling toward harder-to-learn regions (density-adaptive)
+- <strong>SMOTE-ENN</strong>: Combines SMOTE with Edited Nearest Neighbors (cleans overlapping regions post-synthesis)</p>
+<p>Neural successors replace linear interpolation with learned latent-space interpolation (DEGAN, DeepSMOTE), mitigating SMOTE's tendency to generate samples in convex hulls of the minority class (useless if the minority manifold is non-convex).</p>
+<p><strong>Data Processing Application</strong></p>
+<ul>
+<li>The standard first-line approach for class imbalance in tabular data</li>
+<li>Upstream of any classifier (applied only to training data, never to validation/test)</li>
+<li>Combined with undersampling of the majority class (SMOTE + Tomek links)</li>
+<li>Being gradually supplanted by CTGAN/TabDDPM for complex distributions, but remains the fastest and simplest option for moderate imbalance</li>
+</ul>
+<p><strong>Algorithmic Complexity</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Time</th>
+<th>Space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KNN computation</td>
+<td>$O(n_{\text{min}}^2 \cdot p)$ brute-force</td>
+<td>$O(n_{\text{min}} \cdot p)$</td>
+</tr>
+<tr>
+<td>Synthesis ($m$ new points)</td>
+<td>$O(m \cdot p)$</td>
+<td>$O(m \cdot p)$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="phase-2-the-production-ecosystem-python-and-c">Phase 2 — The Production Ecosystem (Python and C#)</h2>
+<p>Theory is nonnegotiable. But theory without a framework is a whiteboard exercise. This section maps the Phase 1 taxonomy to the concrete libraries that make production deployment possible.</p>
+<hr />
+<h3 id="7-python-ecosystem">7) Python Ecosystem</h3>
+<p>Python's dominance is infrastructure, not linguistic merit. It is a thin orchestration layer atop C/C++/CUDA kernels. The following frameworks represent the load-bearing walls of that infrastructure.</p>
+<hr />
+<h4 id="71-pytorch">7.1 PyTorch</h4>
+<p><strong>Primary Use Case</strong>: Dynamic computational graphs for research and production deep learning.</p>
+<p><strong>Architectural Philosophy</strong>: Imperative (eager) execution by default. Define-by-run: the graph is constructed on-the-fly during the forward pass. <code>torch.compile()</code> (TorchDynamo + TorchInductor) now bridges the gap to graph-mode performance via JIT tracing.</p>
+<p><strong>Hardware Acceleration</strong>:
+- <strong>CUDA</strong>: First-class support via <code>torch.cuda</code>. All tensor operations dispatch to cuBLAS/cuDNN when tensors reside on GPU.
+- <strong>ROCm</strong>: AMD GPU support via HIP translation layer.
+- <strong>MPS</strong>: Apple Silicon (M1/M2/M3) via Metal Performance Shaders backend.
+- <strong>XLA</strong>: Via <code>torch_xla</code> for TPU execution (experimental).</p>
+<p><strong>Key Components for Data Engineering</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>torch.nn</code></td>
+<td>Full neural network layer library (Linear, Conv, LSTM, Transformer, etc.)</td>
+</tr>
+<tr>
+<td><code>torch.optim</code></td>
+<td>Optimizers (Adam, AdamW, SGD, LBFGS)</td>
+</tr>
+<tr>
+<td><code>torch.utils.data.DataLoader</code></td>
+<td>Parallel data loading with prefetching, batching, and custom collation</td>
+</tr>
+<tr>
+<td><code>torchvision.transforms</code></td>
+<td>Image augmentation pipeline (composable, GPU-accelerated via torchvision 0.16+)</td>
+</tr>
+<tr>
+<td><code>torch.distributed</code></td>
+<td>Multi-GPU and multi-node training (DDP, FSDP, RPC)</td>
+</tr>
+<tr>
+<td><code>torch.export</code> + <code>torch.compile</code></td>
+<td>Production graph export and ahead-of-time compilation</td>
+</tr>
+<tr>
+<td><code>torch.ao.quantization</code></td>
+<td>Post-training and quantization-aware training (INT8/FP16)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Phase 1</strong>: Implements MLPs, LSTMs, GRUs, CNNs, Transformers, VAEs, GANs, Neural ODEs (<code>torchdiffeq</code>), diffusion models, and any custom architecture.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+
+<span class="c1"># Tabular Transformer-style model</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TabularTransformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">d_model</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">nhead</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">d_model</span><span class="p">)</span>  <span class="c1"># Per-feature embedding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_enc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_features</span><span class="p">,</span> <span class="n">d_model</span><span class="p">))</span>
+        <span class="n">encoder_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">TransformerEncoderLayer</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">nhead</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">TransformerEncoder</span><span class="p">(</span><span class="n">encoder_layer</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># x: (batch, num_features) → (batch, num_features, 1) → (batch, num_features, d_model)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_enc</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Mean-pool over features</span>
+</code></pre></div>
+
+<hr />
+<h4 id="72-tensorflow-keras">7.2 TensorFlow / Keras</h4>
+<p><strong>Primary Use Case</strong>: Production-ready, graph-optimized deep learning with emphasis on deployment and serving.</p>
+<p><strong>Architectural Philosophy</strong>: Graph-first execution (TF 1.x heritage). TF 2.x defaults to eager mode with <code>tf.function</code> for graph compilation. Keras is the high-level API, now the sole official interface.</p>
+<p><strong>Hardware Acceleration</strong>:
+- <strong>CUDA</strong>: Via TensorRT integration for inference optimization.
+- <strong>TPU</strong>: First-class support via <code>tf.distribute.TPUStrategy</code> (TensorFlow's raison d'être for Google Cloud).
+- <strong>TF Lite</strong>: Mobile/edge deployment (INT8 quantization, delegate to GPU/NPU).
+- <strong>TF.js</strong>: Browser inference via WebGL/WASM.</p>
+<p><strong>Key Components for Data Engineering</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tf.data</code></td>
+<td>High-performance input pipeline (prefetch, interleave, cache, parallel map)</td>
+</tr>
+<tr>
+<td><code>tf.keras.layers</code></td>
+<td>Standard layer library + preprocessing layers (Normalization, CategoryEncoding)</td>
+</tr>
+<tr>
+<td><code>tf.distribute</code></td>
+<td>Multi-GPU/TPU strategies (MirroredStrategy, MultiWorkerMirroredStrategy)</td>
+</tr>
+<tr>
+<td>TensorFlow Serving</td>
+<td>Production model serving via gRPC/REST</td>
+</tr>
+<tr>
+<td>TF Extended (TFX)</td>
+<td>End-to-end ML pipeline orchestration (ExampleGen → Transform → Trainer → Pusher)</td>
+</tr>
+<tr>
+<td>TF Probability</td>
+<td>Bayesian layers, variational inference, distributions</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Phase 1</strong>: Same model coverage as PyTorch. TFX specifically addresses the data engineering lifecycle (data validation, feature engineering, model analysis).</p>
+<hr />
+<h4 id="73-jax">7.3 JAX</h4>
+<p><strong>Primary Use Case</strong>: Functional, composable numerical computing with automatic differentiation and hardware compilation.</p>
+<p><strong>Architectural Philosophy</strong>: JAX is <strong>not</strong> a deep learning framework — it is a NumPy replacement with three transformations:</p>
+<table>
+<thead>
+<tr>
+<th>Transformation</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jax.grad</code></td>
+<td>Automatic differentiation (forward and reverse mode)</td>
+</tr>
+<tr>
+<td><code>jax.jit</code></td>
+<td>Just-in-time compilation to XLA (fuses operations, optimizes for hardware)</td>
+</tr>
+<tr>
+<td><code>jax.vmap</code></td>
+<td>Automatic vectorization (batch dimension added without explicit loops)</td>
+</tr>
+<tr>
+<td><code>jax.pmap</code></td>
+<td>Parallel map across devices (multi-GPU/TPU SPMD)</td>
+</tr>
+</tbody>
+</table>
+<p>JAX arrays are <strong>immutable</strong>. There is no in-place mutation. This functional purity enables aggressive compiler optimizations but requires a paradigm shift for imperative programmers.</p>
+<p>Frameworks built on JAX: <strong>Flax</strong> (neural networks), <strong>Optax</strong> (optimizers), <strong>Haiku</strong> (DeepMind), <strong>Equinox</strong> (Pythonic modules).</p>
+<p><strong>Hardware Acceleration</strong>:
+- <strong>TPU</strong>: Native XLA compilation — JAX was born at Google for TPU workloads.
+- <strong>CUDA</strong>: Via XLA CUDA backend.
+- <strong>CPU</strong>: XLA optimizes for CPU as well (SIMD vectorization).</p>
+<p><strong>Relevance to Phase 1</strong>: JAX excels for custom research implementations (Neural ODEs via <code>diffrax</code>, normalizing flows, novel architectures). Its <code>vmap</code> eliminates manual batching and its <code>jit</code> eliminates Python overhead.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">grad</span><span class="p">,</span> <span class="n">jit</span><span class="p">,</span> <span class="n">vmap</span>
+
+<span class="c1"># Pure-functional linear regression with L2 regularization</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># JIT-compiled gradient computation</span>
+<span class="n">grad_fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">))</span>
+
+<span class="c1"># vmap: vectorize over a batch of different regularization strengths</span>
+<span class="n">batched_loss</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div>
+
+<hr />
+<h4 id="74-scikit-learn">7.4 Scikit-Learn</h4>
+<p><strong>Primary Use Case</strong>: Classical ML algorithms, preprocessing, model selection, and evaluation.</p>
+<p><strong>Architectural Philosophy</strong>: The <code>Estimator</code> API: every algorithm implements <code>fit()</code>, <code>predict()</code>, and optionally <code>transform()</code>. Pipelines (<code>Pipeline</code>, <code>ColumnTransformer</code>) compose preprocessing and modeling into a single object with coordinated <code>fit/transform/predict</code>.</p>
+<p><strong>Hardware Acceleration</strong>: CPU-only natively. Parallelism via <code>joblib</code> (thread or process). Intel acceleration via <code>scikit-learn-intelex</code> (drop-in patching of KNN, SVM, PCA, Random Forest to use Intel oneDAL).</p>
+<p><strong>Key Components for Data Engineering</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Phase 1 Methods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sklearn.impute</code></td>
+<td>MICE (<code>IterativeImputer</code>), KNN imputation (<code>KNNImputer</code>)</td>
+</tr>
+<tr>
+<td><code>sklearn.preprocessing</code></td>
+<td>StandardScaler, RobustScaler, QuantileTransformer, PowerTransformer</td>
+</tr>
+<tr>
+<td><code>sklearn.decomposition</code></td>
+<td>PCA, KernelPCA, SparsePCA, NMF, TruncatedSVD</td>
+</tr>
+<tr>
+<td><code>sklearn.ensemble</code></td>
+<td>RandomForest, GradientBoosting, IsolationForest</td>
+</tr>
+<tr>
+<td><code>sklearn.svm</code></td>
+<td>SVC, OneClassSVM, SVR</td>
+</tr>
+<tr>
+<td><code>sklearn.cluster</code></td>
+<td>DBSCAN, AgglomerativeClustering, SpectralClustering, KMeans</td>
+</tr>
+<tr>
+<td><code>sklearn.neighbors</code></td>
+<td>LocalOutlierFactor, KNeighborsClassifier</td>
+</tr>
+<tr>
+<td><code>sklearn.manifold</code></td>
+<td>t-SNE</td>
+</tr>
+<tr>
+<td><code>sklearn.mixture</code></td>
+<td>GaussianMixture</td>
+</tr>
+<tr>
+<td><code>sklearn.linear_model</code></td>
+<td>ElasticNet, Lasso, Ridge, LogisticRegression</td>
+</tr>
+<tr>
+<td><code>sklearn.feature_extraction</code></td>
+<td>FeatureHasher, DictVectorizer</td>
+</tr>
+<tr>
+<td><code>sklearn.model_selection</code></td>
+<td>GridSearchCV, cross_val_score, TimeSeriesSplit</td>
+</tr>
+<tr>
+<td><code>sklearn.pipeline</code></td>
+<td>Pipeline, ColumnTransformer</td>
+</tr>
+<tr>
+<td><code>sklearn.metrics</code></td>
+<td>Every conceivable metric</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">IterativeImputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobustScaler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+
+<span class="c1"># Full preprocessing pipeline: impute → scale → detect anomalies</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;imputer&#39;</span><span class="p">,</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;anomaly&#39;</span><span class="p">,</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="c1"># fit_predict on raw data with missing values and outliers</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_raw</span><span class="p">)</span>  <span class="c1"># -1 = anomaly, 1 = normal</span>
+</code></pre></div>
+
+<hr />
+<h4 id="75-xgboost-lightgbm-catboost-native-libraries">7.5 XGBoost / LightGBM / CatBoost (Native Libraries)</h4>
+<p>Each provides both a native API and a Scikit-Learn compatible wrapper.</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Python Package</th>
+<th>Key Differentiator</th>
+<th>GPU Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>XGBoost</strong></td>
+<td><code>xgboost</code></td>
+<td>Exact + histogram split. Broadest ecosystem.</td>
+<td><code>tree_method='gpu_hist'</code> (CUDA)</td>
+</tr>
+<tr>
+<td><strong>LightGBM</strong></td>
+<td><code>lightgbm</code></td>
+<td>GOSS + EFB. Fastest training on large data.</td>
+<td><code>device='gpu'</code> (CUDA, OpenCL)</td>
+</tr>
+<tr>
+<td><strong>CatBoost</strong></td>
+<td><code>catboost</code></td>
+<td>Native categoricals. Ordered boosting. Fastest CPU inference.</td>
+<td><code>task_type='GPU'</code> (CUDA)</td>
+</tr>
+</tbody>
+</table>
+<p>All three support:
+- Early stopping on validation loss
+- Feature importance (gain, split count, SHAP values)
+- Custom loss functions (first and second derivatives)
+- Distributed training (Spark, Dask, Ray integrations)
+- ONNX export for cross-platform inference</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">catboost</span><span class="w"> </span><span class="kn">import</span> <span class="n">CatBoostClassifier</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">CatBoostClassifier</span><span class="p">(</span>
+    <span class="n">iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">depth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;device_type&#39;</span><span class="p">,</span> <span class="s1">&#39;os&#39;</span><span class="p">],</span>  <span class="c1"># No encoding needed</span>
+    <span class="n">auto_class_weights</span><span class="o">=</span><span class="s1">&#39;Balanced&#39;</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">eval_set</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">),</span> <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h4 id="76-high-performance-data-backends-polars-cudf">7.6 High-Performance Data Backends — Polars &amp; cuDF</h4>
+<p><strong>Polars</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Language</strong></td>
+<td>Rust core, Python bindings via PyO3</td>
+</tr>
+<tr>
+<td><strong>Architecture</strong></td>
+<td>Apache Arrow columnar memory format. Lazy evaluation with query optimization.</td>
+</tr>
+<tr>
+<td><strong>Parallelism</strong></td>
+<td>Automatic multithreading via Rayon. No GIL dependency.</td>
+</tr>
+<tr>
+<td><strong>Key Advantages</strong></td>
+<td>5-50x faster than Pandas for groupby/join/filter. Streaming mode for out-of-core data. Expression-based API.</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_parquet</span><span class="p">(</span><span class="s2">&quot;telemetry/*.parquet&quot;</span><span class="p">)</span>  <span class="c1"># Lazy frame — no data loaded yet</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">&quot;sensor_id&quot;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">agg</span><span class="p">([</span>
+          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;vibration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;mean_vib&quot;</span><span class="p">),</span>
+          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;failure&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;total_failures&quot;</span><span class="p">)</span>
+      <span class="p">])</span>
+      <span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;total_failures&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">collect</span><span class="p">()</span>  <span class="c1"># Execution happens here — one optimized pass</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p><strong>cuDF (RAPIDS)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Architecture</strong></td>
+<td>GPU-accelerated DataFrame library. Pandas-like API backed by CUDA kernels.</td>
+</tr>
+<tr>
+<td><strong>Integration</strong></td>
+<td>Part of RAPIDS ecosystem (cuML for GPU ML, cuGraph for graph analytics).</td>
+</tr>
+<tr>
+<td><strong>Key Advantages</strong></td>
+<td>10-100x speedup over Pandas for large datasets that fit in GPU memory. Zero-copy interchange with PyTorch/TensorFlow via <code>__cuda_array_interface__</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="77-supplementary-ecosystem">7.7 Supplementary Ecosystem</h4>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Purpose</th>
+<th>Phase 1 Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UMAP</strong> (<code>umap-learn</code>)</td>
+<td>UMAP implementation</td>
+<td>Section 2.5</td>
+</tr>
+<tr>
+<td><strong>HDBSCAN</strong> (<code>hdbscan</code>)</td>
+<td>Hierarchical density clustering</td>
+<td>Section 4.2</td>
+</tr>
+<tr>
+<td><strong>imbalanced-learn</strong> (<code>imblearn</code>)</td>
+<td>SMOTE, ADASYN, undersampling</td>
+<td>Section 6.5</td>
+</tr>
+<tr>
+<td><strong>SDV</strong> (<code>sdv</code>)</td>
+<td>Synthetic Data Vault (CTGAN, TVAE, Copulas)</td>
+<td>Section 6.2</td>
+</tr>
+<tr>
+<td><strong>torchdiffeq</strong></td>
+<td>Neural ODE solvers for PyTorch</td>
+<td>Section 5.7</td>
+</tr>
+<tr>
+<td><strong>diffrax</strong></td>
+<td>JAX-based differential equation solvers</td>
+<td>Section 5.7</td>
+</tr>
+<tr>
+<td><strong>PyTorch Forecasting</strong></td>
+<td>TFT, N-BEATS, DeepAR implementations</td>
+<td>Section 5.6</td>
+</tr>
+<tr>
+<td><strong>SHAP</strong> (<code>shap</code>)</td>
+<td>Shapley-value feature explanations</td>
+<td>All supervised methods</td>
+</tr>
+<tr>
+<td><strong>Optuna</strong></td>
+<td>Bayesian hyperparameter optimization</td>
+<td>All methods</td>
+</tr>
+<tr>
+<td><strong>MLflow</strong></td>
+<td>Experiment tracking, model registry, deployment</td>
+<td>All methods</td>
+</tr>
+<tr>
+<td><strong>ONNX Runtime</strong> (<code>onnxruntime</code>)</td>
+<td>Cross-platform model inference</td>
+<td>All methods</td>
+</tr>
+<tr>
+<td><strong>Ray</strong> (<code>ray[tune]</code>, <code>ray[train]</code>)</td>
+<td>Distributed training and hyperparameter tuning</td>
+<td>All methods</td>
+</tr>
+<tr>
+<td><strong>DVC</strong></td>
+<td>Data version control (large dataset tracking in ML pipelines)</td>
+<td>Data preprocessing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="8-c-net-ecosystem">8) C# / .NET Ecosystem</h3>
+<p>The .NET ecosystem for ML is smaller, younger, and frankly less glamorous than Python's. But it fills a critical niche: embedding ML directly into high-performance backend services without the latency, operational complexity, and dependency nightmares of cross-language serving.</p>
+<hr />
+<h4 id="81-mlnet">8.1 ML.NET</h4>
+<p><strong>Primary Use Case</strong>: Classical ML and AutoML within .NET applications.</p>
+<p><strong>Architectural Philosophy</strong>: ML.NET is built around the <strong>IDataView</strong> abstraction — a lazy, cursorable, schematized data pipeline inspired by database query engines. Data flows through a chain of estimators (<code>IEstimator&lt;&gt;</code>) that produce transformers (<code>ITransformer&lt;&gt;</code>):</p>
+<div class="codehilite"><pre><span></span><code>IDataView → Estimator.Fit() → Transformer → IDataView (transformed)
+</code></pre></div>
+
+<p>This is Scikit-Learn's <code>Pipeline</code> philosophy, implemented with .NET's type safety.</p>
+<p><strong>Key Capabilities</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ML.NET AutoML</strong></td>
+<td>Automated model selection + hyperparameter tuning. Supports classification, regression, ranking, recommendation, forecasting, image classification, object detection. Uses cost-frugal optimization (FLAML-style).</td>
+</tr>
+<tr>
+<td><strong>Transforms</strong></td>
+<td>Normalization, one-hot encoding, feature hashing, text featurization (TF-IDF, word embeddings), image loading/resizing, missing value replacement, key-to-value mapping.</td>
+</tr>
+<tr>
+<td><strong>Trainers</strong></td>
+<td>LightGBM (native integration), FastTree, SDCA (Stochastic Dual Coordinate Ascent), L-BFGS logistic regression, averaged perceptron, OLS, PCA, K-Means, anomaly detection (randomized PCA, time-series spike detection).</td>
+</tr>
+<tr>
+<td><strong>Time Series</strong></td>
+<td>Spike detection (IID and SSA), change point detection, forecasting (SSA — Singular Spectrum Analysis).</td>
+</tr>
+<tr>
+<td><strong>Deep Learning</strong></td>
+<td>Via ONNX Runtime integration (load PyTorch/TensorFlow models exported to ONNX). Also image classification via transfer learning (ResNet, InceptionV3).</td>
+</tr>
+<tr>
+<td><strong>Model Explainability</strong></td>
+<td>Permutation Feature Importance (PFI)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hardware Acceleration</strong>: CPU-bound natively. GPU via ONNX Runtime (CUDA execution provider). TorchSharp integration for native GPU model execution.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.ML</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.ML.AutoML</span><span class="p">;</span>
+
+<span class="kt">var</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MLContext</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
+
+<span class="c1">// Load data via IDataView (lazy — no materialization until needed)</span>
+<span class="n">IDataView</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">LoadFromTextFile</span><span class="o">&lt;</span><span class="n">SensorReading</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;telemetry.csv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hasHeader</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">separatorChar</span><span class="p">:</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">);</span>
+
+<span class="c1">// AutoML: let the framework find the best pipeline</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">experiment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Auto</span><span class="p">()</span>
+<span class="w">    </span><span class="p">.</span><span class="n">CreateBinaryClassificationExperiment</span><span class="p">(</span><span class="n">maxExperimentTimeInSeconds</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">labelColumnName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FailureStatus&quot;</span><span class="p">);</span>
+
+<span class="c1">// Best model is immediately usable</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">bestModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">experiment</span><span class="p">.</span><span class="n">BestRun</span><span class="p">.</span><span class="n">Model</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Model</span><span class="p">.</span><span class="n">CreatePredictionEngine</span><span class="o">&lt;</span><span class="n">SensorReading</span><span class="p">,</span><span class="w"> </span><span class="n">FailurePrediction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">bestModel</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">prediction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Predict</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">SensorReading</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">87.5</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.42</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+
+<hr />
+<h4 id="82-torchsharp">8.2 TorchSharp</h4>
+<p><strong>Primary Use Case</strong>: PyTorch bindings for .NET — write PyTorch models in C#/F#.</p>
+<p><strong>Architectural Philosophy</strong>: TorchSharp wraps <code>libtorch</code> (PyTorch's C++ backend) via P/Invoke. The C# API mirrors PyTorch's Python API closely: <code>torch.Tensor</code>, <code>torch.nn.Module</code>, <code>torch.optim</code>, etc.</p>
+<p><strong>Hardware Acceleration</strong>: Full CUDA support (same <code>libtorch</code> backend as Python PyTorch). Install <code>TorchSharp-cuda-windows</code> or <code>TorchSharp-cuda-linux</code> NuGet packages.</p>
+<p><strong>Key Capabilities</strong>:
+- Define, train, and infer neural networks entirely in C#
+- Share models with Python PyTorch (save/load <code>state_dict</code>)
+- GPU tensor operations at native speed
+- Integration with ML.NET via <code>Microsoft.ML.TorchSharp</code> (transfer learning, text classification, object detection trainers)</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">TorchSharp</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">static</span><span class="w"> </span><span class="n">TorchSharp</span><span class="p">.</span><span class="n">torch</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">static</span><span class="w"> </span><span class="n">TorchSharp</span><span class="p">.</span><span class="n">torch</span><span class="p">.</span><span class="n">nn</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TabularNet</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Module</span><span class="o">&lt;</span><span class="n">Tensor</span><span class="p">,</span><span class="w"> </span><span class="n">Tensor</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Module</span><span class="o">&lt;</span><span class="n">Tensor</span><span class="p">,</span><span class="w"> </span><span class="n">Tensor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_layers</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">TabularNet</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">inputDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">outputDim</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="s">&quot;TabularNet&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">_layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sequential</span><span class="p">(</span>
+<span class="w">            </span><span class="n">Linear</span><span class="p">(</span><span class="n">inputDim</span><span class="p">,</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">),</span>
+<span class="w">            </span><span class="n">ReLU</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+<span class="w">            </span><span class="n">Linear</span><span class="p">(</span><span class="n">hiddenDim</span><span class="p">,</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">),</span>
+<span class="w">            </span><span class="n">ReLU</span><span class="p">(),</span>
+<span class="w">            </span><span class="n">Dropout</span><span class="p">(</span><span class="mf">0.3</span><span class="p">),</span>
+<span class="w">            </span><span class="n">Linear</span><span class="p">(</span><span class="n">hiddenDim</span><span class="p">,</span><span class="w"> </span><span class="n">outputDim</span><span class="p">)</span>
+<span class="w">        </span><span class="p">);</span>
+<span class="w">        </span><span class="n">RegisterComponents</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="n">Tensor</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="n">Tensor</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_layers</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Training on GPU</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cuda</span><span class="p">.</span><span class="n">is_available</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">CUDA</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">CPU</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TabularNet</span><span class="p">(</span><span class="n">inputDim</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">outputDim</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">).</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">optimizer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optim</span><span class="p">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">parameters</span><span class="p">(),</span><span class="w"> </span><span class="n">lr</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">criterion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrossEntropyLoss</span><span class="p">();</span>
+</code></pre></div>
+
+<hr />
+<h4 id="83-tensorflownet">8.3 TensorFlow.NET</h4>
+<p><strong>Primary Use Case</strong>: TensorFlow bindings for .NET (part of SciSharp).</p>
+<p><strong>Architectural Philosophy</strong>: Wraps the TensorFlow C API. Provides <code>tf.Session</code>, <code>tf.Graph</code>, eager execution, and Keras-style sequential/functional model APIs.</p>
+<p><strong>Hardware Acceleration</strong>: CUDA via TensorFlow's native GPU support. Install <code>SciSharp.TensorFlow.Redist-Windows-GPU</code> NuGet.</p>
+<p><strong>Key Capabilities</strong>:
+- Full TensorFlow API available in C#
+- Keras-style model building (<code>keras.Sequential</code>, <code>keras.layers</code>)
+- TensorBoard logging from .NET
+- Pre-trained model loading (SavedModel format)</p>
+<p><strong>Practical Status</strong>: Less actively maintained than TorchSharp. For new .NET deep learning projects, TorchSharp is the recommended path. TensorFlow.NET is relevant for teams with existing TensorFlow model investments.</p>
+<hr />
+<h4 id="84-scisharp-stack">8.4 SciSharp Stack</h4>
+<p>The SciSharp organization provides .NET ports of the core Python numerical stack:</p>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>.NET Equivalent</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NumPy</td>
+<td><strong>NumSharp</strong></td>
+<td>N-dimensional array operations</td>
+</tr>
+<tr>
+<td>Pandas</td>
+<td><strong>Pandas.NET</strong></td>
+<td>DataFrame operations (experimental)</td>
+</tr>
+<tr>
+<td>Matplotlib</td>
+<td><strong>ScottPlot</strong> / <strong>Plotly.NET</strong></td>
+<td>Visualization</td>
+</tr>
+<tr>
+<td>SciPy</td>
+<td><strong>MathNet.Numerics</strong></td>
+<td>Linear algebra, distributions, optimization</td>
+</tr>
+<tr>
+<td>TensorFlow</td>
+<td><strong>TensorFlow.NET</strong></td>
+<td>Deep learning</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MathNet.Numerics</strong> deserves special mention: it provides production-grade implementations of:
+- Dense/sparse matrix operations (MKL-backed via <code>MathNet.Numerics.MKL</code>)
+- SVD, QR, Cholesky decompositions (relevant for PCA, linear regression)
+- Statistical distributions and hypothesis tests
+- Numerical integration and root finding</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">MathNet.Numerics.LinearAlgebra</span><span class="p">;</span>
+
+<span class="c1">// PCA via SVD using MathNet</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">.</span><span class="n">Build</span><span class="p">.</span><span class="n">DenseOfArray</span><span class="p">(</span><span class="n">rawData</span><span class="p">);</span><span class="w"> </span><span class="c1">// n × p</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">centered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">X</span><span class="p">.</span><span class="n">SubtractRowMeans</span><span class="p">();</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">svd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">centered</span><span class="p">.</span><span class="n">Svd</span><span class="p">(</span><span class="n">computeVectors</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
+
+<span class="c1">// Top-d principal components (truncated SVD)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">centered</span><span class="p">.</span><span class="n">Multiply</span><span class="p">(</span><span class="n">svd</span><span class="p">.</span><span class="n">VT</span><span class="p">.</span><span class="n">SubMatrix</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">svd</span><span class="p">.</span><span class="n">VT</span><span class="p">.</span><span class="n">ColumnCount</span><span class="p">).</span><span class="n">Transpose</span><span class="p">());</span>
+</code></pre></div>
+
+<hr />
+<h4 id="85-accordnet-legacy">8.5 Accord.NET (Legacy)</h4>
+<p><strong>Status</strong>: Effectively archived. Last significant update was pre-.NET Core. Included for completeness as it was historically the only comprehensive ML library for .NET.</p>
+<p><strong>Capabilities</strong>: Full implementations of SVM, decision trees, random forests, neural networks, KNN, PCA, K-Means, GMM, naive Bayes, HMMs, image processing, and statistical tests — all in pure C# with no native dependencies.</p>
+<p><strong>Modern Recommendation</strong>: Migrate to ML.NET (for classical ML), TorchSharp (for deep learning), and MathNet.Numerics (for linear algebra). Accord.NET's pure-managed implementations cannot compete with the native-backed alternatives on performance.</p>
+<hr />
+<h4 id="86-production-integration-patterns">8.6 Production Integration Patterns</h4>
+<p>The core value proposition of the .NET ML ecosystem is <strong>in-process inference</strong> — no HTTP boundary, no serialization overhead, no Python process to babysit.</p>
+<p><strong>Pattern 1: ONNX Runtime in ASP.NET Core Middleware</strong></p>
+<p>Train in Python (PyTorch/TensorFlow/Scikit-Learn) → export to ONNX → load in ASP.NET Core via <code>Microsoft.ML.OnnxRuntime</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.ML.OnnxRuntime</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.ML.OnnxRuntime.Tensors</span><span class="p">;</span>
+
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AnomalyDetectionMiddleware</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">InferenceSession</span><span class="w"> </span><span class="n">_session</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">AnomalyDetectionMiddleware</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">modelPath</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SessionOptions</span><span class="p">();</span>
+<span class="w">        </span><span class="n">options</span><span class="p">.</span><span class="n">AppendExecutionProvider_CUDA</span><span class="p">(</span><span class="n">deviceId</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// GPU inference</span>
+<span class="w">        </span><span class="n">_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InferenceSession</span><span class="p">(</span><span class="n">modelPath</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="nf">Score</span><span class="p">(</span><span class="kt">float</span><span class="p">[]</span><span class="w"> </span><span class="n">features</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tensor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DenseTensor</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">features</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">features</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NamedOnnxValue</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">NamedOnnxValue</span><span class="p">.</span><span class="n">CreateFromTensor</span><span class="p">(</span><span class="s">&quot;input&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tensor</span><span class="p">)</span>
+<span class="w">        </span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_session</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">inputs</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">results</span><span class="p">.</span><span class="n">First</span><span class="p">().</span><span class="n">AsTensor</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">().</span><span class="n">ToArray</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Pattern 2: ML.NET PredictionEngine in gRPC Service</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// ASP.NET Core gRPC service with ML.NET prediction engine (thread-safe via pooling)</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PredictionService</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Predictor</span><span class="p">.</span><span class="n">PredictorBase</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">PredictionEnginePool</span><span class="o">&lt;</span><span class="n">InputData</span><span class="p">,</span><span class="w"> </span><span class="n">OutputPrediction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_pool</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">PredictionService</span><span class="p">(</span><span class="n">PredictionEnginePool</span><span class="o">&lt;</span><span class="n">InputData</span><span class="p">,</span><span class="w"> </span><span class="n">OutputPrediction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span>
+<span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pool</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">PredictionReply</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Predict</span><span class="p">(</span><span class="n">PredictionRequest</span><span class="w"> </span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="n">ServerCallContext</span><span class="w"> </span><span class="n">ctx</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MapToInput</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_pool</span><span class="p">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">FromResult</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PredictionReply</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="n">Score</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Pattern 3: Cross-Language Pipeline (Django/FastAPI → .NET Microservice)</strong></p>
+<p>For teams maintaining both Python and C# backends:</p>
+<div class="codehilite"><pre><span></span><code>┌──────────────┐    gRPC/REST    ┌─────────────────────┐
+│  Django App  │ ──────────────→ │  ASP.NET Core ML    │
+│  (Python)    │                 │  Microservice       │
+│              │ ←────────────── │  (ONNX/ML.NET)      │
+│  - Data ETL  │   predictions   │  - Model inference  │
+│  - Feature   │                 │  - Low latency      │
+│    eng.      │                 │  - GPU acceleration  │
+└──────────────┘                 └─────────────────────┘
+</code></pre></div>
+
+<p>This pattern is common in enterprises where data science teams operate in Python but serving infrastructure is .NET. The ONNX format is the lingua franca bridging the gap.</p>
+<hr />
+<h3 id="9-cross-language-interop-serving-architecture">9) Cross-Language Interop &amp; Serving Architecture</h3>
+<table>
+<thead>
+<tr>
+<th>Serving Method</th>
+<th>Latency</th>
+<th>Complexity</th>
+<th>Language Agnostic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ONNX Runtime</strong> (in-process)</td>
+<td>μs–ms</td>
+<td>Low</td>
+<td>Yes (C#, C++, Java, Python, JS)</td>
+</tr>
+<tr>
+<td><strong>TorchServe</strong> (Python service)</td>
+<td>ms–10ms</td>
+<td>Medium</td>
+<td>Via HTTP/gRPC</td>
+</tr>
+<tr>
+<td><strong>TF Serving</strong> (C++ binary)</td>
+<td>ms</td>
+<td>Medium</td>
+<td>Via HTTP/gRPC</td>
+</tr>
+<tr>
+<td><strong>Triton Inference Server</strong> (NVIDIA)</td>
+<td>μs–ms</td>
+<td>High</td>
+<td>ONNX, TensorRT, PyTorch, TF</td>
+</tr>
+<tr>
+<td><strong>BentoML</strong> (Python framework)</td>
+<td>ms</td>
+<td>Medium</td>
+<td>Via containerized REST/gRPC</td>
+</tr>
+<tr>
+<td><strong>MLflow Serving</strong></td>
+<td>ms</td>
+<td>Low</td>
+<td>Via REST</td>
+</tr>
+<tr>
+<td><strong>Custom gRPC</strong> (any language)</td>
+<td>μs–ms</td>
+<td>High</td>
+<td>By definition</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Model Format Interop</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">PyTorch</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">pt</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ONNX</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">onnx</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ONNX</span><span class="w"> </span><span class="n">Runtime</span><span class="w"> </span><span class="p">(</span><span class="n">C</span><span class="c1">#/C++/Python)</span>
+<span class="w">                                  </span><span class="err">──→</span><span class="w"> </span><span class="n">TensorRT</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">NVIDIA</span><span class="w"> </span><span class="n">GPUs</span>
+<span class="w">                                  </span><span class="err">──→</span><span class="w"> </span><span class="n">Core</span><span class="w"> </span><span class="n">ML</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">mlmodel</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">Apple</span>
+<span class="w">                                  </span><span class="err">──→</span><span class="w"> </span><span class="n">TF</span><span class="w"> </span><span class="n">Lite</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">tflite</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">mobile</span>
+
+<span class="n">TensorFlow</span><span class="w"> </span><span class="p">(</span><span class="n">SavedModel</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ONNX</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">onnx</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">same</span><span class="w"> </span><span class="n">targets</span>
+<span class="w">                         </span><span class="err">──→</span><span class="w"> </span><span class="n">TF</span><span class="w"> </span><span class="n">Lite</span>
+<span class="w">                         </span><span class="err">──→</span><span class="w"> </span><span class="n">TF</span><span class="o">.</span><span class="n">js</span>
+
+<span class="n">Scikit</span><span class="o">-</span><span class="n">Learn</span><span class="w"> </span><span class="p">(</span><span class="o">.</span><span class="n">pkl</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ONNX</span><span class="w"> </span><span class="p">(</span><span class="n">via</span><span class="w"> </span><span class="n">skl2onnx</span><span class="p">)</span>
+<span class="w">                     </span><span class="err">──→</span><span class="w"> </span><span class="n">PMML</span><span class="w"> </span><span class="p">(</span><span class="n">legacy</span><span class="p">)</span>
+
+<span class="n">XGBoost</span><span class="o">/</span><span class="n">LightGBM</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ONNX</span><span class="w"> </span><span class="p">(</span><span class="n">via</span><span class="w"> </span><span class="n">onnxmltools</span><span class="p">)</span>
+<span class="w">                  </span><span class="err">──→</span><span class="w"> </span><span class="n">Treelite</span><span class="w"> </span><span class="p">(</span><span class="n">C</span><span class="w"> </span><span class="n">compilation</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="n">models</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ultra</span><span class="o">-</span><span class="n">low</span><span class="o">-</span><span class="n">latency</span><span class="p">)</span>
+</code></pre></div>
+
+<p>ONNX is the universal serialization format. If your model cannot be exported to ONNX, your architecture has a problem. If your serving infrastructure cannot load ONNX, your operations team has a problem.</p>
+<hr />
+<h2 id="references">References</h2>
+<ol>
+<li>Azur, M. J. et al. (2011). <em>Multiple imputation by chained equations: what is it and how does it work?</em> International Journal of Methods in Psychiatric Research, 20(1), 40-49.</li>
+<li>Bishop, C. M. (2006). <em>Pattern Recognition and Machine Learning</em>. Springer.</li>
+<li>Breiman, L. (2001). <em>Random Forests</em>. Machine Learning, 45(1), 5-32.</li>
+<li>Breunig, M. M. et al. (2000). <em>LOF: Identifying Density-Based Local Outliers</em>. SIGMOD Record, 29(2), 93-104.</li>
+<li>Campello, R. J. G. B. et al. (2013). <em>Density-Based Clustering Based on Hierarchical Density Estimates</em>. PAKDD 2013.</li>
+<li>Chawla, N. V. et al. (2002). <em>SMOTE: Synthetic Minority Over-sampling Technique</em>. JAIR, 16, 321-357.</li>
+<li>Chen, R. T. Q. et al. (2018). <em>Neural Ordinary Differential Equations</em>. NeurIPS 2018.</li>
+<li>Chen, T. &amp; Guestrin, C. (2016). <em>XGBoost: A Scalable Tree Boosting System</em>. KDD 2016.</li>
+<li>Cho, K. et al. (2014). <em>Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation</em>. EMNLP 2014.</li>
+<li>Ester, M. et al. (1996). <em>A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise</em>. KDD 1996.</li>
+<li>Golovin, D. et al. (2017). <em>Google Vizier: A Service for Black-Box Optimization</em>. KDD 2017.</li>
+<li>Goodfellow, I. et al. (2014). <em>Generative Adversarial Nets</em>. NeurIPS 2014.</li>
+<li>Goodfellow, I. et al. (2016). <em>Deep Learning</em>. MIT Press.</li>
+<li>Ho, J. et al. (2020). <em>Denoising Diffusion Probabilistic Models</em>. NeurIPS 2020.</li>
+<li>Hochreiter, S. &amp; Schmidhuber, J. (1997). <em>Long Short-Term Memory</em>. Neural Computation, 9(8), 1735-1780.</li>
+<li>Ke, G. et al. (2017). <em>LightGBM: A Highly Efficient Gradient Boosting Decision Tree</em>. NeurIPS 2017.</li>
+<li>Kingma, D. P. &amp; Ba, J. (2015). <em>Adam: A Method for Stochastic Optimization</em>. ICLR 2015.</li>
+<li>Kingma, D. P. &amp; Welling, M. (2014). <em>Auto-Encoding Variational Bayes</em>. ICLR 2014.</li>
+<li>Kotelnikov, A. et al. (2023). <em>TabDDPM: Modelling Tabular Data with Diffusion Models</em>. ICML 2023.</li>
+<li>Lim, B. et al. (2021). <em>Temporal Fusion Transformers for Interpretable Multi-Horizon Time Series Forecasting</em>. International Journal of Forecasting.</li>
+<li>Liu, F. T. et al. (2008). <em>Isolation Forest</em>. ICDM 2008.</li>
+<li>McInnes, L. et al. (2018). <em>UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</em>. arXiv:1802.03426.</li>
+<li>Murphy, K. P. (2022). <em>Probabilistic Machine Learning: An Introduction</em>. MIT Press.</li>
+<li>Prokhorenkova, L. et al. (2018). <em>CatBoost: Unbiased Boosting with Categorical Features</em>. NeurIPS 2018.</li>
+<li>Schölkopf, B. et al. (2001). <em>Estimating the Support of a High-Dimensional Distribution</em>. Neural Computation, 13(7).</li>
+<li>van der Maaten, L. &amp; Hinton, G. (2008). <em>Visualizing Data using t-SNE</em>. JMLR, 9, 2579-2605.</li>
+<li>Vaswani, A. et al. (2017). <em>Attention Is All You Need</em>. NeurIPS 2017.</li>
+<li>Xu, L. et al. (2019). <em>Modeling Tabular Data using Conditional GAN</em>. NeurIPS 2019.</li>
+</ol></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
