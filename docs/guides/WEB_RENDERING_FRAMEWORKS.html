@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Rendering Frameworks - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="web-rendering-frameworks-2026-react-alternatives">Web Rendering Frameworks (2026) — React Alternatives</h1>
+<p><strong>Last updated</strong>: March 02, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="#"><img alt="Topic" src="https://img.shields.io/badge/Frontend-Web%20Rendering-blue.svg" /></a>
+<a href="#"><img alt="Stack" src="https://img.shields.io/badge/React%20Alternatives-Vue%20%7C%20Angular%20%7C%20SvelteKit%20%7C%20Solid%20%7C%20Qwik-brightgreen.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>React remains a dominant UI library, but by 2026 there are several strong alternatives depending on what you optimize for:</p>
+<ul>
+<li><strong>Developer experience</strong> (low ceremony, easy onboarding)</li>
+<li><strong>Rendering performance</strong> (fine-grained reactivity, minimal overhead)</li>
+<li><strong>SSR/SSG maturity</strong> (production-grade server rendering, caching patterns)</li>
+<li><strong>Team-scale maintainability</strong> (strong conventions, consistency)</li>
+</ul>
+<p>This guide summarizes the most viable React alternatives and what architectural trade-offs they imply.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#web-rendering-frameworks-2026--react-alternatives">Web Rendering Frameworks (2026) — React Alternatives</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#executive-summary">Executive Summary</a></li>
+<li><a href="#top-react-alternatives-2026">Top React Alternatives (2026)</a><ul>
+<li><a href="#1-vuejs">1) Vue.js</a></li>
+<li><a href="#2-angular">2) Angular</a></li>
+<li><a href="#3-svelte--sveltekit">3) Svelte / SvelteKit</a></li>
+<li><a href="#4-solidjs">4) SolidJS</a></li>
+<li><a href="#5-qwik">5) Qwik</a></li>
+</ul>
+</li>
+<li><a href="#comparison-matrix">Comparison Matrix</a><ul>
+<li><a href="#notes-on-the-matrix">Notes on the matrix</a></li>
+</ul>
+</li>
+<li><a href="#rendering-models-csr-vs-ssr-vs-ssg">Rendering Models: CSR vs SSR vs SSG</a></li>
+<li><a href="#decision-heuristics">Decision Heuristics</a></li>
+<li><a href="#practical-guardrails-avoiding-frontend-spaghetti">Practical Guardrails (Avoiding Frontend Spaghetti)</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<hr />
+<h2 id="executive-summary">Executive Summary</h2>
+<p>If you’re looking for alternatives to React.js in 2026, there are several strong options depending on your priorities — such as performance, learning curve, ecosystem, or rendering model.</p>
+<ul>
+<li><strong>Vue</strong> is approachable and productive with a clean component model.</li>
+<li><strong>Angular</strong> is the “enterprise framework”: structured, opinionated, and consistent.</li>
+<li><strong>Svelte/SvelteKit</strong> compiles away much runtime overhead; great performance and DX.</li>
+<li><strong>SolidJS</strong> keeps JSX ergonomics but uses fine-grained reactivity (no virtual DOM).</li>
+<li><strong>Qwik</strong> pushes ultra-fast startup via resumability and minimal hydration.</li>
+</ul>
+<hr />
+<h2 id="top-react-alternatives-2026">Top React Alternatives (2026)</h2>
+<h3 id="1-vuejs">1) Vue.js</h3>
+<p><strong>Best for:</strong> developers who want a gentle learning curve with a component-based approach.</p>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Easy to learn and productive.</li>
+<li>Reactive data binding and readable templates.</li>
+<li>Strong ecosystem: Vue Router, Pinia.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Enterprise adoption is smaller than React or Angular in some markets.</li>
+</ul>
+<h3 id="2-angular">2) Angular</h3>
+<p><strong>Best for:</strong> large-scale enterprise applications that benefit from strict structure.</p>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Full-featured framework: routing, state patterns, forms, HTTP tooling.</li>
+<li>Strong TypeScript-first approach.</li>
+<li>Opinionated architecture helps consistency across large teams.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Steeper learning curve.</li>
+<li>Higher framework “gravity” (more concepts + more conventions).</li>
+</ul>
+<h3 id="3-svelte-sveltekit">3) Svelte / SvelteKit</h3>
+<p><strong>Best for:</strong> high-performance apps and teams that want low runtime overhead.</p>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Compiles to efficient JavaScript (no virtual DOM).</li>
+<li>Very small runtime footprint.</li>
+<li>SvelteKit supports routing, SSR, and server endpoints.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Smaller ecosystem than React/Vue.</li>
+<li>Some tooling and library maturity may vary by domain.</li>
+</ul>
+<h3 id="4-solidjs">4) SolidJS</h3>
+<p><strong>Best for:</strong> React-like ergonomics with better performance.</p>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Fine-grained reactivity (no virtual DOM).</li>
+<li>JSX support similar to React.</li>
+<li>Extremely fast updates.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Smaller community and fewer ready-made UI components.</li>
+</ul>
+<h3 id="5-qwik">5) Qwik</h3>
+<p><strong>Best for:</strong> instant-loading apps and performance on slow networks.</p>
+<p><strong>Pros</strong></p>
+<ul>
+<li>Resumability model reduces hydration cost.</li>
+<li>Great perceived performance on first load.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Newer technology; ecosystem and hiring pool are smaller.</li>
+</ul>
+<hr />
+<h2 id="comparison-matrix">Comparison Matrix</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Vue</th>
+<th style="text-align: left;">Angular</th>
+<th style="text-align: left;">SvelteKit</th>
+<th style="text-align: left;">SolidJS</th>
+<th style="text-align: left;">Qwik</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Primary appeal</strong></td>
+<td style="text-align: left;">DX + simplicity</td>
+<td style="text-align: left;">Structure + conventions</td>
+<td style="text-align: left;">Performance + compile-time</td>
+<td style="text-align: left;">React-like + speed</td>
+<td style="text-align: left;">Startup performance</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Typing story</strong></td>
+<td style="text-align: left;">Good (TS optional)</td>
+<td style="text-align: left;">Excellent (TS-first)</td>
+<td style="text-align: left;">Good (TS optional)</td>
+<td style="text-align: left;">Good (TS optional)</td>
+<td style="text-align: left;">Good (TS optional)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rendering model fit</strong></td>
+<td style="text-align: left;">CSR/SSR via Nuxt</td>
+<td style="text-align: left;">CSR/SSR supported</td>
+<td style="text-align: left;">SSR/SSG built-in</td>
+<td style="text-align: left;">CSR (SSR options exist)</td>
+<td style="text-align: left;">SSR + resumability</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Component style</strong></td>
+<td style="text-align: left;">Template or JSX</td>
+<td style="text-align: left;">Decorator + templates</td>
+<td style="text-align: left;">Svelte syntax</td>
+<td style="text-align: left;">JSX</td>
+<td style="text-align: left;">JSX</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ecosystem depth</strong></td>
+<td style="text-align: left;">High</td>
+<td style="text-align: left;">High</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Medium/low</td>
+<td style="text-align: left;">Emerging</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Team-scale consistency</strong></td>
+<td style="text-align: left;">Medium/high</td>
+<td style="text-align: left;">Very high</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Medium</td>
+<td style="text-align: left;">Medium</td>
+</tr>
+</tbody>
+</table>
+<h3 id="notes-on-the-matrix">Notes on the matrix</h3>
+<ul>
+<li><strong>Vue + Nuxt</strong> often maps closest to “React + Next.js” style stacks.</li>
+<li><strong>Angular</strong> tends to excel when your organization values predictable structure over flexibility.</li>
+<li><strong>SvelteKit</strong> is a strong general-purpose choice for modern SSR/SSG.</li>
+<li><strong>SolidJS</strong> is compelling if you like JSX but want fine-grained updates.</li>
+<li><strong>Qwik</strong> is the outlier: pick it primarily for the resumability model and startup performance.</li>
+</ul>
+<hr />
+<h2 id="rendering-models-csr-vs-ssr-vs-ssg">Rendering Models: CSR vs SSR vs SSG</h2>
+<p>Your framework choice often matters less than your rendering strategy:</p>
+<ul>
+<li><strong>CSR (Client-Side Rendering):</strong> content is assembled in the browser.</li>
+<li>Pros: simple hosting, rich interactivity.</li>
+<li>
+<p>Cons: slower first content, SEO considerations, larger JS footprint.</p>
+</li>
+<li>
+<p><strong>SSR (Server-Side Rendering):</strong> server renders HTML per request.</p>
+</li>
+<li>Pros: faster first paint, better SEO.</li>
+<li>
+<p>Cons: more complex deployments, caching strategy matters a lot.</p>
+</li>
+<li>
+<p><strong>SSG (Static Site Generation):</strong> build-time HTML.</p>
+</li>
+<li>Pros: fastest, simplest hosting.</li>
+<li>Cons: dynamic content needs client fetch or incremental rebuild.</li>
+</ul>
+<p>If your app is mostly content and marketing pages, SSR/SSG maturity will dominate framework ergonomics.</p>
+<hr />
+<h2 id="decision-heuristics">Decision Heuristics</h2>
+<p>Use this as a practical recommendation set:</p>
+<ul>
+<li>If you want <strong>simplicity and approachability</strong> → Vue.</li>
+<li>If you want <strong>full enterprise structure</strong> → Angular.</li>
+<li>If you want <strong>high performance with low runtime overhead</strong> → Svelte/SvelteKit.</li>
+<li>If you want <strong>React-like syntax but faster updates</strong> → SolidJS.</li>
+<li>If you want <strong>cutting-edge startup performance</strong> → Qwik.</li>
+</ul>
+<p>Two meta-rules:</p>
+<ol>
+<li>Choose the framework that makes the “wrong thing” hardest for your team.</li>
+<li>Choose based on your expected operational reality (SSR, caching, SEO, scale), not Twitter benchmarks.</li>
+</ol>
+<hr />
+<h2 id="practical-guardrails-avoiding-frontend-spaghetti">Practical Guardrails (Avoiding Frontend Spaghetti)</h2>
+<ol>
+<li><strong>Define folder boundaries early:</strong> UI components vs routes/pages vs domain logic.</li>
+<li><strong>Centralize state and side effects:</strong> don’t fetch data in 30 components.</li>
+<li><strong>Strong typing helps at scale:</strong> prefer TypeScript for large apps.</li>
+<li><strong>Standardize forms and validation:</strong> forms are where complexity hides.</li>
+<li><strong>Prefer composition over inheritance:</strong> keep components small and composable.</li>
+<li><strong>Measure performance before optimizing:</strong> profile real user flows.</li>
+</ol>
+<hr />
+<h2 id="references">References</h2>
+<ul>
+<li>Vue: https://vuejs.org/</li>
+<li>Angular: https://angular.dev/</li>
+<li>Svelte: https://svelte.dev/</li>
+<li>SvelteKit: https://kit.svelte.dev/</li>
+<li>SolidJS: https://www.solidjs.com/</li>
+<li>Qwik: https://qwik.dev/</li>
+</ul></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
