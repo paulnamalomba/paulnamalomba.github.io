@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 2: Popular Data Warehouse Systems</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style.css">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+  
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      hljs.highlightAll();
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#131a2e',
+          primaryTextColor: '#e8edf5',
+          primaryBorderColor: '#2a4080',
+          lineColor: '#f0b429',
+          secondaryColor: '#0d1321',
+          tertiaryColor: '#1a2340',
+          fontSize: '16px',
+          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="page-wrapper" id="content">
+    <div class="header-bar">
+      <span class="brand">IBM Data Engineering</span>
+      <nav>
+        <a href="../../index.html">Hub</a>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
+            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#"  class="active">Lecture 2 ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/lecture-1.html">Lecture 1: Data Warehouse Overview</a>
+            <a href="../../course-9/module-1/lecture-2.html" class="active">Lecture 2: Popular Data Warehouse Systems</a>
+            <a href="../../course-9/module-1/lecture-3.html">Lecture 3: Selecting a Data Warehouse System</a>
+            <a href="../../course-9/module-1/lecture-4.html">Lecture 4: Data Marts Overview</a>
+            <a href="../../course-9/module-1/lecture-5.html">Lecture 5: IBM Db2 Warehouse</a>
+            <a href="../../course-9/module-1/lecture-6.html">Lecture 6: Data Lakes Overview</a>
+            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
+      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
+      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
+      Lecture 2
+    </div>
+
+    <h1 class="fade-in">Popular Data Warehouse Systems</h1>
+    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
+      Module 1, Lecture 2
+    </p>
+
+
+<p class="fade-in fade-in-d2">Selecting a data warehouse platform is an architectural commitment comparable to choosing a database engine for an application backend. The market is fragmented across appliances, cloud-native services, and hybrid deployments—each with distinct trade-offs in control, scalability, and operational overhead. Understanding the landscape is a prerequisite to making an informed decision.</p>
+<hr/>
+<div class="section-card fade-in fade-in-d2"><h2>1. Deployment Platform Categories</h2>
+<p>Most data warehouse systems are delivered through one or more of three deployment models:</p>
+<ul>
+<li><strong>Appliances:</strong> Pre-integrated bundles of hardware and software engineered for high-performance analytical workloads with minimal administration overhead.</li>
+<li><strong>Cloud-Only:</strong> Fully managed services that leverage cloud scalability and pay-per-use economics—no infrastructure provisioning required.</li>
+<li><strong>On-Premises / Hybrid:</strong> Traditionally installed within private data centers, though most vendors in this category now also offer cloud deployment options and hybrid configurations.</li>
+</ul>
+<hr/>
+</div><div class="section-card fade-in fade-in-d3"><h2>2. Appliance-Based Systems</h2>
+<h3>2.1 Oracle Exadata</h3>
+<p>Oracle Exadata can be deployed on-premises or via Oracle Public Cloud. It features built-in optimization algorithms and supports all major workload types: <strong>OLTP</strong>, <strong>data warehouse analytics</strong>, <strong>in-memory analytics</strong>, and <strong>mixed workloads</strong>—making it a general-purpose analytical powerhouse within the Oracle ecosystem.</p>
+<h3>2.2 IBM Netezza</h3>
+<p>IBM Netezza is deployable across <strong>IBM Cloud</strong>, <strong>AWS</strong>, <strong>Microsoft Azure</strong>, and private clouds via the <strong>IBM Cloud Pak for Data System</strong>. Netezza is widely recognized for its strong <strong>data science and machine learning enablement</strong>, making it a natural fit for organizations whose analytical workflows extend beyond traditional BI into predictive modelling.</p>
+<hr/>
+</div><div class="section-card fade-in fade-in-d4"><h2>3. Cloud-Native Systems</h2>
+<h3>3.1 Amazon Redshift</h3>
+<p>Amazon Redshift uses AWS-specific hardware and proprietary software to deliver accelerated data compression, encryption, machine learning, and graph-optimization algorithms that automatically organize and store data. It is tightly integrated into the broader AWS ecosystem.</p>
+<h3>3.2 Snowflake</h3>
+<p>Snowflake provides a <strong>multi-cloud analytics solution</strong> with strong data privacy compliance (<strong>GDPR</strong>, <strong>CCPA</strong>) and <strong>FedRAMP Moderate</strong> authorization. It advertises always-on encryption of data both in transit and at rest—positioning itself as a privacy-first analytical platform.</p>
+<h3>3.3 Google BigQuery</h3>
+<p>Google BigQuery markets itself as a "flexible, multi-cloud data warehouse solution" delivering:</p>
+<ul>
+<li><strong>99.99% uptime</strong></li>
+<li><strong>Sub-second query response</strong> from any BI tool</li>
+<li><strong>Petabyte-scale speed</strong> with massive concurrency for real-time analytics</li>
+</ul>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>4. Hybrid On-Premises and Cloud Systems</h2>
+<h3>4.1 Microsoft Azure Synapse Analytics</h3>
+<p>Azure Synapse Analytics offers <strong>code-free visual ETL/ELT</strong> processes with over <strong>95 native connectors</strong> for data ingestion. It supports both <strong>data lake</strong> and <strong>data warehouse</strong> use cases and enables development in <strong>T-SQL</strong>, <strong>Python</strong>, <strong>Scala</strong>, <strong>Spark SQL</strong>, and <strong>.NET</strong> across serverless and dedicated resource pools.</p>
+<h3>4.2 Teradata Vantage</h3>
+<p>Teradata Vantage takes a unified approach, advertising a multi-cloud data platform that brings together data lakes, data warehouses, analytics, and new data sources under a single umbrella. Key differentiators include:</p>
+<ul>
+<li>Combination of open-source and commercial technologies</li>
+<li>High query concurrency via workload management and adaptive optimization</li>
+<li>A single point of contact for operational support—monitoring, change requests, performance tuning, security management, and reporting</li>
+</ul>
+<h3>4.3 IBM Db2 Warehouse</h3>
+<p>IBM Db2 Warehouse is a <strong>containerized, scale-out</strong> data warehousing solution recognized for:</p>
+<ul>
+<li><strong>Massively parallel processing (MPP)</strong> capabilities</li>
+<li><strong>Petaflop-level speeds</strong></li>
+<li><strong>99.99% service uptime</strong></li>
+<li>Seamless workload portability across public cloud, private cloud, and on-premises environments with minimal or no code changes</li>
+</ul>
+<h3>4.4 Vertica</h3>
+<p>Vertica offers multi-cloud support across <strong>AWS</strong>, <strong>Google Cloud</strong>, <strong>Microsoft Azure</strong>, and on-premises <strong>Linux</strong> hardware. It reports fast multi-GB data transfer rates, elastic compute and storage scalability, and notable system fault tolerance when operating in <strong>Eon mode</strong>.</p>
+<h3>4.5 Oracle Autonomous Data Warehouse</h3>
+<p>Oracle Autonomous Data Warehouse runs in <strong>Oracle Public Cloud</strong> and on-premises, supporting multi-model data and multiple workloads. Oracle describes the system as built to eliminate manual data management, with extensive automated security features:</p>
+<ul>
+<li>Autonomous data encryption at rest and in motion</li>
+<li>Protection of regulated data</li>
+<li>Automated security patch application</li>
+<li>Threat detection</li>
+</ul>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>5. Vendor Landscape Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Vendors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Appliance</strong></td>
+<td>Oracle Exadata, IBM Netezza</td>
+</tr>
+<tr>
+<td><strong>Cloud-Native</strong></td>
+<td>Amazon Redshift, Snowflake, Google BigQuery</td>
+</tr>
+<tr>
+<td><strong>Hybrid (On-Prem + Cloud)</strong></td>
+<td>Microsoft Azure Synapse, Teradata Vantage, IBM Db2 Warehouse, Vertica, Oracle Autonomous DW</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<p>Would you like to examine the architectural differences between MPP and SMP query engines, or should we explore the evaluation criteria organizations use when selecting between these warehouse platforms?</p></div>
+
+    <div class="page-footer fade-in fade-in-d5">
+      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+    </div>
+  </div>
+</body>
+</html>

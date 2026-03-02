@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 6: Data Lakes Overview</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style.css">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+  
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      hljs.highlightAll();
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#131a2e',
+          primaryTextColor: '#e8edf5',
+          primaryBorderColor: '#2a4080',
+          lineColor: '#f0b429',
+          secondaryColor: '#0d1321',
+          tertiaryColor: '#1a2340',
+          fontSize: '16px',
+          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="page-wrapper" id="content">
+    <div class="header-bar">
+      <span class="brand">IBM Data Engineering</span>
+      <nav>
+        <a href="../../index.html">Hub</a>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
+            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#"  class="active">Lecture 6 ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/lecture-1.html">Lecture 1: Data Warehouse Overview</a>
+            <a href="../../course-9/module-1/lecture-2.html">Lecture 2: Popular Data Warehouse Systems</a>
+            <a href="../../course-9/module-1/lecture-3.html">Lecture 3: Selecting a Data Warehouse System</a>
+            <a href="../../course-9/module-1/lecture-4.html">Lecture 4: Data Marts Overview</a>
+            <a href="../../course-9/module-1/lecture-5.html">Lecture 5: IBM Db2 Warehouse</a>
+            <a href="../../course-9/module-1/lecture-6.html" class="active">Lecture 6: Data Lakes Overview</a>
+            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
+      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
+      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
+      Lecture 6
+    </div>
+
+    <h1 class="fade-in">Data Lakes Overview</h1>
+    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
+      Module 1, Lecture 6
+    </p>
+
+
+<p class="fade-in fade-in-d2">A data warehouse enforces structure at write time—every record must conform to a pre-defined schema before it enters the system. This rigour is a strength for BI workloads but becomes a bottleneck when an organization generates vast volumes of heterogeneous data whose analytical use cases are not yet defined. Data lakes invert this contract: store everything in its native format first, and impose structure later when the use case demands it.</p>
+<hr/>
+<div class="section-card fade-in fade-in-d2"><h2>1. Defining the Data Lake</h2>
+<p>A <strong>data lake</strong> is a storage repository that can hold large amounts of <strong>structured</strong>, <strong>semi-structured</strong>, and <strong>unstructured</strong> data in their native format, classified and tagged with metadata. Each data element is assigned a unique identifier and tagged with metatags for downstream use.</p>
+<p>Key distinctions from a data warehouse:</p>
+<ul>
+<li><strong>Schema-on-read</strong> — you do not need to define the structure and schema of data before loading it into the data lake</li>
+<li><strong>Use-case agnostic</strong> — you do not need to know all the analytical use cases at ingestion time</li>
+<li><strong>Raw data preservation</strong> — data exists in its original form, straight from the source, and is transformed only when needed for a specific analytical task</li>
+</ul>
+<p>A data lake is also a <strong>reference architecture</strong> that is independent of any specific technology. It can be deployed on:</p>
+<ul>
+<li><strong>Cloud object storage</strong> — e.g., Amazon S3</li>
+<li><strong>Distributed systems</strong> — e.g., Apache Hadoop for Big Data processing</li>
+<li><strong>Relational database management systems</strong></li>
+<li><strong>NoSQL data repositories</strong> capable of storing very large data volumes</li>
+</ul>
+<div class="callout tip"><div class="callout-title">💡 Note</div>
+
+</div>
+<hr/>
+</div><div class="section-card fade-in fade-in-d3"><h2>2. Benefits of a Data Lake</h2>
+<h3>2.1 Universal Data Type Support</h3>
+<p>Data lakes can store all data types without format conversion:</p>
+<ul>
+<li><strong>Unstructured data</strong> — documents, emails, images, audio</li>
+<li><strong>Semi-structured data</strong> — JSON, XML, CSV, log files</li>
+<li><strong>Structured data</strong> — rows and columns from relational databases</li>
+</ul>
+<h3>2.2 Scalable Storage Capacity</h3>
+<p>Data lakes scale from terabytes to petabytes, accommodating the exponential growth of organizational data without capacity-related redesign.</p>
+<h3>2.3 Time Savings</h3>
+<p>By retaining data in its original format, data lakes eliminate the upfront time investment required to define structures, create schemas, and transform data before loading—an overhead that is mandatory in traditional data warehousing.</p>
+<h3>2.4 Flexible Data Reuse</h3>
+<p>The ability to access data in its original format enables fast, flexible reuse across a wide range of <strong>current and future use cases</strong>—from exploratory analysis to machine learning feature engineering.</p>
+<hr/>
+</div><div class="section-card fade-in fade-in-d4"><h2>3. Data Lake Vendor Landscape</h2>
+<p>Technologies, platforms, and reference architectures for data lakes are offered by:</p>
+<table>
+<thead>
+<tr>
+<th>Vendor</th>
+<th>Vendor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>Cloudera</td>
+<td>Oracle</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>SAS</td>
+</tr>
+<tr>
+<td>IBM</td>
+<td>Snowflake</td>
+</tr>
+<tr>
+<td>Informatica</td>
+<td>Teradata / Zaloni</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>4. Data Lakes vs. Data Warehouses</h2>
+<p>Data lakes were designed in response to the limitations of data warehouses. Most organizations require <strong>both</strong>, as they serve fundamentally different needs.</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Data Lake</th>
+<th>Data Warehouse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data Format</strong></td>
+<td>Raw, unstructured, integrated in native form</td>
+<td>Processed, conformed to standards prior to loading</td>
+</tr>
+<tr>
+<td><strong>Schema</strong></td>
+<td>Schema-on-read — no schema required before loading</td>
+<td>Schema-on-write — strict conformance required before loading</td>
+</tr>
+<tr>
+<td><strong>Data Quality</strong></td>
+<td>May contain uncurated, raw data; does not necessarily comply with governance guidelines</td>
+<td>Curated, governed, and quality-controlled</td>
+</tr>
+<tr>
+<td><strong>Primary Users</strong></td>
+<td>Data scientists, data developers, ML engineers</td>
+<td>Business analysts, data analysts</td>
+</tr>
+<tr>
+<td><strong>Staging Role</strong></td>
+<td>Often used as a staging area before loading into warehouses or data marts</td>
+<td>Final analytical destination for BI workloads</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>5. The Data Lake as a Staging Layer</h2>
+<p>Data lakes are frequently used as a <strong>self-serve staging area</strong> for a variety of downstream use cases:</p>
+<ul>
+<li>Machine learning model development and training</li>
+<li>Advanced analytics and exploratory data science</li>
+<li>Data transformation pipelines feeding enterprise data warehouses and data marts</li>
+</ul>
+<p>This positioning makes the data lake a complementary—not competing—component in a modern data architecture.</p>
+<hr/>
+<p>Would you like to explore how data lake governance prevents the descent into a data swamp, or should we examine the emerging data lakehouse architecture that attempts to merge the best of both data lakes and data warehouses?</p></div>
+
+    <div class="page-footer fade-in fade-in-d5">
+      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lecture 1: Data Warehouse Overview</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style.css">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+  
+  <!-- Mermaid.js for Diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      hljs.highlightAll();
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+          primaryColor: '#131a2e',
+          primaryTextColor: '#e8edf5',
+          primaryBorderColor: '#2a4080',
+          lineColor: '#f0b429',
+          secondaryColor: '#0d1321',
+          tertiaryColor: '#1a2340',
+          fontSize: '16px',
+          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="page-wrapper" id="content">
+    <div class="header-bar">
+      <span class="brand">IBM Data Engineering</span>
+      <nav>
+        <a href="../../index.html">Hub</a>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
+            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+          </div>
+        </div>
+        
+        <div class="nav-dropdown">
+          <a href="#"  class="active">Lecture 1 ▾</a>
+          <div class="dropdown-content">
+            <a href="../../course-9/module-1/lecture-1.html" class="active">Lecture 1: Data Warehouse Overview</a>
+            <a href="../../course-9/module-1/lecture-2.html">Lecture 2: Popular Data Warehouse Systems</a>
+            <a href="../../course-9/module-1/lecture-3.html">Lecture 3: Selecting a Data Warehouse System</a>
+            <a href="../../course-9/module-1/lecture-4.html">Lecture 4: Data Marts Overview</a>
+            <a href="../../course-9/module-1/lecture-5.html">Lecture 5: IBM Db2 Warehouse</a>
+            <a href="../../course-9/module-1/lecture-6.html">Lecture 6: Data Lakes Overview</a>
+            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
+      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
+      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
+      Lecture 1
+    </div>
+
+    <h1 class="fade-in">Data Warehouse Overview</h1>
+    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
+      Module 1, Lecture 1
+    </p>
+
+
+<p class="fade-in fade-in-d2">Before an organization can extract signal from its data, it must first solve a harder problem: making disparate, inconsistent data from dozens of operational systems available in one place, at one time, in one coherent form. The data warehouse is the architectural solution to that problem.</p>
+<hr/>
+<div class="section-card fade-in fade-in-d2"><h2>1. Defining the Data Warehouse</h2>
+<p>A <strong>data warehouse</strong> is a system that aggregates data from one or more sources into a single, central, consistent data store to support various data analytics requirements.</p>
+<p>Unlike transactional databases—which are optimized for write-heavy operational workloads—a data warehouse is purpose-built for analytical reads. Its value is not in recording individual transactions but in revealing the patterns across millions of them.</p>
+<h3>1.1 Core Analytics Capabilities</h3>
+<p>A data warehouse is not simply a large database. It is an analytical engine that enables several classes of workloads:</p>
+<ul>
+<li><strong>OLAP (Online Analytical Processing):</strong> Provides fast, flexible, multidimensional data analysis for business intelligence and decision support applications. Analysts can slice and dice metrics across time, geography, product line, and customer segment simultaneously.</li>
+<li><strong>ETL-Accelerated Reporting:</strong> Data transformation during the Extract, Transform, Load process speeds front-end reporting delivery. Critical business metrics reach dashboards faster because the heavy computation has already been done at ingestion time.</li>
+<li><strong>AI and Machine Learning:</strong> Data warehouses expose the historical depth and breadth of organizational data to machine learning pipelines—enabling predictive modelling, anomaly detection, and recommendation engines.</li>
+<li><strong>Data Mining:</strong> Statistical and pattern-discovery workloads run against the warehouse to surface non-obvious correlations that would be invisible in any single operational system.</li>
+</ul>
+<hr/>
+</div><div class="section-card fade-in fade-in-d3"><h2>2. The Evolution of Data Warehouse Infrastructure</h2>
+<p>Data warehouse infrastructure has changed substantially across three distinct eras, each driven by the scale of data being generated.</p>
+<h3>2.1 On-Premises Era</h3>
+<p>Traditionally, data warehouses were hosted within enterprise data centers—initially on <strong>mainframes</strong>, then migrating to <strong>Unix</strong>, <strong>Windows</strong>, and <strong>Linux</strong> server environments. Organizations owned the hardware and managed the software stack entirely in-house.</p>
+<h3>2.2 The Appliance Era</h3>
+<p>As data volumes surged in the 2000s, <strong>data warehouse appliances</strong> emerged. These were pre-integrated bundles of specialized hardware and optimized warehousing software, shipped as a single unit. The appliance model reduced the management overhead of large-scale data warehousing by collapsing hardware provisioning and software tuning into a single vendor-managed layer.</p>
+<h3>2.3 Cloud Data Warehouses (CDWs)</h3>
+<p>The exponential growth of cloud-generated data over the last decade has made <strong>Cloud Data Warehouses (CDWs)</strong> the dominant deployment model. In this paradigm, organizations do not purchase hardware or install warehousing software. Instead, they access a scalable, pay-as-you-go service. This unlocks enterprise-grade analytical infrastructure for teams of any size, removing the capital expenditure barrier entirely.</p>
+<hr/>
+</div><div class="section-card fade-in fade-in-d4"><h2>3. Industry Use Cases</h2>
+<p>Data warehouses are pervasive across virtually every sector of the economy. The common thread is the need to analyze large volumes of historical data to support decisions that would otherwise be based on intuition alone.</p>
+<table>
+<thead>
+<tr>
+<th>Industry</th>
+<th>Primary Analytical Application</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Retail &amp; E-Commerce</strong></td>
+<td>Sales performance analysis; ML-assisted product recommendation engines that drive cross-sell and upsell revenue.</td>
+</tr>
+<tr>
+<td><strong>Healthcare</strong></td>
+<td>AI-driven patient data analysis to enable more accurate diagnosis and treatment decisions at the point of care.</td>
+</tr>
+<tr>
+<td><strong>Transportation &amp; Logistics</strong></td>
+<td>Route optimization, travel time modelling, equipment utilization forecasting, and staffing requirement projections.</td>
+</tr>
+<tr>
+<td><strong>Financial Technology &amp; Banking</strong></td>
+<td>Risk evaluation, real-time fraud detection, and cross-sell analytics applied to transaction histories.</td>
+</tr>
+<tr>
+<td><strong>Social Media</strong></td>
+<td>High-velocity sentiment analysis measuring ever-changing customer opinion and projecting downstream impact on product sales.</td>
+</tr>
+<tr>
+<td><strong>Government</strong></td>
+<td>Business intelligence applied to citizen-facing programs, enabling evidence-based policy evaluation and change decisions.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+</div><div class="section-card fade-in fade-in-d5"><h2>4. The Business Case: Benefits of a Data Warehouse</h2>
+<p>The strategic value of a data warehouse compounds across several dimensions.</p>
+<h3>4.1 Centralization and Data Quality</h3>
+<p>Data warehouses consolidate data from disparate sources—transactional systems, operational databases, flat files—into a single location. The integration process enforces data quality: bad records are removed, duplicates are eliminated, and schemas are standardized. The result is a <strong>single source of truth</strong> that every analytical consumer in the organization can trust.</p>
+<h3>4.2 Performance and Accessibility</h3>
+<p>Separating database operations (writes) from data analytics (reads) into distinct systems generally improves both. Operational databases are no longer burdened by analytical query workloads, and analysts gain faster, more predictable access to the historical data they need—leading to faster business insights.</p>
+<h3>4.3 Advanced Intelligence Capabilities</h3>
+<p>With a clean, centralized, and performant data store in place, large-scale BI functions become viable: data mining, AI model training, and machine learning inference pipelines can all operate against the same authoritative dataset. These capabilities build on each other, progressively elevating the analytical maturity of the organization.</p>
+<h3>4.4 Competitive Advantage</h3>
+<p>Better data quality, faster insights, and smarter decision-making tools collectively give organizations the means to identify and act on opportunities before their competitors do. The data warehouse is not merely an IT asset—it is an organizational capability with direct commercial impact.</p>
+<hr/>
+<p>Would you like to explore how the ETL pipeline is architecturally designed to feed a data warehouse, or should we examine how OLAP cubes structure multidimensional data to enable the fast drill-down queries that analysts rely on?</p></div>
+
+    <div class="page-footer fade-in fade-in-d5">
+      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+    </div>
+  </div>
+</body>
+</html>
