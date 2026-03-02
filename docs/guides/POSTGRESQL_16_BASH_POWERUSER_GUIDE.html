@@ -200,6 +200,18 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readwrite_role;&quot;</span>
 sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readonly_role;&quot;</span>
 
+<span class="c1"># Alter user to set connection limits and expiration</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER app_user CONNECTION LIMIT 50 VALID UNTIL &#39;2025-12-31&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER report_user CONNECTION LIMIT 20 VALID UNTIL &#39;2025-12-31&#39;;&quot;</span>
+
+<span class="c1"># Alter user to certain roles</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER app_user IN ROLE readwrite_role;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER report_user IN ROLE readonly_role;&quot;</span>
+
+<span class="c1"># Give user a certain role</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT readwrite_role TO app_user;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT readonly_role TO report_user;&quot;</span>
+
 <span class="c1"># Grant schema permissions</span>
 sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
 <span class="s">GRANT USAGE ON SCHEMA public TO readwrite_role;</span>

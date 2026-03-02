@@ -186,6 +186,18 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE production_db TO admi
 sudo -u postgres psql -c "GRANT CONNECT ON DATABASE production_db TO readwrite_role;"
 sudo -u postgres psql -c "GRANT CONNECT ON DATABASE production_db TO readonly_role;"
 
+# Alter user to set connection limits and expiration
+sudo -u postgres psql -c "ALTER USER app_user CONNECTION LIMIT 50 VALID UNTIL '2025-12-31';"
+sudo -u postgres psql -c "ALTER USER report_user CONNECTION LIMIT 20 VALID UNTIL '2025-12-31';"
+
+# Alter user to certain roles
+sudo -u postgres psql -c "ALTER USER app_user IN ROLE readwrite_role;"
+sudo -u postgres psql -c "ALTER USER report_user IN ROLE readonly_role;"
+
+# Give user a certain role
+sudo -u postgres psql -c "GRANT readwrite_role TO app_user;"
+sudo -u postgres psql -c "GRANT readonly_role TO report_user;"
+
 # Grant schema permissions
 sudo -u postgres psql -d production_db << 'EOF'
 GRANT USAGE ON SCHEMA public TO readwrite_role;
