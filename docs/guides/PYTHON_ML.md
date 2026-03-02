@@ -22,11 +22,18 @@ Python's dominance in Machine Learning stems not from its inherent execution spe
 - [Python for Machine Learning: Engineering the AI Pipeline](#python-for-machine-learning-engineering-the-ai-pipeline)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [1. Configuration (Windows & Linux)](#1-configuration-windows--linux)
+  - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
+    - [Dependency \& Environment Management](#dependency--environment-management)
+    - [Windows PATH and GPU Drivers](#windows-path-and-gpu-drivers)
   - [2. Writing Basic Code/Scripts (Core ML Frameworks)](#2-writing-basic-codescripts-core-ml-frameworks)
-  - [3. Compile-time Commands (Bytecode & Linting)](#3-compile-time-commands-bytecode--linting)
-  - [4. Runtime Commands (Execution & Serving)](#4-runtime-commands-execution--serving)
-  - [5. Debugging (Tensor Mismatches & OOM Kernels)](#5-debugging-tensor-mismatches--oom-kernels)
+    - [Data Manipulation: NumPy \& Pandas](#data-manipulation-numpy--pandas)
+    - [Classical ML: Scikit-Learn](#classical-ml-scikit-learn)
+    - [Deep Learning: PyTorch](#deep-learning-pytorch)
+  - [3. Compile-time Commands (Bytecode \& Linting)](#3-compile-time-commands-bytecode--linting)
+  - [4. Runtime Commands (Execution \& Serving)](#4-runtime-commands-execution--serving)
+  - [5. Debugging (Tensor Mismatches \& OOM Kernels)](#5-debugging-tensor-mismatches--oom-kernels)
+    - [Common Pitfalls](#common-pitfalls)
+    - [Profiling](#profiling)
 
 ---
 

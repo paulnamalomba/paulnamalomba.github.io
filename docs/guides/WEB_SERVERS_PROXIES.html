@@ -45,14 +45,33 @@
 <p>A robust application exists exclusively at localhost until explicitly routed through a web server or reverse proxy. This guide addresses the foundational configuration syntax necessary for architecting robust Virtual Hosts (<code>.conf</code> files), routing localized traffic securely outside complex firewalls via ngrok, and managing the fundamental daemonization of web traffic controllers on Unix systems.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#web-servers--proxies-apache2-nginx-and-ngrok">Web Servers &amp; Proxies: Apache2, Nginx, and ngrok</a></li>
+<li><a href="#web-servers--proxies-apache2-nginx-and-ngrok">Web Servers \&amp; Proxies: Apache2, Nginx, and ngrok</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows--linux">1. Configuration (Windows &amp; Linux)</a></li>
-<li><a href="#2-writing-basic-codescripts-virtual-hosts--proxies">2. Writing Basic Code/Scripts (Virtual Hosts &amp; Proxies)</a></li>
-<li><a href="#3-compile-time-commands-syntax-verification">3. Compile-time Commands (Syntax Verification)</a></li>
-<li><a href="#4-runtime-commands-daemonization--ngrok">4. Runtime Commands (Daemonization &amp; ngrok)</a></li>
-<li><a href="#5-debugging-502-bad-gateway--port-conflicts">5. Debugging (502 Bad Gateway &amp; Port Conflicts)</a></li>
+<li><a href="#1-configuration-windows--linux">1. Configuration (Windows \&amp; Linux)</a><ul>
+<li><a href="#linux-environment-architecture">Linux Environment Architecture</a></li>
+</ul>
+</li>
+<li><a href="#2-writing-basic-codescripts-virtual-hosts--proxies">2. Writing Basic Code/Scripts (Virtual Hosts \&amp; Proxies)</a><ul>
+<li><a href="#nginx-the-reverse-proxy">Nginx: The Reverse Proxy</a></li>
+<li><a href="#apache2-directory-virtual-hosting">Apache2: Directory Virtual Hosting</a></li>
+</ul>
+</li>
+<li><a href="#3-compile-time-commands-syntax-verification">3. Compile-time Commands (Syntax Verification)</a><ul>
+<li><a href="#nginx-syntax-tester">Nginx Syntax Tester</a></li>
+<li><a href="#apache2-syntax-tester">Apache2 Syntax Tester</a></li>
+</ul>
+</li>
+<li><a href="#4-runtime-commands-daemonization--ngrok">4. Runtime Commands (Daemonization \&amp; ngrok)</a><ul>
+<li><a href="#service-management-nginx--apache">Service Management (Nginx / Apache)</a></li>
+<li><a href="#ngrok-tunneling-local-environments-to-the-public-web">Ngrok: Tunneling Local Environments to the Public Web</a></li>
+</ul>
+</li>
+<li><a href="#5-debugging-502-bad-gateway--port-conflicts">5. Debugging (502 Bad Gateway \&amp; Port Conflicts)</a><ul>
+<li><a href="#the-infamous-502-bad-gateway">The Infamous 502 Bad Gateway</a></li>
+<li><a href="#binding-tcp-port-conflicts">Binding TCP Port Conflicts</a></li>
+</ul>
+</li>
 </ul>
 <hr />
 <h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>

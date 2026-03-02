@@ -19,14 +19,23 @@ A robust application exists exclusively at localhost until explicitly routed thr
 
 ## Contents
 
-- [Web Servers & Proxies: Apache2, Nginx, and ngrok](#web-servers--proxies-apache2-nginx-and-ngrok)
+- [Web Servers \& Proxies: Apache2, Nginx, and ngrok](#web-servers--proxies-apache2-nginx-and-ngrok)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [1. Configuration (Windows & Linux)](#1-configuration-windows--linux)
-  - [2. Writing Basic Code/Scripts (Virtual Hosts & Proxies)](#2-writing-basic-codescripts-virtual-hosts--proxies)
+  - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
+    - [Linux Environment Architecture](#linux-environment-architecture)
+  - [2. Writing Basic Code/Scripts (Virtual Hosts \& Proxies)](#2-writing-basic-codescripts-virtual-hosts--proxies)
+    - [Nginx: The Reverse Proxy](#nginx-the-reverse-proxy)
+    - [Apache2: Directory Virtual Hosting](#apache2-directory-virtual-hosting)
   - [3. Compile-time Commands (Syntax Verification)](#3-compile-time-commands-syntax-verification)
-  - [4. Runtime Commands (Daemonization & ngrok)](#4-runtime-commands-daemonization--ngrok)
-  - [5. Debugging (502 Bad Gateway & Port Conflicts)](#5-debugging-502-bad-gateway--port-conflicts)
+    - [Nginx Syntax Tester](#nginx-syntax-tester)
+    - [Apache2 Syntax Tester](#apache2-syntax-tester)
+  - [4. Runtime Commands (Daemonization \& ngrok)](#4-runtime-commands-daemonization--ngrok)
+    - [Service Management (Nginx / Apache)](#service-management-nginx--apache)
+    - [Ngrok: Tunneling Local Environments to the Public Web](#ngrok-tunneling-local-environments-to-the-public-web)
+  - [5. Debugging (502 Bad Gateway \& Port Conflicts)](#5-debugging-502-bad-gateway--port-conflicts)
+    - [The Infamous 502 Bad Gateway](#the-infamous-502-bad-gateway)
+    - [Binding TCP Port Conflicts](#binding-tcp-port-conflicts)
 
 ---
 

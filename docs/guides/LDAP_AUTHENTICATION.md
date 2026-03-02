@@ -23,11 +23,18 @@ The Lightweight Directory Access Protocol (LDAP) stands as the primary authorita
 - [LDAP \& LDAPS: The Enterprise Authority Architecture](#ldap--ldaps-the-enterprise-authority-architecture)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [1. Configuration (Windows & Linux)](#1-configuration-windows--linux)
-  - [2. Writing Basic Code/Scripts (Connecting & Binding)](#2-writing-basic-codescripts-connecting--binding)
+  - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
+    - [Ports and Security Posture](#ports-and-security-posture)
+    - [Linux Testing Utilities](#linux-testing-utilities)
+  - [2. Writing Basic Code/Scripts (Connecting \& Binding)](#2-writing-basic-codescripts-connecting--binding)
+    - [The Directory Structure](#the-directory-structure)
+    - [Python Integration (via `ldap3`)](#python-integration-via-ldap3)
   - [3. Pre-execution Commands (Certificate Verification)](#3-pre-execution-commands-certificate-verification)
   - [4. Runtime Commands (Authentication Handshakes)](#4-runtime-commands-authentication-handshakes)
-  - [5. Debugging (SSL Chain Failures & Invalid Credentials)](#5-debugging-ssl-chain-failures--invalid-credentials)
+    - [The Standard Bind Test](#the-standard-bind-test)
+  - [5. Debugging (SSL Chain Failures \& Invalid Credentials)](#5-debugging-ssl-chain-failures--invalid-credentials)
+    - [Common Pitfalls and Codes](#common-pitfalls-and-codes)
+    - [Wireshark Protocol Sniffing](#wireshark-protocol-sniffing)
 
 ---
 

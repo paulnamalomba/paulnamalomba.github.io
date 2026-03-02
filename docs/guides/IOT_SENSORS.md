@@ -22,11 +22,19 @@ This guide details the end-to-end architecture of Internet of Things (IoT) senso
 - [IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul](#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [1. Configuration (Windows & Linux)](#1-configuration-windows--linux)
-  - [2. Writing Basic Code/Scripts (ADC & Telemetry)](#2-writing-basic-codescripts-adc--telemetry)
+  - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
+    - [Linux (Debian/Ubuntu) Strategy](#linux-debianubuntu-strategy)
+    - [Windows Strategy](#windows-strategy)
+  - [2. Writing Basic Code/Scripts (ADC \& Telemetry)](#2-writing-basic-codescripts-adc--telemetry)
+    - [Analog-to-Digital Conversion (ADC)](#analog-to-digital-conversion-adc)
+    - [Network Protocols: MQTT vs. HTTP](#network-protocols-mqtt-vs-http)
   - [3. Compile-time Commands (Firmware Generation)](#3-compile-time-commands-firmware-generation)
-  - [4. Runtime Commands (Daemonization & ETL Backhaul)](#4-runtime-commands-daemonization--etl-backhaul)
-  - [5. Debugging (Radio Silence & Data Loss)](#5-debugging-radio-silence--data-loss)
+  - [4. Runtime Commands (Daemonization \& ETL Backhaul)](#4-runtime-commands-daemonization--etl-backhaul)
+    - [Internet Backhaul](#internet-backhaul)
+    - [Tunneling Data Streams into ETL Pipelines](#tunneling-data-streams-into-etl-pipelines)
+  - [5. Debugging (Radio Silence \& Data Loss)](#5-debugging-radio-silence--data-loss)
+    - [Edge Debugging](#edge-debugging)
+    - [Backhaul Debugging](#backhaul-debugging)
 
 ---
 

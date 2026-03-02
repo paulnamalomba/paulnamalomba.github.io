@@ -22,11 +22,21 @@ Despite sharing a substring in their names, Java and JavaScript possess fundamen
 - [Java vs JavaScript: Runtimes, Execution, and Architecture](#java-vs-javascript-runtimes-execution-and-architecture)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [1. Configuration (Windows & Linux)](#1-configuration-windows--linux)
-  - [2. Writing Basic Code/Scripts (Typing & Async Handling)](#2-writing-basic-codescripts-typing--async-handling)
+  - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
+    - [Java (JDK Installation)](#java-jdk-installation)
+    - [JavaScript (Node.js \& NPM)](#javascript-nodejs--npm)
+  - [2. Writing Basic Code/Scripts (Typing \& Async Handling)](#2-writing-basic-codescripts-typing--async-handling)
+    - [Typing Mechanisms](#typing-mechanisms)
+    - [Concurrency: Multi-Threading vs The Event Loop](#concurrency-multi-threading-vs-the-event-loop)
   - [3. Compile-time Commands (Javac vs Transpilation)](#3-compile-time-commands-javac-vs-transpilation)
+    - [Java (Bytecode Compilation)](#java-bytecode-compilation)
+    - [JavaScript (Transpilation \& Bundling)](#javascript-transpilation--bundling)
   - [4. Runtime Commands (JVM Execution vs Event Loop)](#4-runtime-commands-jvm-execution-vs-event-loop)
+    - [Java Execution](#java-execution)
+    - [Node.js Execution](#nodejs-execution)
   - [5. Debugging (NullPointers vs Undefined)](#5-debugging-nullpointers-vs-undefined)
+    - [Java (The NullPointerException)](#java-the-nullpointerexception)
+    - [JavaScript (`undefined is not a function`)](#javascript-undefined-is-not-a-function)
 
 ---
 
