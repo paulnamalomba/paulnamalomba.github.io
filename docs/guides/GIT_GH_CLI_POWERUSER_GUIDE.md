@@ -358,6 +358,7 @@ gh config set git_protocol https
 ## 4. Repository Lifecycle (Create, Clone, Delete, Archive)
 
 ### 4.1 Create a local repo
+
 ```bash
 mkdir my-repo
 cd my-repo
@@ -365,6 +366,7 @@ git init
 ```
 
 ### 4.2 Clone an existing repo
+
 ```bash
 git clone https://github.com/OWNER/REPO.git
 # or
@@ -374,27 +376,32 @@ git clone git@github.com:OWNER/REPO.git
 ### 4.3 Create a GitHub repo from the terminal (gh)
 
 Create and optionally push the current directory:
+
 ```bash
 # inside an existing local repo
 gh repo create OWNER/REPO --private --source=. --remote=origin --push
 ```
 
 Create a new repo and clone it:
+
 ```bash
 gh repo create OWNER/new-repo --public --clone
 ```
 
 ### 4.4 Rename a GitHub repo (gh)
+
 ```bash
 gh repo rename new-name
 ```
 
 Fork a repo (and clone your fork):
+
 ```bash
 gh repo fork OWNER/REPO --clone
 ```
 
 Create from a template repo:
+
 ```bash
 gh repo create OWNER/new-from-template --private --template OWNER/TEMPLATE_REPO --clone
 ```
@@ -402,6 +409,7 @@ gh repo create OWNER/new-from-template --private --template OWNER/TEMPLATE_REPO 
 ### 4.5 Archive vs Delete (be deliberate)
 
 **Archive (reversible, safer)**
+
 ```bash
 gh repo archive OWNER/REPO
 ```
@@ -409,12 +417,14 @@ gh repo archive OWNER/REPO
 **Delete (irreversible)**
 
 Before deletion, consider taking a mirror backup:
+
 ```bash
 git clone --mirror git@github.com:OWNER/REPO.git
 # Produces REPO.git directory with full refs
 ```
 
 Then delete:
+
 ```bash
 gh repo delete OWNER/REPO --confirm
 ```

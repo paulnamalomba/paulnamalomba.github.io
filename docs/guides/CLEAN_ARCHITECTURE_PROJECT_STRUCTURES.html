@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Architecture Project Structures - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="clean-architecture-project-structures-c-dart-flutter-typescript">Clean Architecture &amp; Project Structures — C#, Dart (Flutter) &amp; TypeScript</h1>
+<p><br>
+<strong>Last updated</strong>: March 04, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html"><img alt="Architecture" src="https://img.shields.io/badge/Architecture-Clean%20Architecture-blue.svg" /></a>
+<a href="#"><img alt="Languages" src="https://img.shields.io/badge/Languages-C%23%20%7C%20Dart%20%7C%20TypeScript-brightgreen.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>Architecting software is a battle between the convenience of framework defaults and the necessary rigor of enterprise maintainability. The "typical" structures are optimized for getting a "Hello World" running in five minutes. Clean Architecture is optimized for surviving five years of shifting business requirements without rewriting the entire codebase.</p>
+<p>This guide provides a detailed breakdown of typical, framework-default project structures versus their production-grade Clean Architecture counterparts for <strong>C# (.NET)</strong>, <strong>Dart (Flutter)</strong>, and <strong>TypeScript (Node.js)</strong>. It includes a glossary of fundamental architectural terms, concrete folder structures, comparison tables, a full data-flow walkthrough, and practical guidance on when (and when not) to apply Clean Architecture.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#clean-architecture--project-structures--c-dart-flutter--typescript">Clean Architecture \&amp; Project Structures — C#, Dart (Flutter) \&amp; TypeScript</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#architectural-glossary">Architectural Glossary</a><ul>
+<li><a href="#layer-terms">Layer Terms</a></li>
+<li><a href="#component-terms">Component Terms</a></li>
+<li><a href="#principle-terms">Principle Terms</a></li>
+</ul>
+</li>
+<li><a href="#the-core-idea-the-dependency-rule">The Core Idea: The Dependency Rule</a></li>
+<li><a href="#1-c-net-web-api">1. C# (.NET Web API)</a><ul>
+<li><a href="#typical-structure-single-project-monolith">Typical Structure (Single Project Monolith)</a></li>
+<li><a href="#clean-architecture-structure-multi-project-solution">Clean Architecture Structure (Multi-Project Solution)</a></li>
+<li><a href="#c-project-references-enforcing-the-dependency-rule">C# Project References (Enforcing the Dependency Rule)</a></li>
+</ul>
+</li>
+<li><a href="#2-dart-flutter-for-iosandroid">2. Dart (Flutter for iOS/Android)</a><ul>
+<li><a href="#typical-structure-folder-by-type">Typical Structure (Folder-by-Type)</a></li>
+<li><a href="#clean-architecture-structure-feature-first">Clean Architecture Structure (Feature-First)</a></li>
+<li><a href="#dart-dependency-injection-mechanics">Dart Dependency Injection Mechanics</a></li>
+</ul>
+</li>
+<li><a href="#3-typescript-nodejs-backend">3. TypeScript (Node.js Backend)</a><ul>
+<li><a href="#typical-structure-expressjs-default">Typical Structure (Express.js Default)</a></li>
+<li><a href="#clean-architecture-structure">Clean Architecture Structure</a></li>
+<li><a href="#typescript-di--interface-enforcement">TypeScript DI \&amp; Interface Enforcement</a></li>
+</ul>
+</li>
+<li><a href="#comparison-matrix-typical-vs-clean">Comparison Matrix: Typical vs Clean</a></li>
+<li><a href="#data-flow-walkthrough-user-registration">Data Flow Walkthrough: User Registration</a><ul>
+<li><a href="#step-by-step-from-http-to-database-and-back">Step-by-Step: From HTTP to Database and Back</a></li>
+<li><a href="#concrete-code-example-typescript">Concrete Code Example (TypeScript)</a></li>
+</ul>
+</li>
+<li><a href="#when-to-use-clean-architecture-and-when-not-to">When to Use Clean Architecture (and When Not To)</a></li>
+<li><a href="#common-pitfalls">Common Pitfalls</a></li>
+<li><a href="#references--further-reading">References \&amp; Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="architectural-glossary">Architectural Glossary</h2>
+<p>Before dissecting folder structures, it is critical to establish precise definitions. These terms appear throughout Clean Architecture literature and are often misused or conflated.</p>
+<h3 id="layer-terms">Layer Terms</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Term</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Domain</strong></td>
+<td style="text-align: left;">The innermost layer. Contains the core business rules and enterprise logic that exist regardless of any framework, UI, or database. This layer defines <em>what</em> the system does in pure business terms. It has <strong>zero</strong> external dependencies — no NuGet packages, no npm modules, no Flutter plugins. If your company's business rules would survive the complete replacement of your tech stack, they belong here.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Application</strong></td>
+<td style="text-align: left;">Orchestrates the domain. Contains <strong>Use Cases</strong> (also called Interactors or Application Services) that coordinate domain entities and interfaces to fulfill a specific user intent (e.g., "Register a new user," "Process a payment"). This layer defines <em>how</em> domain rules are triggered. It references the Domain layer and nothing else.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Infrastructure</strong></td>
+<td style="text-align: left;">The implementation layer. This is where all concrete, framework-dependent code lives: database access (Entity Framework, Mongoose, Drift), external API clients (Stripe, Twilio, SendGrid), file system access, caching (Redis), message brokers (RabbitMQ, Kafka). It <em>implements</em> the interfaces (contracts) defined in the Domain layer. It references both Domain and Application.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Presentation</strong></td>
+<td style="text-align: left;">The delivery mechanism. The outermost layer that adapts user input into something the Application layer understands and formats Application output for the user. For a backend API, this is your HTTP controllers, middleware, and route definitions. For Flutter, this is your Widgets, Pages, and state management (Bloc, Riverpod). This layer calls Application Use Cases but never touches Infrastructure directly.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Core</strong></td>
+<td style="text-align: left;">A cross-cutting shared module containing utilities, constants, error/failure classes, and networking primitives (HTTP clients, interceptors) used across all features. In Flutter Clean Architecture, <code>core/</code> often holds the <code>Failure</code> base class, theme data, and the configured <code>Dio</code> client. In backend apps, this might hold shared value objects or extension methods. Not a formal Clean Architecture layer, but a practical necessity.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="component-terms">Component Terms</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Term</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Entity</strong></td>
+<td style="text-align: left;">A domain object that is defined by its <strong>identity</strong> (an ID), not by its attributes. A <code>User</code> entity with <code>id: 42</code> is the same user even if their name changes. Entities encapsulate the most critical business rules. In the Domain layer, entities are plain classes with no framework annotations — no <code>[Table]</code>, no <code>@Entity()</code>, no <code>@JsonSerializable()</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Model</strong></td>
+<td style="text-align: left;">A data-transfer representation of an entity, augmented with serialization logic. A <code>UserModel</code> in the Infrastructure/Data layer might extend or map to a <code>User</code> entity but includes <code>fromJson()</code>, <code>toMap()</code>, or Entity Framework <code>[Column]</code> annotations. Models know about the outside world; entities do not.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DTO (Data Transfer Object)</strong></td>
+<td style="text-align: left;">A plain object used to shuttle data across layer boundaries. A <code>RegisterUserRequest</code> DTO carries input from the Presentation layer to the Application layer. A <code>UserResponse</code> DTO carries output back. DTOs decouple HTTP request/response shapes from internal domain structures. If your API contract changes, only the DTO changes — not the entity.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Repository</strong></td>
+<td style="text-align: left;">An abstraction (interface) that defines data access operations without specifying <em>how</em> data is stored. <code>IUserRepository</code> declares <code>GetByIdAsync(int id)</code> — it does not say whether the backing store is PostgreSQL, MongoDB, or an in-memory list. The interface lives in the Domain layer; the concrete implementation (e.g., <code>UserRepositoryImpl</code>) lives in Infrastructure.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Use Case (Interactor)</strong></td>
+<td style="text-align: left;">A single, named unit of application logic. One Use Case = one user intention. <code>RegisterUserUseCase</code> validates input, checks for duplicates, hashes the password, persists the user, and dispatches a welcome email. Use Cases orchestrate but do not implement — they call repository interfaces and service interfaces defined in the Domain layer.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Service (Domain Service)</strong></td>
+<td style="text-align: left;">Business logic that does not naturally belong to any single entity. For example, a <code>PricingService</code> that calculates a ride fare based on distance, surge multiplier, and vehicle type operates across multiple entities. Domain Services live in the Domain layer and have no external dependencies.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Service (Infrastructure Service)</strong></td>
+<td style="text-align: left;">A concrete implementation of an external capability: <code>EmailService</code> wrapping SendGrid, <code>PaymentService</code> wrapping Stripe, <code>CacheService</code> wrapping Redis. These implement interfaces defined in the Domain layer and live in Infrastructure. The distinction from a Domain Service is that Infrastructure Services depend on third-party SDKs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Middleware</strong></td>
+<td style="text-align: left;">A pipeline component that intercepts requests before they reach a controller or responses before they leave the server. Common middleware includes authentication (JWT validation), logging, CORS enforcement, rate limiting, and global error handling. Middleware lives in the Presentation layer.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Validator</strong></td>
+<td style="text-align: left;">A component that enforces input correctness rules before a Use Case executes. Validators live in the Application layer and use libraries like FluentValidation (C#), <code>class-validator</code> (TypeScript), or <code>dartz</code>/<code>fpdart</code> (Dart) to reject malformed requests early.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="principle-terms">Principle Terms</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Term</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Dependency Rule</strong></td>
+<td style="text-align: left;">The cardinal rule of Clean Architecture: <strong>source code dependencies must point inward only.</strong> The Domain layer knows nothing about Application, Infrastructure, or Presentation. Application knows about Domain but not Infrastructure or Presentation. This is enforced by project/package references, not by developer discipline alone.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dependency Injection (DI)</strong></td>
+<td style="text-align: left;">A technique where a class receives its dependencies (typically via constructor parameters) rather than creating them internally. This enables the Dependency Rule: a Use Case depends on <code>IUserRepository</code> (an abstraction from Domain). At startup, the DI container wires <code>IUserRepository</code> to <code>UserRepositoryImpl</code> (a concrete from Infrastructure). The Use Case never imports or references Infrastructure code.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Inversion of Control (IoC)</strong></td>
+<td style="text-align: left;">The broader principle that DI implements. Traditional code calls libraries; with IoC, the framework calls your code. In Clean Architecture, the inner layers define interfaces (control the contract), and the outer layers provide implementations (invert the typical dependency direction).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Separation of Concerns (SoC)</strong></td>
+<td style="text-align: left;">Each layer or module has a single, well-defined responsibility. Controllers do not validate. Validators do not query databases. Repositories do not format HTTP responses. SoC is the philosophical foundation; Clean Architecture is the structural enforcement.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CQRS (Command Query Responsibility Segregation)</strong></td>
+<td style="text-align: left;">A pattern often paired with Clean Architecture in C# where write operations (Commands) and read operations (Queries) are handled by separate pipelines. MediatR is the canonical .NET library for implementing CQRS with Clean Architecture. Commands mutate state; Queries return data and are side-effect-free.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-core-idea-the-dependency-rule">The Core Idea: The Dependency Rule</h2>
+<p>Clean Architecture, as formalized by Robert C. Martin (Uncle Bob), is not a folder structure — it is a <strong>dependency rule</strong> enforced by project boundaries, package imports, or module references.</p>
+<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────────────────┐
+│                     PRESENTATION                            │
+│  (Controllers, Widgets, CLI, gRPC handlers)                 │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                 INFRASTRUCTURE                      │    │
+│  │  (Database, External APIs, File I/O, Cache)         │    │
+│  │                                                     │    │
+│  │  ┌─────────────────────────────────────────────┐    │    │
+│  │  │              APPLICATION                    │    │    │
+│  │  │  (Use Cases, DTOs, Validators)              │    │    │
+│  │  │                                             │    │    │
+│  │  │  ┌─────────────────────────────────────┐    │    │    │
+│  │  │  │            DOMAIN                   │    │    │    │
+│  │  │  │  (Entities, Interfaces, Services)   │    │    │    │
+│  │  │  └─────────────────────────────────────┘    │    │    │
+│  │  └─────────────────────────────────────────────┘    │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+
+Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
+</code></pre></div>
+
+<p>The key constraint: <strong>inner layers define interfaces; outer layers implement them.</strong> This inversion is what makes the architecture "clean" — you can replace your entire database or swap your presentation framework without modifying a single line of business logic.</p>
+<hr />
+<h2 id="1-c-net-web-api">1. C# (.NET Web API)</h2>
+<p>The .NET ecosystem is heavily opinionated out of the box. The default scaffold (<code>dotnet new webapi</code>) produces a single project assembly, which converges toward a monolithic MVC pattern. This is fine for small microservices with single responsibilities but quickly turns into a tightly coupled mess for enterprise systems with evolving requirements.</p>
+<h3 id="typical-structure-single-project-monolith">Typical Structure (Single Project Monolith)</h3>
+<div class="codehilite"><pre><span></span><code>Solution_Name/
+└── Project_Name.API/
+    ├── Controllers/         # Handles HTTP requests AND business logic
+    ├── Models/              # Database entities mixed with DTOs
+    ├── Services/            # Business logic and database calls mixed
+    ├── appsettings.json     # Configuration
+    └── Program.cs           # Entry point and dependency injection
+</code></pre></div>
+
+<p><strong>Why this becomes problematic:</strong></p>
+<ul>
+<li><strong>Controllers bloat.</strong> Developers add validation, business rules, and DB queries directly into action methods because there is no structural incentive to separate them.</li>
+<li><strong>Models are overloaded.</strong> The same <code>User</code> class is sometimes the EF Core entity, the API request body, and the API response — violating SoC and making schema changes dangerous.</li>
+<li><strong>Services are a dumping ground.</strong> <code>UserService</code> starts as a clean abstraction but accumulates 40 methods covering creation, authentication, password resets, profile management, and report generation.</li>
+<li><strong>Testing is painful.</strong> Unit testing a controller that directly calls <code>DbContext</code> requires mocking the entire database layer.</li>
+</ul>
+<h3 id="clean-architecture-structure-multi-project-solution">Clean Architecture Structure (Multi-Project Solution)</h3>
+<p>In production C#, the solution is split into distinct <strong>Class Libraries</strong> (separate <code>.csproj</code> projects) to enforce dependency rules via assembly references. The compiler itself prevents inner layers from referencing outer layers.</p>
+<div class="codehilite"><pre><span></span><code>EnterpriseSolution/
+│
+├── src/
+│   ├── Project.Domain/                    # Layer 1: Core (innermost)
+│   │   ├── Entities/
+│   │   │   ├── Driver.cs                  # Identity-based domain object
+│   │   │   ├── Ride.cs
+│   │   │   └── Vehicle.cs
+│   │   ├── Enums/
+│   │   │   ├── RideStatus.cs              # Requested, InProgress, Completed, Cancelled
+│   │   │   └── VehicleType.cs
+│   │   ├── Exceptions/
+│   │   │   ├── DomainException.cs         # Base domain exception
+│   │   │   └── RideAlreadyAcceptedException.cs
+│   │   ├── Interfaces/
+│   │   │   ├── IRideRepository.cs         # Data access contract
+│   │   │   ├── IDriverRepository.cs
+│   │   │   └── INotificationService.cs    # External capability contract
+│   │   └── Services/
+│   │       └── FareCalculationService.cs  # Pure business logic (no dependencies)
+│   │
+│   ├── Project.Application/               # Layer 2: References Domain ONLY
+│   │   ├── DTOs/
+│   │   │   ├── RequestRideDto.cs
+│   │   │   └── RideResponseDto.cs
+│   │   ├── Interfaces/
+│   │   │   └── IRideApplicationService.cs
+│   │   ├── Mappings/
+│   │   │   └── RideMappingProfile.cs      # AutoMapper or manual mapping
+│   │   ├── UseCases/                      # Or Commands/Queries (CQRS)
+│   │   │   ├── RequestRideUseCase.cs
+│   │   │   ├── AcceptRideUseCase.cs
+│   │   │   └── CompleteRideUseCase.cs
+│   │   └── Validators/
+│   │       └── RequestRideValidator.cs    # FluentValidation rules
+│   │
+│   ├── Project.Infrastructure/            # Layer 3: References Application &amp; Domain
+│   │   ├── Data/
+│   │   │   ├── AppDbContext.cs            # EF Core DbContext
+│   │   │   ├── Configurations/
+│   │   │   │   └── RideConfiguration.cs   # Fluent API entity config
+│   │   │   └── Migrations/
+│   │   ├── Repositories/
+│   │   │   ├── RideRepository.cs          # Implements IRideRepository
+│   │   │   └── DriverRepository.cs
+│   │   ├── Services/
+│   │   │   ├── PushNotificationService.cs # Implements INotificationService
+│   │   │   └── StripePaymentService.cs
+│   │   └── DependencyInjection.cs         # Extension method: services.AddInfrastructure()
+│   │
+│   └── Project.Api/                       # Layer 4: References Application &amp; Infrastructure
+│       ├── Controllers/
+│       │   └── RidesController.cs         # Thin: parse HTTP → call UseCase → return DTO
+│       ├── Middlewares/
+│       │   ├── ExceptionHandlingMiddleware.cs
+│       │   └── JwtAuthMiddleware.cs
+│       ├── Filters/
+│       │   └── ValidationFilter.cs
+│       ├── appsettings.json
+│       └── Program.cs                     # Wires DI container, middleware pipeline
+│
+├── tests/
+│   ├── Project.Domain.Tests/
+│   ├── Project.Application.Tests/
+│   └── Project.Api.IntegrationTests/
+│
+└── EnterpriseSolution.sln
+</code></pre></div>
+
+<h3 id="c-project-references-enforcing-the-dependency-rule">C# Project References (Enforcing the Dependency Rule)</h3>
+<p>The <code>.csproj</code> files enforce the Dependency Rule at compile time:</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Project.Domain.csproj — ZERO project references --&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Project.Application.csproj — References Domain ONLY --&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Domain\Project.Domain.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;FluentValidation&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;11.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Project.Infrastructure.csproj — References Application &amp; Domain --&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Domain\Project.Domain.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Application\Project.Application.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Microsoft.EntityFrameworkCore&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;8.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Npgsql.EntityFrameworkCore.PostgreSQL&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;8.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Project.Api.csproj — References Application &amp; Infrastructure --&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk.Web&quot;</span><span class="nt">&gt;</span>
+<span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Application\Project.Application.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Infrastructure\Project.Infrastructure.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
+<span class="nt">&lt;/Project&gt;</span>
+</code></pre></div>
+
+<p>If a developer in <code>Project.Domain</code> tries to <code>using Project.Infrastructure;</code>, the compiler will reject it. The dependency rule is structurally enforced, not merely documented.</p>
+<hr />
+<h2 id="2-dart-flutter-for-iosandroid">2. Dart (Flutter for iOS/Android)</h2>
+<p>Flutter is inherently a UI toolkit. It provides zero architectural guidance out of the box, which means that without deliberate structure, codebases gravitate toward the "God Widget" anti-pattern — where UI rendering, state management, HTTP calls, JSON parsing, and business logic coexist in the same file.</p>
+<h3 id="typical-structure-folder-by-type">Typical Structure (Folder-by-Type)</h3>
+<div class="codehilite"><pre><span></span><code>lib/
+├── models/          # ALL data models in the app
+├── screens/         # ALL UI pages
+├── services/        # ALL network and database calls
+├── widgets/         # ALL reusable UI components
+└── main.dart
+</code></pre></div>
+
+<p><strong>Why this becomes problematic:</strong></p>
+<ul>
+<li><strong>Feature discovery is archaeological.</strong> To understand the "Ride Tracking" feature, you must open <code>models/ride.dart</code>, <code>screens/ride_screen.dart</code>, <code>services/ride_service.dart</code>, and <code>widgets/ride_map.dart</code> across four different directories. Multiply by 30 features and discovery becomes excavation.</li>
+<li><strong>Implicit coupling.</strong> Without layer boundaries, a screen widget directly calls an HTTP service, which directly deserializes into a model that is also used as UI state. Changing the API response format forces changes in the UI layer.</li>
+<li><strong>Testing is ad hoc.</strong> No clear seam for mocking exists because there are no interfaces — just concrete classes passed around by type.</li>
+</ul>
+<h3 id="clean-architecture-structure-feature-first">Clean Architecture Structure (Feature-First)</h3>
+<p>For highly scalable mobile applications, a feature-first Clean Architecture is preferred. Each feature (Authentication, Ride Tracking, Payments) contains its own isolated Clean Architecture layers.</p>
+<div class="codehilite"><pre><span></span><code>lib/
+├── core/                           # App-wide shared utilities
+│   ├── constants/
+│   │   └── app_constants.dart
+│   ├── errors/
+│   │   ├── failures.dart           # Failure sealed class hierarchy
+│   │   └── exceptions.dart         # Raw exception wrappers
+│   ├── network/
+│   │   ├── api_client.dart         # Configured Dio instance
+│   │   └── interceptors.dart       # Auth token, retry logic
+│   ├── theme/
+│   │   └── app_theme.dart
+│   └── usecases/
+│       └── usecase.dart            # Abstract UseCase&lt;Type, Params&gt; base class
+│
+├── features/
+│   ├── authentication/
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   │   └── user.dart       # Pure Dart class, no annotations
+│   │   │   ├── repositories/
+│   │   │   │   └── i_auth_repository.dart
+│   │   │   └── usecases/
+│   │   │       ├── login_user.dart
+│   │   │       └── register_user.dart
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   │   └── user_model.dart # extends/maps to User entity + fromJson/toJson
+│   │   │   ├── datasources/
+│   │   │   │   ├── auth_remote_datasource.dart
+│   │   │   │   └── auth_local_datasource.dart  # SharedPreferences/SQLite
+│   │   │   └── repositories/
+│   │   │       └── auth_repository_impl.dart   # Implements IAuthRepository
+│   │   └── presentation/
+│   │       ├── controllers/        # Riverpod StateNotifiers / Bloc
+│   │       │   └── auth_controller.dart
+│   │       ├── pages/
+│   │       │   ├── login_page.dart
+│   │       │   └── register_page.dart
+│   │       └── widgets/
+│   │           └── auth_form.dart
+│   │
+│   └── ride_tracking/
+│       ├── domain/
+│       │   ├── entities/
+│       │   │   ├── ride.dart
+│       │   │   └── location_point.dart
+│       │   ├── repositories/
+│       │   │   └── i_ride_repository.dart
+│       │   └── usecases/
+│       │       ├── request_ride.dart
+│       │       └── track_active_ride.dart
+│       ├── data/
+│       │   ├── models/
+│       │   │   └── ride_model.dart
+│       │   ├── datasources/
+│       │   │   ├── ride_remote_datasource.dart
+│       │   │   └── ride_local_datasource.dart
+│       │   └── repositories/
+│       │       └── ride_repository_impl.dart
+│       └── presentation/
+│           ├── controllers/
+│           │   └── ride_tracking_controller.dart
+│           ├── pages/
+│           │   └── active_ride_page.dart
+│           └── widgets/
+│               ├── map_overlay_widget.dart
+│               └── driver_card.dart
+│
+├── injection_container.dart        # get_it / riverpod setup
+└── main.dart                       # ProviderScope and routing
+</code></pre></div>
+
+<h3 id="dart-dependency-injection-mechanics">Dart Dependency Injection Mechanics</h3>
+<p>Flutter does not have a built-in DI container. The community standard is <code>get_it</code> (a service locator) combined with <code>injectable</code> (code generation). Alternatively, Riverpod's <code>Provider</code> system serves as a functional DI mechanism.</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// injection_container.dart (using get_it)</span>
+<span class="k">import</span><span class="w"> </span><span class="s1">&#39;package:get_it/get_it.dart&#39;</span><span class="p">;</span>
+
+<span class="kd">final</span><span class="w"> </span><span class="n">sl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetIt</span><span class="p">.</span><span class="n">instance</span><span class="p">;</span><span class="w">  </span><span class="c1">// sl = service locator</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">init</span><span class="p">()</span><span class="w"> </span><span class="kd">async</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Use Cases</span>
+<span class="w">  </span><span class="n">sl</span><span class="p">.</span><span class="n">registerLazySingleton</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">LoginUser</span><span class="p">(</span><span class="n">sl</span><span class="p">()));</span>
+<span class="w">  </span><span class="n">sl</span><span class="p">.</span><span class="n">registerLazySingleton</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">RegisterUser</span><span class="p">(</span><span class="n">sl</span><span class="p">()));</span>
+
+<span class="w">  </span><span class="c1">// Repositories — interface mapped to implementation</span>
+<span class="w">  </span><span class="n">sl</span><span class="p">.</span><span class="n">registerLazySingleton</span><span class="o">&lt;</span><span class="n">IAuthRepository</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">AuthRepositoryImpl</span><span class="p">(</span>
+<span class="w">      </span><span class="nl">remoteDatasource:</span><span class="w"> </span><span class="n">sl</span><span class="p">(),</span>
+<span class="w">      </span><span class="nl">localDatasource:</span><span class="w"> </span><span class="n">sl</span><span class="p">(),</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Data Sources</span>
+<span class="w">  </span><span class="n">sl</span><span class="p">.</span><span class="n">registerLazySingleton</span><span class="o">&lt;</span><span class="n">AuthRemoteDatasource</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">AuthRemoteDatasourceImpl</span><span class="p">(</span><span class="nl">client:</span><span class="w"> </span><span class="n">sl</span><span class="p">()),</span>
+<span class="w">  </span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// External</span>
+<span class="w">  </span><span class="n">sl</span><span class="p">.</span><span class="n">registerLazySingleton</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Dio</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The Use Case <code>LoginUser</code> receives <code>IAuthRepository</code> (an abstraction from the domain layer). It never knows whether the concrete implementation hits Firebase, a REST API, or an in-memory stub. This is the Dependency Rule in action.</p>
+<hr />
+<h2 id="3-typescript-nodejs-backend">3. TypeScript (Node.js Backend)</h2>
+<p>TypeScript brings type safety to JavaScript, but Node.js frameworks (particularly Express) are notoriously unopinionated. Without deliberate structure, developers build massive, untyped route handlers that parse JSON, validate inputs, execute business rules, and query the database in a single function.</p>
+<h3 id="typical-structure-expressjs-default">Typical Structure (Express.js Default)</h3>
+<div class="codehilite"><pre><span></span><code>src/
+├── controllers/     # Req/Res handlers and business logic
+├── models/          # Mongoose or TypeORM schemas
+├── routes/          # Express router definitions
+├── utils/           # Helper functions
+└── index.ts         # Server setup
+</code></pre></div>
+
+<p><strong>Why this becomes problematic:</strong></p>
+<ul>
+<li><strong>Controller Bloat.</strong> A single <code>userController.ts</code> ends up at 500+ lines because it handles request parsing, input validation, password hashing, database queries, email dispatch, and response formatting.</li>
+<li><strong>Framework lock-in.</strong> Business logic scattered across Express route handlers means migrating to Fastify, Hono, or a GraphQL resolver requires rewriting business rules alongside transport code.</li>
+<li><strong>Untestable.</strong> Testing a controller requires spinning up Express, mocking <code>req</code>/<code>res</code> objects, and seeding a database — integration testing disguised as unit testing.</li>
+</ul>
+<h3 id="clean-architecture-structure">Clean Architecture Structure</h3>
+<p>TypeScript excels at Clean Architecture because of its robust interface support (<code>interface</code>, <code>abstract class</code>), enabling strict Dependency Injection.</p>
+<div class="codehilite"><pre><span></span><code>src/
+├── domain/                          # Enterprise business rules
+│   ├── entities/
+│   │   ├── User.ts                  # Plain class with business invariants
+│   │   └── Session.ts
+│   ├── enums/
+│   │   └── UserRole.ts
+│   ├── interfaces/
+│   │   ├── IUserRepository.ts       # Data access contract
+│   │   ├── ISessionRepository.ts
+│   │   └── IEmailService.ts         # External capability contract
+│   └── services/
+│       └── PasswordPolicyService.ts # Pure business logic
+│
+├── application/                     # Application business rules
+│   ├── use-cases/
+│   │   ├── RegisterUserUseCase.ts
+│   │   ├── AuthenticateUserUseCase.ts
+│   │   └── GetUserProfileUseCase.ts
+│   ├── dtos/
+│   │   ├── RegisterUserRequestDto.ts
+│   │   └── UserResponseDto.ts
+│   └── validators/
+│       └── RegisterUserValidator.ts
+│
+├── infrastructure/                  # Frameworks and drivers
+│   ├── database/
+│   │   ├── PostgresConnection.ts
+│   │   └── migrations/
+│   ├── repositories/
+│   │   ├── UserRepositoryImpl.ts    # Implements IUserRepository
+│   │   └── SessionRepositoryImpl.ts
+│   ├── services/
+│   │   ├── SendGridEmailService.ts  # Implements IEmailService
+│   │   ├── JwtAuthService.ts
+│   │   └── RedisCacheService.ts
+│   └── config/
+│       └── env.ts                   # Environment variable parsing
+│
+├── presentation/                    # Interface adapters (delivery mechanism)
+│   ├── http/
+│   │   ├── controllers/
+│   │   │   └── UserController.ts    # Parses HTTP, calls UseCase, returns DTO
+│   │   ├── middlewares/
+│   │   │   ├── AuthMiddleware.ts
+│   │   │   └── ErrorHandlerMiddleware.ts
+│   │   └── routes/
+│   │       └── userRoutes.ts
+│   └── Server.ts                    # Express/Fastify instantiation
+│
+├── container.ts                     # DI wiring (tsyringe, inversify, or manual)
+└── main.ts                          # Application bootstrap
+</code></pre></div>
+
+<h3 id="typescript-di-interface-enforcement">TypeScript DI &amp; Interface Enforcement</h3>
+<p>TypeScript interfaces are erased at runtime, so DI requires either a container library or manual wiring. Common approaches:</p>
+<p><strong>Option A: Manual Constructor Injection (zero dependencies)</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// main.ts — Composition Root</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserController</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./presentation/http/controllers/UserController&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./application/use-cases/RegisterUserUseCase&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/repositories/UserRepositoryImpl&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SendGridEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/services/SendGridEmailService&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/database/PostgresConnection&#39;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="p">(</span><span class="nx">db</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">emailService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">SendGridEmailService</span><span class="p">();</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">registerUser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="p">(</span><span class="nx">userRepository</span><span class="p">,</span><span class="w"> </span><span class="nx">emailService</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">userController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">UserController</span><span class="p">(</span><span class="nx">registerUser</span><span class="p">);</span>
+
+<span class="c1">// Wire into Express</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/api/users&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">));</span>
+</code></pre></div>
+
+<p><strong>Option B: <code>tsyringe</code> (decorator-based DI container)</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">container</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;tsyringe&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/repositories/UserRepositoryImpl&#39;</span><span class="p">;</span>
+
+<span class="nx">container</span><span class="p">.</span><span class="nx">register</span><span class="o">&lt;</span><span class="nx">IUserRepository</span><span class="o">&gt;</span><span class="p">(</span><span class="s1">&#39;IUserRepository&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useClass</span><span class="o">:</span><span class="w"> </span><span class="kt">UserRepositoryImpl</span><span class="w"> </span><span class="p">});</span>
+
+<span class="c1">// In RegisterUserUseCase.ts</span>
+<span class="kd">@injectable</span><span class="p">()</span>
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">&#39;IUserRepository&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">userRepo</span><span class="o">:</span><span class="w"> </span><span class="kt">IUserRepository</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">&#39;IEmailService&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">emailService</span><span class="o">:</span><span class="w"> </span><span class="kt">IEmailService</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Both approaches satisfy the Dependency Rule: <code>RegisterUserUseCase</code> depends on <code>IUserRepository</code> (a Domain interface), never on <code>UserRepositoryImpl</code> (an Infrastructure class).</p>
+<hr />
+<h2 id="comparison-matrix-typical-vs-clean">Comparison Matrix: Typical vs Clean</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Dimension</th>
+<th style="text-align: left;">Typical (Framework Default)</th>
+<th style="text-align: left;">Clean Architecture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Optimized for</strong></td>
+<td style="text-align: left;">Speed of initial setup</td>
+<td style="text-align: left;">Long-term maintainability</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Dependency direction</strong></td>
+<td style="text-align: left;">Ad hoc (anything imports anything)</td>
+<td style="text-align: left;">Strictly inward (enforced by project/package boundaries)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Business logic location</strong></td>
+<td style="text-align: left;">Controllers, route handlers, services</td>
+<td style="text-align: left;">Domain layer (entities, domain services) and Application layer (use cases)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Database coupling</strong></td>
+<td style="text-align: left;">Models are often ORM entities used everywhere</td>
+<td style="text-align: left;">ORM models isolated in Infrastructure; domain entities are framework-free</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Testability</strong></td>
+<td style="text-align: left;">Integration tests masquerading as unit tests</td>
+<td style="text-align: left;">True unit tests: domain and application layers have zero framework deps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Onboarding time</strong></td>
+<td style="text-align: left;">Low (familiar folder names)</td>
+<td style="text-align: left;">Medium (requires understanding the layer rules)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Refactoring cost</strong></td>
+<td style="text-align: left;">High (changes ripple across layers)</td>
+<td style="text-align: left;">Low (changes are contained within layer boundaries)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Framework migration</strong></td>
+<td style="text-align: left;">Rewrite</td>
+<td style="text-align: left;">Replace Presentation and/or Infrastructure; Domain and Application untouched</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ideal team size</strong></td>
+<td style="text-align: left;">1–3 developers</td>
+<td style="text-align: left;">3+ developers, or any team expecting &gt;12 months of active development</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ideal project lifespan</strong></td>
+<td style="text-align: left;">Prototypes, hackathons, microservices with single responsibility</td>
+<td style="text-align: left;">Enterprise systems, products with evolving requirements, multi-year codebases</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="data-flow-walkthrough-user-registration">Data Flow Walkthrough: User Registration</h2>
+<p>To make Clean Architecture concrete, this section traces a single operation — <strong>registering a new user</strong> — through every layer, from the HTTP request to the database write and back.</p>
+<h3 id="step-by-step-from-http-to-database-and-back">Step-by-Step: From HTTP to Database and Back</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">Client</span><span class="w"> </span><span class="p">(</span><span class="n">HTTP</span><span class="w"> </span><span class="n">POST</span><span class="w"> </span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">users</span><span class="p">)</span>
+<span class="w">    </span><span class="err">│</span>
+<span class="w">    </span><span class="err">▼</span>
+<span class="err">┌──────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="nl">PRESENTATION:</span><span class="w"> </span><span class="n">UserController</span><span class="p">.</span><span class="n">register</span><span class="p">()</span><span class="w">  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">1.</span><span class="w"> </span><span class="n">Parse</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">DTO</span><span class="w">          </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">2.</span><span class="w"> </span><span class="n">Call</span><span class="w"> </span><span class="n">RegisterUserUseCase</span><span class="p">.</span><span class="n">execute</span><span class="p">()</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">3.</span><span class="w"> </span><span class="n">Return</span><span class="w"> </span><span class="n">formatted</span><span class="w"> </span><span class="n">HTTP</span><span class="w"> </span><span class="n">response</span><span class="w">       </span><span class="err">│</span>
+<span class="err">└──────────────┬───────────────────────────┘</span>
+<span class="w">               </span><span class="err">│</span>
+<span class="w">               </span><span class="err">▼</span>
+<span class="err">┌──────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="nl">APPLICATION:</span><span class="w"> </span><span class="n">RegisterUserUseCase</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">1.</span><span class="w"> </span><span class="n">Validate</span><span class="w"> </span><span class="n">DTO</span><span class="w"> </span><span class="p">(</span><span class="n">RegisterUserValidator</span><span class="p">)</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">2.</span><span class="w"> </span><span class="n">Check</span><span class="w"> </span><span class="n">IUserRepository</span><span class="p">.</span><span class="n">existsByEmail</span><span class="p">()</span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">3.</span><span class="w"> </span><span class="n">Hash</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="p">(</span><span class="n">IHashService</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">4.</span><span class="w"> </span><span class="n">Create</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entity</span><span class="w">                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">5.</span><span class="w"> </span><span class="n">Call</span><span class="w"> </span><span class="n">IUserRepository</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">6.</span><span class="w"> </span><span class="n">Call</span><span class="w"> </span><span class="n">IEmailService</span><span class="p">.</span><span class="n">sendWelcome</span><span class="p">()</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">7.</span><span class="w"> </span><span class="n">Map</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entity</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">UserResponseDto</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">8.</span><span class="w"> </span><span class="n">Return</span><span class="w"> </span><span class="n">UserResponseDto</span><span class="w">               </span><span class="err">│</span>
+<span class="err">└──────────────┬───────────────────────────┘</span>
+<span class="w">               </span><span class="err">│</span><span class="w"> </span><span class="p">(</span><span class="n">calls</span><span class="w"> </span><span class="n">interfaces</span><span class="p">)</span>
+<span class="w">               </span><span class="err">▼</span>
+<span class="err">┌──────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="nl">INFRASTRUCTURE:</span><span class="w"> </span><span class="n">UserRepositoryImpl</span><span class="w">       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">1.</span><span class="w"> </span><span class="n">Map</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entity</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">UserModel</span><span class="w"> </span><span class="p">(</span><span class="n">ORM</span><span class="p">)</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">2.</span><span class="w"> </span><span class="n">INSERT</span><span class="w"> </span><span class="n">INTO</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">(</span><span class="n">PostgreSQL</span><span class="p">)</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">3.</span><span class="w"> </span><span class="n">Map</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="n">back</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entity</span><span class="w">       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">4.</span><span class="w"> </span><span class="n">Return</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entity</span><span class="w">                   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                                          </span><span class="err">│</span>
+<span class="err">│</span><span class="w"> </span><span class="nl">INFRASTRUCTURE:</span><span class="w"> </span><span class="n">SendGridEmailService</span><span class="w">     </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">1.</span><span class="w"> </span><span class="n">Build</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="n">template</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="mf">2.</span><span class="w"> </span><span class="n">Call</span><span class="w"> </span><span class="n">SendGrid</span><span class="w"> </span><span class="n">API</span><span class="w">                    </span><span class="err">│</span>
+<span class="err">└──────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<p><strong>Key observation:</strong> The Application layer calls <code>IUserRepository.save()</code> and <code>IEmailService.sendWelcome()</code>. It has no idea whether the repository is backed by PostgreSQL, MongoDB, or a file. It has no idea whether the email service uses SendGrid, Mailgun, or <code>console.log()</code>. That is the entire point.</p>
+<h3 id="concrete-code-example-typescript">Concrete Code Example (TypeScript)</h3>
+<p><strong>Domain: Entity</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// domain/entities/User.ts</span>
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">hashedPassword</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">createdAt</span><span class="o">:</span><span class="w"> </span><span class="kt">Date</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Domain: Interface</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// domain/interfaces/IUserRepository.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../entities/User&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">save</span><span class="p">(</span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="kt">User</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Application: Use Case</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// application/use-cases/RegisterUserUseCase.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/entities/User&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IEmailService&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IHashService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IHashService&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserRequestDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../dtos/RegisterUserRequestDto&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserResponseDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../dtos/UserResponseDto&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">v4</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">uuidv4</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;uuid&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">userRepo</span><span class="o">:</span><span class="w"> </span><span class="kt">IUserRepository</span><span class="p">,</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">emailService</span><span class="o">:</span><span class="w"> </span><span class="kt">IEmailService</span><span class="p">,</span>
+<span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="nx">hashService</span><span class="o">:</span><span class="w"> </span><span class="kt">IHashService</span><span class="p">,</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">execute</span><span class="p">(</span><span class="nx">dto</span><span class="o">:</span><span class="w"> </span><span class="kt">RegisterUserRequestDto</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">UserResponseDto</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 1. Check uniqueness</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">userRepo</span><span class="p">.</span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">dto</span><span class="p">.</span><span class="nx">email</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">exists</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Email already registered&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 2. Hash password</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">hashed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">hashService</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">dto</span><span class="p">.</span><span class="nx">password</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 3. Create domain entity</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="nx">uuidv4</span><span class="p">(),</span><span class="w"> </span><span class="nx">dto</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">hashed</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">());</span>
+
+<span class="w">    </span><span class="c1">// 4. Persist</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">userRepo</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 5. Side effect: send welcome email (fire-and-forget or awaited)</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">emailService</span><span class="p">.</span><span class="nx">sendWelcome</span><span class="p">(</span><span class="nx">saved</span><span class="p">.</span><span class="nx">email</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 6. Map to response DTO</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">saved.id</span><span class="p">,</span><span class="w"> </span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">saved.email</span><span class="p">,</span><span class="w"> </span><span class="nx">createdAt</span><span class="o">:</span><span class="w"> </span><span class="kt">saved.createdAt.toISOString</span><span class="p">()</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Infrastructure: Repository Implementation</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// infrastructure/repositories/UserRepositoryImpl.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/entities/User&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Pool</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;pg&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="k">implements</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">pool</span><span class="o">:</span><span class="w"> </span><span class="kt">Pool</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">&#39;SELECT 1 FROM users WHERE email = $1&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">email</span><span class="p">]);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">rowCount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">save</span><span class="p">(</span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="kt">User</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
+<span class="w">      </span><span class="s1">&#39;INSERT INTO users (id, email, hashed_password, created_at) VALUES ($1, $2, $3, $4)&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">hashedPassword</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">createdAt</span><span class="p">],</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM users WHERE id = $1&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">id</span><span class="p">]);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">rows</span><span class="p">[</span><span class="mf">0</span><span class="p">];</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">hashed_password</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">created_at</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Presentation: Controller</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// presentation/http/controllers/UserController.ts</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">Response</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;express&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../../application/use-cases/RegisterUserUseCase&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">UserController</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">registerUser</span><span class="o">:</span><span class="w"> </span><span class="kt">RegisterUserUseCase</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">register</span><span class="p">(</span><span class="nx">req</span><span class="o">:</span><span class="w"> </span><span class="kt">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="o">:</span><span class="w"> </span><span class="kt">Response</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="ow">void</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">dto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span><span class="w"> </span><span class="c1">// In production, validate/parse with zod or class-validator</span>
+<span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">registerUser</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">dto</span><span class="p">);</span>
+<span class="w">      </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">201</span><span class="p">).</span><span class="nx">json</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;Email already registered&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">409</span><span class="p">).</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="kt">error.message</span><span class="w"> </span><span class="p">});</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Internal server error&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Notice the controller is <strong>thin</strong>: it parses HTTP, delegates to the Use Case, and formats the HTTP response. It contains zero business logic.</p>
+<hr />
+<h2 id="when-to-use-clean-architecture-and-when-not-to">When to Use Clean Architecture (and When Not To)</h2>
+<p>Clean Architecture is not universally appropriate. Over-engineering a weekend project with four layers and a DI container is as harmful as under-engineering a five-year enterprise product with a single-file Express handler.</p>
+<p><strong>Use Clean Architecture when:</strong></p>
+<ul>
+<li>The project is expected to live and evolve for more than 12 months.</li>
+<li>The team has 3+ developers (separation prevents merge conflicts and cognitive overload).</li>
+<li>Business logic is complex and needs to be independently testable.</li>
+<li>You anticipate swapping infrastructure (e.g., migrating from MongoDB to PostgreSQL, or from REST to gRPC).</li>
+<li>Regulatory or compliance requirements demand auditable, well-separated codebases.</li>
+</ul>
+<p><strong>Use the typical/default structure when:</strong></p>
+<ul>
+<li>Building a prototype, proof of concept, or hackathon project.</li>
+<li>The microservice has a single responsibility (e.g., an image resizer, a webhook relay).</li>
+<li>The team is 1–2 developers and the project has a defined, short lifespan.</li>
+<li>Time-to-market is the dominant constraint and you need to ship in days, not months.</li>
+</ul>
+<p><strong>Hybrid approach:</strong></p>
+<p>Many teams start with the typical structure for speed, then refactor toward Clean Architecture as the codebase grows past a complexity threshold. This is pragmatic if (and only if) you proactively refactor before the monolith becomes load-bearing. The refactoring cost increases exponentially with codebase size.</p>
+<hr />
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<ol>
+<li>
+<p><strong>Premature Abstraction.</strong> Creating <code>IUserRepository</code>, <code>UserRepositoryImpl</code>, <code>UserRepositoryImplFactory</code>, and <code>UserRepositoryImplFactoryProvider</code> for a CRUD app with three endpoints is not Clean Architecture — it is ceremony. Abstractions should be introduced at the point of genuine need.</p>
+</li>
+<li>
+<p><strong>Anemic Domain Model.</strong> Placing all logic in Use Cases and leaving entities as dumb data bags defeats the purpose. Entities should enforce their own invariants: a <code>Ride</code> entity should reject a <code>Complete()</code> call if its status is <code>Cancelled</code>.</p>
+</li>
+<li>
+<p><strong>Leaking Infrastructure into Domain.</strong> Decorating domain entities with <code>[Table("users")]</code> or <code>@Entity()</code> couples the innermost layer to a specific ORM. Use separate model classes in Infrastructure and map between them.</p>
+</li>
+<li>
+<p><strong>Over-layering.</strong> Clean Architecture has four layers, not forty. Adding <code>Mappers/</code>, <code>Adapters/</code>, <code>Gateways/</code>, <code>Ports/</code>, <code>Translators/</code>, and <code>Coordinators/</code> folders creates navigational overhead without proportional benefit. Keep the structure as flat as the complexity demands.</p>
+</li>
+<li>
+<p><strong>Ignoring the DI Composition Root.</strong> If your DI wiring is scattered across multiple files with no clear entry point, debugging dependency resolution failures becomes a nightmare. Centralize registration in a single <code>DependencyInjection.cs</code>, <code>injection_container.dart</code>, or <code>container.ts</code>.</p>
+</li>
+<li>
+<p><strong>Feature Slicing vs Layer Slicing Confusion (Flutter/Mobile).</strong> In Flutter, always prefer feature-first (<code>features/auth/domain/...</code>) over layer-first (<code>domain/auth/...</code>). Feature-first keeps related code co-located, which matches how developers think about and navigate a mobile app.</p>
+</li>
+</ol>
+<hr />
+<h2 id="references-further-reading">References &amp; Further Reading</h2>
+<ul>
+<li>Robert C. Martin, <em>Clean Architecture: A Craftsman's Guide to Software Structure and Design</em> (2017)</li>
+<li>Robert C. Martin, <a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">The Clean Architecture (blog post)</a></li>
+<li>Jason Taylor, <a href="https://github.com/jasontaylordev/CleanArchitecture">Clean Architecture Solution Template for .NET</a></li>
+<li>Reso Coder, <a href="https://resocoder.com/flutter-clean-architecture-tdd/">Flutter TDD Clean Architecture (series)</a></li>
+<li>MediatR (CQRS for .NET): https://github.com/jbogard/MediatR</li>
+<li>tsyringe (TypeScript DI): https://github.com/microsoft/tsyringe</li>
+<li>InversifyJS (TypeScript IoC): https://inversify.io/</li>
+<li>get_it (Dart Service Locator): https://pub.dev/packages/get_it</li>
+<li>FluentValidation (.NET): https://docs.fluentvalidation.net/</li>
+</ul>
+<hr />
+<p><em>This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, comparison tables, pitfalls, and practical recommendations.</em></p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
