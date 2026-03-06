@@ -1,6 +1,7 @@
 # GitHub Management Functions
 # Functions for managing GitHub repositories with automated workflows
 
+# This script includes functions for managing GitHub repository development, handling Git tags, and pushing changes with temporary public visibility. It is designed to streamline common GitHub operations for developers.
 function Manage-GitHubAppDev {
     <#
     .SYNOPSIS
@@ -89,6 +90,7 @@ function Manage-GitHubAppDev {
     Write-Host "--------------------------------------------------------"
 }
 
+# --- This function manages Git tags for a repository, allowing listing, creation, or deletion of tags. ---
 function Manage-GitTags {
     <#
     .SYNOPSIS
@@ -149,6 +151,68 @@ function Manage-GitTags {
     }
     
     Set-Location -Path $originalDir
+    Write-Host "--------------------------------------------------------"
+}
+
+# --- This function pushes changes to GitHub, makes the repository public for a specified duration, and then reverts it back to private. ---
+function GitPushPublicSleepPrivate {
+    <#
+    .SYNOPSIS
+    Pushes changes to GitHub, makes the repository public for a specified duration, and then reverts it back to private.
+    
+    .DESCRIPTION
+    This function pushes changes to the GitHub repository, makes it public for a specified duration, and then reverts it back to private.
+    
+    .PARAMETER sleep
+    The duration (in seconds) to keep the repository public.
+    
+    .PARAMETER branch
+    The branch to push changes to.
+    
+    .PARAMETER msgType
+    The type of commit message: 'message' or 'file'.
+    
+    .PARAMETER msg
+    The commit message (used if msgType is 'message').
+    
+    .PARAMETER file
+    The file containing the commit message (used if msgType is 'file').
+    
+    .EXAMPLE
+    GitPushPublicSleepPrivate -sleep 180 -branch "main" -msgType "message" -msg "Update dependencies"
+    #>
+    param (
+        [int]$sleep = 180,
+        [string]$branch = "main",
+        [string]$msgType = "message",
+        [string]$msg = "",
+        [string]$file = ""
+    )
+    Write-Host "--------------------------------------------------------"
+    Write-Host "Pushing public sleep private changes to GitHub..." -ForegroundColor Cyan
+    Write-Host "Making repository public..."
+    gh repo edit --visibility public --accept-visibility-change-consequences
+    git add .
+    if ($null -eq $msgType -or $msgType -eq "") {
+        $msgType = "message"
+    }
+    if ($msgType -eq "file") {
+        git commit -F $file
+    } else {
+        $commitMessage = Read-Host "Enter commit message"
+        git commit -m "$commitMessage"
+    }
+    git push origin $branch
+    Write-Host "Changes pushed to GitHub. Sleeping $sleep seconds to allow deployment..."
+    $sleepEnd = (Get-Date).AddSeconds($sleep)
+    while ((Get-Date) -lt $sleepEnd) {
+        $remaining = $sleepEnd - (Get-Date)
+        Write-Host -NoNewline "`rTime remaining: $([math]::Ceiling($remaining.TotalSeconds)) seconds     " -ForegroundColor DarkGray
+        Start-Sleep -Milliseconds 1000
+    }
+    Write-Host "Finished sleeping for $sleep seconds."
+    Write-Host "Making repository private again..." -ForegroundColor Green
+    gh repo edit --visibility private --accept-visibility-change-consequences
     Write-Host "--------------------------------------------------------"
 }
 

@@ -263,9 +263,74 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="normal">153</span>
 <span class="normal">154</span>
 <span class="normal">155</span>
-<span class="normal">156</span></pre></div></td><td class="code"><div><pre><span></span><span class="c"># GitHub Management Functions</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span></pre></div></td><td class="code"><div><pre><span></span><span class="c"># GitHub Management Functions</span>
 <span class="c"># Functions for managing GitHub repositories with automated workflows</span>
 
+<span class="c"># This script includes functions for managing GitHub repository development, handling Git tags, and pushing changes with temporary public visibility. It is designed to streamline common GitHub operations for developers.</span>
 <span class="k">function</span> <span class="n">Manage-GitHubAppDev</span> <span class="p">{</span>
     <span class="cm">&lt;#</span>
 <span class="cm">    </span><span class="sd">.SYNOPSIS</span>
@@ -354,6 +419,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
 <span class="p">}</span>
 
+<span class="c"># --- This function manages Git tags for a repository, allowing listing, creation, or deletion of tags. ---</span>
 <span class="k">function</span> <span class="n">Manage-GitTags</span> <span class="p">{</span>
     <span class="cm">&lt;#</span>
 <span class="cm">    </span><span class="sd">.SYNOPSIS</span>
@@ -414,6 +480,68 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="p">}</span>
     
     <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+<span class="p">}</span>
+
+<span class="c"># --- This function pushes changes to GitHub, makes the repository public for a specified duration, and then reverts it back to private. ---</span>
+<span class="k">function</span> <span class="n">GitPushPublicSleepPrivate</span> <span class="p">{</span>
+    <span class="cm">&lt;#</span>
+<span class="cm">    </span><span class="sd">.SYNOPSIS</span>
+<span class="cm">    Pushes changes to GitHub, makes the repository public for a specified duration, and then reverts it back to private.</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.DESCRIPTION</span>
+<span class="cm">    This function pushes changes to the GitHub repository, makes it public for a specified duration, and then reverts it back to private.</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> sleep</span>
+<span class="cm">    The duration (in seconds) to keep the repository public.</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> branch</span>
+<span class="cm">    The branch to push changes to.</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> msgType</span>
+<span class="cm">    The type of commit message: &#39;message&#39; or &#39;file&#39;.</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> msg</span>
+<span class="cm">    The commit message (used if msgType is &#39;message&#39;).</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> file</span>
+<span class="cm">    The file containing the commit message (used if msgType is &#39;file&#39;).</span>
+<span class="cm">    </span>
+<span class="cm">    </span><span class="sd">.EXAMPLE</span>
+<span class="cm">    GitPushPublicSleepPrivate -sleep 180 -branch &quot;main&quot; -msgType &quot;message&quot; -msg &quot;Update dependencies&quot;</span>
+<span class="cm">    #&gt;</span>
+    <span class="k">param</span> <span class="p">(</span>
+        <span class="no">[int]</span><span class="nv">$sleep</span> <span class="p">=</span> <span class="n">180</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$branch</span> <span class="p">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$msg</span> <span class="p">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$file</span> <span class="p">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Pushing public sleep private changes to GitHub...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Making repository public...&quot;</span>
+    <span class="n">gh</span> <span class="n">repo</span> <span class="n">edit</span> <span class="p">-</span><span class="n">-visibility</span> <span class="n">public</span> <span class="p">-</span><span class="n">-accept-visibility-change-consequences</span>
+    <span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$msgType</span> <span class="o">-or</span> <span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">&quot;message&quot;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">git</span> <span class="n">commit</span> <span class="o">-F</span> <span class="nv">$file</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$commitMessage</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">&quot;Enter commit message&quot;</span>
+        <span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">&quot;$commitMessage&quot;</span>
+    <span class="p">}</span>
+    <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="nv">$branch</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Changes pushed to GitHub. Sleeping $sleep seconds to allow deployment...&quot;</span>
+    <span class="nv">$sleepEnd</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddSeconds</span><span class="p">(</span><span class="nv">$sleep</span><span class="p">)</span>
+    <span class="k">while</span> <span class="p">((</span><span class="nb">Get-Date</span><span class="p">)</span> <span class="o">-lt</span> <span class="nv">$sleepEnd</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$remaining</span> <span class="p">=</span> <span class="nv">$sleepEnd</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)</span>
+        <span class="nb">Write-Host</span> <span class="n">-NoNewline</span> <span class="s2">&quot;</span><span class="se">`r</span><span class="s2">Time remaining: </span><span class="p">$(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Ceiling</span><span class="p">(</span><span class="nv">$remaining</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">))</span><span class="s2"> seconds     &quot;</span> <span class="n">-ForegroundColor</span> <span class="n">DarkGray</span>
+        <span class="nb">Start-Sleep</span> <span class="n">-Milliseconds</span> <span class="n">1000</span>
+    <span class="p">}</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Finished sleeping for $sleep seconds.&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;Making repository private again...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="n">gh</span> <span class="n">repo</span> <span class="n">edit</span> <span class="p">-</span><span class="n">-visibility</span> <span class="n">private</span> <span class="p">-</span><span class="n">-accept-visibility-change-consequences</span>
     <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
 <span class="p">}</span>
 
