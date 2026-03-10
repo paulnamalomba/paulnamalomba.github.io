@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>Assessment — IoT, MCU Boards &amp; Sensors (The Edge)</title>
+  <link rel="stylesheet" href="style.css?v=2.3">
+  <style>
+    pre {
+      background: var(--bg-surface);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+      color: var(--accent-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav aria-label="Main navigation">
+        <a href="hub.html">Hub</a>
+        <a href="level1-overview.html">Overview</a>
+        <a href="level2-technical.html">Technical</a>
+        <a href="level3-competency.html">Competency</a>
+        <a href="level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Assessments &#9660;</button>
+          <div class="dropdown-content">
+            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="assessment-scenario-2.html">Scenario 2 (Django &amp; SEAT)</a>
+            <a href="assessment-scenario-3.html">Scenario 3 (Data &amp; MLOps)</a>
+            <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
+            <a href="assessment-data-engineering.html">Data Engineering</a>
+            <a href="assessment-cto-architecture.html">CTO Architecture</a>
+            <a href="assessment-tips-strategy.html">Tips &amp; Strategy</a>
+          </div>
+        </div>
+        <a href="guides.html">Guides</a>
+        <a href="level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+      <a href="hub.html">Hub</a> <span>&rsaquo;</span> Assessment: IoT, MCU Boards &amp; Sensors
+    </div>
+
+    <main id="main-content">
+      <h1 class="fade-in">IoT, MCU Boards &amp; Sensors — The Edge</h1>
+      <p class="fade-in fade-in-d1">
+        Preparation guide for Dr.&nbsp;Obiora Nnene&rsquo;s practical assessment (Thursday 12 March 2026). 
+        This module covers how to <strong>reliably capture and transmit data from the physical world to the cloud</strong> 
+        in a civil-engineering and transport context: edge devices on vehicles, roads, and infrastructure.
+      </p>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="checklist-progress fade-in fade-in-d2" role="region" aria-label="Preparation progress">
+        <div class="checklist-progress-header">
+          <span>Preparation Progress</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <!-- CV GROUNDING -->
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">CV Grounding (use as evidence in answers)</div>
+        <ul>
+          <li><strong>Ecoride GPS &amp; real-time:</strong> You built a production ride-sharing API with Google Maps integration, real-time WebSocket tracking (SignalR), and geofencing &mdash; directly maps to fleet telemetry.</li>
+          <li><strong>SESKA sensor context:</strong> Finite-element suite processing strain/displacement data from physical sensors &mdash; you understand the full lifecycle from physical measurement to numerical processing.</li>
+          <li><strong>ComputeMore event-driven:</strong> RabbitMQ message queuing + Redis caching = the exact same pub/sub pattern used in IoT MQTT architectures.</li>
+          <li><strong>MPI &amp; HPC:</strong> Your MPI + hyperthreading work processing 30M rows under 25 minutes &mdash; demonstrates capacity for high-throughput time-series data at scale.</li>
+        </ul>
+      </div>
+
+      <!-- CHECKLIST: HARDWARE -->
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top:0;" id="hardware">&#128268; Hardware: MCU Boards &amp; Microcontrollers</h2>
+        <p>Focus on the two primary platforms you&rsquo;ll encounter in smart-mobility and infrastructure-monitoring contexts.</p>
+
+        <div class="checklist-category">ESP32 — Low-Cost Wi-Fi/Bluetooth Edge Node</div>
+        <ul class="checklist" role="list" aria-label="ESP32 preparation checklist">
+          <li><div class="checklist-item" data-key="iot-esp32-overview" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study ESP32 architecture &amp; capabilities</div>
+              <div class="checklist-detail">Dual-core Xtensa LX6, 240 MHz, 520 KB SRAM, built-in Wi-Fi (802.11 b/g/n) and Bluetooth (Classic + BLE). Supports deep-sleep modes (as low as 10 &micro;A) for battery-powered field deployments. Review the datasheet from Espressif.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-esp32-wokwi-blink" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Wokwi: Complete the ESP32 &ldquo;Blink + Serial&rdquo; starter</div>
+              <div class="checklist-detail">Go to <a href="https://wokwi.com/" target="_blank" rel="noopener">wokwi.com</a>, select ESP32, and write a sketch that blinks an LED and prints &ldquo;Hello from edge node&rdquo; to Serial Monitor. Time yourself &mdash; aim for under 5 minutes. This verifies you can navigate the tool fluently.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-esp32-wokwi-dht" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Wokwi: Read a DHT22 temperature/humidity sensor</div>
+              <div class="checklist-detail">Wire a virtual DHT22 to the ESP32 in Wokwi. Write C++ firmware using the <code>DHT</code> library to read temperature and humidity every 2 seconds and output via Serial. Understand the difference between analogue (ADC) and digital sensor interfaces.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-esp32-wokwi-mqtt" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Wokwi: Push sensor data via MQTT (PubSubClient)</div>
+              <div class="checklist-detail">Extend the DHT22 project to publish JSON payloads (<code>{"temp": 23.4, "humidity": 61.2, "ts": 1710000000}</code>) to a public MQTT broker (<code>broker.hivemq.com</code>) using the <code>PubSubClient</code> library. Use topic <code>uct/sensors/env/01</code>. Verify receipt with MQTT Explorer or <a href="https://www.hivemq.com/demos/websocket-client/" target="_blank" rel="noopener">HiveMQ WebSocket client</a>.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-esp32-deepsleep" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Practice ESP32 deep-sleep &amp; wake-on-timer</div>
+              <div class="checklist-detail">Write firmware that reads sensor data, publishes via MQTT, then enters deep sleep for 60 seconds. This is the standard pattern for battery-powered field sensors. Calculate power budget: 150 mA active &times; 5s + 10 &micro;A &times; 55s &mdash; estimate battery life on a 2000 mAh LiPo.</div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Raspberry Pi — Heavier Edge Compute</div>
+        <ul class="checklist" role="list" aria-label="Raspberry Pi preparation checklist">
+          <li><div class="checklist-item" data-key="iot-rpi-compare" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Compare RPi vs ESP32: know when to use which</div>
+              <div class="checklist-detail">RPi runs full Linux (Debian/Raspbian), has 1&ndash;8 GB RAM, USB/Ethernet/HDMI. Use RPi as an <strong>edge gateway</strong> that aggregates data from multiple ESP32 nodes, runs local ML inference, and forwards to the cloud. Use ESP32 as the leaf sensor node. Be able to articulate this split in the interview.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-rpi-mqtt-broker" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: RPi as a local Mosquitto MQTT broker</div>
+              <div class="checklist-detail">Review how to install <code>mosquitto</code> on a Raspberry Pi so it acts as a local MQTT broker for a cluster of ESP32 sensor nodes. Understand the benefit: if the upstream internet link drops, the RPi buffers all sensor data locally (store-and-forward). This is critical for African deployment contexts with unreliable connectivity.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-rpi-edge-ml" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: Edge ML inference with TensorFlow Lite on RPi</div>
+              <div class="checklist-detail">Review how a Raspberry Pi can run TFLite models to classify anomalies (e.g., pothole detection from accelerometer data or unusual vibration patterns) <em>before</em> sending data to the cloud. This reduces bandwidth by 90%+ and is a CTO-level optimization that will impress.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- CHECKLIST: SENSORS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="sensors">&#128225; Sensors for Transport &amp; Infrastructure</h2>
+
+        <div class="checklist-category">GPS &amp; Location</div>
+        <ul class="checklist" role="list" aria-label="GPS sensors checklist">
+          <li><div class="checklist-item" data-key="iot-gps-neo6m" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: NEO-6M GPS module with ESP32</div>
+              <div class="checklist-detail">Review NMEA sentence parsing ($GPGGA, $GPRMC). The NEO-6M outputs lat/lon/alt/speed at 1 Hz via UART. Understand how to parse with the <code>TinyGPS++</code> library. Relate this directly to the Ecoride GPS tracking you built &mdash; same data, different source.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-gps-rtk" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know RTK GPS vs standard GPS accuracy</div>
+              <div class="checklist-detail">Standard GPS: &plusmn;2&ndash;5 m. RTK-corrected GPS: &plusmn;2 cm. In transport planning (e.g., lane-level vehicle tracking for MyCiTi BRT), RTK matters. Be ready to discuss when the cost is justified vs. when standard GPS suffices.</div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">IMU — Accelerometers &amp; Gyroscopes</div>
+        <ul class="checklist" role="list" aria-label="IMU sensors checklist">
+          <li><div class="checklist-item" data-key="iot-imu-mpu6050" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: MPU-6050 6-axis IMU (I2C)</div>
+              <div class="checklist-detail">3-axis accelerometer + 3-axis gyroscope. Applications: vehicle telemetry (harsh braking, cornering G-forces), structural health monitoring (bridge vibrations). Review I2C communication protocol and how to read raw registers using <code>Wire.h</code> on ESP32.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-imu-vibration" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Wokwi: Simulate vibration data &amp; compute RMS</div>
+              <div class="checklist-detail">In Wokwi, use simulated accelerometer values. Write firmware that computes the RMS (root-mean-square) of acceleration over a 1-second window. If RMS exceeds a threshold, publish an alert via MQTT. This simulates a rudimentary structural health alarm.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-imu-fusion" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know sensor fusion basics (complementary filter)</div>
+              <div class="checklist-detail">Accelerometers give noisy but absolute orientation; gyroscopes give smooth but drifting orientation. A complementary filter combines both: <code>angle = 0.98 * (angle + gyro_rate * dt) + 0.02 * accel_angle</code>. Know this intuitively &mdash; you may need to explain it.</div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Environmental Sensors</div>
+        <ul class="checklist" role="list" aria-label="Environmental sensors checklist">
+          <li><div class="checklist-item" data-key="iot-env-air" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: Air quality sensors (PMS5003, MQ-135)</div>
+              <div class="checklist-detail">Particulate matter (PM2.5/PM10) sensors for urban air quality monitoring near transit corridors. The PMS5003 outputs particle counts via UART; the MQ-135 is a cheap analogue gas sensor. In a transport-planning context, these help quantify environmental impact of BRT routes.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-env-ultrasonic" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study: HC-SR04 ultrasonic for occupancy/distance</div>
+              <div class="checklist-detail">Cheap proximity sensor used to count passengers boarding/alighting a bus or detect vehicle presence in a parking bay. Trigger + Echo pins, measures time-of-flight. Range: 2 cm &ndash; 4 m. Quick to wire in Wokwi.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- CHECKLIST: PROTOCOLS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="protocols">&#128752; Communication Protocols</h2>
+        <p>In IoT, the choice of protocol is a first-class architectural decision. HTTP REST is too heavy for constrained devices on unreliable networks.</p>
+
+        <div class="checklist-category">MQTT — The IoT Standard</div>
+        <ul class="checklist" role="list" aria-label="MQTT checklist">
+          <li><div class="checklist-item" data-key="iot-mqtt-deep" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Deep-study MQTT architecture (QoS 0, 1, 2)</div>
+              <div class="checklist-detail"><strong>QoS 0:</strong> Fire-and-forget (fast, may lose data). <strong>QoS 1:</strong> At-least-once (guaranteed delivery, possible duplicates). <strong>QoS 2:</strong> Exactly-once (4-step handshake, slowest). For high-frequency sensor data (e.g., 10 Hz accelerometer), use QoS 0. For critical alerts (e.g., bridge vibration alarm), use QoS 1. Be ready to justify these choices.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-mqtt-topics" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Design a topic hierarchy for a fleet system</div>
+              <div class="checklist-detail">Practice designing: <code>fleet/{fleet_id}/vehicle/{vehicle_id}/gps</code>, <code>fleet/{fleet_id}/vehicle/{vehicle_id}/imu</code>, <code>infra/bridge/{bridge_id}/vibration</code>. Wildcards: <code>fleet/+/vehicle/+/gps</code> subscribes to all GPS across the fleet. <code>infra/#</code> gets all infrastructure data.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-mqtt-retained" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Understand retained messages &amp; last-will testament</div>
+              <div class="checklist-detail"><strong>Retained messages:</strong> Broker stores the last message on a topic so new subscribers immediately get the latest state (e.g., last known GPS position). <strong>Last Will and Testament (LWT):</strong> If a sensor disconnects unexpectedly, the broker publishes a pre-configured &ldquo;offline&rdquo; message &mdash; critical for monitoring fleet health.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-mqtt-practice" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Hands-on: Send &amp; receive MQTT from Python (paho-mqtt)</div>
+              <div class="checklist-detail">Write a Python script using <code>paho-mqtt</code> that subscribes to <code>uct/sensors/#</code>, logs incoming payloads to a local JSON file, and prints a live dashboard in the terminal. This simulates the cloud-side ingestion you&rsquo;d build. Time yourself: aim for 15 minutes.</div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">CoAP &amp; Other Protocols</div>
+        <ul class="checklist" role="list" aria-label="Alternative protocols checklist">
+          <li><div class="checklist-item" data-key="iot-coap-study" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study CoAP vs MQTT trade-offs</div>
+              <div class="checklist-detail"><strong>CoAP:</strong> UDP-based, RESTful (GET/PUT/POST/DELETE), better for request-response patterns. <strong>MQTT:</strong> TCP-based, pub/sub, better for continuous streaming. CoAP uses less memory but lacks native pub/sub. For transport telemetry (continuous streams), MQTT wins. For occasional configuration updates to a sensor, CoAP is lighter.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-lorawan-study" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Study LoRaWAN for long-range, low-power scenarios</div>
+              <div class="checklist-detail">LoRaWAN: range up to 15 km in rural areas, but only 0.3&ndash;50 kbps. Ideal for sensors on remote highway bridges or rural transit stops where there is no Wi-Fi or cellular. Mention this as an option for South African infrastructure monitoring &mdash; it shows domain awareness.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- PREPARATION TOOLS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="tools">&#128295; Preparation Tools &amp; Resources</h2>
+        <div class="resource-grid">
+          <a href="https://wokwi.com/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#9889;</div>
+            <div class="rc-title">Wokwi Simulator</div>
+            <div class="rc-desc">Browser-based ESP32/RPi Pico/Arduino simulator. Write C++ or MicroPython, wire virtual sensors, and test MQTT &mdash; no physical hardware needed.</div>
+            <div class="rc-url">wokwi.com</div>
+          </a>
+          <a href="https://thingsboard.io/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128202;</div>
+            <div class="rc-title">ThingsBoard</div>
+            <div class="rc-desc">Open-source IoT platform for device management, data ingestion, and dashboards. Spin up locally with Docker to practice fleet-tracking and smart-city dashboards.</div>
+            <div class="rc-url">thingsboard.io</div>
+          </a>
+          <a href="https://www.hivemq.com/demos/websocket-client/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128225;</div>
+            <div class="rc-title">HiveMQ MQTT Client</div>
+            <div class="rc-desc">Free browser-based MQTT client to subscribe/publish to the HiveMQ public broker. Perfect for verifying your ESP32 MQTT publishes in real time.</div>
+            <div class="rc-url">hivemq.com/demos/websocket-client</div>
+          </a>
+          <a href="https://mqtt-explorer.com/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128270;</div>
+            <div class="rc-title">MQTT Explorer</div>
+            <div class="rc-desc">Desktop app to visualise MQTT topic trees and message payloads in real time. Excellent for debugging topic hierarchies.</div>
+            <div class="rc-url">mqtt-explorer.com</div>
+          </a>
+          <a href="https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128218;</div>
+            <div class="rc-title">RandomNerdTutorials: ESP32 + MQTT</div>
+            <div class="rc-desc">Step-by-step tutorial covering ESP32 Wi-Fi connection, PubSubClient setup, and publishing sensor data. Excellent quick reference.</div>
+            <div class="rc-url">randomnerdtutorials.com</div>
+          </a>
+          <a href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128196;</div>
+            <div class="rc-title">ESP-IDF Documentation</div>
+            <div class="rc-desc">Official Espressif ESP32 development framework docs. Go deeper than Arduino &mdash; understand FreeRTOS tasks, Wi-Fi driver, and power management APIs.</div>
+            <div class="rc-url">docs.espressif.com</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- PRACTICAL EXERCISE -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="exercise">&#127919; Timed Practice Exercise (45 min)</h2>
+        <p>Simulate the Thursday assessment conditions. Set a 45-minute timer and complete this end-to-end:</p>
+
+        <div class="checklist-category">Exercise: Smart Shuttle Sensor Node</div>
+        <ul class="checklist" role="list" aria-label="Practice exercise checklist">
+          <li><div class="checklist-item" data-key="iot-ex-step1" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 1: Wokwi &mdash; Wire ESP32 + DHT22 + LED (5 min)</div>
+              <div class="checklist-detail">Create a new ESP32 project. Add a DHT22 on GPIO 4 and an LED on GPIO 2. Verify the wiring compiles and runs.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-ex-step2" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 2: Read sensor &amp; apply edge filtering (10 min)</div>
+              <div class="checklist-detail">Read DHT22 every 2 seconds. Implement a moving-average filter (window=5) in C++ to smooth noisy readings. Only transmit if the smoothed value differs from the last transmitted value by &gt; 0.5 &deg;C. This is edge computing in action.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-ex-step3" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 3: MQTT publish with JSON payload (10 min)</div>
+              <div class="checklist-detail">Publish to <code>uct/shuttle/env/01</code> with payload: <code>{"node":"env-01","temp":23.4,"hum":61.2,"ts":1710000000,"filtered":true}</code>. Include a Last Will Testament message on <code>uct/shuttle/status/01</code> with payload <code>{"status":"offline"}</code>.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-ex-step4" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 4: Python subscriber + live logging (10 min)</div>
+              <div class="checklist-detail">Write a Python script with <code>paho-mqtt</code> that subscribes to <code>uct/shuttle/#</code>, parses incoming JSON, appends to a local CSV file, and prints a colour-coded terminal output (green for normal, red if temp &gt; 35).</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="iot-ex-step5" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 5: Draw the architecture diagram (10 min)</div>
+              <div class="checklist-detail">On paper or Excalidraw, draw the full pipeline: ESP32 &rarr; MQTT Broker &rarr; Python Ingestion Service &rarr; TimescaleDB &rarr; Grafana Dashboard. Label each component with its role. Include the store-and-forward pattern for connectivity drops.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- KEY TALKING POINTS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;">&#128172; Key Talking Points for the Assessment</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">How would you handle connectivity dropouts for sensors deployed along a BRT corridor?</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Strategy</span></p>
+            <p><strong>Store-and-forward on the MCU:</strong> The ESP32 has built-in flash (4 MB typical) and supports SPIFFS/LittleFS file systems. When MQTT connection is lost, buffer sensor readings to flash. On reconnection, replay the buffer in timestamp order. MQTT QoS 1 ensures the broker acknowledges each message.</p>
+            <p><strong>RPi gateway buffering:</strong> If there&rsquo;s a Raspberry Pi gateway aggregating multiple ESP32 nodes, it runs a local Mosquitto broker + SQLite buffer. Upstream reconnection triggers a bulk-forward. This is battle-tested in African deployment contexts where cellular can drop for hours.</p>
+            <p><strong>Your evidence:</strong> &ldquo;At ComputeMore, our Ecoride platform handles ride-tracking over South African mobile networks. We engineered retry logic with exponential backoff and local state persistence &mdash; the same principles apply at the hardware layer.&rdquo;</p>
+          </div>
+        </div>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">Why MQTT over HTTP REST for IoT sensor data?</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-t">Technical</span></p>
+            <p><strong>Header overhead:</strong> An HTTP request carries ~700+ bytes of headers for a 50-byte payload. MQTT&rsquo;s fixed header is only 2 bytes. At 10 Hz from 100 sensors, that&rsquo;s 7 MB/min wasted on HTTP headers vs. 20 KB/min with MQTT.</p>
+            <p><strong>Connection model:</strong> HTTP is request-response (client initiates). MQTT maintains a persistent TCP connection with the broker and uses pub/sub &mdash; the server can push to the client, and multiple consumers can subscribe to a single data stream without the producer knowing.</p>
+            <p><strong>QoS guarantees:</strong> HTTP has no built-in delivery guarantee beyond TCP ACK. MQTT provides application-level QoS 0/1/2. For critical infrastructure alerts, QoS 1 (at-least-once) is essential.</p>
+            <p><strong>Bandwidth:</strong> On unreliable cellular (EDGE/2G still common in SA rural areas), MQTT&rsquo;s keep-alive pings are tiny (2 bytes every 30&ndash;60s), whereas HTTP would need to re-establish TLS handshakes (~3.5 KB+) for each request.</p>
+          </div>
+        </div>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">Describe a cost-effective sensor deployment for monitoring a bridge&rsquo;s structural health.</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-a">Architecture</span></p>
+            <p><strong>Sensor nodes (3&ndash;8 per bridge):</strong> ESP32 + MPU-6050 IMU + solar panel + LiPo battery. Each node samples vibration at 100 Hz, computes FFT on-device (edge processing), and only transmits frequency-domain summary (peak frequencies + amplitudes) every 60 seconds via MQTT QoS 1.</p>
+            <p><strong>Gateway:</strong> A weatherproof Raspberry Pi with 4G modem and local Mosquitto broker. Runs a TFLite anomaly-detection model trained on baseline vibration signatures. If anomaly score &gt; threshold, it escalates an immediate alert.</p>
+            <p><strong>Cloud:</strong> Data flows to TimescaleDB (time-series optimised PostgreSQL). A Grafana dashboard shows real-time vibration spectra, historical trends, and red/amber/green health status per bridge.</p>
+            <p><strong>Cost:</strong> Each sensor node ~R800 ($45); RPi gateway ~R2,500 ($140); 4G data plan ~R200/month. Total for a 6-sensor bridge: ~R8,000 hardware + R200/month recurring. Orders of magnitude cheaper than traditional wired structural health monitoring systems.</p>
+            <p><strong>Your evidence:</strong> &ldquo;SESKA gave me first-principles understanding of structural dynamics &mdash; natural frequencies, mode shapes, damping ratios. I know <em>what</em> the sensor data means, not just how to pipe it. And my Ecoride real-time pipeline proves I can build the full ingestion-to-dashboard stack.&rdquo;</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="checklist-reset-btn" id="resetBtn" aria-label="Reset all checklist progress">Reset All Progress</button>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot; Dr.&nbsp;Nnene &middot; 12 March 2026</p>
+      </div>
+    </main>
+  </div>
+
+  <button class="back-to-top" id="btt" title="Back to top" aria-label="Back to top">&#8593;</button>
+
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+      // Back to top
+      var btt=document.getElementById('btt');
+      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
+      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+      // Checklist persistence
+      const STORAGE_KEY = 'iot-edge-checklist';
+      const items = document.querySelectorAll('.checklist-item[data-key]');
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+      function updateProgress() {
+        const total = items.length;
+        const checked = document.querySelectorAll('.checklist-item.checked').length;
+        document.getElementById('progressCount').textContent = checked + ' / ' + total;
+        const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+        const bar = document.getElementById('progressBar');
+        bar.style.width = pct + '%';
+        bar.setAttribute('aria-valuenow', pct);
+        bar.classList.toggle('complete', pct === 100);
+      }
+
+      items.forEach(function(item) {
+        const key = item.getAttribute('data-key');
+        if (saved[key]) {
+          item.classList.add('checked');
+          item.setAttribute('aria-checked', 'true');
+        }
+        item.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A') return; // don't toggle when clicking links
+          item.classList.toggle('checked');
+          const isChecked = item.classList.contains('checked');
+          item.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          saved[key] = isChecked;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+          updateProgress();
+        });
+        item.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            item.click();
+          }
+        });
+      });
+
+      updateProgress();
+
+      // Reset button
+      document.getElementById('resetBtn').addEventListener('click', function() {
+        if(!confirm('Reset all checklist progress on this page?')) return;
+        items.forEach(function(item) {
+          item.classList.remove('checked');
+          item.setAttribute('aria-checked', 'false');
+        });
+        localStorage.removeItem(STORAGE_KEY);
+        updateProgress();
+      });
+    })();
+
+    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
+  </script>
+</body>
+</html>

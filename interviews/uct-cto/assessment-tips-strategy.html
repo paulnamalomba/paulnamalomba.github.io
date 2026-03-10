@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>Assessment — Tips, Tricks &amp; Strategy</title>
+  <link rel="stylesheet" href="style.css?v=2.3">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav aria-label="Main navigation">
+        <a href="hub.html">Hub</a>
+        <a href="level1-overview.html">Overview</a>
+        <a href="level2-technical.html">Technical</a>
+        <a href="level3-competency.html">Competency</a>
+        <a href="level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Assessments &#9660;</button>
+          <div class="dropdown-content">
+            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="assessment-scenario-2.html">Scenario 2 (Django &amp; SEAT)</a>
+            <a href="assessment-scenario-3.html">Scenario 3 (Data &amp; MLOps)</a>
+            <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
+            <a href="assessment-data-engineering.html">Data Engineering</a>
+            <a href="assessment-cto-architecture.html">CTO Architecture</a>
+            <a href="assessment-tips-strategy.html">Tips &amp; Strategy</a>
+          </div>
+        </div>
+        <a href="guides.html">Guides</a>
+        <a href="level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+      <a href="hub.html">Hub</a> <span>&rsaquo;</span> Assessment: Tips, Tricks &amp; Strategy
+    </div>
+
+    <main id="main-content">
+      <h1 class="fade-in">Tips, Tricks &amp; Assessment Strategy</h1>
+      <p class="fade-in fade-in-d1">
+        Meta-strategies for Thursday 12 March 2026. Dr.&nbsp;Nnene&rsquo;s assessment will be <strong>practical and hands-on</strong>.
+        This page covers how to <strong>manage your time, communicate under pressure, handle unknowns gracefully,
+        and deploy domain-specific awareness</strong> that distinguishes a CTO candidate from a senior developer.
+      </p>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="checklist-progress fade-in fade-in-d2" role="region" aria-label="Preparation progress">
+        <div class="checklist-progress-header">
+          <span>Preparation Progress</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <!-- ASSESSMENT DAY GAME PLAN -->
+      <div class="section-card fade-in fade-in-d2">
+        <h2 style="margin-top:0;" id="gameplan">&#127919; Assessment Day Game Plan</h2>
+
+        <div class="checklist-category">Pre-Assessment (Morning)</div>
+        <ul class="checklist" role="list" aria-label="Pre-assessment checklist">
+          <li><div class="checklist-item" data-key="tips-pre-setup" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Prepare your laptop environment the night before</div>
+              <div class="checklist-detail">Ensure installed: Python 3.11+, pip, VS Code, Docker Desktop (running), pgAdmin or DBeaver. Have these tabs pre-opened: Wokwi, HiveMQ WebSocket client, Excalidraw. Pre-install libraries: <code>pip install paho-mqtt pandas numpy geopandas matplotlib psycopg2-binary</code>. Test that everything works. Remove surprises.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-pre-docker" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Pre-pull Docker images</div>
+              <div class="checklist-detail">Run: <code>docker pull postgis/postgis:16-3.4</code> and <code>docker pull timescale/timescaledb:latest-pg16</code>. If Docker is available during the assessment, you can spin up a spatial or time-series database in 10 seconds without waiting for download.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-pre-snippets" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Prepare code snippets in a scratch folder</div>
+              <div class="checklist-detail">Create a folder <code>~/assessment-prep/</code> with ready-to-paste code:<br>
+                &bull; <code>mqtt_subscriber.py</code> &mdash; paho-mqtt subscriber template<br>
+                &bull; <code>haversine.py</code> &mdash; vectorised Haversine function<br>
+                &bull; <code>generate_data.py</code> &mdash; synthetic GPS generator<br>
+                &bull; <code>timescale_setup.sql</code> &mdash; hypertable + PostGIS setup<br>
+                &bull; <code>docker-compose.yml</code> &mdash; TimescaleDB + Mosquitto stack<br>
+                These are not cheating &mdash; they&rsquo;re tools a CTO would have ready. Adapt to the specific problem during the assessment.
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-pre-review" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">30-minute morning review of the 3 assessment pages</div>
+              <div class="checklist-detail">Skim through the IoT/Edge, Data Engineering, and CTO Architecture pages. Don&rsquo;t study &mdash; just refresh. Focus on: the 6-layer pipeline, the MPI narrative, the domain bridges, and your 3 whiteboard exercises. You should feel calm and prepared, not cramming.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- COMMUNICATION STRATEGIES -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="communication">&#128172; Communication Under Pressure</h2>
+
+        <div class="checklist-category">When You Know the Answer</div>
+        <ul class="checklist" role="list" aria-label="Communication strategies checklist">
+          <li><div class="checklist-item" data-key="tips-comm-structure" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Use the &ldquo;Answer &rarr; Evidence &rarr; Trade-off&rdquo; structure</div>
+              <div class="checklist-detail">Example: <strong>Answer:</strong> &ldquo;I&rsquo;d use MQTT over HTTP for sensor telemetry.&rdquo; <strong>Evidence:</strong> &ldquo;MQTT&rsquo;s 2-byte header vs HTTP&rsquo;s 700+ bytes, at 10 Hz from 100 sensors, saves 17 GB/day.&rdquo; <strong>Trade-off:</strong> &ldquo;HTTP would be simpler for the development team, but the bandwidth cost on cellular networks makes it impractical for South African deployments.&rdquo; This structure shows depth, proof, and judgment in 30 seconds.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-comm-anchor" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Always anchor to a personal experience</div>
+              <div class="checklist-detail">Never give a purely theoretical answer. Every response should include &ldquo;At SEAT/ComputeMore/SESKA, I...&rdquo; or &ldquo;When I built Ecoride, I...&rdquo;. This transforms you from &ldquo;someone who has read about it&rdquo; to &ldquo;someone who has done it&rdquo;. Practise 5 answers aloud, each anchored to a different experience.</div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">When You Don&rsquo;t Know the Answer</div>
+        <ul class="checklist" role="list" aria-label="Handling unknowns checklist">
+          <li><div class="checklist-item" data-key="tips-comm-unknown" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Framework: &ldquo;I haven&rsquo;t used X, but here&rsquo;s how I&rsquo;d approach it&rdquo;</div>
+              <div class="checklist-detail">If asked about a technology you haven&rsquo;t used (e.g., a specific simulation tool), say: &ldquo;I haven&rsquo;t worked directly with [X], but based on its architecture &mdash; [state what you know] &mdash; I&rsquo;d approach it by [logical first step]. In my experience with [similar tool Y], the pattern was [Z], and I expect it transfers.&rdquo; This shows intellectual honesty + transferable problem-solving.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-comm-thinking" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Talk through your thinking out loud</div>
+              <div class="checklist-detail">During the practical assessment, narrate your thought process: &ldquo;I&rsquo;m going to start by defining the data schema because the pipeline design depends on it...&rdquo; This gives the assessor insight into your reasoning even if you don&rsquo;t finish the task. A CTO is evaluated on <em>how</em> they think, not just the final output.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- AFRICAN TRANSPORT CONTEXT -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="context">&#127757; African Transport Context Awareness</h2>
+        <p>Dr. Nnene&rsquo;s research is in African transport systems. Demonstrate that you understand the unique constraints.</p>
+
+        <div class="checklist-category">Domain-Specific Knowledge</div>
+        <ul class="checklist" role="list" aria-label="African transport context checklist">
+          <li><div class="checklist-item" data-key="tips-ctx-data-scarcity" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Acknowledge data scarcity proactively</div>
+              <div class="checklist-detail">In African transport contexts, data is often missing, noisy, or unstructured. Mention strategies: (1) <strong>Store-and-forward</strong> on MCUs for connectivity dropouts. (2) <strong>Forward-fill interpolation</strong> for gap-filling time-series. (3) <strong>Crowdsourced collection</strong> (e.g., GPS data from minibus taxis as a data source). (4) <strong>Synthetic data generation</strong> for training ML models. Saying &ldquo;we&rsquo;ll never have perfect data, so we design for graceful degradation&rdquo; is CTO-level thinking.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-ctx-connectivity" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Design for unreliable connectivity</div>
+              <div class="checklist-detail">South African cellular networks: 4G in urban areas but drops to 2G/EDGE on highways. Power outages cause cell tower failures. Design implications: (1) Use MQTT QoS 1 (not 0) for important data. (2) Buffer on the edge device (ESP32 SPIFFS/LittleFS). (3) Use LoRaWAN for rural sensors where cellular is absent. (4) Batch and compress data before transmission. Every design should have an &ldquo;offline mode&rdquo;.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-ctx-cost" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Demonstrate cost awareness (African budgets)</div>
+              <div class="checklist-detail">UCT Civil Engineering is a research department, not a VC-funded startup. Hardware choices matter: ESP32 (R120) not Raspberry Pi (R2,500) for leaf sensors. Open-source everything: Mosquitto, Kafka, TimescaleDB, Grafana &mdash; zero license costs. Cloud hosting on UCT infrastructure or Hetzner SA (cheaper than AWS/Azure for SA data residency). Show that you think about total cost of ownership, not just technical elegance.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-ctx-informal" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Mention informal transport (minibus taxis)</div>
+              <div class="checklist-detail">~70% of South African commuters use minibus taxis, which are largely unmonitored. This is a major research gap for Dr. Nnene&rsquo;s team. Propose: &ldquo;What if we equipped 50 taxis with ESP32+GPS nodes to build the first open trajectory dataset for informal transit in Cape Town? Low cost (R6,000 hardware total), massive research impact.&rdquo; This shows you understand the domain and can propose innovative, actionable research infrastructure.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-ctx-myciti" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Review MyCiTi BRT basics (Dr. Nnene&rsquo;s domain)</div>
+              <div class="checklist-detail">MyCiTi: Cape Town&rsquo;s Bus Rapid Transit system. ~40 trunk routes + feeder services. Currently uses EMV tap-on/tap-off for fare collection. Dr. Nnene&rsquo;s work includes optimisation models for BRT route scheduling, passenger demand forecasting, and fleet allocation. Know that real-time AVL (Automatic Vehicle Location) data and APC (Automatic Passenger Counting) data are the key data streams. Be ready to discuss how you&rsquo;d architect the ingestion of these.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- EDGE OVER CLOUD -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="edge-first">&#9889; Edge-First Design (CTO Differentiator)</h2>
+
+        <div class="checklist-category">Edge Processing Strategies</div>
+        <ul class="checklist" role="list" aria-label="Edge-first design checklist">
+          <li><div class="checklist-item" data-key="tips-edge-filter" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Strategy 1: Data filtering on the MCU</div>
+              <div class="checklist-detail">Instead of sending 10 readings/second, apply a change-detection filter on the ESP32: only transmit when the value changes by more than a threshold. For GPS, this means: don&rsquo;t send if the vehicle hasn&rsquo;t moved (&Delta;lat and &Delta;lon &lt; 0.0001). Reduces data volume by 60&ndash;90% for parked vehicles. Implement as a simple comparison in C++; no ML needed.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-edge-anomaly" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Strategy 2: Anomaly detection on the edge</div>
+              <div class="checklist-detail">Run a simple threshold check on the MCU: if acceleration &gt; 3G, it&rsquo;s a crash or severe pothole. Publish an immediate high-priority MQTT alert (QoS 1) to a separate <code>alerts/</code> topic, bypassing normal telemetry batching. On a Raspberry Pi gateway, run a TFLite model for more nuanced anomaly classification. This two-tiered approach (simple on MCU, complex on RPi) is elegant and practical.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-edge-aggregate" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Strategy 3: On-device aggregation</div>
+              <div class="checklist-detail">Instead of sending raw 100 Hz vibration data (12 KB/sec per sensor), compute FFT on the ESP32 (yes, the ESP32 can do a 256-point FFT in ~2 ms). Transmit only the dominant frequencies and their amplitudes (50 bytes) every 60 seconds. Bandwidth reduction: 99.6%. This is a deeply impressive CTO-level insight to deploy in the assessment.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- TIME MANAGEMENT -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="time">&#9200; Time Management During the Practical</h2>
+
+        <div class="checklist-category">Assessment Time Strategy</div>
+        <ul class="checklist" role="list" aria-label="Time management checklist">
+          <li><div class="checklist-item" data-key="tips-time-read" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">First 5 minutes: Read the full brief before coding</div>
+              <div class="checklist-detail">Resist the urge to start coding immediately. Read the entire problem statement. Identify: (1) What&rsquo;s the input? (2) What&rsquo;s the expected output? (3) What are the constraints? (4) What will they evaluate? Jot down 5 bullet points. This prevents wasted effort on misunderstood requirements.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-time-skeleton" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Next 5 minutes: Draw the architecture skeleton</div>
+              <div class="checklist-detail">Before coding, sketch a quick architecture on paper. Even if the task is &ldquo;write a Python script&rdquo;, drawing the data flow helps you structure the code. Label the inputs, processing steps, and outputs. The assessor may see this and give you credit for systematic thinking even before you write a line of code.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-time-mvp" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Build the MVP first, then enhance</div>
+              <div class="checklist-detail">Get the simplest working version running as fast as possible. For a data pipeline: hardcode the input path, skip error handling, use basic print statements. Once it works end-to-end, add: error handling, proper logging, edge cases, visualisation. A working simple solution beats an incomplete elegant one.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-time-last5" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Last 5 minutes: Clean up and prepare to present</div>
+              <div class="checklist-detail">Stop coding. Add comments to key sections. Prepare a 2-minute verbal summary: &ldquo;Here&rsquo;s what I built, here&rsquo;s what I&rsquo;d add with more time, and here are the trade-offs I considered.&rdquo; This clean wrap-up is what separates a CTO from a developer &mdash; you manage scope and communicate outcomes.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- TRADE-OFF MANTRAS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="mantras">&#128161; Trade-off Mantras (Memorise These)</h2>
+        <p>A CTO never says &ldquo;this is the perfect solution.&rdquo; Always pair a recommendation with its trade-off.</p>
+
+        <div class="checklist-category">Ready-to-Deploy Trade-off Statements</div>
+        <ul class="checklist" role="list" aria-label="Trade-off mantras checklist">
+          <li><div class="checklist-item" data-key="tips-mantra-mqtt" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">&ldquo;MQTT for sensors, WebSockets for browsers&rdquo;</div>
+              <div class="checklist-detail">&ldquo;We could use WebSockets for real-time telemetry from sensors, but MQTT is better suited for the unreliable cellular networks these devices will operate on. MQTT&rsquo;s QoS levels and last-will testament handle disconnections gracefully. For the browser-based dashboard, WebSockets (via Socket.IO or similar) is the right choice because browsers don&rsquo;t natively speak MQTT.&rdquo;</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-mantra-tsdb" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">&ldquo;TimescaleDB for versatility, InfluxDB for raw speed&rdquo;</div>
+              <div class="checklist-detail">&ldquo;InfluxDB would give us slightly faster raw write throughput, but TimescaleDB gives us full SQL and native PostGIS integration. For a research department that needs spatial + temporal queries and will be used by people who already know SQL, the development velocity and query flexibility of TimescaleDB outweigh InfluxDB&rsquo;s raw performance edge.&rdquo;</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-mantra-edge" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">&ldquo;Process at the edge to save bandwidth, not to avoid the cloud&rdquo;</div>
+              <div class="checklist-detail">&ldquo;Edge computing isn&rsquo;t about replacing cloud &mdash; it&rsquo;s about being smart about what we send. Raw high-frequency sensor data is expensive to transmit and mostly redundant. By filtering and aggregating on the MCU, we reduce data volume by 95% and send only actionable information. The cloud then handles long-term storage, complex analytics, and cross-device correlation.&rdquo;</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-mantra-perfect" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">&ldquo;Ship the 80% solution this quarter, iterate next quarter&rdquo;</div>
+              <div class="checklist-detail">&ldquo;We could build a perfectly architected system with Kafka, Spark, and a custom ML pipeline, but that takes 6 months and the research team needs data <em>now</em>. I&rsquo;d start with MQTT &rarr; Python script &rarr; PostgreSQL+PostGIS &rarr; Grafana. Get data flowing in 2 weeks. Then iteratively add Kafka, TimescaleDB, and ML components as the data volume grows. Pragmatic delivery beats theoretical perfection.&rdquo;</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- OVERVIEW CHECKLIST -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="final">&#9989; Final Pre-Assessment Checklist</h2>
+        <p>Complete these the night before (Wednesday 11 March). Every item should be green before you sleep.</p>
+
+        <div class="checklist-category">Wednesday Night</div>
+        <ul class="checklist" role="list" aria-label="Final pre-assessment checklist">
+          <li><div class="checklist-item" data-key="tips-final-env" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Development environment fully tested</div>
+              <div class="checklist-detail">Python + libraries, Docker + images pulled, VS Code + extensions, database clients. Everything opens and works without errors.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-final-snippets" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Code snippets folder prepared and tested</div>
+              <div class="checklist-detail">MQTT subscriber, Haversine function, data generator, TimescaleDB setup, Docker Compose &mdash; all tested and working.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-final-narrative" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">MPI narrative rehearsed (Problem &rarr; Solution &rarr; Result &rarr; Bridge)</div>
+              <div class="checklist-detail">Say it aloud 3 times. Time it: should take 2&ndash;3 minutes. This is your killer evidence.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-final-diagrams" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">3 architecture diagrams practised</div>
+              <div class="checklist-detail">Fleet tracker, bridge monitoring, pavement condition. Can draw each in &lt;10 minutes. Can narrate each in &lt;5 minutes.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-final-bridges" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">5 domain bridges memorised</div>
+              <div class="checklist-detail">Ecoride &rarr; BRT, SESKA &rarr; SHM, SEAT MPI &rarr; IoT ingestion, RabbitMQ &rarr; MQTT, Teaching &rarr; CTO communication. Can deploy any of them in &lt;20 seconds when prompted.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="tips-final-rest" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Get 7+ hours of sleep</div>
+              <div class="checklist-detail">A rested mind is worth more than an extra hour of studying. You&rsquo;ve prepared thoroughly. Trust your preparation. Sleep well.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- QUICK NAV TO OTHER ASSESSMENT PAGES -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;">&#128218; Assessment Preparation Hub</h2>
+        <div class="hub-grid">
+          <a href="assessment-iot-edge.html" class="hub-card">
+            <div class="card-level">Module 1</div>
+            <div class="card-title">IoT, MCU Boards &amp; Sensors</div>
+            <div class="card-desc">ESP32, Raspberry Pi, GPS, IMU, MQTT, CoAP, LoRaWAN, Wokwi practice exercises.</div>
+          </a>
+          <a href="assessment-data-engineering.html" class="hub-card">
+            <div class="card-level">Module 2</div>
+            <div class="card-title">Data Engineering &amp; Big Data</div>
+            <div class="card-desc">PostGIS, Kafka, TimescaleDB, Pandas, Haversine, Kaggle datasets, MPI narrative.</div>
+          </a>
+          <a href="assessment-cto-architecture.html" class="hub-card">
+            <div class="card-level">Module 3</div>
+            <div class="card-title">CTO Architecture &amp; Strategy</div>
+            <div class="card-desc">C4 model, whiteboard exercises, domain mapping, scalability trade-offs.</div>
+          </a>
+        </div>
+      </div>
+
+      <button class="checklist-reset-btn" id="resetBtn" aria-label="Reset all checklist progress">Reset All Progress</button>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot; Dr.&nbsp;Nnene &middot; 12 March 2026</p>
+      </div>
+    </main>
+  </div>
+
+  <button class="back-to-top" id="btt" title="Back to top" aria-label="Back to top">&#8593;</button>
+
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+      var btt=document.getElementById('btt');
+      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
+      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+      const STORAGE_KEY = 'tips-strategy-checklist';
+      const items = document.querySelectorAll('.checklist-item[data-key]');
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+      function updateProgress() {
+        const total = items.length;
+        const checked = document.querySelectorAll('.checklist-item.checked').length;
+        document.getElementById('progressCount').textContent = checked + ' / ' + total;
+        const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+        const bar = document.getElementById('progressBar');
+        bar.style.width = pct + '%';
+        bar.setAttribute('aria-valuenow', pct);
+        bar.classList.toggle('complete', pct === 100);
+      }
+
+      items.forEach(function(item) {
+        const key = item.getAttribute('data-key');
+        if (saved[key]) {
+          item.classList.add('checked');
+          item.setAttribute('aria-checked', 'true');
+        }
+        item.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A') return;
+          item.classList.toggle('checked');
+          const isChecked = item.classList.contains('checked');
+          item.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          saved[key] = isChecked;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+          updateProgress();
+        });
+        item.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            item.click();
+          }
+        });
+      });
+
+      updateProgress();
+
+      document.getElementById('resetBtn').addEventListener('click', function() {
+        if(!confirm('Reset all checklist progress on this page?')) return;
+        items.forEach(function(item) {
+          item.classList.remove('checked');
+          item.setAttribute('aria-checked', 'false');
+        });
+        localStorage.removeItem(STORAGE_KEY);
+        updateProgress();
+      });
+    })();
+  </script>
+</body>
+</html>
