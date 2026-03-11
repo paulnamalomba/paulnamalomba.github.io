@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>Assessment — Web Servers: ASP.NET, Nginx &amp; Apache</title>
+  <link rel="stylesheet" href="style.css?v=2.3">
+  <style>
+    pre{background:var(--bg-surface);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border);overflow-x:auto;color:var(--accent-secondary);font-family:var(--font-mono);font-size:0.85rem;margin:1rem 0;}
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav aria-label="Main navigation">
+        <a href="hub.html">Hub</a>
+        <a href="level1-overview.html">Overview</a>
+        <a href="level2-technical.html">Technical</a>
+        <a href="level3-competency.html">Competency</a>
+        <a href="level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Assessments &#9660;</button>
+          <div class="dropdown-content">
+            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="assessment-scenario-2.html">Scenario 2 (Django &amp; SEAT)</a>
+            <a href="assessment-scenario-3.html">Scenario 3 (Data &amp; MLOps)</a>
+            <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
+            <a href="assessment-data-engineering.html">Data Engineering</a>
+            <a href="assessment-cto-architecture.html">CTO Architecture</a>
+            <a href="assessment-tips-strategy.html">Tips &amp; Strategy</a>
+          </div>
+        </div>
+        <a href="guides.html">Guides</a>
+        <a href="level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+      <a href="hub.html">Hub</a> <span>&rsaquo;</span> <a href="assessment-data-engineering.html">Data Engineering</a> <span>&rsaquo;</span> ASP.NET, Nginx &amp; Apache
+    </div>
+
+    <main id="main-content">
+      <h1 class="fade-in">Web Servers &mdash; ASP.NET Core, Nginx &amp; Apache</h1>
+      <p class="fade-in fade-in-d1">
+        A CTO must be comfortable deploying and configuring web servers beyond the Python ecosystem.
+        This module covers <strong>ASP.NET Core</strong> (C# web framework), <strong>Nginx</strong> (reverse proxy and static server),
+        and <strong>Apache</strong> (traditional web server) &mdash; the trio that powers most enterprise Linux deployments.
+      </p>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="checklist-progress fade-in fade-in-d2" role="region" aria-label="Preparation progress">
+        <div class="checklist-progress-header">
+          <span>Preparation Progress</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <!-- CV GROUNDING -->
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">CV Grounding</div>
+        <ul>
+          <li><strong>SEAT + Nginx:</strong> The SEAT platform runs Django behind Gunicorn with <strong>Nginx</strong> as the reverse proxy. You configure Nginx server blocks, TLS certificates, and static file serving in production.</li>
+          <li><strong>ComputeMore (.NET):</strong> While the current stack is Nuxt.js, the enterprise API architecture uses ASP.NET Core patterns. C# is your strongest language alongside Python.</li>
+          <li><strong>UCT Infrastructure:</strong> University systems often run on Apache (legacy) and Nginx (modern). As CTO, you&rsquo;ll manage both.</li>
+        </ul>
+      </div>
+
+      <!-- NGINX -->
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top:0;" id="nginx">&#128737;&#65039; Nginx &mdash; Reverse Proxy &amp; Web Server</h2>
+        <p>Nginx is the most common reverse proxy for Python and .NET applications. Know it cold.</p>
+
+        <div class="checklist-category">Installation &amp; Core Configuration</div>
+        <ul class="checklist" role="list" aria-label="Nginx setup checklist">
+          <li><div class="checklist-item" data-key="dotnet-nginx-install" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Drill: Install and configure Nginx in WSL</div>
+              <div class="checklist-detail">
+<pre># Install
+sudo apt install -y nginx
+
+# Start / enable
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Verify
+curl -s http://localhost | head -5
+# Should show "Welcome to nginx!"
+
+# Key directories:
+# /etc/nginx/nginx.conf          - main config
+# /etc/nginx/sites-available/    - virtual host configs
+# /etc/nginx/sites-enabled/      - symlinks to active configs
+# /var/log/nginx/access.log      - access logs
+# /var/log/nginx/error.log       - error logs</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-nginx-reverse" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Nginx reverse proxy for Django (Gunicorn)</div>
+              <div class="checklist-detail">
+<pre># /etc/nginx/sites-available/transport_api
+server {
+    listen 80;
+    server_name transport.uct.ac.za;
+
+    # Security headers
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+
+    # Static files (served directly by Nginx)
+    location /static/ {
+        alias /opt/transport_api/staticfiles/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /media/ {
+        alias /opt/transport_api/media/;
+    }
+
+    # Proxy all other requests to Gunicorn
+    location / {
+        proxy_pass http://unix:/run/gunicorn.sock;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 120s;
+    }
+
+    # Health check endpoint
+    location /health {
+        proxy_pass http://unix:/run/gunicorn.sock;
+        access_log off;
+    }
+}
+
+# Enable the site
+sudo ln -s /etc/nginx/sites-available/transport_api /etc/nginx/sites-enabled/
+sudo nginx -t         # Test config
+sudo systemctl reload nginx</pre>
+                <strong>Docs:</strong> <a href="https://nginx.org/en/docs/beginners_guide.html" target="_blank" rel="noopener">Nginx Beginner&rsquo;s Guide</a>.
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-nginx-aspnet" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Nginx reverse proxy for ASP.NET Core (Kestrel)</div>
+              <div class="checklist-detail">
+<pre># /etc/nginx/sites-available/dotnet_api
+server {
+    listen 80;
+    server_name api.uct.ac.za;
+
+    location / {
+        proxy_pass http://localhost:5000;  # Kestrel default port
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# Key difference from Gunicorn:
+# - Kestrel uses TCP port (localhost:5000), not Unix socket
+# - ASP.NET handles its own worker threads internally
+# - proxy_http_version 1.1 is needed for WebSocket support</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-nginx-ssl" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: TLS/SSL with Let&rsquo;s Encrypt (Certbot)</div>
+              <div class="checklist-detail">
+<pre># Install Certbot
+sudo apt install -y certbot python3-certbot-nginx
+
+# Obtain and auto-configure certificate
+sudo certbot --nginx -d transport.uct.ac.za
+
+# Certbot modifies your Nginx config to add:
+# listen 443 ssl;
+# ssl_certificate /etc/letsencrypt/live/...;
+# ssl_certificate_key /etc/letsencrypt/live/...;
+# Redirect HTTP → HTTPS
+
+# Auto-renewal (already set up by Certbot)
+sudo certbot renew --dry-run
+
+# Manual renewal cron (if needed)
+# 0 3 * * 1 certbot renew --post-hook "systemctl reload nginx"</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Load Balancing &amp; Rate Limiting</div>
+        <ul class="checklist" role="list" aria-label="Nginx advanced checklist">
+          <li><div class="checklist-item" data-key="dotnet-nginx-lb" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Nginx as a load balancer</div>
+              <div class="checklist-detail">
+<pre># Load balance across multiple Gunicorn/Kestrel instances
+upstream backend {
+    # Round-robin (default)
+    server 127.0.0.1:8001;
+    server 127.0.0.1:8002;
+    server 127.0.0.1:8003;
+    
+    # Weighted
+    # server 127.0.0.1:8001 weight=3;
+    # server 127.0.0.1:8002 weight=1;
+    
+    # Least connections
+    # least_conn;
+    
+    # IP hash (sticky sessions)
+    # ip_hash;
+}
+
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+    }
+}
+
+# Rate limiting
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+
+server {
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        proxy_pass http://backend;
+    }
+}</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- APACHE -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="apache">&#128295; Apache &mdash; Traditional Web Server</h2>
+        <p>Apache is still common at universities and government servers. Know the basics even if you prefer Nginx.</p>
+
+        <div class="checklist-category">Apache Configuration</div>
+        <ul class="checklist" role="list" aria-label="Apache checklist">
+          <li><div class="checklist-item" data-key="dotnet-apache-install" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Drill: Install and configure Apache in WSL</div>
+              <div class="checklist-detail">
+<pre># Install
+sudo apt install -y apache2
+
+# Enable required modules
+sudo a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests
+sudo a2enmod rewrite headers ssl
+
+# Start
+sudo systemctl start apache2
+
+# Key directories:
+# /etc/apache2/apache2.conf            - main config
+# /etc/apache2/sites-available/        - virtual host configs
+# /etc/apache2/sites-enabled/          - symlinks to active configs
+# /var/log/apache2/access.log
+# /var/log/apache2/error.log</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-apache-reverse" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Apache reverse proxy for Django/Gunicorn</div>
+              <div class="checklist-detail">
+<pre># /etc/apache2/sites-available/transport_api.conf
+&lt;VirtualHost *:80&gt;
+    ServerName transport.uct.ac.za
+
+    # Security headers
+    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options nosniff
+
+    # Static files
+    Alias /static/ /opt/transport_api/staticfiles/
+    &lt;Directory /opt/transport_api/staticfiles/&gt;
+        Require all granted
+        Options -Indexes
+    &lt;/Directory&gt;
+
+    # Reverse proxy to Gunicorn
+    ProxyPreserveHost On
+    ProxyPass /static/ !
+    ProxyPass / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
+
+    # Logging
+    ErrorLog ${APACHE_LOG_DIR}/transport_error.log
+    CustomLog ${APACHE_LOG_DIR}/transport_access.log combined
+&lt;/VirtualHost&gt;
+
+# Enable
+sudo a2ensite transport_api
+sudo apache2ctl configtest  # Test config
+sudo systemctl reload apache2</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-apache-aspnet" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Apache reverse proxy for ASP.NET Core (Kestrel)</div>
+              <div class="checklist-detail">
+<pre># /etc/apache2/sites-available/dotnet_api.conf
+&lt;VirtualHost *:80&gt;
+    ServerName api.uct.ac.za
+
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:5000/
+    ProxyPassReverse / http://127.0.0.1:5000/
+
+    # WebSocket support (if needed)
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} websocket [NC]
+    RewriteCond %{HTTP:Connection} upgrade [NC]
+    RewriteRule /(.*) ws://127.0.0.1:5000/$1 [P,L]
+
+    ErrorLog ${APACHE_LOG_DIR}/dotnet_error.log
+    CustomLog ${APACHE_LOG_DIR}/dotnet_access.log combined
+&lt;/VirtualHost&gt;</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-apache-vs-nginx" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Apache vs Nginx &mdash; when to use each</div>
+              <div class="checklist-detail">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                  <tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:0.3rem;">Criteria</th><th style="text-align:left;padding:0.3rem;">Nginx</th><th style="text-align:left;padding:0.3rem;">Apache</th></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Architecture</td><td style="padding:0.3rem;">Event-driven (async)</td><td style="padding:0.3rem;">Process/thread per request</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Concurrent connections</td><td style="padding:0.3rem;">Excellent (10K+)</td><td style="padding:0.3rem;">Good (1K&ndash;5K)</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Static files</td><td style="padding:0.3rem;">Very fast</td><td style="padding:0.3rem;">Fast</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">.htaccess support</td><td style="padding:0.3rem;">No</td><td style="padding:0.3rem;">Yes (per-directory config)</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Module system</td><td style="padding:0.3rem;">Compiled in</td><td style="padding:0.3rem;">Dynamic (a2enmod)</td></tr>
+                  <tr><td style="padding:0.3rem;">Your recommendation</td><td style="padding:0.3rem;color:var(--accent);">Default choice</td><td style="padding:0.3rem;">Legacy compatibility</td></tr>
+                </table>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- ASP.NET CORE -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="aspnet">&#128142; ASP.NET Core &mdash; C# Web Framework</h2>
+        <p>ASP.NET Core runs on Linux via .NET SDK. It&rsquo;s cross-platform, high-performance, and uses Kestrel as its built-in web server.</p>
+
+        <div class="checklist-category">Setup &amp; Scaffolding</div>
+        <ul class="checklist" role="list" aria-label="ASP.NET setup checklist">
+          <li><div class="checklist-item" data-key="dotnet-install" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Drill: Install .NET SDK in WSL and scaffold a project</div>
+              <div class="checklist-detail">
+<pre># Install .NET SDK 8
+wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --channel 8.0
+export PATH="$HOME/.dotnet:$PATH"
+
+# Or via apt:
+# sudo apt install -y dotnet-sdk-8.0
+
+# Verify
+dotnet --version
+
+# Scaffold a Web API
+dotnet new webapi -n TransportApi -o ~/transport-api-dotnet
+cd ~/transport-api-dotnet
+dotnet run
+# Listening on http://localhost:5000</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-project" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: ASP.NET Core project structure</div>
+              <div class="checklist-detail">
+<pre>TransportApi/
+├── Program.cs              # Entry point (Minimal API or MVC)
+├── appsettings.json        # Configuration (connection strings, logging)
+├── appsettings.Development.json
+├── TransportApi.csproj     # Project file (dependencies)
+├── Controllers/
+│   └── VehiclesController.cs
+├── Models/
+│   ├── Vehicle.cs
+│   └── GPSPing.cs
+├── Data/
+│   └── TransportDbContext.cs  # Entity Framework DbContext
+└── Properties/
+    └── launchSettings.json
+
+# Key concepts:
+# - Kestrel = built-in web server (like Gunicorn for Python)
+# - Entity Framework = ORM (like Django ORM)
+# - DbContext = database session manager
+# - Dependency Injection = first-class citizen in ASP.NET Core</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Minimal API (Fast Prototyping)</div>
+        <ul class="checklist" role="list" aria-label="ASP.NET minimal API checklist">
+          <li><div class="checklist-item" data-key="dotnet-minimal" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Practice: Minimal API for data endpoints</div>
+              <div class="checklist-detail">
+<pre>// Program.cs - ASP.NET Core Minimal API
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Register DbContext with PostgreSQL
+builder.Services.AddDbContext&lt;TransportDb&gt;(opt =&gt;
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+var app = builder.Build();
+
+// GET /api/vehicles
+app.MapGet("/api/vehicles", async (TransportDb db) =&gt;
+    await db.Vehicles.ToListAsync());
+
+// GET /api/vehicles/{id}/pings
+app.MapGet("/api/vehicles/{id}/pings", async (int id, TransportDb db) =&gt;
+    await db.GPSPings.Where(p =&gt; p.VehicleId == id)
+                     .OrderByDescending(p =&gt; p.Timestamp)
+                     .Take(100).ToListAsync());
+
+// POST /api/pings
+app.MapPost("/api/pings", async (GPSPing ping, TransportDb db) =&gt; {
+    db.GPSPings.Add(ping);
+    await db.SaveChangesAsync();
+    return Results.Created($"/api/pings/{ping.Id}", ping);
+});
+
+app.Run();
+
+// Models &amp; DbContext
+public class Vehicle {
+    public int Id { get; set; }
+    [MaxLength(20)] public string VehicleId { get; set; } = "";
+    public string VehicleType { get; set; } = "";
+    public bool IsActive { get; set; } = true;
+}
+
+public class GPSPing {
+    public int Id { get; set; }
+    public int VehicleId { get; set; }
+    public double Lat { get; set; }
+    public double Lon { get; set; }
+    public double Speed { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+public class TransportDb : DbContext {
+    public TransportDb(DbContextOptions&lt;TransportDb&gt; options) : base(options) { }
+    public DbSet&lt;Vehicle&gt; Vehicles =&gt; Set&lt;Vehicle&gt;();
+    public DbSet&lt;GPSPing&gt; GPSPings =&gt; Set&lt;GPSPing&gt;();
+}</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Deployment as a Linux Service</div>
+        <ul class="checklist" role="list" aria-label="ASP.NET deployment checklist">
+          <li><div class="checklist-item" data-key="dotnet-deploy" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Deploy ASP.NET Core as a systemd service on Linux</div>
+              <div class="checklist-detail">
+<pre># Build for production
+dotnet publish -c Release -o /opt/transport-api-dotnet
+
+# /etc/systemd/system/kestrel-transport.service
+[Unit]
+Description=ASP.NET Core Transport API
+After=network.target postgresql.service
+
+[Service]
+WorkingDirectory=/opt/transport-api-dotnet
+ExecStart=/usr/bin/dotnet /opt/transport-api-dotnet/TransportApi.dll
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=transport-api
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://localhost:5000
+Environment=ConnectionStrings__Default=Host=localhost;Database=transport_db;Username=django
+
+[Install]
+WantedBy=multi-user.target
+
+# Enable and start
+sudo systemctl daemon-reload
+sudo systemctl enable kestrel-transport
+sudo systemctl start kestrel-transport
+
+# Check status
+sudo systemctl status kestrel-transport
+journalctl -u kestrel-transport --since "5 min ago"</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-kestrel-config" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Kestrel configuration and limits</div>
+              <div class="checklist-detail">
+<pre>// appsettings.json
+{
+  "ConnectionStrings": {
+    "Default": "Host=localhost;Database=transport_db;Username=django"
+  },
+  "Kestrel": {
+    "Limits": {
+      "MaxConcurrentConnections": 100,
+      "MaxRequestBodySize": 10485760,
+      "RequestHeadersTimeout": "00:00:30"
+    }
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+
+// Remember: Kestrel should NOT be exposed directly to the internet.
+// Always put Nginx or Apache in front as a reverse proxy.
+// Nginx handles: TLS, static files, request buffering, rate limiting.
+// Kestrel handles: application logic only.</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- FULL DEPLOYMENT STACK -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="full-stack">&#127959;&#65039; Full Deployment Stack (Putting It All Together)</h2>
+
+        <div class="checklist-category">Architecture Diagram</div>
+        <ul class="checklist" role="list" aria-label="Full stack deployment checklist">
+          <li><div class="checklist-item" data-key="dotnet-arch" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Understand: Complete request flow for both stacks</div>
+              <div class="checklist-detail">
+<pre>
+=== Django Stack ===
+Client → Nginx (TLS, static files)
+           → Gunicorn (WSGI, workers)
+              → Django (views, ORM)
+                 → PostgreSQL + PostGIS
+
+=== ASP.NET Stack ===
+Client → Nginx (TLS, static files)
+           → Kestrel (built-in, async)
+              → ASP.NET Core (controllers, EF Core)
+                 → PostgreSQL
+
+=== Shared Infrastructure ===
+PostgreSQL: shared database server
+Nginx: shared reverse proxy (multiple server blocks)
+systemd: manages both Gunicorn and Kestrel services
+Let's Encrypt: TLS certificates for both
+</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-troubleshoot" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Common troubleshooting commands</div>
+              <div class="checklist-detail">
+<pre># Check what's listening on ports
+ss -tlnp | grep -E '80|443|5000|8000'
+
+# Test Nginx config
+sudo nginx -t
+
+# Test Apache config
+sudo apache2ctl configtest
+
+# Restart services
+sudo systemctl restart nginx
+sudo systemctl restart gunicorn
+sudo systemctl restart kestrel-transport
+
+# View logs
+tail -f /var/log/nginx/error.log
+journalctl -u gunicorn -f
+journalctl -u kestrel-transport -f
+
+# Check service status
+systemctl list-units --type=service --state=running | grep -E 'nginx|apache|gunicorn|kestrel'
+
+# Test proxy chain
+curl -v http://localhost           # Hits Nginx
+curl -v http://localhost:8000      # Hits Gunicorn directly
+curl -v http://localhost:5000      # Hits Kestrel directly</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- TIMED EXERCISE -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="exercise">&#127919; Timed Practice Exercise (45 min)</h2>
+
+        <div class="checklist-category">Exercise: Deploy Both Stacks Behind Nginx</div>
+        <ul class="checklist" role="list" aria-label="Practice exercise checklist">
+          <li><div class="checklist-item" data-key="dotnet-ex-1" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 1: Start PostgreSQL &amp; create a database (3 min)</div>
+              <div class="checklist-detail"><code>sudo service postgresql start; createdb transport_db</code>.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-ex-2" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 2: Scaffold &amp; run Django + Gunicorn on port 8000 (10 min)</div>
+              <div class="checklist-detail">startproject, models, migrate, gunicorn bind. Test with curl.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-ex-3" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 3: Scaffold &amp; run ASP.NET Core on port 5000 (10 min)</div>
+              <div class="checklist-detail">dotnet new webapi, add models, EF migrations, dotnet run. Test with curl.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-ex-4" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 4: Configure Nginx to proxy both (10 min)</div>
+              <div class="checklist-detail"><code>/api/django/*</code> &rarr; Gunicorn, <code>/api/dotnet/*</code> &rarr; Kestrel. Single Nginx server block, two location blocks.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-ex-5" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 5: Create systemd service files for both (7 min)</div>
+              <div class="checklist-detail">Write <code>gunicorn.service</code> and <code>kestrel-transport.service</code>. Enable and start both.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="dotnet-ex-6" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 6: Verify end-to-end through Nginx (5 min)</div>
+              <div class="checklist-detail">
+<pre>curl http://localhost/api/django/vehicles/
+curl http://localhost/api/dotnet/vehicles
+ss -tlnp | grep -E '80|5000|8000'</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- RESOURCES -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="resources">&#128295; Practice Resources</h2>
+        <div class="resource-grid">
+          <a href="https://nginx.org/en/docs/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128737;&#65039;</div>
+            <div class="rc-title">Nginx Docs</div>
+            <div class="rc-desc">Official documentation. Directives reference, reverse proxy, load balancing, TLS configuration.</div>
+            <div class="rc-url">nginx.org/en/docs</div>
+          </a>
+          <a href="https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128142;</div>
+            <div class="rc-title">ASP.NET on Linux</div>
+            <div class="rc-desc">Microsoft&rsquo;s official guide for hosting ASP.NET Core on Linux with Nginx. Step-by-step with systemd service files.</div>
+            <div class="rc-url">learn.microsoft.com</div>
+          </a>
+          <a href="https://httpd.apache.org/docs/2.4/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128295;</div>
+            <div class="rc-title">Apache Docs</div>
+            <div class="rc-desc">Apache HTTP Server documentation. Virtual hosts, mod_proxy, mod_rewrite, SSL/TLS.</div>
+            <div class="rc-url">httpd.apache.org</div>
+          </a>
+          <a href="https://www.digitalocean.com/community/tutorials" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#127754;</div>
+            <div class="rc-title">DigitalOcean Tutorials</div>
+            <div class="rc-desc">Excellent step-by-step guides for Nginx, Apache, Django deployment, .NET on Linux. Search-friendly.</div>
+            <div class="rc-url">digitalocean.com/community</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TALKING POINTS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;">&#128172; Key Talking Points</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">Why use Nginx in front of Kestrel? Kestrel can serve HTTP.</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-t">Technical</span></p>
+            <p><strong>Defense in depth.</strong> Kestrel is an application server optimised for running C# code fast. Nginx is a battle-tested internet-facing server optimised for handling thousands of concurrent connections, TLS termination, request buffering (protecting against slow clients), static file serving, and rate limiting.</p>
+            <p>Without Nginx, a slow client uploading a 100 MB file would tie up a Kestrel thread for minutes. Nginx buffers the entire request before forwarding it to Kestrel in one fast internal transfer. Microsoft&rsquo;s own documentation recommends this architecture for production deployments.</p>
+            <p><strong>Analogy:</strong> Nginx is the bouncer at the door. Kestrel is the bartender. You don&rsquo;t make the bartender check IDs.</p>
+          </div>
+        </div>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">How does UCT&rsquo;s infrastructure currently handle web serving?</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-l">Leadership</span></p>
+            <p>UCT runs a mix. Legacy systems (student portals, HR) are often on Apache behind F5 load balancers. Newer services (SEAT, research platforms) use Nginx. As CTO, the strategic direction is:</p>
+            <ul>
+              <li><strong>Standardise on Nginx</strong> for new deployments &mdash; better concurrency model, simpler config syntax</li>
+              <li><strong>Maintain Apache</strong> where migration cost &gt; benefit (legacy .htaccess-dependent apps)</li>
+              <li><strong>Containerise</strong> where possible &mdash; Nginx as ingress controller in Kubernetes</li>
+              <li><strong>Enforce TLS everywhere</strong> via automated certificate management (cert-manager or Certbot)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <button class="checklist-reset-btn" id="resetBtn" aria-label="Reset all checklist progress">Reset All Progress</button>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot; Dr.&nbsp;Nnene &middot; 12 March 2026</p>
+      </div>
+    </main>
+  </div>
+
+  <button class="back-to-top" id="btt" title="Back to top" aria-label="Back to top">&#8593;</button>
+
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+      var btt=document.getElementById('btt');
+      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
+      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+      const STORAGE_KEY = 'web-servers-dotnet-checklist';
+      const items = document.querySelectorAll('.checklist-item[data-key]');
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+      function updateProgress() {
+        const total = items.length;
+        const checked = document.querySelectorAll('.checklist-item.checked').length;
+        document.getElementById('progressCount').textContent = checked + ' / ' + total;
+        const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+        const bar = document.getElementById('progressBar');
+        bar.style.width = pct + '%';
+        bar.setAttribute('aria-valuenow', pct);
+        bar.classList.toggle('complete', pct === 100);
+      }
+
+      items.forEach(function(item) {
+        const key = item.getAttribute('data-key');
+        if (saved[key]) {
+          item.classList.add('checked');
+          item.setAttribute('aria-checked', 'true');
+        }
+        item.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A') return;
+          item.classList.toggle('checked');
+          const isChecked = item.classList.contains('checked');
+          item.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          saved[key] = isChecked;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+          updateProgress();
+        });
+        item.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            item.click();
+          }
+        });
+      });
+
+      updateProgress();
+
+      document.getElementById('resetBtn').addEventListener('click', function() {
+        if(!confirm('Reset all checklist progress on this page?')) return;
+        items.forEach(function(item) {
+          item.classList.remove('checked');
+          item.setAttribute('aria-checked', 'false');
+        });
+        localStorage.removeItem(STORAGE_KEY);
+        updateProgress();
+      });
+    })();
+
+    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
+  </script>
+</body>
+</html>

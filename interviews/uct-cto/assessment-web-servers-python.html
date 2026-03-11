@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>Assessment — Web Servers: Python (Django &amp; Flask)</title>
+  <link rel="stylesheet" href="style.css?v=2.3">
+  <style>
+    pre{background:var(--bg-surface);padding:1rem;border-radius:var(--radius-sm);border:1px solid var(--border);overflow-x:auto;color:var(--accent-secondary);font-family:var(--font-mono);font-size:0.85rem;margin:1rem 0;}
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav aria-label="Main navigation">
+        <a href="hub.html">Hub</a>
+        <a href="level1-overview.html">Overview</a>
+        <a href="level2-technical.html">Technical</a>
+        <a href="level3-competency.html">Competency</a>
+        <a href="level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Assessments &#9660;</button>
+          <div class="dropdown-content">
+            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="assessment-scenario-2.html">Scenario 2 (Django &amp; SEAT)</a>
+            <a href="assessment-scenario-3.html">Scenario 3 (Data &amp; MLOps)</a>
+            <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
+            <a href="assessment-data-engineering.html">Data Engineering</a>
+            <a href="assessment-cto-architecture.html">CTO Architecture</a>
+            <a href="assessment-tips-strategy.html">Tips &amp; Strategy</a>
+          </div>
+        </div>
+        <a href="guides.html">Guides</a>
+        <a href="level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+      <a href="hub.html">Hub</a> <span>&rsaquo;</span> <a href="assessment-data-engineering.html">Data Engineering</a> <span>&rsaquo;</span> Python Web Servers
+    </div>
+
+    <main id="main-content">
+      <h1 class="fade-in">Web Servers &mdash; Python (Django &amp; Flask)</h1>
+      <p class="fade-in fade-in-d1">
+        Know how to stand up, configure, and deploy Python web servers from scratch in a terminal.
+        This module covers <strong>Django</strong> (your primary framework from SEAT) and <strong>Flask</strong> (lightweight alternative),
+        plus the WSGI/ASGI application servers that sit between them and Nginx/Apache.
+      </p>
+
+      <!-- PROGRESS TRACKER -->
+      <div class="checklist-progress fade-in fade-in-d2" role="region" aria-label="Preparation progress">
+        <div class="checklist-progress-header">
+          <span>Preparation Progress</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+
+      <!-- CV GROUNDING -->
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">CV Grounding</div>
+        <ul>
+          <li><strong>SEAT (Django):</strong> You built and deployed the SEAT transport management platform on Django 4.x with PostgreSQL + PostGIS, served via Gunicorn behind Nginx on Ubuntu VMs. This is battle-tested, production experience.</li>
+          <li><strong>ComputeMore (Nuxt / Node):</strong> While the frontend is Nuxt.js (Node), deployment patterns are similar &mdash; reverse proxies, process managers, environment variables, health checks.</li>
+          <li><strong>HPC Workflows:</strong> Job scheduling and monitoring on SESKA uses web dashboards built on lightweight Python frameworks, connecting to Slurm APIs.</li>
+        </ul>
+      </div>
+
+      <!-- DJANGO DEEP DIVE -->
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top:0;" id="django">&#128013; Django &mdash; Full-Stack Setup</h2>
+
+        <div class="checklist-category">Project Scaffolding (Should Be Muscle Memory)</div>
+        <ul class="checklist" role="list" aria-label="Django scaffolding checklist">
+          <li><div class="checklist-item" data-key="py-django-scaffold" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Drill: From zero to running Django in 5 minutes</div>
+              <div class="checklist-detail">
+<pre>mkdir ~/transport_api &amp;&amp; cd ~/transport_api
+python3 -m venv venv &amp;&amp; source venv/bin/activate
+pip install django djangorestframework psycopg2-binary gunicorn
+
+django-admin startproject config .
+python manage.py startapp sensors
+python manage.py startapp vehicles
+
+# Edit config/settings.py:
+# INSTALLED_APPS += ['rest_framework', 'sensors', 'vehicles']
+# DATABASES: switch to PostgreSQL
+
+python manage.py migrate
+python manage.py createsuperuser --username admin --email admin@uct.ac.za
+python manage.py runserver 0.0.0.0:8000</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-django-settings" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: settings.py configuration patterns</div>
+              <div class="checklist-detail">
+<pre># Environment-based settings (12-factor)
+import os
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'change-me')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'transport_db'),
+        'USER': os.environ.get('DB_USER', 'django'),
+        'PASSWORD': os.environ.get('DB_PASS', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
+    }
+}
+
+# Static files for production
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Security headers
+SECURE_HSTS_SECONDS = 31536000
+SECURE_SSL_REDIRECT = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG</pre>
+                <strong>Docs:</strong> <a href="https://docs.djangoproject.com/en/5.0/ref/settings/" target="_blank" rel="noopener">Django settings reference</a>.
+              </div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Models, Views &amp; REST API</div>
+        <ul class="checklist" role="list" aria-label="Django MVC checklist">
+          <li><div class="checklist-item" data-key="py-django-model" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Practice: Define transport models with PostGIS</div>
+              <div class="checklist-detail">
+<pre># sensors/models.py
+from django.contrib.gis.db import models as gis_models
+from django.db import models
+
+class Vehicle(models.Model):
+    vehicle_id = models.CharField(max_length=20, unique=True)
+    vehicle_type = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['vehicle_id']
+
+class GPSPing(models.Model):
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name='pings')
+    location = gis_models.PointField(srid=4326)
+    speed = models.FloatField()
+    heading = models.FloatField(null=True)
+    timestamp = models.DateTimeField(db_index=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['vehicle', 'timestamp']),
+        ]</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-django-drf" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Practice: Django REST Framework serializers and viewsets</div>
+              <div class="checklist-detail">
+<pre># sensors/serializers.py
+from rest_framework import serializers
+from .models import GPSPing, Vehicle
+
+class VehicleSerializer(serializers.ModelSerializer):
+    ping_count = serializers.IntegerField(read_only=True)
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+
+class GPSPingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GPSPing
+        fields = '__all__'
+
+# sensors/views.py
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.db.models import Count, Avg
+
+class VehicleViewSet(viewsets.ModelViewSet):
+    queryset = Vehicle.objects.annotate(ping_count=Count('pings'))
+    serializer_class = VehicleSerializer
+
+    @action(detail=True, methods=['get'])
+    def stats(self, request, pk=None):
+        vehicle = self.get_object()
+        stats = vehicle.pings.aggregate(
+            avg_speed=Avg('speed'),
+            total_pings=Count('id')
+        )
+        return Response(stats)
+
+# config/urls.py
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register(r'vehicles', VehicleViewSet)
+urlpatterns += router.urls</pre>
+                <strong>Docs:</strong> <a href="https://www.django-rest-framework.org/tutorial/quickstart/" target="_blank" rel="noopener">DRF Quickstart Tutorial</a>.
+              </div>
+            </div>
+          </div></li>
+        </ul>
+
+        <div class="checklist-category">Gunicorn &mdash; Production WSGI Server</div>
+        <ul class="checklist" role="list" aria-label="Gunicorn checklist">
+          <li><div class="checklist-item" data-key="py-gunicorn" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Running Django under Gunicorn</div>
+              <div class="checklist-detail">
+<pre># Basic start (4 workers)
+gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
+
+# Production configuration
+gunicorn config.wsgi:application \
+  --bind unix:/run/gunicorn.sock \
+  --workers 4 \
+  --threads 2 \
+  --timeout 120 \
+  --access-logfile /var/log/gunicorn/access.log \
+  --error-logfile /var/log/gunicorn/error.log \
+  --capture-output
+
+# Worker calculation: (2 × CPU cores) + 1
+# e.g., 4-core server → 9 workers
+
+# With ASGI (for WebSocket / async views)
+pip install uvicorn
+uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --workers 4</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-gunicorn-systemd" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: systemd service file for Gunicorn</div>
+              <div class="checklist-detail">
+<pre># /etc/systemd/system/gunicorn.service
+[Unit]
+Description=Gunicorn daemon for Transport API
+After=network.target postgresql.service
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/transport_api
+Environment="PATH=/opt/transport_api/venv/bin"
+Environment="DJANGO_SETTINGS_MODULE=config.settings"
+Environment="DB_NAME=transport_db"
+ExecStart=/opt/transport_api/venv/bin/gunicorn \
+          config.wsgi:application \
+          --bind unix:/run/gunicorn.sock \
+          --workers 4
+
+[Install]
+WantedBy=multi-user.target
+
+# Enable and start
+sudo systemctl daemon-reload
+sudo systemctl enable gunicorn
+sudo systemctl start gunicorn
+sudo systemctl status gunicorn</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- FLASK -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="flask">&#128248; Flask &mdash; Lightweight Alternative</h2>
+        <p>Flask is useful for microservices, data APIs, and quick prototyping. Know when to choose it over Django.</p>
+
+        <div class="checklist-category">Flask Fundamentals</div>
+        <ul class="checklist" role="list" aria-label="Flask checklist">
+          <li><div class="checklist-item" data-key="py-flask-basic" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Drill: Minimal Flask API from scratch (5 min)</div>
+              <div class="checklist-detail">
+<pre># app.py
+from flask import Flask, jsonify, request
+import psycopg2
+
+app = Flask(__name__)
+
+def get_db():
+    return psycopg2.connect(dbname='transport_db', user='paul')
+
+@app.route('/api/health')
+def health():
+    return jsonify(status='ok')
+
+@app.route('/api/vehicles')
+def vehicles():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT vehicle_id, AVG(speed) as avg_speed FROM gps_pings GROUP BY vehicle_id ORDER BY avg_speed DESC LIMIT 10")
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify([{'vehicle': r[0], 'avg_speed': round(r[1], 1)} for r in rows])
+
+@app.route('/api/pings', methods=['POST'])
+def create_ping():
+    data = request.get_json()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO gps_pings (vehicle, lat, lon, speed) VALUES (%s, %s, %s, %s)",
+        (data['vehicle'], data['lat'], data['lon'], data['speed'])
+    )
+    conn.commit()
+    conn.close()
+    return jsonify(status='created'), 201
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-flask-factory" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Flask application factory pattern</div>
+              <div class="checklist-detail">
+<pre># project structure:
+# transport_api/
+# ├── app/
+# │   ├── __init__.py     &lt;-- create_app()
+# │   ├── models.py
+# │   ├── routes/
+# │   │   ├── vehicles.py
+# │   │   └── pings.py
+# │   └── config.py
+# ├── wsgi.py
+# └── requirements.txt
+
+# app/__init__.py
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+def create_app(config='app.config.ProductionConfig'):
+    app = Flask(__name__)
+    app.config.from_object(config)
+    db.init_app(app)
+
+    from .routes.vehicles import vehicles_bp
+    from .routes.pings import pings_bp
+    app.register_blueprint(vehicles_bp, url_prefix='/api')
+    app.register_blueprint(pings_bp, url_prefix='/api')
+
+    return app
+
+# wsgi.py
+from app import create_app
+app = create_app()
+
+# Run with: gunicorn wsgi:app --bind 0.0.0.0:5000 --workers 4</pre>
+                <strong>Docs:</strong> <a href="https://flask.palletsprojects.com/en/3.0.x/patterns/appfactories/" target="_blank" rel="noopener">Flask Application Factories</a>.
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-flask-vs-django" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: When to use Flask vs Django</div>
+              <div class="checklist-detail">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                  <tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:0.3rem;">Criteria</th><th style="text-align:left;padding:0.3rem;">Django</th><th style="text-align:left;padding:0.3rem;">Flask</th></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">ORM</td><td style="padding:0.3rem;">Built-in (powerful)</td><td style="padding:0.3rem;">SQLAlchemy (opt-in)</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Admin panel</td><td style="padding:0.3rem;">Built-in</td><td style="padding:0.3rem;">Flask-Admin (opt-in)</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Auth</td><td style="padding:0.3rem;">Built-in</td><td style="padding:0.3rem;">Flask-Login (opt-in)</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Startup time</td><td style="padding:0.3rem;">Slower (full framework)</td><td style="padding:0.3rem;">Near-instant</td></tr>
+                  <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.3rem;">Best for</td><td style="padding:0.3rem;">Full apps (like SEAT)</td><td style="padding:0.3rem;">Microservices, data APIs</td></tr>
+                  <tr><td style="padding:0.3rem;">Your use</td><td style="padding:0.3rem;">SEAT platform</td><td style="padding:0.3rem;">Internal data pipelines</td></tr>
+                </table>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- WSGI/ASGI CONCEPTS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="wsgi">&#9881;&#65039; WSGI vs ASGI &mdash; Understanding the Stack</h2>
+
+        <div class="checklist-category">Application Server Concepts</div>
+        <ul class="checklist" role="list" aria-label="WSGI/ASGI checklist">
+          <li><div class="checklist-item" data-key="py-wsgi-asgi" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Understand the request flow: Browser &rarr; Nginx &rarr; Gunicorn &rarr; Django</div>
+              <div class="checklist-detail">
+<pre>Browser/curl &rarr; Nginx (port 80/443)
+                  ↓ (proxy_pass)
+               Gunicorn (unix socket or port 8000)
+                  ↓ (WSGI callable)
+               Django (config.wsgi:application)
+                  ↓
+               View → ORM → PostgreSQL → Response
+
+WSGI: Synchronous. One request per thread/worker. Gunicorn, uWSGI.
+ASGI: Asynchronous. WebSockets, long-polling, async views. Uvicorn, Daphne, Hypercorn.</pre>
+                <strong>Rule of thumb:</strong> Use WSGI (Gunicorn) unless you need WebSockets or async views. SEAT uses WSGI because all operations are standard request/response.
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-static-files" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Static files and media in production</div>
+              <div class="checklist-detail">
+<pre># Django: collect static files
+python manage.py collectstatic --noinput
+# Creates ./staticfiles/ directory
+
+# Nginx serves static files directly (no Django involvement)
+# In nginx config:
+location /static/ {
+    alias /opt/transport_api/staticfiles/;
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+}
+
+location /media/ {
+    alias /opt/transport_api/media/;
+}
+
+# Everything else goes to Gunicorn
+location / {
+    proxy_pass http://unix:/run/gunicorn.sock;
+}</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- DATABASE CONNECTIONS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="database">&#128451;&#65039; Database Connections &amp; Pooling</h2>
+
+        <div class="checklist-category">Connection Management</div>
+        <ul class="checklist" role="list" aria-label="Database connections checklist">
+          <li><div class="checklist-item" data-key="py-db-django" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Django database connection settings</div>
+              <div class="checklist-detail">
+<pre># settings.py - connection pooling (Django 5.1+)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'transport_db',
+        'CONN_MAX_AGE': 600,       # Keep connections open 10 min
+        'CONN_HEALTH_CHECKS': True, # Verify before reuse
+        # Or use pgbouncer:
+        # 'HOST': 'localhost',
+        # 'PORT': '6432',  # pgbouncer port, not 5432
+    }
+}
+
+# For PostGIS:
+# ENGINE: 'django.contrib.gis.db.backends.postgis'</pre>
+              </div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-db-flask" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Know: Flask-SQLAlchemy connection setup</div>
+              <div class="checklist-detail">
+<pre># config.py
+class Config:
+    SQLALCHEMY_DATABASE_URI = 'postgresql://paul@localhost/transport_db'
+    SQLALCHEMY_POOL_SIZE = 10
+    SQLALCHEMY_POOL_RECYCLE = 300
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# Or use DATABASE_URL environment variable:
+import os
+SQLALCHEMY_DATABASE_URI = os.environ.get(
+    'DATABASE_URL', 'postgresql://localhost/transport_db'
+)</pre>
+              </div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- TIMED EXERCISE -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="exercise">&#127919; Timed Practice Exercise (40 min)</h2>
+        <p>Build a complete data API. Terminal only &mdash; no VS Code.</p>
+
+        <div class="checklist-category">Exercise: Django REST API for GPS Data</div>
+        <ul class="checklist" role="list" aria-label="Practice exercise checklist">
+          <li><div class="checklist-item" data-key="py-ex-1" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 1: Scaffold Django + DRF + PostgreSQL (5 min)</div>
+              <div class="checklist-detail">Virtual env, install deps, startproject, startapp, configure settings.py for PostgreSQL.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-ex-2" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 2: Define Vehicle and GPSPing models, migrate (5 min)</div>
+              <div class="checklist-detail">Models with proper fields, indexes, foreign keys. Run migrations.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-ex-3" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 3: Load test data from CSV using management command (10 min)</div>
+              <div class="checklist-detail">Write a custom management command. Load 10K rows. Use <code>bulk_create()</code>.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-ex-4" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 4: Create DRF ViewSets with filtering and pagination (10 min)</div>
+              <div class="checklist-detail">Vehicles list with ping count, GPSPing list filtered by vehicle and date range, pagination.</div>
+            </div>
+          </div></li>
+          <li><div class="checklist-item" data-key="py-ex-5" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="checklist-checkbox" aria-hidden="true"></div>
+            <div class="checklist-text">
+              <div class="checklist-label">Step 5: Serve with Gunicorn, test with curl (10 min)</div>
+              <div class="checklist-detail"><code>gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2</code>. Test: <code>curl http://localhost:8000/api/vehicles/ | python3 -m json.tool</code>.</div>
+            </div>
+          </div></li>
+        </ul>
+      </div>
+
+      <!-- RESOURCES -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;" id="resources">&#128295; Practice Resources</h2>
+        <div class="resource-grid">
+          <a href="https://docs.djangoproject.com/en/5.0/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128013;</div>
+            <div class="rc-title">Django Docs</div>
+            <div class="rc-desc">Official Django documentation. Models, views, URLs, settings, deployment. The fastest reference during the assessment.</div>
+            <div class="rc-url">docs.djangoproject.com</div>
+          </a>
+          <a href="https://www.django-rest-framework.org/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128260;</div>
+            <div class="rc-title">DRF Docs</div>
+            <div class="rc-desc">Django REST Framework. Serializers, viewsets, routers, filtering, pagination. Your API layer reference.</div>
+            <div class="rc-url">django-rest-framework.org</div>
+          </a>
+          <a href="https://flask.palletsprojects.com/en/3.0.x/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#128248;</div>
+            <div class="rc-title">Flask Docs</div>
+            <div class="rc-desc">Flask quickstart, blueprints, app factories, configuration, testing. Lightweight alternative reference.</div>
+            <div class="rc-url">flask.palletsprojects.com</div>
+          </a>
+          <a href="https://docs.gunicorn.org/en/stable/" target="_blank" rel="noopener" class="resource-card">
+            <div class="rc-icon">&#9881;&#65039;</div>
+            <div class="rc-title">Gunicorn Docs</div>
+            <div class="rc-desc">Production WSGI server. Worker types, configuration, logging, deployment patterns.</div>
+            <div class="rc-url">docs.gunicorn.org</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- TALKING POINTS -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top:0;">&#128172; Key Talking Points</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">How do you decide between Django and Flask for a new service?</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-t">Technical</span></p>
+            <p><strong>Django</strong> when you need: ORM for complex data models, built-in admin panel for operations teams, authentication/authorization out of the box, GIS support (PostGIS), established patterns for larger teams. SEAT is Django because it&rsquo;s a full platform with 15+ models, role-based auth, and an admin dashboard.</p>
+            <p><strong>Flask</strong> when you need: a lightweight data API with 2&ndash;3 endpoints, a microservice in a larger architecture, maximum flexibility on dependencies, rapid prototyping where Django&rsquo;s boilerplate is overkill.</p>
+            <p><strong>Your evidence:</strong> &ldquo;SEAT is Django because we needed the full framework &mdash; ORM, admin, auth, GIS. When I build internal data pipeline APIs or health check endpoints, I use Flask because I need a single file that returns JSON from a PostgreSQL query.&rdquo;</p>
+          </div>
+        </div>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">Why Gunicorn and not Django&rsquo;s built-in server?</button>
+          <div class="qa-answer">
+            <p><span class="star-label star-t">Technical</span></p>
+            <p>Django&rsquo;s <code>runserver</code> is single-threaded, has no connection pooling, no worker management, and is explicitly marked &ldquo;not for production&rdquo; in the Django docs. Gunicorn pre-forks multiple worker processes, each handling requests independently. If one worker crashes (e.g., OOM on a large query), the master process respawns it. Combined with Nginx as a reverse proxy for TLS termination, static file serving, and connection buffering, this is the standard production deployment pattern.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="checklist-reset-btn" id="resetBtn" aria-label="Reset all checklist progress">Reset All Progress</button>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot; Dr.&nbsp;Nnene &middot; 12 March 2026</p>
+      </div>
+    </main>
+  </div>
+
+  <button class="back-to-top" id="btt" title="Back to top" aria-label="Back to top">&#8593;</button>
+
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+
+      var btt=document.getElementById('btt');
+      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
+      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+      const STORAGE_KEY = 'web-servers-python-checklist';
+      const items = document.querySelectorAll('.checklist-item[data-key]');
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+      function updateProgress() {
+        const total = items.length;
+        const checked = document.querySelectorAll('.checklist-item.checked').length;
+        document.getElementById('progressCount').textContent = checked + ' / ' + total;
+        const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+        const bar = document.getElementById('progressBar');
+        bar.style.width = pct + '%';
+        bar.setAttribute('aria-valuenow', pct);
+        bar.classList.toggle('complete', pct === 100);
+      }
+
+      items.forEach(function(item) {
+        const key = item.getAttribute('data-key');
+        if (saved[key]) {
+          item.classList.add('checked');
+          item.setAttribute('aria-checked', 'true');
+        }
+        item.addEventListener('click', function(e) {
+          if (e.target.tagName === 'A') return;
+          item.classList.toggle('checked');
+          const isChecked = item.classList.contains('checked');
+          item.setAttribute('aria-checked', isChecked ? 'true' : 'false');
+          saved[key] = isChecked;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+          updateProgress();
+        });
+        item.addEventListener('keydown', function(e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            item.click();
+          }
+        });
+      });
+
+      updateProgress();
+
+      document.getElementById('resetBtn').addEventListener('click', function() {
+        if(!confirm('Reset all checklist progress on this page?')) return;
+        items.forEach(function(item) {
+          item.classList.remove('checked');
+          item.setAttribute('aria-checked', 'false');
+        });
+        localStorage.removeItem(STORAGE_KEY);
+        updateProgress();
+      });
+    })();
+
+    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
+  </script>
+</body>
+</html>
