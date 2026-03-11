@@ -679,6 +679,96 @@ code {
   display: block;
 }
 
+/* --- Nested Dropdown (Data Engineering sub-modules) --- */
+.dropdown-nested {
+  position: relative;
+}
+.dropdown-nested > a.has-submenu {
+  display: block;
+  padding: 12px 16px;
+  color: black;
+  text-decoration: none;
+}
+.dropdown-nested > a.has-submenu::after {
+  content: ' \25B8';
+  font-size: 0.7em;
+  opacity: 0.6;
+}
+.dropdown-nested > a.has-submenu:hover {
+  background-color: #ddd;
+}
+.dropdown-nested-content {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background-color: var(--bg-card);
+  min-width: 210px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+.dropdown-nested-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.85rem;
+}
+.dropdown-nested-content a:hover {
+  background-color: #ddd;
+}
+.dropdown-nested:hover .dropdown-nested-content {
+  display: block;
+}
+
+/* --- Breadcrumb Module Dropdown --- */
+.breadcrumb-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.breadcrumb-dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 0;
+}
+.breadcrumb-dropdown-btn:hover {
+  text-decoration: underline;
+}
+.breadcrumb-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 1.4rem;
+  left: 0;
+  background-color: var(--bg-card);
+  min-width: 210px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 10;
+  border-radius: var(--radius-sm);
+}
+.breadcrumb-dropdown-content a {
+  color: var(--text-primary);
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.8rem;
+}
+.breadcrumb-dropdown-content a:hover {
+  background-color: var(--bg-surface);
+  color: var(--accent);
+}
+.breadcrumb-dropdown-content a.current {
+  color: var(--accent);
+  font-weight: 600;
+}
+.breadcrumb-dropdown:hover .breadcrumb-dropdown-content {
+  display: block;
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 768px) {
   .page-wrapper { padding: 1rem 1rem 3rem; }
