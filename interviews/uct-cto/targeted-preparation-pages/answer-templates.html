@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>Concise Answer Templates</title>
+  <link rel="stylesheet" href="../style.css?v=2.3">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <div class="page-wrapper protected-content" id="content" style="display:none;">
+    <div class="header-bar">
+      <span class="brand">CTO Interview Prep</span>
+      <nav aria-label="Main navigation">
+        <a href="../hub.html">Hub</a>
+        <a href="../level1-overview.html">Overview</a>
+        <a href="../level2-technical.html">Technical</a>
+        <a href="../level3-competency.html">Competency</a>
+        <a href="../level4-scenarios.html">Scenarios</a>
+        <div class="dropdown-menu">
+          <button class="dropdown-button">Assessments &#9660;</button>
+          <div class="dropdown-content">
+            <a href="../assessment-scenario-1.html">Scenario 1 (System Design)</a>
+            <a href="../assessment-scenario-2.html">Scenario 2 (Django &amp; SEAT)</a>
+            <a href="../assessment-scenario-3.html">Scenario 3 (Data &amp; MLOps)</a>
+            <a href="../assessment-iot-edge.html">IoT &amp; Edge Computing</a>
+            <div class="dropdown-nested">
+              <a href="../assessment-data-engineering.html" class="has-submenu">Data Engineering</a>
+              <div class="dropdown-nested-content">
+                <a href="../assessment-de-docker.html">Docker &amp; Containers</a>
+                <a href="../assessment-de-wsl.html">WSL &amp; Linux CLI</a>
+                <a href="../assessment-web-servers-python.html">Python Web Servers</a>
+                <a href="../assessment-web-servers-dotnet.html">ASP.NET, Nginx &amp; Apache</a>
+              </div>
+            </div>
+            <a href="../assessment-cto-architecture.html">CTO Architecture</a>
+            <a href="../assessment-tips-strategy.html">Tips &amp; Strategy</a>
+          </div>
+        </div>
+        <div class="dropdown-menu">
+          <button class="dropdown-button" style="color:var(--accent);">Targeted Prep &#9660;</button>
+          <div class="dropdown-content">
+            <a href="index.html">Prep Hub</a>
+            <a href="mock-interview.html">30-Min Mock Interview</a>
+            <a href="answer-templates.html">Answer Templates</a>
+            <a href="revision-sheet.html">Revision Sheet</a>
+          </div>
+        </div>
+        <a href="../guides.html">Guides</a>
+        <a href="../level5-panel.html">Panel</a>
+      </nav>
+    </div>
+
+    <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+      <a href="../hub.html">Hub</a> <span>&rsaquo;</span> <a href="index.html">Targeted Preparation</a> <span>&rsaquo;</span> Answer Templates
+    </div>
+
+    <main id="main-content">
+      <h1 class="fade-in">Concise Answer Templates</h1>
+      <p class="fade-in fade-in-d1">These templates are intentionally compact. They are meant to keep your answers structured, not scripted. Replace the example anchor with your own experience each time.</p>
+
+      <div class="section-card fade-in fade-in-d2">
+        <h2 style="margin-top:0;">1. Simulation vs Optimisation</h2>
+        <p><strong>Template:</strong> “Simulation helps me understand how a system behaves under a set of assumptions. Optimisation helps me search for a better decision under objectives and constraints. In realistic transport or infrastructure systems, I often need both: simulation to evaluate candidate solutions, and optimisation to navigate the search space. In my own work, the closest analogue is [your example], where the challenge was not only building the system, but choosing a defensible approach under constraints.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top:0;">2. Why Agent-Based Modelling</h2>
+        <p><strong>Template:</strong> “I would use an agent-based model when individual actors make different choices and those local choices produce system-level behaviour. It is valuable when aggregate averages hide the real dynamics. The limitation is that calibration and validation become harder, and the data demands can increase quickly. So I would only choose it when heterogeneity actually matters to the decision.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top:0;">3. Handling Messy Data</h2>
+        <p><strong>Template:</strong> “My first move is not modelling. It is a data audit. I check schema stability, missingness patterns, duplicate logic, timestamp integrity, and source consistency. Then I separate repair rules from analytical logic so the pipeline stays auditable. If the data is incomplete, I would make the assumptions explicit and validate the downstream outputs with bounds, spot checks, and stakeholder knowledge rather than pretending the dataset is cleaner than it is.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d4">
+        <h2 style="margin-top:0;">4. When to Use Machine Learning</h2>
+        <p><strong>Template:</strong> “I use machine learning when there is a genuine prediction problem with enough signal and enough data to justify it. I do not use ML as a substitute for clear problem framing. If the core problem is optimisation, policy choice, or system design, I would usually start with a more interpretable modelling approach and add ML only where it clearly improves the workflow.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d4">
+        <h2 style="margin-top:0;">5. Validation Without Perfect Ground Truth</h2>
+        <p><strong>Template:</strong> “When ground truth is limited, validation has to become layered. I would compare against whatever partial observations exist, test whether outputs stay within realistic operating bounds, run sensitivity checks on important assumptions, and review the outputs with domain stakeholders. I would report uncertainty directly instead of hiding it behind a single score.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d5">
+        <h2 style="margin-top:0;">6. Explaining Trade-Offs</h2>
+        <p><strong>Template:</strong> “If user cost, operator cost, and emissions conflict, I would not present one answer as universally optimal. I would present a small set of defensible alternatives, show what each one improves and what it sacrifices, and make the decision criteria explicit. That is a decision-support problem more than a pure prediction problem.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d5">
+        <h2 style="margin-top:0;">7. Designing a Data Pipeline</h2>
+        <p><strong>Template:</strong> “I would design the pipeline around reliability first: clear schema, ingest path, validation layer, storage choice matched to the query pattern, and observability. If the environment is connectivity-constrained, I would add edge buffering and replay capability. If it serves both research and operations, I would separate raw, cleaned, and derived layers so the system remains reproducible.”</p>
+      </div>
+
+      <div class="section-card fade-in fade-in-d5">
+        <h2 style="margin-top:0;">8. Answering Something You Have Not Used Directly</h2>
+        <p><strong>Template:</strong> “I have not used that exact tool directly, but I would approach it by first mapping the problem it solves, the interfaces around it, and the operational constraints. The nearest thing I have worked on is [your example], so I would transfer that reasoning first, then validate the unknown parts quickly with a small proof of concept.”</p>
+      </div>
+
+      <div class="callout tip fade-in fade-in-d5" style="margin-top:1rem;">
+        <div class="callout-title">What to avoid</div>
+        <ul>
+          <li>Do not jump straight into tools without defining the problem.</li>
+          <li>Do not claim certainty where the situation is clearly uncertain.</li>
+          <li>Do not answer in abstract terms only; anchor to one real example.</li>
+          <li>Do not oversell ML if a simpler modelling or systems answer is stronger.</li>
+        </ul>
+      </div>
+
+      <div class="page-footer" style="margin-top:2rem;">
+        <p>Prepared for Paul Namalomba &middot; Targeted Dr. Nnene Prep &middot; Answer Templates</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
+      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('../index.html');return;}
+      document.getElementById('content').style.display='';
+      document.addEventListener('contextmenu',function(e){e.preventDefault();});
+    })();
+  </script>
+</body>
+</html>
