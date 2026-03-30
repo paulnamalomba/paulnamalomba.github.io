@@ -26,29 +26,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) # current dir
 REPO_ROOT = os.path.dirname(SCRIPT_DIR) # the dir parent to scripts dir
 LEARNING_DIR = os.path.join(REPO_ROOT, "learning", "ibm-data-engineering") # where our classes live
 
-# global dictionary to hold course metadata read from metadata.txt files in each course's raw-markdown directory
-COURSE_METADATA = {}  # e.g. {'8': {'number': '8', 'name': 'ETL and Data Pipelines...'}, ...}
-
-def load_all_course_metadata():
-    """Scan raw-markdown/ for course directories containing metadata.txt and load course names."""
-    global COURSE_METADATA
-    raw_md_dir = os.path.join(LEARNING_DIR, "raw-markdown")
-    if not os.path.exists(raw_md_dir):
-        return
-    for entry in sorted(os.listdir(raw_md_dir)):
-        if entry.startswith('course-') and os.path.isdir(os.path.join(raw_md_dir, entry)):
-            meta_path = os.path.join(raw_md_dir, entry, 'metadata.txt')
-            if os.path.exists(meta_path):
-                with open(meta_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                num_match = re.search(r'Course Number:\s*(\d+)', content)
-                name_match = re.search(r'Course Name:\s*(.+)', content)
-                if num_match:
-                    c_num = num_match.group(1)
-                    c_name = name_match.group(1).strip() if name_match else f"Course {c_num}"
-                    COURSE_METADATA[c_num] = {'number': c_num, 'name': c_name}
-    print(f"Loaded metadata for {len(COURSE_METADATA)} course(s): {', '.join(f'Course {k}' for k in sorted(COURSE_METADATA.keys(), key=lambda x: int(x) if x.isdigit() else x))}")
-
 # here is the default HTML template for lectures, with placeholders for dynamic content like title, nav, and body
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -129,8 +106,8 @@ def extract_metadata(filename, md_text):
         'lecture_title': 'Untitled Lecture'
     } # fed in directly from the .md files later
     
-    match_filename = re.search(r'course-(\d+)[/\\]module-(\d+)-lecture-(\d+)', filename.replace('\\', '/')) # regex to match file names
-    if match_filename: # extracts appropriate metadata from the filename, which is expected to be in the format "course-{course_num}/module-{module_num}-lecture-{lecture_num}.md"
+    match_filename = re.search(r'module-(\d+)[\/\\]module-(\d+)-lecture-(\d+)', filename.replace('\\', '/')) # regex to match file names
+    if match_filename: # extracts appropriate metadata from the filename, which is expected to be in the format "module-{course_num}/module-{module_num}-lecture-{lecture_num}.md"
         metadata['course_num'] = match_filename.group(1)
         metadata['module_num'] = match_filename.group(2)
         metadata['lecture_num'] = match_filename.group(3)
@@ -192,11 +169,8 @@ def generate_nav_html(tree, depth, current_c=None, current_m=None, current_l=Non
     
     course_titles = {}
     for c in tree.keys():
-        if c in COURSE_METADATA:
-            course_titles[c] = f"Course {c}: {COURSE_METADATA[c]['name']}"
-        else:
-            path = os.path.join(LEARNING_DIR, f"course-{c}", "index.html")
-            course_titles[c] = get_title_from_html(path, f"Course {c}")
+        path = os.path.join(LEARNING_DIR, f"course-{c}", "index.html")
+        course_titles[c] = get_title_from_html(path, f"Course {c}")
         
     module_titles = {}
     if current_c and current_c in tree:
@@ -446,261 +420,10 @@ def process_markdown_file(md_path, tree):
         f.write(final_output)
         
     print(f" -> Generated: {out_file}")
+    update_module_index(metadata, out_file)
 
-# These functions dynamically generate hub, course, and module index pages from the tree and COURSE_METADATA.
-# They ensure all courses with raw-markdown content get proper navigation pages.
-
-def generate_hub_index(tree):
-    """Generate the hub index.html with dynamic course cards for all courses with content."""
-    hub_path = os.path.join(LEARNING_DIR, "index.html")
-    nav_html = generate_nav_html(tree, depth=0)
-
-    # Build course cards
-    course_cards = ""
-    delay = 3
-    for c in sorted(tree.keys(), key=lambda x: int(x) if x.isdigit() else x):
-        c_meta = COURSE_METADATA.get(c, {})
-        c_name = c_meta.get('name', f'Course {c}')
-        d = min(delay, 5)
-
-        # Build module links for the expandable section
-        module_links = f'          <a href="course-{c}/index.html" class="module-link">Go to Course Dashboard \u203a</a>\n'
-        for m in sorted(tree[c].keys(), key=lambda x: int(x) if x.isdigit() else x):
-            num_lectures = len(tree[c][m])
-            module_links += f'          <a href="course-{c}/module-{m}/index.html" class="module-link">Module {m} ({num_lectures} lecture{"s" if num_lectures != 1 else ""})</a>\n'
-
-        total_lectures = sum(len(tree[c][m]) for m in tree[c])
-        num_modules = len(tree[c])
-        desc = f"{num_modules} module{'s' if num_modules != 1 else ''}, {total_lectures} lecture{'s' if total_lectures != 1 else ''}. {c_name}."
-
-        course_cards += f'''      <div class="hub-card fade-in fade-in-d{d}">
-        <div class="card-level">Course {c}</div>
-        <div class="card-title">{c_name}</div>
-        <div class="card-desc">{desc}</div>
-        \n        <button class="expand-btn" onclick="toggleExpand(this)">Expand to see more</button>
-        <div class="expand-wrapper">
-{module_links}        </div>
-      </div>
-'''
-        delay += 1
-
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IBM Data Engineering Hub</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-{nav_html}
-      </nav>
-    </div>
-
-    <h1 class="fade-in">\U0001f9e0 IBM Data Engineering Courses</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Professional Certificate Learning Pathway<br>
-      <span style="color:var(--text-muted);">Curated modules, lectures, and resources for comprehensive data engineering mastery.</span>
-    </p>
-
-    <h2 class="fade-in fade-in-d2">\U0001f4da Course Path</h2>
-    
-    <div class="hub-grid">
-{course_cards}    </div>
-
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
-    </div>
-  </div>
-
-  <script>
-    function toggleExpand(btn) {{{{
-      const card = btn.closest('.hub-card');
-      card.classList.toggle('expanded');
-      if (card.classList.contains('expanded')) {{{{
-        btn.textContent = 'Show less';
-      }}}} else {{{{
-        btn.textContent = 'Expand to see more';
-      }}}}
-    }}}}
-  </script>
-</body>
-</html>"""
-    with open(hub_path, 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f" -> Generated hub index: {hub_path}")
-
-
-def generate_course_index(tree, course_num):
-    """Generate a course-level index.html with module cards."""
-    course_dir = os.path.join(LEARNING_DIR, f"course-{course_num}")
-    os.makedirs(course_dir, exist_ok=True)
-    index_path = os.path.join(course_dir, "index.html")
-
-    c_meta = COURSE_METADATA.get(course_num, {})
-    c_name = c_meta.get('name', f'Course {course_num}')
-    nav_html = generate_nav_html(tree, depth=1, current_c=course_num)
-
-    # Build module cards
-    module_cards = ""
-    delay = 3
-    for m in sorted(tree[course_num].keys(), key=lambda x: int(x) if x.isdigit() else x):
-        lectures = tree[course_num][m]
-        d = min(delay, 5)
-
-        lecture_links = f'          <a href="module-{m}/index.html" class="module-link">Go to Module Dashboard \u203a</a>\n'
-        for lec in lectures:
-            lecture_links += f'          <a href="module-{m}/{lec["filename"]}" class="module-link">Lecture {lec["num"]}: {lec["title"]}</a>\n'
-
-        first_titles = ', '.join(lec['title'] for lec in lectures[:3])
-        desc = f"{len(lectures)} lecture{'s' if len(lectures) != 1 else ''}: {first_titles}{'...' if len(lectures) > 3 else ''}."
-        if len(desc) > 150: desc = desc[:147] + "..."
-
-        module_cards += f'''\n      <div class="hub-card fade-in fade-in-d{d}">
-        <div class="card-level">Module {m}</div>
-        <div class="card-title">Module {m}</div>
-        <div class="card-desc">{desc}</div>
-        \n        <button class="expand-btn" onclick="toggleExpand(this)">Expand to see more</button>
-        <div class="expand-wrapper">
-{lecture_links}        </div>
-      </div>
-'''
-        delay += 1
-
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Course {course_num}: {c_name}</title>
-  <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-{nav_html}
-      </nav>
-    </div>
-
-    <div class="breadcrumb">
-      <a href="../index.html">Hub</a> <span>&rsaquo;</span> Course {course_num}
-    </div>
-
-    <h1 class="fade-in">\U0001f4d8 Course {course_num}: {c_name}</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Professional Certificate Learning Pathway
-    </p>
-
-    <h2 class="fade-in fade-in-d2">\U0001f4da Course Modules</h2>
-    
-    <div class="hub-grid">
-{module_cards}    </div>
-
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
-    </div>
-  </div>
-
-  <script>
-    function toggleExpand(btn) {{{{
-      const card = btn.closest('.hub-card');
-      card.classList.toggle('expanded');
-      if (card.classList.contains('expanded')) {{{{
-        btn.textContent = 'Show less';
-      }}}} else {{{{
-        btn.textContent = 'Expand to see more';
-      }}}}
-    }}}}
-  </script>
-</body>
-</html>"""
-    with open(index_path, 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f" -> Generated course index: {index_path}")
-
-
-def generate_module_index_page(tree, course_num, module_num):
-    """Generate a module-level index.html with lecture cards."""
-    course_dir = os.path.join(LEARNING_DIR, f"course-{course_num}")
-    module_dir = os.path.join(course_dir, f"module-{module_num}")
-    os.makedirs(module_dir, exist_ok=True)
-    index_path = os.path.join(module_dir, "index.html")
-
-    c_meta = COURSE_METADATA.get(course_num, {})
-    c_name = c_meta.get('name', f'Course {course_num}')
-    nav_html = generate_nav_html(tree, depth=2, current_c=course_num, current_m=module_num)
-
-    lectures = tree[course_num][module_num]
-
-    # Build lecture cards as clickable links
-    lecture_cards = ""
-    delay = 3
-    for lec in lectures:
-        d = min(delay, 5)
-        lecture_cards += f'''\n      <a href="{lec['filename']}" class="hub-card fade-in fade-in-d{d}">
-        <div class="card-level">Lecture {lec['num']}</div>
-        <div class="card-title">{lec['title']}</div>
-        <div class="card-desc">Module {module_num}, Lecture {lec['num']}</div>
-      </a>
-'''
-        delay += 1
-
-    html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module {module_num} &mdash; Course {course_num}: {c_name}</title>
-  <link rel="stylesheet" href="../../style.css">
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-{nav_html}
-      </nav>
-    </div>
-
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course {course_num}</a> <span>&rsaquo;</span> 
-      Module {module_num}
-    </div>
-
-    <h1 class="fade-in">\U0001f4d6 Module {module_num}</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Course {course_num}: {c_name}
-    </p>
-
-    <h2 class="fade-in fade-in-d2">\U0001f4da Lectures</h2>
-    
-    <div class="hub-grid">
-{lecture_cards}    </div>
-
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
-    </div>
-  </div>
-</body>
-</html>"""
-    with open(index_path, 'w', encoding='utf-8') as f:
-        f.write(html)
-    print(f" -> Generated module index: {index_path}")
-
-
-# this method is the executor (orchestrator) that glues everything together. It loads course metadata, searches for all markdown files, builds the tree structure for navigation, processes each markdown file to generate HTML, generates all index pages, and finally updates all index navigation bars.
+# this method is the executor (orchestrator) that glues everything together. It searches for all markdown files, builds the tree structure for navigation, processes each markdown file to generate HTML, and finally updates all index navigation bars to reflect any new lectures that were added.
 def main():
-    # Step 1: load course metadata from metadata.txt files
-    load_all_course_metadata()
-
-    # Step 2: find and build tree from markdown files
     search_pattern = os.path.join(LEARNING_DIR, "raw-markdown", "**", "*.md")
     md_files = glob.glob(search_pattern, recursive=True)
     
@@ -711,19 +434,9 @@ def main():
     print(f"Found {len(md_files)} lectures to compile.")
     tree = build_tree(md_files)
     
-    # Step 3: process each markdown file to generate lecture HTML pages
     for md_path in md_files:
         process_markdown_file(md_path, tree)
-
-    # Step 4: generate all index pages (hub, courses, modules) dynamically from the tree
-    print("Generating index pages...")
-    generate_hub_index(tree)
-    for c in sorted(tree.keys(), key=lambda x: int(x) if x.isdigit() else x):
-        generate_course_index(tree, c)
-        for m in sorted(tree[c].keys(), key=lambda x: int(x) if x.isdigit() else x):
-            generate_module_index_page(tree, c, m)
-
-    # Step 5: update all navigation bars across existing index files to reflect the full tree
+        
     print("Updating Global Index Navigation Bars...")
     update_all_index_navs(tree)
         

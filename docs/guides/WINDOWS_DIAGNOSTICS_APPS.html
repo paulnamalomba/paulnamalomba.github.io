@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Diagnostics Apps - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="windows-application-diagnostics-poweruser-guide">Windows Application Diagnostics PowerUser Guide</h1>
+<p><strong>Last updated</strong>: March 30, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://learn.microsoft.com/en-us/windows/"><img alt="Framework" src="https://img.shields.io/badge/OS-Windows-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>When an application decides to take a collective vow of silence across an entire lab, it is rarely a coincidence. Software is rarely that maliciously organized without an underlying systemic cause—usually a pushed update, an aggressive Endpoint Detection and Response (EDR) policy, or a severed dependency. </p>
+<p>Here is a comprehensive, system-level guide to diagnosing application startup failures on Windows 10 and 11 environments, structured to help you trace the failure from the surface GUI down to the bare-metal system calls.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#windows-application-diagnostics-poweruser-guide">Windows Application Diagnostics PowerUser Guide</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#phase-1-graphical-user-interface-gui-methods">Phase 1: Graphical User Interface (GUI) Methods</a><ul>
+<li><a href="#1-the-event-viewer-eventvwrmsc">1. The Event Viewer (<code>eventvwr.msc</code>)</a></li>
+<li><a href="#2-reliability-monitor-perfmon-rel">2. Reliability Monitor (<code>perfmon /rel</code>)</a></li>
+</ul>
+</li>
+<li><a href="#phase-2-command-line-methods-powershell--cmd">Phase 2: Command-Line Methods (PowerShell \&amp; CMD)</a><ul>
+<li><a href="#1-powershell-versions-51-and-75">1. PowerShell (Versions 5.1 and 7.5+)</a></li>
+<li><a href="#2-command-prompt-cmd">2. Command Prompt (CMD)</a></li>
+</ul>
+</li>
+<li><a href="#phase-3-system-level-diagnostics">Phase 3: System-Level Diagnostics</a><ul>
+<li><a href="#1-sysinternals-process-monitor-procmon">1. Sysinternals Process Monitor (Procmon)</a></li>
+<li><a href="#2-advanced-checking-for-silent-edrantivirus-kills">2. Advanced: Checking for Silent EDR/Antivirus Kills</a></li>
+<li><a href="#3-dependency-walking">3. Dependency Walking</a></li>
+</ul>
+</li>
+<li><a href="#lab-wide-outages">Lab-Wide Outages</a></li>
+</ul>
+<hr />
+<h2 id="phase-1-graphical-user-interface-gui-methods">Phase 1: Graphical User Interface (GUI) Methods</h2>
+<p>For quick, visual correlation of failures, the built-in Windows diagnostic GUIs are the first port of call.</p>
+<h3 id="1-the-event-viewer-eventvwrmsc">1. The Event Viewer (<code>eventvwr.msc</code>)</h3>
+<p>The Event Viewer remains the canonical source for application crashes. When an app fails to initialize, the Windows Error Reporting (WER) subsystem usually catches the exception.</p>
+<ul>
+<li><strong>Execution:</strong> Press <code>Win + R</code>, type <code>eventvwr.msc</code>, and hit Enter.</li>
+<li><strong>Target Logs:</strong> Navigate to <strong>Windows Logs</strong> &gt; <strong>Application</strong>.</li>
+<li><strong>What to Look For:</strong> Filter the log for <strong>Errors</strong> (Red 'X') and look for the following Event IDs:<ul>
+<li><code>Event ID 1000</code>: Application Error (The crash itself. Look at the "Faulting module name" to see if a specific <code>.dll</code> is causing the crash).</li>
+<li><code>Event ID 1001</code>: Windows Error Reporting (WER bucket data).</li>
+<li><code>Event ID 1026</code>: .NET Runtime Error (Crucial if the application is built on the .NET framework).</li>
+</ul>
+</li>
+<li><strong>Systemic Check:</strong> Check <strong>Windows Logs</strong> &gt; <strong>System</strong> for unexpected service terminations or disk/network errors that might be starving the application of resources.</li>
+</ul>
+<h3 id="2-reliability-monitor-perfmon-rel">2. Reliability Monitor (<code>perfmon /rel</code>)</h3>
+<p>Reliability Monitor aggregates Event Viewer data into a timeline. This is invaluable for lab environments to determine <em>when</em> the synchronized failure began and what system changes correlated with it.</p>
+<ul>
+<li><strong>Execution:</strong> Press <code>Win + R</code>, type <code>perfmon /rel</code>, and hit Enter.</li>
+<li><strong>Analysis:</strong> Look for the day the application started failing. Check the lower pane for "Information events" on that exact day—specifically, recent Windows Updates, driver installations, or background software deployments that might have introduced a conflict.</li>
+</ul>
+<hr />
+<h2 id="phase-2-command-line-methods-powershell-cmd">Phase 2: Command-Line Methods (PowerShell &amp; CMD)</h2>
+<p>For querying multiple lab machines remotely or scripting the diagnostic process, command-line tools are vastly superior to clicking through the Event Viewer.</p>
+<h3 id="1-powershell-versions-51-and-75">1. PowerShell (Versions 5.1 and 7.5+)</h3>
+<p>The modern standard for event log querying in PowerShell is <code>Get-WinEvent</code>. It is significantly faster than the legacy <code>Get-EventLog</code> because it filters at the log-source level rather than retrieving everything and piping it to <code>Where-Object</code>. <code>Get-WinEvent</code> functions identically across both Windows PowerShell 5.1 and PowerShell Core 7.5+.</p>
+<p><strong>To find the last 10 Application crash events:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">&#39;Application&#39;</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">&#39;Application Error&#39;</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">10</span> <span class="p">|</span> 
+<span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+
+<p><strong>To search for .NET specific crashes:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">&#39;Application&#39;</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">&#39;.NET Runtime&#39;</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">5</span> <span class="p">|</span> 
+<span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+
+<p><strong>To check if an AppLocker or Group Policy is silently killing the app:</strong>
+If your lab uses strict execution policies, the app might be getting blocked before it even has a chance to crash.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s2">&quot;Microsoft-Windows-AppLocker/EXE and DLL&quot;</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">LevelDisplayName</span> <span class="o">-eq</span> <span class="s2">&quot;Error&quot;</span><span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2-command-prompt-cmd">2. Command Prompt (CMD)</h3>
+<p>If PowerShell is restricted or unavailable, <code>wevtutil</code> (Windows Events Command Line Utility) is the native executable for querying logs. </p>
+<p><strong>To retrieve the last 5 Application errors in text format:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">wevtutil</span><span class="w"> </span><span class="n">qe</span><span class="w"> </span><span class="n">Application</span><span class="w"> </span><span class="o">/</span><span class="nl">c</span><span class="p">:</span><span class="mi">5</span><span class="w"> </span><span class="o">/</span><span class="nl">f</span><span class="p">:</span><span class="nc">text</span><span class="w"> </span><span class="o">/</span><span class="nl">q</span><span class="p">:</span><span class="ss">&quot;*[System[(Level=2)]] and *[System[Provider[@Name=&#39;Application Error&#39;]]]&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="phase-3-system-level-diagnostics">Phase 3: System-Level Diagnostics</h2>
+<p>When the Event Logs offer nothing but an unhelpful <code>0xc0000005</code> (Access Violation) or are entirely empty, the application is likely dying during early initialization before it can write to the OS logs. This requires bringing out the heavy telemetry.</p>
+<h3 id="1-sysinternals-process-monitor-procmon">1. Sysinternals Process Monitor (Procmon)</h3>
+<p>Process Monitor captures real-time file system, Registry, and process/thread activity. It is the definitive tool for answering "What exactly was this application doing the millisecond before it died?"</p>
+<ul>
+<li><strong>Setup:</strong> Download Procmon from Microsoft Sysinternals. Run as Administrator.</li>
+<li><strong>Filtering (Crucial):</strong> Procmon captures tens of thousands of events per second. You must filter it immediately.<ul>
+<li>Go to <strong>Filter</strong> &gt; <strong>Filter...</strong></li>
+<li>Set the condition: <code>Process Name</code> <code>is</code> <code>[YourApp.exe]</code> then click <strong>Include</strong>.</li>
+<li><em>Pro-Tip:</em> To save memory during debugging, go to <strong>Filter</strong> and check <strong>Drop Filtered Events</strong>.</li>
+</ul>
+</li>
+<li><strong>Analysis Strategy:</strong> * Start the capture. Attempt to launch the app. Stop the capture immediately after it fails.<ul>
+<li>Look through the <code>Result</code> column. You are hunting for <code>ACCESS DENIED</code> (permissions issue), <code>NAME NOT FOUND</code> (missing DLLs, config files, or paths), or <code>FILE LOCKED WITH ONLY READERS</code>. </li>
+<li>In a lab environment, if the app relies on a mapped network drive or a central configuration file, Procmon will instantly highlight the failed UNC path request.</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-advanced-checking-for-silent-edrantivirus-kills">2. Advanced: Checking for Silent EDR/Antivirus Kills</h3>
+<p>Modern EDRs (CrowdStrike, SentinelOne, Microsoft Defender for Endpoint) often kill processes they deem suspicious without notifying the user, and sometimes without writing to the standard Application log.</p>
+<ul>
+<li>Check the specific logs for your EDR solution.</li>
+<li>For Windows Defender, use PowerShell:
+    <code>powershell
+    Get-MpThreatDetection</code>
+    Or check the Event Viewer under: <strong>Applications and Services Logs</strong> &gt; <strong>Microsoft</strong> &gt; <strong>Windows</strong> &gt; <strong>Windows Defender</strong> &gt; <strong>Operational</strong>. Look for Event ID <code>1116</code> (Malware detected) or <code>1117</code> (Action taken).</li>
+</ul>
+<h3 id="3-dependency-walking">3. Dependency Walking</h3>
+<p>If the application relies on specific runtime libraries (C++ Redistributables, specific .NET framework versions) that were accidentally uninstalled or corrupted via a lab-wide script, it will fail silently. Tools like <a href="https://github.com/lucasg/Dependencies">Dependencies</a> (a modern rewrite of the classic Dependency Walker) can be pointed at the <code>.exe</code> to highlight missing <code>.dll</code> files in red.</p>
+<hr />
+<h2 id="lab-wide-outages">Lab-Wide Outages</h2>
+<p>Because this is happening on <em>every</em> computer simultaneously, you can safely deprioritize local corruption (like a bad sector on a hard drive) and focus your initial diagnostic time on shared variables. The most frequent culprits for synchronous lab failures are:
+1.  <strong>Network/Licensing:</strong> The application requires a handshake with a local license server that is currently down or unreachable due to a VLAN change.
+2.  <strong>Shared Resources:</strong> The app reads its initial configuration from a network share (<code>\\lab-server\app-configs\</code>) that has had its permissions altered.
+3.  <strong>Group Policy Updates:</strong> A newly pushed GPO has restricted execution policies or revoked read access to a vital registry key. </p>
+<p>Would you like me to provide a script that can remotely pull and aggregate these specific event logs from a list of the lab computers to pinpoint exactly when the failures began across the network?</p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
