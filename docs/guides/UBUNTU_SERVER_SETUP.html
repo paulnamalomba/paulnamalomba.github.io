@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ubuntu Server Setup - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo"><a href="/">Paul Namalomba</a></div>
+            <ul class="nav-links">
+                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                <li><a href="/docs/guides/">Tech Guides</a></li>
+                <li><a href="/docs/system-scripts/">System Scripts</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="container docs-container">
+    <div class="card docs-card">
+        <div class="docs-breadcrumb">
+            <a href="index.html">← Back to Guides</a>
+            <span>|</span>
+            <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content"><h1 id="ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh">Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH</h1>
+<p><br>
+<strong>Last updated</strong>: April 05, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
+  - SESKA Computational Engineer<br>
+  - SEAT Backend Developer<br>
+  - Software Developer<br>
+  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br>
+<a href="https://ubuntu.com/server"><img alt="OS" src="https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420.svg" /></a>
+<a href="https://ubuntu.com/download/server"><img alt="Form Factor" src="https://img.shields.io/badge/Deployment-Bare_Metal-gray.svg" /></a>
+<a href="https://www.openssh.com/"><img alt="Remote Access" src="https://img.shields.io/badge/Remote-OpenSSH-green.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>This guide covers a production-minded installation of Ubuntu Server 24.04 LTS onto a physical machine with a 128 GB SSD, 16 GB RAM, Intel Core i7 9th Gen CPU, and an NVIDIA RTX 1650 GPU. The specific deployment objective is to erase and repurpose the SSD for Ubuntu Server while preserving data that already exists on the HDD for later use, including the possibility of reinstalling Windows in the future without destroying the HDD contents.</p>
+<p>The emphasis is not only on getting the machine to boot, but on getting the platform correct: UEFI/GPT layout, bootloader placement on the SSD only, predictable networking, inbound and outbound SSH configuration, initial OS hardening, package hygiene, data-preserving mount strategies, and common failure cases seen during bare-metal installs.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh">Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a><ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#recommended-deployment-order">Recommended Deployment Order</a></li>
+</ul>
+</li>
+<li><a href="#key-concepts">Key Concepts</a><ul>
+<li><a href="#storage-strategy-for-this-machine">Storage Strategy for This Machine</a></li>
+<li><a href="#uefi-gpt-and-bootloader-placement">UEFI, GPT, and Bootloader Placement</a></li>
+<li><a href="#networking-model-on-ubuntu-server-2404">Networking Model on Ubuntu Server 24.04</a></li>
+<li><a href="#ssh-reception-vs-ssh-emission">SSH Reception vs SSH Emission</a></li>
+<li><a href="#nvidia-considerations-on-a-headless-server">NVIDIA Considerations on a Headless Server</a></li>
+</ul>
+</li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a><ul>
+<li><a href="#1-pre-install-safety-and-data-preservation">1. Pre-Install Safety and Data Preservation</a></li>
+<li><a href="#2-biosuefi-firmware-preparation">2. BIOS/UEFI Firmware Preparation</a></li>
+<li><a href="#3-build-the-ubuntu-server-installer-usb">3. Build the Ubuntu Server Installer USB</a></li>
+<li><a href="#4-identify-the-correct-ssd-and-protect-the-hdd">4. Identify the Correct SSD and Protect the HDD</a></li>
+<li><a href="#5-install-ubuntu-server-onto-the-ssd-only">5. Install Ubuntu Server onto the SSD Only</a></li>
+<li><a href="#6-first-boot-os-baseline">6. First Boot OS Baseline</a></li>
+<li><a href="#7-networking-setup-with-netplan">7. Networking Setup with Netplan</a></li>
+<li><a href="#dhcp-with-router-reservation">DHCP with Router Reservation</a></li>
+<li><a href="#static-address-in-netplan">Static Address in Netplan</a></li>
+<li><a href="#8-ssh-server-setup-and-hardening">8. SSH Server Setup and Hardening</a></li>
+<li><a href="#9-ssh-client-setup-for-outbound-connections">9. SSH Client Setup for Outbound Connections</a></li>
+<li><a href="#10-access-the-preserved-hdd-safely-after-install">10. Access the Preserved HDD Safely After Install</a></li>
+<li><a href="#11-optional-nvidia-driver-and-cuda-preparation">11. Optional NVIDIA Driver and CUDA Preparation</a></li>
+</ul>
+</li>
+<li><a href="#security-considerations">Security Considerations</a><ul>
+<li><a href="#physical-and-firmware-security">Physical and Firmware Security</a></li>
+<li><a href="#os-and-service-hardening">OS and Service Hardening</a></li>
+<li><a href="#network-exposure-strategy">Network Exposure Strategy</a></li>
+</ul>
+</li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#example-1-disk-inventory-before-installation">Example 1: Disk Inventory Before Installation</a></li>
+<li><a href="#example-2-static-netplan-configuration">Example 2: Static Netplan Configuration</a></li>
+<li><a href="#example-3-ssh-hardening-drop-in">Example 3: SSH Hardening Drop-In</a></li>
+<li><a href="#example-4-mount-the-preserved-hdd-read-only-first">Example 4: Mount the Preserved HDD Read-Only First</a></li>
+<li><a href="#example-5-install-nvidia-drivers-on-a-headless-server">Example 5: Install NVIDIA Drivers on a Headless Server</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a><ul>
+<li><a href="#installer-and-boot-problems">Installer and Boot Problems</a></li>
+<li><a href="#problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd">Problem: The installer sees both disks and you are not sure which one is the SSD</a></li>
+<li><a href="#problem-ubuntu-installs-but-the-system-only-boots-when-the-hdd-is-attached">Problem: Ubuntu installs, but the system only boots when the HDD is attached</a></li>
+<li><a href="#problem-firmware-says-no-bootable-device-after-installation">Problem: Firmware says no bootable device after installation</a></li>
+<li><a href="#networking-problems">Networking Problems</a></li>
+<li><a href="#problem-network-is-down-after-editing-netplan">Problem: Network is down after editing Netplan</a></li>
+<li><a href="#problem-the-host-can-ping-ips-but-not-domain-names">Problem: The host can ping IPs but not domain names</a></li>
+<li><a href="#problem-link-is-unstable-or-slow">Problem: Link is unstable or slow</a></li>
+<li><a href="#ssh-problems">SSH Problems</a></li>
+<li><a href="#problem-connection-refused-on-port-22">Problem: Connection refused on port 22</a></li>
+<li><a href="#problem-permission-denied-publickey">Problem: Permission denied (publickey)</a></li>
+<li><a href="#problem-you-locked-yourself-out-after-hardening-ssh">Problem: You locked yourself out after hardening SSH</a></li>
+<li><a href="#disk-and-filesystem-problems">Disk and Filesystem Problems</a></li>
+<li><a href="#problem-preserved-ntfs-partition-will-not-mount-read-write">Problem: Preserved NTFS partition will not mount read-write</a></li>
+<li><a href="#problem-hdd-auto-mount-breaks-boot">Problem: HDD auto-mount breaks boot</a></li>
+<li><a href="#problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd">Problem: Root filesystem is unexpectedly full on a 128 GB SSD</a></li>
+<li><a href="#nvidia-and-secure-boot-problems">NVIDIA and Secure Boot Problems</a></li>
+<li><a href="#problem-driver-installed-but-nvidia-smi-fails">Problem: Driver installed but <code>nvidia-smi</code> fails</a></li>
+<li><a href="#problem-black-screen-or-unstable-console-after-gpu-driver-changes">Problem: Black screen or unstable console after GPU driver changes</a></li>
+</ul>
+</li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a><ul>
+<li><a href="#storage-and-ssd-hygiene">Storage and SSD Hygiene</a></li>
+<li><a href="#memory-swap-and-logging">Memory, Swap, and Logging</a></li>
+<li><a href="#network-stability-and-throughput">Network Stability and Throughput</a></li>
+</ul>
+</li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Ubuntu Server 24.04 LTS ISO downloaded from Canonical</li>
+<li>One USB flash drive of at least 4 GB for the installer</li>
+<li>Physical access to the machine, keyboard, monitor, and BIOS/UEFI settings</li>
+<li>A verified backup of anything on the SSD that must not be lost</li>
+<li>A clear understanding that the SSD will be erased for Ubuntu Server</li>
+<li>Basic router/switch access if you want a DHCP reservation or a known static IP</li>
+<li>Ethernet connection strongly preferred for the initial deployment</li>
+</ul>
+<h3 id="recommended-deployment-order">Recommended Deployment Order</h3>
+<ol>
+<li>Back up anything needed from the SSD.</li>
+<li>Record the exact SSD and HDD model/size so you do not format the wrong device.</li>
+<li>In firmware, boot in pure UEFI mode and prefer AHCI for SATA storage.</li>
+<li>Boot the Ubuntu Server installer USB.</li>
+<li>Use a custom storage layout and touch only the SSD.</li>
+<li>Create a dedicated EFI System Partition on the SSD so the machine boots independently of the HDD.</li>
+<li>Install OpenSSH during setup or immediately after first boot.</li>
+<li>Update the OS, configure networking properly, and harden SSH before exposing the host beyond the local network.</li>
+<li>Mount the preserved HDD read-only first, inspect it, then decide whether to mount it permanently.</li>
+</ol>
+<hr />
+<h2 id="key-concepts">Key Concepts</h2>
+<h3 id="storage-strategy-for-this-machine">Storage Strategy for This Machine</h3>
+<p>Your machine has a relatively small SSD by server standards, so the correct design is to keep the operating system, packages, logs, and active services on the SSD while leaving the HDD untouched until you explicitly decide how to use it later.</p>
+<p>For this specific scenario, the most defensible approach is:</p>
+<ul>
+<li>SSD: fully dedicated to Ubuntu Server 24.04 LTS</li>
+<li>HDD: preserved during installation, not formatted, not reused by the installer, and mounted manually only after the new server is stable</li>
+</ul>
+<p>This keeps the operating system clean and makes it possible to reintroduce Windows later without having destroyed the HDD contents.</p>
+<h3 id="uefi-gpt-and-bootloader-placement">UEFI, GPT, and Bootloader Placement</h3>
+<p>On modern hardware, Ubuntu Server should be installed in UEFI mode using a GPT partition table.</p>
+<p>The critical operational detail is this: do not let the installer place the bootloader or reuse an EFI partition on the HDD unless that is explicitly intended. If the SSD is the Ubuntu OS disk, it should also contain:</p>
+<ul>
+<li>a GPT label</li>
+<li>an EFI System Partition (ESP), typically 512 MB to 1 GB, FAT32</li>
+<li>the root filesystem on the remaining space</li>
+</ul>
+<p>That way, the machine can boot from the SSD even if the HDD is removed or later repurposed.</p>
+<h3 id="networking-model-on-ubuntu-server-2404">Networking Model on Ubuntu Server 24.04</h3>
+<p>Ubuntu Server 24.04 uses Netplan as the declarative network configuration layer. On server installs, the backend renderer is commonly <code>systemd-networkd</code>.</p>
+<p>This means network configuration is usually managed in YAML files under:</p>
+<div class="codehilite"><pre><span></span><code>/etc/netplan/
+</code></pre></div>
+
+<p>Typical patterns are:</p>
+<ul>
+<li>DHCP for initial install or lab environments</li>
+<li>DHCP reservation on the router for stable addressing with minimal host complexity</li>
+<li>Static addressing in Netplan for infrastructure roles where the IP must be explicit and self-contained</li>
+</ul>
+<h3 id="ssh-reception-vs-ssh-emission">SSH Reception vs SSH Emission</h3>
+<p>The machine plays two separate SSH roles:</p>
+<ul>
+<li>SSH reception: the server accepts inbound SSH sessions from your laptop/workstation or another management node</li>
+<li>SSH emission: the server itself initiates outbound SSH connections to Git servers, backup targets, HPC nodes, or other Linux machines</li>
+</ul>
+<p>These two roles have different requirements:</p>
+<ul>
+<li>Inbound SSH requires <code>openssh-server</code>, firewall allowance, and hardened <code>sshd</code> policy</li>
+<li>Outbound SSH requires <code>openssh-client</code>, proper key management, sane <code>~/.ssh/config</code>, and controlled trust of remote host keys</li>
+</ul>
+<h3 id="nvidia-considerations-on-a-headless-server">NVIDIA Considerations on a Headless Server</h3>
+<p>An RTX 1650 is not required for a normal server install. If you only need a stable headless server, do not install NVIDIA proprietary drivers on day one unless you actually need CUDA, GPU compute, transcoding, or model inference.</p>
+<p>Reasons to delay NVIDIA driver installation:</p>
+<ul>
+<li>it introduces kernel module complexity</li>
+<li>Secure Boot can block unsigned module loading</li>
+<li>remote-only machines become harder to recover if driver changes break boot or TTY output</li>
+</ul>
+<p>If GPU functionality is required later, install and validate it after the base server is already remotely manageable.</p>
+<hr />
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<h3 id="1-pre-install-safety-and-data-preservation">1. Pre-Install Safety and Data Preservation</h3>
+<p>Before booting the installer, decide what is allowed to be destroyed.</p>
+<p>For your stated requirement, the policy is:</p>
+<ul>
+<li>SSD: may be fully erased and rebuilt for Ubuntu Server</li>
+<li>HDD: must be preserved exactly as-is</li>
+</ul>
+<p>Operational best practices:</p>
+<ul>
+<li>If possible, physically disconnect the HDD during installation. This is the safest option by a wide margin.</li>
+<li>If you cannot disconnect it, write down the SSD and HDD model names and capacities exactly before starting.</li>
+<li>Photograph the BIOS storage page or record serial/model information.</li>
+<li>Do not trust <code>/dev/sda</code> vs <code>/dev/sdb</code> ordering across boots; Linux device names can change.</li>
+<li>Prefer identifying disks by model, serial, and persistent path under <code>/dev/disk/by-id/</code>.</li>
+</ul>
+<p>If the current machine boots Windows from the SSD and also has Ubuntu-related data on the HDD, that is acceptable. The SSD can be repurposed while preserving the HDD. The installer must be prevented from reusing the HDD EFI partition or overwriting its partition table.</p>
+<h3 id="2-biosuefi-firmware-preparation">2. BIOS/UEFI Firmware Preparation</h3>
+<p>Before installation, enter firmware setup and verify the following:</p>
+<ul>
+<li>Boot mode: <code>UEFI</code> only, not Legacy/CSM if avoidable</li>
+<li>SATA mode: <code>AHCI</code> preferred unless storage is intentionally configured as RAID</li>
+<li>Secure Boot: enabled or disabled according to your driver plan</li>
+<li>Boot order: USB installer first for deployment, SSD first after installation</li>
+<li>Fast Boot: preferably disabled during installation and early testing</li>
+</ul>
+<p>Recommended policy decisions:</p>
+<ul>
+<li>If you do not need NVIDIA proprietary drivers immediately, leaving Secure Boot enabled is reasonable.</li>
+<li>If you know you will install proprietary NVIDIA drivers very early and do not want to handle MOK enrollment, disabling Secure Boot may simplify operations.</li>
+<li>If the firmware exposes both the SSD and HDD as boot candidates, ensure the SSD becomes the permanent boot target after install.</li>
+</ul>
+<p>Update firmware if the vendor provides a stable BIOS update that improves storage or UEFI behavior, but do not combine a BIOS flash and an OS install in the same maintenance window unless necessary.</p>
+<h3 id="3-build-the-ubuntu-server-installer-usb">3. Build the Ubuntu Server Installer USB</h3>
+<p>On Windows, use a reliable tool such as Rufus or balenaEtcher.</p>
+<p>Recommended settings for Rufus:</p>
+<ul>
+<li>Boot selection: Ubuntu Server 24.04 LTS ISO</li>
+<li>Partition scheme: <code>GPT</code></li>
+<li>Target system: <code>UEFI (non CSM)</code></li>
+<li>Filesystem: default chosen by Rufus</li>
+<li>Write mode: ISO mode is usually fine unless the ISO specifically requires DD mode</li>
+</ul>
+<p>Checksum verification is worth doing for production-minded installs. On Windows PowerShell:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-FileHash</span> <span class="p">.\</span><span class="n">ubuntu</span><span class="p">-</span><span class="n">24</span><span class="p">.</span><span class="n">04-live-server-amd64</span><span class="p">.</span><span class="n">iso</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>
+</code></pre></div>
+
+<p>Compare the SHA256 output against the checksum published by Canonical.</p>
+<h3 id="4-identify-the-correct-ssd-and-protect-the-hdd">4. Identify the Correct SSD and Protect the HDD</h3>
+<p>From the installer shell or a live environment, inventory disks before touching storage.</p>
+<p>Useful commands:</p>
+<div class="codehilite"><pre><span></span><code>lsblk<span class="w"> </span>-e7<span class="w"> </span>-o<span class="w"> </span>NAME,SIZE,TYPE,FSTYPE,MODEL,SERIAL,MOUNTPOINT
+sudo<span class="w"> </span>blkid
+sudo<span class="w"> </span>fdisk<span class="w"> </span>-l
+ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
+</code></pre></div>
+
+<p>For NVMe SSDs:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvme-cli
+sudo<span class="w"> </span>nvme<span class="w"> </span>list
+</code></pre></div>
+
+<p>For SATA health and identity checks:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>smartmontools
+sudo<span class="w"> </span>smartctl<span class="w"> </span>-i<span class="w"> </span>/dev/sda
+</code></pre></div>
+
+<p>What you are looking for:</p>
+<ul>
+<li>The 128 GB SSD by model and capacity</li>
+<li>The larger HDD by model and capacity</li>
+<li>Existing filesystems and partitions on the HDD that must remain intact</li>
+</ul>
+<p>If the installer UI shows multiple disks and you are not 100% certain which one is the SSD, stop and re-identify the hardware before proceeding.</p>
+<h3 id="5-install-ubuntu-server-onto-the-ssd-only">5. Install Ubuntu Server onto the SSD Only</h3>
+<p>The Ubuntu Server ISO uses the Subiquity installer. During storage configuration, choose the path that gives you full control over the SSD.</p>
+<p>Recommended installation flow:</p>
+<ol>
+<li>Boot the installer in UEFI mode.</li>
+<li>Configure language, keyboard, and temporary network settings.</li>
+<li>When storage configuration appears, do not accept a guided layout if it includes or references the HDD.</li>
+<li>Use a custom storage layout.</li>
+<li>Select only the SSD.</li>
+<li>Delete all partitions on the SSD if the SSD is being fully repurposed.</li>
+<li>Create a new GPT partition table on the SSD.</li>
+<li>Create a new EFI System Partition on the SSD.</li>
+<li>Create the root filesystem on the remaining SSD capacity.</li>
+<li>Leave the HDD entirely untouched.</li>
+</ol>
+<p>Recommended SSD layout for this machine:</p>
+<table>
+<thead>
+<tr>
+<th>Mount point</th>
+<th style="text-align: right;">Size</th>
+<th>Filesystem</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/boot/efi</code></td>
+<td style="text-align: right;">512 MB to 1 GB</td>
+<td>FAT32</td>
+<td>Must be flagged as EFI System Partition</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td style="text-align: right;">Remainder of SSD</td>
+<td>ext4 or LVM-backed ext4</td>
+<td>Root filesystem for OS and packages</td>
+</tr>
+<tr>
+<td>swap</td>
+<td style="text-align: right;">swapfile preferred</td>
+<td>swapfile</td>
+<td>With 16 GB RAM, a swap partition is usually unnecessary</td>
+</tr>
+</tbody>
+</table>
+<p>Practical recommendation:</p>
+<ul>
+<li>Use ext4 on the root filesystem unless you have a strong reason for ZFS.</li>
+<li>Use LVM only if you value future resizing and snapshot flexibility enough to justify the added abstraction.</li>
+<li>For a small single-disk server, plain ext4 on the root partition is simpler and easier to recover.</li>
+</ul>
+<p>Important installer cautions:</p>
+<ul>
+<li>If the installer tries to reuse an existing EFI partition on the HDD, do not accept it.</li>
+<li>If you see a proposed boot device that points to the HDD, correct it.</li>
+<li>If the SSD is NVMe, expect names like <code>/dev/nvme0n1p1</code>; if SATA, expect <code>/dev/sda1</code> style names.</li>
+<li>If the installer presents a checkbox to install OpenSSH, enable it.</li>
+</ul>
+<p>User creation guidance:</p>
+<ul>
+<li>Create a named administrative user rather than relying on <code>root</code>.</li>
+<li>Use a strong password even if you intend to disable password SSH later.</li>
+<li>If you already have a trusted SSH public key, you can import it during setup, but only do this if you control the source and understand what keys are being imported.</li>
+</ul>
+<h3 id="6-first-boot-os-baseline">6. First Boot OS Baseline</h3>
+<p>After the first successful boot, establish a clean baseline before doing workload-specific changes.</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>full-upgrade<span class="w"> </span>-y
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>openssh-server<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>openssh-client<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ufw<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>curl<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>wget<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>vim<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>tmux<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>htop<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>btop<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ethtool<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>lsof<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>net-tools<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>dnsutils<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>smartmontools<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>nvme-cli<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>unattended-upgrades<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>fail2ban<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>acl
+</code></pre></div>
+
+<p>Set core identity and time settings:</p>
+<div class="codehilite"><pre><span></span><code>hostnamectl
+sudo<span class="w"> </span>hostnamectl<span class="w"> </span>set-hostname<span class="w"> </span>server01
+timedatectl
+sudo<span class="w"> </span>timedatectl<span class="w"> </span>set-timezone<span class="w"> </span>Africa/Johannesburg
+locale
+</code></pre></div>
+
+<p>Verify time synchronization:</p>
+<div class="codehilite"><pre><span></span><code>timedatectl<span class="w"> </span>status
+systemctl<span class="w"> </span>status<span class="w"> </span>systemd-timesyncd
+</code></pre></div>
+
+<p>Enable automatic security updates:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>dpkg-reconfigure<span class="w"> </span>-plow<span class="w"> </span>unattended-upgrades
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>unattended-upgrades
+</code></pre></div>
+
+<p>Useful baseline verification:</p>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-a
+lsblk
+findmnt<span class="w"> </span>/
+df<span class="w"> </span>-h
+free<span class="w"> </span>-h
+systemctl<span class="w"> </span>--failed
+journalctl<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span><span class="w"> </span>-xb
+</code></pre></div>
+
+<h3 id="7-networking-setup-with-netplan">7. Networking Setup with Netplan</h3>
+<p>Use Ethernet for the initial build unless you have a compelling reason to run a headless server over Wi-Fi.</p>
+<p>First, identify the real interface names:</p>
+<div class="codehilite"><pre><span></span><code>ip<span class="w"> </span>-br<span class="w"> </span>link
+networkctl<span class="w"> </span>list
+lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;Ethernet|Network&#39;</span>
+</code></pre></div>
+
+<p>On Ubuntu Server 24.04, you will typically find a Netplan file such as:</p>
+<div class="codehilite"><pre><span></span><code>/etc/netplan/50-cloud-init.yaml
+</code></pre></div>
+
+<p>or</p>
+<div class="codehilite"><pre><span></span><code>/etc/netplan/00-installer-config.yaml
+</code></pre></div>
+
+<p>Choose one of the following strategies.</p>
+<h4 id="dhcp-with-router-reservation">DHCP with Router Reservation</h4>
+<p>This is often the best operational compromise for a home lab or small office server.</p>
+<ul>
+<li>Keep the Ubuntu host on DHCP.</li>
+<li>Reserve a fixed address in the router using the NIC MAC address.</li>
+<li>The server stays simple while still getting a stable IP.</li>
+</ul>
+<h4 id="static-address-in-netplan">Static Address in Netplan</h4>
+<p>Use this when the machine is infrastructure and its IP must remain defined at the host layer.</p>
+<p>Example structure:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">network</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">renderer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networkd</span>
+<span class="w">  </span><span class="nt">ethernets</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enp3s0</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">addresses</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.50/24</span>
+<span class="w">      </span><span class="nt">routes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">          </span><span class="nt">via</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+<span class="w">      </span><span class="nt">nameservers</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">addresses</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1.1.1</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.8.8.8</span>
+<span class="w">        </span><span class="nt">search</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lan</span>
+</code></pre></div>
+
+<p>Validation workflow:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>generate
+sudo<span class="w"> </span>netplan<span class="w"> </span>try
+sudo<span class="w"> </span>netplan<span class="w"> </span>apply
+ip<span class="w"> </span>addr<span class="w"> </span>show
+ip<span class="w"> </span>route
+resolvectl<span class="w"> </span>status
+ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1</span>.1.1.1
+ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>google.com
+</code></pre></div>
+
+<p>Netplan best practices:</p>
+<ul>
+<li>Use spaces, not tabs, in YAML.</li>
+<li>Prefer <code>routes:</code> over deprecated <code>gateway4:</code> syntax.</li>
+<li>Keep one interface definition active until connectivity is confirmed.</li>
+<li>Use <code>netplan try</code> before <code>netplan apply</code> when working remotely.</li>
+<li>If remote, keep a second active terminal session open before changing networking.</li>
+</ul>
+<p>If you have multiple interfaces, bind configuration to the intended NIC carefully. Interface names such as <code>enp3s0</code>, <code>eno1</code>, or <code>enx&lt;mac&gt;</code> are not interchangeable.</p>
+<h3 id="8-ssh-server-setup-and-hardening">8. SSH Server Setup and Hardening</h3>
+<p>Inbound SSH is how the machine becomes operationally useful.</p>
+<p>Install and enable the server if it was not selected during setup:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-server
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>ssh
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
+sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+</code></pre></div>
+
+<p>Allow SSH through the firewall:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>OpenSSH
+sudo<span class="w"> </span>ufw<span class="w"> </span><span class="nb">enable</span>
+sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+</code></pre></div>
+
+<p>Create a modern keypair on the client machine that will connect to this server:</p>
+<div class="codehilite"><pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;admin@server01&quot;</span>
+</code></pre></div>
+
+<p>Install the public key on the server:</p>
+<div class="codehilite"><pre><span></span><code>ssh-copy-id<span class="w"> </span>youruser@server-ip
+</code></pre></div>
+
+<p>If <code>ssh-copy-id</code> is unavailable on the client:</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh
+chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+cat<span class="w"> </span>~/id_ed25519.pub<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/authorized_keys
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
+</code></pre></div>
+
+<p>Create an SSH hardening drop-in instead of editing the main config directly:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/ssh/sshd_config.d
+sudo<span class="w"> </span>vim<span class="w"> </span>/etc/ssh/sshd_config.d/10-hardening.conf
+</code></pre></div>
+
+<p>Recommended baseline:</p>
+<div class="codehilite"><pre><span></span><code>PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+X11Forwarding no
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 2
+AllowUsers youruser
+</code></pre></div>
+
+<p>Validate before restarting:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>sshd<span class="w"> </span>-t
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>ssh
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
+</code></pre></div>
+
+<p>Critical operational rule: do not close your current SSH session until you have opened and verified a second session successfully.</p>
+<h3 id="9-ssh-client-setup-for-outbound-connections">9. SSH Client Setup for Outbound Connections</h3>
+<p>If this server must reach GitHub, internal Git servers, backup machines, or cluster nodes, configure outbound SSH properly.</p>
+<p>Generate a keypair on the server:</p>
+<div class="codehilite"><pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;server01-outbound&quot;</span>
+</code></pre></div>
+
+<p>Recommended permissions:</p>
+<div class="codehilite"><pre><span></span><code>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/id_ed25519
+chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>~/.ssh/id_ed25519.pub
+</code></pre></div>
+
+<p>Create a client config:</p>
+<div class="codehilite"><pre><span></span><code>vim<span class="w"> </span>~/.ssh/config
+</code></pre></div>
+
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code>Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
+
+Host backup-host
+    HostName 192.168.1.60
+    User backup
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+</code></pre></div>
+
+<p>Initialize trust carefully:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
+ssh-keyscan<span class="w"> </span>-H<span class="w"> </span>github.com<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/known_hosts
+</code></pre></div>
+
+<p>If outbound policy is tightened via firewall, explicitly allow egress TCP 22 to required destinations. By default, UFW permits outgoing traffic unless you change the default policy.</p>
+<h3 id="10-access-the-preserved-hdd-safely-after-install">10. Access the Preserved HDD Safely After Install</h3>
+<p>Do not immediately auto-mount preserved disks read-write. First verify what is on them.</p>
+<p>Inventory again:</p>
+<div class="codehilite"><pre><span></span><code>lsblk<span class="w"> </span>-f
+sudo<span class="w"> </span>blkid
+</code></pre></div>
+
+<p>Mount the relevant HDD partition read-only first:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/preserved-hdd
+sudo<span class="w"> </span>mount<span class="w"> </span>-o<span class="w"> </span>ro<span class="w"> </span>/dev/sdb1<span class="w"> </span>/mnt/preserved-hdd
+findmnt<span class="w"> </span>/mnt/preserved-hdd
+ls<span class="w"> </span>-lah<span class="w"> </span>/mnt/preserved-hdd
+</code></pre></div>
+
+<p>If the HDD partition is NTFS:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>ntfs-3g
+sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>ntfs3<span class="w"> </span>-o<span class="w"> </span>ro<span class="w"> </span>/dev/sdb1<span class="w"> </span>/mnt/preserved-hdd
+</code></pre></div>
+
+<p>If the mount fails with an unsafe state or hibernation warning, the NTFS volume may still carry a Windows Fast Startup or hibernation flag. Do not force-write to it from Linux unless you accept the recovery risk.</p>
+<p>When you are finally ready to mount permanently, use UUIDs and conservative options in <code>/etc/fstab</code>.</p>
+<p>Example for ext4 data:</p>
+<div class="codehilite"><pre><span></span><code>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /srv/data ext4 defaults,nofail,x-systemd.automount 0 2
+</code></pre></div>
+
+<p>Example for NTFS data mounted cautiously:</p>
+<div class="codehilite"><pre><span></span><code>UUID=XXXX-XXXX /srv/windows-data ntfs3 ro,nofail,uid=1000,gid=1000,x-systemd.automount 0 0
+</code></pre></div>
+
+<p>Test <code>fstab</code> changes safely:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>mount<span class="w"> </span>-a
+findmnt
+</code></pre></div>
+
+<h3 id="11-optional-nvidia-driver-and-cuda-preparation">11. Optional NVIDIA Driver and CUDA Preparation</h3>
+<p>Only do this after networking and SSH are stable.</p>
+<p>Inspect GPU state:</p>
+<div class="codehilite"><pre><span></span><code>lspci<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+ubuntu-drivers<span class="w"> </span>devices
+</code></pre></div>
+
+<p>Install the recommended driver:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ubuntu-drivers<span class="w"> </span>autoinstall
+sudo<span class="w"> </span>reboot
+</code></pre></div>
+
+<p>Verify after reboot:</p>
+<div class="codehilite"><pre><span></span><code>nvidia-smi
+lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
+</code></pre></div>
+
+<p>If Secure Boot is enabled, Ubuntu may require Machine Owner Key enrollment for third-party modules. If the driver appears installed but <code>nvidia-smi</code> fails and the module is not loaded, Secure Boot is one of the first things to investigate.</p>
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<h3 id="physical-and-firmware-security">Physical and Firmware Security</h3>
+<ul>
+<li>Set a firmware password if the server is in a shared physical environment.</li>
+<li>Disable unused boot options if practical.</li>
+<li>Keep USB boot disabled during normal operations after deployment if physical tampering is a concern.</li>
+<li>If the box is remotely located and lacks out-of-band management, think carefully before using full-disk encryption because an unattended reboot may require local console unlock.</li>
+</ul>
+<p>On full-disk encryption:</p>
+<ul>
+<li>LUKS is a strong choice if theft of the physical SSD is a real threat.</li>
+<li>For a headless server without IPMI/iDRAC/iLO/KVM, LUKS adds reboot-time operational complexity.</li>
+<li>If uptime and unattended recovery matter more than physical-at-rest protection, many operators choose no root-disk encryption on single-node edge servers.</li>
+</ul>
+<h3 id="os-and-service-hardening">OS and Service Hardening</h3>
+<ul>
+<li>Keep the system patched with <code>unattended-upgrades</code> or disciplined maintenance windows.</li>
+<li>Use SSH keys, not passwords, for administration.</li>
+<li>Disable direct root SSH login.</li>
+<li>Install only the packages you actually need.</li>
+<li>Use <code>ufw</code> to expose only necessary ports.</li>
+<li>Consider <code>fail2ban</code> if the machine will be reachable from untrusted networks.</li>
+<li>Review <code>sudo</code> membership and remove unused accounts.</li>
+<li>Inspect failed services and boot errors after the first few reboots.</li>
+</ul>
+<p>Useful commands:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+sudo<span class="w"> </span>fail2ban-client<span class="w"> </span>status
+sudo<span class="w"> </span>getent<span class="w"> </span>group<span class="w"> </span>sudo
+sudo<span class="w"> </span>systemctl<span class="w"> </span>--failed
+sudo<span class="w"> </span>journalctl<span class="w"> </span>-p<span class="w"> </span>warning<span class="w"> </span>-b
+</code></pre></div>
+
+<h3 id="network-exposure-strategy">Network Exposure Strategy</h3>
+<p>Do not expose the host to the public internet until the following are true:</p>
+<ul>
+<li>SSH key login works</li>
+<li>password SSH is disabled if that matches your policy</li>
+<li>firewall policy is explicit</li>
+<li>the system clock is correct</li>
+<li>updates have been applied</li>
+<li>the intended static IP or DHCP reservation is stable</li>
+</ul>
+<p>If the server is internet-facing, also plan for:</p>
+<ul>
+<li>router port-forwarding discipline</li>
+<li>dynamic DNS or fixed public IP strategy</li>
+<li>reverse proxy or VPN access pattern instead of exposing multiple services directly</li>
+<li>centralized logs or at least disciplined local log review</li>
+</ul>
+<hr />
+<h2 id="examples">Examples</h2>
+<h3 id="example-1-disk-inventory-before-installation">Example 1: Disk Inventory Before Installation</h3>
+<div class="codehilite"><pre><span></span><code>lsblk<span class="w"> </span>-e7<span class="w"> </span>-o<span class="w"> </span>NAME,SIZE,TYPE,FSTYPE,MODEL,SERIAL,MOUNTPOINT
+sudo<span class="w"> </span>fdisk<span class="w"> </span>-l
+ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
+</code></pre></div>
+
+<p>Interpretation pattern:</p>
+<ul>
+<li>confirm which device is the 128 GB SSD</li>
+<li>confirm which device is the HDD to preserve</li>
+<li>confirm whether any existing EFI partition sits on the HDD so you do not accidentally reuse it</li>
+</ul>
+<h3 id="example-2-static-netplan-configuration">Example 2: Static Netplan Configuration</h3>
+<div class="codehilite"><pre><span></span><code><span class="nt">network</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">renderer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networkd</span>
+<span class="w">  </span><span class="nt">ethernets</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enp3s0</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">dhcp4</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">addresses</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.50/24</span>
+<span class="w">      </span><span class="nt">routes</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">          </span><span class="nt">via</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.1.1</span>
+<span class="w">      </span><span class="nt">nameservers</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">addresses</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1.1.1</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.8.8.8</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.9.9.9</span>
+</code></pre></div>
+
+<p>Validation:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>generate
+sudo<span class="w"> </span>netplan<span class="w"> </span>try
+sudo<span class="w"> </span>netplan<span class="w"> </span>apply
+ip<span class="w"> </span>route
+resolvectl<span class="w"> </span>status
+</code></pre></div>
+
+<h3 id="example-3-ssh-hardening-drop-in">Example 3: SSH Hardening Drop-In</h3>
+<div class="codehilite"><pre><span></span><code># /etc/ssh/sshd_config.d/10-hardening.conf
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+UsePAM yes
+X11Forwarding no
+MaxAuthTries 3
+LoginGraceTime 30
+AllowUsers youruser
+</code></pre></div>
+
+<p>Validate and reload:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>sshd<span class="w"> </span>-t
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>ssh
+</code></pre></div>
+
+<h3 id="example-4-mount-the-preserved-hdd-read-only-first">Example 4: Mount the Preserved HDD Read-Only First</h3>
+<div class="codehilite"><pre><span></span><code>lsblk<span class="w"> </span>-f
+sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/preserved-hdd
+sudo<span class="w"> </span>mount<span class="w"> </span>-o<span class="w"> </span>ro<span class="w"> </span>/dev/sdb2<span class="w"> </span>/mnt/preserved-hdd
+findmnt<span class="w"> </span>/mnt/preserved-hdd
+</code></pre></div>
+
+<p>If the data looks correct and healthy, then decide whether a persistent <code>fstab</code> entry is appropriate.</p>
+<h3 id="example-5-install-nvidia-drivers-on-a-headless-server">Example 5: Install NVIDIA Drivers on a Headless Server</h3>
+<div class="codehilite"><pre><span></span><code>ubuntu-drivers<span class="w"> </span>devices
+sudo<span class="w"> </span>ubuntu-drivers<span class="w"> </span>autoinstall
+sudo<span class="w"> </span>reboot
+nvidia-smi
+</code></pre></div>
+
+<p>If <code>nvidia-smi</code> fails after reboot, inspect Secure Boot, module loading, and kernel logs:</p>
+<div class="codehilite"><pre><span></span><code>mokutil<span class="w"> </span>--sb-state
+journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">&#39;nvidia|nouveau|secure&#39;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="installer-and-boot-problems">Installer and Boot Problems</h3>
+<h4 id="problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd">Problem: The installer sees both disks and you are not sure which one is the SSD</h4>
+<ul>
+<li>Stop before modifying storage.</li>
+<li>Use <code>lsblk</code>, <code>fdisk -l</code>, and <code>/dev/disk/by-id/</code> to identify model and capacity.</li>
+<li>If doubt remains, shut down and disconnect the HDD physically.</li>
+</ul>
+<h4 id="problem-ubuntu-installs-but-the-system-only-boots-when-the-hdd-is-attached">Problem: Ubuntu installs, but the system only boots when the HDD is attached</h4>
+<ul>
+<li>The bootloader or EFI files were likely placed on the HDD.</li>
+<li>Reboot from installer media and inspect EFI partitions.</li>
+<li>Corrective action usually means creating an ESP on the SSD and reinstalling GRUB for the SSD boot path.</li>
+<li>Check boot entries with <code>efibootmgr -v</code> after recovery.</li>
+</ul>
+<h4 id="problem-firmware-says-no-bootable-device-after-installation">Problem: Firmware says no bootable device after installation</h4>
+<ul>
+<li>Verify the installer was booted in UEFI mode, not legacy mode.</li>
+<li>Confirm the SSD contains a FAT32 EFI System Partition.</li>
+<li>Check whether the firmware boot order points to the SSD.</li>
+<li>Use <code>efibootmgr -v</code> from rescue mode to inspect or recreate boot entries.</li>
+</ul>
+<h3 id="networking-problems">Networking Problems</h3>
+<h4 id="problem-network-is-down-after-editing-netplan">Problem: Network is down after editing Netplan</h4>
+<ul>
+<li>YAML indentation errors are common.</li>
+<li>Interface name may be wrong.</li>
+<li>DNS may be missing even when the link is up.</li>
+<li>Run:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>generate
+sudo<span class="w"> </span>netplan<span class="w"> </span>try
+journalctl<span class="w"> </span>-u<span class="w"> </span>systemd-networkd<span class="w"> </span>-b
+ip<span class="w"> </span>addr
+ip<span class="w"> </span>route
+resolvectl<span class="w"> </span>status
+</code></pre></div>
+
+<h4 id="problem-the-host-can-ping-ips-but-not-domain-names">Problem: The host can ping IPs but not domain names</h4>
+<ul>
+<li>Routing is working; DNS is not.</li>
+<li>Review the <code>nameservers</code> block and <code>resolvectl status</code>.</li>
+<li>Test with a known resolver such as <code>1.1.1.1</code> or your router DNS.</li>
+</ul>
+<h4 id="problem-link-is-unstable-or-slow">Problem: Link is unstable or slow</h4>
+<ul>
+<li>Inspect duplex and negotiated speed:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ethtool<span class="w"> </span>enp3s0
+</code></pre></div>
+
+<ul>
+<li>Replace bad cables before blaming Linux.</li>
+<li>Check NIC driver binding with <code>lspci -nnk</code>.</li>
+</ul>
+<h3 id="ssh-problems">SSH Problems</h3>
+<h4 id="problem-connection-refused-on-port-22">Problem: Connection refused on port 22</h4>
+<ul>
+<li>The service may not be installed or running.</li>
+<li>Firewall may be blocking it.</li>
+<li>Validate:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh
+sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
+</code></pre></div>
+
+<h4 id="problem-permission-denied-publickey">Problem: Permission denied (publickey)</h4>
+<ul>
+<li>The wrong key may be offered.</li>
+<li><code>authorized_keys</code> permissions may be wrong.</li>
+<li>The account name may be wrong.</li>
+<li>Use verbose client output:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-vvv<span class="w"> </span>youruser@server-ip
+</code></pre></div>
+
+<ul>
+<li>Confirm on the server:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
+</code></pre></div>
+
+<h4 id="problem-you-locked-yourself-out-after-hardening-ssh">Problem: You locked yourself out after hardening SSH</h4>
+<ul>
+<li>This is why a second tested session matters.</li>
+<li>Revert the last drop-in from local console access.</li>
+<li>Always run <code>sshd -t</code> before restarting the service.</li>
+</ul>
+<h3 id="disk-and-filesystem-problems">Disk and Filesystem Problems</h3>
+<h4 id="problem-preserved-ntfs-partition-will-not-mount-read-write">Problem: Preserved NTFS partition will not mount read-write</h4>
+<ul>
+<li>Windows Fast Startup or hibernation likely left the filesystem dirty.</li>
+<li>Mount read-only first.</li>
+<li>If the data is critical, clear the dirty state from Windows rather than forcing Linux writes.</li>
+</ul>
+<h4 id="problem-hdd-auto-mount-breaks-boot">Problem: HDD auto-mount breaks boot</h4>
+<ul>
+<li>Your <code>/etc/fstab</code> entry is too strict.</li>
+<li>Add <code>nofail</code> and preferably <code>x-systemd.automount</code>.</li>
+<li>Test with <code>sudo mount -a</code> before rebooting.</li>
+</ul>
+<h4 id="problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd">Problem: Root filesystem is unexpectedly full on a 128 GB SSD</h4>
+<ul>
+<li>Check logs, package cache, container images, and backup artifacts.</li>
+<li>Investigate with:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>df<span class="w"> </span>-h
+sudo<span class="w"> </span>du<span class="w"> </span>-xh<span class="w"> </span>/<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">30</span>
+sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
+</code></pre></div>
+
+<h3 id="nvidia-and-secure-boot-problems">NVIDIA and Secure Boot Problems</h3>
+<h4 id="problem-driver-installed-but-nvidia-smi-fails">Problem: Driver installed but <code>nvidia-smi</code> fails</h4>
+<ul>
+<li>Kernel module may not be loaded.</li>
+<li>Secure Boot may have blocked it.</li>
+<li>Inspect:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
+mokutil<span class="w"> </span>--sb-state
+journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">&#39;nvidia|nouveau|secure&#39;</span>
+</code></pre></div>
+
+<h4 id="problem-black-screen-or-unstable-console-after-gpu-driver-changes">Problem: Black screen or unstable console after GPU driver changes</h4>
+<ul>
+<li>Prefer doing NVIDIA work only after you have SSH access.</li>
+<li>Keep a recovery plan through GRUB advanced options or installer rescue mode.</li>
+<li>For pure server roles, consider leaving the machine on the default open-source stack unless GPU acceleration is truly needed.</li>
+</ul>
+<hr />
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<h3 id="storage-and-ssd-hygiene">Storage and SSD Hygiene</h3>
+<ul>
+<li>Ensure TRIM is active:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>systemctl<span class="w"> </span>status<span class="w"> </span>fstrim.timer
+</code></pre></div>
+
+<ul>
+<li>If it is disabled:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>fstrim.timer
+</code></pre></div>
+
+<ul>
+<li>Use SSD space intentionally; 128 GB disappears quickly once logs, containers, and datasets accumulate.</li>
+<li>Keep the HDD for bulk data once you have validated and mounted it correctly.</li>
+</ul>
+<h3 id="memory-swap-and-logging">Memory, Swap, and Logging</h3>
+<p>With 16 GB RAM, Ubuntu's default swapfile behavior is usually sufficient.</p>
+<p>Operational guidance:</p>
+<ul>
+<li>avoid creating an oversized swap partition</li>
+<li>monitor memory pressure before tuning aggressively</li>
+<li>limit log growth on a small SSD</li>
+</ul>
+<p>Useful checks:</p>
+<div class="codehilite"><pre><span></span><code>free<span class="w"> </span>-h
+swapon<span class="w"> </span>--show
+sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
+grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;^SystemMaxUse&quot;</span><span class="w"> </span>/etc/systemd/journald.conf<span class="w"> </span>/etc/systemd/journald.conf.d<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+
+<p>If local logs are consuming too much SSD space, tune <code>journald</code> retention.</p>
+<h3 id="network-stability-and-throughput">Network Stability and Throughput</h3>
+<ul>
+<li>Prefer wired Ethernet over Wi-Fi for a physical server.</li>
+<li>Reserve the IP on the router if you want stable addressing without host-side static config complexity.</li>
+<li>Verify the NIC is negotiating expected speed and duplex.</li>
+<li>Use <code>iperf3</code> for real throughput testing when needed.</li>
+</ul>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>iperf3
+iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;target-host&gt;
+</code></pre></div>
+
+<hr />
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ul>
+<li>Canonical Ubuntu Server documentation: <a href="https://documentation.ubuntu.com/server/">https://documentation.ubuntu.com/server/</a></li>
+<li>Ubuntu installation guide and Subiquity installer docs: <a href="https://canonical-subiquity.readthedocs-hosted.com/">https://canonical-subiquity.readthedocs-hosted.com/</a></li>
+<li>Netplan documentation: <a href="https://netplan.readthedocs.io/">https://netplan.readthedocs.io/</a></li>
+<li>OpenSSH documentation: <a href="https://www.openssh.com/manual.html">https://www.openssh.com/manual.html</a></li>
+<li>Ubuntu community help on UEFI and GRUB recovery: <a href="https://help.ubuntu.com/community/">https://help.ubuntu.com/community/</a></li>
+</ul>
+<p>For this machine and installation goal, the single most important operational decision is still the simplest one: keep the HDD out of the installer's blast radius. If you can disconnect it physically during installation, do that. If you cannot, identify disks by model and serial, create a dedicated EFI partition on the SSD, and do not accept any installer action that references the HDD.</p></article>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
