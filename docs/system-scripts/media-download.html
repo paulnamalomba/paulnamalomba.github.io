@@ -82,33 +82,41 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .il { color: #666 } /* Literal.Number.Integer.Long */</style>
 </head>
 <body class="docs-page">
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to System Scripts</a>
-            <span>|</span>
-            <a href="/docs/guide-home/">Guides &amp; Scripts</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
         </div>
-        <article class="docs-content">
-            <h1>Media Download</h1>
-            <p><code>media-download.ps1</code> · <a href="media-download.ps1" download>Download Script</a></p>
-            <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to System Scripts</a>
+                <span>|</span>
+                <a href="/docs/guide-home/">Guides &amp; Scripts</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content">
+                <h1>Media Download</h1>
+                <p><code>media-download.ps1</code> · <a href="media-download.ps1" download>Download Script</a></p>
+                <div class="codehilite"><table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -283,14 +291,34 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="nb">Export-ModuleMember</span> <span class="n">-Function</span> <span class="n">YtDL-Playlist</span><span class="p">,</span> <span class="n">YtDL-Song</span>
 </pre></div></td></tr></table></div>
 
-        </article>
-    </div>
-</main>
+            </article>
+        </div>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 </body>
 </html>

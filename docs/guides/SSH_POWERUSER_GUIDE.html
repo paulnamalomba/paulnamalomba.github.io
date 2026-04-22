@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ssh Poweruser Guide - Paul Namalomba</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="docs-page">
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to Guides</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content"><h1 id="ssh-poweruser-guide-powershell-bash">SSH PowerUser Guide (PowerShell &amp; Bash)</h1>
+<p><strong>Last updated</strong>: April 22, 2026<br>
+<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br></p>
+<ul>
+<li>SESKA Computational Engineer<br></li>
+<li>SEAT Backend Developer<br></li>
+<li>Software Developer<br></li>
+<li>PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br></li>
+</ul>
+<p><strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
+<br></p>
+<p><a href="https://www.openssh.com/manual.html"><img alt="Protocol" src="https://img.shields.io/badge/OpenSSH-9.x-green.svg" /></a>
+<a href="https://learn.microsoft.com/windows-server/administration/openssh/openssh-overview"><img alt="Shells" src="https://img.shields.io/badge/Shells-PowerShell%20%7C%20Bash-blue.svg" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
+<h2 id="overview">Overview</h2>
+<p>SSH is the standard secure remote access protocol for Linux servers, Windows servers, Git remotes, bastion hosts, and encrypted file transfer. This guide targets native OpenSSH workflows on Windows and Linux, using both PowerShell and Bash where command or path behavior differs. It covers client and server setup, key-based passwordless authentication, <code>~/.ssh/config</code> design, file copying with <code>scp</code> and <code>sftp</code>, advanced forwarding and jump-host patterns, and hardening practices that are actually safe in production.</p>
+<p>It is intentionally explicit about one point that often gets mangled in low-quality tutorials: standard OpenSSH does not have a legitimate "store my plaintext password in the config file" feature. If you want to stop typing passwords, the correct pattern is key-based authentication, optionally combined with <code>ssh-agent</code>, <code>IdentityFile</code>, <code>IdentitiesOnly</code>, and host aliases in the SSH config.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#ssh-poweruser-guide-powershell--bash">SSH PowerUser Guide (PowerShell \&amp; Bash)</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#quickstart">Quickstart</a></li>
+<li><a href="#key-concepts">Key Concepts</a></li>
+<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a><ul>
+<li><a href="#1-what-openssh-components-you-actually-need">1. What OpenSSH Components You Actually Need</a></li>
+<li><a href="#2-install-and-verify-ssh-on-windows-and-linux">2. Install and Verify SSH on Windows and Linux</a></li>
+<li><a href="#3-generate-modern-keys-correctly">3. Generate Modern Keys Correctly</a></li>
+<li><a href="#4-install-public-keys-for-passwordless-login">4. Install Public Keys for Passwordless Login</a></li>
+<li><a href="#5-ssh-config-files-that-remove-repetition-safely">5. SSH Config Files That Remove Repetition Safely</a></li>
+<li><a href="#6-server-side-ssh-hardening">6. Server-Side SSH Hardening</a></li>
+<li><a href="#7-file-transfer-with-scp-and-sftp">7. File Transfer with <code>scp</code> and <code>sftp</code></a></li>
+<li><a href="#8-advanced-ssh-capabilities">8. Advanced SSH Capabilities</a></li>
+</ul>
+</li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#examples">Examples</a><ul>
+<li><a href="#example-1-install-openssh-on-windows">Example 1: Install OpenSSH on Windows</a></li>
+<li><a href="#example-2-install-openssh-on-linux">Example 2: Install OpenSSH on Linux</a></li>
+<li><a href="#example-3-generate-a-key-and-load-it-into-ssh-agent">Example 3: Generate a Key and Load It into <code>ssh-agent</code></a></li>
+<li><a href="#example-4-install-your-public-key-on-a-remote-linux-host">Example 4: Install Your Public Key on a Remote Linux Host</a></li>
+<li><a href="#example-5-build-a-clean-ssh-config">Example 5: Build a Clean SSH Config</a></li>
+<li><a href="#example-6-upload-and-download-files">Example 6: Upload and Download Files</a></li>
+<li><a href="#example-7-use-a-jump-host-and-port-forwarding">Example 7: Use a Jump Host and Port Forwarding</a></li>
+</ul>
+</li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
+<li><a href="#references-and-further-reading">References and Further Reading</a></li>
+</ul>
+<hr />
+<h2 id="quickstart">Quickstart</h2>
+<ol>
+<li>Install the OpenSSH client on your machine and the OpenSSH server on any machine that must accept inbound SSH.</li>
+<li>Generate an <code>ed25519</code> keypair with a passphrase using <code>ssh-keygen</code>.</li>
+<li>Start <code>ssh-agent</code> and add the private key so you do not retype the passphrase every single session.</li>
+<li>Install the public key into the target account's <code>authorized_keys</code> file.</li>
+<li>Create a host alias in the SSH config so you only type <code>ssh myserver</code> instead of repeating host, user, port, and key flags.</li>
+<li>Once key login works, disable password authentication on servers that should not accept it.</li>
+</ol>
+<h2 id="key-concepts">Key Concepts</h2>
+<ul>
+<li><strong>OpenSSH client</strong>: Provides <code>ssh</code>, <code>scp</code>, <code>sftp</code>, <code>ssh-keygen</code>, <code>ssh-agent</code>, and <code>ssh-add</code>.</li>
+<li><strong>OpenSSH server</strong>: Provides <code>sshd</code>, which accepts inbound SSH sessions.</li>
+<li><strong>Host key</strong>: The server's identity key. It proves you are connecting to the same server you connected to previously.</li>
+<li><strong>User key</strong>: Your own private/public keypair used for authentication.</li>
+<li><strong><code>known_hosts</code></strong>: Local file that stores trusted server host keys.</li>
+<li><strong><code>authorized_keys</code></strong>: Remote file that stores user public keys allowed to log in.</li>
+<li><strong>Passwordless SSH</strong>: Usually means key-based login. It does not mean plaintext password storage in <code>ssh_config</code>.</li>
+<li><strong><code>ssh-agent</code></strong>: A local key cache that holds decrypted private keys in memory after you unlock them once.</li>
+<li><strong>Host alias</strong>: A friendly name in <code>~/.ssh/config</code> that expands to real connection parameters.</li>
+<li><strong>Jump host / bastion</strong>: An intermediate SSH host used to reach private network targets.</li>
+<li><strong>Local port forward</strong>: Exposes a remote service on your local machine.</li>
+<li><strong>Remote port forward</strong>: Exposes a local service on the remote machine.</li>
+<li><strong>Dynamic port forward</strong>: Creates a SOCKS proxy over SSH.</li>
+</ul>
+<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
+<h3 id="1-what-openssh-components-you-actually-need">1. What OpenSSH Components You Actually Need</h3>
+<p>There are two separate SSH roles and they should not be confused:</p>
+<ul>
+<li><strong>Outbound SSH</strong>: Your machine initiates a connection to another machine. You need the OpenSSH client.</li>
+<li><strong>Inbound SSH</strong>: Other machines connect to your machine. You need the OpenSSH server.</li>
+</ul>
+<p>For a normal developer workstation:</p>
+<ul>
+<li>install the client</li>
+<li>install the server only if the workstation must be reachable remotely</li>
+</ul>
+<p>For a Linux or Windows server that you manage remotely:</p>
+<ul>
+<li>install both client and server</li>
+<li>harden the server</li>
+<li>keep client tooling available for Git, backups, bastions, and cross-host admin work</li>
+</ul>
+<p>Useful file locations:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Windows</th>
+<th style="text-align: left;">Linux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Client config</td>
+<td style="text-align: left;"><code>%USERPROFILE%\.ssh\config</code></td>
+<td style="text-align: left;"><code>~/.ssh/config</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Known hosts</td>
+<td style="text-align: left;"><code>%USERPROFILE%\.ssh\known_hosts</code></td>
+<td style="text-align: left;"><code>~/.ssh/known_hosts</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">User authorized keys</td>
+<td style="text-align: left;"><code>%USERPROFILE%\.ssh\authorized_keys</code> for standard users</td>
+<td style="text-align: left;"><code>~/.ssh/authorized_keys</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Admin authorized keys on Windows server</td>
+<td style="text-align: left;"><code>C:\ProgramData\ssh\administrators_authorized_keys</code> may be used by default</td>
+<td style="text-align: left;">Not applicable</td>
+</tr>
+<tr>
+<td style="text-align: left;">Server config</td>
+<td style="text-align: left;"><code>C:\ProgramData\ssh\sshd_config</code></td>
+<td style="text-align: left;"><code>/etc/ssh/sshd_config</code> or <code>/etc/ssh/sshd_config.d/*.conf</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-install-and-verify-ssh-on-windows-and-linux">2. Install and Verify SSH on Windows and Linux</h3>
+<p>On modern Windows 10/11 and Windows Server, OpenSSH is normally installed via Windows optional capabilities. PowerShell is the cleanest way to manage it.</p>
+<p>On Linux, package names vary slightly, but the split is consistent: client package plus server package.</p>
+<p>After installation, verify these basics before doing anything else:</p>
+<ul>
+<li><code>ssh -V</code></li>
+<li><code>sshd -T</code> on servers where supported</li>
+<li>service status for <code>ssh</code>, <code>sshd</code>, or <code>ssh-agent</code></li>
+<li>whether TCP port 22 is listening on hosts that should accept connections</li>
+</ul>
+<p>On Windows, useful checks are:</p>
+<ul>
+<li><code>Get-Service sshd, ssh-agent</code></li>
+<li><code>Get-NetTCPConnection -LocalPort 22</code></li>
+<li><code>Test-NetConnection servername -Port 22</code></li>
+</ul>
+<p>On Linux, useful checks are:</p>
+<ul>
+<li><code>systemctl status ssh</code> or <code>systemctl status sshd</code></li>
+<li><code>ss -tlnp | grep ':22'</code></li>
+<li><code>ssh -V</code></li>
+</ul>
+<h3 id="3-generate-modern-keys-correctly">3. Generate Modern Keys Correctly</h3>
+<p>Prefer <code>ed25519</code> unless you have a legacy interoperability requirement.</p>
+<p>Why:</p>
+<ul>
+<li>shorter keys</li>
+<li>fast operations</li>
+<li>strong modern default</li>
+<li>less parameter tuning than RSA</li>
+</ul>
+<p>Recommended rule set:</p>
+<ul>
+<li>Use one primary admin key per person, not one shared team private key.</li>
+<li>Add a passphrase unless the key exists purely for locked-down automation.</li>
+<li>Name keys deliberately if you manage multiple environments.</li>
+<li>Keep private keys out of sync tools and source control.</li>
+</ul>
+<p>Example naming patterns:</p>
+<ul>
+<li><code>id_ed25519</code> for your default daily key</li>
+<li><code>id_ed25519_work</code> for a work-specific identity</li>
+<li><code>id_ed25519_backup</code> for backup automation</li>
+</ul>
+<h3 id="4-install-public-keys-for-passwordless-login">4. Install Public Keys for Passwordless Login</h3>
+<p>The correct passwordless pattern is:</p>
+<ol>
+<li>generate a keypair locally</li>
+<li>copy only the public key to the remote host</li>
+<li>append the public key to <code>authorized_keys</code></li>
+<li>keep the private key private</li>
+</ol>
+<p>If <code>ssh-copy-id</code> exists on your Bash client, use it. On Windows PowerShell, the practical equivalents are either:</p>
+<ul>
+<li>upload the public key with <code>scp</code>, then append it remotely</li>
+<li>manually append the public key after opening a one-time password session</li>
+</ul>
+<p>Key file hygiene matters:</p>
+<ul>
+<li>Linux: <code>chmod 700 ~/.ssh</code>, <code>chmod 600 ~/.ssh/authorized_keys</code>, <code>chmod 600 ~/.ssh/config</code></li>
+<li>Windows: inherited ACLs can break OpenSSH key acceptance; use <code>icacls</code> if permissions become too broad</li>
+</ul>
+<p>Windows server nuance:</p>
+<ul>
+<li>if the account is in the local Administrators group, inspect <code>C:\ProgramData\ssh\sshd_config</code></li>
+<li>many Windows OpenSSH server defaults use a <code>Match Group administrators</code> block</li>
+<li>that block often redirects key lookup to <code>C:\ProgramData\ssh\administrators_authorized_keys</code></li>
+<li>if your per-user <code>authorized_keys</code> file seems ignored, this is one of the first places to check</li>
+</ul>
+<h3 id="5-ssh-config-files-that-remove-repetition-safely">5. SSH Config Files That Remove Repetition Safely</h3>
+<p>The SSH config file is where quality-of-life improvements live.</p>
+<p>Good uses of the config:</p>
+<ul>
+<li>set host aliases</li>
+<li>pin usernames and ports</li>
+<li>point specific hosts at specific keys</li>
+<li>define jump hosts</li>
+<li>set keepalive options</li>
+<li>add local forwarding rules for repetitive workflows</li>
+</ul>
+<p>Common safe directives:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Directive</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>Host</code></td>
+<td style="text-align: left;">Alias block name</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>HostName</code></td>
+<td style="text-align: left;">Real DNS name or IP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>User</code></td>
+<td style="text-align: left;">Remote account</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Port</code></td>
+<td style="text-align: left;">Non-default SSH port</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>IdentityFile</code></td>
+<td style="text-align: left;">Private key path</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>IdentitiesOnly yes</code></td>
+<td style="text-align: left;">Forces the client to offer only the chosen key</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>AddKeysToAgent yes</code></td>
+<td style="text-align: left;">Convenient on clients with <code>ssh-agent</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ServerAliveInterval 30</code></td>
+<td style="text-align: left;">Keepalive probe interval</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ServerAliveCountMax 3</code></td>
+<td style="text-align: left;">Disconnect after repeated failures</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ProxyJump</code></td>
+<td style="text-align: left;">Jump through a bastion host</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>LocalForward</code></td>
+<td style="text-align: left;">Persistent local port forward</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ForwardAgent</code></td>
+<td style="text-align: left;">Forward your local agent, only when needed</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>StrictHostKeyChecking ask</code></td>
+<td style="text-align: left;">Safer first-connection behavior</td>
+</tr>
+</tbody>
+</table>
+<p>Bad uses of the config:</p>
+<ul>
+<li>trying to store a plaintext password there</li>
+<li>globally disabling host-key checking</li>
+<li>globally enabling agent forwarding</li>
+<li>using a single wildcard block that silently affects every host on every network</li>
+</ul>
+<h3 id="6-server-side-ssh-hardening">6. Server-Side SSH Hardening</h3>
+<p>Once key-based access is verified, harden the server.</p>
+<p>Typical minimum baseline on Linux servers:</p>
+<ul>
+<li><code>PermitRootLogin no</code></li>
+<li><code>PasswordAuthentication no</code></li>
+<li><code>KbdInteractiveAuthentication no</code></li>
+<li><code>PubkeyAuthentication yes</code></li>
+<li><code>PermitEmptyPasswords no</code></li>
+<li><code>MaxAuthTries 3</code></li>
+<li><code>AllowUsers youradminuser</code> or <code>AllowGroups ssh-admins</code></li>
+</ul>
+<p>On Windows OpenSSH Server, not every Linux-centric directive is equally relevant, but these still matter:</p>
+<ul>
+<li><code>PasswordAuthentication no</code></li>
+<li><code>PubkeyAuthentication yes</code></li>
+<li><code>PermitEmptyPasswords no</code></li>
+<li><code>AllowUsers</code> or <code>AllowGroups</code></li>
+<li><code>MaxAuthTries 3</code></li>
+</ul>
+<p>Operational rule:</p>
+<ul>
+<li>validate config before restart</li>
+<li>keep one working session open while testing a second session</li>
+</ul>
+<p>Typical validation commands:</p>
+<ul>
+<li>Linux: <code>sudo sshd -t</code></li>
+<li>Windows: <code>sshd -t</code></li>
+</ul>
+<h3 id="7-file-transfer-with-scp-and-sftp">7. File Transfer with <code>scp</code> and <code>sftp</code></h3>
+<p><code>scp</code> and <code>sftp</code> ride on SSH and inherit the same config, identities, and host aliases.</p>
+<p>What to use when:</p>
+<ul>
+<li><code>scp</code>: fast one-shot upload or download, recursive copy, simple scripting</li>
+<li><code>sftp</code>: interactive browsing, directory navigation, multiple put/get actions in one session</li>
+</ul>
+<p>Key habits:</p>
+<ul>
+<li>quote Windows paths in PowerShell if they contain spaces</li>
+<li>remember that remote paths are almost always POSIX-style on Linux hosts</li>
+<li>if you use a host alias in the config, use that alias in <code>scp</code> and <code>sftp</code> too</li>
+<li>custom ports use <code>-P</code> for <code>scp</code> and <code>-o Port=</code> or config entries for <code>sftp</code></li>
+</ul>
+<h3 id="8-advanced-ssh-capabilities">8. Advanced SSH Capabilities</h3>
+<p>Once the basics are stable, SSH becomes a secure transport toolkit rather than just a remote shell.</p>
+<p>Important advanced patterns:</p>
+<ul>
+<li><strong>Jump hosts</strong>: <code>ssh -J bastion target</code></li>
+<li><strong>Local forwarding</strong>: <code>ssh -L 5432:127.0.0.1:5432 db-host</code></li>
+<li><strong>Remote forwarding</strong>: <code>ssh -R 8080:127.0.0.1:8080 host</code></li>
+<li><strong>Dynamic forwarding</strong>: <code>ssh -D 1080 host</code></li>
+<li><strong>Agent forwarding</strong>: <code>ssh -A host</code>, use only when necessary and trusted</li>
+<li><strong>Connection multiplexing</strong>: powerful on Unix-like Bash clients via <code>ControlMaster</code> and <code>ControlPersist</code></li>
+</ul>
+<p>Important accuracy note:</p>
+<ul>
+<li>connection multiplexing is a Unix-centric OpenSSH optimization used heavily on Linux, macOS, and WSL clients</li>
+<li>it is not a core day-to-day Windows PowerShell workflow, so do not build your main Windows setup around it unless you have verified the environment supports it cleanly</li>
+</ul>
+<h2 id="security-considerations">Security Considerations</h2>
+<ol>
+<li><strong>Do not disable host-key verification globally</strong>: <code>StrictHostKeyChecking no</code> plus <code>UserKnownHostsFile /dev/null</code> is a short-lived lab shortcut, not a production habit.</li>
+<li><strong>Do not try to automate plaintext passwords with config files</strong>: OpenSSH is designed around keys, agents, and host aliases for a reason.</li>
+<li><strong>Use separate keys for people and automation</strong>: a backup job key should not be your personal admin key.</li>
+<li><strong>Use passphrases for human-operated keys</strong>: then let <code>ssh-agent</code> handle convenience.</li>
+<li><strong>Restrict server-side access deliberately</strong>: <code>AllowUsers</code>, <code>AllowGroups</code>, firewall rules, and non-root administration matter more than just changing the port.</li>
+<li><strong>Review host key changes carefully</strong>: an unexpected host key mismatch can indicate a rebuild, an IP reuse event, or a man-in-the-middle problem.</li>
+<li><strong>Treat agent forwarding as privileged delegation</strong>: if you forward your agent into an untrusted host, that host can try to use your agent while the session exists.</li>
+<li><strong>Protect private keys on disk</strong>: Linux permissions and Windows ACLs both matter.</li>
+</ol>
+<h2 id="examples">Examples</h2>
+<h3 id="example-1-install-openssh-on-windows">Example 1: Install OpenSSH on Windows</h3>
+<p>Use PowerShell as Administrator.</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Inspect capability state</span>
+<span class="nb">Get-WindowsCapability</span> <span class="n">-Online</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="n">Name</span> <span class="o">-like</span> <span class="s1">&#39;OpenSSH*&#39;</span>
+
+<span class="c"># Install client and server if needed</span>
+<span class="nb">Add-WindowsCapability</span> <span class="n">-Online</span> <span class="n">-Name</span> <span class="n">OpenSSH</span><span class="p">.</span><span class="n">Client</span><span class="p">~~~~</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">0</span>
+<span class="nb">Add-WindowsCapability</span> <span class="n">-Online</span> <span class="n">-Name</span> <span class="n">OpenSSH</span><span class="p">.</span><span class="n">Server</span><span class="p">~~~~</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">0</span>
+
+<span class="c"># Start and persist services</span>
+<span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">ssh-agent</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
+<span class="nb">Start-Service</span> <span class="n">ssh-agent</span>
+
+<span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">sshd</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
+<span class="nb">Start-Service</span> <span class="n">sshd</span>
+
+<span class="c"># Verify</span>
+<span class="n">ssh</span> <span class="n">-V</span>
+<span class="nb">Get-Service</span> <span class="n">sshd</span><span class="p">,</span> <span class="n">ssh-agent</span>
+<span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="n">22</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+</code></pre></div>
+
+<p>If the inbound firewall rule does not exist or you want to create it explicitly:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">New-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">&#39;OpenSSH-Server-In-TCP&#39;</span> <span class="p">`</span>
+  <span class="n">-DisplayName</span> <span class="s1">&#39;OpenSSH Server (TCP 22)&#39;</span> <span class="p">`</span>
+  <span class="n">-Enabled</span> <span class="n">True</span> <span class="p">`</span>
+  <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="p">`</span>
+  <span class="n">-Protocol</span> <span class="n">TCP</span> <span class="p">`</span>
+  <span class="n">-Action</span> <span class="n">Allow</span> <span class="p">`</span>
+  <span class="n">-LocalPort</span> <span class="n">22</span>
+</code></pre></div>
+
+<h3 id="example-2-install-openssh-on-linux">Example 2: Install OpenSSH on Linux</h3>
+<p>Debian or Ubuntu style:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-client<span class="w"> </span>openssh-server
+
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>ssh
+ssh<span class="w"> </span>-V
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+</code></pre></div>
+
+<p>RHEL, Rocky, AlmaLinux, Fedora style:</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-clients<span class="w"> </span>openssh-server
+
+sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>sshd
+ssh<span class="w"> </span>-V
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>sshd<span class="w"> </span>--no-pager
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+</code></pre></div>
+
+<h3 id="example-3-generate-a-key-and-load-it-into-ssh-agent">Example 3: Generate a Key and Load It into <code>ssh-agent</code></h3>
+<p>PowerShell:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Generate a modern keypair</span>
+<span class="n">ssh-keygen</span> <span class="n">-t</span> <span class="n">ed25519</span> <span class="n">-a</span> <span class="n">100</span> <span class="o">-f</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span> <span class="n">-C</span> <span class="s2">&quot;work-admin&quot;</span>
+
+<span class="c"># Ensure the agent is running</span>
+<span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">ssh-agent</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
+<span class="nb">Start-Service</span> <span class="n">ssh-agent</span>
+
+<span class="c"># Add the key for this login session</span>
+<span class="n">ssh-add</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span>
+
+<span class="c"># List loaded keys</span>
+<span class="n">ssh-add</span> <span class="n">-l</span>
+</code></pre></div>
+
+<p>Bash:</p>
+<div class="codehilite"><pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_work<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;work-admin&quot;</span>
+
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+ssh-add<span class="w"> </span>~/.ssh/id_ed25519_work
+ssh-add<span class="w"> </span>-l
+</code></pre></div>
+
+<p>If Windows key permissions become a problem, repair them with <code>icacls</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">icacls</span> <span class="s2">&quot;$HOME\.ssh&quot;</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;$env:USERNAME:(OI)(CI)F&quot;</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;SYSTEM:(OI)(CI)F&quot;</span>
+<span class="n">icacls</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;$env:USERNAME:R&quot;</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;SYSTEM:R&quot;</span>
+</code></pre></div>
+
+<h3 id="example-4-install-your-public-key-on-a-remote-linux-host">Example 4: Install Your Public Key on a Remote Linux Host</h3>
+<p>Bash with <code>ssh-copy-id</code>:</p>
+<div class="codehilite"><pre><span></span><code>ssh-copy-id<span class="w"> </span>-i<span class="w"> </span>~/.ssh/id_ed25519_work.pub<span class="w"> </span>admin@192.168.1.50
+ssh<span class="w"> </span>admin@192.168.1.50
+</code></pre></div>
+
+<p>PowerShell equivalent using <code>scp</code> plus a remote append:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">scp</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work.pub&quot;</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span><span class="p">:/</span><span class="n">tmp</span><span class="p">/</span><span class="n">id_ed25519_work</span><span class="p">.</span><span class="n">pub</span>
+
+<span class="n">ssh</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span> <span class="s2">&quot;umask 077; mkdir -p ~/.ssh; cat /tmp/id_ed25519_work.pub &gt;&gt; ~/.ssh/authorized_keys; rm -f /tmp/id_ed25519_work.pub&quot;</span>
+
+<span class="n">ssh</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span>
+</code></pre></div>
+
+<p>Manual Linux-side permission repair if login still fails:</p>
+<div class="codehilite"><pre><span></span><code>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
+chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span>:<span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>~/.ssh
+</code></pre></div>
+
+<h3 id="example-5-build-a-clean-ssh-config">Example 5: Build a Clean SSH Config</h3>
+<p>PowerShell path:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\.ssh&quot;</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="n">notepad</span> <span class="s2">&quot;$HOME\.ssh\config&quot;</span>
+</code></pre></div>
+
+<p>Bash path:</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh
+chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
+<span class="si">${</span><span class="nv">EDITOR</span><span class="k">:-</span><span class="nv">vim</span><span class="si">}</span><span class="w"> </span>~/.ssh/config
+chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/config
+</code></pre></div>
+
+<p>Shared config example:</p>
+<div class="codehilite"><pre><span></span><code>Host bastion
+    HostName 203.0.113.10
+    User ops
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519_work
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+    ServerAliveInterval 30
+    ServerAliveCountMax 3
+
+Host app-prod
+    HostName 10.10.20.15
+    User ubuntu
+    IdentityFile ~/.ssh/id_ed25519_work
+    IdentitiesOnly yes
+    ProxyJump bastion
+    LocalForward 15432 127.0.0.1:5432
+
+Host git-work
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_work
+    IdentitiesOnly yes
+</code></pre></div>
+
+<p>Then use it cleanly:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>app-prod
+scp<span class="w"> </span>./build.tar.gz<span class="w"> </span>app-prod:/srv/releases/
+sftp<span class="w"> </span>app-prod
+ssh<span class="w"> </span>-T<span class="w"> </span>git-work
+</code></pre></div>
+
+<h3 id="example-6-upload-and-download-files">Example 6: Upload and Download Files</h3>
+<p>PowerShell upload to Linux host:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">scp</span> <span class="n">-r</span> <span class="s2">&quot;.\publish&quot;</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">srv</span><span class="p">/</span><span class="n">myapp</span><span class="p">/</span>
+</code></pre></div>
+
+<p>PowerShell download from Linux host:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">scp</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">var</span><span class="p">/</span><span class="n">log</span><span class="p">/</span><span class="n">nginx</span><span class="p">/</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="s2">&quot;$HOME\Downloads\&quot;</span>
+</code></pre></div>
+
+<p>Bash upload:</p>
+<div class="codehilite"><pre><span></span><code>scp<span class="w"> </span>-r<span class="w"> </span>./publish<span class="w"> </span>app-prod:/srv/myapp/
+</code></pre></div>
+
+<p>Bash download:</p>
+<div class="codehilite"><pre><span></span><code>scp<span class="w"> </span>app-prod:/var/log/nginx/access.log<span class="w"> </span>./
+</code></pre></div>
+
+<p>Interactive <code>sftp</code> session:</p>
+<div class="codehilite"><pre><span></span><code>sftp<span class="w"> </span>app-prod
+sftp&gt;<span class="w"> </span><span class="nb">pwd</span>
+sftp&gt;<span class="w"> </span>lpwd
+sftp&gt;<span class="w"> </span>put<span class="w"> </span>./artifact.zip
+sftp&gt;<span class="w"> </span>get<span class="w"> </span>/var/log/syslog
+sftp&gt;<span class="w"> </span>mkdir<span class="w"> </span>uploads
+sftp&gt;<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>uploads
+sftp&gt;<span class="w"> </span>mput<span class="w"> </span>./*.csv
+sftp&gt;<span class="w"> </span>bye
+</code></pre></div>
+
+<p>Custom SSH port example:</p>
+<div class="codehilite"><pre><span></span><code>scp<span class="w"> </span>-P<span class="w"> </span><span class="m">2222</span><span class="w"> </span>./backup.tar.gz<span class="w"> </span>admin@example.com:/srv/backups/
+</code></pre></div>
+
+<h3 id="example-7-use-a-jump-host-and-port-forwarding">Example 7: Use a Jump Host and Port Forwarding</h3>
+<p>One-off jump host connection:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-J<span class="w"> </span>ops@203.0.113.10<span class="w"> </span>ubuntu@10.10.20.15
+</code></pre></div>
+
+<p>Local forward to a remote PostgreSQL instance:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">15432</span>:127.0.0.1:5432<span class="w"> </span>app-prod
+</code></pre></div>
+
+<p>Now your local tools can connect to <code>127.0.0.1:15432</code> while the database remains private.</p>
+<p>Remote forward exposing a local service to the remote host:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">18080</span>:127.0.0.1:8080<span class="w"> </span>bastion
+</code></pre></div>
+
+<p>Dynamic SOCKS proxy:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">1080</span><span class="w"> </span>bastion
+</code></pre></div>
+
+<p>Unix-like Bash client multiplexing example:</p>
+<div class="codehilite"><pre><span></span><code>Host *
+    ControlMaster auto
+    ControlPath ~/.ssh/cm-%r@%h:%p
+    ControlPersist 10m
+</code></pre></div>
+
+<p>That setting can drastically reduce repeated connection startup cost on Linux or WSL clients when you perform many sequential <code>ssh</code>, <code>scp</code>, or <code>sftp</code> operations.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Problem</th>
+<th style="text-align: left;">Likely Cause</th>
+<th style="text-align: left;">Practical Checks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>Connection refused</code></td>
+<td style="text-align: left;"><code>sshd</code> not running or firewall blocked</td>
+<td style="text-align: left;">Check service state and TCP 22 listener</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Permission denied (publickey)</code></td>
+<td style="text-align: left;">wrong key, wrong user, bad permissions, admin-key redirect on Windows</td>
+<td style="text-align: left;">Use <code>ssh -vvv</code>, inspect <code>authorized_keys</code>, inspect Windows <code>Match Group administrators</code> block</td>
+</tr>
+<tr>
+<td style="text-align: left;">Host key mismatch warning</td>
+<td style="text-align: left;">server rebuilt, DNS/IP reuse, or security event</td>
+<td style="text-align: left;">inspect <code>known_hosts</code> entry before deleting it</td>
+</tr>
+<tr>
+<td style="text-align: left;">Key ignored on Windows</td>
+<td style="text-align: left;">ACLs too broad or wrong authorized keys path</td>
+<td style="text-align: left;">repair ACLs with <code>icacls</code>; inspect <code>C:\ProgramData\ssh\sshd_config</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">File transfer fails but shell login works</td>
+<td style="text-align: left;">wrong path syntax, wrong port, permissions on remote target</td>
+<td style="text-align: left;">test with a small file first and explicit destination</td>
+</tr>
+<tr>
+<td style="text-align: left;">First connection hangs</td>
+<td style="text-align: left;">DNS, firewall, or dead route</td>
+<td style="text-align: left;"><code>Test-NetConnection host -Port 22</code> in PowerShell, <code>ssh -vvv host</code> in Bash</td>
+</tr>
+</tbody>
+</table>
+<p>Useful PowerShell diagnostics:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Test-NetConnection</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span> <span class="n">-Port</span> <span class="n">22</span>
+<span class="n">ssh</span> <span class="n">-vvv</span> <span class="n">app-prod</span>
+<span class="nb">Get-Service</span> <span class="n">sshd</span><span class="p">,</span> <span class="n">ssh-agent</span>
+<span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s1">&#39;OpenSSH/Operational&#39;</span> <span class="n">-MaxEvents</span> <span class="n">20</span>
+</code></pre></div>
+
+<p>Useful Linux diagnostics:</p>
+<div class="codehilite"><pre><span></span><code>ssh<span class="w"> </span>-vvv<span class="w"> </span>app-prod
+sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager
+sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>sshd<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager
+sudo<span class="w"> </span>sshd<span class="w"> </span>-t
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+</code></pre></div>
+
+<h2 id="performance-and-tuning">Performance and Tuning</h2>
+<ul>
+<li>Use host aliases so repetitive workflows stay readable and consistent.</li>
+<li>Use <code>ssh-agent</code> for human workflows instead of unencrypted private keys or no-passphrase habits.</li>
+<li>On Unix-like Bash clients, use connection multiplexing if you run many SSH commands in short bursts.</li>
+<li>Use <code>Compression yes</code> only when bandwidth is tight and CPU is not the bottleneck.</li>
+<li>Prefer <code>scp</code> for simple scripted transfers and <code>sftp</code> for interactive transfer sessions.</li>
+<li>For very large, repetitive directory synchronization on Bash systems, <code>rsync -e ssh</code> is often better than repeated <code>scp</code>, but it is not a native Windows PowerShell-first workflow.</li>
+</ul>
+<p>Example optional compression block:</p>
+<div class="codehilite"><pre><span></span><code>Host slow-link
+    HostName 198.51.100.20
+    User ops
+    Compression yes
+    ServerAliveInterval 30
+</code></pre></div>
+
+<h2 id="references-and-further-reading">References and Further Reading</h2>
+<ul>
+<li>OpenSSH manuals: <a href="https://www.openssh.com/manual.html">https://www.openssh.com/manual.html</a></li>
+<li>Microsoft OpenSSH for Windows documentation: <a href="https://learn.microsoft.com/windows-server/administration/openssh/openssh-overview">https://learn.microsoft.com/windows-server/administration/openssh/openssh-overview</a></li>
+<li><code>ssh_config</code> reference: <a href="https://man.openbsd.org/ssh_config">https://man.openbsd.org/ssh_config</a></li>
+<li><code>sshd_config</code> reference: <a href="https://man.openbsd.org/sshd_config">https://man.openbsd.org/sshd_config</a></li>
+<li><code>scp</code> reference: <a href="https://man.openbsd.org/scp">https://man.openbsd.org/scp</a></li>
+<li><code>sftp</code> reference: <a href="https://man.openbsd.org/sftp">https://man.openbsd.org/sftp</a></li>
+</ul></article>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
+</body>
+</html>

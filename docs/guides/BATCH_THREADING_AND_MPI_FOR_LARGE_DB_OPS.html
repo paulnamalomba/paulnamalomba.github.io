@@ -7,28 +7,36 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to Guides</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
         </div>
-        <article class="docs-content"><h1 id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database Operations</h1>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to Guides</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content"><h1 id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database Operations</h1>
 <p><br>
 <strong>Last updated</strong>: February 16, 2026<br>
 <strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
@@ -210,14 +218,14 @@
 <h2 id="3-stage-1-memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</h2>
 <p>The batcher answers one question: <em>how many rows can I hold in RAM at once without exceeding the usable budget?</em></p>
 <p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">RAM_total</span><span class="o">,</span><span class="w"> </span><span class="n">RAM_os</span><span class="o">,</span><span class="w"> </span><span class="err">α</span><span class="o">,</span><span class="w"> </span><span class="n">row_size</span><span class="o">,</span><span class="w"> </span><span class="n">total_rows</span>
-<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">batch_size</span><span class="w"> </span><span class="o">(</span><span class="n">bytes</span><span class="o">),</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">,</span><span class="w"> </span><span class="n">num_batches</span>
+<div class="codehilite"><pre><span></span><code>INPUT:  RAM_total, RAM_os, α, row_size, total_rows
+OUTPUT: batch_size (bytes), rows_per_batch, num_batches
 
-<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">RAM_usable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">RAM_total</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="n">RAM_os</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="o">(</span><span class="err">α</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="n">RAM_total</span><span class="o">)</span>
-<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">batch_size</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">RAM_usable</span><span class="w">                            </span><span class="err">#</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">budget</span>
-<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
-<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">num_batches</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ceil</span><span class="o">(</span><span class="n">total_rows</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">)</span>
-<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">batch_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="o">,</span><span class="w"> </span><span class="n">num_batches</span>
+1.  RAM_usable  = RAM_total − RAM_os − (α × RAM_total)
+2.  batch_size  = RAM_usable                            # fill the budget
+3.  rows_per_batch = floor(batch_size / row_size)
+4.  num_batches    = ceil(total_rows / rows_per_batch)
+5.  RETURN batch_size, rows_per_batch, num_batches
 </code></pre></div>
 
 <p>The batch size dynamically adapts: on a 24 GB machine you get large batches (few iterations), on a 4 GB machine you get small batches (many iterations). The total work is identical; only the iteration count changes.</p>
@@ -228,14 +236,14 @@
 <h2 id="4-stage-2-thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</h2>
 <p>Once a batch is loaded into RAM, it is subdivided into <code>T</code> independent thread buffers. Each thread operates on a non-overlapping slice of the batch.</p>
 <p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">batch_size</span><span class="o">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">(</span><span class="n">num</span><span class="w"> </span><span class="n">threads</span><span class="o">)</span>
-<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_thread</span>
+<div class="codehilite"><pre><span></span><code>INPUT:  batch_size, T (num threads)
+OUTPUT: thread_buffer_size, rows_per_thread
 
-<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">T</span><span class="o">)</span>
-<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_thread</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
-<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">remainder_rows</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">rows_per_batch</span><span class="w"> </span><span class="err">−</span><span class="w"> </span><span class="o">(</span><span class="n">T</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="n">rows_per_thread</span><span class="o">)</span>
-<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">Assign</span><span class="w"> </span><span class="n">remainder_rows</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">thread</span><span class="w"> </span><span class="o">(</span><span class="n">or</span><span class="w"> </span><span class="n">distribute</span><span class="w"> </span><span class="n">round</span><span class="o">-</span><span class="n">robin</span><span class="o">)</span>
-<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_thread</span>
+1.  thread_buffer_size = floor(batch_size / T)
+2.  rows_per_thread    = floor(thread_buffer_size / row_size)
+3.  remainder_rows     = rows_per_batch − (T × rows_per_thread)
+4.  Assign remainder_rows to the last thread (or distribute round-robin)
+5.  RETURN thread_buffer_size, rows_per_thread
 </code></pre></div>
 
 <p>T must either be chosen based on your target buffer size (<code>thread_buffer_size</code>) of scaled by number of logical cores or simply an arbitrary number as per your choice. How to choose <code>T</code>:</p>
@@ -253,15 +261,15 @@
 <h2 id="5-stage-3-mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</h2>
 <p>Each thread buffer is further decomposed into <code>C</code> chunks, one per logical core, distributed via MPI <code>Scatter</code> / <code>Gather</code> (or in a shared-memory context, via OpenMP work-sharing).</p>
 <p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="n">INPUT</span><span class="o">:</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="o">,</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="o">(</span><span class="n">logical</span><span class="w"> </span><span class="n">cores</span><span class="o">)</span>
-<span class="n">OUTPUT</span><span class="o">:</span><span class="w"> </span><span class="n">chunk_size</span><span class="o">,</span><span class="w"> </span><span class="n">rows_per_chunk</span>
+<div class="codehilite"><pre><span></span><code><span class="nl">INPUT:</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="p">(</span><span class="n">logical</span><span class="w"> </span><span class="n">cores</span><span class="p">)</span>
+<span class="nl">OUTPUT:</span><span class="w"> </span><span class="n">chunk_size</span><span class="p">,</span><span class="w"> </span><span class="n">rows_per_chunk</span>
 
-<span class="mi">1</span><span class="o">.</span><span class="w">  </span><span class="n">chunk_size</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">C</span><span class="o">)</span>
-<span class="mi">2</span><span class="o">.</span><span class="w">  </span><span class="n">rows_per_chunk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="o">(</span><span class="n">chunk_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="o">)</span>
-<span class="mi">3</span><span class="o">.</span><span class="w">  </span><span class="n">MPI_Scatter</span><span class="o">(</span><span class="n">thread_buffer</span><span class="o">,</span><span class="w"> </span><span class="n">chunk_size</span><span class="o">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="o">)</span>
-<span class="mi">4</span><span class="o">.</span><span class="w">  </span><span class="n">Each</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="n">processes</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">chunk</span><span class="w"> </span><span class="n">independently</span>
-<span class="mi">5</span><span class="o">.</span><span class="w">  </span><span class="n">MPI_Gather</span><span class="o">(</span><span class="n">results</span><span class="o">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mi">0</span><span class="o">)</span>
-<span class="mi">6</span><span class="o">.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">aggregated</span><span class="w"> </span><span class="n">results</span>
+<span class="mf">1.</span><span class="w">  </span><span class="n">chunk_size</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="p">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">C</span><span class="p">)</span>
+<span class="mf">2.</span><span class="w">  </span><span class="n">rows_per_chunk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="p">(</span><span class="n">chunk_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">row_size</span><span class="p">)</span>
+<span class="mf">3.</span><span class="w">  </span><span class="n">MPI_Scatter</span><span class="p">(</span><span class="n">thread_buffer</span><span class="p">,</span><span class="w"> </span><span class="n">chunk_size</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mh">0</span><span class="p">)</span>
+<span class="mf">4.</span><span class="w">  </span><span class="n">Each</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="n">processes</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">chunk</span><span class="w"> </span><span class="n">independently</span>
+<span class="mf">5.</span><span class="w">  </span><span class="n">MPI_Gather</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mh">0</span><span class="p">)</span>
+<span class="mf">6.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">aggregated</span><span class="w"> </span><span class="n">results</span>
 </code></pre></div>
 
 <p>Example — if <code>thread_buffer_size = 50 MB</code> and <code>C = 10</code>:</p>
@@ -875,13 +883,33 @@ Notes:
 <li>psutil — cross-platform system monitoring: <a href="https://psutil.readthedocs.io/">https://psutil.readthedocs.io/</a></li>
 <li>Python GIL explained: <a href="https://realpython.com/python-gil/">https://realpython.com/python-gil/</a></li>
 </ul></article>
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 </body>
 </html>

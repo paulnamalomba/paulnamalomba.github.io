@@ -7,30 +7,38 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="/">Portfolio Home</a>
-            <span>|</span>
-            <a href="/docs/guides/">Tech Guides</a>
-            <span>|</span>
-            <a href="/docs/system-scripts/">System Scripts</a>
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
         </div>
-        <article class="docs-content"><h1 id="technical-guide-and-systemserver-management-scripts">Technical Guide and System/Server Management Scripts</h1>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="/">Portfolio Home</a>
+                <span>|</span>
+                <a href="/docs/guides/">Tech Guides</a>
+                <span>|</span>
+                <a href="/docs/system-scripts/">System Scripts</a>
+            </div>
+            <article class="docs-content"><h1 id="technical-guide-and-systemserver-management-scripts">Technical Guide and System/Server Management Scripts</h1>
 <p><br>
 <strong>Last updated</strong>: March 01, 2026<br>
 <strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
@@ -42,7 +50,7 @@
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br></p>
 <!-- [![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-blue.svg)](https://github.com/PowerShell/PowerShell) -->
 <p><a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a>
-<a href="https://paulnamalomba.github.io/docs/guides/"><img alt="Power User Guides" src="https://img.shields.io/badge/Power%20User%20Guides-39-green.svg" /></a>
+<a href="https://paulnamalomba.github.io/docs/guides/"><img alt="Power User Guides" src="https://img.shields.io/badge/Power%20User%20Guides-40-green.svg" /></a>
 <a href="https://paulnamalomba.github.io/docs/system-scripts/"><img alt="PowerShell Scripts" src="https://img.shields.io/badge/PowerShell%20Scripts-11-yellow.svg" /></a>
 <a href="#"><img alt="Technologies Covered" src="https://img.shields.io/badge/Technologies-Git%2C%20GitHub%20CLI%2C%20Docker%2C%20PostgreSQL%2C%20Redis%2C%20RabbitMQ%2C%20Kafka%2C%20Azure%20AD%2C%20SSL%2FTLS%2C%20.NET-blue.svg" /></a></p>
 <h2 id="overview">Overview</h2>
@@ -282,6 +290,10 @@
 </ul>
 <h3 id="security-networking">Security &amp; Networking</h3>
 <ul>
+<li>
+<p><strong><a href="/docs/guides/SSH_POWERUSER_GUIDE.html">SSH_POWERUSER_GUIDE.md</a></strong><br />
+  OpenSSH client and server workflows on Windows and Linux; key-based passwordless auth; SSH config files; <code>scp</code>, <code>sftp</code>, jump hosts, and port forwarding</p>
+</li>
 <li>
 <p><strong><a href="/docs/guides/UBUNTU_SERVER_SETUP.html">UBUNTU_SERVER_SETUP.md</a></strong><br />
   Ubuntu Server 24.04 LTS installation on bare metal; SSD-only installation while preserving HDD data; UEFI/GPT boot layout; networking, SSH server/client setup, and post-install hardening</p>
@@ -606,7 +618,7 @@
 <hr />
 <h2 id="statistics">Statistics</h2>
 <ul>
-<li><strong>Power User Guides</strong>: 32 comprehensive technical guides</li>
+<li><strong>Power User Guides</strong>: 40 comprehensive technical guides</li>
 <li><strong>PowerShell Scripts</strong>: 11 automation script collections</li>
 <li><strong>Technologies Covered</strong>: Git, GitHub CLI, Docker, PostgreSQL, Redis, RabbitMQ, Kafka, Azure AD, SSL/TLS, .NET, and more</li>
 <li><strong>Lines of Documentation</strong>: 10,000+ lines of technical documentation</li>
@@ -617,13 +629,33 @@
 <strong>Repository Status</strong>: Active Development<br />
 <strong>PowerShell Version</strong>: 7.0+<br />
 <strong>Windows Compatibility</strong>: Windows 10/11, Server 2016+</p></article>
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 </body>
 </html>

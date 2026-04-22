@@ -7,28 +7,36 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to Guides</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
         </div>
-        <article class="docs-content"><h1 id="postgresql-16-poweruser-guide-powershell">POSTGRESQL 16 PowerUser Guide (PowerShell)</h1>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to Guides</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content"><h1 id="postgresql-16-poweruser-guide-powershell">POSTGRESQL 16 PowerUser Guide (PowerShell)</h1>
 <p><strong>Last updated</strong>: December 04, 2025<br>
 <strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
   - SESKA Computational Engineer<br>
@@ -505,13 +513,33 @@ Install PgBouncer for connection pooling:</p>
 <li><a href="https://wiki.postgresql.org/wiki/Performance_Optimization">PostgreSQL Performance Tuning</a> - Performance optimization guide</li>
 <li><a href="https://github.com/dhamaniasad/awesome-postgres">Awesome PostgreSQL</a> - Curated list of PostgreSQL resources</li>
 </ul></article>
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 </body>
 </html>

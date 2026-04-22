@@ -46,26 +46,53 @@ def resolve_system_mgmt_repo(cli_arg: str | None) -> str:
 # ──────────────────────────────────────────────
 
 NAV_HTML = """\
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>"""
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+"""
 
 FOOTER_HTML = """\
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>"""
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+"""
 
 
 def page_shell(title: str, body: str, extra_css: str = "") -> str:
@@ -146,16 +173,17 @@ def build_guides(guides_dir: str) -> None:
         title = to_title(md_file)
 
         body = f"""\
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to Guides</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to Guides</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content">{html_content}</article>
         </div>
-        <article class="docs-content">{html_content}</article>
-    </div>
-</main>"""
+    </main>
+"""
 
         with open(html_path, "w", encoding="utf-8") as f:
             f.write(page_shell(title, body))
@@ -166,16 +194,19 @@ def build_guides(guides_dir: str) -> None:
         html_name = g[:-3] + ".html"
         title = to_title(g)
         cards += f"""\
-                    <div class="card">
-                        <h3><a href="{html_name}">{title}</a></h3>
-                    </div>\n"""
+    <div class="card">
+        <h3><a href="{html_name}">{title}</a></h3>
+    </div>\n
+"""
 
     body = f"""\
-<main class="container docs-container">
-    <h2>Technical Guides</h2>
-    <div class="grid">
-{cards}                </div>
-</main>"""
+    <main class="container docs-container">
+        <h2>Technical Guides</h2>
+        <div class="grid">
+            {cards}
+        </div>
+    </main>
+"""
 
     index_path = os.path.join(guides_dir, "index.html")
     with open(index_path, "w", encoding="utf-8") as f:
@@ -208,20 +239,21 @@ def build_docs_index(docs_dir: str) -> None:
     html_content = md_to_html(content)
 
     body = f"""\
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="/">Portfolio Home</a>
-            <span>|</span>
-            <a href="/docs/guide-home/">Guides &amp; Scripts</a>
-            <span>|</span>
-            <a href="/docs/guides/">Tech Guides</a>
-            <span>|</span>
-            <a href="/docs/system-scripts/">System Scripts</a>
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="/">Portfolio Home</a>
+                <span>|</span>
+                <a href="/docs/guide-home/">Guides &amp; Scripts</a>
+                <span>|</span>
+                <a href="/docs/guides/">Tech Guides</a>
+                <span>|</span>
+                <a href="/docs/system-scripts/">System Scripts</a>
+            </div>
+            <article class="docs-content">{html_content}</article>
         </div>
-        <article class="docs-content">{html_content}</article>
-    </div>
-</main>"""
+    </main>
+"""
 
     out = os.path.join(docs_dir, "index.html")
     with open(out, "w", encoding="utf-8") as f:
@@ -261,18 +293,19 @@ def build_guide_home(docs_dir: str, sys_mgmt_repo: str) -> None:
     html_content = md_to_html(content)
 
     body = f"""\
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="/">Portfolio Home</a>
-            <span>|</span>
-            <a href="/docs/guides/">Tech Guides</a>
-            <span>|</span>
-            <a href="/docs/system-scripts/">System Scripts</a>
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="/">Portfolio Home</a>
+                <span>|</span>
+                <a href="/docs/guides/">Tech Guides</a>
+                <span>|</span>
+                <a href="/docs/system-scripts/">System Scripts</a>
+            </div>
+            <article class="docs-content">{html_content}</article>
         </div>
-        <article class="docs-content">{html_content}</article>
-    </div>
-</main>"""
+    </main>
+"""
 
     out_dir = os.path.join(docs_dir, "guide-home")
     os.makedirs(out_dir, exist_ok=True)
@@ -319,22 +352,23 @@ def build_system_scripts(scripts_dir: str) -> None:
         title = to_title(ps1_file)
 
         body = f"""\
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to System Scripts</a>
-            <span>|</span>
-            <a href="/docs/guide-home/">Guides &amp; Scripts</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to System Scripts</a>
+                <span>|</span>
+                <a href="/docs/guide-home/">Guides &amp; Scripts</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content">
+                <h1>{title}</h1>
+                <p><code>{ps1_file}</code> · <a href="{ps1_file}" download>Download Script</a></p>
+                {highlighted}
+            </article>
         </div>
-        <article class="docs-content">
-            <h1>{title}</h1>
-            <p><code>{ps1_file}</code> · <a href="{ps1_file}" download>Download Script</a></p>
-            {highlighted}
-        </article>
-    </div>
-</main>"""
+    </main>
+"""
 
         html_path = os.path.join(scripts_dir, ps1_file[:-4] + ".html")
         with open(html_path, "w", encoding="utf-8") as f:
@@ -361,18 +395,20 @@ def build_system_scripts(scripts_dir: str) -> None:
         desc = desc_parts[0] if desc_parts else script
 
         cards += f"""\
-                    <div class="card">
-                        <h3><a href="{html_name}">{title}</a></h3>
-                        <p>{desc}</p>
-                        <p><code>{script}</code></p>
-                    </div>\n"""
+    <div class="card">
+        <h3><a href="{html_name}">{title}</a></h3>
+        <p>{desc}</p>
+        <p><code>{script}</code></p>
+    </div>\n
+"""
 
     body = f"""\
-<main class="container docs-container">
-    <h2>System Scripts</h2>
-    <div class="grid">
-{cards}                </div>
-</main>"""
+    <main class="container docs-container">
+        <h2>System Scripts</h2>
+        <div class="grid">
+    {cards}                </div>
+    </main>
+"""
 
     index_path = os.path.join(scripts_dir, "index.html")
     with open(index_path, "w", encoding="utf-8") as f:

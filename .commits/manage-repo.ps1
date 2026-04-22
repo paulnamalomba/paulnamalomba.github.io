@@ -2,19 +2,19 @@
 # Manages git operations with version-based commits and tags
 # Usage:
 # # List available versions
-# .\.helpers\manage-repo.ps1
+# .\.commits\manage-repo.ps1
 
 # # Complete release (recommended)
-# .\.helpers\manage-repo.ps1 -Action release -Version v0.1.0-alpha
+# .\.commits\manage-repo.ps1 -Action release -Version v0.1.0-alpha
 
 # # Individual steps
-# .\.helpers\manage-repo.ps1 -Action add
-# .\.helpers\manage-repo.ps1 -Action commit -Version v0.1.0-alpha
-# .\.helpers\manage-repo.ps1 -Action push
-# .\.helpers\manage-repo.ps1 -Action tag -Version v0.1.0-alpha
+# .\.commits\manage-repo.ps1 -Action add
+# .\.commits\manage-repo.ps1 -Action commit -Version v0.1.0-alpha
+# .\.commits\manage-repo.ps1 -Action push
+# .\.commits\manage-repo.ps1 -Action tag -Version v0.1.0-alpha
 
 # # Custom remote/branch
-# .\.helpers\manage-repo.ps1 -Action release -Version v0.1.0-alpha -Remote upstream -Branch develop
+# .\.commits\manage-repo.ps1 -Action release -Version v0.1.0-alpha -Remote upstream -Branch develop
 
 param(
     [Parameter(Mandatory=$false)]
@@ -58,7 +58,7 @@ function Write-Error {
 # Get available versions from .commits directory
 function Get-AvailableVersions {
     $commitsDir = Join-Path $PSScriptRoot "."
-    $txtFiles = Get-ChildItem -Path $commitsDir -Filter "*.txt" | Where-Object { $_.Name -match '^v\d+\.\d+\.\d+.*\.txt$' }
+    $txtFiles = Get-ChildItem -Path $commitsDir -Filter "*.txt" | Where-Object { $_.Name -match '\d+.*\.txt$' }
     
     $versions = @()
     foreach ($file in $txtFiles) {
@@ -78,7 +78,7 @@ function Show-AvailableVersions {
     
     if ($versions.Count -eq 0) {
         Write-Warning "No version files found in .commits/ directory"
-        Write-Info "Expected format: v*.txt (e.g., v0.1.0-alpha.txt)"
+        Write-Info "Expected format: *.txt (e.g., 0.1.0-alpha.txt)"
         return $false
     }
     

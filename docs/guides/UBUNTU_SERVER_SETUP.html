@@ -7,28 +7,36 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-<header>
-    <div class="container">
-        <nav>
-            <div class="logo"><a href="/">Paul Namalomba</a></div>
-            <ul class="nav-links">
-                <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                <li><a href="/docs/guides/">Tech Guides</a></li>
-                <li><a href="/docs/system-scripts/">System Scripts</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-
-<main class="container docs-container">
-    <div class="card docs-card">
-        <div class="docs-breadcrumb">
-            <a href="index.html">← Back to Guides</a>
-            <span>|</span>
-            <a href="/">Portfolio Home</a>
+    <!-- Nav Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo"><a href="/">Paul Namalomba</a></div>
+                <!-- Mobile Menu -->
+                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
+                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
+                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
+                </ul>
+            </nav>
         </div>
-        <article class="docs-content"><h1 id="ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh">Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH</h1>
+    </header>
+
+
+    <main class="container docs-container">
+        <div class="card docs-card">
+            <div class="docs-breadcrumb">
+                <a href="index.html">← Back to Guides</a>
+                <span>|</span>
+                <a href="/">Portfolio Home</a>
+            </div>
+            <article class="docs-content"><h1 id="ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh">Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH</h1>
 <p><br>
 <strong>Last updated</strong>: April 05, 2026<br>
 <strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
@@ -922,13 +930,33 @@ iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;target-host&gt;
 <li>Ubuntu community help on UEFI and GRUB recovery: <a href="https://help.ubuntu.com/community/">https://help.ubuntu.com/community/</a></li>
 </ul>
 <p>For this machine and installation goal, the single most important operational decision is still the simplest one: keep the HDD out of the installer's blast radius. If you can disconnect it physically during installation, do that. If you cannot, identify disks by model and serial, create a dedicated EFI partition on the SSD, and do not accept any installer action that references the HDD.</p></article>
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
-    </div>
-</footer>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 </body>
 </html>
