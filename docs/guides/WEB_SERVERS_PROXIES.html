@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Servers Proxies - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Web Servers & Proxies: Apache2, Nginx, and ngrok - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -44,7 +44,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br>
 <a href="https://nginx.org/"><img alt="Nginx" src="https://img.shields.io/badge/Server-Nginx-green.svg" /></a>
@@ -53,14 +53,14 @@
 <p>A robust application exists exclusively at localhost until explicitly routed through a web server or reverse proxy. This guide addresses the foundational configuration syntax necessary for architecting robust Virtual Hosts (<code>.conf</code> files), routing localized traffic securely outside complex firewalls via ngrok, and managing the fundamental daemonization of web traffic controllers on Unix systems.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#web-servers--proxies-apache2-nginx-and-ngrok">Web Servers \&amp; Proxies: Apache2, Nginx, and ngrok</a></li>
+<li><a href="#web-servers-proxies-apache2-nginx-and-ngrok">Web Servers \&amp; Proxies: Apache2, Nginx, and ngrok</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows--linux">1. Configuration (Windows \&amp; Linux)</a><ul>
+<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
 <li><a href="#linux-environment-architecture">Linux Environment Architecture</a></li>
 </ul>
 </li>
-<li><a href="#2-writing-basic-codescripts-virtual-hosts--proxies">2. Writing Basic Code/Scripts (Virtual Hosts \&amp; Proxies)</a><ul>
+<li><a href="#2-writing-basic-codescripts-virtual-hosts-proxies">2. Writing Basic Code/Scripts (Virtual Hosts \&amp; Proxies)</a><ul>
 <li><a href="#nginx-the-reverse-proxy">Nginx: The Reverse Proxy</a></li>
 <li><a href="#apache2-directory-virtual-hosting">Apache2: Directory Virtual Hosting</a></li>
 </ul>
@@ -70,12 +70,12 @@
 <li><a href="#apache2-syntax-tester">Apache2 Syntax Tester</a></li>
 </ul>
 </li>
-<li><a href="#4-runtime-commands-daemonization--ngrok">4. Runtime Commands (Daemonization \&amp; ngrok)</a><ul>
-<li><a href="#service-management-nginx--apache">Service Management (Nginx / Apache)</a></li>
+<li><a href="#4-runtime-commands-daemonization-ngrok">4. Runtime Commands (Daemonization \&amp; ngrok)</a><ul>
+<li><a href="#service-management-nginx-apache">Service Management (Nginx / Apache)</a></li>
 <li><a href="#ngrok-tunneling-local-environments-to-the-public-web">Ngrok: Tunneling Local Environments to the Public Web</a></li>
 </ul>
 </li>
-<li><a href="#5-debugging-502-bad-gateway--port-conflicts">5. Debugging (502 Bad Gateway \&amp; Port Conflicts)</a><ul>
+<li><a href="#5-debugging-502-bad-gateway-port-conflicts">5. Debugging (502 Bad Gateway \&amp; Port Conflicts)</a><ul>
 <li><a href="#the-infamous-502-bad-gateway">The Infamous 502 Bad Gateway</a></li>
 <li><a href="#binding-tcp-port-conflicts">Binding TCP Port Conflicts</a></li>
 </ul>
@@ -200,9 +200,9 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
 <h2 id="5-debugging-502-bad-gateway-port-conflicts">5. Debugging (502 Bad Gateway &amp; Port Conflicts)</h2>
 <p>Reverse proxies orchestrating web traffic introduce significant complexity. Understanding the standard error codes quickly isolates whether the problem sits at the network layer or the application codebase.</p>
 <h3 id="the-infamous-502-bad-gateway">The Infamous 502 Bad Gateway</h3>
-<p>If Nginx returns a <code>502</code>, the Nginx daemon correctly caught the public internet request, attempted to <code>proxy_pass</code> it to your internal application at <code>localhost:5000</code>, and hit a literal wall. 
+<p>If Nginx returns a <code>502</code>, the Nginx daemon correctly caught the public internet request, attempted to <code>proxy_pass</code> it to your internal application at <code>localhost:5000</code>, and hit a literal wall.
 * <strong>The Fix:</strong> The internal application is dead. Nginx is completely innocent. Ensure the backend (Node, .NET, Python) is actually running and listening on port <code>5000</code>.
-* <strong>The Log Investigation:</strong> 
+* <strong>The Log Investigation:</strong>
   <code>bash
   sudo tail -f /var/log/nginx/error.log
   # Expected trace: "connect() failed (111: Connection refused) while connecting to upstream"</code></p>
@@ -217,8 +217,9 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -229,6 +230,7 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -236,6 +238,7 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

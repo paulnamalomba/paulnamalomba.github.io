@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git Gh Cli Poweruser Guide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Git + GitHub CLI (gh) PowerUser Guide - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -44,7 +44,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://git-scm.com/docs"><img alt="CLI" src="https://img.shields.io/badge/SCM-Git-1f425f.svg" /></a>
@@ -54,7 +54,7 @@
 <p>This guide is a practical deep dive into <strong>Git</strong> (core version control) and <strong>GitHub CLI (<code>gh</code>)</strong> (GitHub automation from the terminal). It covers repository creation/deletion, local and remote repo management, authentication (HTTPS/PAT, SSH, and <code>gh</code>), professional collaboration workflows (feature branches, PRs, rebase strategies), recovery techniques (<code>reflog</code>, resets, revert), and <strong>CLI-driven deployments</strong> (Git push deployments, remote servers via bare repos/hooks, and GitHub Actions triggered and operated via <code>gh</code>).</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#git--github-cli-gh-poweruser-guide">Git + GitHub CLI (gh) PowerUser Guide</a></li>
+<li><a href="#git-github-cli-gh-poweruser-guide">Git + GitHub CLI (gh) PowerUser Guide</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#quickstart">Quickstart</a></li>
@@ -71,7 +71,7 @@
 </ul>
 </li>
 <li><a href="#3-authentication-git-httpspat-ssh-and-gh">3. Authentication (Git HTTPS/PAT, SSH, and gh)</a><ul>
-<li><a href="#31-git-over-https-pat--credential-manager">3.1 Git over HTTPS (PAT) + Credential Manager</a></li>
+<li><a href="#31-git-over-https-pat-credential-manager">3.1 Git over HTTPS (PAT) + Credential Manager</a></li>
 <li><a href="#32-git-over-ssh-recommended-for-power-users">3.2 Git over SSH (recommended for power users)</a></li>
 <li><a href="#33-github-cli-authentication">3.3 GitHub CLI authentication</a></li>
 </ul>
@@ -146,8 +146,8 @@
 <li><a href="#12-cli-driven-deployment-git-push-remote-hooks-github-actions">12. CLI-Driven Deployment (Git Push, Remote Hooks, GitHub Actions)</a><ul>
 <li><a href="#121-push-to-deploy-via-github-actions-operate-with-gh">12.1 Push-to-deploy via GitHub Actions (operate with gh)</a></li>
 <li><a href="#122-tag-driven-releases-and-deployments">12.2 Tag-driven releases and deployments</a></li>
-<li><a href="#123-remote-server-deployment-using-a-bare-repo--hook">12.3 Remote server deployment using a bare repo + hook</a></li>
-<li><a href="#124-remote-deployment-key-management-github--servers">12.4 Remote deployment key management (GitHub + servers)</a></li>
+<li><a href="#123-remote-server-deployment-using-a-bare-repo-hook">12.3 Remote server deployment using a bare repo + hook</a></li>
+<li><a href="#124-remote-deployment-key-management-github-servers">12.4 Remote deployment key management (GitHub + servers)</a></li>
 </ul>
 </li>
 <li><a href="#13-security-and-governance">13. Security and Governance</a><ul>
@@ -160,7 +160,7 @@
 <li><a href="#credentials-keep-failing">Credentials keep failing</a></li>
 <li><a href="#detached-head">Detached HEAD</a></li>
 <li><a href="#non-fast-forward-push-rejected">“non-fast-forward” push rejected</a></li>
-<li><a href="#accidental-git-reset---hard">Accidental <code>git reset --hard</code></a></li>
+<li><a href="#accidental-git-reset-hard">Accidental <code>git reset --hard</code></a></li>
 </ul>
 </li>
 <li><a href="#references-and-further-reading">References and Further Reading</a></li>
@@ -1080,8 +1080,9 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -1092,6 +1093,7 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -1099,6 +1101,7 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

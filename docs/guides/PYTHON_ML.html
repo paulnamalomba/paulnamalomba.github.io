@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Ml - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Python for Machine Learning: Engineering the AI Pipeline - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -44,7 +44,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br>
 <a href="https://www.python.org/"><img alt="Language" src="https://img.shields.io/badge/Language-Python_3.11-blue.svg" /></a>
@@ -56,20 +56,20 @@
 <li><a href="#python-for-machine-learning-engineering-the-ai-pipeline">Python for Machine Learning: Engineering the AI Pipeline</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows--linux">1. Configuration (Windows \&amp; Linux)</a><ul>
-<li><a href="#dependency--environment-management">Dependency \&amp; Environment Management</a></li>
+<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
+<li><a href="#dependency-environment-management">Dependency \&amp; Environment Management</a></li>
 <li><a href="#windows-path-and-gpu-drivers">Windows PATH and GPU Drivers</a></li>
 </ul>
 </li>
 <li><a href="#2-writing-basic-codescripts-core-ml-frameworks">2. Writing Basic Code/Scripts (Core ML Frameworks)</a><ul>
-<li><a href="#data-manipulation-numpy--pandas">Data Manipulation: NumPy \&amp; Pandas</a></li>
+<li><a href="#data-manipulation-numpy-pandas">Data Manipulation: NumPy \&amp; Pandas</a></li>
 <li><a href="#classical-ml-scikit-learn">Classical ML: Scikit-Learn</a></li>
 <li><a href="#deep-learning-pytorch">Deep Learning: PyTorch</a></li>
 </ul>
 </li>
-<li><a href="#3-compile-time-commands-bytecode--linting">3. Compile-time Commands (Bytecode \&amp; Linting)</a></li>
-<li><a href="#4-runtime-commands-execution--serving">4. Runtime Commands (Execution \&amp; Serving)</a></li>
-<li><a href="#5-debugging-tensor-mismatches--oom-kernels">5. Debugging (Tensor Mismatches \&amp; OOM Kernels)</a><ul>
+<li><a href="#3-compile-time-commands-bytecode-linting">3. Compile-time Commands (Bytecode \&amp; Linting)</a></li>
+<li><a href="#4-runtime-commands-execution-serving">4. Runtime Commands (Execution \&amp; Serving)</a></li>
+<li><a href="#5-debugging-tensor-mismatches-oom-kernels">5. Debugging (Tensor Mismatches \&amp; OOM Kernels)</a><ul>
 <li><a href="#common-pitfalls">Common Pitfalls</a></li>
 <li><a href="#profiling">Profiling</a></li>
 </ul>
@@ -226,8 +226,9 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -238,6 +239,7 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -245,6 +247,7 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

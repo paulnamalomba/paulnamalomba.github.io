@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth Services Powershell Poweruser Guide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>AUTH_SERVICES PowerUser Guide (PowerShell) - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br>
 <a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
@@ -207,8 +207,8 @@
 <span class="nv">$failedSignIns</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogSignIn</span> <span class="p">`</span>
     <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">100</span> <span class="p">|</span>
-    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span> 
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ErrorCode&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span> 
+    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ErrorCode&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;FailureReason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}},</span>
                   <span class="n">IpAddress</span><span class="p">,</span> <span class="n">Location</span>
 
@@ -221,7 +221,7 @@
 <span class="nv">$auditLogs</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogDirectoryAudit</span> <span class="p">`</span>
     <span class="n">-Filter</span> <span class="s2">&quot;activityDisplayName eq &#39;Add member to role&#39; and activityDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">50</span> <span class="p">|</span>
-    <span class="nb">Select-Object</span> <span class="n">ActivityDateTime</span><span class="p">,</span> <span class="n">ActivityDisplayName</span><span class="p">,</span> 
+    <span class="nb">Select-Object</span> <span class="n">ActivityDateTime</span><span class="p">,</span> <span class="n">ActivityDisplayName</span><span class="p">,</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;InitiatedBy&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">InitiatedBy</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;TargetUser&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">TargetResources</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Result&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Result</span><span class="p">}}</span>
@@ -557,8 +557,8 @@
     <span class="k">foreach</span> <span class="p">(</span><span class="nv">$member</span> <span class="k">in</span> <span class="nv">$members</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-UserId</span> <span class="nv">$member</span><span class="p">.</span><span class="n">Id</span> <span class="n">-Property</span> <span class="s2">&quot;DisplayName,UserPrincipalName,AssignedLicenses,LicenseAssignmentStates&quot;</span>
 
-        <span class="nv">$licenseState</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LicenseAssignmentStates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> 
-            <span class="nv">$_</span><span class="p">.</span><span class="n">SkuId</span> <span class="o">-eq</span> <span class="nv">$SkuId</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">AssignedByGroup</span> <span class="o">-eq</span> <span class="nv">$GroupId</span> 
+        <span class="nv">$licenseState</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LicenseAssignmentStates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
+            <span class="nv">$_</span><span class="p">.</span><span class="n">SkuId</span> <span class="o">-eq</span> <span class="nv">$SkuId</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">AssignedByGroup</span> <span class="o">-eq</span> <span class="nv">$GroupId</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="nv">$licenseState</span><span class="p">)</span> <span class="p">{</span>
@@ -658,7 +658,7 @@
 <span class="c"># Check API permissions for service principal</span>
 <span class="nv">$appId</span> <span class="p">=</span> <span class="s2">&quot;your-app-id&quot;</span>
 <span class="nv">$sp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">&quot;appId eq &#39;$appId&#39;&quot;</span>
-<span class="nb">Get-MgServicePrincipalAppRoleAssignment</span> <span class="n">-ServicePrincipalId</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span> <span class="p">|</span> 
+<span class="nb">Get-MgServicePrincipalAppRoleAssignment</span> <span class="n">-ServicePrincipalId</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span> <span class="p">|</span>
     <span class="nb">Select-Object</span> <span class="n">AppRoleId</span><span class="p">,</span> <span class="n">PrincipalDisplayName</span><span class="p">,</span> <span class="n">ResourceDisplayName</span>
 
 <span class="c"># Test certificate authentication</span>
@@ -676,8 +676,8 @@
 <span class="c"># Check Azure AD sign-in logs for errors</span>
 <span class="nb">Get-MgAuditLogSignIn</span> <span class="n">-Top</span> <span class="n">10</span> <span class="n">-OrderBy</span> <span class="s2">&quot;createdDateTime desc&quot;</span> <span class="p">|</span>
     <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">-ne</span> <span class="n">0</span> <span class="p">}</span> <span class="p">|</span>
-    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span> 
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Error&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span> 
+    <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Error&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Reason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}}</span>
 </code></pre></div>
 
@@ -814,7 +814,7 @@
     <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$((</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddHours</span><span class="p">(-</span><span class="n">1</span><span class="p">).</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-ddTHH:mm:ssZ&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">100</span>
 
-<span class="nv">$suspiciousActivity</span> <span class="p">=</span> <span class="nv">$recentFailures</span> <span class="p">|</span> <span class="nb">Group-Object</span> <span class="n">UserPrincipalName</span> <span class="p">|</span> 
+<span class="nv">$suspiciousActivity</span> <span class="p">=</span> <span class="nv">$recentFailures</span> <span class="p">|</span> <span class="nb">Group-Object</span> <span class="n">UserPrincipalName</span> <span class="p">|</span>
     <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Count</span> <span class="o">-ge</span> <span class="n">5</span> <span class="p">}</span>  <span class="c"># 5+ failures in 1 hour</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nv">$suspiciousActivity</span><span class="p">)</span> <span class="p">{</span>
@@ -849,8 +849,9 @@
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -861,6 +862,7 @@
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -868,6 +870,7 @@
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

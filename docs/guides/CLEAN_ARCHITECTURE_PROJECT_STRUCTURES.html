@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clean Architecture Project Structures - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Clean Architecture & Project Structures — C#, Dart (Flutter) & TypeScript - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -44,7 +44,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html"><img alt="Architecture" src="https://img.shields.io/badge/Architecture-Clean%20Architecture-blue.svg" /></a>
@@ -55,7 +55,7 @@
 <p>This guide provides a detailed breakdown of typical, framework-default project structures versus their production-grade Clean Architecture counterparts for <strong>C# (.NET)</strong>, <strong>Dart (Flutter)</strong>, and <strong>TypeScript (Node.js)</strong>. It includes a glossary of fundamental architectural terms, concrete folder structures, comparison tables, a full data-flow walkthrough, and practical guidance on when (and when not) to apply Clean Architecture.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#clean-architecture--project-structures--c-dart-flutter--typescript">Clean Architecture \&amp; Project Structures — C#, Dart (Flutter) \&amp; TypeScript</a></li>
+<li><a href="#clean-architecture-project-structures-c-dart-flutter-typescript">Clean Architecture \&amp; Project Structures — C#, Dart (Flutter) \&amp; TypeScript</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#architectural-glossary">Architectural Glossary</a><ul>
@@ -80,7 +80,7 @@
 <li><a href="#3-typescript-nodejs-backend">3. TypeScript (Node.js Backend)</a><ul>
 <li><a href="#typical-structure-expressjs-default">Typical Structure (Express.js Default)</a></li>
 <li><a href="#clean-architecture-structure">Clean Architecture Structure</a></li>
-<li><a href="#typescript-di--interface-enforcement">TypeScript DI \&amp; Interface Enforcement</a></li>
+<li><a href="#typescript-di-interface-enforcement">TypeScript DI \&amp; Interface Enforcement</a></li>
 </ul>
 </li>
 <li><a href="#comparison-matrix-typical-vs-clean">Comparison Matrix: Typical vs Clean</a></li>
@@ -91,7 +91,7 @@
 </li>
 <li><a href="#when-to-use-clean-architecture-and-when-not-to">When to Use Clean Architecture (and When Not To)</a></li>
 <li><a href="#common-pitfalls">Common Pitfalls</a></li>
-<li><a href="#references--further-reading">References \&amp; Further Reading</a></li>
+<li><a href="#references-further-reading">References \&amp; Further Reading</a></li>
 </ul>
 <hr />
 <h2 id="architectural-glossary">Architectural Glossary</h2>
@@ -901,8 +901,9 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -913,6 +914,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -920,6 +922,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Web Design Testing Poweruser Guide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Responsive Web Design Testing PowerUser Guide (PowerShell & HTML) - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://docs.python.org/3/library/http.server.html"><img alt="Framework" src="https://img.shields.io/badge/Python-3.x-blue.svg" /></a>
@@ -53,7 +53,7 @@
 <p>Responsive web design testing ensures that HTML/CSS sites render correctly across all viewport sizes — from 320px mobile screens to 2560px desktop monitors. This guide covers serving sites locally with Python's built-in HTTP server, using Chrome/Edge/Firefox DevTools for device emulation, building custom HTML-based overflow debuggers, and automating viewport regression testing. Power users need to understand viewport meta tags, CSS media query breakpoints, overflow detection strategies, and local-first testing workflows to catch layout issues <strong>before</strong> deploying to production (e.g., GitHub Pages, Vercel, Netlify).</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#responsive-web-design-testing-poweruser-guide-powershell--html">Responsive Web Design Testing PowerUser Guide (PowerShell \&amp; HTML)</a></li>
+<li><a href="#responsive-web-design-testing-poweruser-guide-powershell-html">Responsive Web Design Testing PowerUser Guide (PowerShell \&amp; HTML)</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#quickstart">Quickstart</a></li>
@@ -982,8 +982,9 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -994,6 +995,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -1001,6 +1003,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

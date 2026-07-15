@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
     <title>Github Management - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
     <style>pre { line-height: 125%; }
@@ -82,21 +84,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .codehilite .il { color: #666 } /* Literal.Number.Integer.Long */</style>
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -104,7 +104,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to System Scripts</a>
@@ -372,7 +372,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="no">[string]</span><span class="nv">$commitMessage</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;update&quot;</span>
     <span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;u&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;update&quot;</span>
     <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;i&quot;</span><span class="p">)</span> <span class="p">{</span>
@@ -393,7 +393,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="p">}</span>
 
     <span class="nv">$originalDir</span> <span class="p">=</span> <span class="nb">Get-Location</span>
-    
+
     <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$managerPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$managerPath</span>
@@ -402,10 +402,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="nb">Write-Host</span> <span class="s2">&quot;Directory &#39;$managerPath&#39; does not exist.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">&quot;update&quot;</span> <span class="o">-or</span> <span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">&quot;init&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">&quot;app-manager.ps1&quot;</span>
-        
+
         <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$appName</span> <span class="o">-or</span> <span class="nv">$appName</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span> <span class="o">-or</span>
             <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitTag</span> <span class="o">-or</span> <span class="nv">$commitTag</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span> <span class="o">-or</span>
             <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitMessage</span> <span class="o">-or</span> <span class="nv">$commitMessage</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
@@ -422,7 +422,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; not found in &#39;$managerPath&#39;.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="p">}</span>
     <span class="p">}</span>
-    
+
     <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
     <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
 <span class="p">}</span>
@@ -455,10 +455,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="no">[string]</span><span class="nv">$commitTag</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;list&quot;</span>
     <span class="p">)</span>
-    
+
     <span class="nb">Write-Host</span> <span class="s2">&quot;-------------*GITHUB TAG MANAGER*----------------------&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
     <span class="nb">Write-Host</span> <span class="s2">&quot;Managing GitHub Tags for repository: $appName&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;l&quot;</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;list&quot;</span>
         <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">&quot;tag-list.ps1&quot;</span>
@@ -471,14 +471,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="p">}</span>
 
     <span class="nv">$originalDir</span> <span class="p">=</span> <span class="nb">Get-Location</span>
-    
+
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$managerPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$managerPath</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nb">Write-Host</span> <span class="s2">&quot;Directory &#39;$managerPath&#39; does not exist.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
-    
+
     <span class="nv">$scriptPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$managerPath</span> <span class="n">-ChildPath</span> <span class="s2">&quot;$managerApp&quot;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$scriptPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="p">.</span> <span class="nv">$scriptPath</span> <span class="n">-appName</span> <span class="nv">$appName</span> <span class="n">-commitTag</span> <span class="nv">$commitTag</span> <span class="n">-method</span> <span class="nv">$method</span>
@@ -486,7 +486,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; not found.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
     <span class="p">}</span>
-    
+
     <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
     <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
 <span class="p">}</span>
@@ -563,8 +563,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -575,6 +576,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -582,6 +584,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>
