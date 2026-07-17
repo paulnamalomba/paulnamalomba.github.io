@@ -227,7 +227,8 @@ function Invoke-GitTag {
 function Invoke-GitRelease {
     param(
         [string]$VersionNumber,
-        [string]$Remote
+        [string]$Remote,
+        [string]$Branch
     )
     
     Write-Info "Creating release: $VersionNumber"
@@ -249,7 +250,7 @@ function Invoke-GitRelease {
         }
     }
     $releaseMessageFile = Join-Path $PSScriptRoot "$VersionNumber.txt"
-    gh release create "$VersionNumber" --title "$VersionNumber" --notes-file $releaseMessageFile --target dev/paulnamalomba
+    gh release create "$VersionNumber" --title "$VersionNumber" --notes-file $releaseMessageFile --target $Branch
     
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Release $VersionNumber created successfully"
@@ -333,7 +334,7 @@ function Invoke-Release {
     if (-not (Invoke-GitCommit -VersionNumber $VersionNumber)) { return }
     if (-not (Invoke-GitPush -Remote $Remote -Branch $Branch)) { return }
     if (-not (Invoke-GitTag -VersionNumber $VersionNumber -Remote $Remote)) { return }
-    if (-not (Invoke-GitRelease -VersionNumber $VersionNumber -Remote $Remote)) { return }
+    if (-not (Invoke-GitRelease -VersionNumber $VersionNumber -Remote $Remote -Branch $Branch)) { return }
     
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Green
