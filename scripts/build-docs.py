@@ -174,10 +174,24 @@ def guide_metadata(filename: str, content: str) -> dict[str, str]:
 
 
 def md_to_html(md_text: str) -> str:
-    return markdown.markdown(
+    rendered = markdown.markdown(
         md_text,
         extensions=["fenced_code", "codehilite", "tables", "toc"],
     )
+
+    # A few source guides contain additional level-one headings inside the
+    # document body. Keep the first as the page title and demote later H1s so
+    # every generated guide has one clear primary heading.
+    first_h1 = True
+
+    def normalize_h1(match: re.Match[str]) -> str:
+        nonlocal first_h1
+        if first_h1:
+            first_h1 = False
+            return match.group(0)
+        return re.sub(r"h1", "h2", match.group(0), count=2, flags=re.IGNORECASE)
+
+    return re.sub(r"<h1\b[^>]*>.*?</h1>", normalize_h1, rendered, flags=re.IGNORECASE | re.DOTALL)
 
 
 def repair_internal_fragments(html_text: str) -> str:
@@ -524,7 +538,7 @@ def build_system_scripts(scripts_dir: str) -> None:
 
     body = f"""\
     <main id="main" class="container docs-container">
-        <h2>System Scripts</h2>
+        <h1>System Scripts</h1>
         <div class="grid">
     {cards}                </div>
     </main>
