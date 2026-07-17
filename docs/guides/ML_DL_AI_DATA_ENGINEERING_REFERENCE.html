@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ml Dl Ai Data Engineering Reference - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Machine Learning, Deep Learning & AI Methods for Data Analysis, Processing & Engineering - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -57,11 +57,11 @@
 <p>Phase 1 provides the algorithmic taxonomy. Phase 2 maps these algorithms to the concrete library and framework landscape in <strong>Python</strong> and <strong>C# / .NET</strong>, covering hardware acceleration, API philosophy, and production integration patterns.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#machine-learning-deep-learning--ai-methods-for-data-analysis-processing--engineering">Machine Learning, Deep Learning \&amp; AI Methods for Data Analysis, Processing \&amp; Engineering</a></li>
+<li><a href="#machine-learning-deep-learning-ai-methods-for-data-analysis-processing-engineering">Machine Learning, Deep Learning \&amp; AI Methods for Data Analysis, Processing \&amp; Engineering</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#phase-1--comprehensive-taxonomy-of-mldl-methods-in-data-analysis">Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis</a><ul>
-<li><a href="#1-data-preprocessing--feature-engineering">1) Data Preprocessing \&amp; Feature Engineering</a></li>
+<li><a href="#phase-1-comprehensive-taxonomy-of-mldl-methods-in-data-analysis">Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis</a><ul>
+<li><a href="#1-data-preprocessing-feature-engineering">1) Data Preprocessing \&amp; Feature Engineering</a></li>
 <li><a href="#11-multiple-imputation-by-chained-equations-mice">1.1 Multiple Imputation by Chained Equations (MICE)</a></li>
 <li><a href="#12-knn-imputation">1.2 KNN Imputation</a></li>
 <li><a href="#13-matrix-completion-via-nuclear-norm-minimization">1.3 Matrix Completion via Nuclear Norm Minimization</a></li>
@@ -71,7 +71,7 @@
 <li><a href="#17-scaling-transformations">1.7 Scaling Transformations</a></li>
 <li><a href="#18-feature-hashing-hashing-trick">1.8 Feature Hashing (Hashing Trick)</a></li>
 <li><a href="#19-target-encoding">1.9 Target Encoding</a></li>
-<li><a href="#2-dimensionality-reduction--manifold-learning">2) Dimensionality Reduction \&amp; Manifold Learning</a></li>
+<li><a href="#2-dimensionality-reduction-manifold-learning">2) Dimensionality Reduction \&amp; Manifold Learning</a></li>
 <li><a href="#21-principal-component-analysis-pca">2.1 Principal Component Analysis (PCA)</a></li>
 <li><a href="#22-kernel-pca">2.2 Kernel PCA</a></li>
 <li><a href="#23-sparse-pca">2.3 Sparse PCA</a></li>
@@ -80,17 +80,17 @@
 <li><a href="#26-autoencoders-vanilla">2.6 Autoencoders (Vanilla)</a></li>
 <li><a href="#27-variational-autoencoders-vae">2.7 Variational Autoencoders (VAE)</a></li>
 <li><a href="#28-sparse-autoencoders">2.8 Sparse Autoencoders</a></li>
-<li><a href="#3-supervised-learning--regression--classification">3) Supervised Learning — Regression \&amp; Classification</a></li>
-<li><a href="#31-gradient-boosted-decision-trees--xgboost">3.1 Gradient Boosted Decision Trees — XGBoost</a></li>
+<li><a href="#3-supervised-learning-regression-classification">3) Supervised Learning — Regression \&amp; Classification</a></li>
+<li><a href="#31-gradient-boosted-decision-trees-xgboost">3.1 Gradient Boosted Decision Trees — XGBoost</a></li>
 <li><a href="#32-lightgbm">3.2 LightGBM</a></li>
 <li><a href="#33-catboost">3.3 CatBoost</a></li>
 <li><a href="#34-support-vector-machines-svm">3.4 Support Vector Machines (SVM)</a></li>
-<li><a href="#35-elastic-net-l1--l2-regularized-regression">3.5 Elastic Net (L1 + L2 Regularized Regression)</a></li>
+<li><a href="#35-elastic-net-l1-l2-regularized-regression">3.5 Elastic Net (L1 + L2 Regularized Regression)</a></li>
 <li><a href="#36-random-forests">3.6 Random Forests</a></li>
-<li><a href="#4-unsupervised-learning--clustering--density-estimation">4) Unsupervised Learning — Clustering \&amp; Density Estimation</a></li>
+<li><a href="#4-unsupervised-learning-clustering-density-estimation">4) Unsupervised Learning — Clustering \&amp; Density Estimation</a></li>
 <li><a href="#41-dbscan">4.1 DBSCAN</a></li>
 <li><a href="#42-hdbscan">4.2 HDBSCAN</a></li>
-<li><a href="#43-gaussian-mixture-models-gmm--expectation-maximization">4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization</a></li>
+<li><a href="#43-gaussian-mixture-models-gmm-expectation-maximization">4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization</a></li>
 <li><a href="#44-agglomerative-hierarchical-clustering">4.4 Agglomerative Hierarchical Clustering</a></li>
 <li><a href="#45-spectral-clustering">4.5 Spectral Clustering</a></li>
 <li><a href="#5-deep-learning-for-data">5) Deep Learning for Data</a></li>
@@ -98,7 +98,7 @@
 <li><a href="#52-long-short-term-memory-lstm">5.2 Long Short-Term Memory (LSTM)</a></li>
 <li><a href="#53-gated-recurrent-unit-gru">5.3 Gated Recurrent Unit (GRU)</a></li>
 <li><a href="#54-convolutional-neural-networks-cnn-on-structured-data">5.4 Convolutional Neural Networks (CNN) on Structured Data</a></li>
-<li><a href="#55-attention-mechanisms--transformers-for-structured-data">5.5 Attention Mechanisms \&amp; Transformers for Structured Data</a></li>
+<li><a href="#55-attention-mechanisms-transformers-for-structured-data">5.5 Attention Mechanisms \&amp; Transformers for Structured Data</a></li>
 <li><a href="#56-temporal-fusion-transformers-tft">5.6 Temporal Fusion Transformers (TFT)</a></li>
 <li><a href="#57-neural-ordinary-differential-equations-neural-odes">5.7 Neural Ordinary Differential Equations (Neural ODEs)</a></li>
 <li><a href="#6-generative-ai-in-data-processing">6) Generative AI in Data Processing</a></li>
@@ -109,23 +109,23 @@
 <li><a href="#65-smote-and-its-neural-successors">6.5 SMOTE and Its Neural Successors</a></li>
 </ul>
 </li>
-<li><a href="#phase-2--the-production-ecosystem-python-and-c">Phase 2 — The Production Ecosystem (Python and C#)</a><ul>
+<li><a href="#phase-2-the-production-ecosystem-python-and-c">Phase 2 — The Production Ecosystem (Python and C#)</a><ul>
 <li><a href="#7-python-ecosystem">7) Python Ecosystem</a></li>
 <li><a href="#71-pytorch">7.1 PyTorch</a></li>
-<li><a href="#72-tensorflow--keras">7.2 TensorFlow / Keras</a></li>
+<li><a href="#72-tensorflow-keras">7.2 TensorFlow / Keras</a></li>
 <li><a href="#73-jax">7.3 JAX</a></li>
 <li><a href="#74-scikit-learn">7.4 Scikit-Learn</a></li>
-<li><a href="#75-xgboost--lightgbm--catboost-native-libraries">7.5 XGBoost / LightGBM / CatBoost (Native Libraries)</a></li>
-<li><a href="#76-high-performance-data-backends--polars--cudf">7.6 High-Performance Data Backends — Polars \&amp; cuDF</a></li>
+<li><a href="#75-xgboost-lightgbm-catboost-native-libraries">7.5 XGBoost / LightGBM / CatBoost (Native Libraries)</a></li>
+<li><a href="#76-high-performance-data-backends-polars-cudf">7.6 High-Performance Data Backends — Polars \&amp; cuDF</a></li>
 <li><a href="#77-supplementary-ecosystem">7.7 Supplementary Ecosystem</a></li>
-<li><a href="#8-c--net-ecosystem">8) C# / .NET Ecosystem</a></li>
+<li><a href="#8-c-net-ecosystem">8) C# / .NET Ecosystem</a></li>
 <li><a href="#81-mlnet">8.1 ML.NET</a></li>
 <li><a href="#82-torchsharp">8.2 TorchSharp</a></li>
 <li><a href="#83-tensorflownet">8.3 TensorFlow.NET</a></li>
 <li><a href="#84-scisharp-stack">8.4 SciSharp Stack</a></li>
 <li><a href="#85-accordnet-legacy">8.5 Accord.NET (Legacy)</a></li>
 <li><a href="#86-production-integration-patterns">8.6 Production Integration Patterns</a></li>
-<li><a href="#9-cross-language-interop--serving-architecture">9) Cross-Language Interop \&amp; Serving Architecture</a></li>
+<li><a href="#9-cross-language-interop-serving-architecture">9) Cross-Language Interop \&amp; Serving Architecture</a></li>
 </ul>
 </li>
 <li><a href="#references">References</a></li>
@@ -2703,8 +2703,9 @@ $$</p>
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -2715,6 +2716,7 @@ $$</p>
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -2722,6 +2724,7 @@ $$</p>
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

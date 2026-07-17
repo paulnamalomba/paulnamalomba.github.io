@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batch Threading And Mpi For Large Db Ops - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Memory-Aware Batching, Threading & MPI Chunking for Large Database Operations - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -44,7 +44,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br>
 <a href="https://www.python.org/"><img alt="Language: Python" src="https://img.shields.io/badge/Language-Python-3776AB.svg" /></a></p>
@@ -85,24 +85,24 @@
 <p>Each scenario is evaluated against three theoretical RAM profiles: <strong>24 GB</strong>, <strong>8 GB</strong>, and <strong>4 GB</strong>.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#memory-aware-batching-threading--mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading \&amp; MPI Chunking for Large Database Operations</a></li>
+<li><a href="#memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading \&amp; MPI Chunking for Large Database Operations</a></li>
 <li><a href="#context">Context</a></li>
 <li><a href="#foundational-assumptions">Foundational Assumptions</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-problem-statement--hardware-model">1) Problem Statement \&amp; Hardware Model</a></li>
+<li><a href="#1-problem-statement-hardware-model">1) Problem Statement \&amp; Hardware Model</a></li>
 <li><a href="#2-the-three-stage-pipeline">2) The Three-Stage Pipeline</a></li>
-<li><a href="#3-stage-1--memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</a></li>
-<li><a href="#4-stage-2--thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</a></li>
-<li><a href="#5-stage-3--mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</a></li>
-<li><a href="#6-disk-io-constraint--nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</a></li>
-<li><a href="#7-worked-scenarios--numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</a><ul>
-<li><a href="#scenario-a--heavy-update-10-gb--5-kb-rows--2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</a></li>
-<li><a href="#scenario-b--moderate-update-3-gb--20-kb-rows--157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</a></li>
-<li><a href="#discussion--why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</a></li>
+<li><a href="#3-stage-1-memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</a></li>
+<li><a href="#4-stage-2-thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</a></li>
+<li><a href="#5-stage-3-mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</a></li>
+<li><a href="#6-disk-io-constraint-nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</a></li>
+<li><a href="#7-worked-scenarios-numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</a><ul>
+<li><a href="#scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</a></li>
+<li><a href="#scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</a></li>
+<li><a href="#discussion-why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</a></li>
 </ul>
 </li>
 <li><a href="#8-python-reference-implementation">8) Python Reference Implementation</a></li>
-<li><a href="#9-performance-notes--pitfalls">9) Performance Notes \&amp; Pitfalls</a></li>
+<li><a href="#9-performance-notes-pitfalls">9) Performance Notes \&amp; Pitfalls</a></li>
 <li><a href="#references">References</a></li>
 </ul>
 <hr />
@@ -379,7 +379,7 @@ if compute_time &lt; IO_time_estimate:
 - The 4 GB machine runs 5 batches of ~2.1 GB each. More iterations but each is fully parallelised.</p>
 <p>I/O check (worst case, random writes at ~2 GB/s):
 - 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
-- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>. 
+- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>.
 - 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
 <p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
 <p>Observations (Same Buffer Sizes):
@@ -388,7 +388,7 @@ if compute_time &lt; IO_time_estimate:
 - The 4 GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each), but can only load 5 batches at a time. Means 5 iterations of 5 batches each.</p>
 <p>I/O check (worst case, random writes at ~2 GB/s):
 - 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
-- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>. 
+- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>.
 - 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
 <p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
 <h3 id="scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</h3>
@@ -888,8 +888,9 @@ Notes:
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -900,6 +901,7 @@ Notes:
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -907,6 +909,7 @@ Notes:
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

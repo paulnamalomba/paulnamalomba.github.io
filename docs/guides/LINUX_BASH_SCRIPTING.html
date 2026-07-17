@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux Bash Scripting - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Linux Bash Shell: Automation, Execution, and Daemons - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -56,29 +56,29 @@
 <li><a href="#linux-bash-shell-automation-execution-and-daemons">Linux Bash Shell: Automation, Execution, and Daemons</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows--linux">1. Configuration (Windows \&amp; Linux)</a><ul>
+<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
 <li><a href="#unixlinux-environments">Unix/Linux Environments</a></li>
 <li><a href="#windows-wsl-convergence">Windows (WSL Convergence)</a></li>
 </ul>
 </li>
-<li><a href="#2-writing-basic-scripts-piping--execution-logic">2. Writing Basic Scripts (Piping \&amp; Execution Logic)</a><ul>
+<li><a href="#2-writing-basic-scripts-piping-execution-logic">2. Writing Basic Scripts (Piping \&amp; Execution Logic)</a><ul>
 <li><a href="#standard-streams-and-piping">Standard Streams and Piping</a></li>
 <li><a href="#strict-mode-scripts">Strict Mode Scripts</a></li>
 </ul>
 </li>
-<li><a href="#3-pre-execution-commands-permissions--validation">3. Pre-execution Commands (Permissions \&amp; Validation)</a><ul>
+<li><a href="#3-pre-execution-commands-permissions-validation">3. Pre-execution Commands (Permissions \&amp; Validation)</a><ul>
 <li><a href="#the-execution-bit-constraints">The Execution Bit Constraints</a></li>
 <li><a href="#carriage-return-translation">Carriage Return Translation</a></li>
 </ul>
 </li>
-<li><a href="#4-runtime-commands-cron-automation--daemons">4. Runtime Commands (Cron Automation \&amp; Daemons)</a><ul>
+<li><a href="#4-runtime-commands-cron-automation-daemons">4. Runtime Commands (Cron Automation \&amp; Daemons)</a><ul>
 <li><a href="#daemon-execution-management">Daemon Execution Management</a></li>
 <li><a href="#the-cron-scheduler">The Cron Scheduler</a></li>
 </ul>
 </li>
-<li><a href="#5-debugging-trace-output--path-traps">5. Debugging (Trace Output \&amp; Path Traps)</a><ul>
+<li><a href="#5-debugging-trace-output-path-traps">5. Debugging (Trace Output \&amp; Path Traps)</a><ul>
 <li><a href="#internal-environment-tracing">Internal Environment Tracing</a></li>
-<li><a href="#path-variables--cron-failures">Path Variables \&amp; Cron Failures</a></li>
+<li><a href="#path-variables-cron-failures">Path Variables \&amp; Cron Failures</a></li>
 </ul>
 </li>
 </ul>
@@ -94,7 +94,7 @@
 <h3 id="windows-wsl-convergence">Windows (WSL Convergence)</h3>
 <p>Windows relies explicitly on the Windows Subsystem for Linux (WSL) to operate a native bash interpreter. Executing a standard terminal window is insufficient.</p>
 <div class="codehilite"><pre><span></span><code><span class="c"># Open an elevated PowerShell terminal and install real Linux kernels directly</span>
-<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span> 
+<span class="n">wsl</span> <span class="p">-</span><span class="n">-install</span> <span class="n">-d</span> <span class="n">Ubuntu</span>
 <span class="c"># Proceed to spawn native Bash sessions inside the Windows Host natively</span>
 <span class="n">wsl</span>
 </code></pre></div>
@@ -189,7 +189,7 @@ bash<span class="w"> </span>-x<span class="w"> </span>script.sh
 </code></pre></div>
 
 <h3 id="path-variables-cron-failures">Path Variables &amp; Cron Failures</h3>
-<p>The absolute classic pitfall associated exclusively with automation natively involves executing flawlessly from the SSH console, yet strictly failing when queued locally by <code>cron</code>. 
+<p>The absolute classic pitfall associated exclusively with automation natively involves executing flawlessly from the SSH console, yet strictly failing when queued locally by <code>cron</code>.
 * <strong>The Root Cause:</strong> The interactive shell dynamically maps <code>/usr/local/bin</code> via <code>.bashrc</code>. The isolated local <code>cron</code> daemon natively executes explicitly mapping a heavily stripped <code>$PATH</code>, completely omitting locally installed tools (like Node, Python packages, etc.).
 * <strong>The Resolution:</strong> Absolute operational paths must be implemented uniformly across the bash file natively.</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># FAILURE PRONE (Assumes &#39;python3&#39; and &#39;docker&#39; map cleanly to PATH)</span>
@@ -205,8 +205,9 @@ docker<span class="w"> </span>restart<span class="w"> </span>web_server
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -217,6 +218,7 @@ docker<span class="w"> </span>restart<span class="w"> </span>web_server
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -224,6 +226,7 @@ docker<span class="w"> </span>restart<span class="w"> </span>web_server
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

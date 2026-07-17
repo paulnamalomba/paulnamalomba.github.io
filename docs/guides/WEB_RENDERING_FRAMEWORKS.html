@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Rendering Frameworks - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Web Rendering Frameworks (2026) — React Alternatives - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="#"><img alt="Topic" src="https://img.shields.io/badge/Frontend-Web%20Rendering-blue.svg" /></a>
@@ -60,14 +60,14 @@
 <p>This guide summarizes the most viable React alternatives and what architectural trade-offs they imply.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#web-rendering-frameworks-2026--react-alternatives">Web Rendering Frameworks (2026) — React Alternatives</a></li>
+<li><a href="#web-rendering-frameworks-2026-react-alternatives">Web Rendering Frameworks (2026) — React Alternatives</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#executive-summary">Executive Summary</a></li>
 <li><a href="#top-react-alternatives-2026">Top React Alternatives (2026)</a><ul>
 <li><a href="#1-vuejs">1) Vue.js</a></li>
 <li><a href="#2-angular">2) Angular</a></li>
-<li><a href="#3-svelte--sveltekit">3) Svelte / SvelteKit</a></li>
+<li><a href="#3-svelte-sveltekit">3) Svelte / SvelteKit</a></li>
 <li><a href="#4-solidjs">4) SolidJS</a></li>
 <li><a href="#5-qwik">5) Qwik</a></li>
 </ul>
@@ -289,8 +289,9 @@
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -301,6 +302,7 @@
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -308,6 +310,7 @@
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

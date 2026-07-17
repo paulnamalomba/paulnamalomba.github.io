@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Systemctl Bash Powershell Userguide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Service and Process Management Guide: Bash vs. PowerShell - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://www.openssl.org/docs/"><img alt="Framework" src="https://img.shields.io/badge/OpenSSL-3.x-red.svg" /></a>
@@ -61,11 +61,11 @@
 <li><a href="#boot-management"><strong>Boot Management</strong></a></li>
 <li><a href="#logging-journalctl"><strong>Logging (Journalctl)</strong></a></li>
 <li><a href="#12-windows-powershell-service-cmdlets">1.2 Windows: PowerShell Service Cmdlets</a></li>
-<li><a href="#basic-service-control-1"><strong>Basic Service Control</strong></a></li>
+<li><a href="#basic-service-control_1"><strong>Basic Service Control</strong></a></li>
 <li><a href="#boot-management-startup-types"><strong>Boot Management (Startup Types)</strong></a></li>
 </ul>
 </li>
-<li><a href="#part-2-process-control--supervisor">Part 2: Process Control \&amp; Supervisor</a><ul>
+<li><a href="#part-2-process-control-supervisor">Part 2: Process Control \&amp; Supervisor</a><ul>
 <li><a href="#21-linux-supervisor-supervisorctl">2.1 Linux: Supervisor (<code>supervisorctl</code>)</a></li>
 <li><a href="#key-commands"><strong>Key Commands</strong></a></li>
 <li><a href="#22-windows-powershell-process-management">2.2 Windows: PowerShell Process Management</a></li>
@@ -74,19 +74,19 @@
 <li><a href="#architectural-equivalents-to-supervisor"><strong>Architectural Equivalents to Supervisor</strong></a></li>
 </ul>
 </li>
-<li><a href="#part-3-service-configuration--dependencies">Part 3: Service Configuration \&amp; Dependencies</a><ul>
+<li><a href="#part-3-service-configuration-dependencies">Part 3: Service Configuration \&amp; Dependencies</a><ul>
 <li><a href="#31-linux-systemd-unit-files">3.1 Linux: Systemd Unit Files</a></li>
 <li><a href="#anatomy-of-a-unit-file"><strong>Anatomy of a Unit File</strong></a></li>
-<li><a href="#32-windows-service-dependencies--recovery">3.2 Windows: Service Dependencies \&amp; Recovery</a></li>
+<li><a href="#32-windows-service-dependencies-recovery">3.2 Windows: Service Dependencies \&amp; Recovery</a></li>
 <li><a href="#managing-dependencies"><strong>Managing Dependencies</strong></a></li>
 <li><a href="#service-recovery-auto-restart"><strong>Service Recovery (Auto-Restart)</strong></a></li>
 </ul>
 </li>
-<li><a href="#part-4-background-jobs--process-priority">Part 4: Background Jobs \&amp; Process Priority</a><ul>
-<li><a href="#41-linux-job-control--nice">4.1 Linux: Job Control \&amp; Nice</a></li>
+<li><a href="#part-4-background-jobs-process-priority">Part 4: Background Jobs \&amp; Process Priority</a><ul>
+<li><a href="#41-linux-job-control-nice">4.1 Linux: Job Control \&amp; Nice</a></li>
 <li><a href="#shell-job-control"><strong>Shell Job Control</strong></a></li>
 <li><a href="#process-priority-nice"><strong>Process Priority (Nice)</strong></a></li>
-<li><a href="#42-windows-powershell-jobs--priority">4.2 Windows: PowerShell Jobs \&amp; Priority</a></li>
+<li><a href="#42-windows-powershell-jobs-priority">4.2 Windows: PowerShell Jobs \&amp; Priority</a></li>
 <li><a href="#powershell-jobs"><strong>PowerShell Jobs</strong></a></li>
 <li><a href="#process-priority"><strong>Process Priority</strong></a></li>
 </ul>
@@ -292,7 +292,7 @@ sudo supervisorctl update</code></li>
     ```powershell
     # Services that depend on 'LanmanWorkstation'
     Get-Service -Name LanmanWorkstation -DependentServices</p>
-<h1 id="services-that-lanmanworkstation-depends-on">Services that 'LanmanWorkstation' depends on</h1>
+<h2 id="services-that-lanmanworkstation-depends-on">Services that 'LanmanWorkstation' depends on</h2>
 <p>Get-Service -Name LanmanWorkstation -RequiredServices
 ```</p>
 </li>
@@ -360,8 +360,9 @@ sudo supervisorctl update</code></li>
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -372,6 +373,7 @@ sudo supervisorctl update</code></li>
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -379,6 +381,7 @@ sudo supervisorctl update</code></li>
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

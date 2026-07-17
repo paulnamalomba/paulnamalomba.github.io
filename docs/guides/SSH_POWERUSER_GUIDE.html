@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ssh Poweruser Guide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>SSH PowerUser Guide (PowerShell & Bash) - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -56,7 +56,7 @@
 <p>It is intentionally explicit about one point that often gets mangled in low-quality tutorials: standard OpenSSH does not have a legitimate "store my plaintext password in the config file" feature. If you want to stop typing passwords, the correct pattern is key-based authentication, optionally combined with <code>ssh-agent</code>, <code>IdentityFile</code>, <code>IdentitiesOnly</code>, and host aliases in the SSH config.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#ssh-poweruser-guide-powershell--bash">SSH PowerUser Guide (PowerShell \&amp; Bash)</a></li>
+<li><a href="#ssh-poweruser-guide-powershell-bash">SSH PowerUser Guide (PowerShell \&amp; Bash)</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#quickstart">Quickstart</a></li>
@@ -684,8 +684,9 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -696,6 +697,7 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -703,6 +705,7 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

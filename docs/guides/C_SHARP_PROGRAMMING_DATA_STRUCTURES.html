@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C Sharp Programming Data Structures - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>C# Programming — Data Structures, Classes, Coding Style & Language Mechanics - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://docs.microsoft.com/dotnet/csharp/"><img alt="Language: C#" src="https://img.shields.io/badge/Language-C%23-239120.svg" /></a>
@@ -53,16 +53,16 @@
 <p>Use this guide as a reference when designing APIs, choosing data structures, writing idiomatic C#, or preparing for production deployment across .NET platforms.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#c-programming--data-structures-classes-coding-style--language-mechanics">C# Programming — Data Structures, Classes, Coding Style \&amp; Language Mechanics</a></li>
+<li><a href="#c-programming-data-structures-classes-coding-style-language-mechanics">C# Programming — Data Structures, Classes, Coding Style \&amp; Language Mechanics</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
 <li><a href="#c-fundamentals">C# Fundamentals</a><ul>
-<li><a href="#compilation--runtime">Compilation \&amp; Runtime</a></li>
-<li><a href="#clr-jit--memory-management">CLR, JIT \&amp; Memory Management</a></li>
+<li><a href="#compilation-runtime">Compilation \&amp; Runtime</a></li>
+<li><a href="#clr-jit-memory-management">CLR, JIT \&amp; Memory Management</a></li>
 <li><a href="#type-system-value-vs-reference">Type System (Value vs Reference)</a></li>
 </ul>
 </li>
-<li><a href="#primitive-types--built-in-collections">Primitive Types \&amp; Built-in Collections</a><ul>
+<li><a href="#primitive-types-built-in-collections">Primitive Types \&amp; Built-in Collections</a><ul>
 <li><a href="#primitive-types-short-summary">Primitive Types (short summary)</a></li>
 <li><a href="#arrays">Arrays</a></li>
 <li><a href="#list-and-generic-collections">List and Generic Collections</a></li>
@@ -74,36 +74,36 @@
 <li><a href="#linked-lists">Linked Lists</a></li>
 <li><a href="#trees-and-binary-trees">Trees and Binary Trees</a></li>
 <li><a href="#graphs-adjacency-listsmatrices">Graphs (Adjacency lists/matrices)</a></li>
-<li><a href="#hash-tables--collision-strategies">Hash Tables \&amp; Collision Strategies</a></li>
+<li><a href="#hash-tables-collision-strategies">Hash Tables \&amp; Collision Strategies</a></li>
 </ul>
 </li>
-<li><a href="#classes-objects--oop">Classes, Objects \&amp; OOP</a><ul>
+<li><a href="#classes-objects-oop">Classes, Objects \&amp; OOP</a><ul>
 <li><a href="#classes-structs-records">Classes, Structs, Records</a></li>
 <li><a href="#constructors-properties-auto-properties">Constructors, Properties, Auto-properties</a></li>
-<li><a href="#inheritance-interfaces--polymorphism">Inheritance, Interfaces \&amp; Polymorphism</a></li>
-<li><a href="#encapsulation--access-modifiers">Encapsulation \&amp; Access Modifiers</a></li>
+<li><a href="#inheritance-interfaces-polymorphism">Inheritance, Interfaces \&amp; Polymorphism</a></li>
+<li><a href="#encapsulation-access-modifiers">Encapsulation \&amp; Access Modifiers</a></li>
 <li><a href="#design-srp-di-solid-summary">Design: SRP, DI, SOLID Summary</a></li>
 </ul>
 </li>
-<li><a href="#modules-namespaces--assemblies">Modules, Namespaces \&amp; Assemblies</a><ul>
-<li><a href="#namespaces--using">Namespaces \&amp; <code>using</code></a></li>
-<li><a href="#assemblies--csproj">Assemblies \&amp; <code>csproj</code></a></li>
+<li><a href="#modules-namespaces-assemblies">Modules, Namespaces \&amp; Assemblies</a><ul>
+<li><a href="#namespaces-using">Namespaces \&amp; <code>using</code></a></li>
+<li><a href="#assemblies-csproj">Assemblies \&amp; <code>csproj</code></a></li>
 <li><a href="#nuget-and-versioning">NuGet and Versioning</a></li>
 </ul>
 </li>
-<li><a href="#coding-style--conventions">Coding Style \&amp; Conventions</a><ul>
+<li><a href="#coding-style-conventions">Coding Style \&amp; Conventions</a><ul>
 <li><a href="#naming-indentation-braces-xml-docs">Naming, Indentation, Braces, XML docs</a></li>
-<li><a href="#best-practices-for-readability-maintainability--performance">Best practices for readability, maintainability \&amp; performance</a></li>
+<li><a href="#best-practices-for-readability-maintainability-performance">Best practices for readability, maintainability \&amp; performance</a></li>
 </ul>
 </li>
-<li><a href="#testing-debugging--tooling">Testing, Debugging \&amp; Tooling</a></li>
+<li><a href="#testing-debugging-tooling">Testing, Debugging \&amp; Tooling</a></li>
 <li><a href="#c-in-the-modern-net-ecosystem">C# in the Modern .NET Ecosystem</a></li>
-<li><a href="#appendices--cheatsheets--common-patterns">Appendices — Cheatsheets \&amp; Common Patterns</a><ul>
+<li><a href="#appendices-cheatsheets-common-patterns">Appendices — Cheatsheets \&amp; Common Patterns</a><ul>
 <li><a href="#common-language-idioms">Common language idioms</a></li>
 <li><a href="#common-pitfalls-checklist">Common pitfalls checklist</a></li>
 </ul>
 </li>
-<li><a href="#references--further-reading">References \&amp; Further Reading</a></li>
+<li><a href="#references-further-reading">References \&amp; Further Reading</a></li>
 </ul>
 <hr />
 <h2 id="c-fundamentals">C# Fundamentals</h2>
@@ -635,8 +635,9 @@
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -647,6 +648,7 @@
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -654,6 +656,7 @@
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

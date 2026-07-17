@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Management Csharp Poweruser Guide - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Memory Management and Execution on Windows — C# (.NET) - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -43,7 +43,7 @@
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
+<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
 <strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
 <br></p>
 <p><a href="https://learn.microsoft.com/dotnet/csharp/"><img alt="Language: C#" src="https://img.shields.io/badge/Language-C%23-blue.svg" /></a>
@@ -53,17 +53,17 @@
 <p>This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory management and execution semantics on Windows. Covering value vs reference types, stack vs heap storage, copy semantics, and nullability features (nullable reference types, <code>Nullable&lt;T&gt;</code>), plus examples and best practices.</p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li><a href="#memory-management-and-execution-on-windows--c-net">Memory Management and Execution on Windows — C# (.NET)</a></li>
+<li><a href="#memory-management-and-execution-on-windows-c-net">Memory Management and Execution on Windows — C# (.NET)</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#windows--build--run-powershell--command-prompt">Windows — Build \&amp; Run (PowerShell / Command Prompt)</a></li>
-<li><a href="#overview-1">Overview</a></li>
-<li><a href="#contents-1">Contents</a></li>
-<li><a href="#1-data-structures--value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</a></li>
-<li><a href="#2-storage--stack-vs-heap--garbage-collector">2) Storage — Stack vs Heap \&amp; Garbage Collector</a></li>
-<li><a href="#3-copy-semantics--shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</a></li>
+<li><a href="#windows-build-run-powershell-command-prompt">Windows — Build \&amp; Run (PowerShell / Command Prompt)</a></li>
+<li><a href="#overview_1">Overview</a></li>
+<li><a href="#contents_1">Contents</a></li>
+<li><a href="#1-data-structures-value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</a></li>
+<li><a href="#2-storage-stack-vs-heap-garbage-collector">2) Storage — Stack vs Heap \&amp; Garbage Collector</a></li>
+<li><a href="#3-copy-semantics-shallow-vs-deep">3) Copy Semantics — Shallow vs Deep</a></li>
 <li><a href="#4-nullability">4) Nullability</a></li>
-<li><a href="#examples--runnable-snippets">Examples — Runnable Snippets</a></li>
+<li><a href="#examples-runnable-snippets">Examples — Runnable Snippets</a></li>
 <li><a href="#windowsnet-specific-notes">Windows/.NET Specific Notes</a></li>
 <li><a href="#references">References</a></li>
 </ul>
@@ -263,8 +263,9 @@
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -275,6 +276,7 @@
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -282,6 +284,7 @@
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>

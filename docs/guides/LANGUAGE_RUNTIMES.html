@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Runtimes - Paul Namalomba</title>
+    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
+    <meta name="theme-color" content="#f2f0e9">
+    <title>Language Runtimes: Memory, Architectures, and Execution - Paul Namalomba</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="docs-page">
-    <!-- Nav Header -->
+    <a class="skip-link" href="#main">Skip to content</a>
     <header>
         <div class="container">
             <nav>
                 <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <!-- Mobile Menu -->
                 <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
                     <span></span>
                     <span></span>
                 </button>
                 <ul class="nav-links">
-                    <li><a href="https://paulnamalomba.github.io/">Portfolio Home</a></li>
-                    <li><a href="/docs/guide-home/">Guides &amp; Scripts</a></li>
-                    <li><a href="/docs/guides/">Tech Guides</a></li>
+                    <li><a href="/">Portfolio</a></li>
+                    <li><a href="/docs/">Knowledge Base</a></li>
+                    <li><a href="/docs/guides/">All Guides</a></li>
                     <li><a href="/docs/system-scripts/">System Scripts</a></li>
                 </ul>
             </nav>
@@ -29,7 +29,7 @@
     </header>
 
 
-    <main class="container docs-container">
+    <main id="main" class="container docs-container">
         <div class="card docs-card">
             <div class="docs-breadcrumb">
                 <a href="index.html">← Back to Guides</a>
@@ -57,7 +57,7 @@
 <li><a href="#language-runtimes-memory-architectures-and-execution">Language Runtimes: Memory, Architectures, and Execution</a></li>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows--linux">1. Configuration (Windows \&amp; Linux)</a><ul>
+<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
 <li><a href="#c-native-compilation">C++ (Native Compilation)</a></li>
 <li><a href="#c-net-managed-runtime">C# .NET (Managed Runtime)</a></li>
 <li><a href="#python-interpreted-virtual-machine">Python (Interpreted Virtual Machine)</a></li>
@@ -66,7 +66,7 @@
 <li><a href="#2-writing-basic-codescripts-memory-operations">2. Writing Basic Code/Scripts (Memory Operations)</a><ul>
 <li><a href="#c-manual-memory-management">C++: Manual Memory Management</a></li>
 <li><a href="#c-net-garbage-collected-gc">C# .NET: Garbage Collected (GC)</a></li>
-<li><a href="#python-reference-counting--the-gil">Python: Reference Counting \&amp; The GIL</a></li>
+<li><a href="#python-reference-counting-the-gil">Python: Reference Counting \&amp; The GIL</a></li>
 </ul>
 </li>
 <li><a href="#3-compile-time-commands-compilers-vs-vms">3. Compile-time Commands (Compilers vs VMs)</a><ul>
@@ -83,7 +83,7 @@
 </li>
 <li><a href="#5-debugging-segfaults-vs-overflows">5. Debugging (Segfaults vs Overflows)</a><ul>
 <li><a href="#c-the-segmentation-fault">C++: The Segmentation Fault</a></li>
-<li><a href="#c-stackoverflows--gc-pauses">C#: StackOverflows \&amp; GC Pauses</a></li>
+<li><a href="#c-stackoverflows-gc-pauses">C#: StackOverflows \&amp; GC Pauses</a></li>
 <li><a href="#python-the-resource-bottleneck">Python: The Resource Bottleneck</a></li>
 </ul>
 </li>
@@ -209,8 +209,8 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
 </code></pre></div>
 
 <h3 id="c-stackoverflows-gc-pauses">C#: StackOverflows &amp; GC Pauses</h3>
-<p>While memory leaks are rare, keeping a reference to an object in a static dictionary permanently prevents the Garbage Collector from freeing it—an effective memory leak. 
-* <strong>The Pitfall:</strong> The CLR guarantees memory safety, but recursively calling functions endlessly exhausts the strictly constrained frame <code>Stack</code>, crashing the runtime via a <code>StackOverflowException</code>. 
+<p>While memory leaks are rare, keeping a reference to an object in a static dictionary permanently prevents the Garbage Collector from freeing it—an effective memory leak.
+* <strong>The Pitfall:</strong> The CLR guarantees memory safety, but recursively calling functions endlessly exhausts the strictly constrained frame <code>Stack</code>, crashing the runtime via a <code>StackOverflowException</code>.
 * <strong>The Tools:</strong> PerfView or the Visual Studio Diagnostic Tools to analyze Gen2 Garbage Collection pauses.</p>
 <h3 id="python-the-resource-bottleneck">Python: The Resource Bottleneck</h3>
 <p>Python rarely crashes the OS (because standard memory violations are caught safely by the interpreter). The danger lies in loading a massive pandas DataFrame that exceeds RAM, prompting the OS OOM (Out Of Memory) Killer to brutally terminate the <code>python3</code> process.
@@ -222,8 +222,9 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
 
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Paul Namalomba. All rights reserved.</p>
+        <div class="container footer-inner">
+            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+            <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
     <script>
@@ -234,6 +235,7 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
             hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('open');
+            document.body.classList.toggle('menu-open', !expanded);
         });
         // Close menu when a nav link is clicked
         navLinks.querySelectorAll('a').forEach(link => {
@@ -241,6 +243,7 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('open');
                 hamburger.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('menu-open');
             });
         });
     </script>
