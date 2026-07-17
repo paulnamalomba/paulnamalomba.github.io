@@ -46,12 +46,21 @@ h1, h2, h3, p { text-wrap: pretty; }
 h1 { margin: 0; max-width: 870px; font-size: clamp(3.4rem, 7.2vw, 7.2rem); line-height: .92; letter-spacing: -.065em; font-weight: 760; }
 h1 em { color: var(--teal); font-family: Georgia, serif; font-weight: 400; }
 .hero-lede { max-width: 720px; margin: 2rem 0 2.25rem; color: var(--ink-soft); font-size: clamp(1.05rem, 1.55vw, 1.35rem); line-height: 1.55; }
-.hero-actions { display: flex; gap: 1.75rem; align-items: center; }
-.button { display: inline-flex; align-items: center; justify-content: space-between; gap: 2rem; padding: .95rem 1.25rem; border: 1px solid currentColor; text-decoration: none; font-size: .83rem; font-weight: 750; transition: transform .18s, background .18s, color .18s; }
-.button:hover { transform: translateY(-2px); }
+.hero-socials { display: flex; flex-wrap: wrap; gap: .55rem; margin: 0 0 1.15rem; }
+.social-button, .button { display: inline-flex; width: fit-content; min-height: 38px; align-items: center; justify-content: center; gap: .5rem; border: 1px solid transparent; border-radius: .375rem; box-shadow: 0 1px 2px rgba(18,23,21,.12); text-decoration: none; font-size: .78rem; font-weight: 750; line-height: 1; transition: background-color .16s, border-color .16s, box-shadow .16s, color .16s; }
+.social-button { padding: .55rem .75rem; color: white; }
+.social-button svg { width: 1rem; height: 1rem; flex: none; }
+.social-button-views { padding: .25rem; background: #1f2937; border-color: #1f2937; }
+.social-button-views img { width: auto; height: 24px; border-radius: .2rem; }
+.social-button-github { background: #159947; border-color: #159947; }
+.social-button-linkedin { background: #0a66c2; border-color: #0a66c2; }
+.social-button:hover, .button:hover { box-shadow: 0 2px 5px rgba(18,23,21,.18); filter: brightness(.96); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.button { padding: .68rem .9rem; border-color: currentColor; }
 .button-dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
 .button-dark:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
 .text-link { text-decoration: none; font-size: .85rem; font-weight: 750; border-bottom: 1px solid currentColor; padding-bottom: .12rem; }
+.social-button:focus-visible, .button:focus-visible, .text-link:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 .hero-portrait { margin: 0; align-self: end; }
 .portrait-frame { padding: .8rem; background: var(--white); border: 1px solid var(--line); transform: rotate(1.2deg); box-shadow: 0 20px 50px rgba(18,23,21,.12); }
 .portrait-frame img { aspect-ratio: 1; object-fit: cover; filter: saturate(.88); }
@@ -124,7 +133,8 @@ h1 em { color: var(--teal); font-family: Georgia, serif; font-weight: 400; }
 .experience-intro { position: sticky; top: 8rem; align-self: start; }
 .experience-intro > p:not(.eyebrow) { margin: 1.5rem 0; color: var(--ink-soft); max-width: 450px; }
 .timeline { border-top: 1px solid var(--line); }
-.timeline article { display: grid; grid-template-columns: 110px 1fr; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--line); }
+.timeline article { display: grid; grid-template-columns: minmax(172px, .42fr) 1fr; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--line); }
+.experience-dates { display: grid; gap: .38rem; align-content: start; }
 .timeline time { font: 700 .68rem/1.4 monospace; color: var(--teal-dark); }
 .timeline h3 { margin: 0; font-size: 1.35rem; letter-spacing: -.03em; }
 .timeline p { margin: .15rem 0 .65rem; font-weight: 700; color: var(--ink-soft); }
@@ -197,8 +207,9 @@ h1 em { color: var(--teal); font-family: Georgia, serif; font-weight: 400; }
   .site-nav a { width: 100%; padding: .7rem 0; border-bottom: 1px solid var(--line); font-size: 1.45rem; }
   .nav-contact { margin-top: auto; color: var(--teal-dark); }
   .hero { padding-top: 3rem; }
-  h1 { font-size: clamp(3rem, 13.2vw, 4.4rem); overflow-wrap: anywhere; }
-  .hero-actions { align-items: flex-start; flex-direction: column; gap: 1rem; }
+  h1 { font-size: clamp(2.65rem, 11.6vw, 3.5rem); letter-spacing: -.055em; overflow-wrap: anywhere; }
+  .hero-socials { gap: .45rem; }
+  .hero-actions { align-items: flex-start; gap: .8rem 1rem; }
   .hero-portrait { width: 86%; }
   .proof-strip { margin-top: 3rem; }
   .proof-strip div { gap: .5rem; padding: .8rem .65rem; }
