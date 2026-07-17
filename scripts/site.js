@@ -3,19 +3,27 @@ const navigation = document.querySelector('[data-nav]');
 const header = document.querySelector('[data-header]');
 
 if (menuButton && navigation) {
+  const setMenuState = (isOpen, { returnFocus = false } = {}) => {
+    menuButton.setAttribute('aria-expanded', String(isOpen));
+    navigation.classList.toggle('open', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
+
+    if (returnFocus) menuButton.focus();
+  };
+
   menuButton.addEventListener('click', () => {
     const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', String(!isOpen));
-    navigation.classList.toggle('open', !isOpen);
-    document.body.classList.toggle('menu-open', !isOpen);
+    setMenuState(!isOpen);
   });
 
   navigation.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      menuButton.setAttribute('aria-expanded', 'false');
-      navigation.classList.remove('open');
-      document.body.classList.remove('menu-open');
-    });
+    link.addEventListener('click', () => setMenuState(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+      setMenuState(false, { returnFocus: true });
+    }
   });
 }
 
