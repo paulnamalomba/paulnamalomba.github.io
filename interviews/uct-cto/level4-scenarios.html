@@ -1,290 +1,676 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Level 4 — Scenario & Behavioural Questions</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
-</head>
-<body>
-  <div class="page-wrapper protected-content" id="content" style="display:none;">
-    <div class="header-bar">
-      <span class="brand">CTO Interview Prep</span>
-      <nav>
-        <a href="hub.html">Hub</a>
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Levels ▼</button>
-          <div class="dropdown-content">
-            <a href="level1-overview.html">Overview</a>
-            <a href="level2-technical.html">Technical</a>
-            <a href="level3-competency.html">Competency</a>
-            <a href="level4-scenarios.html" class="active">Scenarios</a>
-          </div>
-        </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-button" style="color:var(--accent);">Assessments ▼</button>
-          <div class="dropdown-content">
-            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
-            <a href="assessment-scenario-2.html">Scenario 2 (Django & SEAT)</a>
-            <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
-            <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
-            <div class="dropdown-nested">
-              <a href="assessment-data-engineering.html" class="has-submenu">Data Engineering</a>
-              <div class="dropdown-nested-content">
-                <a href="assessment-de-docker.html">Docker & Containers</a>
-                <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
-                <a href="assessment-web-servers-python.html">Python Web Servers</a>
-                <a href="assessment-web-servers-dotnet.html">ASP.NET, Nginx & Apache</a>
-              </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Level 4 — Scenario & Behavioural Questions</title>
+    <link rel="stylesheet" href="style.css?v=2.2" />
+  </head>
+  <body>
+    <div
+      class="page-wrapper protected-content"
+      id="content"
+      style="display: none"
+    >
+      <div class="header-bar">
+        <span class="brand">CTO Interview Prep</span>
+        <nav>
+          <a href="hub.html">Hub</a>
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Levels ▼</button>
+            <div class="dropdown-content">
+              <a href="level1-overview.html">Overview</a>
+              <a href="level2-technical.html">Technical</a>
+              <a href="level3-competency.html">Competency</a>
+              <a href="level4-scenarios.html" class="active">Scenarios</a>
             </div>
-            <a href="assessment-cto-architecture.html">CTO Architecture</a>
-            <a href="assessment-tips-strategy.html">Tips & Strategy</a>
+          </div>
+          <div class="dropdown-menu">
+            <button class="dropdown-button" style="color: var(--accent)">
+              Assessments ▼
+            </button>
+            <div class="dropdown-content">
+              <a href="assessment-scenario-1.html"
+                >Scenario 1 (System Design)</a
+              >
+              <a href="assessment-scenario-2.html"
+                >Scenario 2 (Django & SEAT)</a
+              >
+              <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
+              <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
+              <div class="dropdown-nested">
+                <a href="assessment-data-engineering.html" class="has-submenu"
+                  >Data Engineering</a
+                >
+                <div class="dropdown-nested-content">
+                  <a href="assessment-de-docker.html">Docker & Containers</a>
+                  <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
+                  <a href="assessment-web-servers-python.html"
+                    >Python Web Servers</a
+                  >
+                  <a href="assessment-web-servers-dotnet.html"
+                    >ASP.NET, Nginx & Apache</a
+                  >
+                </div>
+              </div>
+              <a href="assessment-cto-architecture.html">CTO Architecture</a>
+              <a href="assessment-tips-strategy.html">Tips & Strategy</a>
+            </div>
+          </div>
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Targeted Prep ▼</button>
+            <div class="dropdown-content">
+              <a href="targeted-preparation-pages/index.html">Prep Hub</a>
+              <a href="targeted-preparation-pages/mock-interview.html"
+                >30-Min Mock Interview</a
+              >
+              <a href="targeted-preparation-pages/answer-templates.html"
+                >Answer Templates</a
+              >
+              <a href="targeted-preparation-pages/revision-sheet.html"
+                >Revision Sheet</a
+              >
+            </div>
+          </div>
+          <a href="guides.html">Guides</a>
+          <a href="level5-panel.html">Panel</a>
+        </nav>
+      </div>
+      <div class="breadcrumb">
+        <a href="hub.html">Hub</a> <span>›</span> Level 4
+      </div>
+      <h1 class="fade-in">Level 4 — Scenario & Behavioural Questions</h1>
+      <p class="fade-in fade-in-d1">
+        These are the unpredictable "What would you do if…" questions. Practise
+        thinking on your feet, but anchor every answer in real experience using
+        the <strong>STAR framework</strong>.
+      </p>
+
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">Reality Anchor (CV-grounded)</div>
+        <p>
+          When answering scenarios, keep the structure:
+          <strong>triage → communicate → restore → post-mortem</strong>, and
+          cite real systems you’ve operated:
+        </p>
+        <ul>
+          <li>
+            <strong>SEAT:</strong> Ubuntu server operations, Django/PostgreSQL,
+            LDAP auth; registration-cycle reliability and incident prevention.
+          </li>
+          <li>
+            <strong>ComputeMore (Ecoride/INNTEGRATE):</strong> production APIs
+            with auth hardening (BCrypt/JWT), event-driven components
+            (RabbitMQ), caching (Redis), real-time messaging (SignalR), and
+            multi-environment DevOps (Azure/Render/Vercel/Cloudflare).
+          </li>
+          <li>
+            <strong>SESKA/HPC:</strong> Slurm + OpenMPI workflows; performance
+            troubleshooting and reproducibility discipline.
+          </li>
+          <li>
+            <strong>Teaching / people impact:</strong> Assistant Lecturer
+            leadership means you can communicate calmly under pressure, set
+            expectations, and coach students/researchers through fixes without
+            blame.
+          </li>
+          <li>
+            <strong>Security & governance mindset:</strong> LDAP-based access
+            control (SEAT) + production auth patterns (ComputeMore) gives you
+            credible “contain → assess scope → notify → remediate” handling for
+            POPIA-sensitive incidents.
+          </li>
+        </ul>
+      </div>
+
+      <div class="callout warning fade-in fade-in-d2">
+        <div class="callout-title">
+          ⏱️ Remember: 40-minute interview, 8 panellists
+        </div>
+        <p>
+          You'll get ~5–6 questions total. Some will be scenario-based. Keep
+          answers to <strong>2 minutes max</strong>. If you go longer, the panel
+          loses engagement and you lose questions where you could shine.
+        </p>
+      </div>
+
+      <!-- SCENARIO 1 -->
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top: 0">
+          🔥 Scenario: Server Crisis During Registration
+        </h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            It's January, peak registration period. SEAT goes down on a Monday
+            morning. Students and faculty are panicking. What do you do?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Immediate response</strong> (first 15 minutes): Triage the
+              issue — is it SEAT-specific or a server-level problem? I'd check
+              server status, error logs, and recent deployments. If it's server
+              infrastructure (e.g., Ubuntu server, Apache2), I'd contact ICTS
+              immediately as I have direct relationships with their team. If
+              it's application-level, I'd identify the error, roll back any
+              recent changes if needed, and restart services.
+            </p>
+            <p>
+              <strong>Communication</strong> (within 30 minutes): Notify the
+              faculty office (Celeste Wilson) and HOD with a clear status
+              update: what happened, estimated fix time, and workaround if any.
+              Students need to know it's being handled.
+            </p>
+            <p>
+              <strong>Resolution and post-mortem</strong>: Fix the root cause,
+              not just the symptom. After restoration, document what happened
+              and implement preventive measures — better monitoring, automated
+              alerts, staging environment for testing changes before deployment.
+            </p>
+            <p>
+              <strong>Real experience</strong>: I've maintained 100% SEAT uptime
+              with zero server errors per month. This isn't hypothetical — I've
+              been the person responsible for keeping SEAT running during
+              registration. I know the system, the infrastructure, and who to
+              call.
+            </p>
           </div>
         </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Targeted Prep ▼</button>
-          <div class="dropdown-content">
-            <a href="targeted-preparation-pages/index.html">Prep Hub</a>
-            <a href="targeted-preparation-pages/mock-interview.html">30-Min Mock Interview</a>
-            <a href="targeted-preparation-pages/answer-templates.html">Answer Templates</a>
-            <a href="targeted-preparation-pages/revision-sheet.html">Revision Sheet</a>
+      </div>
+
+      <!-- SCENARIO 2 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          🔬 Scenario: Conflicting Research Group Demands
+        </h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Three research groups — Centre for Transport Studies, Future Water,
+            and CoMSIRU — all need your help this week. Transport needs a sensor
+            network set up, Future Water has a broken Python pipeline, and
+            CoMSIRU needs HPC access for a conference deadline. How do you
+            prioritise?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Prioritisation framework:</strong> I'd assess each request
+              on three factors: <em>urgency</em> (is there a hard deadline?),
+              <em>impact</em> (who's blocked?), and <em>effort</em> (how long
+              will it take?).
+            </p>
+            <p><strong>In this case:</strong></p>
+            <ul>
+              <li>
+                <strong>CoMSIRU — HPC access (highest priority)</strong>:
+                Conference deadline is immovable. This is likely a quick setup
+                task — granting access, helping with job submission scripts. I'd
+                address this first, possibly within a few hours.
+              </li>
+              <li>
+                <strong>Future Water — broken pipeline (medium priority)</strong
+                >: Researchers are blocked. Debugging a Python pipeline is my
+                daily work. I'd aim to diagnose and fix this within a day.
+              </li>
+              <li>
+                <strong
+                  >Transport — sensor network (lower urgency, higher
+                  effort)</strong
+                >: Setting up a sensor network is a multi-day project with no
+                immediate deadline. I'd schedule a planning meeting this week
+                and begin work next week.
+              </li>
+            </ul>
+            <p>
+              <strong>Key point:</strong> Transparent communication. I'd let all
+              three groups know the timeline and my reasoning. Nobody likes
+              being deprioritised, but they respect honesty and a clear plan.
+            </p>
           </div>
         </div>
-        <a href="guides.html">Guides</a>
-        <a href="level5-panel.html">Panel</a>
-      </nav>
-    </div>
-    <div class="breadcrumb"><a href="hub.html">Hub</a> <span>›</span> Level 4</div>
-    <h1 class="fade-in">Level 4 — Scenario & Behavioural Questions</h1>
-    <p class="fade-in fade-in-d1">These are the unpredictable "What would you do if…" questions. Practise thinking on your feet, but anchor every answer in real experience using the <strong>STAR framework</strong>.</p>
-
-    <div class="callout info fade-in fade-in-d2">
-      <div class="callout-title">Reality Anchor (CV-grounded)</div>
-      <p>When answering scenarios, keep the structure: <strong>triage → communicate → restore → post-mortem</strong>, and cite real systems you’ve operated:</p>
-      <ul>
-        <li><strong>SEAT:</strong> Ubuntu server operations, Django/PostgreSQL, LDAP auth; registration-cycle reliability and incident prevention.</li>
-        <li><strong>ComputeMore (Ecoride/INNTEGRATE):</strong> production APIs with auth hardening (BCrypt/JWT), event-driven components (RabbitMQ), caching (Redis), real-time messaging (SignalR), and multi-environment DevOps (Azure/Render/Vercel/Cloudflare).</li>
-        <li><strong>SESKA/HPC:</strong> Slurm + OpenMPI workflows; performance troubleshooting and reproducibility discipline.</li>
-        <li><strong>Teaching / people impact:</strong> Assistant Lecturer leadership means you can communicate calmly under pressure, set expectations, and coach students/researchers through fixes without blame.</li>
-        <li><strong>Security & governance mindset:</strong> LDAP-based access control (SEAT) + production auth patterns (ComputeMore) gives you credible “contain → assess scope → notify → remediate” handling for POPIA-sensitive incidents.</li>
-      </ul>
-    </div>
-
-    <div class="callout warning fade-in fade-in-d2">
-      <div class="callout-title">⏱️ Remember: 40-minute interview, 8 panellists</div>
-      <p>You'll get ~5–6 questions total. Some will be scenario-based. Keep answers to <strong>2 minutes max</strong>. If you go longer, the panel loses engagement and you lose questions where you could shine.</p>
-    </div>
-
-    <!-- SCENARIO 1 -->
-    <div class="section-card fade-in fade-in-d3">
-      <h2 style="margin-top:0;">🔥 Scenario: Server Crisis During Registration</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">It's January, peak registration period. SEAT goes down on a Monday morning. Students and faculty are panicking. What do you do?</button>
-        <div class="qa-answer">
-          <p><strong>Immediate response</strong> (first 15 minutes): Triage the issue — is it SEAT-specific or a server-level problem? I'd check server status, error logs, and recent deployments. If it's server infrastructure (e.g., Ubuntu server, Apache2), I'd contact ICTS immediately as I have direct relationships with their team. If it's application-level, I'd identify the error, roll back any recent changes if needed, and restart services.</p>
-          <p><strong>Communication</strong> (within 30 minutes): Notify the faculty office (Celeste Wilson) and HOD with a clear status update: what happened, estimated fix time, and workaround if any. Students need to know it's being handled.</p>
-          <p><strong>Resolution and post-mortem</strong>: Fix the root cause, not just the symptom. After restoration, document what happened and implement preventive measures — better monitoring, automated alerts, staging environment for testing changes before deployment.</p>
-          <p><strong>Real experience</strong>: I've maintained 100% SEAT uptime with zero server errors per month. This isn't hypothetical — I've been the person responsible for keeping SEAT running during registration. I know the system, the infrastructure, and who to call.</p>
-        </div>
       </div>
-    </div>
 
-    <!-- SCENARIO 2 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🔬 Scenario: Conflicting Research Group Demands</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Three research groups — Centre for Transport Studies, Future Water, and CoMSIRU — all need your help this week. Transport needs a sensor network set up, Future Water has a broken Python pipeline, and CoMSIRU needs HPC access for a conference deadline. How do you prioritise?</button>
-        <div class="qa-answer">
-          <p><strong>Prioritisation framework:</strong> I'd assess each request on three factors: <em>urgency</em> (is there a hard deadline?), <em>impact</em> (who's blocked?), and <em>effort</em> (how long will it take?).</p>
-          <p><strong>In this case:</strong></p>
-          <ul>
-            <li><strong>CoMSIRU — HPC access (highest priority)</strong>: Conference deadline is immovable. This is likely a quick setup task — granting access, helping with job submission scripts. I'd address this first, possibly within a few hours.</li>
-            <li><strong>Future Water — broken pipeline (medium priority)</strong>: Researchers are blocked. Debugging a Python pipeline is my daily work. I'd aim to diagnose and fix this within a day.</li>
-            <li><strong>Transport — sensor network (lower urgency, higher effort)</strong>: Setting up a sensor network is a multi-day project with no immediate deadline. I'd schedule a planning meeting this week and begin work next week.</li>
-          </ul>
-          <p><strong>Key point:</strong> Transparent communication. I'd let all three groups know the timeline and my reasoning. Nobody likes being deprioritised, but they respect honesty and a clear plan.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 3 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">👨‍🏫 Scenario: Resistant Academic</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">A senior professor doesn't see the value of the digital design learning line and resists integrating coding into their course. How do you handle this?</button>
-        <div class="qa-answer">
-          <p><strong>Approach:</strong> I'd start by listening. A senior professor has valuable context about their course that I may not fully understand. Their resistance might be about workload, scepticism about relevance, or a bad experience with poorly implemented tech in the past.</p>
-          <p><strong>Strategy:</strong></p>
-          <ul>
-            <li><strong>Understand their concerns</strong> — Meet one-on-one, not in a committee. Ask what their real objection is.</li>
-            <li><strong>Show, don't tell</strong> — Rather than arguing for coding, demonstrate a small, specific example: "Here's how 10 lines of Python could automate the data analysis your students do manually in Excel." Make it about their course outcomes, not about technology for its own sake.</li>
-            <li><strong>Start small</strong> — Offer to create a single exercise that integrates seamlessly into their existing structure. If it works, they'll ask for more.</li>
-            <li><strong>Leverage the mandate</strong> — The digital design line is a departmental and ECSA requirement, not a personal preference. If gentle persuasion doesn't work, the Director of UG Studies and HOD can reinforce the curriculum mandate.</li>
-          </ul>
-          <p><strong>Real experience:</strong> From lecturing, I've learned that the best way to win people over is through demonstrated value, not through hierarchy or argument.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 4 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🔐 Scenario: Data Breach</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">You discover that a student's script accidentally exposed sensitive research data on a public server. What's your response?</button>
-        <div class="qa-answer">
-          <p><strong>Immediate (within 1 hour):</strong></p>
-          <ul>
-            <li>Take the data offline immediately — remove public access.</li>
-            <li>Assess scope — what data was exposed, for how long, and who might have accessed it.</li>
-            <li>Notify my line manager and ICTS security team.</li>
-          </ul>
-          <p><strong>Investigation:</strong></p>
-          <ul>
-            <li>Work with the student to understand how it happened — no blame, focus on fixing the process.</li>
-            <li>Check if similar vulnerabilities exist in other projects.</li>
-          </ul>
-          <p><strong>Remediation:</strong></p>
-          <ul>
-            <li>Implement access controls to prevent recurrence.</li>
-            <li>Create clear guidelines for researchers about data handling — file permissions, server configurations, what can and can't be public.</li>
-            <li>Report as required by UCT's data governance policies and POPIA (Protection of Personal Information Act).</li>
-          </ul>
-          <p><strong>Prevention:</strong> This scenario reinforces the need for the metadata protocols and SOPs the JD mentions. I'd prioritise creating these as part of the departmental data management framework.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 5 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🤝 Scenario: ICTS Disagreement</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">You want to deploy a new tool for the department, but ICTS says it doesn't meet their security requirements. What do you do?</button>
-        <div class="qa-answer">
-          <p><strong>Key principle:</strong> ICTS are not the enemy. They have institutional responsibility for security, and their requirements exist for good reason.</p>
-          <p><strong>Approach:</strong></p>
-          <ul>
-            <li><strong>Understand their specific objections</strong> — Is it a particular vulnerability? A deployment concern? A policy conflict? Getting specific turns a "no" into a "not yet, because..."</li>
-            <li><strong>Collaborate on a solution</strong> — Can the tool be modified to meet their requirements? Can we deploy it in a sandboxed environment? Can they recommend an approved alternative?</li>
-            <li><strong>Document the business case</strong> — If the tool is genuinely needed for teaching or research, prepare a clear justification with risk mitigation measures.</li>
-            <li><strong>Escalate respectfully</strong> — If we reach a genuine impasse, involve the HOD or the Advanced Computing Committee.</li>
-          </ul>
-          <p><strong>Real experience:</strong> I already liaise with ICTS through Theo Armstrong and Sibonelo Twala. We've navigated SESKA deployments and SEAT server issues by working collaboratively rather than adversarially.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 6 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">📊 Scenario: Proving Value to the Department</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">After your first year in the role, the HOD asks you to demonstrate the value you've added. How would you present your impact?</button>
-        <div class="qa-answer">
-          <p><strong>I'd prepare a report structured around the 6 KPAs with measurable outcomes:</strong></p>
-          <ul>
-            <li><strong>Teaching</strong>: Number of courses supported, student satisfaction scores, new digital exercises developed, tutors trained.</li>
-            <li><strong>Research</strong>: Number of researchers supported, data pipelines built, HPC access setup, datasets managed.</li>
-            <li><strong>SEAT</strong>: System uptime %, new features delivered, user satisfaction, registration cycle performance.</li>
-            <li><strong>Infrastructure</strong>: Software/hardware acquisition, security improvements, cost savings from better resource management.</li>
-            <li><strong>Digital Lab progress</strong>: Steps taken toward the larger CIV Digital Lab vision, partnerships established.</li>
-          </ul>
-          <p>I'd also include qualitative feedback from course conveners, researchers, and students. Quantitative metrics tell the "what"; qualitative feedback tells the "so what."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 7 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🌍 Scenario: External Data Integration</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">The Centre for Transport Studies needs real-time traffic data from SANRAL's Freeway Management System integrated into their research database. How would you approach this?</button>
-        <div class="qa-answer">
-          <p><strong>Step-by-step approach:</strong></p>
-          <ol>
-            <li><strong>Requirements gathering</strong>: Meet with the research team to understand exactly what data they need, at what frequency, and how they'll use it.</li>
-            <li><strong>API investigation</strong>: Explore SANRAL's data access options — do they have a REST API? Data exports? Do we need a formal data sharing agreement?</li>
-            <li><strong>Pipeline design</strong>: Build an ETL pipeline in Python — extract from the SANRAL endpoint, transform/clean the data, load into our PostgreSQL database. I'd use scheduled tasks (cron on Linux) for regular automated refreshes.</li>
-            <li><strong>Data quality</strong>: Implement validation checks — sensor outages, missing values, outliers. Build monitoring to alert when data quality drops.</li>
-            <li><strong>Documentation</strong>: Create metadata records and data dictionaries so researchers understand the data's provenance and limitations.</li>
-          </ol>
-          <p><strong>Real experience:</strong> I've built web scraping and data extraction tools (CSV, HTML, BigQuery), published Python data processing packages on PyPI, and created ETL pipelines as part of my IBM Data Engineering certification. I also have experience with Google Maps APIs and REST APIs from the Ecoride project.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIO 8 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🧠 Scenario: The "Vision" Question</h2>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Where do you see the CTO role and the department's digital infrastructure in 5 years?</button>
-        <div class="qa-answer">
-          <p><strong>Vision:</strong> "In 5 years, I'd want the Department of Civil Engineering to be the leading digitally-enabled civil engineering department in Africa. That means:</p>
-          <ul>
-            <li><strong>A fully operational CIV Digital Lab</strong> — not just a room with computers, but an integrated facility where students, researchers, and industry partners can access computational tools, data services, IoT test beds, and collaborative computing environments.</li>
-            <li><strong>A mature digital design learning line</strong> — where every graduate leaves with competency in coding, data analysis, and computational modelling, aligned with ECSA and industry expectations.</li>
-            <li><strong>Self-service data infrastructure</strong> — researchers can access, store, and analyse data through well-documented, reliable pipelines without needing to reinvent the wheel for every project.</li>
-            <li><strong>Integrated AI/ML capabilities</strong> — with machine learning becoming standard in engineering research, the department should have ready-to-use tools and training for AI-assisted analysis.</li>
-            <li><strong>Strong industry partnerships</strong> — through the Digital Lab, connecting with organisations like SANRAL, CSIR, and international research networks.</li>
-          </ul>
-          <p>This aligns directly with UCT's Vision 2030 and the department's stated ambition. The CTO role is the engine that makes this vision operational."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- CURVEBALL SECTION -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">⚡ Curveball Questions</h2>
-      <p>Questions that don't fit neatly into categories but could come from any panellist.</p>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">You're doing a PhD — how can we be sure you'll commit fully to this permanent role?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "My PhD is on track for submission in August 2026. By the time I take up this position, I'll be in the writing-up phase or have already submitted. The PhD and the CTO role are deeply complementary — my PhD work on SESKA has given me the computational mechanics, HPC, and programming expertise that directly feeds into this role's research support function.</p>
-          <p>I see the PhD as evidence of my commitment to this department and to technical excellence, not as a competing priority. The fact that I've simultaneously maintained SEAT, lectured, and progressed my PhD shows I can manage multiple commitments effectively."</p>
+      <!-- SCENARIO 3 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">👨‍🏫 Scenario: Resistant Academic</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            A senior professor doesn't see the value of the digital design
+            learning line and resists integrating coding into their course. How
+            do you handle this?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Approach:</strong> I'd start by listening. A senior
+              professor has valuable context about their course that I may not
+              fully understand. Their resistance might be about workload,
+              scepticism about relevance, or a bad experience with poorly
+              implemented tech in the past.
+            </p>
+            <p><strong>Strategy:</strong></p>
+            <ul>
+              <li>
+                <strong>Understand their concerns</strong> — Meet one-on-one,
+                not in a committee. Ask what their real objection is.
+              </li>
+              <li>
+                <strong>Show, don't tell</strong> — Rather than arguing for
+                coding, demonstrate a small, specific example: "Here's how 10
+                lines of Python could automate the data analysis your students
+                do manually in Excel." Make it about their course outcomes, not
+                about technology for its own sake.
+              </li>
+              <li>
+                <strong>Start small</strong> — Offer to create a single exercise
+                that integrates seamlessly into their existing structure. If it
+                works, they'll ask for more.
+              </li>
+              <li>
+                <strong>Leverage the mandate</strong> — The digital design line
+                is a departmental and ECSA requirement, not a personal
+                preference. If gentle persuasion doesn't work, the Director of
+                UG Studies and HOD can reinforce the curriculum mandate.
+              </li>
+            </ul>
+            <p>
+              <strong>Real experience:</strong> From lecturing, I've learned
+              that the best way to win people over is through demonstrated
+              value, not through hierarchy or argument.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">You've been at ComputeMore as a CIO. Why would you take a Payclass 10 position instead of continuing in industry?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "ComputeMore gave me invaluable industry experience — building production APIs, managing DevOps, working with real customers. But my heart is in this department. I've been at UCT since 2016, my PhD research is here, and the problems I find most meaningful — strengthening research computing, building student capacity, and developing infrastructure for a world-class civil engineering department — are here.</p>
-          <p>The CTO role isn't a step down; it's a step into exactly what I want to build my career around. The combination of teaching, research, and technical leadership is genuinely exciting. And the permanence of the role means I can invest in long-term infrastructure and relationships in a way that project-based work doesn't allow."</p>
+      <!-- SCENARIO 4 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">🔐 Scenario: Data Breach</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            You discover that a student's script accidentally exposed sensitive
+            research data on a public server. What's your response?
+          </button>
+          <div class="qa-answer">
+            <p><strong>Immediate (within 1 hour):</strong></p>
+            <ul>
+              <li>Take the data offline immediately — remove public access.</li>
+              <li>
+                Assess scope — what data was exposed, for how long, and who
+                might have accessed it.
+              </li>
+              <li>Notify my line manager and ICTS security team.</li>
+            </ul>
+            <p><strong>Investigation:</strong></p>
+            <ul>
+              <li>
+                Work with the student to understand how it happened — no blame,
+                focus on fixing the process.
+              </li>
+              <li>Check if similar vulnerabilities exist in other projects.</li>
+            </ul>
+            <p><strong>Remediation:</strong></p>
+            <ul>
+              <li>Implement access controls to prevent recurrence.</li>
+              <li>
+                Create clear guidelines for researchers about data handling —
+                file permissions, server configurations, what can and can't be
+                public.
+              </li>
+              <li>
+                Report as required by UCT's data governance policies and POPIA
+                (Protection of Personal Information Act).
+              </li>
+            </ul>
+            <p>
+              <strong>Prevention:</strong> This scenario reinforces the need for
+              the metadata protocols and SOPs the JD mentions. I'd prioritise
+              creating these as part of the departmental data management
+              framework.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">What's your biggest weakness or area for development?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "My weakest area in the context of this role is probably augmented and virtual reality — which the JD mentions in the teaching support section. I have strong foundations in IoT, coding, and data science, but AR/VR is not yet in my toolkit. However, I've demonstrated that I'm a fast learner — completing over 750 hours of professional certifications in just over a year. If AR/VR becomes a priority for the digital design line, I'd invest in developing that competency systematically."</p>
-          <p><em>Tip: Choosing AR/VR is strategic — it's mentioned once in the JD as an aspirational item, not a core requirement. It's honest, specific, and immediately followed by evidence of your ability to close skill gaps quickly.</em></p>
+      <!-- SCENARIO 5 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">🤝 Scenario: ICTS Disagreement</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            You want to deploy a new tool for the department, but ICTS says it
+            doesn't meet their security requirements. What do you do?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Key principle:</strong> ICTS are not the enemy. They have
+              institutional responsibility for security, and their requirements
+              exist for good reason.
+            </p>
+            <p><strong>Approach:</strong></p>
+            <ul>
+              <li>
+                <strong>Understand their specific objections</strong> — Is it a
+                particular vulnerability? A deployment concern? A policy
+                conflict? Getting specific turns a "no" into a "not yet,
+                because..."
+              </li>
+              <li>
+                <strong>Collaborate on a solution</strong> — Can the tool be
+                modified to meet their requirements? Can we deploy it in a
+                sandboxed environment? Can they recommend an approved
+                alternative?
+              </li>
+              <li>
+                <strong>Document the business case</strong> — If the tool is
+                genuinely needed for teaching or research, prepare a clear
+                justification with risk mitigation measures.
+              </li>
+              <li>
+                <strong>Escalate respectfully</strong> — If we reach a genuine
+                impasse, involve the HOD or the Advanced Computing Committee.
+              </li>
+            </ul>
+            <p>
+              <strong>Real experience:</strong> I already liaise with ICTS
+              through Theo Armstrong and Sibonelo Twala. We've navigated SESKA
+              deployments and SEAT server issues by working collaboratively
+              rather than adversarially.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you handle a situation where a senior colleague makes a decision about technology that you disagree with?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I'd share my perspective with evidence — not as a challenge, but as input. Technical decisions should be based on facts: performance data, security implications, cost, and user impact. I'd present the tradeoffs and my recommendation, but ultimately respect the decision-making authority of the line manager or committee.</p>
-          <p>If the decision leads to a problem I predicted, I wouldn't say 'I told you so' — I'd focus on fixing it and documenting the lesson learned for future decisions. Building trust over time means your input carries more weight in future discussions."</p>
+      <!-- SCENARIO 6 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          📊 Scenario: Proving Value to the Department
+        </h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            After your first year in the role, the HOD asks you to demonstrate
+            the value you've added. How would you present your impact?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong
+                >I'd prepare a report structured around the 6 KPAs with
+                measurable outcomes:</strong
+              >
+            </p>
+            <ul>
+              <li>
+                <strong>Teaching</strong>: Number of courses supported, student
+                satisfaction scores, new digital exercises developed, tutors
+                trained.
+              </li>
+              <li>
+                <strong>Research</strong>: Number of researchers supported, data
+                pipelines built, HPC access setup, datasets managed.
+              </li>
+              <li>
+                <strong>SEAT</strong>: System uptime %, new features delivered,
+                user satisfaction, registration cycle performance.
+              </li>
+              <li>
+                <strong>Infrastructure</strong>: Software/hardware acquisition,
+                security improvements, cost savings from better resource
+                management.
+              </li>
+              <li>
+                <strong>Digital Lab progress</strong>: Steps taken toward the
+                larger CIV Digital Lab vision, partnerships established.
+              </li>
+            </ul>
+            <p>
+              I'd also include qualitative feedback from course conveners,
+              researchers, and students. Quantitative metrics tell the "what";
+              qualitative feedback tells the "so what."
+            </p>
+          </div>
         </div>
+      </div>
+
+      <!-- SCENARIO 7 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">🌍 Scenario: External Data Integration</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            The Centre for Transport Studies needs real-time traffic data from
+            SANRAL's Freeway Management System integrated into their research
+            database. How would you approach this?
+          </button>
+          <div class="qa-answer">
+            <p><strong>Step-by-step approach:</strong></p>
+            <ol>
+              <li>
+                <strong>Requirements gathering</strong>: Meet with the research
+                team to understand exactly what data they need, at what
+                frequency, and how they'll use it.
+              </li>
+              <li>
+                <strong>API investigation</strong>: Explore SANRAL's data access
+                options — do they have a REST API? Data exports? Do we need a
+                formal data sharing agreement?
+              </li>
+              <li>
+                <strong>Pipeline design</strong>: Build an ETL pipeline in
+                Python — extract from the SANRAL endpoint, transform/clean the
+                data, load into our PostgreSQL database. I'd use scheduled tasks
+                (cron on Linux) for regular automated refreshes.
+              </li>
+              <li>
+                <strong>Data quality</strong>: Implement validation checks —
+                sensor outages, missing values, outliers. Build monitoring to
+                alert when data quality drops.
+              </li>
+              <li>
+                <strong>Documentation</strong>: Create metadata records and data
+                dictionaries so researchers understand the data's provenance and
+                limitations.
+              </li>
+            </ol>
+            <p>
+              <strong>Real experience:</strong> I've built web scraping and data
+              extraction tools (CSV, HTML, BigQuery), published Python data
+              processing packages on PyPI, and created ETL pipelines as part of
+              my IBM Data Engineering certification. I also have experience with
+              Google Maps APIs and REST APIs from the Ecoride project.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENARIO 8 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">🧠 Scenario: The "Vision" Question</h2>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Where do you see the CTO role and the department's digital
+            infrastructure in 5 years?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Vision:</strong> "In 5 years, I'd want the Department of
+              Civil Engineering to be the leading digitally-enabled civil
+              engineering department in Africa. That means:
+            </p>
+            <ul>
+              <li>
+                <strong>A fully operational CIV Digital Lab</strong> — not just
+                a room with computers, but an integrated facility where
+                students, researchers, and industry partners can access
+                computational tools, data services, IoT test beds, and
+                collaborative computing environments.
+              </li>
+              <li>
+                <strong>A mature digital design learning line</strong> — where
+                every graduate leaves with competency in coding, data analysis,
+                and computational modelling, aligned with ECSA and industry
+                expectations.
+              </li>
+              <li>
+                <strong>Self-service data infrastructure</strong> — researchers
+                can access, store, and analyse data through well-documented,
+                reliable pipelines without needing to reinvent the wheel for
+                every project.
+              </li>
+              <li>
+                <strong>Integrated AI/ML capabilities</strong> — with machine
+                learning becoming standard in engineering research, the
+                department should have ready-to-use tools and training for
+                AI-assisted analysis.
+              </li>
+              <li>
+                <strong>Strong industry partnerships</strong> — through the
+                Digital Lab, connecting with organisations like SANRAL, CSIR,
+                and international research networks.
+              </li>
+            </ul>
+            <p>
+              This aligns directly with UCT's Vision 2030 and the department's
+              stated ambition. The CTO role is the engine that makes this vision
+              operational."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CURVEBALL SECTION -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">⚡ Curveball Questions</h2>
+        <p>
+          Questions that don't fit neatly into categories but could come from
+          any panellist.
+        </p>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            You're doing a PhD — how can we be sure you'll commit fully to this
+            permanent role?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "My PhD is on track for
+              submission in August 2026. By the time I take up this position,
+              I'll be in the writing-up phase or have already submitted. The PhD
+              and the CTO role are deeply complementary — my PhD work on SESKA
+              has given me the computational mechanics, HPC, and programming
+              expertise that directly feeds into this role's research support
+              function.
+            </p>
+            <p>
+              I see the PhD as evidence of my commitment to this department and
+              to technical excellence, not as a competing priority. The fact
+              that I've simultaneously maintained SEAT, lectured, and progressed
+              my PhD shows I can manage multiple commitments effectively."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            You've been at ComputeMore as a CIO. Why would you take a Payclass
+            10 position instead of continuing in industry?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "ComputeMore gave me invaluable
+              industry experience — building production APIs, managing DevOps,
+              working with real customers. But my heart is in this department.
+              I've been at UCT since 2016, my PhD research is here, and the
+              problems I find most meaningful — strengthening research
+              computing, building student capacity, and developing
+              infrastructure for a world-class civil engineering department —
+              are here.
+            </p>
+            <p>
+              The CTO role isn't a step down; it's a step into exactly what I
+              want to build my career around. The combination of teaching,
+              research, and technical leadership is genuinely exciting. And the
+              permanence of the role means I can invest in long-term
+              infrastructure and relationships in a way that project-based work
+              doesn't allow."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            What's your biggest weakness or area for development?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "My weakest area in the context
+              of this role is probably augmented and virtual reality — which the
+              JD mentions in the teaching support section. I have strong
+              foundations in IoT, coding, and data science, but AR/VR is not yet
+              in my toolkit. However, I've demonstrated that I'm a fast learner
+              — completing over 750 hours of professional certifications in just
+              over a year. If AR/VR becomes a priority for the digital design
+              line, I'd invest in developing that competency systematically."
+            </p>
+            <p>
+              <em
+                >Tip: Choosing AR/VR is strategic — it's mentioned once in the
+                JD as an aspirational item, not a core requirement. It's honest,
+                specific, and immediately followed by evidence of your ability
+                to close skill gaps quickly.</em
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you handle a situation where a senior colleague makes a
+            decision about technology that you disagree with?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I'd share my perspective with
+              evidence — not as a challenge, but as input. Technical decisions
+              should be based on facts: performance data, security implications,
+              cost, and user impact. I'd present the tradeoffs and my
+              recommendation, but ultimately respect the decision-making
+              authority of the line manager or committee.
+            </p>
+            <p>
+              If the decision leads to a problem I predicted, I wouldn't say 'I
+              told you so' — I'd focus on fixing it and documenting the lesson
+              learned for future decisions. Building trust over time means your
+              input carries more weight in future discussions."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
       </div>
     </div>
-
-    <div class="page-footer">
-      <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
-    </div>
-  </div>
-  <button class="back-to-top" id="btt" title="Back to top">↑</button>
-  <script>
-    (function(){
-      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
-      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
-      document.getElementById('content').style.display='';
-      document.addEventListener('contextmenu',function(e){e.preventDefault();});
-      var btt=document.getElementById('btt');
-      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
-      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
-    })();
-    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
-  </script>
-</body>
+    <button class="back-to-top" id="btt" title="Back to top">↑</button>
+    <script>
+      (function () {
+        const H =
+          "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
+        if (sessionStorage.getItem("_ig_auth") !== H) {
+          window.location.replace("index.html");
+          return;
+        }
+        document.getElementById("content").style.display = "";
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+        var btt = document.getElementById("btt");
+        window.addEventListener("scroll", function () {
+          btt.classList.toggle("visible", window.scrollY > 300);
+        });
+        btt.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      })();
+      function toggleQA(btn) {
+        btn.classList.toggle("open");
+        var a = btn.nextElementSibling;
+        a.classList.toggle("visible");
+      }
+    </script>
+  </body>
 </html>

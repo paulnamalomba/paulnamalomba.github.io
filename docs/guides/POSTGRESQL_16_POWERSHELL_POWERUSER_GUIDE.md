@@ -2,10 +2,11 @@
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -60,6 +61,7 @@ PostgreSQL 16 is an advanced open-source relational database with support for AC
 ## Configuration and Best Practices
 
 **postgresql.conf** (located in data directory):
+
 ```ini
 # Connection settings
 max_connections = 100
@@ -86,6 +88,7 @@ log_min_duration_statement = 1000      # Log queries > 1 second
 ```
 
 **pg_hba.conf** (host-based authentication):
+
 ```
 # TYPE  DATABASE  USER      ADDRESS         METHOD
 local   all       all                       scram-sha-256
@@ -95,6 +98,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 ```
 
 **Best Practices**:
+
 - Use connection pooling (PgBouncer) for applications with >100 connections
 - Enable query logging for slow queries (>1000ms)
 - Implement regular VACUUM ANALYZE for table statistics
@@ -113,6 +117,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 7. **Data Encryption**: Use `pgcrypto` for column-level encryption; enable transparent data encryption (TDE) for data-at-rest
 
 **Create Secure Application User**:
+
 ```sql
 CREATE ROLE appuser WITH LOGIN PASSWORD 'SecurePassword123!';
 CREATE DATABASE appdb OWNER appuser;
@@ -259,7 +264,7 @@ psql -U postgres -d production_db -c "EXPLAIN ANALYZE SELECT * FROM users WHERE 
 
 # Get table sizes
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     schemaname,
     tablename,
     pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
@@ -272,7 +277,7 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 
 # Get index usage statistics
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
@@ -286,7 +291,7 @@ ORDER BY idx_scan DESC;
 
 # Find slow queries (requires pg_stat_statements extension)
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     query,
     calls,
     total_exec_time,
@@ -329,7 +334,7 @@ psql -U postgres -d production_db -c "REINDEX TABLE CONCURRENTLY users;"
 
 # Get unused indexes
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
@@ -365,7 +370,7 @@ psql -U postgres -d production_db -c "REINDEX DATABASE production_db;"
 
 # Check for bloat
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     schemaname,
     tablename,
     pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size,
@@ -393,6 +398,7 @@ ALTER TABLE users SET (
 ## Troubleshooting
 
 **Connection Refused**:
+
 - **Error**: "could not connect to server: Connection refused"
   - **Check service**: `Get-Service postgresql-x64-16`
   - **Start service**: `Start-Service postgresql-x64-16`
@@ -400,22 +406,26 @@ ALTER TABLE users SET (
   - **Check logs**: `Get-Content "C:\PostgreSQL\data\log\postgresql-*.log" -Tail 50`
 
 **Authentication Failed**:
+
 - **Error**: "FATAL: password authentication failed"
   - **Check pg_hba.conf**: Ensure correct authentication method
   - **Reset password**: `psql -U postgres -c "ALTER USER postgres PASSWORD 'NewPassword123!';"`
   - **Reload config**: `psql -U postgres -c "SELECT pg_reload_conf();"`
 
 **Out of Memory**:
+
 - **Error**: "out of memory" or "could not resize shared memory segment"
   - **Check shared_buffers**: Reduce if >25% of RAM
   - **Check work_mem**: Reduce per-connection memory
   - **Increase system RAM** or reduce max_connections
 
 **Lock Timeouts**:
+
 - **Check blocking queries**:
+
 ```powershell
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     pid,
     usename,
     pg_blocking_pids(pid) AS blocked_by,
@@ -424,9 +434,11 @@ FROM pg_stat_activity
 WHERE cardinality(pg_blocking_pids(pid)) > 0;
 "@
 ```
+
 - **Kill blocking session**: `psql -U postgres -c "SELECT pg_terminate_backend(12345);"`
 
 **Common Logs**:
+
 - PostgreSQL logs: `C:\PostgreSQL\data\log\postgresql-*.log`
 - Windows Event Viewer: Application logs for PostgreSQL service
 - Connection logs: Enable `log_connections = on` in postgresql.conf
@@ -434,6 +446,7 @@ WHERE cardinality(pg_blocking_pids(pid)) > 0;
 ## Performance and Tuning
 
 **Memory Configuration**:
+
 ```ini
 # For 16GB RAM system
 shared_buffers = 4GB              # 25% of RAM
@@ -444,6 +457,7 @@ work_mem = 16MB                   # Per sort/hash operation
 
 **Connection Pooling**:
 Install PgBouncer for connection pooling:
+
 ```powershell
 # Install PgBouncer
 choco install pgbouncer
@@ -468,6 +482,7 @@ net start pgbouncer
 ```
 
 **Query Optimization**:
+
 ```powershell
 # Enable pg_stat_statements extension
 psql -U postgres -d production_db -c "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
@@ -484,6 +499,7 @@ Restart-Service postgresql-x64-16
 ```
 
 **Monitoring Commands**:
+
 ```powershell
 # Active connections
 psql -U postgres -c "SELECT count(*) FROM pg_stat_activity;"
@@ -493,7 +509,7 @@ psql -U postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size
 
 # Cache hit ratio (should be >99%)
 psql -U postgres -d production_db -c @"
-SELECT 
+SELECT
     sum(heap_blks_read) as heap_read,
     sum(heap_blks_hit) as heap_hit,
     sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS cache_hit_ratio

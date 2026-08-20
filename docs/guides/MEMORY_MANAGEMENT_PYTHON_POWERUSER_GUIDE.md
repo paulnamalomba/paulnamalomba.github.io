@@ -2,10 +2,11 @@
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -14,7 +15,7 @@
 [![Interpreter: CPython](https://img.shields.io/badge/Interpreter-CPython-FFD43B.svg)](https://docs.python.org/3/c-api/intro.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-## Overview 
+## Overview
 
 This guide explains how Python (CPython on Windows) handles key memory and execution concepts: value vs reference semantics, heap storage, copy semantics (deep vs shallow), and nullability. The content focuses on what actually happens under the hood on Windows using CPython, with short, runnable examples and Windows-specific notes.
 
@@ -59,6 +60,7 @@ Python (CPython) provides high-level memory management with automatic memory all
 ---
 
 ## Contents
+
 - Data Structures: all objects, value vs reference interpretation
 - Storage: heap allocation, object layout in CPython, small object allocator
 - Copy Semantics: assignment, shallow copy, deep copy
@@ -70,7 +72,7 @@ Python (CPython) provides high-level memory management with automatic memory all
 
 ## 1) Data Structures — "Value" vs "Reference" in Python
 
-- In Python, *everything is an object*. Names (variables) are labels bound to object references.
+- In Python, _everything is an object_. Names (variables) are labels bound to object references.
 - Immutable types (e.g., `int`, `str`, `tuple`) behave like values semantically — operations produce new objects. Mutable types (`list`, `dict`, `set`) allow in-place changes.
 
 Example:
@@ -88,6 +90,7 @@ print(lst1)  # [1,2,3,4]
 ```
 
 Notes:
+
 - Understanding mutability is essential: immutable types are safe to share, mutable types require attention.
 
 ---
@@ -99,10 +102,12 @@ Notes:
 - Memory for large objects (arrays, bytes) is allocated separately.
 
 Reference counting & GC:
+
 - CPython primarily uses reference counting (immediate deallocation when refcount drops to zero).
 - It also has a cyclic garbage collector (`gc` module) to detect and collect reference cycles.
 
 Windows specifics:
+
 - CPython uses the Windows heap API under-the-hood; performance tuning is limited compared to native languages.
 
 ---
@@ -126,6 +131,7 @@ print(deep)    # independent copy -> no change
 ```
 
 Tips:
+
 - Prefer immutable objects for safety.
 - Use `deepcopy` cautiously — expensive for large structures.
 
@@ -145,6 +151,7 @@ if x is None:
 ```
 
 Pitfalls:
+
 - Do not use `== None`; use `is None` for identity.
 - Be careful with mutable default arguments in function signatures; use `None` sentinel.
 
@@ -202,8 +209,9 @@ Run with `python main.py` or `py -3 main.py` on Windows.
 ---
 
 ## References
+
 - CPython internals: https://github.com/python/cpython
 - Python memory management: https://docs.python.org/3/c-api/memory.html
 - `gc` module docs: https://docs.python.org/3/library/gc.html
 
-*End of Python guide.*
+_End of Python guide._

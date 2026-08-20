@@ -26,11 +26,11 @@ Similarly, data must be **cleaned, organized, and governed** in storage systems 
 
 ### Challenges with Data Lakes
 
-| Challenge | Description |
-| --- | --- |
+| Challenge                     | Description                                                                                                                                                       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Data Governance & Quality** | Without rigorous governance, data lakes degrade into **data swamps**—filled with duplicate, inaccurate, or incomplete data that is difficult to track and manage. |
-| **Data Staleness** | Ungoverned data degrades over time, losing its value for generating insights—just as unused kitchen ingredients eventually spoil. |
-| **Query Performance** | Data lakes are not optimized for complex analytical queries. Extracting insights directly from a lake can be slow and operationally difficult. |
+| **Data Staleness**            | Ungoverned data degrades over time, losing its value for generating insights—just as unused kitchen ingredients eventually spoil.                                 |
+| **Query Performance**         | Data lakes are not optimized for complex analytical queries. Extracting insights directly from a lake can be slow and operationally difficult.                    |
 
 ---
 
@@ -40,16 +40,16 @@ Similarly, data must be **cleaned, organized, and governed** in storage systems 
 
 EDWs excel at powering:
 
-* **Business Intelligence (BI) workloads** — dashboards, reports, and visualizations
-* **Structured analytical queries** with high performance and concurrency
+- **Business Intelligence (BI) workloads** — dashboards, reports, and visualizations
+- **Structured analytical queries** with high performance and concurrency
 
 ### Challenges with Data Warehouses
 
-| Challenge | Description |
-| --- | --- |
-| **High Cost** | Like enterprise-grade walk-in freezers, data warehouses are expensive to operate. Not everything can—or should—be loaded into one. |
+| Challenge                             | Description                                                                                                                               |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **High Cost**                         | Like enterprise-grade walk-in freezers, data warehouses are expensive to operate. Not everything can—or should—be loaded into one.        |
 | **Limited Unstructured Data Support** | Warehouses have limited support for semi-structured and unstructured data—precisely the data types growing fastest in most organizations. |
-| **Latency** | The time required to sort, clean, and load data into the warehouse can make it too slow for applications requiring the freshest data. |
+| **Latency**                           | The time required to sort, clean, and load data into the warehouse can make it too slow for applications requiring the freshest data.     |
 
 ---
 
@@ -89,28 +89,28 @@ graph TD
 
 The data lakehouse combines:
 
-* **The flexibility and cost-effectiveness of a data lake** — store data from an exploding number of sources at low cost
-* **The performance and structure of a data warehouse** — built-in data management and governance layers enable both BI and high-performance ML workloads
+- **The flexibility and cost-effectiveness of a data lake** — store data from an exploding number of sources at low cost
+- **The performance and structure of a data warehouse** — built-in data management and governance layers enable both BI and high-performance ML workloads
 
 ### 4.2 Adoption Paths
 
 Organizations can approach the data lakehouse through several routes:
 
-* **Modernize existing data lakes** — layer governance and query optimization on top of current lake infrastructure
-* **Complement existing data warehouses** — extend warehouse capabilities to support new AI and machine learning-driven workloads that require semi-structured and unstructured data
+- **Modernize existing data lakes** — layer governance and query optimization on top of current lake infrastructure
+- **Complement existing data warehouses** — extend warehouse capabilities to support new AI and machine learning-driven workloads that require semi-structured and unstructured data
 
 ---
 
 ## 5. Comparative Summary
 
-| Dimension | Data Lake | Data Warehouse | Data Lakehouse |
-| --- | --- | --- | --- |
-| **Cost** | Low | High | Moderate |
-| **Data Types** | All (structured, semi-structured, unstructured) | Primarily structured | All |
-| **Governance** | Weak (risk of data swamp) | Strong | Strong (built-in) |
-| **Query Performance** | Low for complex analytics | High | High |
-| **ML/AI Support** | High (raw data access) | Limited | High |
-| **BI Support** | Limited | High | High |
+| Dimension             | Data Lake                                       | Data Warehouse       | Data Lakehouse    |
+| --------------------- | ----------------------------------------------- | -------------------- | ----------------- |
+| **Cost**              | Low                                             | High                 | Moderate          |
+| **Data Types**        | All (structured, semi-structured, unstructured) | Primarily structured | All               |
+| **Governance**        | Weak (risk of data swamp)                       | Strong               | Strong (built-in) |
+| **Query Performance** | Low for complex analytics                       | High                 | High              |
+| **ML/AI Support**     | High (raw data access)                          | Limited              | High              |
+| **BI Support**        | Limited                                         | High                 | High              |
 
 ---
 

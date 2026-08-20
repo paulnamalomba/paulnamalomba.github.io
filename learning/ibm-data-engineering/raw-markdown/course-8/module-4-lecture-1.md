@@ -10,9 +10,9 @@ Originally engineered at LinkedIn to handle massive volumes of user activity tel
 
 When evaluating infrastructure for a backend system—whether it's tracking thousands of concurrent student session states or aggregating real-time computational metrics from a distributed solver—Kafka is deployed for:
 
-* **Metric Streaming:** Ingesting high-frequency sensor readings, hardware utilization, or application logs into a centralized, immutable repository.
-* **Event Sourcing & Transactions:** Serving as the backbone for fintech applications where every state change (e.g., a payment execution) must be securely ordered, audited, and strictly compliant with governance regulations.
-* **Real-Time Analytics:** Feeding data into stream-processing engines (like Apache Flink) or machine learning pipelines with sub-millisecond latency.
+- **Metric Streaming:** Ingesting high-frequency sensor readings, hardware utilization, or application logs into a centralized, immutable repository.
+- **Event Sourcing & Transactions:** Serving as the backbone for fintech applications where every state change (e.g., a payment execution) must be securely ordered, audited, and strictly compliant with governance regulations.
+- **Real-Time Analytics:** Feeding data into stream-processing engines (like Apache Flink) or machine learning pipelines with sub-millisecond latency.
 
 ---
 
@@ -24,9 +24,9 @@ Kafka is a distributed, real-time system built on a strictly decoupled client-se
 
 A Kafka deployment is never a single server; it is a cluster of independent nodes called **Brokers**.
 
-* **Ingestion:** Brokers receive payloads from Producers.
-* **Storage:** They persist these records to disk. Kafka divides this storage into **Partitions** and replicates them across multiple brokers. This ensures that if a server rack in a Cape Town data center goes offline, the data remains highly available and fault-tolerant.
-* **Distribution:** Brokers serve these persistent records to subscribing Consumers. Because data is stored permanently (based on retention policies), consumers can read and replay events at their own processing speed.
+- **Ingestion:** Brokers receive payloads from Producers.
+- **Storage:** They persist these records to disk. Kafka divides this storage into **Partitions** and replicates them across multiple brokers. This ensures that if a server rack in a Cape Town data center goes offline, the data remains highly available and fault-tolerant.
+- **Distribution:** Brokers serve these persistent records to subscribing Consumers. Because data is stored permanently (based on retention policies), consumers can read and replay events at their own processing speed.
 
 ### 2.2 The Consensus Protocol Shift: ZooKeeper to KRaft
 
@@ -121,10 +121,10 @@ public class KafkaInfrastructureManager
 
 Running a distributed consensus protocol requires rigorous tuning of JVM heaps, OS page caches, and network I/O. For teams focused on building computational software or web applications rather than managing server infrastructure, managed services are standard:
 
-| Provider | Core Value Proposition |
-| --- | --- |
-| **Confluent Cloud** | Founded by the original creators of Kafka. Offers a fully managed, serverless, cloud-native Kafka experience with extensive pre-built connectors (e.g., syncing directly to PostgreSQL). |
-| **Amazon MSK** | (Managed Streaming for Apache Kafka). Deeply integrated into the AWS ecosystem, offering simplified provisioning while retaining raw access to the underlying cluster configurations. |
-| **IBM Event Streams** | Focuses heavily on enterprise-grade security, auditing, and compliance capabilities built on top of the open-source Kafka core. |
+| Provider              | Core Value Proposition                                                                                                                                                                   |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Confluent Cloud**   | Founded by the original creators of Kafka. Offers a fully managed, serverless, cloud-native Kafka experience with extensive pre-built connectors (e.g., syncing directly to PostgreSQL). |
+| **Amazon MSK**        | (Managed Streaming for Apache Kafka). Deeply integrated into the AWS ecosystem, offering simplified provisioning while retaining raw access to the underlying cluster configurations.    |
+| **IBM Event Streams** | Focuses heavily on enterprise-grade security, auditing, and compliance capabilities built on top of the open-source Kafka core.                                                          |
 
 Would you like to explore the specific replication mathematics Kafka uses to guarantee zero data loss across brokers, or should we map out how to integrate the C# `AdminClient` into an automated CI/CD pipeline?

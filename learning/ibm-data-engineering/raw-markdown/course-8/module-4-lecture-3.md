@@ -4,15 +4,15 @@
 
 At the hardware and network level, a Kafka environment is not a monolithic application; it is a distributed cluster of **Brokers**.
 
-* **Brokers:** These are dedicated servers responsible for receiving, storing, processing, and distributing events.
-* **KRaft (Kafka Raft):** Modern Kafka utilizes controller nodes running the KRaft consensus protocol to manage the cluster's metadata log. This replaces the legacy Zookeeper dependency, streamlining the architecture by keeping metadata state natively within Kafka.
+- **Brokers:** These are dedicated servers responsible for receiving, storing, processing, and distributing events.
+- **KRaft (Kafka Raft):** Modern Kafka utilizes controller nodes running the KRaft consensus protocol to manage the cluster's metadata log. This replaces the legacy Zookeeper dependency, streamlining the architecture by keeping metadata state natively within Kafka.
 
 ```mermaid
 graph TD
     subgraph "Kafka Cluster Topology"
         C1[KRaft Controller Node] <--> C2[KRaft Controller Node]
         C2 <--> C3[KRaft Controller Node]
-        
+
         B1[Broker 0] --> C1
         B2[Broker 1] --> C2
         B3[Broker 2] --> C3
@@ -28,8 +28,8 @@ Kafka organizes data into logical containers called **Topics**. You can conceptu
 
 To achieve massive throughput and fault tolerance, topics are physically divided:
 
-* **Partitions:** A topic is split into multiple partitions distributed across different brokers. This allows parallel writing and reading.
-* **Replications:** Each partition is duplicated across multiple brokers. If Broker 0 fails, clients automatically failover to the replica on Broker 1.
+- **Partitions:** A topic is split into multiple partitions distributed across different brokers. This allows parallel writing and reading.
+- **Replications:** Each partition is duplicated across multiple brokers. If Broker 0 fails, clients automatically failover to the replica on Broker 1.
 
 ### CLI Topic Management
 
@@ -51,7 +51,7 @@ kafka-topics.sh --describe --topic log_topic --bootstrap-server localhost:9092
 
 ## 3. Ingestion: Kafka Producers
 
-**Producers** are client applications that push event payloads into Kafka topics. Kafka guarantees that messages sent to a *specific partition* by a *single producer* will be appended in the exact order they were sent.
+**Producers** are client applications that push event payloads into Kafka topics. Kafka guarantees that messages sent to a _specific partition_ by a _single producer_ will be appended in the exact order they were sent.
 
 ### The Role of Partition Keys
 
@@ -90,10 +90,10 @@ public class UserActivityProducer
 
         using var producer = new ProducerBuilder<string, string>(config).Build();
 
-        var message = new Message<string, string> 
-        { 
+        var message = new Message<string, string>
+        {
             Key = userId, // Hashes the user ID to guarantee partition routing
-            Value = action 
+            Value = action
         };
 
         var result = await producer.ProduceAsync("user_topic", message);
@@ -109,8 +109,8 @@ public class UserActivityProducer
 
 **Consumers** are client applications that subscribe to topics. Because Kafka stores events durably on disk, producers and consumers are fully decoupled. A consumer can crash, stay offline for an hour, and resume exactly where it left off.
 
-* **Offsets:** Consumers track their read position using an integer called an offset.
-* **Playback:** By resetting the offset to `0`, a consumer can replay the entire historical stream (a very useful feature for auditing, provided you haven't configured a short retention policy).
+- **Offsets:** Consumers track their read position using an integer called an offset.
+- **Playback:** By resetting the offset to `0`, a consumer can replay the entire historical stream (a very useful feature for auditing, provided you haven't configured a short retention policy).
 
 ### CLI Consumer Examples
 
@@ -194,16 +194,16 @@ graph LR
 
     W_API -. JSON .-> W_Prod
     T_API -. JSON .-> T_Prod
-    
+
     W_Prod ==>|Serialize to Bytes| W_Topic
     T_Prod ==>|Serialize to Bytes| T_Topic
-    
+
     W_Topic ==>|Read Bytes| W_Cons
     T_Topic ==>|Read Bytes| T_Cons
-    
+
     W_Cons -. Deserialize JSON .-> DB_Writer
     T_Cons -. Deserialize JSON .-> DB_Writer
-    
+
     DB_Writer -- SQL INSERT --> RDBMS
     RDBMS --> Dash
 

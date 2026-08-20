@@ -2,10 +2,11 @@
 
 **Last updated**: December 18, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -62,53 +63,56 @@ This section covers the management of background services (daemons in Linux, Ser
 `systemd` is the init system and service manager for most modern Linux distributions. `systemctl` is the primary command-line utility for introspection and control.
 
 #### **Basic Service Control**
+
 The generic syntax is `sudo systemctl [command] [service_name]`.
 
-* **Start a service:**
-    ```bash
-    sudo systemctl start nginx
-    ```
-* **Stop a service:**
-    ```bash
-    sudo systemctl stop nginx
-    ```
-* **Restart a service:** (Stops and then starts)
-    ```bash
-    sudo systemctl restart nginx
-    ```
-* **Reload configuration:** (Reloads config without dropping connections, if supported)
-    ```bash
-    sudo systemctl reload nginx
-    ```
-* **Check status:** (Shows active state, PIDs, and recent logs)
-    ```bash
-    systemctl status nginx
-    ```
+- **Start a service:**
+  ```bash
+  sudo systemctl start nginx
+  ```
+- **Stop a service:**
+  ```bash
+  sudo systemctl stop nginx
+  ```
+- **Restart a service:** (Stops and then starts)
+  ```bash
+  sudo systemctl restart nginx
+  ```
+- **Reload configuration:** (Reloads config without dropping connections, if supported)
+  ```bash
+  sudo systemctl reload nginx
+  ```
+- **Check status:** (Shows active state, PIDs, and recent logs)
+  ```bash
+  systemctl status nginx
+  ```
 
 #### **Boot Management**
+
 Controls whether a service launches automatically when the OS boots.
 
-* **Enable at boot:** (Creates symlinks)
-    ```bash
-    sudo systemctl enable nginx
-    ```
-* **Disable at boot:** (Removes symlinks)
-    ```bash
-    sudo systemctl disable nginx
-    ```
-* **Check if enabled:**
-    ```bash
-    systemctl is-enabled nginx
-    ```
+- **Enable at boot:** (Creates symlinks)
+  ```bash
+  sudo systemctl enable nginx
+  ```
+- **Disable at boot:** (Removes symlinks)
+  ```bash
+  sudo systemctl disable nginx
+  ```
+- **Check if enabled:**
+  ```bash
+  systemctl is-enabled nginx
+  ```
 
 #### **Logging (Journalctl)**
+
 `systemd` uses a binary logger called the journal.
 
-* **View logs for a specific service:**
-    ```bash
-    # -u = unit, -f = follow (tail), -n = number of lines
-    journalctl -u nginx -f -n 50
-    ```
+- **View logs for a specific service:**
+  ```bash
+  # -u = unit, -f = follow (tail), -n = number of lines
+  journalctl -u nginx -f -n 50
+  ```
 
 ---
 
@@ -117,44 +121,46 @@ Controls whether a service launches automatically when the OS boots.
 PowerShell uses the `*-Service` noun for service management.
 
 #### **Basic Service Control**
-* **Get Service Status:**
-    ```powershell
-    Get-Service -Name W3SVC
-    ```
-* **Start a service:**
-    ```powershell
-    Start-Service -Name W3SVC
-    ```
-* **Stop a service:**
-    ```powershell
-    Stop-Service -Name W3SVC
-    ```
-* **Restart a service:**
-    ```powershell
-    Restart-Service -Name W3SVC
-    ```
-* **Filtering Services:**
-    PowerShell allows object-based filtering rather than text grep.
-    ```powershell
-    # Find all running services starting with 'W'
-    Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.Name -like 'W*' }
-    ```
+
+- **Get Service Status:**
+  ```powershell
+  Get-Service -Name W3SVC
+  ```
+- **Start a service:**
+  ```powershell
+  Start-Service -Name W3SVC
+  ```
+- **Stop a service:**
+  ```powershell
+  Stop-Service -Name W3SVC
+  ```
+- **Restart a service:**
+  ```powershell
+  Restart-Service -Name W3SVC
+  ```
+- **Filtering Services:**
+  PowerShell allows object-based filtering rather than text grep.
+  ```powershell
+  # Find all running services starting with 'W'
+  Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.Name -like 'W*' }
+  ```
 
 #### **Boot Management (Startup Types)**
+
 Windows uses "Startup Types" (Automatic, Manual, Disabled) rather than just enable/disable flags.
 
-* **Set to Automatic (Enable at boot):**
-    ```powershell
-    Set-Service -Name W3SVC -StartupType Automatic
-    ```
-* **Set to Disabled (Disable at boot):**
-    ```powershell
-    Set-Service -Name W3SVC -StartupType Disabled
-    ```
-* **Set to Manual:**
-    ```powershell
-    Set-Service -Name W3SVC -StartupType Manual
-    ```
+- **Set to Automatic (Enable at boot):**
+  ```powershell
+  Set-Service -Name W3SVC -StartupType Automatic
+  ```
+- **Set to Disabled (Disable at boot):**
+  ```powershell
+  Set-Service -Name W3SVC -StartupType Disabled
+  ```
+- **Set to Manual:**
+  ```powershell
+  Set-Service -Name W3SVC -StartupType Manual
+  ```
 
 ---
 
@@ -168,79 +174,82 @@ Supervisor is a client/server system that allows its users to monitor and contro
 
 #### **Key Commands**
 
-* **Enter Interactive Shell:**
-    ```bash
-    sudo supervisorctl
-    ```
-* **Check Status of All Processes:**
-    ```bash
-    sudo supervisorctl status
-    ```
-* **Start/Stop specific process:**
-    ```bash
-    sudo supervisorctl start my_app_worker
-    sudo supervisorctl stop my_app_worker
-    ```
-* **Restart specific process:**
-    ```bash
-    sudo supervisorctl restart my_app_worker
-    ```
-* **Reload Config (Reread & Update):**
-    * `reread`: Reloads the configuration files but doesn't restart processes.
-    * `update`: Restarts processes whose configuration has changed.
-    ```bash
-    sudo supervisorctl reread
-    sudo supervisorctl update
-    ```
-* **Tail Logs:**
-    Supervisor captures stdout/stderr.
-    ```bash
-    sudo supervisorctl tail -f my_app_worker
-    ```
+- **Enter Interactive Shell:**
+  ```bash
+  sudo supervisorctl
+  ```
+- **Check Status of All Processes:**
+  ```bash
+  sudo supervisorctl status
+  ```
+- **Start/Stop specific process:**
+  ```bash
+  sudo supervisorctl start my_app_worker
+  sudo supervisorctl stop my_app_worker
+  ```
+- **Restart specific process:**
+  ```bash
+  sudo supervisorctl restart my_app_worker
+  ```
+- **Reload Config (Reread & Update):**
+  - `reread`: Reloads the configuration files but doesn't restart processes.
+  - `update`: Restarts processes whose configuration has changed.
+  ```bash
+  sudo supervisorctl reread
+  sudo supervisorctl update
+  ```
+- **Tail Logs:**
+  Supervisor captures stdout/stderr.
+  ```bash
+  sudo supervisorctl tail -f my_app_worker
+  ```
 
 ---
 
 ### 2.2 Windows: PowerShell Process Management
 
-**Note:** Windows does not have a built-in 1:1 equivalent to Supervisor for *process grouping* and *automatic respawning* without external tools. Native PowerShell commands interact directly with the OS process table.
+**Note:** Windows does not have a built-in 1:1 equivalent to Supervisor for _process grouping_ and _automatic respawning_ without external tools. Native PowerShell commands interact directly with the OS process table.
 
 #### **Native Process Cmdlets**
 
-* **List Processes:**
-    ```powershell
-    # Equivalent to 'ps aux' or 'top'
-    Get-Process
-    ```
-* **Find Specific Process:**
-    ```powershell
-    Get-Process -Name chrome
-    # Or via ID
-    Get-Process -Id 4520
-    ```
-* **Stop (Kill) Process:**
-    ```powershell
-    Stop-Process -Name notepad
-    # Force kill
-    Stop-Process -Name notepad -Force
-    ```
-* **Start a Process:**
-    ```powershell
-    Start-Process -FilePath "C:\Path\To\App.exe" -ArgumentList "-config config.json"
-    ```
+- **List Processes:**
+  ```powershell
+  # Equivalent to 'ps aux' or 'top'
+  Get-Process
+  ```
+- **Find Specific Process:**
+  ```powershell
+  Get-Process -Name chrome
+  # Or via ID
+  Get-Process -Id 4520
+  ```
+- **Stop (Kill) Process:**
+  ```powershell
+  Stop-Process -Name notepad
+  # Force kill
+  Stop-Process -Name notepad -Force
+  ```
+- **Start a Process:**
+  ```powershell
+  Start-Process -FilePath "C:\Path\To\App.exe" -ArgumentList "-config config.json"
+  ```
 
 #### **Advanced Inspection (WMI/CIM)**
+
 `Get-Process` does not show the full command line arguments by default. You need WMI or CIM for this.
 
-* **Get Command Line Arguments:**
-    ```powershell
-    Get-CimInstance Win32_Process | Select-Object ProcessId, Name, CommandLine | Format-List
-    ```
+- **Get Command Line Arguments:**
+  ```powershell
+  Get-CimInstance Win32_Process | Select-Object ProcessId, Name, CommandLine | Format-List
+  ```
 
 #### **Architectural Equivalents to Supervisor**
+
 To achieve "keep-alive" functionality (respawning apps if they crash) on Windows, you typically wrap the executable as a Windows Service.
 
 1.  **NSSM (Non-Sucking Service Manager):**
     The industry standard 3rd-party tool for running arbitrary .exe files as services.
+
     ```powershell
     # Installation (if nssm is in path)
     nssm install MyAppService "C:\path\to\app.exe"
@@ -265,6 +274,7 @@ Understanding how services are defined and how they relate to one another is cru
 In Systemd, services are defined in `.service` files (Unit files), typically located in `/etc/systemd/system/`.
 
 #### **Anatomy of a Unit File**
+
 A basic service file (`/etc/systemd/system/myapp.service`) looks like this:
 
 ```ini
@@ -284,33 +294,35 @@ RestartSec=5s
 WantedBy=multi-user.target               # Enable for standard multi-user runlevel
 ```
 
-*   **Reloading Daemon:** After editing a unit file, you must run:
-    ```bash
-    sudo systemctl daemon-reload
-    ```
+- **Reloading Daemon:** After editing a unit file, you must run:
+  ```bash
+  sudo systemctl daemon-reload
+  ```
 
 ### 3.2 Windows: Service Dependencies & Recovery
 
 Windows services store configuration in the Registry. While `Set-Service` covers basics, `sc.exe` (Service Control) or WMI is often needed for advanced configuration.
 
 #### **Managing Dependencies**
-*   **View Dependencies (PowerShell):**
-    ```powershell
-    # Services that depend on 'LanmanWorkstation'
-    Get-Service -Name LanmanWorkstation -DependentServices
 
-    # Services that 'LanmanWorkstation' depends on
-    Get-Service -Name LanmanWorkstation -RequiredServices
-    ```
+- **View Dependencies (PowerShell):**
+  ```powershell
+  # Services that depend on 'LanmanWorkstation'
+  Get-Service -Name LanmanWorkstation -DependentServices
+
+  # Services that 'LanmanWorkstation' depends on
+  Get-Service -Name LanmanWorkstation -RequiredServices
+  ```
 
 #### **Service Recovery (Auto-Restart)**
+
 Configuring a service to restart automatically upon failure is common. PowerShell's `Set-Service` doesn't expose recovery options directly; use `sc.exe` (legacy but effective) or CIM.
 
-*   **Configure Restart on Failure (cmd/sc.exe):**
-    ```powershell
-    # Set failure actions: Restart after 1st, 2nd, and subsequent failures (delay 60s)
-    sc.exe failure "W3SVC" reset= 86400 actions= restart/60000/restart/60000/restart/60000
-    ```
+- **Configure Restart on Failure (cmd/sc.exe):**
+  ```powershell
+  # Set failure actions: Restart after 1st, 2nd, and subsequent failures (delay 60s)
+  sc.exe failure "W3SVC" reset= 86400 actions= restart/60000/restart/60000/restart/60000
+  ```
 
 ---
 
@@ -321,58 +333,62 @@ Managing ad-hoc background tasks and system resource allocation.
 ### 4.1 Linux: Job Control & Nice
 
 #### **Shell Job Control**
+
 Bash allows running commands in the background of the current shell session.
 
-*   **Start in background:** Append `&`
-    ```bash
-    long_running_script.sh &
-    ```
-*   **List jobs:**
-    ```bash
-    jobs
-    ```
-*   **Bring to foreground:**
-    ```bash
-    fg %1
-    ```
+- **Start in background:** Append `&`
+  ```bash
+  long_running_script.sh &
+  ```
+- **List jobs:**
+  ```bash
+  jobs
+  ```
+- **Bring to foreground:**
+  ```bash
+  fg %1
+  ```
 
 #### **Process Priority (Nice)**
-*   **Start with lower priority:** (Higher nice value = lower priority, range -20 to 19)
-    ```bash
-    nice -n 10 ./backup.sh
-    ```
-*   **Change priority of running process:**
-    ```bash
-    renice -n 10 -p 1234
-    ```
+
+- **Start with lower priority:** (Higher nice value = lower priority, range -20 to 19)
+  ```bash
+  nice -n 10 ./backup.sh
+  ```
+- **Change priority of running process:**
+  ```bash
+  renice -n 10 -p 1234
+  ```
 
 ### 4.2 Windows: PowerShell Jobs & Priority
 
 #### **PowerShell Jobs**
+
 PowerShell jobs run in a separate process (wsmprovhost.exe), allowing the main console to remain responsive.
 
-*   **Start a Job:**
-    ```powershell
-    $job = Start-Job -ScriptBlock { Get-ChildItem -Recurse C:\Windows }
-    ```
-*   **Check Status:**
-    ```powershell
-    Get-Job
-    ```
-*   **Get Results:** (Removes data from queue unless -Keep is used)
-    ```powershell
-    Receive-Job -Job $job
-    ```
+- **Start a Job:**
+  ```powershell
+  $job = Start-Job -ScriptBlock { Get-ChildItem -Recurse C:\Windows }
+  ```
+- **Check Status:**
+  ```powershell
+  Get-Job
+  ```
+- **Get Results:** (Removes data from queue unless -Keep is used)
+  ```powershell
+  Receive-Job -Job $job
+  ```
 
 #### **Process Priority**
+
 You can adjust the `PriorityClass` of a process object.
 
-*   **Set Priority:**
-    ```powershell
-    $proc = Get-Process -Name "notepad"
-    $proc.PriorityClass = "BelowNormal" # Options: Idle, BelowNormal, Normal, AboveNormal, High, RealTime
-    ```
+- **Set Priority:**
+  ```powershell
+  $proc = Get-Process -Name "notepad"
+  $proc.PriorityClass = "BelowNormal" # Options: Idle, BelowNormal, Normal, AboveNormal, High, RealTime
+  ```
 
 ---
 
-*This guide covers service and process management on Linux and Windows.*
+_This guide covers service and process management on Linux and Windows._

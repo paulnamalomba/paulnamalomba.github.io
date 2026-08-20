@@ -1,268 +1,566 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Service and Process Management Guide: Bash vs. PowerShell - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Service and Process Management Guide: Bash vs. PowerShell - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="service-and-process-management-guide-bash-vs-powershell">Service and Process Management Guide: Bash vs. PowerShell</h1>
-<p><strong>Last updated</strong>: December 18, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://www.openssl.org/docs/"><img alt="Framework" src="https://img.shields.io/badge/OpenSSL-3.x-red.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide provides a comparative technical reference for managing system services and processes in Linux (via Bash/Systemd) and Windows (via PowerShell). It covers essential commands and concepts for both operating systems, focusing on service control, process management, and best practices.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#service-and-process-management-guide-bash-vs-powershell">Service and Process Management Guide: Bash vs. PowerShell</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#part-1-system-services-management">Part 1: System Services Management</a><ul>
-<li><a href="#11-linux-systemd-systemctl">1.1 Linux: Systemd (<code>systemctl</code>)</a></li>
-<li><a href="#basic-service-control"><strong>Basic Service Control</strong></a></li>
-<li><a href="#boot-management"><strong>Boot Management</strong></a></li>
-<li><a href="#logging-journalctl"><strong>Logging (Journalctl)</strong></a></li>
-<li><a href="#12-windows-powershell-service-cmdlets">1.2 Windows: PowerShell Service Cmdlets</a></li>
-<li><a href="#basic-service-control_1"><strong>Basic Service Control</strong></a></li>
-<li><a href="#boot-management-startup-types"><strong>Boot Management (Startup Types)</strong></a></li>
-</ul>
-</li>
-<li><a href="#part-2-process-control-supervisor">Part 2: Process Control \&amp; Supervisor</a><ul>
-<li><a href="#21-linux-supervisor-supervisorctl">2.1 Linux: Supervisor (<code>supervisorctl</code>)</a></li>
-<li><a href="#key-commands"><strong>Key Commands</strong></a></li>
-<li><a href="#22-windows-powershell-process-management">2.2 Windows: PowerShell Process Management</a></li>
-<li><a href="#native-process-cmdlets"><strong>Native Process Cmdlets</strong></a></li>
-<li><a href="#advanced-inspection-wmicim"><strong>Advanced Inspection (WMI/CIM)</strong></a></li>
-<li><a href="#architectural-equivalents-to-supervisor"><strong>Architectural Equivalents to Supervisor</strong></a></li>
-</ul>
-</li>
-<li><a href="#part-3-service-configuration-dependencies">Part 3: Service Configuration \&amp; Dependencies</a><ul>
-<li><a href="#31-linux-systemd-unit-files">3.1 Linux: Systemd Unit Files</a></li>
-<li><a href="#anatomy-of-a-unit-file"><strong>Anatomy of a Unit File</strong></a></li>
-<li><a href="#32-windows-service-dependencies-recovery">3.2 Windows: Service Dependencies \&amp; Recovery</a></li>
-<li><a href="#managing-dependencies"><strong>Managing Dependencies</strong></a></li>
-<li><a href="#service-recovery-auto-restart"><strong>Service Recovery (Auto-Restart)</strong></a></li>
-</ul>
-</li>
-<li><a href="#part-4-background-jobs-process-priority">Part 4: Background Jobs \&amp; Process Priority</a><ul>
-<li><a href="#41-linux-job-control-nice">4.1 Linux: Job Control \&amp; Nice</a></li>
-<li><a href="#shell-job-control"><strong>Shell Job Control</strong></a></li>
-<li><a href="#process-priority-nice"><strong>Process Priority (Nice)</strong></a></li>
-<li><a href="#42-windows-powershell-jobs-priority">4.2 Windows: PowerShell Jobs \&amp; Priority</a></li>
-<li><a href="#powershell-jobs"><strong>PowerShell Jobs</strong></a></li>
-<li><a href="#process-priority"><strong>Process Priority</strong></a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="part-1-system-services-management">Part 1: System Services Management</h2>
-<p>This section covers the management of background services (daemons in Linux, Services in Windows).</p>
-<h3 id="11-linux-systemd-systemctl">1.1 Linux: Systemd (<code>systemctl</code>)</h3>
-<p><code>systemd</code> is the init system and service manager for most modern Linux distributions. <code>systemctl</code> is the primary command-line utility for introspection and control.</p>
-<h4 id="basic-service-control"><strong>Basic Service Control</strong></h4>
-<p>The generic syntax is <code>sudo systemctl [command] [service_name]</code>.</p>
-<ul>
-<li><strong>Start a service:</strong>
-    <code>bash
-    sudo systemctl start nginx</code></li>
-<li><strong>Stop a service:</strong>
-    <code>bash
-    sudo systemctl stop nginx</code></li>
-<li><strong>Restart a service:</strong> (Stops and then starts)
-    <code>bash
-    sudo systemctl restart nginx</code></li>
-<li><strong>Reload configuration:</strong> (Reloads config without dropping connections, if supported)
-    <code>bash
-    sudo systemctl reload nginx</code></li>
-<li><strong>Check status:</strong> (Shows active state, PIDs, and recent logs)
-    <code>bash
-    systemctl status nginx</code></li>
-</ul>
-<h4 id="boot-management"><strong>Boot Management</strong></h4>
-<p>Controls whether a service launches automatically when the OS boots.</p>
-<ul>
-<li><strong>Enable at boot:</strong> (Creates symlinks)
-    <code>bash
-    sudo systemctl enable nginx</code></li>
-<li><strong>Disable at boot:</strong> (Removes symlinks)
-    <code>bash
-    sudo systemctl disable nginx</code></li>
-<li><strong>Check if enabled:</strong>
-    <code>bash
-    systemctl is-enabled nginx</code></li>
-</ul>
-<h4 id="logging-journalctl"><strong>Logging (Journalctl)</strong></h4>
-<p><code>systemd</code> uses a binary logger called the journal.</p>
-<ul>
-<li><strong>View logs for a specific service:</strong>
-    <code>bash
-    # -u = unit, -f = follow (tail), -n = number of lines
-    journalctl -u nginx -f -n 50</code></li>
-</ul>
-<hr />
-<h3 id="12-windows-powershell-service-cmdlets">1.2 Windows: PowerShell Service Cmdlets</h3>
-<p>PowerShell uses the <code>*-Service</code> noun for service management.</p>
-<h4 id="basic-service-control_1"><strong>Basic Service Control</strong></h4>
-<ul>
-<li><strong>Get Service Status:</strong>
-    <code>powershell
-    Get-Service -Name W3SVC</code></li>
-<li><strong>Start a service:</strong>
-    <code>powershell
-    Start-Service -Name W3SVC</code></li>
-<li><strong>Stop a service:</strong>
-    <code>powershell
-    Stop-Service -Name W3SVC</code></li>
-<li><strong>Restart a service:</strong>
-    <code>powershell
-    Restart-Service -Name W3SVC</code></li>
-<li><strong>Filtering Services:</strong>
-    PowerShell allows object-based filtering rather than text grep.
-    <code>powershell
-    # Find all running services starting with 'W'
-    Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.Name -like 'W*' }</code></li>
-</ul>
-<h4 id="boot-management-startup-types"><strong>Boot Management (Startup Types)</strong></h4>
-<p>Windows uses "Startup Types" (Automatic, Manual, Disabled) rather than just enable/disable flags.</p>
-<ul>
-<li><strong>Set to Automatic (Enable at boot):</strong>
-    <code>powershell
-    Set-Service -Name W3SVC -StartupType Automatic</code></li>
-<li><strong>Set to Disabled (Disable at boot):</strong>
-    <code>powershell
-    Set-Service -Name W3SVC -StartupType Disabled</code></li>
-<li><strong>Set to Manual:</strong>
-    <code>powershell
-    Set-Service -Name W3SVC -StartupType Manual</code></li>
-</ul>
-<hr />
-<h2 id="part-2-process-control-supervisor">Part 2: Process Control &amp; Supervisor</h2>
-<p>This section compares the Linux <code>supervisor</code> tool (process control system) with Windows process management.</p>
-<h3 id="21-linux-supervisor-supervisorctl">2.1 Linux: Supervisor (<code>supervisorctl</code>)</h3>
-<p>Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems. It is often used to keep applications running (respawning them if they crash).</p>
-<h4 id="key-commands"><strong>Key Commands</strong></h4>
-<ul>
-<li><strong>Enter Interactive Shell:</strong>
-    <code>bash
-    sudo supervisorctl</code></li>
-<li><strong>Check Status of All Processes:</strong>
-    <code>bash
-    sudo supervisorctl status</code></li>
-<li><strong>Start/Stop specific process:</strong>
-    <code>bash
-    sudo supervisorctl start my_app_worker
-    sudo supervisorctl stop my_app_worker</code></li>
-<li><strong>Restart specific process:</strong>
-    <code>bash
-    sudo supervisorctl restart my_app_worker</code></li>
-<li><strong>Reload Config (Reread &amp; Update):</strong><ul>
-<li><code>reread</code>: Reloads the configuration files but doesn't restart processes.</li>
-<li><code>update</code>: Restarts processes whose configuration has changed.
-<code>bash
-sudo supervisorctl reread
-sudo supervisorctl update</code></li>
-</ul>
-</li>
-<li><strong>Tail Logs:</strong>
-    Supervisor captures stdout/stderr.
-    <code>bash
-    sudo supervisorctl tail -f my_app_worker</code></li>
-</ul>
-<hr />
-<h3 id="22-windows-powershell-process-management">2.2 Windows: PowerShell Process Management</h3>
-<p><strong>Note:</strong> Windows does not have a built-in 1:1 equivalent to Supervisor for <em>process grouping</em> and <em>automatic respawning</em> without external tools. Native PowerShell commands interact directly with the OS process table.</p>
-<h4 id="native-process-cmdlets"><strong>Native Process Cmdlets</strong></h4>
-<ul>
-<li><strong>List Processes:</strong>
-    <code>powershell
-    # Equivalent to 'ps aux' or 'top'
-    Get-Process</code></li>
-<li><strong>Find Specific Process:</strong>
-    <code>powershell
-    Get-Process -Name chrome
-    # Or via ID
-    Get-Process -Id 4520</code></li>
-<li><strong>Stop (Kill) Process:</strong>
-    <code>powershell
-    Stop-Process -Name notepad
-    # Force kill
-    Stop-Process -Name notepad -Force</code></li>
-<li><strong>Start a Process:</strong>
-    <code>powershell
-    Start-Process -FilePath "C:\Path\To\App.exe" -ArgumentList "-config config.json"</code></li>
-</ul>
-<h4 id="advanced-inspection-wmicim"><strong>Advanced Inspection (WMI/CIM)</strong></h4>
-<p><code>Get-Process</code> does not show the full command line arguments by default. You need WMI or CIM for this.</p>
-<ul>
-<li><strong>Get Command Line Arguments:</strong>
-    <code>powershell
-    Get-CimInstance Win32_Process | Select-Object ProcessId, Name, CommandLine | Format-List</code></li>
-</ul>
-<h4 id="architectural-equivalents-to-supervisor"><strong>Architectural Equivalents to Supervisor</strong></h4>
-<p>To achieve "keep-alive" functionality (respawning apps if they crash) on Windows, you typically wrap the executable as a Windows Service.</p>
-<ol>
-<li>
-<p><strong>NSSM (Non-Sucking Service Manager):</strong>
-    The industry standard 3rd-party tool for running arbitrary .exe files as services.
-    <code>powershell
-    # Installation (if nssm is in path)
-    nssm install MyAppService "C:\path\to\app.exe"
-    nssm set MyAppService AppDirectory "C:\path\to"
-    nssm start MyAppService</code></p>
-</li>
-<li>
-<p><strong>Native <code>New-Service</code>:</strong>
-    Can create services, but the executable must strictly implement the Windows Service API (unlike NSSM which handles the API wrapper).
-    <code>powershell
-    New-Service -Name "MyApp" -BinaryPathName "C:\path\to\service-compatible-app.exe" -StartupType Automatic</code></p>
-</li>
-</ol>
-<hr />
-<h2 id="part-3-service-configuration-dependencies">Part 3: Service Configuration &amp; Dependencies</h2>
-<p>Understanding how services are defined and how they relate to one another is crucial for system stability.</p>
-<h3 id="31-linux-systemd-unit-files">3.1 Linux: Systemd Unit Files</h3>
-<p>In Systemd, services are defined in <code>.service</code> files (Unit files), typically located in <code>/etc/systemd/system/</code>.</p>
-<h4 id="anatomy-of-a-unit-file"><strong>Anatomy of a Unit File</strong></h4>
-<p>A basic service file (<code>/etc/systemd/system/myapp.service</code>) looks like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[Unit]</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="service-and-process-management-guide-bash-vs-powershell">
+            Service and Process Management Guide: Bash vs. PowerShell
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 18, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://www.openssl.org/docs/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/OpenSSL-3.x-red.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide provides a comparative technical reference for managing
+            system services and processes in Linux (via Bash/Systemd) and
+            Windows (via PowerShell). It covers essential commands and concepts
+            for both operating systems, focusing on service control, process
+            management, and best practices.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#service-and-process-management-guide-bash-vs-powershell"
+                >Service and Process Management Guide: Bash vs. PowerShell</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#part-1-system-services-management"
+                >Part 1: System Services Management</a
+              >
+              <ul>
+                <li>
+                  <a href="#11-linux-systemd-systemctl"
+                    >1.1 Linux: Systemd (<code>systemctl</code>)</a
+                  >
+                </li>
+                <li>
+                  <a href="#basic-service-control"
+                    ><strong>Basic Service Control</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#boot-management"
+                    ><strong>Boot Management</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#logging-journalctl"
+                    ><strong>Logging (Journalctl)</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#12-windows-powershell-service-cmdlets"
+                    >1.2 Windows: PowerShell Service Cmdlets</a
+                  >
+                </li>
+                <li>
+                  <a href="#basic-service-control_1"
+                    ><strong>Basic Service Control</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#boot-management-startup-types"
+                    ><strong>Boot Management (Startup Types)</strong></a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#part-2-process-control-supervisor"
+                >Part 2: Process Control \&amp; Supervisor</a
+              >
+              <ul>
+                <li>
+                  <a href="#21-linux-supervisor-supervisorctl"
+                    >2.1 Linux: Supervisor (<code>supervisorctl</code>)</a
+                  >
+                </li>
+                <li>
+                  <a href="#key-commands"><strong>Key Commands</strong></a>
+                </li>
+                <li>
+                  <a href="#22-windows-powershell-process-management"
+                    >2.2 Windows: PowerShell Process Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#native-process-cmdlets"
+                    ><strong>Native Process Cmdlets</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#advanced-inspection-wmicim"
+                    ><strong>Advanced Inspection (WMI/CIM)</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#architectural-equivalents-to-supervisor"
+                    ><strong>Architectural Equivalents to Supervisor</strong></a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#part-3-service-configuration-dependencies"
+                >Part 3: Service Configuration \&amp; Dependencies</a
+              >
+              <ul>
+                <li>
+                  <a href="#31-linux-systemd-unit-files"
+                    >3.1 Linux: Systemd Unit Files</a
+                  >
+                </li>
+                <li>
+                  <a href="#anatomy-of-a-unit-file"
+                    ><strong>Anatomy of a Unit File</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#32-windows-service-dependencies-recovery"
+                    >3.2 Windows: Service Dependencies \&amp; Recovery</a
+                  >
+                </li>
+                <li>
+                  <a href="#managing-dependencies"
+                    ><strong>Managing Dependencies</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#service-recovery-auto-restart"
+                    ><strong>Service Recovery (Auto-Restart)</strong></a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#part-4-background-jobs-process-priority"
+                >Part 4: Background Jobs \&amp; Process Priority</a
+              >
+              <ul>
+                <li>
+                  <a href="#41-linux-job-control-nice"
+                    >4.1 Linux: Job Control \&amp; Nice</a
+                  >
+                </li>
+                <li>
+                  <a href="#shell-job-control"
+                    ><strong>Shell Job Control</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#process-priority-nice"
+                    ><strong>Process Priority (Nice)</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#42-windows-powershell-jobs-priority"
+                    >4.2 Windows: PowerShell Jobs \&amp; Priority</a
+                  >
+                </li>
+                <li>
+                  <a href="#powershell-jobs"
+                    ><strong>PowerShell Jobs</strong></a
+                  >
+                </li>
+                <li>
+                  <a href="#process-priority"
+                    ><strong>Process Priority</strong></a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="part-1-system-services-management">
+            Part 1: System Services Management
+          </h2>
+          <p>
+            This section covers the management of background services (daemons
+            in Linux, Services in Windows).
+          </p>
+          <h3 id="11-linux-systemd-systemctl">
+            1.1 Linux: Systemd (<code>systemctl</code>)
+          </h3>
+          <p>
+            <code>systemd</code> is the init system and service manager for most
+            modern Linux distributions. <code>systemctl</code> is the primary
+            command-line utility for introspection and control.
+          </p>
+          <h4 id="basic-service-control">
+            <strong>Basic Service Control</strong>
+          </h4>
+          <p>
+            The generic syntax is
+            <code>sudo systemctl [command] [service_name]</code>.
+          </p>
+          <ul>
+            <li>
+              <strong>Start a service:</strong>
+              <code>bash sudo systemctl start nginx</code>
+            </li>
+            <li>
+              <strong>Stop a service:</strong>
+              <code>bash sudo systemctl stop nginx</code>
+            </li>
+            <li>
+              <strong>Restart a service:</strong> (Stops and then starts)
+              <code>bash sudo systemctl restart nginx</code>
+            </li>
+            <li>
+              <strong>Reload configuration:</strong> (Reloads config without
+              dropping connections, if supported)
+              <code>bash sudo systemctl reload nginx</code>
+            </li>
+            <li>
+              <strong>Check status:</strong> (Shows active state, PIDs, and
+              recent logs) <code>bash systemctl status nginx</code>
+            </li>
+          </ul>
+          <h4 id="boot-management"><strong>Boot Management</strong></h4>
+          <p>
+            Controls whether a service launches automatically when the OS boots.
+          </p>
+          <ul>
+            <li>
+              <strong>Enable at boot:</strong> (Creates symlinks)
+              <code>bash sudo systemctl enable nginx</code>
+            </li>
+            <li>
+              <strong>Disable at boot:</strong> (Removes symlinks)
+              <code>bash sudo systemctl disable nginx</code>
+            </li>
+            <li>
+              <strong>Check if enabled:</strong>
+              <code>bash systemctl is-enabled nginx</code>
+            </li>
+          </ul>
+          <h4 id="logging-journalctl"><strong>Logging (Journalctl)</strong></h4>
+          <p><code>systemd</code> uses a binary logger called the journal.</p>
+          <ul>
+            <li>
+              <strong>View logs for a specific service:</strong>
+              <code
+                >bash # -u = unit, -f = follow (tail), -n = number of lines
+                journalctl -u nginx -f -n 50</code
+              >
+            </li>
+          </ul>
+          <hr />
+          <h3 id="12-windows-powershell-service-cmdlets">
+            1.2 Windows: PowerShell Service Cmdlets
+          </h3>
+          <p>
+            PowerShell uses the <code>*-Service</code> noun for service
+            management.
+          </p>
+          <h4 id="basic-service-control_1">
+            <strong>Basic Service Control</strong>
+          </h4>
+          <ul>
+            <li>
+              <strong>Get Service Status:</strong>
+              <code>powershell Get-Service -Name W3SVC</code>
+            </li>
+            <li>
+              <strong>Start a service:</strong>
+              <code>powershell Start-Service -Name W3SVC</code>
+            </li>
+            <li>
+              <strong>Stop a service:</strong>
+              <code>powershell Stop-Service -Name W3SVC</code>
+            </li>
+            <li>
+              <strong>Restart a service:</strong>
+              <code>powershell Restart-Service -Name W3SVC</code>
+            </li>
+            <li>
+              <strong>Filtering Services:</strong>
+              PowerShell allows object-based filtering rather than text grep.
+              <code
+                >powershell # Find all running services starting with 'W'
+                Get-Service | Where-Object { $_.Status -eq 'Running' -and
+                $_.Name -like 'W*' }</code
+              >
+            </li>
+          </ul>
+          <h4 id="boot-management-startup-types">
+            <strong>Boot Management (Startup Types)</strong>
+          </h4>
+          <p>
+            Windows uses "Startup Types" (Automatic, Manual, Disabled) rather
+            than just enable/disable flags.
+          </p>
+          <ul>
+            <li>
+              <strong>Set to Automatic (Enable at boot):</strong>
+              <code
+                >powershell Set-Service -Name W3SVC -StartupType Automatic</code
+              >
+            </li>
+            <li>
+              <strong>Set to Disabled (Disable at boot):</strong>
+              <code
+                >powershell Set-Service -Name W3SVC -StartupType Disabled</code
+              >
+            </li>
+            <li>
+              <strong>Set to Manual:</strong>
+              <code
+                >powershell Set-Service -Name W3SVC -StartupType Manual</code
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="part-2-process-control-supervisor">
+            Part 2: Process Control &amp; Supervisor
+          </h2>
+          <p>
+            This section compares the Linux <code>supervisor</code> tool
+            (process control system) with Windows process management.
+          </p>
+          <h3 id="21-linux-supervisor-supervisorctl">
+            2.1 Linux: Supervisor (<code>supervisorctl</code>)
+          </h3>
+          <p>
+            Supervisor is a client/server system that allows its users to
+            monitor and control a number of processes on UNIX-like operating
+            systems. It is often used to keep applications running (respawning
+            them if they crash).
+          </p>
+          <h4 id="key-commands"><strong>Key Commands</strong></h4>
+          <ul>
+            <li>
+              <strong>Enter Interactive Shell:</strong>
+              <code>bash sudo supervisorctl</code>
+            </li>
+            <li>
+              <strong>Check Status of All Processes:</strong>
+              <code>bash sudo supervisorctl status</code>
+            </li>
+            <li>
+              <strong>Start/Stop specific process:</strong>
+              <code
+                >bash sudo supervisorctl start my_app_worker sudo supervisorctl
+                stop my_app_worker</code
+              >
+            </li>
+            <li>
+              <strong>Restart specific process:</strong>
+              <code>bash sudo supervisorctl restart my_app_worker</code>
+            </li>
+            <li>
+              <strong>Reload Config (Reread &amp; Update):</strong>
+              <ul>
+                <li>
+                  <code>reread</code>: Reloads the configuration files but
+                  doesn't restart processes.
+                </li>
+                <li>
+                  <code>update</code>: Restarts processes whose configuration
+                  has changed.
+                  <code
+                    >bash sudo supervisorctl reread sudo supervisorctl
+                    update</code
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Tail Logs:</strong>
+              Supervisor captures stdout/stderr.
+              <code>bash sudo supervisorctl tail -f my_app_worker</code>
+            </li>
+          </ul>
+          <hr />
+          <h3 id="22-windows-powershell-process-management">
+            2.2 Windows: PowerShell Process Management
+          </h3>
+          <p>
+            <strong>Note:</strong> Windows does not have a built-in 1:1
+            equivalent to Supervisor for <em>process grouping</em> and
+            <em>automatic respawning</em> without external tools. Native
+            PowerShell commands interact directly with the OS process table.
+          </p>
+          <h4 id="native-process-cmdlets">
+            <strong>Native Process Cmdlets</strong>
+          </h4>
+          <ul>
+            <li>
+              <strong>List Processes:</strong>
+              <code
+                >powershell # Equivalent to 'ps aux' or 'top' Get-Process</code
+              >
+            </li>
+            <li>
+              <strong>Find Specific Process:</strong>
+              <code
+                >powershell Get-Process -Name chrome # Or via ID Get-Process -Id
+                4520</code
+              >
+            </li>
+            <li>
+              <strong>Stop (Kill) Process:</strong>
+              <code
+                >powershell Stop-Process -Name notepad # Force kill Stop-Process
+                -Name notepad -Force</code
+              >
+            </li>
+            <li>
+              <strong>Start a Process:</strong>
+              <code
+                >powershell Start-Process -FilePath "C:\Path\To\App.exe"
+                -ArgumentList "-config config.json"</code
+              >
+            </li>
+          </ul>
+          <h4 id="advanced-inspection-wmicim">
+            <strong>Advanced Inspection (WMI/CIM)</strong>
+          </h4>
+          <p>
+            <code>Get-Process</code> does not show the full command line
+            arguments by default. You need WMI or CIM for this.
+          </p>
+          <ul>
+            <li>
+              <strong>Get Command Line Arguments:</strong>
+              <code
+                >powershell Get-CimInstance Win32_Process | Select-Object
+                ProcessId, Name, CommandLine | Format-List</code
+              >
+            </li>
+          </ul>
+          <h4 id="architectural-equivalents-to-supervisor">
+            <strong>Architectural Equivalents to Supervisor</strong>
+          </h4>
+          <p>
+            To achieve "keep-alive" functionality (respawning apps if they
+            crash) on Windows, you typically wrap the executable as a Windows
+            Service.
+          </p>
+          <ol>
+            <li>
+              <p>
+                <strong>NSSM (Non-Sucking Service Manager):</strong>
+                The industry standard 3rd-party tool for running arbitrary .exe
+                files as services.
+                <code
+                  >powershell # Installation (if nssm is in path) nssm install
+                  MyAppService "C:\path\to\app.exe" nssm set MyAppService
+                  AppDirectory "C:\path\to" nssm start MyAppService</code
+                >
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Native <code>New-Service</code>:</strong>
+                Can create services, but the executable must strictly implement
+                the Windows Service API (unlike NSSM which handles the API
+                wrapper).
+                <code
+                  >powershell New-Service -Name "MyApp" -BinaryPathName
+                  "C:\path\to\service-compatible-app.exe" -StartupType
+                  Automatic</code
+                >
+              </p>
+            </li>
+          </ol>
+          <hr />
+          <h2 id="part-3-service-configuration-dependencies">
+            Part 3: Service Configuration &amp; Dependencies
+          </h2>
+          <p>
+            Understanding how services are defined and how they relate to one
+            another is crucial for system stability.
+          </p>
+          <h3 id="31-linux-systemd-unit-files">
+            3.1 Linux: Systemd Unit Files
+          </h3>
+          <p>
+            In Systemd, services are defined in <code>.service</code> files
+            (Unit files), typically located in
+            <code>/etc/systemd/system/</code>.
+          </p>
+          <h4 id="anatomy-of-a-unit-file">
+            <strong>Anatomy of a Unit File</strong>
+          </h4>
+          <p>
+            A basic service file
+            (<code>/etc/systemd/system/myapp.service</code>) looks like this:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">My Custom App</span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target postgresql.service</span><span class="w">  </span><span class="c1"># Start after these</span>
 <span class="na">Requires</span><span class="o">=</span><span class="s">postgresql.service</span><span class="w">              </span><span class="c1"># Strong dependency</span>
@@ -276,115 +574,171 @@ sudo supervisorctl update</code></li>
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span><span class="w">               </span><span class="c1"># Enable for standard multi-user runlevel</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Reloading Daemon:</strong> After editing a unit file, you must run:
-    <code>bash
-    sudo systemctl daemon-reload</code></li>
-</ul>
-<h3 id="32-windows-service-dependencies-recovery">3.2 Windows: Service Dependencies &amp; Recovery</h3>
-<p>Windows services store configuration in the Registry. While <code>Set-Service</code> covers basics, <code>sc.exe</code> (Service Control) or WMI is often needed for advanced configuration.</p>
-<h4 id="managing-dependencies"><strong>Managing Dependencies</strong></h4>
-<ul>
-<li>
-<p><strong>View Dependencies (PowerShell):</strong>
-    ```powershell
-    # Services that depend on 'LanmanWorkstation'
-    Get-Service -Name LanmanWorkstation -DependentServices</p>
-<h2 id="services-that-lanmanworkstation-depends-on">Services that 'LanmanWorkstation' depends on</h2>
-<p>Get-Service -Name LanmanWorkstation -RequiredServices
-```</p>
-</li>
-</ul>
-<h4 id="service-recovery-auto-restart"><strong>Service Recovery (Auto-Restart)</strong></h4>
-<p>Configuring a service to restart automatically upon failure is common. PowerShell's <code>Set-Service</code> doesn't expose recovery options directly; use <code>sc.exe</code> (legacy but effective) or CIM.</p>
-<ul>
-<li><strong>Configure Restart on Failure (cmd/sc.exe):</strong>
-    <code>powershell
-    # Set failure actions: Restart after 1st, 2nd, and subsequent failures (delay 60s)
-    sc.exe failure "W3SVC" reset= 86400 actions= restart/60000/restart/60000/restart/60000</code></li>
-</ul>
-<hr />
-<h2 id="part-4-background-jobs-process-priority">Part 4: Background Jobs &amp; Process Priority</h2>
-<p>Managing ad-hoc background tasks and system resource allocation.</p>
-<h3 id="41-linux-job-control-nice">4.1 Linux: Job Control &amp; Nice</h3>
-<h4 id="shell-job-control"><strong>Shell Job Control</strong></h4>
-<p>Bash allows running commands in the background of the current shell session.</p>
-<ul>
-<li><strong>Start in background:</strong> Append <code>&amp;</code>
-    <code>bash
-    long_running_script.sh &amp;</code></li>
-<li><strong>List jobs:</strong>
-    <code>bash
-    jobs</code></li>
-<li><strong>Bring to foreground:</strong>
-    <code>bash
-    fg %1</code></li>
-</ul>
-<h4 id="process-priority-nice"><strong>Process Priority (Nice)</strong></h4>
-<ul>
-<li><strong>Start with lower priority:</strong> (Higher nice value = lower priority, range -20 to 19)
-    <code>bash
-    nice -n 10 ./backup.sh</code></li>
-<li><strong>Change priority of running process:</strong>
-    <code>bash
-    renice -n 10 -p 1234</code></li>
-</ul>
-<h3 id="42-windows-powershell-jobs-priority">4.2 Windows: PowerShell Jobs &amp; Priority</h3>
-<h4 id="powershell-jobs"><strong>PowerShell Jobs</strong></h4>
-<p>PowerShell jobs run in a separate process (wsmprovhost.exe), allowing the main console to remain responsive.</p>
-<ul>
-<li><strong>Start a Job:</strong>
-    <code>powershell
-    $job = Start-Job -ScriptBlock { Get-ChildItem -Recurse C:\Windows }</code></li>
-<li><strong>Check Status:</strong>
-    <code>powershell
-    Get-Job</code></li>
-<li><strong>Get Results:</strong> (Removes data from queue unless -Keep is used)
-    <code>powershell
-    Receive-Job -Job $job</code></li>
-</ul>
-<h4 id="process-priority"><strong>Process Priority</strong></h4>
-<p>You can adjust the <code>PriorityClass</code> of a process object.</p>
-<ul>
-<li><strong>Set Priority:</strong>
-    <code>powershell
-    $proc = Get-Process -Name "notepad"
-    $proc.PriorityClass = "BelowNormal" # Options: Idle, BelowNormal, Normal, AboveNormal, High, RealTime</code></li>
-</ul>
-<hr />
-<p><em>This guide covers service and process management on Linux and Windows.</em></p></article>
-        </div>
+          <ul>
+            <li>
+              <strong>Reloading Daemon:</strong> After editing a unit file, you
+              must run: <code>bash sudo systemctl daemon-reload</code>
+            </li>
+          </ul>
+          <h3 id="32-windows-service-dependencies-recovery">
+            3.2 Windows: Service Dependencies &amp; Recovery
+          </h3>
+          <p>
+            Windows services store configuration in the Registry. While
+            <code>Set-Service</code> covers basics, <code>sc.exe</code> (Service
+            Control) or WMI is often needed for advanced configuration.
+          </p>
+          <h4 id="managing-dependencies">
+            <strong>Managing Dependencies</strong>
+          </h4>
+          <ul>
+            <li>
+              <p>
+                <strong>View Dependencies (PowerShell):</strong> ```powershell #
+                Services that depend on 'LanmanWorkstation' Get-Service -Name
+                LanmanWorkstation -DependentServices
+              </p>
+              <h2 id="services-that-lanmanworkstation-depends-on">
+                Services that 'LanmanWorkstation' depends on
+              </h2>
+              <p>Get-Service -Name LanmanWorkstation -RequiredServices ```</p>
+            </li>
+          </ul>
+          <h4 id="service-recovery-auto-restart">
+            <strong>Service Recovery (Auto-Restart)</strong>
+          </h4>
+          <p>
+            Configuring a service to restart automatically upon failure is
+            common. PowerShell's <code>Set-Service</code> doesn't expose
+            recovery options directly; use <code>sc.exe</code> (legacy but
+            effective) or CIM.
+          </p>
+          <ul>
+            <li>
+              <strong>Configure Restart on Failure (cmd/sc.exe):</strong>
+              <code
+                >powershell # Set failure actions: Restart after 1st, 2nd, and
+                subsequent failures (delay 60s) sc.exe failure "W3SVC" reset=
+                86400 actions= restart/60000/restart/60000/restart/60000</code
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="part-4-background-jobs-process-priority">
+            Part 4: Background Jobs &amp; Process Priority
+          </h2>
+          <p>
+            Managing ad-hoc background tasks and system resource allocation.
+          </p>
+          <h3 id="41-linux-job-control-nice">
+            4.1 Linux: Job Control &amp; Nice
+          </h3>
+          <h4 id="shell-job-control"><strong>Shell Job Control</strong></h4>
+          <p>
+            Bash allows running commands in the background of the current shell
+            session.
+          </p>
+          <ul>
+            <li>
+              <strong>Start in background:</strong> Append <code>&amp;</code>
+              <code>bash long_running_script.sh &amp;</code>
+            </li>
+            <li><strong>List jobs:</strong> <code>bash jobs</code></li>
+            <li>
+              <strong>Bring to foreground:</strong> <code>bash fg %1</code>
+            </li>
+          </ul>
+          <h4 id="process-priority-nice">
+            <strong>Process Priority (Nice)</strong>
+          </h4>
+          <ul>
+            <li>
+              <strong>Start with lower priority:</strong> (Higher nice value =
+              lower priority, range -20 to 19)
+              <code>bash nice -n 10 ./backup.sh</code>
+            </li>
+            <li>
+              <strong>Change priority of running process:</strong>
+              <code>bash renice -n 10 -p 1234</code>
+            </li>
+          </ul>
+          <h3 id="42-windows-powershell-jobs-priority">
+            4.2 Windows: PowerShell Jobs &amp; Priority
+          </h3>
+          <h4 id="powershell-jobs"><strong>PowerShell Jobs</strong></h4>
+          <p>
+            PowerShell jobs run in a separate process (wsmprovhost.exe),
+            allowing the main console to remain responsive.
+          </p>
+          <ul>
+            <li>
+              <strong>Start a Job:</strong>
+              <code
+                >powershell $job = Start-Job -ScriptBlock { Get-ChildItem
+                -Recurse C:\Windows }</code
+              >
+            </li>
+            <li>
+              <strong>Check Status:</strong> <code>powershell Get-Job</code>
+            </li>
+            <li>
+              <strong>Get Results:</strong> (Removes data from queue unless
+              -Keep is used) <code>powershell Receive-Job -Job $job</code>
+            </li>
+          </ul>
+          <h4 id="process-priority"><strong>Process Priority</strong></h4>
+          <p>
+            You can adjust the <code>PriorityClass</code> of a process object.
+          </p>
+          <ul>
+            <li>
+              <strong>Set Priority:</strong>
+              <code
+                >powershell $proc = Get-Process -Name "notepad"
+                $proc.PriorityClass = "BelowNormal" # Options: Idle,
+                BelowNormal, Normal, AboveNormal, High, RealTime</code
+              >
+            </li>
+          </ul>
+          <hr />
+          <p>
+            <em
+              >This guide covers service and process management on Linux and
+              Windows.</em
+            >
+          </p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

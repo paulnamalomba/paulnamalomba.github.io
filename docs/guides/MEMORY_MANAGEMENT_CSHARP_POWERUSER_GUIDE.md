@@ -2,10 +2,11 @@
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -14,7 +15,7 @@
 [![Runtime: .NET](https://img.shields.io/badge/Runtime-.NET-512BD4.svg)](https://learn.microsoft.com/dotnet/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-## Overview 
+## Overview
 
 This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory management and execution semantics on Windows. Covering value vs reference types, stack vs heap storage, copy semantics, and nullability features (nullable reference types, `Nullable<T>`), plus examples and best practices.
 
@@ -59,6 +60,7 @@ This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory m
 ---
 
 ## Contents
+
 - Data Structures: value types (`struct`) vs reference types (`class`)
 - Storage: stack vs heap under CLR; GC generations and finalizers
 - Copy semantics: shallow vs deep, `ICloneable`, copy constructors
@@ -75,12 +77,12 @@ This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory m
 
 Table comparison:
 
-| Aspect | Value Types | Reference Types |
-|---|---|---|
-| Examples | `int`, `struct Point` | `class Person`, `string` |
-| Storage | Inline (stack or embedded) | Managed heap (GC) |
-| Passing | Copy of value | Copy of reference |
-| Nullability | `Nullable<T>` (`int?`) | Can be null, but nullable reference types provide annotations |
+| Aspect      | Value Types                | Reference Types                                               |
+| ----------- | -------------------------- | ------------------------------------------------------------- |
+| Examples    | `int`, `struct Point`      | `class Person`, `string`                                      |
+| Storage     | Inline (stack or embedded) | Managed heap (GC)                                             |
+| Passing     | Copy of value              | Copy of reference                                             |
+| Nullability | `Nullable<T>` (`int?`)     | Can be null, but nullable reference types provide annotations |
 
 Example:
 
@@ -99,6 +101,7 @@ void Demo() {
 ```
 
 Notes:
+
 - `string` is a reference type but immutable: assignment yields reference copy; modifications produce new strings.
 
 ---
@@ -109,6 +112,7 @@ Notes:
 - Garbage Collector: generational (Gen0/Gen1/Gen2), background GC, server GC. GC reclaims unreachable objects; finalizers (`~Type()`) run on separate finalizer thread.
 
 Windows/.NET specifics:
+
 - The CLR uses the OS virtual memory and the GC has options (Workstation vs Server) and settings in `runtimeconfig.json`.
 - Use `GC.Collect` only in rare cases; prefer letting runtime manage memory.
 
@@ -130,6 +134,7 @@ class Demo {
 ```
 
 Tips:
+
 - Implement `IDisposable` and `using` for deterministic unmanaged resource cleanup.
 - Use `WeakReference<T>` for cache-like scenarios where you don't want to keep objects alive.
 
@@ -157,6 +162,7 @@ void Demo() {
 ```
 
 Best practices:
+
 - Prefer immutable types or make deep copies when necessary.
 - Use `MemberwiseClone` carefully; implement custom cloning when needed.
 
@@ -179,6 +185,7 @@ if (maybeInt.HasValue) Console.WriteLine(maybeInt.Value);
 ```
 
 Tips:
+
 - Enable nullable reference types in `csproj` (`<Nullable>enable</Nullable>`).
 - Use null-coalescing `??` and `?.` for safe access.
 
@@ -226,7 +233,8 @@ Run with `dotnet run` in project folder.
 ---
 
 ## References
-- Microsoft docs: https://learn.microsoft.com/dotnet/  
+
+- Microsoft docs: https://learn.microsoft.com/dotnet/
 - .NET GC: https://learn.microsoft.com/dotnet/standard/garbage-collection/
 
-*End of C# guide.*
+_End of C# guide._

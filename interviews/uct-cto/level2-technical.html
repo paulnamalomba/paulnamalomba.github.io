@@ -1,346 +1,859 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Level 2 — Technical Deep-Dive by KPA</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
-</head>
-<body>
-  <div class="page-wrapper protected-content" id="content" style="display:none;">
-    <div class="header-bar">
-      <span class="brand">CTO Interview Prep</span>
-      <nav>
-        <a href="hub.html">Hub</a>
-        <a href="level1-overview.html">Overview</a>
-        <a href="level2-technical.html" class="active">Technical</a>
-        <a href="level3-competency.html">Competency</a>
-        <a href="level4-scenarios.html">Scenarios</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Level 2 — Technical Deep-Dive by KPA</title>
+    <link rel="stylesheet" href="style.css?v=2.2" />
+  </head>
+  <body>
+    <div
+      class="page-wrapper protected-content"
+      id="content"
+      style="display: none"
+    >
+      <div class="header-bar">
+        <span class="brand">CTO Interview Prep</span>
+        <nav>
+          <a href="hub.html">Hub</a>
+          <a href="level1-overview.html">Overview</a>
+          <a href="level2-technical.html" class="active">Technical</a>
+          <a href="level3-competency.html">Competency</a>
+          <a href="level4-scenarios.html">Scenarios</a>
 
-        <!-- Assessment must be a drodown to support the other assessment scnarios possible-->
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Assessments ▼</button>
-          <div class="dropdown-content">
-            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
-            <a href="assessment-scenario-2.html">Scenario 2 (Django & SEAT)</a>
-            <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
-            <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
-            <div class="dropdown-nested">
-              <a href="assessment-data-engineering.html" class="has-submenu">Data Engineering</a>
-              <div class="dropdown-nested-content">
-                <a href="assessment-de-docker.html">Docker & Containers</a>
-                <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
-                <a href="assessment-web-servers-python.html">Python Web Servers</a>
-                <a href="assessment-web-servers-dotnet.html">ASP.NET, Nginx & Apache</a>
+          <!-- Assessment must be a drodown to support the other assessment scnarios possible-->
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Assessments ▼</button>
+            <div class="dropdown-content">
+              <a href="assessment-scenario-1.html"
+                >Scenario 1 (System Design)</a
+              >
+              <a href="assessment-scenario-2.html"
+                >Scenario 2 (Django & SEAT)</a
+              >
+              <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
+              <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
+              <div class="dropdown-nested">
+                <a href="assessment-data-engineering.html" class="has-submenu"
+                  >Data Engineering</a
+                >
+                <div class="dropdown-nested-content">
+                  <a href="assessment-de-docker.html">Docker & Containers</a>
+                  <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
+                  <a href="assessment-web-servers-python.html"
+                    >Python Web Servers</a
+                  >
+                  <a href="assessment-web-servers-dotnet.html"
+                    >ASP.NET, Nginx & Apache</a
+                  >
+                </div>
               </div>
+              <a href="assessment-cto-architecture.html">CTO Architecture</a>
+              <a href="assessment-tips-strategy.html">Tips & Strategy</a>
             </div>
-            <a href="assessment-cto-architecture.html">CTO Architecture</a>
-            <a href="assessment-tips-strategy.html">Tips & Strategy</a>
+          </div>
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Targeted Prep ▼</button>
+            <div class="dropdown-content">
+              <a href="targeted-preparation-pages/index.html">Prep Hub</a>
+              <a href="targeted-preparation-pages/mock-interview.html"
+                >30-Min Mock Interview</a
+              >
+              <a href="targeted-preparation-pages/answer-templates.html"
+                >Answer Templates</a
+              >
+              <a href="targeted-preparation-pages/revision-sheet.html"
+                >Revision Sheet</a
+              >
+            </div>
+          </div>
+          <a href="guides.html">Guides</a>
+
+          <!-- Panel must be a drodown to support the other panel scnarios possible-->
+          <a href="level5-panel.html">Panel</a>
+        </nav>
+      </div>
+      <div class="breadcrumb">
+        <a href="hub.html">Hub</a> <span>›</span> Level 2
+      </div>
+      <h1 class="fade-in">Level 2 — Technical Deep-Dive by KPA</h1>
+      <p class="fade-in fade-in-d1">
+        The JD defines 6 Key Performance Areas. For each: what they want, what
+        you bring, and the questions they'll likely ask.
+      </p>
+
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">
+          CV Evidence Anchor (use this to back every KPA)
+        </div>
+        <ul>
+          <li>
+            <strong>SEAT (Django/PostgreSQL/LDAP):</strong> operational support
+            + migrations + database access control; large updates up to 30M rows
+            using MPI + hyperthreading + batch chunking; SMTP automation; AI
+            timetable generator; demonstrated stability (100% availability, 0
+            server errors/month during registration).
+          </li>
+          <li>
+            <strong>SESKA (GNU C++/Fortran + HPC):</strong> OpenMPI/PETSc/METIS,
+            Slurm/Rocky Linux; deployed across HPC + labs; full Windows port;
+            advanced mechanics models; performance engineering.
+          </li>
+          <li>
+            <strong
+              >ComputeMore (ASP.NET Core + EF Core + event-driven):</strong
+            >
+            Ecoride/INNTEGRATE platforms with robust APIs, auth (BCrypt + JWT),
+            message queue patterns (RabbitMQ), real-time updates (SignalR),
+            caching (Redis), and geo/mobile workflows (Google Maps APIs) with
+            DevOps across Azure/Render/Vercel/Cloudflare R2.
+          </li>
+          <li>
+            <strong>Teaching:</strong> Assistant Lecturer (2022–2025), led up to
+            five TAs; high pass rates; created content/exams from scratch and
+            integrated computational tooling into teaching.
+          </li>
+          <li>
+            <strong>Data science + engineering readiness:</strong> 750+ hours of
+            structured training (Google Advanced Data Analytics; IBM Data
+            Engineering; Microsoft backend) + applied work (Python data tooling,
+            ML experiments, CV/outlier detection). Use this as KPA 3 evidence
+            when asked about stats/ML and “big data”.
+          </li>
+          <li>
+            <strong>IoT / sensor context (JD-specific):</strong> Arduino MCU
+            experience + REST/WebSocket patterns (SignalR) + location workflows
+            (Ecoride phone GPS/Maps) — a direct bridge to SHM/sensor networks
+            and transport data collection.
+          </li>
+        </ul>
+      </div>
+
+      <!-- KPA 1 -->
+      <div class="section-card fade-in fade-in-d2">
+        <h2 style="margin-top: 0">
+          KPA 1: Curriculum & Digital Design Learning Line
+          <span class="badge badge-gold">10% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 10%"></div>
           </div>
         </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Targeted Prep ▼</button>
-          <div class="dropdown-content">
-            <a href="targeted-preparation-pages/index.html">Prep Hub</a>
-            <a href="targeted-preparation-pages/mock-interview.html">30-Min Mock Interview</a>
-            <a href="targeted-preparation-pages/answer-templates.html">Answer Templates</a>
-            <a href="targeted-preparation-pages/revision-sheet.html">Revision Sheet</a>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>
+            Engage with Director of UG Studies, CTO Built Environment and course
+            conveners to develop, implement, and maintain the digital design
+            learning line in the new curriculum.
+          </li>
+          <li>
+            Focus on coding, data preparation, database management, analytics,
+            computation, and visualisation.
+          </li>
+          <li>
+            Align with the ECSA (Engineering Council of SA) competency framework
+            and UCT Vision 2030.
+          </li>
+        </ul>
+
+        <h3>Your Evidence</h3>
+        <ul>
+          <li>
+            <strong>4 semesters as Assistant Lecturer</strong> — CIV2011F and
+            CIV1007S. Crafted course outlines, content, and exams from scratch.
+          </li>
+          <li>
+            <strong>Integrated SESKA into teaching</strong> — Used computational
+            modelling software in class instruction.
+          </li>
+          <li>
+            <strong>Managed 5 Teaching Assistants</strong> — Training,
+            scheduling, budget management.
+          </li>
+          <li>
+            <strong>85%+ and 93%+ course pass rates</strong> — Demonstrable
+            teaching effectiveness.
+          </li>
+          <li>
+            <strong>CAD/GIS/BIM awareness</strong> — The JD mentions
+            strengthening these areas; your SESKA work covers computational
+            modelling directly.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you approach developing a digital design learning line for
+            the new Civil Engineering curriculum?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I'd start with a stakeholder
+              audit — meeting the Director of UG Studies, course conveners, and
+              the CTO Built Environment to understand what learning outcomes are
+              needed and where digital competencies fit in the curriculum
+              structure. I'd map out a progression from foundational coding in
+              Python in the early years, through data handling and database
+              management in the middle years, to computational modelling and
+              data analytics in the senior years.
+            </p>
+            <p>
+              From my lecturing experience, I know that students engage best
+              when digital tools are embedded in real engineering problems — not
+              taught in isolation. For example, I've already used SESKA as a
+              teaching tool for computational mechanics, which gives students
+              hands-on experience with real simulation software.
+            </p>
+            <p>
+              I'd align everything with ECSA's requirements and the department's
+              Vision 2030 ambition for a larger Digital Lab. Practically, I'd
+              pilot modules, collect student feedback, iterate, and document
+              everything so the learning line is sustainable beyond any single
+              person."
+            </p>
           </div>
         </div>
-        <a href="guides.html">Guides</a>
 
-        <!-- Panel must be a drodown to support the other panel scnarios possible-->
-        <a href="level5-panel.html">Panel</a>
-      </nav>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you train tutors who may not have strong coding
+            backgrounds?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I've done this directly — I
+              led teams of up to five teaching assistants across four semesters.
+              My approach is structured induction: I create reference materials
+              and walkthrough guides, then run hands-on sessions where tutors
+              work through the same exercises students will face. I pair
+              stronger tutors with newer ones and schedule check-ins throughout
+              the semester. The key is making tutors confident, not just
+              competent — so I focus on the 'why' behind each concept, not just
+              the syntax."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPA 2 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          KPA 2: Technical Support (UG Classes)
+          <span class="badge badge-gold">30% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 30%"></div>
+          </div>
+        </div>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>
+            Provide specialist technical services to classes/projects using big
+            data, coding, computation, database design.
+          </li>
+          <li>Support UG classes and tutorials; train tutors and TAs.</li>
+          <li>
+            Liaise with UCT GIS Unit, ICTS, and HPC cluster on trends and
+            developments.
+          </li>
+          <li>
+            Manage information flow to the department at curriculum meetings.
+          </li>
+          <li>
+            Ad-hoc training of new researchers in specific coding languages and
+            database software.
+          </li>
+        </ul>
+
+        <h3>Your Evidence</h3>
+        <ul>
+          <li>
+            <strong>SEAT technical support</strong> — You already provide
+            technical support during the registration cycle, troubleshooting
+            issues for staff and students across the faculty.
+          </li>
+          <li>
+            <strong>Lecturing experience</strong> — Prepared and ran exercises,
+            tutorials, and practical demonstrations.
+          </li>
+          <li>
+            <strong>SESKA deployment across labs</strong> — Deployed to EBE
+            Computational Mechanics Labs and Chemical Engineering labs; you know
+            the lab infrastructure.
+          </li>
+          <li>
+            <strong>Cross-departmental liaison</strong> — Already work with ICTS
+            (Theo Armstrong, Sibonelo Twala) and HPC cluster administrators.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            This KPA takes 30% of your time. How would you balance supporting
+            multiple courses with different technical requirements?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "The key is proactive planning
+              at the start of each semester. I'd meet with every course convener
+              who needs technical support to understand their schedule, the
+              tools they'll use, and any special requirements. I'd create a
+              semester calendar that maps out all labs, tutorials, and project
+              deadlines so I can see where the pressure points are.
+            </p>
+            <p>
+              From my lecturing experience, I know that most technical issues
+              cluster around three periods: the start of a new tool
+              introduction, just before project deadlines, and during exam prep.
+              If I anticipate these, I can front-load preparation — setting up
+              environments, writing setup guides, and pre-testing exercises
+              before students encounter them.
+            </p>
+            <p>
+              For ad-hoc requests from researchers, I'd establish office hours
+              so there's a structured but accessible channel. Having reference
+              documentation and FAQ resources online means I'm not solving the
+              same problem repeatedly."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you keep the department up to date on developments in data
+            science and computing?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I'd prepare brief, practical
+              updates for departmental meetings — not long lectures, but focused
+              briefs on what's new and what's relevant to civil engineering. For
+              example, new Python libraries for geospatial analysis, changes to
+              HPC policies, or new cloud storage options that could benefit
+              research groups.
+            </p>
+            <p>
+              I'm also an active subscriber to multiple tech platforms — Google
+              Cloud, GitHub Pro, and various API services. I maintain a
+              portfolio website where I publish guides and sample scripts, which
+              I'd adapt as an internal resource for the department. Attending
+              conferences like AfriCOMP and ICMM also keeps me connected to how
+              peer institutions handle these challenges."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPA 3 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          KPA 3: Research Support — Data Science & HPC
+          <span class="badge badge-gold">30% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 30%"></div>
+          </div>
+        </div>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>
+            Digital data collection, database management, elementary data mining
+            and analytics.
+          </li>
+          <li>Basic coding support — debugging scripts, writing basic code.</li>
+          <li>Statistical analysis (e.g., for machine learning).</li>
+          <li>
+            Set up and instruct researchers on Python, SQL, R or equivalent.
+          </li>
+          <li>
+            Retrieve and collate big data from external sources (SANRAL,
+            OpenStreetMaps, sensor networks/IoT).
+          </li>
+          <li>Provide access to UCT HPC cluster (Linux).</li>
+          <li>
+            Equipment issuing, software license maintenance, metadata protocols.
+          </li>
+        </ul>
+
+        <h3>Your Evidence</h3>
+        <ul>
+          <li>
+            <strong>SEAT data engineering</strong>: Managed database migrations,
+            updates, access control with PostgreSQL + Django ORM. Innovated
+            batch-chunked memory management with MPI + hyperthreading for
+            30M-row data loads.
+          </li>
+          <li>
+            <strong>SESKA on HPC</strong>: Deployed on UCT HPC (Slurm, Rocky
+            Linux), wrote OpenMPI parallel code, used PETSc and METIS.
+          </li>
+          <li>
+            <strong>Machine learning</strong>: Scikit-Learn, TensorFlow,
+            statsmodels — Google Advanced Data Analytics certified (300+ hrs).
+            Built AI timetable generator. Built Computer Vision tools using
+            Google Gemma models.
+          </li>
+          <li>
+            <strong>Data extraction</strong>: Built web scraping tools, Python
+            data processing packages on PyPI, ETL pipelines.
+          </li>
+          <li>
+            <strong>IoT</strong>: Arduino MCU programming, REST APIs for
+            real-time devices.
+          </li>
+          <li>
+            <strong>Multi-language</strong>: Python, SQL, R, C++, C#,
+            JavaScript, Fortran — covers every language mentioned in the JD.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Can you describe your experience with database management and
+            handling large datasets?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "My most intensive database
+              experience is with SEAT, where I work with a PostgreSQL database
+              hosted on a remote Ubuntu server. On the operational side, I
+              manage migrations, access control, and resource allocation using
+              Django ORM and psycopg2.
+            </p>
+            <p>
+              The most interesting challenge I solved was data loading at scale.
+              During the registration cycle, we need to refresh student data
+              from PeopleSoft — up to 30 million rows. The naive approach would
+              take hours and risk crashing the server. I designed a solution
+              using MPI and batch-chunked memory management with hyperthreading,
+              which processes the data in parallel while keeping server memory
+              usage manageable. That innovation is now a core part of SEAT's
+              data pipeline.
+            </p>
+            <p>
+              Beyond SEAT, I work with PostgreSQL, MySQL, SQLite, MongoDB, and
+              Redis across different projects, and I've recently been working
+              with Cloudflare R2 for cloud object storage. My IBM Data
+              Engineering certification covers ETL pipelines and big data tools
+              like Spark and Hadoop."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you help a researcher who has no coding experience get
+            started with Python for their data analysis?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I'd start by understanding
+              their specific research question and data format — there's no
+              point teaching them abstract syntax when we can learn through
+              their own data. I'd set up their environment (Jupyter Notebook is
+              ideal for beginners), then build a template notebook that loads
+              their actual data, performs the analysis steps they need, and
+              generates visualisations.
+            </p>
+            <p>
+              I'd walk them through it hands-on, explaining each step. Then I'd
+              give them a slightly different task to try independently, and be
+              available for questions. I maintain guides and sample scripts on
+              my website which I'd share as reference material.
+            </p>
+            <p>
+              The goal isn't to make them a developer — it's to make them
+              self-sufficient for their specific workflow. From my lecturing
+              experience, I've found that practical, problem-first instruction
+              works far better than theoretical, syntax-first approaches."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Describe your experience with HPC and how you'd support researchers
+            accessing the cluster.
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I've been using UCT's HPC
+              cluster for over two years through my SESKA work. I'm familiar
+              with Slurm job scheduling, module loading, OpenMPI parallel
+              execution, and the Linux environment (Rocky Linux). I've also used
+              PETSc for sparse linear algebra and METIS for domain
+              decomposition.
+            </p>
+            <p>
+              For researcher support, I'd create standardised job submission
+              templates for common Civil Engineering workflows — Python scripts,
+              Matlab jobs, ABAQUS simulations. I'd write documentation covering
+              the basics: SSH access, file transfer, environment setup, and
+              common pitfalls. For more complex cases, I'd sit with researchers
+              individually to debug their job scripts and optimise resource
+              allocation.
+            </p>
+            <p>
+              I also have a working relationship with ICTS staff like Sibonelo
+              Twala who manage the infrastructure, so I can escalate
+              system-level issues when needed."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPA 4 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          KPA 4: Management & Leadership
+          <span class="badge badge-gold">10% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 10%"></div>
+          </div>
+        </div>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>
+            Manage the department's data repositories in collaboration with ICTS
+            and HPC.
+          </li>
+          <li>
+            Manage low/medium-cost resources with discretionary decision-making.
+          </li>
+          <li>
+            Assist staff with applications to UCT's Advanced Computing
+            Committee.
+          </li>
+          <li>
+            Participate in departmental committees and administrative tasks.
+          </li>
+          <li>Compile and manage software/equipment budgets.</li>
+        </ul>
+
+        <h3>Your Evidence</h3>
+        <ul>
+          <li>
+            <strong>Budget management</strong>: Managed TA budgets and schedules
+            across 4 semesters as Assistant Lecturer.
+          </li>
+          <li>
+            <strong>Team leadership</strong>: Led teams of up to 5 Teaching
+            Assistants.
+          </li>
+          <li>
+            <strong>Vendor management</strong>: As CIO at ComputeMore, managed
+            tech partnerships with Namecheap, Cloudflare, PayChangu, ICTAM.
+          </li>
+          <li>
+            <strong>DevOps & infrastructure</strong>: Managed deployments on
+            Azure, Vercel, DockerHub.
+          </li>
+          <li>
+            <strong>ICTS relationships</strong>: Direct working relationships
+            with Theo Armstrong and Sibonelo Twala.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you approach managing the department's data repositories
+            and ensuring long-term data integrity?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I'd start with an audit of the
+              current state — what data is stored where, who owns it, and what
+              the backup and access policies look like. From my SEAT experience,
+              I've learned that clear metadata protocols are essential. Every
+              dataset needs to be documented: source, collection date, format,
+              access permissions, and retention policy.
+            </p>
+            <p>
+              I'd work with ICTS and the HPC team to ensure we're using
+              appropriate storage tiers — hot storage for active research data,
+              cold storage for archived datasets. For cloud services, I've
+              worked with Cloudflare R2 which is cost-effective for large
+              objects, and I'd evaluate whether that or UCT's existing
+              infrastructure is more appropriate.
+            </p>
+            <p>
+              I'd establish SOPs for data confidentiality and sharing, and
+              communicate these to all research groups. The goal is a system
+              where data is findable, accessible, interoperable, and reusable —
+              the FAIR principles."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPA 5 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          KPA 5: Systems Development — SEAT
+          <span class="badge badge-gold">10% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 10%"></div>
+          </div>
+        </div>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>Design, build, and maintain SEAT and similar tools.</li>
+          <li>Python, JavaScript, HTML, SQL, Django stack.</li>
+          <li>Apache2, LDAP integration.</li>
+          <li>Unit and integration tests.</li>
+          <li>Automate deployment, monitoring, and reporting.</li>
+          <li>Security best practices and compliance.</li>
+        </ul>
+
+        <h3>Your Evidence — This Is Your Superpower</h3>
+        <div class="callout tip">
+          <div class="callout-title">💎 Your Strongest Card</div>
+          <p>
+            You are arguably
+            <strong>the only candidate who has actually worked on SEAT</strong>.
+            15 months of hands-on backend development. This is not theoretical
+            experience — you built features, fixed bugs, and kept the system
+            running.
+          </p>
+        </div>
+        <ul>
+          <li>
+            <strong>Backend</strong>: Python Django with HTML views; code
+            inspection, debugging, refactoring, module linking.
+          </li>
+          <li>
+            <strong>Database</strong>: PostgreSQL with psycopg2, Django ORM,
+            pgAdmin. Managed migrations, updates, access control.
+          </li>
+          <li>
+            <strong>Security</strong>: LDAP client verification and
+            authorisation. Protected against SQL injection via Django's ORM
+            layer.
+          </li>
+          <li>
+            <strong>Performance</strong>: Improved server availability to 100%
+            with 0 errors/month. Innovated MPI + hyperthreading for 30M-row
+            loads.
+          </li>
+          <li>
+            <strong>Features</strong>: AI-based timetable generator, email
+            automation (SMTP + Django shell), UX improvements for student
+            enrolment visibility.
+          </li>
+          <li>
+            <strong>DevOps</strong>: Git CLI, Linux BASH (Ubuntu 24.04 Server),
+            Django CLI/Shell tools.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Tell us about your experience with SEAT. What did you build, and
+            what challenges did you overcome?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "I've worked on SEAT across
+              three separate periods totalling nearly two years. SEAT is a
+              Django-based web application with a PostgreSQL database that
+              supports the entire EBE faculty's student enrolment advising
+              process.
+            </p>
+            <p>
+              My contributions span the full stack. On the backend, I did code
+              inspection, debugging, and refactoring — improving code quality
+              and reliability. I managed all database operations: migrations,
+              schema changes, access control, and critically, the data refresh
+              cycle where we load student and scheduling data from PeopleSoft.
+            </p>
+            <p>
+              The biggest technical challenge was the data loading bottleneck.
+              Loading 30 million rows from PeopleSoft would overwhelm the
+              server. I designed a solution using MPI for parallel processing
+              combined with batch-chunked memory management, so we could process
+              data in controlled portions without exceeding server resources.
+              This went from a fragile, hours-long process to a reliable, fast
+              pipeline.
+            </p>
+            <p>
+              I also built an AI-based timetable generator, implemented email
+              automation using SMTP, improved the UX with new components for
+              students to see outstanding enrolments, and achieved 100% server
+              availability with zero errors per month. Security was hardened
+              through LDAP integration and Django's ORM layer to protect against
+              SQL injection."
+            </p>
+          </div>
+        </div>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How would you ensure SEAT remains reliable during the critical
+            registration period?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "The registration period from
+              November to February is SEAT's peak usage time, and reliability is
+              non-negotiable. My approach would be three-fold:
+            </p>
+            <p>
+              <strong>Preparation</strong> (July–September): Work with
+              departments to load and verify curriculum and scheduling data. Run
+              validation checks against PeopleSoft data. Identify and fix any
+              data inconsistencies before they affect students.
+            </p>
+            <p>
+              <strong>Monitoring</strong> (November–February): Implement logging
+              and diagnostic tools to monitor system performance in real-time.
+              Set up alerts for unusual load patterns or errors. Have rollback
+              procedures ready for any deployment.
+            </p>
+            <p>
+              <strong>Support</strong>: Be available for technical support to
+              staff and students. Document common issues and solutions. Liaise
+              with ICTS on server maintenance and PeopleSoft data exports. My
+              track record of 100% uptime with zero errors shows I take this
+              seriously."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPA 6 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          KPA 6: Web App Development & System Administration
+          <span class="badge badge-gold">10% of Time</span>
+        </h2>
+        <div class="kpa-bar-wrapper">
+          <div class="kpa-bar">
+            <div class="kpa-bar-fill" style="width: 10%"></div>
+          </div>
+        </div>
+
+        <h3>What the JD Asks</h3>
+        <ul>
+          <li>
+            Install, configure, and maintain servers, databases, and IT
+            infrastructure.
+          </li>
+          <li>Manage user accounts, permissions, and system policies.</li>
+          <li>Monitor system performance, uptime, and availability.</li>
+          <li>Automate repetitive tasks (backups, updates, patches).</li>
+          <li>Implement monitoring tools; troubleshoot technical issues.</li>
+          <li>
+            Ensure systems are secure and compliant; apply patches and fixes.
+          </li>
+        </ul>
+
+        <h3>Your Evidence</h3>
+        <ul>
+          <li>
+            <strong>Linux sysadmin</strong>: Ubuntu Server 20.04+ administration
+            for SEAT. Shell scripting (BASH, PowerShell 7+).
+          </li>
+          <li>
+            <strong>Server management</strong>: Django deployment, Apache2
+            configuration, LDAP setup.
+          </li>
+          <li>
+            <strong>Security</strong>: BCrypt hashing, JWT 256-bit tokens, LDAP
+            configuration, SQL injection prevention, Microsoft Security &
+            Authentication certificate.
+          </li>
+          <li>
+            <strong>DevOps</strong>: Git, Docker, Vercel, Azure deployments.
+            CI/CD pipelines via GitHub and Bitbucket.
+          </li>
+          <li>
+            <strong>Industry experience</strong>: ComputeMore — managed
+            deployments across Azure, Render, Vercel, and Cloudflare.
+          </li>
+        </ul>
+
+        <h3>Likely Questions</h3>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How do you approach system security and ensuring compliance with
+            university policies?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "Security is layered — there's
+              no single solution. At the application level, I use Django's ORM
+              to prevent SQL injection, implement LDAP for authentication tied
+              to UCT's directory, and use BCrypt or equivalent for any local
+              password hashing. At the server level, I apply regular security
+              patches, configure firewalls, and use SSH key-based authentication
+              rather than passwords.
+            </p>
+            <p>
+              For compliance, I work within ICTS's frameworks — they set the
+              university-wide policies, and I ensure our departmental systems
+              adhere to them. With SEAT, I maintained client verification and
+              authorisation protocols through LDAP, which integrates seamlessly
+              with UCT's identity management.
+            </p>
+            <p>
+              I also hold a Microsoft Security and Authentication certificate,
+              which covers modern security patterns including JWT tokens, OAuth,
+              and secure API design. At ComputeMore, I implemented JWT 256-bit
+              token authentication and clean architecture patterns for API
+              security."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
+      </div>
     </div>
-    <div class="breadcrumb"><a href="hub.html">Hub</a> <span>›</span> Level 2</div>
-    <h1 class="fade-in">Level 2 — Technical Deep-Dive by KPA</h1>
-    <p class="fade-in fade-in-d1">The JD defines 6 Key Performance Areas. For each: what they want, what you bring, and the questions they'll likely ask.</p>
-
-    <div class="callout info fade-in fade-in-d2">
-      <div class="callout-title">CV Evidence Anchor (use this to back every KPA)</div>
-      <ul>
-        <li><strong>SEAT (Django/PostgreSQL/LDAP):</strong> operational support + migrations + database access control; large updates up to 30M rows using MPI + hyperthreading + batch chunking; SMTP automation; AI timetable generator; demonstrated stability (100% availability, 0 server errors/month during registration).</li>
-        <li><strong>SESKA (GNU C++/Fortran + HPC):</strong> OpenMPI/PETSc/METIS, Slurm/Rocky Linux; deployed across HPC + labs; full Windows port; advanced mechanics models; performance engineering.</li>
-        <li><strong>ComputeMore (ASP.NET Core + EF Core + event-driven):</strong> Ecoride/INNTEGRATE platforms with robust APIs, auth (BCrypt + JWT), message queue patterns (RabbitMQ), real-time updates (SignalR), caching (Redis), and geo/mobile workflows (Google Maps APIs) with DevOps across Azure/Render/Vercel/Cloudflare R2.</li>
-        <li><strong>Teaching:</strong> Assistant Lecturer (2022–2025), led up to five TAs; high pass rates; created content/exams from scratch and integrated computational tooling into teaching.</li>
-        <li><strong>Data science + engineering readiness:</strong> 750+ hours of structured training (Google Advanced Data Analytics; IBM Data Engineering; Microsoft backend) + applied work (Python data tooling, ML experiments, CV/outlier detection). Use this as KPA 3 evidence when asked about stats/ML and “big data”.</li>
-        <li><strong>IoT / sensor context (JD-specific):</strong> Arduino MCU experience + REST/WebSocket patterns (SignalR) + location workflows (Ecoride phone GPS/Maps) — a direct bridge to SHM/sensor networks and transport data collection.</li>
-      </ul>
-    </div>
-
-    <!-- KPA 1 -->
-    <div class="section-card fade-in fade-in-d2">
-      <h2 style="margin-top:0;">KPA 1: Curriculum & Digital Design Learning Line <span class="badge badge-gold">10% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:10%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Engage with Director of UG Studies, CTO Built Environment and course conveners to develop, implement, and maintain the digital design learning line in the new curriculum.</li>
-        <li>Focus on coding, data preparation, database management, analytics, computation, and visualisation.</li>
-        <li>Align with the ECSA (Engineering Council of SA) competency framework and UCT Vision 2030.</li>
-      </ul>
-
-      <h3>Your Evidence</h3>
-      <ul>
-        <li><strong>4 semesters as Assistant Lecturer</strong> — CIV2011F and CIV1007S. Crafted course outlines, content, and exams from scratch.</li>
-        <li><strong>Integrated SESKA into teaching</strong> — Used computational modelling software in class instruction.</li>
-        <li><strong>Managed 5 Teaching Assistants</strong> — Training, scheduling, budget management.</li>
-        <li><strong>85%+ and 93%+ course pass rates</strong> — Demonstrable teaching effectiveness.</li>
-        <li><strong>CAD/GIS/BIM awareness</strong> — The JD mentions strengthening these areas; your SESKA work covers computational modelling directly.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you approach developing a digital design learning line for the new Civil Engineering curriculum?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I'd start with a stakeholder audit — meeting the Director of UG Studies, course conveners, and the CTO Built Environment to understand what learning outcomes are needed and where digital competencies fit in the curriculum structure. I'd map out a progression from foundational coding in Python in the early years, through data handling and database management in the middle years, to computational modelling and data analytics in the senior years.</p>
-          <p>From my lecturing experience, I know that students engage best when digital tools are embedded in real engineering problems — not taught in isolation. For example, I've already used SESKA as a teaching tool for computational mechanics, which gives students hands-on experience with real simulation software.</p>
-          <p>I'd align everything with ECSA's requirements and the department's Vision 2030 ambition for a larger Digital Lab. Practically, I'd pilot modules, collect student feedback, iterate, and document everything so the learning line is sustainable beyond any single person."</p>
-        </div>
-      </div>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you train tutors who may not have strong coding backgrounds?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I've done this directly — I led teams of up to five teaching assistants across four semesters. My approach is structured induction: I create reference materials and walkthrough guides, then run hands-on sessions where tutors work through the same exercises students will face. I pair stronger tutors with newer ones and schedule check-ins throughout the semester. The key is making tutors confident, not just competent — so I focus on the 'why' behind each concept, not just the syntax."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPA 2 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">KPA 2: Technical Support (UG Classes) <span class="badge badge-gold">30% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:30%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Provide specialist technical services to classes/projects using big data, coding, computation, database design.</li>
-        <li>Support UG classes and tutorials; train tutors and TAs.</li>
-        <li>Liaise with UCT GIS Unit, ICTS, and HPC cluster on trends and developments.</li>
-        <li>Manage information flow to the department at curriculum meetings.</li>
-        <li>Ad-hoc training of new researchers in specific coding languages and database software.</li>
-      </ul>
-
-      <h3>Your Evidence</h3>
-      <ul>
-        <li><strong>SEAT technical support</strong> — You already provide technical support during the registration cycle, troubleshooting issues for staff and students across the faculty.</li>
-        <li><strong>Lecturing experience</strong> — Prepared and ran exercises, tutorials, and practical demonstrations.</li>
-        <li><strong>SESKA deployment across labs</strong> — Deployed to EBE Computational Mechanics Labs and Chemical Engineering labs; you know the lab infrastructure.</li>
-        <li><strong>Cross-departmental liaison</strong> — Already work with ICTS (Theo Armstrong, Sibonelo Twala) and HPC cluster administrators.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">This KPA takes 30% of your time. How would you balance supporting multiple courses with different technical requirements?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "The key is proactive planning at the start of each semester. I'd meet with every course convener who needs technical support to understand their schedule, the tools they'll use, and any special requirements. I'd create a semester calendar that maps out all labs, tutorials, and project deadlines so I can see where the pressure points are.</p>
-          <p>From my lecturing experience, I know that most technical issues cluster around three periods: the start of a new tool introduction, just before project deadlines, and during exam prep. If I anticipate these, I can front-load preparation — setting up environments, writing setup guides, and pre-testing exercises before students encounter them.</p>
-          <p>For ad-hoc requests from researchers, I'd establish office hours so there's a structured but accessible channel. Having reference documentation and FAQ resources online means I'm not solving the same problem repeatedly."</p>
-        </div>
-      </div>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you keep the department up to date on developments in data science and computing?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I'd prepare brief, practical updates for departmental meetings — not long lectures, but focused briefs on what's new and what's relevant to civil engineering. For example, new Python libraries for geospatial analysis, changes to HPC policies, or new cloud storage options that could benefit research groups.</p>
-          <p>I'm also an active subscriber to multiple tech platforms — Google Cloud, GitHub Pro, and various API services. I maintain a portfolio website where I publish guides and sample scripts, which I'd adapt as an internal resource for the department. Attending conferences like AfriCOMP and ICMM also keeps me connected to how peer institutions handle these challenges."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPA 3 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">KPA 3: Research Support — Data Science & HPC <span class="badge badge-gold">30% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:30%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Digital data collection, database management, elementary data mining and analytics.</li>
-        <li>Basic coding support — debugging scripts, writing basic code.</li>
-        <li>Statistical analysis (e.g., for machine learning).</li>
-        <li>Set up and instruct researchers on Python, SQL, R or equivalent.</li>
-        <li>Retrieve and collate big data from external sources (SANRAL, OpenStreetMaps, sensor networks/IoT).</li>
-        <li>Provide access to UCT HPC cluster (Linux).</li>
-        <li>Equipment issuing, software license maintenance, metadata protocols.</li>
-      </ul>
-
-      <h3>Your Evidence</h3>
-      <ul>
-        <li><strong>SEAT data engineering</strong>: Managed database migrations, updates, access control with PostgreSQL + Django ORM. Innovated batch-chunked memory management with MPI + hyperthreading for 30M-row data loads.</li>
-        <li><strong>SESKA on HPC</strong>: Deployed on UCT HPC (Slurm, Rocky Linux), wrote OpenMPI parallel code, used PETSc and METIS.</li>
-        <li><strong>Machine learning</strong>: Scikit-Learn, TensorFlow, statsmodels — Google Advanced Data Analytics certified (300+ hrs). Built AI timetable generator. Built Computer Vision tools using Google Gemma models.</li>
-        <li><strong>Data extraction</strong>: Built web scraping tools, Python data processing packages on PyPI, ETL pipelines.</li>
-        <li><strong>IoT</strong>: Arduino MCU programming, REST APIs for real-time devices.</li>
-        <li><strong>Multi-language</strong>: Python, SQL, R, C++, C#, JavaScript, Fortran — covers every language mentioned in the JD.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Can you describe your experience with database management and handling large datasets?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "My most intensive database experience is with SEAT, where I work with a PostgreSQL database hosted on a remote Ubuntu server. On the operational side, I manage migrations, access control, and resource allocation using Django ORM and psycopg2.</p>
-          <p>The most interesting challenge I solved was data loading at scale. During the registration cycle, we need to refresh student data from PeopleSoft — up to 30 million rows. The naive approach would take hours and risk crashing the server. I designed a solution using MPI and batch-chunked memory management with hyperthreading, which processes the data in parallel while keeping server memory usage manageable. That innovation is now a core part of SEAT's data pipeline.</p>
-          <p>Beyond SEAT, I work with PostgreSQL, MySQL, SQLite, MongoDB, and Redis across different projects, and I've recently been working with Cloudflare R2 for cloud object storage. My IBM Data Engineering certification covers ETL pipelines and big data tools like Spark and Hadoop."</p>
-        </div>
-      </div>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you help a researcher who has no coding experience get started with Python for their data analysis?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I'd start by understanding their specific research question and data format — there's no point teaching them abstract syntax when we can learn through their own data. I'd set up their environment (Jupyter Notebook is ideal for beginners), then build a template notebook that loads their actual data, performs the analysis steps they need, and generates visualisations.</p>
-          <p>I'd walk them through it hands-on, explaining each step. Then I'd give them a slightly different task to try independently, and be available for questions. I maintain guides and sample scripts on my website which I'd share as reference material.</p>
-          <p>The goal isn't to make them a developer — it's to make them self-sufficient for their specific workflow. From my lecturing experience, I've found that practical, problem-first instruction works far better than theoretical, syntax-first approaches."</p>
-        </div>
-      </div>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Describe your experience with HPC and how you'd support researchers accessing the cluster.</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I've been using UCT's HPC cluster for over two years through my SESKA work. I'm familiar with Slurm job scheduling, module loading, OpenMPI parallel execution, and the Linux environment (Rocky Linux). I've also used PETSc for sparse linear algebra and METIS for domain decomposition.</p>
-          <p>For researcher support, I'd create standardised job submission templates for common Civil Engineering workflows — Python scripts, Matlab jobs, ABAQUS simulations. I'd write documentation covering the basics: SSH access, file transfer, environment setup, and common pitfalls. For more complex cases, I'd sit with researchers individually to debug their job scripts and optimise resource allocation.</p>
-          <p>I also have a working relationship with ICTS staff like Sibonelo Twala who manage the infrastructure, so I can escalate system-level issues when needed."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPA 4 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">KPA 4: Management & Leadership <span class="badge badge-gold">10% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:10%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Manage the department's data repositories in collaboration with ICTS and HPC.</li>
-        <li>Manage low/medium-cost resources with discretionary decision-making.</li>
-        <li>Assist staff with applications to UCT's Advanced Computing Committee.</li>
-        <li>Participate in departmental committees and administrative tasks.</li>
-        <li>Compile and manage software/equipment budgets.</li>
-      </ul>
-
-      <h3>Your Evidence</h3>
-      <ul>
-        <li><strong>Budget management</strong>: Managed TA budgets and schedules across 4 semesters as Assistant Lecturer.</li>
-        <li><strong>Team leadership</strong>: Led teams of up to 5 Teaching Assistants.</li>
-        <li><strong>Vendor management</strong>: As CIO at ComputeMore, managed tech partnerships with Namecheap, Cloudflare, PayChangu, ICTAM.</li>
-        <li><strong>DevOps & infrastructure</strong>: Managed deployments on Azure, Vercel, DockerHub.</li>
-        <li><strong>ICTS relationships</strong>: Direct working relationships with Theo Armstrong and Sibonelo Twala.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you approach managing the department's data repositories and ensuring long-term data integrity?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I'd start with an audit of the current state — what data is stored where, who owns it, and what the backup and access policies look like. From my SEAT experience, I've learned that clear metadata protocols are essential. Every dataset needs to be documented: source, collection date, format, access permissions, and retention policy.</p>
-          <p>I'd work with ICTS and the HPC team to ensure we're using appropriate storage tiers — hot storage for active research data, cold storage for archived datasets. For cloud services, I've worked with Cloudflare R2 which is cost-effective for large objects, and I'd evaluate whether that or UCT's existing infrastructure is more appropriate.</p>
-          <p>I'd establish SOPs for data confidentiality and sharing, and communicate these to all research groups. The goal is a system where data is findable, accessible, interoperable, and reusable — the FAIR principles."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPA 5 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">KPA 5: Systems Development — SEAT <span class="badge badge-gold">10% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:10%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Design, build, and maintain SEAT and similar tools.</li>
-        <li>Python, JavaScript, HTML, SQL, Django stack.</li>
-        <li>Apache2, LDAP integration.</li>
-        <li>Unit and integration tests.</li>
-        <li>Automate deployment, monitoring, and reporting.</li>
-        <li>Security best practices and compliance.</li>
-      </ul>
-
-      <h3>Your Evidence — This Is Your Superpower</h3>
-      <div class="callout tip">
-        <div class="callout-title">💎 Your Strongest Card</div>
-        <p>You are arguably <strong>the only candidate who has actually worked on SEAT</strong>. 15 months of hands-on backend development. This is not theoretical experience — you built features, fixed bugs, and kept the system running.</p>
-      </div>
-      <ul>
-        <li><strong>Backend</strong>: Python Django with HTML views; code inspection, debugging, refactoring, module linking.</li>
-        <li><strong>Database</strong>: PostgreSQL with psycopg2, Django ORM, pgAdmin. Managed migrations, updates, access control.</li>
-        <li><strong>Security</strong>: LDAP client verification and authorisation. Protected against SQL injection via Django's ORM layer.</li>
-        <li><strong>Performance</strong>: Improved server availability to 100% with 0 errors/month. Innovated MPI + hyperthreading for 30M-row loads.</li>
-        <li><strong>Features</strong>: AI-based timetable generator, email automation (SMTP + Django shell), UX improvements for student enrolment visibility.</li>
-        <li><strong>DevOps</strong>: Git CLI, Linux BASH (Ubuntu 24.04 Server), Django CLI/Shell tools.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Tell us about your experience with SEAT. What did you build, and what challenges did you overcome?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "I've worked on SEAT across three separate periods totalling nearly two years. SEAT is a Django-based web application with a PostgreSQL database that supports the entire EBE faculty's student enrolment advising process.</p>
-          <p>My contributions span the full stack. On the backend, I did code inspection, debugging, and refactoring — improving code quality and reliability. I managed all database operations: migrations, schema changes, access control, and critically, the data refresh cycle where we load student and scheduling data from PeopleSoft.</p>
-          <p>The biggest technical challenge was the data loading bottleneck. Loading 30 million rows from PeopleSoft would overwhelm the server. I designed a solution using MPI for parallel processing combined with batch-chunked memory management, so we could process data in controlled portions without exceeding server resources. This went from a fragile, hours-long process to a reliable, fast pipeline.</p>
-          <p>I also built an AI-based timetable generator, implemented email automation using SMTP, improved the UX with new components for students to see outstanding enrolments, and achieved 100% server availability with zero errors per month. Security was hardened through LDAP integration and Django's ORM layer to protect against SQL injection."</p>
-        </div>
-      </div>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How would you ensure SEAT remains reliable during the critical registration period?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "The registration period from November to February is SEAT's peak usage time, and reliability is non-negotiable. My approach would be three-fold:</p>
-          <p><strong>Preparation</strong> (July–September): Work with departments to load and verify curriculum and scheduling data. Run validation checks against PeopleSoft data. Identify and fix any data inconsistencies before they affect students.</p>
-          <p><strong>Monitoring</strong> (November–February): Implement logging and diagnostic tools to monitor system performance in real-time. Set up alerts for unusual load patterns or errors. Have rollback procedures ready for any deployment.</p>
-          <p><strong>Support</strong>: Be available for technical support to staff and students. Document common issues and solutions. Liaise with ICTS on server maintenance and PeopleSoft data exports. My track record of 100% uptime with zero errors shows I take this seriously."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPA 6 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">KPA 6: Web App Development & System Administration <span class="badge badge-gold">10% of Time</span></h2>
-      <div class="kpa-bar-wrapper"><div class="kpa-bar"><div class="kpa-bar-fill" style="width:10%"></div></div></div>
-
-      <h3>What the JD Asks</h3>
-      <ul>
-        <li>Install, configure, and maintain servers, databases, and IT infrastructure.</li>
-        <li>Manage user accounts, permissions, and system policies.</li>
-        <li>Monitor system performance, uptime, and availability.</li>
-        <li>Automate repetitive tasks (backups, updates, patches).</li>
-        <li>Implement monitoring tools; troubleshoot technical issues.</li>
-        <li>Ensure systems are secure and compliant; apply patches and fixes.</li>
-      </ul>
-
-      <h3>Your Evidence</h3>
-      <ul>
-        <li><strong>Linux sysadmin</strong>: Ubuntu Server 20.04+ administration for SEAT. Shell scripting (BASH, PowerShell 7+).</li>
-        <li><strong>Server management</strong>: Django deployment, Apache2 configuration, LDAP setup.</li>
-        <li><strong>Security</strong>: BCrypt hashing, JWT 256-bit tokens, LDAP configuration, SQL injection prevention, Microsoft Security & Authentication certificate.</li>
-        <li><strong>DevOps</strong>: Git, Docker, Vercel, Azure deployments. CI/CD pipelines via GitHub and Bitbucket.</li>
-        <li><strong>Industry experience</strong>: ComputeMore — managed deployments across Azure, Render, Vercel, and Cloudflare.</li>
-      </ul>
-
-      <h3>Likely Questions</h3>
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How do you approach system security and ensuring compliance with university policies?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "Security is layered — there's no single solution. At the application level, I use Django's ORM to prevent SQL injection, implement LDAP for authentication tied to UCT's directory, and use BCrypt or equivalent for any local password hashing. At the server level, I apply regular security patches, configure firewalls, and use SSH key-based authentication rather than passwords.</p>
-          <p>For compliance, I work within ICTS's frameworks — they set the university-wide policies, and I ensure our departmental systems adhere to them. With SEAT, I maintained client verification and authorisation protocols through LDAP, which integrates seamlessly with UCT's identity management.</p>
-          <p>I also hold a Microsoft Security and Authentication certificate, which covers modern security patterns including JWT tokens, OAuth, and secure API design. At ComputeMore, I implemented JWT 256-bit token authentication and clean architecture patterns for API security."</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="page-footer">
-      <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
-    </div>
-  </div>
-  <button class="back-to-top" id="btt" title="Back to top">↑</button>
-  <script>
-    (function(){
-      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
-      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
-      document.getElementById('content').style.display='';
-      document.addEventListener('contextmenu',function(e){e.preventDefault();});
-      var btt=document.getElementById('btt');
-      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
-      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
-    })();
-    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
-  </script>
-</body>
+    <button class="back-to-top" id="btt" title="Back to top">↑</button>
+    <script>
+      (function () {
+        const H =
+          "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
+        if (sessionStorage.getItem("_ig_auth") !== H) {
+          window.location.replace("index.html");
+          return;
+        }
+        document.getElementById("content").style.display = "";
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+        var btt = document.getElementById("btt");
+        window.addEventListener("scroll", function () {
+          btt.classList.toggle("visible", window.scrollY > 300);
+        });
+        btt.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      })();
+      function toggleQA(btn) {
+        btn.classList.toggle("open");
+        var a = btn.nextElementSibling;
+        a.classList.toggle("visible");
+      }
+    </script>
+  </body>
 </html>

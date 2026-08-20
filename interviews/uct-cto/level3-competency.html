@@ -1,242 +1,555 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Level 3 — Competency-Based Q&A</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
-</head>
-<body>
-  <div class="page-wrapper protected-content" id="content" style="display:none;">
-    <div class="header-bar">
-      <span class="brand">CTO Interview Prep</span>
-      <nav>
-        <a href="hub.html">Hub</a>
-        <a href="level1-overview.html">Overview</a>
-        <a href="level2-technical.html">Technical</a>
-        <a href="level3-competency.html" class="active">Competency</a>
-        <a href="level4-scenarios.html">Scenarios</a>
-        <div class="dropdown-menu">
-          <button class="dropdown-button" style="color:var(--accent);">Assessments ▼</button>
-          <div class="dropdown-content">
-            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
-            <a href="assessment-scenario-2.html">Scenario 2 (Django & SEAT)</a>
-            <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
-            <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
-            <div class="dropdown-nested">
-              <a href="assessment-data-engineering.html" class="has-submenu">Data Engineering</a>
-              <div class="dropdown-nested-content">
-                <a href="assessment-de-docker.html">Docker & Containers</a>
-                <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
-                <a href="assessment-web-servers-python.html">Python Web Servers</a>
-                <a href="assessment-web-servers-dotnet.html">ASP.NET, Nginx & Apache</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Level 3 — Competency-Based Q&A</title>
+    <link rel="stylesheet" href="style.css?v=2.2" />
+  </head>
+  <body>
+    <div
+      class="page-wrapper protected-content"
+      id="content"
+      style="display: none"
+    >
+      <div class="header-bar">
+        <span class="brand">CTO Interview Prep</span>
+        <nav>
+          <a href="hub.html">Hub</a>
+          <a href="level1-overview.html">Overview</a>
+          <a href="level2-technical.html">Technical</a>
+          <a href="level3-competency.html" class="active">Competency</a>
+          <a href="level4-scenarios.html">Scenarios</a>
+          <div class="dropdown-menu">
+            <button class="dropdown-button" style="color: var(--accent)">
+              Assessments ▼
+            </button>
+            <div class="dropdown-content">
+              <a href="assessment-scenario-1.html"
+                >Scenario 1 (System Design)</a
+              >
+              <a href="assessment-scenario-2.html"
+                >Scenario 2 (Django & SEAT)</a
+              >
+              <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
+              <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
+              <div class="dropdown-nested">
+                <a href="assessment-data-engineering.html" class="has-submenu"
+                  >Data Engineering</a
+                >
+                <div class="dropdown-nested-content">
+                  <a href="assessment-de-docker.html">Docker & Containers</a>
+                  <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
+                  <a href="assessment-web-servers-python.html"
+                    >Python Web Servers</a
+                  >
+                  <a href="assessment-web-servers-dotnet.html"
+                    >ASP.NET, Nginx & Apache</a
+                  >
+                </div>
               </div>
+              <a href="assessment-cto-architecture.html">CTO Architecture</a>
+              <a href="assessment-tips-strategy.html">Tips & Strategy</a>
             </div>
-            <a href="assessment-cto-architecture.html">CTO Architecture</a>
-            <a href="assessment-tips-strategy.html">Tips & Strategy</a>
+          </div>
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Targeted Prep ▼</button>
+            <div class="dropdown-content">
+              <a href="targeted-preparation-pages/index.html">Prep Hub</a>
+              <a href="targeted-preparation-pages/mock-interview.html"
+                >30-Min Mock Interview</a
+              >
+              <a href="targeted-preparation-pages/answer-templates.html"
+                >Answer Templates</a
+              >
+              <a href="targeted-preparation-pages/revision-sheet.html"
+                >Revision Sheet</a
+              >
+            </div>
+          </div>
+          <a href="guides.html">Guides</a>
+          <a href="level5-panel.html">Panel</a>
+        </nav>
+      </div>
+      <div class="breadcrumb">
+        <a href="hub.html">Hub</a> <span>›</span> Level 3
+      </div>
+      <h1 class="fade-in">Level 3 — Competency-Based Q&A</h1>
+      <p class="fade-in fade-in-d1">
+        The JD specifies 8 competencies from the
+        <strong>UCT Competency Framework</strong>, all at
+        <strong>Level 2</strong>. Each will likely generate at least one
+        question. Here's how to answer them using real examples from your
+        career.
+      </p>
+
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">
+          Profile Anchor (CV-grounded examples to reuse)
+        </div>
+        <ul>
+          <li>
+            <strong>Analytical / problem solving:</strong> SEAT 30M-row update
+            pipeline (MPI + hyperthreading + batch chunking) and SESKA
+            performance engineering on HPC (profiling, reproducibility, resource
+            constraints).
+          </li>
+          <li>
+            <strong>Client service + reliability:</strong> SEAT registration
+            operational support (high-pressure peak periods), UX improvements,
+            SMTP automations; outcomes measured in uptime and reduced support
+            burden.
+          </li>
+          <li>
+            <strong>Leadership + communication:</strong> led up to five TAs as
+            Assistant Lecturer; translates technical tradeoffs to non-technical
+            leadership as ComputeMore CIO/Lead Backend Engineer (stakeholder
+            alignment, prioritisation, delivery cadence).
+          </li>
+          <li>
+            <strong>Modern backend discipline:</strong> ComputeMore platforms
+            (Ecoride/INNTEGRATE): ASP.NET Core clean architecture (Controller →
+            DTOs → Services → Entities), auth hardening (BCrypt + JWT),
+            real-time updates (SignalR), event-driven components (RabbitMQ),
+            caching (Redis), cloud deployments.
+          </li>
+          <li>
+            <strong>Credibility in Civil Engineering context:</strong>
+            Civil/Structural qualifications + computational mechanics research
+            means you can support domain-specific labs (transport, water, SHM)
+            without sounding like an “outsider IT person”.
+          </li>
+        </ul>
+      </div>
+
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">📌 How to Use This Section</div>
+        <p>
+          Each competency below has: the UCT definition, a likely interview
+          question, and a STAR-format answer drawn from your real experience.
+          Click each question to expand the answer. Practise speaking these
+          aloud — aim for 2 minutes per answer.
+        </p>
+      </div>
+
+      <!-- COMPETENCY 1 -->
+      <div class="section-card fade-in fade-in-d2">
+        <h2 style="margin-top: 0">1. Analytical Thinking & Problem Solving</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The ability to identify
+          problems, analyse information, and develop effective solutions.
+        </p>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Tell us about a complex technical problem you solved. Walk us
+            through your approach.
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              During the SEAT registration cycle, we needed to refresh the
+              student database from PeopleSoft — 30 million rows of student and
+              scheduling data. The existing process was unreliable: it took
+              hours, consumed all server memory, and frequently crashed.
+            </p>
+            <p><span class="star-label star-t">Task</span></p>
+            <p>
+              I needed to redesign the data loading pipeline so it could handle
+              the volume reliably, within available server resources, and
+              complete in a reasonable timeframe.
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I analysed the bottleneck and identified two issues: the data was
+              being loaded in a single monolithic transaction (memory
+              exhaustion), and it was sequential (CPU underutilisation). I
+              designed a solution using MPI for parallel processing and
+              batch-chunked memory management. Data was divided into manageable
+              chunks, each processed by a separate thread, with memory cleaned
+              between batches. I also implemented validation checkpoints between
+              stages.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              The new pipeline is reliable, fast, and resource-efficient. Server
+              availability improved to 100% with zero errors per month during
+              the registration period. This innovation is now a permanent part
+              of SEAT's architecture.
+            </p>
           </div>
         </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Targeted Prep ▼</button>
-          <div class="dropdown-content">
-            <a href="targeted-preparation-pages/index.html">Prep Hub</a>
-            <a href="targeted-preparation-pages/mock-interview.html">30-Min Mock Interview</a>
-            <a href="targeted-preparation-pages/answer-templates.html">Answer Templates</a>
-            <a href="targeted-preparation-pages/revision-sheet.html">Revision Sheet</a>
+      </div>
+
+      <!-- COMPETENCY 2 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">2. Building Interpersonal Relationships</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The ability to develop
+          and maintain productive working relationships with colleagues and
+          stakeholders.
+        </p>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            This role requires working with academics, researchers, students,
+            ICTS, and the faculty office. How do you build effective
+            relationships across such diverse groups?
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              In my current roles at UCT, I already work across multiple
+              stakeholder groups: research supervisors (Prof. Skatulla), ICTS
+              technical staff (Theo Armstrong, Sibonelo Twala), the faculty
+              office (Celeste Wilson), departmental administration (Ayesha
+              Dalwai), and students.
+            </p>
+            <p><span class="star-label star-t">Task</span></p>
+            <p>
+              Each group has different needs, different technical vocabularies,
+              and different priorities. A researcher wants their code debugged;
+              ICTS wants systems to follow policy; students want things to "just
+              work."
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I adapt my communication style to each audience. With academics, I
+              focus on outcomes — "your simulation will run 3x faster" — not
+              implementation details. With ICTS, I speak their language — server
+              specs, compliance, protocols. With students, I prioritise clarity
+              and patience. I also maintain reliability: when I say I'll deliver
+              something by Friday, I deliver by Thursday. Trust is built through
+              consistent follow-through.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              I've built a network across the department and faculty that would
+              serve me immediately in the CTO role. Multiple stakeholders —
+              Prof. Skatulla, Celeste Wilson, Ayesha Dalwai, Theo Armstrong —
+              are listed as my referees, which reflects the strength of these
+              working relationships.
+            </p>
           </div>
         </div>
-        <a href="guides.html">Guides</a>
-        <a href="level5-panel.html">Panel</a>
-      </nav>
-    </div>
-    <div class="breadcrumb"><a href="hub.html">Hub</a> <span>›</span> Level 3</div>
-    <h1 class="fade-in">Level 3 — Competency-Based Q&A</h1>
-    <p class="fade-in fade-in-d1">The JD specifies 8 competencies from the <strong>UCT Competency Framework</strong>, all at <strong>Level 2</strong>. Each will likely generate at least one question. Here's how to answer them using real examples from your career.</p>
+      </div>
 
-    <div class="callout info fade-in fade-in-d2">
-      <div class="callout-title">Profile Anchor (CV-grounded examples to reuse)</div>
-      <ul>
-        <li><strong>Analytical / problem solving:</strong> SEAT 30M-row update pipeline (MPI + hyperthreading + batch chunking) and SESKA performance engineering on HPC (profiling, reproducibility, resource constraints).</li>
-        <li><strong>Client service + reliability:</strong> SEAT registration operational support (high-pressure peak periods), UX improvements, SMTP automations; outcomes measured in uptime and reduced support burden.</li>
-        <li><strong>Leadership + communication:</strong> led up to five TAs as Assistant Lecturer; translates technical tradeoffs to non-technical leadership as ComputeMore CIO/Lead Backend Engineer (stakeholder alignment, prioritisation, delivery cadence).</li>
-        <li><strong>Modern backend discipline:</strong> ComputeMore platforms (Ecoride/INNTEGRATE): ASP.NET Core clean architecture (Controller → DTOs → Services → Entities), auth hardening (BCrypt + JWT), real-time updates (SignalR), event-driven components (RabbitMQ), caching (Redis), cloud deployments.</li>
-        <li><strong>Credibility in Civil Engineering context:</strong> Civil/Structural qualifications + computational mechanics research means you can support domain-specific labs (transport, water, SHM) without sounding like an “outsider IT person”.</li>
-      </ul>
-    </div>
+      <!-- COMPETENCY 3 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">3. Client/Student Services & Support</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The ability to provide
+          quality service and support to students and internal clients.
+        </p>
 
-    <div class="callout info fade-in fade-in-d2">
-      <div class="callout-title">📌 How to Use This Section</div>
-      <p>Each competency below has: the UCT definition, a likely interview question, and a STAR-format answer drawn from your real experience. Click each question to expand the answer. Practise speaking these aloud — aim for 2 minutes per answer.</p>
-    </div>
-
-    <!-- COMPETENCY 1 -->
-    <div class="section-card fade-in fade-in-d2">
-      <h2 style="margin-top:0;">1. Analytical Thinking & Problem Solving</h2>
-      <p><span class="badge badge-blue">Level 2</span> The ability to identify problems, analyse information, and develop effective solutions.</p>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Tell us about a complex technical problem you solved. Walk us through your approach.</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>During the SEAT registration cycle, we needed to refresh the student database from PeopleSoft — 30 million rows of student and scheduling data. The existing process was unreliable: it took hours, consumed all server memory, and frequently crashed.</p>
-          <p><span class="star-label star-t">Task</span></p>
-          <p>I needed to redesign the data loading pipeline so it could handle the volume reliably, within available server resources, and complete in a reasonable timeframe.</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I analysed the bottleneck and identified two issues: the data was being loaded in a single monolithic transaction (memory exhaustion), and it was sequential (CPU underutilisation). I designed a solution using MPI for parallel processing and batch-chunked memory management. Data was divided into manageable chunks, each processed by a separate thread, with memory cleaned between batches. I also implemented validation checkpoints between stages.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>The new pipeline is reliable, fast, and resource-efficient. Server availability improved to 100% with zero errors per month during the registration period. This innovation is now a permanent part of SEAT's architecture.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Describe a time when you went beyond what was expected to support a
+            student or colleague.
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              During a SEAT registration cycle, students were struggling to
+              identify which courses they still needed to enroll in. The
+              existing interface showed a dense table with limited visual cues.
+            </p>
+            <p><span class="star-label star-t">Task</span></p>
+            <p>
+              While not explicitly part of my backend brief, I noticed the pain
+              point and decided to address it.
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I designed and implemented new UX components that clearly
+              highlighted outstanding enrolments, using visual indicators and
+              intuitive grouping. I also implemented email automation using SMTP
+              and Django's shell so students could receive personalised
+              notifications about their registration status.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              Students found it significantly easier to manage their enrolment,
+              and the faculty office received fewer "Where do I enroll?"
+              queries. It demonstrated my willingness to look beyond my assigned
+              scope when I see a way to improve the user experience.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 2 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">2. Building Interpersonal Relationships</h2>
-      <p><span class="badge badge-blue">Level 2</span> The ability to develop and maintain productive working relationships with colleagues and stakeholders.</p>
+      <!-- COMPETENCY 4 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">4. Communication</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The ability to convey
+          information clearly and effectively, both written and verbal.
+        </p>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">This role requires working with academics, researchers, students, ICTS, and the faculty office. How do you build effective relationships across such diverse groups?</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>In my current roles at UCT, I already work across multiple stakeholder groups: research supervisors (Prof. Skatulla), ICTS technical staff (Theo Armstrong, Sibonelo Twala), the faculty office (Celeste Wilson), departmental administration (Ayesha Dalwai), and students.</p>
-          <p><span class="star-label star-t">Task</span></p>
-          <p>Each group has different needs, different technical vocabularies, and different priorities. A researcher wants their code debugged; ICTS wants systems to follow policy; students want things to "just work."</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I adapt my communication style to each audience. With academics, I focus on outcomes — "your simulation will run 3x faster" — not implementation details. With ICTS, I speak their language — server specs, compliance, protocols. With students, I prioritise clarity and patience. I also maintain reliability: when I say I'll deliver something by Friday, I deliver by Thursday. Trust is built through consistent follow-through.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>I've built a network across the department and faculty that would serve me immediately in the CTO role. Multiple stakeholders — Prof. Skatulla, Celeste Wilson, Ayesha Dalwai, Theo Armstrong — are listed as my referees, which reflects the strength of these working relationships.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How do you communicate complex technical concepts to non-technical
+            stakeholders?
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              As an Assistant Lecturer, I regularly teach engineering students
+              who are encountering coding and computational concepts for the
+              first time. As a CIO at ComputeMore, I communicate system
+              architecture decisions to non-technical managing directors.
+            </p>
+            <p><span class="star-label star-t">Task</span></p>
+            <p>
+              I need to make complex ideas accessible without oversimplifying to
+              the point of inaccuracy.
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I use analogies rooted in what the audience already knows. For
+              civil engineering students, I explain database tables as
+              spreadsheets with rules, and APIs as controlled windows into data.
+              I use visual aids — diagrams, flowcharts, live demonstrations. I
+              also maintain a portfolio website with published guides and sample
+              scripts, which serves as reference documentation that people can
+              revisit at their own pace.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              93%+ pass rates in CIV1007S across three semesters, and 85%+ in
+              CIV2011F. Students consistently engage with the material, and I've
+              received positive teaching evaluations. At ComputeMore,
+              non-technical leadership can make informed decisions about system
+              architecture because I translate the tradeoffs into business
+              impact.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 3 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">3. Client/Student Services & Support</h2>
-      <p><span class="badge badge-blue">Level 2</span> The ability to provide quality service and support to students and internal clients.</p>
+      <!-- COMPETENCY 5 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          5. Planning & Organising / Work Management
+        </h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The ability to plan,
+          coordinate, and manage multiple tasks and priorities effectively.
+        </p>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Describe a time when you went beyond what was expected to support a student or colleague.</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>During a SEAT registration cycle, students were struggling to identify which courses they still needed to enroll in. The existing interface showed a dense table with limited visual cues.</p>
-          <p><span class="star-label star-t">Task</span></p>
-          <p>While not explicitly part of my backend brief, I noticed the pain point and decided to address it.</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I designed and implemented new UX components that clearly highlighted outstanding enrolments, using visual indicators and intuitive grouping. I also implemented email automation using SMTP and Django's shell so students could receive personalised notifications about their registration status.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>Students found it significantly easier to manage their enrolment, and the faculty office received fewer "Where do I enroll?" queries. It demonstrated my willingness to look beyond my assigned scope when I see a way to improve the user experience.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            This role involves teaching support, research support, SEAT, and
+            admin — all simultaneously. How would you manage your time?
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              I currently balance three concurrent roles: PhD research, SEAT
+              development, and assistant lecturing. At ComputeMore, I
+              simultaneously managed two product development projects (Ecoride
+              and INNTEGRATE) while overseeing DevOps.
+            </p>
+            <p><span class="star-label star-t">Task</span></p>
+            <p>
+              Each role has different cadences — SEAT peaks during registration
+              (Nov–Feb), teaching runs in semesters, research is continuous.
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I use a structured approach: at the start of each semester, I map
+              all deadlines and peak periods across all commitments. I identify
+              conflicts early and plan around them. For daily management, I use
+              task tracking tools and prioritise by impact and urgency. I also
+              build buffer time for unexpected requests, which in a support role
+              are inevitable.
+            </p>
+            <p>
+              The JD's time split — 10% curriculum, 30% teaching support, 30%
+              research, 10% management, 10% SEAT, 10% sysadmin — provides a
+              natural framework. I'd use that as a baseline and adjust
+              seasonally.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              I've maintained high output across all concurrent roles: 100%
+              server uptime on SEAT, consistent teaching pass rates, and a PhD
+              thesis on track for August 2026 submission. This track record
+              shows I can handle the multi-faceted demands of the CTO role.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 4 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">4. Communication</h2>
-      <p><span class="badge badge-blue">Level 2</span> The ability to convey information clearly and effectively, both written and verbal.</p>
+      <!-- COMPETENCY 6 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">6. Professional Knowledge & Skill</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> The level of technical
+          and professional knowledge required to perform the job effectively.
+        </p>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How do you communicate complex technical concepts to non-technical stakeholders?</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>As an Assistant Lecturer, I regularly teach engineering students who are encountering coding and computational concepts for the first time. As a CIO at ComputeMore, I communicate system architecture decisions to non-technical managing directors.</p>
-          <p><span class="star-label star-t">Task</span></p>
-          <p>I need to make complex ideas accessible without oversimplifying to the point of inaccuracy.</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I use analogies rooted in what the audience already knows. For civil engineering students, I explain database tables as spreadsheets with rules, and APIs as controlled windows into data. I use visual aids — diagrams, flowcharts, live demonstrations. I also maintain a portfolio website with published guides and sample scripts, which serves as reference documentation that people can revisit at their own pace.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>93%+ pass rates in CIV1007S across three semesters, and 85%+ in CIV2011F. Students consistently engage with the material, and I've received positive teaching evaluations. At ComputeMore, non-technical leadership can make informed decisions about system architecture because I translate the tradeoffs into business impact.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How do you stay current with rapidly evolving technologies in data
+            science and IT?
+          </button>
+          <div class="qa-answer">
+            <p><span class="star-label star-s">Situation</span></p>
+            <p>
+              Data science and IT evolve rapidly — tools and best practices
+              shift every 6–12 months. In a university context, I need to
+              balance learning new technologies with maintaining stable,
+              reliable systems.
+            </p>
+            <p><span class="star-label star-a">Action</span></p>
+            <p>
+              I take a structured approach to continuous learning. In the past
+              year alone, I've completed professional certificates from Google
+              (Advanced Data Analytics, 300+ hours), IBM (Data Engineering, 150+
+              hours), and Microsoft (Backend Development, 40+ hours). These
+              aren't just certifications — they include hands-on labs and
+              capstone projects.
+            </p>
+            <p>
+              I'm also a GitHub Pro contributor with 500+ contributions in the
+              last 6 months, a PyPI package author, and I maintain subscriptions
+              to Google Cloud, AfricasTalking, and other API platforms for
+              hands-on experimentation. I attend conferences like AfriCOMP,
+              ICMM, and SACAM.
+            </p>
+            <p><span class="star-label star-r">Result</span></p>
+            <p>
+              Over 750 hours of certified training across data science, data
+              engineering, and backend development — this isn't theoretical
+              knowledge. I apply these skills daily in SESKA, SEAT, and my
+              ComputeMore projects. When a researcher asks about machine
+              learning, I can help because I've recently built models in
+              Scikit-Learn and TensorFlow, not because I read about them five
+              years ago.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 5 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">5. Planning & Organising / Work Management</h2>
-      <p><span class="badge badge-blue">Level 2</span> The ability to plan, coordinate, and manage multiple tasks and priorities effectively.</p>
+      <!-- COMPETENCY 7 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">7. Safety Awareness</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> Awareness and
+          application of health, safety, and environmental principles in the
+          workplace.
+        </p>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">This role involves teaching support, research support, SEAT, and admin — all simultaneously. How would you manage your time?</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>I currently balance three concurrent roles: PhD research, SEAT development, and assistant lecturing. At ComputeMore, I simultaneously managed two product development projects (Ecoride and INNTEGRATE) while overseeing DevOps.</p>
-          <p><span class="star-label star-t">Task</span></p>
-          <p>Each role has different cadences — SEAT peaks during registration (Nov–Feb), teaching runs in semesters, research is continuous.</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I use a structured approach: at the start of each semester, I map all deadlines and peak periods across all commitments. I identify conflicts early and plan around them. For daily management, I use task tracking tools and prioritise by impact and urgency. I also build buffer time for unexpected requests, which in a support role are inevitable.</p>
-          <p>The JD's time split — 10% curriculum, 30% teaching support, 30% research, 10% management, 10% SEAT, 10% sysadmin — provides a natural framework. I'd use that as a baseline and adjust seasonally.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>I've maintained high output across all concurrent roles: 100% server uptime on SEAT, consistent teaching pass rates, and a PhD thesis on track for August 2026 submission. This track record shows I can handle the multi-faceted demands of the CTO role.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How does safety awareness apply to a data science and IT role?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "Safety in a CTO Data Science
+              role has two dimensions. First, <strong>data safety</strong> —
+              protecting sensitive student and research data through proper
+              security protocols, access controls, and backup procedures. With
+              SEAT, I implemented LDAP authentication and SQL injection
+              prevention, and I'd apply these same principles across all
+              departmental systems.
+            </p>
+            <p>
+              Second, <strong>physical safety</strong> — when working with IoT
+              devices, sensors, and lab equipment, following proper handling
+              procedures, electrical safety protocols, and university
+              guidelines. When deploying SESKA to computer labs, I coordinated
+              with lab administrators to ensure installations didn't disrupt
+              other systems or create safety hazards.
+            </p>
+            <p>
+              I also consider <strong>ergonomic safety</strong> for students
+              spending extended periods at workstations during data-intensive
+              labs, ensuring proper setup and break scheduling."
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 6 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">6. Professional Knowledge & Skill</h2>
-      <p><span class="badge badge-blue">Level 2</span> The level of technical and professional knowledge required to perform the job effectively.</p>
+      <!-- COMPETENCY 8 -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">8. University Awareness</h2>
+        <p>
+          <span class="badge badge-blue">Level 2</span> Understanding of UCT's
+          mission, structures, policies, and strategic direction.
+        </p>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How do you stay current with rapidly evolving technologies in data science and IT?</button>
-        <div class="qa-answer">
-          <p><span class="star-label star-s">Situation</span></p>
-          <p>Data science and IT evolve rapidly — tools and best practices shift every 6–12 months. In a university context, I need to balance learning new technologies with maintaining stable, reliable systems.</p>
-          <p><span class="star-label star-a">Action</span></p>
-          <p>I take a structured approach to continuous learning. In the past year alone, I've completed professional certificates from Google (Advanced Data Analytics, 300+ hours), IBM (Data Engineering, 150+ hours), and Microsoft (Backend Development, 40+ hours). These aren't just certifications — they include hands-on labs and capstone projects.</p>
-          <p>I'm also a GitHub Pro contributor with 500+ contributions in the last 6 months, a PyPI package author, and I maintain subscriptions to Google Cloud, AfricasTalking, and other API platforms for hands-on experimentation. I attend conferences like AfriCOMP, ICMM, and SACAM.</p>
-          <p><span class="star-label star-r">Result</span></p>
-          <p>Over 750 hours of certified training across data science, data engineering, and backend development — this isn't theoretical knowledge. I apply these skills daily in SESKA, SEAT, and my ComputeMore projects. When a researcher asks about machine learning, I can help because I've recently built models in Scikit-Learn and TensorFlow, not because I read about them five years ago.</p>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            How does this role align with UCT's Vision 2030 and the department's
+            strategic goals?
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Suggested Answer:</strong> "UCT's Vision 2030 emphasises
+              excellence, inclusivity, and being a globally competitive research
+              university. The CTO role directly supports this by strengthening
+              the department's digital infrastructure — which is essential for
+              competitive research, effective teaching, and attracting students
+              and funding.
+            </p>
+            <p>
+              The JD specifically references Vision 2030 and the department's
+              ambition to establish a larger 'CIV Digital Lab.' I'd see the CTO
+              role as the foundational pillar of that vision — building the
+              infrastructure, tools, and training capacity that makes a Digital
+              Lab possible.
+            </p>
+            <p>
+              I understand UCT's structures from the inside: I know how ICTS
+              operates, how the HPC cluster is governed, how the faculty office
+              functions with EBE, and how departmental committees work. This
+              isn't knowledge I'd need to acquire — I already operate within
+              these structures daily as a PhD student, lecturer, and SEAT
+              developer.
+            </p>
+            <p>
+              I'm also aware of UCT's employment equity commitments and the
+              importance of the collective responsibility model referenced in
+              the JD. I'm committed to contributing to departmental governance
+              and service."
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- COMPETENCY 7 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">7. Safety Awareness</h2>
-      <p><span class="badge badge-blue">Level 2</span> Awareness and application of health, safety, and environmental principles in the workplace.</p>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How does safety awareness apply to a data science and IT role?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "Safety in a CTO Data Science role has two dimensions. First, <strong>data safety</strong> — protecting sensitive student and research data through proper security protocols, access controls, and backup procedures. With SEAT, I implemented LDAP authentication and SQL injection prevention, and I'd apply these same principles across all departmental systems.</p>
-          <p>Second, <strong>physical safety</strong> — when working with IoT devices, sensors, and lab equipment, following proper handling procedures, electrical safety protocols, and university guidelines. When deploying SESKA to computer labs, I coordinated with lab administrators to ensure installations didn't disrupt other systems or create safety hazards.</p>
-          <p>I also consider <strong>ergonomic safety</strong> for students spending extended periods at workstations during data-intensive labs, ensuring proper setup and break scheduling."</p>
-        </div>
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
       </div>
     </div>
-
-    <!-- COMPETENCY 8 -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">8. University Awareness</h2>
-      <p><span class="badge badge-blue">Level 2</span> Understanding of UCT's mission, structures, policies, and strategic direction.</p>
-
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">How does this role align with UCT's Vision 2030 and the department's strategic goals?</button>
-        <div class="qa-answer">
-          <p><strong>Suggested Answer:</strong> "UCT's Vision 2030 emphasises excellence, inclusivity, and being a globally competitive research university. The CTO role directly supports this by strengthening the department's digital infrastructure — which is essential for competitive research, effective teaching, and attracting students and funding.</p>
-          <p>The JD specifically references Vision 2030 and the department's ambition to establish a larger 'CIV Digital Lab.' I'd see the CTO role as the foundational pillar of that vision — building the infrastructure, tools, and training capacity that makes a Digital Lab possible.</p>
-          <p>I understand UCT's structures from the inside: I know how ICTS operates, how the HPC cluster is governed, how the faculty office functions with EBE, and how departmental committees work. This isn't knowledge I'd need to acquire — I already operate within these structures daily as a PhD student, lecturer, and SEAT developer.</p>
-          <p>I'm also aware of UCT's employment equity commitments and the importance of the collective responsibility model referenced in the JD. I'm committed to contributing to departmental governance and service."</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="page-footer">
-      <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
-    </div>
-  </div>
-  <button class="back-to-top" id="btt" title="Back to top">↑</button>
-  <script>
-    (function(){
-      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
-      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
-      document.getElementById('content').style.display='';
-      document.addEventListener('contextmenu',function(e){e.preventDefault();});
-      var btt=document.getElementById('btt');
-      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
-      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
-    })();
-    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
-  </script>
-</body>
+    <button class="back-to-top" id="btt" title="Back to top">↑</button>
+    <script>
+      (function () {
+        const H =
+          "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
+        if (sessionStorage.getItem("_ig_auth") !== H) {
+          window.location.replace("index.html");
+          return;
+        }
+        document.getElementById("content").style.display = "";
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+        var btt = document.getElementById("btt");
+        window.addEventListener("scroll", function () {
+          btt.classList.toggle("visible", window.scrollY > 300);
+        });
+        btt.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      })();
+      function toggleQA(btn) {
+        btn.classList.toggle("open");
+        var a = btn.nextElementSibling;
+        a.classList.toggle("visible");
+      }
+    </script>
+  </body>
 </html>

@@ -1,99 +1,212 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>REDIS PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="redis-poweruser-guide-powershell">REDIS PowerUser Guide (PowerShell)</h1>
-<p><strong>Last updated</strong>: December 04, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://redis.io/docs/"><img alt="Framework" src="https://img.shields.io/badge/Redis-7.x-red.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Redis is an in-memory data structure store used as a database, cache, message broker, and streaming engine. This guide covers installation, data structures, persistence, clustering, and performance optimization using PowerShell on Windows. Power users need to understand memory management, eviction policies, replication, and pub/sub patterns for production deployments.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#redis-poweruser-guide-powershell">REDIS PowerUser Guide (PowerShell)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#install-and-configure-redis-on-windows">Install and Configure Redis on Windows</a></li>
-<li><a href="#basic-data-operations">Basic Data Operations</a></li>
-<li><a href="#pubsub-messaging-pattern">Pub/Sub Messaging Pattern</a></li>
-<li><a href="#pipelining-and-transactions">Pipelining and Transactions</a></li>
-<li><a href="#backup-and-persistence">Backup and Persistence</a></li>
-<li><a href="#monitoring-and-statistics">Monitoring and Statistics</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install Redis</strong>: Download from <a href="https://redis.io/download">redis.io/download</a> or use Chocolatey: <code>choco install redis-64</code></li>
-<li><strong>Install as Windows service</strong>: <code>redis-server --service-install redis.windows.conf</code></li>
-<li><strong>Start service</strong>: <code>redis-server --service-start</code></li>
-<li><strong>Verify installation</strong>: <code>redis-cli ping</code> (should return PONG)</li>
-<li><strong>Set a key</strong>: <code>redis-cli SET mykey "Hello Redis"</code></li>
-<li><strong>Get a key</strong>: <code>redis-cli GET mykey</code></li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>In-Memory Storage</strong>: All data stored in RAM for sub-millisecond latency; optional persistence to disk</li>
-<li><strong>Data Structures</strong>: Strings, Lists, Sets, Sorted Sets, Hashes, Bitmaps, HyperLogLogs, Streams</li>
-<li><strong>Persistence</strong>: RDB (point-in-time snapshots) and AOF (append-only file) for durability</li>
-<li><strong>Replication</strong>: Master-replica architecture with automatic failover via Redis Sentinel</li>
-<li><strong>Pub/Sub</strong>: Publish/subscribe messaging pattern for real-time event distribution</li>
-<li><strong>Transactions</strong>: MULTI/EXEC commands for atomic execution of command batches</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>redis.windows.conf</strong> (located in installation directory):</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Network</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="redis-poweruser-guide-powershell">
+            REDIS PowerUser Guide (PowerShell)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 04, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://redis.io/docs/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Redis-7.x-red.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Redis is an in-memory data structure store used as a database,
+            cache, message broker, and streaming engine. This guide covers
+            installation, data structures, persistence, clustering, and
+            performance optimization using PowerShell on Windows. Power users
+            need to understand memory management, eviction policies,
+            replication, and pub/sub patterns for production deployments.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#redis-poweruser-guide-powershell"
+                >REDIS PowerUser Guide (PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#install-and-configure-redis-on-windows"
+                    >Install and Configure Redis on Windows</a
+                  >
+                </li>
+                <li>
+                  <a href="#basic-data-operations">Basic Data Operations</a>
+                </li>
+                <li>
+                  <a href="#pubsub-messaging-pattern"
+                    >Pub/Sub Messaging Pattern</a
+                  >
+                </li>
+                <li>
+                  <a href="#pipelining-and-transactions"
+                    >Pipelining and Transactions</a
+                  >
+                </li>
+                <li>
+                  <a href="#backup-and-persistence">Backup and Persistence</a>
+                </li>
+                <li>
+                  <a href="#monitoring-and-statistics"
+                    >Monitoring and Statistics</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install Redis</strong>: Download from
+              <a href="https://redis.io/download">redis.io/download</a> or use
+              Chocolatey: <code>choco install redis-64</code>
+            </li>
+            <li>
+              <strong>Install as Windows service</strong>:
+              <code>redis-server --service-install redis.windows.conf</code>
+            </li>
+            <li>
+              <strong>Start service</strong>:
+              <code>redis-server --service-start</code>
+            </li>
+            <li>
+              <strong>Verify installation</strong>:
+              <code>redis-cli ping</code> (should return PONG)
+            </li>
+            <li>
+              <strong>Set a key</strong>:
+              <code>redis-cli SET mykey "Hello Redis"</code>
+            </li>
+            <li>
+              <strong>Get a key</strong>: <code>redis-cli GET mykey</code>
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>In-Memory Storage</strong>: All data stored in RAM for
+              sub-millisecond latency; optional persistence to disk
+            </li>
+            <li>
+              <strong>Data Structures</strong>: Strings, Lists, Sets, Sorted
+              Sets, Hashes, Bitmaps, HyperLogLogs, Streams
+            </li>
+            <li>
+              <strong>Persistence</strong>: RDB (point-in-time snapshots) and
+              AOF (append-only file) for durability
+            </li>
+            <li>
+              <strong>Replication</strong>: Master-replica architecture with
+              automatic failover via Redis Sentinel
+            </li>
+            <li>
+              <strong>Pub/Sub</strong>: Publish/subscribe messaging pattern for
+              real-time event distribution
+            </li>
+            <li>
+              <strong>Transactions</strong>: MULTI/EXEC commands for atomic
+              execution of command batches
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p>
+            <strong>redis.windows.conf</strong> (located in installation
+            directory):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Network</span>
 <span class="na">bind 127.0.0.1</span>
 <span class="na">port 6379</span>
 <span class="na">timeout 300</span>
@@ -120,36 +233,67 @@
 
 <span class="c1"># Security</span>
 <span class="na">requirepass StrongPassword123!</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Set <code>maxmemory</code> to 75% of available RAM
-- Use <code>allkeys-lru</code> eviction policy for caching scenarios
-- Enable both RDB and AOF for maximum durability
-- Implement connection pooling in applications
-- Use pipelining for batch operations
-- Monitor memory usage and fragmentation ratio</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Authentication</strong>: Always set <code>requirepass</code> in production; use strong passwords</li>
-<li><strong>Network Binding</strong>: Bind to localhost (<code>127.0.0.1</code>) or specific interfaces; never <code>0.0.0.0</code> without firewall</li>
-<li><strong>Disable Dangerous Commands</strong>: Rename or disable commands like FLUSHDB, FLUSHALL, CONFIG, SHUTDOWN</li>
-<li><strong>TLS/SSL</strong>: Enable TLS for encrypted connections in Redis 6.0+</li>
-<li><strong>ACLs</strong>: Use Access Control Lists (Redis 6.0+) for fine-grained user permissions</li>
-<li><strong>Firewall</strong>: Use Windows Firewall to restrict access to port 6379</li>
-<li><strong>Regular Updates</strong>: Keep Redis updated to patch security vulnerabilities</li>
-</ol>
-<p><strong>Rename Dangerous Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="na">rename-command FLUSHDB &quot;&quot;</span>
+          <p>
+            <strong>Best Practices</strong>: - Set <code>maxmemory</code> to 75%
+            of available RAM - Use <code>allkeys-lru</code> eviction policy for
+            caching scenarios - Enable both RDB and AOF for maximum durability -
+            Implement connection pooling in applications - Use pipelining for
+            batch operations - Monitor memory usage and fragmentation ratio
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Authentication</strong>: Always set
+              <code>requirepass</code> in production; use strong passwords
+            </li>
+            <li>
+              <strong>Network Binding</strong>: Bind to localhost
+              (<code>127.0.0.1</code>) or specific interfaces; never
+              <code>0.0.0.0</code> without firewall
+            </li>
+            <li>
+              <strong>Disable Dangerous Commands</strong>: Rename or disable
+              commands like FLUSHDB, FLUSHALL, CONFIG, SHUTDOWN
+            </li>
+            <li>
+              <strong>TLS/SSL</strong>: Enable TLS for encrypted connections in
+              Redis 6.0+
+            </li>
+            <li>
+              <strong>ACLs</strong>: Use Access Control Lists (Redis 6.0+) for
+              fine-grained user permissions
+            </li>
+            <li>
+              <strong>Firewall</strong>: Use Windows Firewall to restrict access
+              to port 6379
+            </li>
+            <li>
+              <strong>Regular Updates</strong>: Keep Redis updated to patch
+              security vulnerabilities
+            </li>
+          </ol>
+          <p><strong>Rename Dangerous Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="na">rename-command FLUSHDB &quot;&quot;</span>
 <span class="na">rename-command FLUSHALL &quot;&quot;</span>
 <span class="na">rename-command CONFIG &quot;CONFIG_8d7a9f2b&quot;</span>
 <span class="na">rename-command SHUTDOWN &quot;SHUTDOWN_5c4e1d3f&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="install-and-configure-redis-on-windows">Install and Configure Redis on Windows</h3>
-<p>Download, install, and configure Redis as a Windows service with basic security settings.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Install via Chocolatey</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="install-and-configure-redis-on-windows">
+            Install and Configure Redis on Windows
+          </h3>
+          <p>
+            Download, install, and configure Redis as a Windows service with
+            basic security settings.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Install via Chocolatey</span>
 <span class="n">choco</span> <span class="n">install</span> <span class="n">redis</span><span class="p">-</span><span class="n">64</span> <span class="n">-y</span>
 
 <span class="c"># Or download manually</span>
@@ -191,11 +335,16 @@
 
 <span class="c"># Test connection</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">ping</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="basic-data-operations">Basic Data Operations</h3>
-<p>Perform CRUD operations with different Redis data structures using redis-cli.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Set password for authentication</span>
+          <h3 id="basic-data-operations">Basic Data Operations</h3>
+          <p>
+            Perform CRUD operations with different Redis data structures using
+            redis-cli.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Set password for authentication</span>
 <span class="nv">$env:REDISCLI_AUTH</span> <span class="p">=</span> <span class="s2">&quot;StrongPassword123!&quot;</span>
 
 <span class="c"># String operations</span>
@@ -236,11 +385,16 @@
 <span class="n">redis-cli</span> <span class="n">EXPIRE</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span> <span class="n">3600</span>
 <span class="n">redis-cli</span> <span class="n">TTL</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span>
 <span class="n">redis-cli</span> <span class="n">KEYS</span> <span class="s2">&quot;user:*&quot;</span>  <span class="c"># Use SCAN in production</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="pubsub-messaging-pattern">Pub/Sub Messaging Pattern</h3>
-<p>Implement publish/subscribe messaging for real-time event distribution across applications.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Publisher script (publisher.ps1)</span>
+          <h3 id="pubsub-messaging-pattern">Pub/Sub Messaging Pattern</h3>
+          <p>
+            Implement publish/subscribe messaging for real-time event
+            distribution across applications.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Publisher script (publisher.ps1)</span>
 <span class="nv">$config</span> <span class="p">=</span> <span class="sh">@&quot;</span>
 <span class="sh">`$env:REDISCLI_AUTH = &#39;StrongPassword123!&#39;</span>
 <span class="sh">while (`$true) {</span>
@@ -271,11 +425,16 @@
 <span class="c"># Unsubscribe</span>
 <span class="n">redis-cli</span> <span class="n">UNSUBSCRIBE</span> <span class="n">news</span>
 <span class="n">redis-cli</span> <span class="n">PUNSUBSCRIBE</span> <span class="s2">&quot;event:*&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="pipelining-and-transactions">Pipelining and Transactions</h3>
-<p>Use pipelining for batch operations and transactions for atomic command execution.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Pipelining example - execute multiple commands in batch</span>
+          <h3 id="pipelining-and-transactions">Pipelining and Transactions</h3>
+          <p>
+            Use pipelining for batch operations and transactions for atomic
+            command execution.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Pipelining example - execute multiple commands in batch</span>
 <span class="nv">$commands</span> <span class="p">=</span> <span class="sh">@&quot;</span>
 <span class="sh">SET key1 value1</span>
 <span class="sh">SET key2 value2</span>
@@ -306,11 +465,16 @@
 <span class="nb">SET </span><span class="n">balance</span> <span class="nv">$new_balance</span>
 <span class="n">EXEC</span>
 <span class="n">EOF</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="backup-and-persistence">Backup and Persistence</h3>
-<p>Configure and manage RDB snapshots and AOF files for data durability.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Trigger manual RDB snapshot</span>
+          <h3 id="backup-and-persistence">Backup and Persistence</h3>
+          <p>
+            Configure and manage RDB snapshots and AOF files for data
+            durability.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Trigger manual RDB snapshot</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">SAVE</span>  <span class="c"># Blocking</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">BGSAVE</span>  <span class="c"># Background</span>
 
@@ -361,11 +525,15 @@
 <span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;PowerShell.exe&quot;</span> <span class="n">-Argument</span> <span class="s2">&quot;-File C:\Scripts\redis-backup.ps1&quot;</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">2am</span>
 <span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">&quot;Redis Daily Backup&quot;</span> <span class="n">-Description</span> <span class="s2">&quot;Daily Redis backup&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="monitoring-and-statistics">Monitoring and Statistics</h3>
-<p>Monitor Redis performance, memory usage, and client connections.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Get server info</span>
+          <h3 id="monitoring-and-statistics">Monitoring and Statistics</h3>
+          <p>
+            Monitor Redis performance, memory usage, and client connections.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Get server info</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">INFO</span>
 
 <span class="c"># Get specific info sections</span>
@@ -427,35 +595,53 @@
 
 <span class="c"># Run monitor</span>
 <span class="c"># .\redis-monitor.ps1</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Connection Refused</strong>:
-- <strong>Error</strong>: "Could not connect to Redis"
-  - <strong>Check service</strong>: <code>Get-Service Redis</code>
-  - <strong>Start service</strong>: <code>Start-Service Redis</code>
-  - <strong>Check port</strong>: <code>netstat -an | Select-String "6379"</code>
-  - <strong>Check logs</strong>: <code>Get-Content "C:\Redis\redis.log" -Tail 50</code></p>
-<p><strong>Authentication Errors</strong>:
-- <strong>Error</strong>: "NOAUTH Authentication required"
-  - <strong>Set password env var</strong>: <code>$env:REDISCLI_AUTH = "YourPassword"</code>
-  - <strong>Use -a flag</strong>: <code>redis-cli -a YourPassword PING</code></p>
-<p><strong>Out of Memory</strong>:
-- <strong>Error</strong>: "OOM command not allowed when used memory &gt; 'maxmemory'"
-  - <strong>Check memory</strong>: <code>redis-cli INFO memory</code>
-  - <strong>Increase maxmemory</strong>: <code>redis-cli CONFIG SET maxmemory 4gb</code>
-  - <strong>Change eviction policy</strong>: <code>redis-cli CONFIG SET maxmemory-policy allkeys-lru</code></p>
-<p><strong>Slow Commands</strong>:
-- <strong>Check slow log</strong>: <code>redis-cli SLOWLOG GET 10</code>
-- <strong>Identify O(N) commands</strong>: Avoid KEYS, use SCAN instead
-- <strong>Optimize data structures</strong>: Use appropriate data types for use case</p>
-<p><strong>Common Logs</strong>:
-- Redis log file: <code>C:\Redis\redis.log</code> (if configured)
-- Windows Event Viewer: Application logs
-- Monitor commands: Use <code>redis-cli MONITOR</code> sparingly (impacts performance)</p>
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Memory Optimization</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># redis.windows.conf</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Connection Refused</strong>: - <strong>Error</strong>:
+            "Could not connect to Redis" - <strong>Check service</strong>:
+            <code>Get-Service Redis</code> - <strong>Start service</strong>:
+            <code>Start-Service Redis</code> - <strong>Check port</strong>:
+            <code>netstat -an | Select-String "6379"</code> -
+            <strong>Check logs</strong>:
+            <code>Get-Content "C:\Redis\redis.log" -Tail 50</code>
+          </p>
+          <p>
+            <strong>Authentication Errors</strong>: - <strong>Error</strong>:
+            "NOAUTH Authentication required" -
+            <strong>Set password env var</strong>:
+            <code>$env:REDISCLI_AUTH = "YourPassword"</code> -
+            <strong>Use -a flag</strong>:
+            <code>redis-cli -a YourPassword PING</code>
+          </p>
+          <p>
+            <strong>Out of Memory</strong>: - <strong>Error</strong>: "OOM
+            command not allowed when used memory &gt; 'maxmemory'" -
+            <strong>Check memory</strong>: <code>redis-cli INFO memory</code> -
+            <strong>Increase maxmemory</strong>:
+            <code>redis-cli CONFIG SET maxmemory 4gb</code> -
+            <strong>Change eviction policy</strong>:
+            <code>redis-cli CONFIG SET maxmemory-policy allkeys-lru</code>
+          </p>
+          <p>
+            <strong>Slow Commands</strong>: - <strong>Check slow log</strong>:
+            <code>redis-cli SLOWLOG GET 10</code> -
+            <strong>Identify O(N) commands</strong>: Avoid KEYS, use SCAN
+            instead - <strong>Optimize data structures</strong>: Use appropriate
+            data types for use case
+          </p>
+          <p>
+            <strong>Common Logs</strong>: - Redis log file:
+            <code>C:\Redis\redis.log</code> (if configured) - Windows Event
+            Viewer: Application logs - Monitor commands: Use
+            <code>redis-cli MONITOR</code> sparingly (impacts performance)
+          </p>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Memory Optimization</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># redis.windows.conf</span>
 <span class="na">maxmemory 2gb</span>
 <span class="na">maxmemory-policy allkeys-lru</span>
 <span class="na">maxmemory-samples 5</span>
@@ -467,10 +653,12 @@
 <span class="na">set-max-intset-entries 512</span>
 <span class="na">zset-max-ziplist-entries 128</span>
 <span class="na">zset-max-ziplist-value 64</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Persistence Tuning</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># RDB - less frequent saves for better performance</span>
+          <p><strong>Persistence Tuning</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># RDB - less frequent saves for better performance</span>
 <span class="na">save 900 1</span>
 <span class="na">save 300 10</span>
 <span class="na">save 60 10000</span>
@@ -481,19 +669,27 @@
 <span class="na">no-appendfsync-on-rewrite no</span>
 <span class="na">auto-aof-rewrite-percentage 100</span>
 <span class="na">auto-aof-rewrite-min-size 64mb</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Connection Pooling</strong>:
-Use StackExchange.Redis or similar libraries with connection pooling in applications.</p>
-<p><strong>Pipelining</strong>:
-Batch multiple commands to reduce network round trips:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Instead of multiple individual commands</span>
+          <p>
+            <strong>Connection Pooling</strong>: Use StackExchange.Redis or
+            similar libraries with connection pooling in applications.
+          </p>
+          <p>
+            <strong>Pipelining</strong>: Batch multiple commands to reduce
+            network round trips:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Instead of multiple individual commands</span>
 <span class="nv">$commands</span> <span class="p">=</span> <span class="n">1</span><span class="p">..</span><span class="n">1000</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="s2">&quot;SET key:$_ value$_&quot;</span> <span class="p">}</span>
 <span class="nv">$commands</span> <span class="n">-join</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">&quot;</span> <span class="p">|</span> <span class="n">redis-cli</span> <span class="p">-</span><span class="n">-pipe</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Monitoring Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Get latency statistics</span>
+          <p><strong>Monitoring Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Get latency statistics</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="p">-</span><span class="n">-latency</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="p">-</span><span class="n">-latency-history</span>
 
@@ -505,46 +701,69 @@ Batch multiple commands to reduce network round trips:</p>
 
 <span class="c"># Monitor hit rate</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">INFO</span> <span class="n">stats</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">&quot;keyspace_hits|keyspace_misses&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://redis.io/docs/">Redis Documentation</a> - Official comprehensive Redis documentation</li>
-<li><a href="https://redis.io/commands">Redis Commands Reference</a> - Complete command reference with examples</li>
-<li><a href="https://redis.io/topics/best-practices">Redis Best Practices</a> - Official best practices guide</li>
-<li><a href="https://stackexchange.github.io/StackExchange.Redis/">StackExchange.Redis</a> - Popular .NET Redis client</li>
-<li><a href="https://redis.io/topics/persistence">Redis Persistence</a> - Deep dive into RDB and AOF persistence</li>
-</ul></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://redis.io/docs/">Redis Documentation</a> -
+              Official comprehensive Redis documentation
+            </li>
+            <li>
+              <a href="https://redis.io/commands">Redis Commands Reference</a> -
+              Complete command reference with examples
+            </li>
+            <li>
+              <a href="https://redis.io/topics/best-practices"
+                >Redis Best Practices</a
+              >
+              - Official best practices guide
+            </li>
+            <li>
+              <a href="https://stackexchange.github.io/StackExchange.Redis/"
+                >StackExchange.Redis</a
+              >
+              - Popular .NET Redis client
+            </li>
+            <li>
+              <a href="https://redis.io/topics/persistence"
+                >Redis Persistence</a
+              >
+              - Deep dive into RDB and AOF persistence
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

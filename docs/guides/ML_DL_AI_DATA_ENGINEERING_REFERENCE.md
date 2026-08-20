@@ -130,10 +130,10 @@ MICE is the default advanced imputation strategy for tabular datasets in which m
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Per iteration (one feature) | $O(n \cdot p)$ for linear regression; $O(n \cdot p^2)$ if OLS closed-form | $O(n \cdot p)$ |
-| Full MICE (T iterations, p features) | $O(T \cdot p \cdot n \cdot p) = O(T \cdot p^2 \cdot n)$ | $O(m \cdot n \cdot p)$ for $m$ imputations |
+| Phase                                | Time                                                                      | Space                                      |
+| ------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------ |
+| Per iteration (one feature)          | $O(n \cdot p)$ for linear regression; $O(n \cdot p^2)$ if OLS closed-form | $O(n \cdot p)$                             |
+| Full MICE (T iterations, p features) | $O(T \cdot p \cdot n \cdot p) = O(T \cdot p^2 \cdot n)$                   | $O(m \cdot n \cdot p)$ for $m$ imputations |
 
 ---
 
@@ -164,10 +164,10 @@ KNN imputation is non-parametric - it makes no distributional assumptions about 
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Brute-force | $O(n^2 \cdot p)$ | $O(n \cdot p)$ |
-| With KD-Tree (dense, low-$p$) | $O(n \cdot p \cdot \log n)$ | $O(n \cdot p)$ |
+| Phase                          | Time                        | Space          |
+| ------------------------------ | --------------------------- | -------------- |
+| Brute-force                    | $O(n^2 \cdot p)$            | $O(n \cdot p)$ |
+| With KD-Tree (dense, low-$p$)  | $O(n \cdot p \cdot \log n)$ | $O(n \cdot p)$ |
 | With Ball-Tree (metric spaces) | $O(n \cdot p \cdot \log n)$ | $O(n \cdot p)$ |
 
 KNN imputation does not scale gracefully. For $n > 10^5$, approximate nearest neighbors (FAISS, Annoy) should replace exact search, or MICE should be preferred outright.
@@ -196,11 +196,11 @@ Matrix completion is the mathematically principled approach to imputation when t
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| SVD per iteration | $O(\min(n^2 p, n p^2))$ | $O(n \cdot p)$ |
-| Full optimization (T iterations) | $O(T \cdot \min(n^2 p, n p^2))$ | $O(n \cdot p)$ |
-| Truncated SVD (rank-$r$) | $O(n \cdot p \cdot r)$ per iteration | $O((n + p) \cdot r)$ |
+| Phase                            | Time                                 | Space                |
+| -------------------------------- | ------------------------------------ | -------------------- |
+| SVD per iteration                | $O(\min(n^2 p, n p^2))$              | $O(n \cdot p)$       |
+| Full optimization (T iterations) | $O(T \cdot \min(n^2 p, n p^2))$      | $O(n \cdot p)$       |
+| Truncated SVD (rank-$r$)         | $O(n \cdot p \cdot r)$ per iteration | $O((n + p) \cdot r)$ |
 
 ---
 
@@ -208,7 +208,7 @@ Matrix completion is the mathematically principled approach to imputation when t
 
 **Theoretical Foundation**
 
-Isolation Forest exploits the principle that anomalies are *few and different*, making them easier to isolate via random partitioning. The algorithm constructs an ensemble of $T$ isolation trees (iTrees), each built by:
+Isolation Forest exploits the principle that anomalies are _few and different_, making them easier to isolate via random partitioning. The algorithm constructs an ensemble of $T$ isolation trees (iTrees), each built by:
 
 1. Randomly selecting a feature $q$ from the feature set
 2. Randomly selecting a split value $s$ uniformly between the feature's min and max in the current node
@@ -239,11 +239,11 @@ Isolation Forest is the workhorse anomaly detector for high-dimensional tabular 
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                                   | Time                              | Space             |
+| --------------------------------------- | --------------------------------- | ----------------- |
 | Training ($T$ trees, $\psi$ subsamples) | $O(T \cdot \psi \cdot \log \psi)$ | $O(T \cdot \psi)$ |
-| Scoring (single point) | $O(T \cdot \log \psi)$ | $O(1)$ |
-| Scoring (all $n$ points) | $O(n \cdot T \cdot \log \psi)$ | $O(n)$ |
+| Scoring (single point)                  | $O(T \cdot \log \psi)$            | $O(1)$            |
+| Scoring (all $n$ points)                | $O(n \cdot T \cdot \log \psi)$    | $O(n)$            |
 
 The subsampling parameter $\psi$ (default 256) decouples training cost from $n$, making Isolation Forest one of the few anomaly detectors that genuinely scales to $10^7+$ rows.
 
@@ -283,10 +283,10 @@ Its fatal weakness: it does not scale. The kernel matrix is $O(n^2)$ in memory. 
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Training (kernel matrix + QP) | $O(n^2 \cdot p)$ to $O(n^3)$ | $O(n^2)$ |
-| Inference (per point) | $O(n_{\text{SV}} \cdot p)$ | $O(n_{\text{SV}} \cdot p)$ |
+| Phase                         | Time                         | Space                      |
+| ----------------------------- | ---------------------------- | -------------------------- |
+| Training (kernel matrix + QP) | $O(n^2 \cdot p)$ to $O(n^3)$ | $O(n^2)$                   |
+| Inference (per point)         | $O(n_{\text{SV}} \cdot p)$   | $O(n_{\text{SV}} \cdot p)$ |
 
 ---
 
@@ -313,10 +313,10 @@ LOF excels at detecting **local** anomalies — points that are outliers relativ
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                  | Time                                                                   | Space          |
+| ---------------------- | ---------------------------------------------------------------------- | -------------- |
 | KNN graph construction | $O(n^2 \cdot p)$ brute-force; $O(n \cdot p \cdot \log n)$ with KD-Tree | $O(n \cdot k)$ |
-| LOF computation | $O(n \cdot k)$ | $O(n)$ |
+| LOF computation        | $O(n \cdot k)$                                                         | $O(n)$         |
 
 ---
 
@@ -326,16 +326,16 @@ LOF excels at detecting **local** anomalies — points that are outliers relativ
 
 Scaling is not optional — it is a mathematical prerequisite for any method involving distance metrics, gradient descent, or regularization penalties:
 
-| Transform | Formula | Effect |
-|-----------|---------|--------|
-| **Standard (Z-score)** | $z = \frac{x - \mu}{\sigma}$ | Centers at 0, unit variance. Assumes Gaussian. |
-| **Min-Max** | $z = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$ | Maps to $[0, 1]$. Preserves zero entries in sparse data. |
-| **Robust** | $z = \frac{x - \text{median}}{\text{IQR}}$ | Median-centered, IQR-scaled. Resistant to outliers. |
-| **Max-Abs** | $z = \frac{x}{|x_{\max}|}$ | Maps to $[-1, 1]$. Preserves sparsity structure. |
-| **Quantile (Uniform)** | $z = F_n(x)$ | Maps to $\text{Uniform}(0, 1)$ via empirical CDF. Non-linear. |
-| **Quantile (Gaussian)** | $z = \Phi^{-1}(F_n(x))$ | Forces Gaussianity. Non-linear. Destroys multimodality. |
-| **Power (Yeo-Johnson)** | $z = \frac{(x+1)^\lambda - 1}{\lambda}$ (if $\lambda \neq 0$, $x \geq 0$) | Stabilizes variance. Handles negatives (unlike Box-Cox). |
-| **Log / Log1p** | $z = \log(1 + x)$ | Compresses right-skewed distributions. Requires $x \geq 0$. |
+| Transform               | Formula                                                                   | Effect                                                        |
+| ----------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Standard (Z-score)**  | $z = \frac{x - \mu}{\sigma}$                                              | Centers at 0, unit variance. Assumes Gaussian.                |
+| **Min-Max**             | $z = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$                            | Maps to $[0, 1]$. Preserves zero entries in sparse data.      |
+| **Robust**              | $z = \frac{x - \text{median}}{\text{IQR}}$                                | Median-centered, IQR-scaled. Resistant to outliers.           |
+| **Max-Abs**             | $z = \frac{x}{                                                            | x_{\max}                                                      | }$  | Maps to $[-1, 1]$. Preserves sparsity structure. |
+| **Quantile (Uniform)**  | $z = F_n(x)$                                                              | Maps to $\text{Uniform}(0, 1)$ via empirical CDF. Non-linear. |
+| **Quantile (Gaussian)** | $z = \Phi^{-1}(F_n(x))$                                                   | Forces Gaussianity. Non-linear. Destroys multimodality.       |
+| **Power (Yeo-Johnson)** | $z = \frac{(x+1)^\lambda - 1}{\lambda}$ (if $\lambda \neq 0$, $x \geq 0$) | Stabilizes variance. Handles negatives (unlike Box-Cox).      |
+| **Log / Log1p**         | $z = \log(1 + x)$                                                         | Compresses right-skewed distributions. Requires $x \geq 0$.   |
 
 **Data Processing Application**
 
@@ -371,8 +371,8 @@ The sign function $\xi$ ensures that the inner product is preserved in expectati
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase    | Time                    | Space                                         |
+| -------- | ----------------------- | --------------------------------------------- |
 | Encoding | $O(n \cdot \text{nnz})$ | $O(m)$ per sample (fixed, independent of $C$) |
 
 ---
@@ -439,11 +439,11 @@ Variance retention criterion: choose $d$ such that $\frac{\sum_{i=1}^d \lambda_i
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Full SVD | $O(\min(n^2 p, n p^2))$ | $O(n \cdot p)$ |
-| Truncated SVD (rank-$d$, randomized) | $O(n \cdot p \cdot d)$ | $O((n + p) \cdot d)$ |
-| Incremental PCA (mini-batch) | $O(n \cdot p \cdot d)$ total | $O(b \cdot p)$ per batch of size $b$ |
+| Phase                                | Time                         | Space                                |
+| ------------------------------------ | ---------------------------- | ------------------------------------ |
+| Full SVD                             | $O(\min(n^2 p, n p^2))$      | $O(n \cdot p)$                       |
+| Truncated SVD (rank-$d$, randomized) | $O(n \cdot p \cdot d)$       | $O((n + p) \cdot d)$                 |
+| Incremental PCA (mini-batch)         | $O(n \cdot p \cdot d)$ total | $O(b \cdot p)$ per batch of size $b$ |
 
 ---
 
@@ -460,6 +460,7 @@ $$
 Projection of new point $\mathbf{x}$: $z_k = \sum_{i=1}^n \alpha_i^{(k)} \kappa(\mathbf{x}_i, \mathbf{x})$.
 
 Common kernels:
+
 - RBF: $\kappa(\mathbf{x}, \mathbf{y}) = \exp(-\gamma \|\mathbf{x} - \mathbf{y}\|^2)$
 - Polynomial: $\kappa(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^T \mathbf{y} + c)^d$
 - Sigmoid: $\kappa(\mathbf{x}, \mathbf{y}) = \tanh(\alpha \mathbf{x}^T \mathbf{y} + c)$
@@ -472,11 +473,11 @@ Common kernels:
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                     | Time             | Space    |
+| ------------------------- | ---------------- | -------- |
 | Kernel matrix computation | $O(n^2 \cdot p)$ | $O(n^2)$ |
-| Eigendecomposition of $K$ | $O(n^3)$ | $O(n^2)$ |
-| Projection (new point) | $O(n \cdot p)$ | $O(n)$ |
+| Eigendecomposition of $K$ | $O(n^3)$         | $O(n^2)$ |
+| Projection (new point)    | $O(n \cdot p)$   | $O(n)$   |
 
 The $O(n^2)$ memory requirement is the kill shot. For large $n$, use Nyström approximation (subsample $m \ll n$ landmarks) reducing cost to $O(n \cdot m^2)$.
 
@@ -508,10 +509,10 @@ Solved via coordinate descent or ADMM.
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Per component (coordinate descent) | $O(p^2 \cdot n)$ per iteration | $O(n \cdot p)$ |
-| $d$ components, $T$ iterations | $O(d \cdot T \cdot p^2 \cdot n)$ | $O(n \cdot p)$ |
+| Phase                              | Time                             | Space          |
+| ---------------------------------- | -------------------------------- | -------------- |
+| Per component (coordinate descent) | $O(p^2 \cdot n)$ per iteration   | $O(n \cdot p)$ |
+| $d$ components, $T$ iterations     | $O(d \cdot T \cdot p^2 \cdot n)$ | $O(n \cdot p)$ |
 
 ---
 
@@ -522,16 +523,19 @@ Solved via coordinate descent or ADMM.
 t-SNE (van der Maaten & Hinton, 2008) constructs two probability distributions: one over pairs in high-dimensional space (Gaussian kernel), one over pairs in the low-dimensional embedding (Student-t with 1 DOF):
 
 High-dimensional affinity:
+
 $$
 p_{j|i} = \frac{\exp(-\|\mathbf{x}_i - \mathbf{x}_j\|^2 / 2\sigma_i^2)}{\sum_{k \neq i}\exp(-\|\mathbf{x}_i - \mathbf{x}_k\|^2 / 2\sigma_i^2)}, \quad p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}
 $$
 
 Low-dimensional affinity (heavy-tailed Student-t):
+
 $$
 q_{ij} = \frac{(1 + \|\mathbf{y}_i - \mathbf{y}_j\|^2)^{-1}}{\sum_{k \neq l}(1 + \|\mathbf{y}_k - \mathbf{y}_l\|^2)^{-1}}
 $$
 
 Objective (KL divergence):
+
 $$
 \mathcal{L} = \text{KL}(P \| Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}
 $$
@@ -546,11 +550,11 @@ Minimized via gradient descent with momentum. The bandwidth $\sigma_i$ per point
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Exact | $O(n^2)$ per gradient step | $O(n^2)$ |
-| Barnes-Hut approximation | $O(n \log n)$ per step | $O(n)$ |
-| FFT-accelerated (FIt-SNE) | $O(n \log n)$ per step | $O(n)$ |
+| Phase                     | Time                       | Space    |
+| ------------------------- | -------------------------- | -------- |
+| Exact                     | $O(n^2)$ per gradient step | $O(n^2)$ |
+| Barnes-Hut approximation  | $O(n \log n)$ per step     | $O(n)$   |
+| FFT-accelerated (FIt-SNE) | $O(n \log n)$ per step     | $O(n)$   |
 
 ---
 
@@ -561,6 +565,7 @@ Minimized via gradient descent with momentum. The bandwidth $\sigma_i$ per point
 UMAP (McInnes et al., 2018) constructs a weighted $k$-nearest-neighbor graph in high dimensions, interprets it as a fuzzy simplicial set (via Riemannian geometry on the data manifold), then optimizes a low-dimensional layout to preserve the topological structure. The key equations:
 
 High-dimensional fuzzy membership:
+
 $$
 \mu_{ij} = \exp\left(-\frac{d(\mathbf{x}_i, \mathbf{x}_j) - \rho_i}{\sigma_i}\right)
 $$
@@ -570,6 +575,7 @@ where $\rho_i$ is the distance to the nearest neighbor (local connectivity guara
 Symmetrization: $\mu_{ij}^{\text{sym}} = \mu_{ij} + \mu_{ji} - \mu_{ij} \cdot \mu_{ji}$ (fuzzy set union, not average).
 
 Low-dimensional affinity:
+
 $$
 \nu_{ij} = \left(1 + a \|\mathbf{y}_i - \mathbf{y}_j\|^{2b}\right)^{-1}
 $$
@@ -593,11 +599,11 @@ Applications: scRNA-seq visualization, embedding space exploration, outlier dete
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| KNN graph (NN-Descent) | $O(n^{1.14})$ empirical | $O(n \cdot k)$ |
-| Optimization (SGD) | $O(n \cdot E)$ for $E$ epochs | $O(n \cdot d)$ |
-| Total | $O(n^{1.14} + n \cdot E)$ | $O(n \cdot k + n \cdot d)$ |
+| Phase                  | Time                          | Space                      |
+| ---------------------- | ----------------------------- | -------------------------- |
+| KNN graph (NN-Descent) | $O(n^{1.14})$ empirical       | $O(n \cdot k)$             |
+| Optimization (SGD)     | $O(n \cdot E)$ for $E$ epochs | $O(n \cdot d)$             |
+| Total                  | $O(n^{1.14} + n \cdot E)$     | $O(n \cdot k + n \cdot d)$ |
 
 ---
 
@@ -626,11 +632,11 @@ With linear activations, the autoencoder learns a subspace identical to PCA. Non
 
 Depends on architecture. For a single hidden layer of width $h$:
 
-| Phase | Time (per sample) | Space |
-|-------|-------------------|-------|
-| Forward pass | $O(p \cdot h + h \cdot d + d \cdot h + h \cdot p) = O(p \cdot h)$ | $O(p + h + d)$ |
-| Backward pass | $\approx 2\times$ forward | + gradient buffers |
-| Training ($n$ samples, $E$ epochs) | $O(E \cdot n \cdot p \cdot h)$ | $O(\text{params})$ |
+| Phase                              | Time (per sample)                                                 | Space              |
+| ---------------------------------- | ----------------------------------------------------------------- | ------------------ |
+| Forward pass                       | $O(p \cdot h + h \cdot d + d \cdot h + h \cdot p) = O(p \cdot h)$ | $O(p + h + d)$     |
+| Backward pass                      | $\approx 2\times$ forward                                         | + gradient buffers |
+| Training ($n$ samples, $E$ epochs) | $O(E \cdot n \cdot p \cdot h)$                                    | $O(\text{params})$ |
 
 ---
 
@@ -741,11 +747,11 @@ XGBoost is the de facto standard for structured/tabular prediction tasks. Its do
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Training (exact greedy, $T$ trees, depth $D$) | $O(T \cdot D \cdot n \cdot p \cdot \log n)$ | $O(n \cdot p)$ |
-| Training (histogram approx., $B$ bins) | $O(T \cdot D \cdot n \cdot p + T \cdot D \cdot B \cdot p)$ | $O(n \cdot p + B \cdot p)$ |
-| Inference (single sample) | $O(T \cdot D)$ | $O(1)$ |
+| Phase                                         | Time                                                       | Space                      |
+| --------------------------------------------- | ---------------------------------------------------------- | -------------------------- |
+| Training (exact greedy, $T$ trees, depth $D$) | $O(T \cdot D \cdot n \cdot p \cdot \log n)$                | $O(n \cdot p)$             |
+| Training (histogram approx., $B$ bins)        | $O(T \cdot D \cdot n \cdot p + T \cdot D \cdot B \cdot p)$ | $O(n \cdot p + B \cdot p)$ |
+| Inference (single sample)                     | $O(T \cdot D)$                                             | $O(1)$                     |
 
 ---
 
@@ -770,6 +776,7 @@ where $A$ is the top-$a$ set and $B$ is the random subsample of the complement.
 **Data Processing Application**
 
 LightGBM dominates when:
+
 - $n$ is very large ($> 10^6$) — GOSS dramatically reduces per-iteration cost
 - $p$ is high with sparsity (NLP feature counts, one-hot explosions) — EFB compresses effectively
 - Training time is a constraint (2-10x faster than XGBoost on equivalent configurations)
@@ -777,10 +784,10 @@ LightGBM dominates when:
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                                            | Time                                                  | Space                        |
+| ------------------------------------------------ | ----------------------------------------------------- | ---------------------------- |
 | Training (GOSS + EFB, $T$ trees, max leaves $L$) | $O(T \cdot L \cdot (a \cdot n + b \cdot n) \cdot p')$ | $O(n \cdot p' + B \cdot p')$ |
-| Inference | $O(T \cdot L)$ worst case | $O(1)$ |
+| Inference                                        | $O(T \cdot L)$ worst case                             | $O(1)$                       |
 
 ---
 
@@ -805,6 +812,7 @@ where $P$ is the global target prior and $a$ is a smoothing parameter. This is t
 **Data Processing Application**
 
 CatBoost is the correct choice when:
+
 - Categorical features are abundant and high-cardinality (no manual encoding needed)
 - Prediction shift is a concern (small datasets, few boosting rounds)
 - Inference latency matters (oblivious trees are extremely cache-friendly)
@@ -812,10 +820,10 @@ CatBoost is the correct choice when:
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Training ($T$ trees, depth $D$, ordered boosting) | $O(T \cdot n \cdot D \cdot p)$ | $O(n \cdot p + T \cdot 2^D)$ |
-| Inference (oblivious tree, single sample) | $O(T \cdot D)$ (bit operations, SIMD) | $O(1)$ |
+| Phase                                             | Time                                  | Space                        |
+| ------------------------------------------------- | ------------------------------------- | ---------------------------- |
+| Training ($T$ trees, depth $D$, ordered boosting) | $O(T \cdot n \cdot D \cdot p)$        | $O(n \cdot p + T \cdot 2^D)$ |
+| Inference (oblivious tree, single sample)         | $O(T \cdot D)$ (bit operations, SIMD) | $O(1)$                       |
 
 ---
 
@@ -834,6 +842,7 @@ subject to $0 \leq \alpha_i \leq C$, $\sum_i \alpha_i y_i = 0$.
 **The Kernel Trick** replaces $\langle \mathbf{x}_i, \mathbf{x}_j \rangle$ with $K(\mathbf{x}_i, \mathbf{x}_j) = \langle \phi(\mathbf{x}_i), \phi(\mathbf{x}_j) \rangle$ where $\phi$ maps to a (potentially infinite-dimensional) RKHS. All operations depend only on pairwise kernel evaluations — $\phi$ itself is never computed.
 
 For the RBF kernel, $\phi$ maps to an infinite-dimensional space, yet the kernel evaluation is $O(p)$:
+
 $$
 K(\mathbf{x}, \mathbf{y}) = \exp(-\gamma \|\mathbf{x} - \mathbf{y}\|^2) = \exp\left(-\gamma \sum_{k=1}^p (x_k - y_k)^2\right)
 $$
@@ -841,6 +850,7 @@ $$
 The SMO (Sequential Minimal Optimization) algorithm solves the QP by iteratively optimizing pairs of $\alpha_i$.
 
 For **SVM regression** ($\epsilon$-SVR), the loss is the $\epsilon$-insensitive tube:
+
 $$
 \ell(y, \hat{y}) = \max(0, |y - \hat{y}| - \epsilon)
 $$
@@ -855,11 +865,11 @@ SVMs are not used in modern large-scale data engineering. They are mathematicall
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Training (SMO, RBF kernel) | $O(n^2 \cdot p)$ to $O(n^3)$ | $O(n^2)$ kernel matrix |
-| Training (linear, LIBLINEAR) | $O(n \cdot p \cdot \text{nnz})$ | $O(n \cdot p)$ |
-| Inference (per sample) | $O(n_{\text{SV}} \cdot p)$ RBF; $O(p)$ linear | $O(p)$ or $O(n_{\text{SV}})$ |
+| Phase                        | Time                                          | Space                        |
+| ---------------------------- | --------------------------------------------- | ---------------------------- |
+| Training (SMO, RBF kernel)   | $O(n^2 \cdot p)$ to $O(n^3)$                  | $O(n^2)$ kernel matrix       |
+| Training (linear, LIBLINEAR) | $O(n \cdot p \cdot \text{nnz})$               | $O(n \cdot p)$               |
+| Inference (per sample)       | $O(n_{\text{SV}} \cdot p)$ RBF; $O(p)$ linear | $O(p)$ or $O(n_{\text{SV}})$ |
 
 ---
 
@@ -894,10 +904,10 @@ where $S(z, \gamma) = \text{sign}(z) \cdot \max(|z| - \gamma, 0)$ is the soft-th
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Coordinate descent (single $\alpha$) | $O(n \cdot p)$ per pass, typically $O(n \cdot p \cdot T)$ for convergence | $O(n \cdot p)$ |
-| Full regularization path ($K$ values) | $O(K \cdot n \cdot p \cdot T)$ with warm starts | $O(n \cdot p)$ |
+| Phase                                 | Time                                                                      | Space          |
+| ------------------------------------- | ------------------------------------------------------------------------- | -------------- |
+| Coordinate descent (single $\alpha$)  | $O(n \cdot p)$ per pass, typically $O(n \cdot p \cdot T)$ for convergence | $O(n \cdot p)$ |
+| Full regularization path ($K$ values) | $O(K \cdot n \cdot p \cdot T)$ with warm starts                           | $O(n \cdot p)$ |
 
 ---
 
@@ -932,10 +942,10 @@ where $\bar{\rho}$ is the average correlation between trees and $s$ is the avera
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                               | Time                                  | Space                       |
+| ----------------------------------- | ------------------------------------- | --------------------------- |
 | Training ($T$ trees, max depth $D$) | $O(T \cdot n \cdot m \cdot \log^2 n)$ | $O(T \cdot n)$ leaf storage |
-| Inference (single sample) | $O(T \cdot D)$ | $O(1)$ |
+| Inference (single sample)           | $O(T \cdot D)$                        | $O(1)$                      |
 
 ---
 
@@ -966,10 +976,10 @@ The critical weakness: DBSCAN cannot handle clusters of varying density. A singl
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| With spatial index (KD-Tree/Ball-Tree) | $O(n \log n)$ average | $O(n)$ |
-| Brute-force (high-dimensional) | $O(n^2)$ | $O(n^2)$ distance matrix |
+| Phase                                  | Time                  | Space                    |
+| -------------------------------------- | --------------------- | ------------------------ |
+| With spatial index (KD-Tree/Ball-Tree) | $O(n \log n)$ average | $O(n)$                   |
+| Brute-force (high-dimensional)         | $O(n^2)$              | $O(n^2)$ distance matrix |
 
 ---
 
@@ -1002,12 +1012,12 @@ Applications: customer segmentation, document clustering, spatial event detectio
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                         | Time                                                   | Space                      |
+| ----------------------------- | ------------------------------------------------------ | -------------------------- |
 | Mutual reachability distances | $O(n^2)$ brute-force; $O(n \log n)$ with spatial index | $O(n^2)$ or $O(n \cdot k)$ |
-| MST (Prim's) | $O(n^2)$ or $O(E \log n)$ with sparse graph | $O(n)$ |
-| Hierarchy + extraction | $O(n \log n)$ | $O(n)$ |
-| Total (with KD-Tree) | $O(n \log n)$ best, $O(n^2)$ worst (high $p$) | $O(n \cdot k)$ |
+| MST (Prim's)                  | $O(n^2)$ or $O(E \log n)$ with sparse graph            | $O(n)$                     |
+| Hierarchy + extraction        | $O(n \log n)$                                          | $O(n)$                     |
+| Total (with KD-Tree)          | $O(n \log n)$ best, $O(n^2)$ worst (high $p$)          | $O(n \cdot k)$             |
 
 ---
 
@@ -1026,11 +1036,13 @@ where $\pi_k$ are mixing weights ($\sum_k \pi_k = 1$), $\mu_k$ are means, and $\
 The EM algorithm iterates:
 
 **E-step** — compute responsibilities:
+
 $$
 \gamma_{ik} = \frac{\pi_k \, \mathcal{N}(\mathbf{x}_i \mid \mu_k, \Sigma_k)}{\sum_{j=1}^K \pi_j \, \mathcal{N}(\mathbf{x}_i \mid \mu_j, \Sigma_j)}
 $$
 
 **M-step** — update parameters:
+
 $$
 N_k = \sum_{i=1}^n \gamma_{ik}, \quad \mu_k = \frac{1}{N_k}\sum_{i=1}^n \gamma_{ik} \mathbf{x}_i
 $$
@@ -1057,11 +1069,11 @@ where $k$ is the number of free parameters: $k = K \cdot p + K \cdot p(p+1)/2 + 
 
 **Algorithmic Complexity**
 
-| Phase | Time (per iteration) | Space |
-|-------|---------------------|-------|
-| E-step | $O(n \cdot K \cdot p^2)$ (Mahalanobis distance) | $O(n \cdot K)$ |
-| M-step | $O(n \cdot K \cdot p^2)$ (covariance updates) | $O(K \cdot p^2)$ |
-| Total ($T$ iterations) | $O(T \cdot n \cdot K \cdot p^2)$ | $O(n \cdot K + K \cdot p^2)$ |
+| Phase                  | Time (per iteration)                            | Space                        |
+| ---------------------- | ----------------------------------------------- | ---------------------------- |
+| E-step                 | $O(n \cdot K \cdot p^2)$ (Mahalanobis distance) | $O(n \cdot K)$               |
+| M-step                 | $O(n \cdot K \cdot p^2)$ (covariance updates)   | $O(K \cdot p^2)$             |
+| Total ($T$ iterations) | $O(T \cdot n \cdot K \cdot p^2)$                | $O(n \cdot K + K \cdot p^2)$ |
 
 ---
 
@@ -1071,12 +1083,12 @@ where $k$ is the number of free parameters: $k = K \cdot p + K \cdot p(p+1)/2 + 
 
 Bottom-up clustering: each point starts as its own cluster. At each step, merge the two clusters minimizing a linkage criterion:
 
-| Linkage | Formula | Properties |
-|---------|---------|------------|
-| **Single** | $\min_{a \in A, b \in B} d(a, b)$ | Chaining effect. Finds elongated clusters. |
-| **Complete** | $\max_{a \in A, b \in B} d(a, b)$ | Compact, spherical clusters. Sensitive to outliers. |
-| **Average** | $\frac{1}{|A||B|}\sum_{a,b} d(a,b)$ | Compromise. Less sensitive to noise. |
-| **Ward** | $\Delta(\text{SSE}) = \text{SSE}_{A \cup B} - \text{SSE}_A - \text{SSE}_B$ | Minimizes within-cluster variance. Produces balanced trees. |
+| Linkage      | Formula                                                                    | Properties                                                  |
+| ------------ | -------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **Single**   | $\min_{a \in A, b \in B} d(a, b)$                                          | Chaining effect. Finds elongated clusters.                  |
+| **Complete** | $\max_{a \in A, b \in B} d(a, b)$                                          | Compact, spherical clusters. Sensitive to outliers.         |
+| **Average**  | $\frac{1}{                                                                 | A                                                           |     | B   | }\sum_{a,b} d(a,b)$ | Compromise. Less sensitive to noise. |
+| **Ward**     | $\Delta(\text{SSE}) = \text{SSE}_{A \cup B} - \text{SSE}_A - \text{SSE}_B$ | Minimizes within-cluster variance. Produces balanced trees. |
 
 Ward's method is equivalent to merging the pair that minimizes the increase in the total $\sum_k \sum_{i \in C_k} \|\mathbf{x}_i - \mu_k\|^2$.
 
@@ -1088,11 +1100,11 @@ Ward's method is equivalent to merging the pair that minimizes the increase in t
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Naive (full distance matrix) | $O(n^3)$ | $O(n^2)$ |
-| With nearest-neighbor chain (Ward, complete, average) | $O(n^2)$ | $O(n^2)$ |
-| Single linkage (via MST) | $O(n^2)$ or $O(n \log n)$ with spatial index | $O(n)$ |
+| Phase                                                 | Time                                         | Space    |
+| ----------------------------------------------------- | -------------------------------------------- | -------- |
+| Naive (full distance matrix)                          | $O(n^3)$                                     | $O(n^2)$ |
+| With nearest-neighbor chain (Ward, complete, average) | $O(n^2)$                                     | $O(n^2)$ |
+| Single linkage (via MST)                              | $O(n^2)$ or $O(n \log n)$ with spatial index | $O(n)$   |
 
 ---
 
@@ -1117,11 +1129,11 @@ The spectral embedding maps points into a space where cluster structure is linea
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Affinity matrix | $O(n^2 \cdot p)$ | $O(n^2)$ |
-| Eigen decomposition (bottom-$K$) | $O(n^2 \cdot K)$ via Lanczos | $O(n \cdot K)$ |
-| K-means on embedding | $O(n \cdot K^2 \cdot T_{\text{km}})$ | $O(n \cdot K)$ |
+| Phase                            | Time                                 | Space          |
+| -------------------------------- | ------------------------------------ | -------------- |
+| Affinity matrix                  | $O(n^2 \cdot p)$                     | $O(n^2)$       |
+| Eigen decomposition (bottom-$K$) | $O(n^2 \cdot K)$ via Lanczos         | $O(n \cdot K)$ |
+| K-means on embedding             | $O(n \cdot K^2 \cdot T_{\text{km}})$ | $O(n \cdot K)$ |
 
 For large $n$: use sparse affinity (KNN graph), then `scipy.sparse.linalg.eigsh` or LOBPCG.
 
@@ -1142,19 +1154,23 @@ $$
 $$
 
 Activation functions:
+
 - **ReLU**: $\sigma(z) = \max(0, z)$. Sparse activation. Dead neuron problem.
 - **GELU**: $\sigma(z) = z \cdot \Phi(z)$. Smooth approximation to ReLU. Default in Transformers.
 - **SiLU (Swish)**: $\sigma(z) = z \cdot \text{sigmoid}(z)$. Non-monotonic. Used in EfficientNet.
 
 **Loss functions**:
+
 - Regression: MSE $= \frac{1}{n}\sum_i (y_i - \hat{y}_i)^2$, Huber loss for robustness
 - Binary classification: BCE $= -\frac{1}{n}\sum_i [y_i \log \hat{y}_i + (1-y_i)\log(1-\hat{y}_i)]$
 - Multi-class: Cross-entropy $= -\frac{1}{n}\sum_i \sum_c y_{ic}\log \hat{y}_{ic}$
 
 **Optimization**: Adam (Kingma & Ba, 2015) with adaptive learning rates:
+
 $$
 m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t, \quad v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2
 $$
+
 $$
 \theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}
 $$
@@ -1170,10 +1186,10 @@ $$
 
 For layer widths $[p, h_1, h_2, \ldots, h_L, c]$:
 
-| Phase | Time (per sample) | Space |
-|-------|-------------------|-------|
-| Forward | $O(\sum_{\ell} h_\ell \cdot h_{\ell-1})$ | $O(\sum_\ell h_\ell)$ activations |
-| Backward | $\approx 2\times$ forward | + gradient buffers |
+| Phase          | Time (per sample)                                 | Space                                   |
+| -------------- | ------------------------------------------------- | --------------------------------------- |
+| Forward        | $O(\sum_{\ell} h_\ell \cdot h_{\ell-1})$          | $O(\sum_\ell h_\ell)$ activations       |
+| Backward       | $\approx 2\times$ forward                         | + gradient buffers                      |
 | Total training | $O(E \cdot n \cdot \sum h_\ell \cdot h_{\ell-1})$ | $O(\text{params} + \text{activations})$ |
 
 ---
@@ -1211,11 +1227,11 @@ Note: For most time-series tasks, Transformers and temporal CNNs have overtaken 
 
 **Algorithmic Complexity**
 
-| Phase | Time (sequence length $T$) | Space |
-|-------|---------------------------|-------|
-| Forward (single sequence) | $O(T \cdot (p \cdot h + h^2))$ | $O(T \cdot h)$ (store states for BPTT) |
-| BPTT | $O(T \cdot (p \cdot h + h^2))$ | $O(T \cdot h)$ |
-| Truncated BPTT (window $\tau$) | $O(T \cdot (p \cdot h + h^2))$ fwd, $O(\tau \cdot (p \cdot h + h^2))$ bwd | $O(\tau \cdot h)$ |
+| Phase                          | Time (sequence length $T$)                                                | Space                                  |
+| ------------------------------ | ------------------------------------------------------------------------- | -------------------------------------- |
+| Forward (single sequence)      | $O(T \cdot (p \cdot h + h^2))$                                            | $O(T \cdot h)$ (store states for BPTT) |
+| BPTT                           | $O(T \cdot (p \cdot h + h^2))$                                            | $O(T \cdot h)$                         |
+| Truncated BPTT (window $\tau$) | $O(T \cdot (p \cdot h + h^2))$ fwd, $O(\tau \cdot (p \cdot h + h^2))$ bwd | $O(\tau \cdot h)$                      |
 
 ---
 
@@ -1268,6 +1284,7 @@ $$
 **Data Processing Application**
 
 CNNs are not limited to images. On structured data:
+
 - **1D-CNN on time series**: WaveNet-style dilated causal convolutions for temporal modeling (faster than RNNs, parallelizable)
 - **2D-CNN on tabular data**: Reshape feature vectors into a 2D grid (e.g., by correlation-based ordering), then apply standard CV architectures. SuperTML and DeepInsight use this approach.
 - **Spectral analysis**: FFT of time series → spectrogram → 2D-CNN for frequency-domain pattern recognition
@@ -1277,9 +1294,9 @@ CNNs are not limited to images. On structured data:
 
 For input size $n$, $c_{\text{in}}$ channels, filter size $k$, $c_{\text{out}}$ filters:
 
-| Phase | Time (per layer) | Space |
-|-------|-----------------|-------|
-| Forward (1D) | $O(n \cdot k \cdot c_{\text{in}} \cdot c_{\text{out}})$ | $O(n \cdot c_{\text{out}})$ |
+| Phase                      | Time (per layer)                                                  | Space                               |
+| -------------------------- | ----------------------------------------------------------------- | ----------------------------------- |
+| Forward (1D)               | $O(n \cdot k \cdot c_{\text{in}} \cdot c_{\text{out}})$           | $O(n \cdot c_{\text{out}})$         |
 | Forward (2D, $H \times W$) | $O(H \cdot W \cdot k^2 \cdot c_{\text{in}} \cdot c_{\text{out}})$ | $O(H \cdot W \cdot c_{\text{out}})$ |
 
 ---
@@ -1297,9 +1314,11 @@ $$
 where $Q, K, V \in \mathbb{R}^{n \times d_k}$ are queries, keys, and values respectively. The $1/\sqrt{d_k}$ scaling prevents softmax saturation.
 
 **Multi-Head Attention** runs $h$ parallel attention heads with different learned projections:
+
 $$
 \text{MHA}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O
 $$
+
 $$
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
 $$
@@ -1307,6 +1326,7 @@ $$
 A **transformer block** = LayerNorm → MHA → Residual → LayerNorm → FFN → Residual.
 
 **For tabular data** (FT-Transformer, TabTransformer):
+
 - Categorical features → learned embeddings
 - Numerical features → linear projection (or periodic encoding)
 - Feature tokens attend to each other via self-attention
@@ -1321,11 +1341,11 @@ A **transformer block** = LayerNorm → MHA → Residual → LayerNorm → FFN �
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Self-attention (sequence/features = $L$) | $O(L^2 \cdot d)$ | $O(L^2 + L \cdot d)$ |
-| FFN block | $O(L \cdot d \cdot d_{\text{ff}})$ | $O(L \cdot d_{\text{ff}})$ |
-| Full transformer ($N$ layers) | $O(N \cdot (L^2 d + L d \cdot d_{\text{ff}}))$ | $O(N \cdot (L^2 + L \cdot d_{\text{ff}}))$ |
+| Phase                                    | Time                                           | Space                                      |
+| ---------------------------------------- | ---------------------------------------------- | ------------------------------------------ |
+| Self-attention (sequence/features = $L$) | $O(L^2 \cdot d)$                               | $O(L^2 + L \cdot d)$                       |
+| FFN block                                | $O(L \cdot d \cdot d_{\text{ff}})$             | $O(L \cdot d_{\text{ff}})$                 |
+| Full transformer ($N$ layers)            | $O(N \cdot (L^2 d + L d \cdot d_{\text{ff}}))$ | $O(N \cdot (L^2 + L \cdot d_{\text{ff}}))$ |
 
 For long sequences: linear attention variants (Performer, Linformer) reduce to $O(L \cdot d^2)$.
 
@@ -1338,6 +1358,7 @@ For long sequences: linear attention variants (Performer, Linformer) reduce to $
 TFT (Lim et al., 2021) is purpose-built for multi-horizon time-series forecasting with heterogeneous inputs. Architecture components:
 
 1. **Variable Selection Networks (VSN)**: Gated Residual Networks (GRN) with softmax attention over input features, learning which variables matter at each time step:
+
 $$
 \text{VSN}(\mathbf{x}_t) = \sum_{j=1}^p v_j(t) \cdot \tilde{x}_j(t), \quad v_j(t) = \text{softmax}(\text{GRN}(\mathbf{x}_t))_j
 $$
@@ -1347,6 +1368,7 @@ $$
 3. **Temporal self-attention** with a decoder mask (causal attention for future steps).
 
 4. **Quantile output**: Predicts quantiles $\hat{y}_{t+\tau}^{(q)}$ for each forecast horizon $\tau$, trained with quantile loss:
+
 $$
 \mathcal{L}_q = \sum_{\tau} \sum_i \left[q \cdot (y_{i,t+\tau} - \hat{y}_{i,t+\tau}^{(q)})^+ + (1-q) \cdot (\hat{y}_{i,t+\tau}^{(q)} - y_{i,t+\tau})^+\right]
 $$
@@ -1359,8 +1381,8 @@ $$
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                                                         | Time                                                         | Space                                          |
+| ------------------------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------- |
 | Forward (lookback $T_{\text{enc}}$, horizon $T_{\text{dec}}$) | $O((T_{\text{enc}} + T_{\text{dec}})^2 \cdot d + p \cdot d)$ | $O((T_{\text{enc}} + T_{\text{dec}}) \cdot d)$ |
 
 ---
@@ -1392,10 +1414,10 @@ Memory cost is $O(1)$ in depth (only the final state and adjoint are stored, not
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
+| Phase                                | Time                               | Space                                           |
+| ------------------------------------ | ---------------------------------- | ----------------------------------------------- |
 | Forward (adaptive solver, $S$ steps) | $O(S \cdot \text{cost}(f_\theta))$ | $O(\text{params})$ (adjoint: constant in depth) |
-| Backward (adjoint method) | $O(S \cdot \text{cost}(f_\theta))$ | $O(\text{params})$ |
+| Backward (adjoint method)            | $O(S \cdot \text{cost}(f_\theta))$ | $O(\text{params})$                              |
 
 $S$ is adaptive — stiff dynamics or tight tolerances increase $S$ dramatically. This makes training time hard to predict, which is exactly the kind of thing that delights no one in production.
 
@@ -1422,11 +1444,13 @@ $$
 $$
 
 At the Nash equilibrium, $G$ generates samples indistinguishable from real data, and $D$ outputs 0.5 everywhere. In practice, GANs suffer from:
+
 - **Mode collapse**: $G$ generates a narrow subset of the data distribution
 - **Training instability**: The discriminator may overpower the generator (or vice versa), collapsing the gradient signal
 - **Evaluation difficulty**: No tractable likelihood; FID and IS are approximate metrics
 
 Wasserstein GAN (WGAN) addresses instability by replacing the JS divergence with the Earth Mover distance:
+
 $$
 W(p_{\text{data}}, p_G) = \sup_{\|f\|_L \leq 1} \mathbb{E}_{\mathbf{x} \sim p_{\text{data}}}[f(\mathbf{x})] - \mathbb{E}_{\mathbf{x} \sim p_G}[f(\mathbf{x})]
 $$
@@ -1441,10 +1465,10 @@ enforcing the Lipschitz constraint via gradient penalty (WGAN-GP) or spectral no
 
 **Algorithmic Complexity**
 
-| Phase | Time (per iteration) | Space |
-|-------|---------------------|-------|
-| Generator forward + backward | $O(B \cdot \text{params}_G)$ | $O(\text{params}_G + B \cdot p)$ |
-| Discriminator forward + backward | $O(B \cdot \text{params}_D)$ | $O(\text{params}_D + B \cdot p)$ |
+| Phase                             | Time (per iteration)                                     | Space                                  |
+| --------------------------------- | -------------------------------------------------------- | -------------------------------------- |
+| Generator forward + backward      | $O(B \cdot \text{params}_G)$                             | $O(\text{params}_G + B \cdot p)$       |
+| Discriminator forward + backward  | $O(B \cdot \text{params}_D)$                             | $O(\text{params}_D + B \cdot p)$       |
 | Total ($E$ epochs, $n/B$ batches) | $O(E \cdot n \cdot (\text{params}_G + \text{params}_D))$ | $O(\text{params}_G + \text{params}_D)$ |
 
 ---
@@ -1458,6 +1482,7 @@ CTGAN (Xu et al., 2019) addresses the unique challenges of tabular data generati
 1. **Mode-specific normalization**: Continuous columns are modeled as mixtures of Gaussians (via VGM — Variational Gaussian Mixture). Each value is represented as a (mode, normalized_value) pair, preventing mode collapse across multi-modal distributions.
 
 2. **Conditional generator**: The generator is conditioned on a one-hot vector indicating which column/category to generate, with a **training-by-sampling** strategy that ensures balanced representation of all category values:
+
 $$
 G(\mathbf{z}, \mathbf{cond}) \to \mathbf{x}_{\text{fake}}
 $$
@@ -1467,6 +1492,7 @@ $$
 **Data Processing Application**
 
 CTGAN is the primary method for synthetic tabular data generation:
+
 - Generating realistic training data when original data is under privacy restrictions (GDPR, HIPAA)
 - Augmenting minority classes in imbalanced tabular datasets
 - Creating realistic test/staging datasets for data pipeline development
@@ -1492,6 +1518,7 @@ See [Section 2.7](#27-variational-autoencoders-vae) for the full VAE formulation
 **Data Processing Application**
 
 VAEs produce smoother, less artifact-prone synthetic data than GANs due to the continuous, regularized latent space. Preferred when:
+
 - Data fidelity is less critical than latent space regularity (e.g., for downstream model training, not privacy)
 - The data has meaningful continuous structure in latent space
 - Stable training is prioritized (VAEs converge reliably; GANs may not)
@@ -1536,11 +1563,11 @@ For **tabular data** (TabDDPM, Kotelnikov et al., 2023): continuous features use
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| Training (per step) | $O(B \cdot \text{params}_\theta)$ | $O(\text{params}_\theta + B \cdot p)$ |
-| Sampling ($T$ denoising steps) | $O(T \cdot B \cdot \text{params}_\theta)$ | $O(B \cdot p)$ |
-| DDIM (accelerated, $S \ll T$ steps) | $O(S \cdot B \cdot \text{params}_\theta)$ | $O(B \cdot p)$ |
+| Phase                               | Time                                      | Space                                 |
+| ----------------------------------- | ----------------------------------------- | ------------------------------------- |
+| Training (per step)                 | $O(B \cdot \text{params}_\theta)$         | $O(\text{params}_\theta + B \cdot p)$ |
+| Sampling ($T$ denoising steps)      | $O(T \cdot B \cdot \text{params}_\theta)$ | $O(B \cdot p)$                        |
+| DDIM (accelerated, $S \ll T$ steps) | $O(S \cdot B \cdot \text{params}_\theta)$ | $O(B \cdot p)$                        |
 
 Sampling is the bottleneck — $T = 1000$ denoising steps is standard. DDIM reduces this to $\sim 50$ steps with minimal quality loss.
 
@@ -1557,6 +1584,7 @@ $$
 $$
 
 Variants address specific failure modes:
+
 - **Borderline-SMOTE**: Only oversamples points near the decision boundary
 - **ADASYN**: Weights oversampling toward harder-to-learn regions (density-adaptive)
 - **SMOTE-ENN**: Combines SMOTE with Edited Nearest Neighbors (cleans overlapping regions post-synthesis)
@@ -1572,10 +1600,10 @@ Neural successors replace linear interpolation with learned latent-space interpo
 
 **Algorithmic Complexity**
 
-| Phase | Time | Space |
-|-------|------|-------|
-| KNN computation | $O(n_{\text{min}}^2 \cdot p)$ brute-force | $O(n_{\text{min}} \cdot p)$ |
-| Synthesis ($m$ new points) | $O(m \cdot p)$ | $O(m \cdot p)$ |
+| Phase                      | Time                                      | Space                       |
+| -------------------------- | ----------------------------------------- | --------------------------- |
+| KNN computation            | $O(n_{\text{min}}^2 \cdot p)$ brute-force | $O(n_{\text{min}} \cdot p)$ |
+| Synthesis ($m$ new points) | $O(m \cdot p)$                            | $O(m \cdot p)$              |
 
 ---
 
@@ -1598,6 +1626,7 @@ Python's dominance is infrastructure, not linguistic merit. It is a thin orchest
 **Architectural Philosophy**: Imperative (eager) execution by default. Define-by-run: the graph is constructed on-the-fly during the forward pass. `torch.compile()` (TorchDynamo + TorchInductor) now bridges the gap to graph-mode performance via JIT tracing.
 
 **Hardware Acceleration**:
+
 - **CUDA**: First-class support via `torch.cuda`. All tensor operations dispatch to cuBLAS/cuDNN when tensors reside on GPU.
 - **ROCm**: AMD GPU support via HIP translation layer.
 - **MPS**: Apple Silicon (M1/M2/M3) via Metal Performance Shaders backend.
@@ -1605,15 +1634,15 @@ Python's dominance is infrastructure, not linguistic merit. It is a thin orchest
 
 **Key Components for Data Engineering**:
 
-| Component | Role |
-|-----------|------|
-| `torch.nn` | Full neural network layer library (Linear, Conv, LSTM, Transformer, etc.) |
-| `torch.optim` | Optimizers (Adam, AdamW, SGD, LBFGS) |
-| `torch.utils.data.DataLoader` | Parallel data loading with prefetching, batching, and custom collation |
-| `torchvision.transforms` | Image augmentation pipeline (composable, GPU-accelerated via torchvision 0.16+) |
-| `torch.distributed` | Multi-GPU and multi-node training (DDP, FSDP, RPC) |
-| `torch.export` + `torch.compile` | Production graph export and ahead-of-time compilation |
-| `torch.ao.quantization` | Post-training and quantization-aware training (INT8/FP16) |
+| Component                        | Role                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| `torch.nn`                       | Full neural network layer library (Linear, Conv, LSTM, Transformer, etc.)       |
+| `torch.optim`                    | Optimizers (Adam, AdamW, SGD, LBFGS)                                            |
+| `torch.utils.data.DataLoader`    | Parallel data loading with prefetching, batching, and custom collation          |
+| `torchvision.transforms`         | Image augmentation pipeline (composable, GPU-accelerated via torchvision 0.16+) |
+| `torch.distributed`              | Multi-GPU and multi-node training (DDP, FSDP, RPC)                              |
+| `torch.export` + `torch.compile` | Production graph export and ahead-of-time compilation                           |
+| `torch.ao.quantization`          | Post-training and quantization-aware training (INT8/FP16)                       |
 
 **Relevance to Phase 1**: Implements MLPs, LSTMs, GRUs, CNNs, Transformers, VAEs, GANs, Neural ODEs (`torchdiffeq`), diffusion models, and any custom architecture.
 
@@ -1647,6 +1676,7 @@ class TabularTransformer(nn.Module):
 **Architectural Philosophy**: Graph-first execution (TF 1.x heritage). TF 2.x defaults to eager mode with `tf.function` for graph compilation. Keras is the high-level API, now the sole official interface.
 
 **Hardware Acceleration**:
+
 - **CUDA**: Via TensorRT integration for inference optimization.
 - **TPU**: First-class support via `tf.distribute.TPUStrategy` (TensorFlow's raison d'être for Google Cloud).
 - **TF Lite**: Mobile/edge deployment (INT8 quantization, delegate to GPU/NPU).
@@ -1654,14 +1684,14 @@ class TabularTransformer(nn.Module):
 
 **Key Components for Data Engineering**:
 
-| Component | Role |
-|-----------|------|
-| `tf.data` | High-performance input pipeline (prefetch, interleave, cache, parallel map) |
-| `tf.keras.layers` | Standard layer library + preprocessing layers (Normalization, CategoryEncoding) |
-| `tf.distribute` | Multi-GPU/TPU strategies (MirroredStrategy, MultiWorkerMirroredStrategy) |
-| TensorFlow Serving | Production model serving via gRPC/REST |
-| TF Extended (TFX) | End-to-end ML pipeline orchestration (ExampleGen → Transform → Trainer → Pusher) |
-| TF Probability | Bayesian layers, variational inference, distributions |
+| Component          | Role                                                                             |
+| ------------------ | -------------------------------------------------------------------------------- |
+| `tf.data`          | High-performance input pipeline (prefetch, interleave, cache, parallel map)      |
+| `tf.keras.layers`  | Standard layer library + preprocessing layers (Normalization, CategoryEncoding)  |
+| `tf.distribute`    | Multi-GPU/TPU strategies (MirroredStrategy, MultiWorkerMirroredStrategy)         |
+| TensorFlow Serving | Production model serving via gRPC/REST                                           |
+| TF Extended (TFX)  | End-to-end ML pipeline orchestration (ExampleGen → Transform → Trainer → Pusher) |
+| TF Probability     | Bayesian layers, variational inference, distributions                            |
 
 **Relevance to Phase 1**: Same model coverage as PyTorch. TFX specifically addresses the data engineering lifecycle (data validation, feature engineering, model analysis).
 
@@ -1673,18 +1703,19 @@ class TabularTransformer(nn.Module):
 
 **Architectural Philosophy**: JAX is **not** a deep learning framework — it is a NumPy replacement with three transformations:
 
-| Transformation | Purpose |
-|---------------|---------|
-| `jax.grad` | Automatic differentiation (forward and reverse mode) |
-| `jax.jit` | Just-in-time compilation to XLA (fuses operations, optimizes for hardware) |
-| `jax.vmap` | Automatic vectorization (batch dimension added without explicit loops) |
-| `jax.pmap` | Parallel map across devices (multi-GPU/TPU SPMD) |
+| Transformation | Purpose                                                                    |
+| -------------- | -------------------------------------------------------------------------- |
+| `jax.grad`     | Automatic differentiation (forward and reverse mode)                       |
+| `jax.jit`      | Just-in-time compilation to XLA (fuses operations, optimizes for hardware) |
+| `jax.vmap`     | Automatic vectorization (batch dimension added without explicit loops)     |
+| `jax.pmap`     | Parallel map across devices (multi-GPU/TPU SPMD)                           |
 
 JAX arrays are **immutable**. There is no in-place mutation. This functional purity enables aggressive compiler optimizations but requires a paradigm shift for imperative programmers.
 
 Frameworks built on JAX: **Flax** (neural networks), **Optax** (optimizers), **Haiku** (DeepMind), **Equinox** (Pythonic modules).
 
 **Hardware Acceleration**:
+
 - **TPU**: Native XLA compilation — JAX was born at Google for TPU workloads.
 - **CUDA**: Via XLA CUDA backend.
 - **CPU**: XLA optimizes for CPU as well (SIMD vectorization).
@@ -1720,22 +1751,22 @@ batched_loss = vmap(loss_fn, in_axes=(None, None, None, 0))
 
 **Key Components for Data Engineering**:
 
-| Component | Phase 1 Methods |
-|-----------|----------------|
-| `sklearn.impute` | MICE (`IterativeImputer`), KNN imputation (`KNNImputer`) |
-| `sklearn.preprocessing` | StandardScaler, RobustScaler, QuantileTransformer, PowerTransformer |
-| `sklearn.decomposition` | PCA, KernelPCA, SparsePCA, NMF, TruncatedSVD |
-| `sklearn.ensemble` | RandomForest, GradientBoosting, IsolationForest |
-| `sklearn.svm` | SVC, OneClassSVM, SVR |
-| `sklearn.cluster` | DBSCAN, AgglomerativeClustering, SpectralClustering, KMeans |
-| `sklearn.neighbors` | LocalOutlierFactor, KNeighborsClassifier |
-| `sklearn.manifold` | t-SNE |
-| `sklearn.mixture` | GaussianMixture |
-| `sklearn.linear_model` | ElasticNet, Lasso, Ridge, LogisticRegression |
-| `sklearn.feature_extraction` | FeatureHasher, DictVectorizer |
-| `sklearn.model_selection` | GridSearchCV, cross_val_score, TimeSeriesSplit |
-| `sklearn.pipeline` | Pipeline, ColumnTransformer |
-| `sklearn.metrics` | Every conceivable metric |
+| Component                    | Phase 1 Methods                                                     |
+| ---------------------------- | ------------------------------------------------------------------- |
+| `sklearn.impute`             | MICE (`IterativeImputer`), KNN imputation (`KNNImputer`)            |
+| `sklearn.preprocessing`      | StandardScaler, RobustScaler, QuantileTransformer, PowerTransformer |
+| `sklearn.decomposition`      | PCA, KernelPCA, SparsePCA, NMF, TruncatedSVD                        |
+| `sklearn.ensemble`           | RandomForest, GradientBoosting, IsolationForest                     |
+| `sklearn.svm`                | SVC, OneClassSVM, SVR                                               |
+| `sklearn.cluster`            | DBSCAN, AgglomerativeClustering, SpectralClustering, KMeans         |
+| `sklearn.neighbors`          | LocalOutlierFactor, KNeighborsClassifier                            |
+| `sklearn.manifold`           | t-SNE                                                               |
+| `sklearn.mixture`            | GaussianMixture                                                     |
+| `sklearn.linear_model`       | ElasticNet, Lasso, Ridge, LogisticRegression                        |
+| `sklearn.feature_extraction` | FeatureHasher, DictVectorizer                                       |
+| `sklearn.model_selection`    | GridSearchCV, cross_val_score, TimeSeriesSplit                      |
+| `sklearn.pipeline`           | Pipeline, ColumnTransformer                                         |
+| `sklearn.metrics`            | Every conceivable metric                                            |
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -1760,13 +1791,14 @@ labels = pipeline.fit_predict(X_raw)  # -1 = anomaly, 1 = normal
 
 Each provides both a native API and a Scikit-Learn compatible wrapper.
 
-| Library | Python Package | Key Differentiator | GPU Support |
-|---------|---------------|-------------------|-------------|
-| **XGBoost** | `xgboost` | Exact + histogram split. Broadest ecosystem. | `tree_method='gpu_hist'` (CUDA) |
-| **LightGBM** | `lightgbm` | GOSS + EFB. Fastest training on large data. | `device='gpu'` (CUDA, OpenCL) |
-| **CatBoost** | `catboost` | Native categoricals. Ordered boosting. Fastest CPU inference. | `task_type='GPU'` (CUDA) |
+| Library      | Python Package | Key Differentiator                                            | GPU Support                     |
+| ------------ | -------------- | ------------------------------------------------------------- | ------------------------------- |
+| **XGBoost**  | `xgboost`      | Exact + histogram split. Broadest ecosystem.                  | `tree_method='gpu_hist'` (CUDA) |
+| **LightGBM** | `lightgbm`     | GOSS + EFB. Fastest training on large data.                   | `device='gpu'` (CUDA, OpenCL)   |
+| **CatBoost** | `catboost`     | Native categoricals. Ordered boosting. Fastest CPU inference. | `task_type='GPU'` (CUDA)        |
 
 All three support:
+
 - Early stopping on validation loss
 - Feature importance (gain, split count, SHAP values)
 - Custom loss functions (first and second derivatives)
@@ -1794,11 +1826,11 @@ model.fit(X_train, y_train, eval_set=(X_val, y_val), early_stopping_rounds=50)
 
 **Polars**
 
-| Aspect | Detail |
-|--------|--------|
-| **Language** | Rust core, Python bindings via PyO3 |
-| **Architecture** | Apache Arrow columnar memory format. Lazy evaluation with query optimization. |
-| **Parallelism** | Automatic multithreading via Rayon. No GIL dependency. |
+| Aspect             | Detail                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **Language**       | Rust core, Python bindings via PyO3                                                                          |
+| **Architecture**   | Apache Arrow columnar memory format. Lazy evaluation with query optimization.                                |
+| **Parallelism**    | Automatic multithreading via Rayon. No GIL dependency.                                                       |
 | **Key Advantages** | 5-50x faster than Pandas for groupby/join/filter. Streaming mode for out-of-core data. Expression-based API. |
 
 ```python
@@ -1819,31 +1851,31 @@ result = (
 
 **cuDF (RAPIDS)**
 
-| Aspect | Detail |
-|--------|--------|
-| **Architecture** | GPU-accelerated DataFrame library. Pandas-like API backed by CUDA kernels. |
-| **Integration** | Part of RAPIDS ecosystem (cuML for GPU ML, cuGraph for graph analytics). |
+| Aspect             | Detail                                                                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Architecture**   | GPU-accelerated DataFrame library. Pandas-like API backed by CUDA kernels.                                                                           |
+| **Integration**    | Part of RAPIDS ecosystem (cuML for GPU ML, cuGraph for graph analytics).                                                                             |
 | **Key Advantages** | 10-100x speedup over Pandas for large datasets that fit in GPU memory. Zero-copy interchange with PyTorch/TensorFlow via `__cuda_array_interface__`. |
 
 ---
 
 #### 7.7 Supplementary Ecosystem
 
-| Library | Purpose | Phase 1 Coverage |
-|---------|---------|-----------------|
-| **UMAP** (`umap-learn`) | UMAP implementation | Section 2.5 |
-| **HDBSCAN** (`hdbscan`) | Hierarchical density clustering | Section 4.2 |
-| **imbalanced-learn** (`imblearn`) | SMOTE, ADASYN, undersampling | Section 6.5 |
-| **SDV** (`sdv`) | Synthetic Data Vault (CTGAN, TVAE, Copulas) | Section 6.2 |
-| **torchdiffeq** | Neural ODE solvers for PyTorch | Section 5.7 |
-| **diffrax** | JAX-based differential equation solvers | Section 5.7 |
-| **PyTorch Forecasting** | TFT, N-BEATS, DeepAR implementations | Section 5.6 |
-| **SHAP** (`shap`) | Shapley-value feature explanations | All supervised methods |
-| **Optuna** | Bayesian hyperparameter optimization | All methods |
-| **MLflow** | Experiment tracking, model registry, deployment | All methods |
-| **ONNX Runtime** (`onnxruntime`) | Cross-platform model inference | All methods |
-| **Ray** (`ray[tune]`, `ray[train]`) | Distributed training and hyperparameter tuning | All methods |
-| **DVC** | Data version control (large dataset tracking in ML pipelines) | Data preprocessing |
+| Library                             | Purpose                                                       | Phase 1 Coverage       |
+| ----------------------------------- | ------------------------------------------------------------- | ---------------------- |
+| **UMAP** (`umap-learn`)             | UMAP implementation                                           | Section 2.5            |
+| **HDBSCAN** (`hdbscan`)             | Hierarchical density clustering                               | Section 4.2            |
+| **imbalanced-learn** (`imblearn`)   | SMOTE, ADASYN, undersampling                                  | Section 6.5            |
+| **SDV** (`sdv`)                     | Synthetic Data Vault (CTGAN, TVAE, Copulas)                   | Section 6.2            |
+| **torchdiffeq**                     | Neural ODE solvers for PyTorch                                | Section 5.7            |
+| **diffrax**                         | JAX-based differential equation solvers                       | Section 5.7            |
+| **PyTorch Forecasting**             | TFT, N-BEATS, DeepAR implementations                          | Section 5.6            |
+| **SHAP** (`shap`)                   | Shapley-value feature explanations                            | All supervised methods |
+| **Optuna**                          | Bayesian hyperparameter optimization                          | All methods            |
+| **MLflow**                          | Experiment tracking, model registry, deployment               | All methods            |
+| **ONNX Runtime** (`onnxruntime`)    | Cross-platform model inference                                | All methods            |
+| **Ray** (`ray[tune]`, `ray[train]`) | Distributed training and hyperparameter tuning                | All methods            |
+| **DVC**                             | Data version control (large dataset tracking in ML pipelines) | Data preprocessing     |
 
 ---
 
@@ -1867,14 +1899,14 @@ This is Scikit-Learn's `Pipeline` philosophy, implemented with .NET's type safet
 
 **Key Capabilities**:
 
-| Component | Coverage |
-|-----------|----------|
-| **ML.NET AutoML** | Automated model selection + hyperparameter tuning. Supports classification, regression, ranking, recommendation, forecasting, image classification, object detection. Uses cost-frugal optimization (FLAML-style). |
-| **Transforms** | Normalization, one-hot encoding, feature hashing, text featurization (TF-IDF, word embeddings), image loading/resizing, missing value replacement, key-to-value mapping. |
-| **Trainers** | LightGBM (native integration), FastTree, SDCA (Stochastic Dual Coordinate Ascent), L-BFGS logistic regression, averaged perceptron, OLS, PCA, K-Means, anomaly detection (randomized PCA, time-series spike detection). |
-| **Time Series** | Spike detection (IID and SSA), change point detection, forecasting (SSA — Singular Spectrum Analysis). |
-| **Deep Learning** | Via ONNX Runtime integration (load PyTorch/TensorFlow models exported to ONNX). Also image classification via transfer learning (ResNet, InceptionV3). |
-| **Model Explainability** | Permutation Feature Importance (PFI) |
+| Component                | Coverage                                                                                                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ML.NET AutoML**        | Automated model selection + hyperparameter tuning. Supports classification, regression, ranking, recommendation, forecasting, image classification, object detection. Uses cost-frugal optimization (FLAML-style).      |
+| **Transforms**           | Normalization, one-hot encoding, feature hashing, text featurization (TF-IDF, word embeddings), image loading/resizing, missing value replacement, key-to-value mapping.                                                |
+| **Trainers**             | LightGBM (native integration), FastTree, SDCA (Stochastic Dual Coordinate Ascent), L-BFGS logistic regression, averaged perceptron, OLS, PCA, K-Means, anomaly detection (randomized PCA, time-series spike detection). |
+| **Time Series**          | Spike detection (IID and SSA), change point detection, forecasting (SSA — Singular Spectrum Analysis).                                                                                                                  |
+| **Deep Learning**        | Via ONNX Runtime integration (load PyTorch/TensorFlow models exported to ONNX). Also image classification via transfer learning (ResNet, InceptionV3).                                                                  |
+| **Model Explainability** | Permutation Feature Importance (PFI)                                                                                                                                                                                    |
 
 **Hardware Acceleration**: CPU-bound natively. GPU via ONNX Runtime (CUDA execution provider). TorchSharp integration for native GPU model execution.
 
@@ -1910,6 +1942,7 @@ var prediction = engine.Predict(new SensorReading { Temperature = 87.5, Vibratio
 **Hardware Acceleration**: Full CUDA support (same `libtorch` backend as Python PyTorch). Install `TorchSharp-cuda-windows` or `TorchSharp-cuda-linux` NuGet packages.
 
 **Key Capabilities**:
+
 - Define, train, and infer neural networks entirely in C#
 - Share models with Python PyTorch (save/load `state_dict`)
 - GPU tensor operations at native speed
@@ -1959,6 +1992,7 @@ var criterion = CrossEntropyLoss();
 **Hardware Acceleration**: CUDA via TensorFlow's native GPU support. Install `SciSharp.TensorFlow.Redist-Windows-GPU` NuGet.
 
 **Key Capabilities**:
+
 - Full TensorFlow API available in C#
 - Keras-style model building (`keras.Sequential`, `keras.layers`)
 - TensorBoard logging from .NET
@@ -1972,15 +2006,16 @@ var criterion = CrossEntropyLoss();
 
 The SciSharp organization provides .NET ports of the core Python numerical stack:
 
-| Library | .NET Equivalent | Purpose |
-|---------|----------------|---------|
-| NumPy | **NumSharp** | N-dimensional array operations |
-| Pandas | **Pandas.NET** | DataFrame operations (experimental) |
-| Matplotlib | **ScottPlot** / **Plotly.NET** | Visualization |
-| SciPy | **MathNet.Numerics** | Linear algebra, distributions, optimization |
-| TensorFlow | **TensorFlow.NET** | Deep learning |
+| Library    | .NET Equivalent                | Purpose                                     |
+| ---------- | ------------------------------ | ------------------------------------------- |
+| NumPy      | **NumSharp**                   | N-dimensional array operations              |
+| Pandas     | **Pandas.NET**                 | DataFrame operations (experimental)         |
+| Matplotlib | **ScottPlot** / **Plotly.NET** | Visualization                               |
+| SciPy      | **MathNet.Numerics**           | Linear algebra, distributions, optimization |
+| TensorFlow | **TensorFlow.NET**             | Deep learning                               |
 
 **MathNet.Numerics** deserves special mention: it provides production-grade implementations of:
+
 - Dense/sparse matrix operations (MKL-backed via `MathNet.Numerics.MKL`)
 - SVD, QR, Cholesky decompositions (relevant for PCA, linear regression)
 - Statistical distributions and hypothesis tests
@@ -2089,15 +2124,15 @@ This pattern is common in enterprises where data science teams operate in Python
 
 ### 9) Cross-Language Interop & Serving Architecture
 
-| Serving Method | Latency | Complexity | Language Agnostic |
-|---------------|---------|-----------|-------------------|
-| **ONNX Runtime** (in-process) | μs–ms | Low | Yes (C#, C++, Java, Python, JS) |
-| **TorchServe** (Python service) | ms–10ms | Medium | Via HTTP/gRPC |
-| **TF Serving** (C++ binary) | ms | Medium | Via HTTP/gRPC |
-| **Triton Inference Server** (NVIDIA) | μs–ms | High | ONNX, TensorRT, PyTorch, TF |
-| **BentoML** (Python framework) | ms | Medium | Via containerized REST/gRPC |
-| **MLflow Serving** | ms | Low | Via REST |
-| **Custom gRPC** (any language) | μs–ms | High | By definition |
+| Serving Method                       | Latency | Complexity | Language Agnostic               |
+| ------------------------------------ | ------- | ---------- | ------------------------------- |
+| **ONNX Runtime** (in-process)        | μs–ms   | Low        | Yes (C#, C++, Java, Python, JS) |
+| **TorchServe** (Python service)      | ms–10ms | Medium     | Via HTTP/gRPC                   |
+| **TF Serving** (C++ binary)          | ms      | Medium     | Via HTTP/gRPC                   |
+| **Triton Inference Server** (NVIDIA) | μs–ms   | High       | ONNX, TensorRT, PyTorch, TF     |
+| **BentoML** (Python framework)       | ms      | Medium     | Via containerized REST/gRPC     |
+| **MLflow Serving**                   | ms      | Low        | Via REST                        |
+| **Custom gRPC** (any language)       | μs–ms   | High       | By definition                   |
 
 **Model Format Interop**:
 
@@ -2124,31 +2159,31 @@ ONNX is the universal serialization format. If your model cannot be exported to 
 
 ## References
 
-1. Azur, M. J. et al. (2011). *Multiple imputation by chained equations: what is it and how does it work?* International Journal of Methods in Psychiatric Research, 20(1), 40-49.
-2. Bishop, C. M. (2006). *Pattern Recognition and Machine Learning*. Springer.
-3. Breiman, L. (2001). *Random Forests*. Machine Learning, 45(1), 5-32.
-4. Breunig, M. M. et al. (2000). *LOF: Identifying Density-Based Local Outliers*. SIGMOD Record, 29(2), 93-104.
-5. Campello, R. J. G. B. et al. (2013). *Density-Based Clustering Based on Hierarchical Density Estimates*. PAKDD 2013.
-6. Chawla, N. V. et al. (2002). *SMOTE: Synthetic Minority Over-sampling Technique*. JAIR, 16, 321-357.
-7. Chen, R. T. Q. et al. (2018). *Neural Ordinary Differential Equations*. NeurIPS 2018.
-8. Chen, T. & Guestrin, C. (2016). *XGBoost: A Scalable Tree Boosting System*. KDD 2016.
-9. Cho, K. et al. (2014). *Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation*. EMNLP 2014.
-10. Ester, M. et al. (1996). *A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise*. KDD 1996.
-11. Golovin, D. et al. (2017). *Google Vizier: A Service for Black-Box Optimization*. KDD 2017.
-12. Goodfellow, I. et al. (2014). *Generative Adversarial Nets*. NeurIPS 2014.
-13. Goodfellow, I. et al. (2016). *Deep Learning*. MIT Press.
-14. Ho, J. et al. (2020). *Denoising Diffusion Probabilistic Models*. NeurIPS 2020.
-15. Hochreiter, S. & Schmidhuber, J. (1997). *Long Short-Term Memory*. Neural Computation, 9(8), 1735-1780.
-16. Ke, G. et al. (2017). *LightGBM: A Highly Efficient Gradient Boosting Decision Tree*. NeurIPS 2017.
-17. Kingma, D. P. & Ba, J. (2015). *Adam: A Method for Stochastic Optimization*. ICLR 2015.
-18. Kingma, D. P. & Welling, M. (2014). *Auto-Encoding Variational Bayes*. ICLR 2014.
-19. Kotelnikov, A. et al. (2023). *TabDDPM: Modelling Tabular Data with Diffusion Models*. ICML 2023.
-20. Lim, B. et al. (2021). *Temporal Fusion Transformers for Interpretable Multi-Horizon Time Series Forecasting*. International Journal of Forecasting.
-21. Liu, F. T. et al. (2008). *Isolation Forest*. ICDM 2008.
-22. McInnes, L. et al. (2018). *UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction*. arXiv:1802.03426.
-23. Murphy, K. P. (2022). *Probabilistic Machine Learning: An Introduction*. MIT Press.
-24. Prokhorenkova, L. et al. (2018). *CatBoost: Unbiased Boosting with Categorical Features*. NeurIPS 2018.
-25. Schölkopf, B. et al. (2001). *Estimating the Support of a High-Dimensional Distribution*. Neural Computation, 13(7).
-26. van der Maaten, L. & Hinton, G. (2008). *Visualizing Data using t-SNE*. JMLR, 9, 2579-2605.
-27. Vaswani, A. et al. (2017). *Attention Is All You Need*. NeurIPS 2017.
-28. Xu, L. et al. (2019). *Modeling Tabular Data using Conditional GAN*. NeurIPS 2019.
+1. Azur, M. J. et al. (2011). _Multiple imputation by chained equations: what is it and how does it work?_ International Journal of Methods in Psychiatric Research, 20(1), 40-49.
+2. Bishop, C. M. (2006). _Pattern Recognition and Machine Learning_. Springer.
+3. Breiman, L. (2001). _Random Forests_. Machine Learning, 45(1), 5-32.
+4. Breunig, M. M. et al. (2000). _LOF: Identifying Density-Based Local Outliers_. SIGMOD Record, 29(2), 93-104.
+5. Campello, R. J. G. B. et al. (2013). _Density-Based Clustering Based on Hierarchical Density Estimates_. PAKDD 2013.
+6. Chawla, N. V. et al. (2002). _SMOTE: Synthetic Minority Over-sampling Technique_. JAIR, 16, 321-357.
+7. Chen, R. T. Q. et al. (2018). _Neural Ordinary Differential Equations_. NeurIPS 2018.
+8. Chen, T. & Guestrin, C. (2016). _XGBoost: A Scalable Tree Boosting System_. KDD 2016.
+9. Cho, K. et al. (2014). _Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation_. EMNLP 2014.
+10. Ester, M. et al. (1996). _A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise_. KDD 1996.
+11. Golovin, D. et al. (2017). _Google Vizier: A Service for Black-Box Optimization_. KDD 2017.
+12. Goodfellow, I. et al. (2014). _Generative Adversarial Nets_. NeurIPS 2014.
+13. Goodfellow, I. et al. (2016). _Deep Learning_. MIT Press.
+14. Ho, J. et al. (2020). _Denoising Diffusion Probabilistic Models_. NeurIPS 2020.
+15. Hochreiter, S. & Schmidhuber, J. (1997). _Long Short-Term Memory_. Neural Computation, 9(8), 1735-1780.
+16. Ke, G. et al. (2017). _LightGBM: A Highly Efficient Gradient Boosting Decision Tree_. NeurIPS 2017.
+17. Kingma, D. P. & Ba, J. (2015). _Adam: A Method for Stochastic Optimization_. ICLR 2015.
+18. Kingma, D. P. & Welling, M. (2014). _Auto-Encoding Variational Bayes_. ICLR 2014.
+19. Kotelnikov, A. et al. (2023). _TabDDPM: Modelling Tabular Data with Diffusion Models_. ICML 2023.
+20. Lim, B. et al. (2021). _Temporal Fusion Transformers for Interpretable Multi-Horizon Time Series Forecasting_. International Journal of Forecasting.
+21. Liu, F. T. et al. (2008). _Isolation Forest_. ICDM 2008.
+22. McInnes, L. et al. (2018). _UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction_. arXiv:1802.03426.
+23. Murphy, K. P. (2022). _Probabilistic Machine Learning: An Introduction_. MIT Press.
+24. Prokhorenkova, L. et al. (2018). _CatBoost: Unbiased Boosting with Categorical Features_. NeurIPS 2018.
+25. Schölkopf, B. et al. (2001). _Estimating the Support of a High-Dimensional Distribution_. Neural Computation, 13(7).
+26. van der Maaten, L. & Hinton, G. (2008). _Visualizing Data using t-SNE_. JMLR, 9, 2579-2605.
+27. Vaswani, A. et al. (2017). _Attention Is All You Need_. NeurIPS 2017.
+28. Xu, L. et al. (2019). _Modeling Tabular Data using Conditional GAN_. NeurIPS 2019.

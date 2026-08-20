@@ -2,10 +2,11 @@
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -14,7 +15,7 @@
 [![Compiler: MSVC](https://img.shields.io/badge/Compiler-MSVC-0078D7.svg)](https://learn.microsoft.com/cpp/build/overview-of-the-microsoft-cpp-compiler)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-## Overview 
+## Overview
 
 This guide explains how C++ (MSVC on Windows) handles key memory and execution concepts: value vs reference semantics, stack vs heap storage, copy semantics (deep vs shallow), and nullability. The content focuses on what actually happens under the hood on Windows using MSVC, with short, runnable examples and Windows-specific notes.
 
@@ -82,9 +83,10 @@ This guide explains how C++ (MSVC on Windows) handles key memory and execution c
 C++ does not have a single runtime-managed split of "value vs reference" like some managed languages. Instead:
 
 - Primitive built-in types and user-defined `struct` / `class` objects are by default value types (their semantics depend on how you use them).
-- An actual *reference type* in C++ is a reference (`T&`) or pointer (`T*`) — these are not objects themselves but aliases or addresses referring to other objects.
+- An actual _reference type_ in C++ is a reference (`T&`) or pointer (`T*`) — these are not objects themselves but aliases or addresses referring to other objects.
 
 Key points:
+
 - Declaring an object `MyType x;` instantiates a value object. If you use `MyType* p = new MyType();` you allocate an object on the heap and `p` stores its address.
 - `struct` vs `class` in C++ differ only by default access (public vs private).
 
@@ -103,6 +105,7 @@ void example() {
 ```
 
 Notes/Tips:
+
 - Value semantics by default makes copying cheap for small objects but expensive for large ones.
 - Use pointers/references for polymorphism and dynamic lifetime control.
 
@@ -116,6 +119,7 @@ Where objects live depends on how they are created:
 - Heap (dynamic storage): `new`/`malloc` allocate memory on the heap. Heap allocations are relatively slow and the programmer (or RAII wrappers) must free them.
 
 Windows/MSVC specifics:
+
 - MSVC uses the OS virtual memory APIs for heap allocation; default CRT heap allows fragmentation handling, low-fragmentation heap options exist for production (LFH).
 - Stack size is configurable per-thread (default ~1MB for Windows threads created by the runtime). Watch recursion and large stack arrays.
 
@@ -131,6 +135,7 @@ void foo() {
 ```
 
 Pitfalls:
+
 - Stack overflow if you allocate huge local arrays or have deep recursion.
 - Memory leaks if `delete` not called or exceptions bypass cleanup. Use RAII and smart pointers.
 
@@ -168,6 +173,7 @@ struct Buffer {
 ```
 
 Best practices:
+
 - Prefer RAII containers (`std::vector`, `std::string`) which implement deep/move semantics correctly.
 - Implement move operations for expensive-to-copy resources.
 - Rule of five / zero: if you implement destructor/copy/move, follow the rule of five (or prefer no manual resource management and rely on standard containers).
@@ -195,6 +201,7 @@ if (maybe.has_value()) { int v = *maybe; }
 ```
 
 Pitfalls:
+
 - Do not mix `delete` and `delete[]` incorrectly.
 - Avoid raw owning pointers; prefer `unique_ptr`/`shared_ptr`.
 - Beware of `shared_ptr` cycles causing leaks — use `weak_ptr` to break cycles.
@@ -257,4 +264,4 @@ Compile & run with MSVC as described earlier.
 
 ---
 
-*End of C++ guide.*
+_End of C++ guide._

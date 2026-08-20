@@ -1,89 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul - Paul
+      Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul">IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul</h1>
-<p><br>
-<strong>Last updated</strong>: February 26, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://learn.microsoft.com/en-us/azure/iot-edge/"><img alt="Hardware" src="https://img.shields.io/badge/Hardware-Edge_Compute-orange.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide details the end-to-end architecture of Internet of Things (IoT) sensors, spanning from raw hardware data acquisition to cloud-based ETL pipelines. It covers the crucial mechanics of Analog-to-Digital Conversion (ADC), network telemetry protocols (MQTT vs. HTTP), internet backhaul strategies, and large-scale data tunneling.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul">IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
-<li><a href="#linux-debianubuntu-strategy">Linux (Debian/Ubuntu) Strategy</a></li>
-<li><a href="#windows-strategy">Windows Strategy</a></li>
-</ul>
-</li>
-<li><a href="#2-writing-basic-codescripts-adc-telemetry">2. Writing Basic Code/Scripts (ADC \&amp; Telemetry)</a><ul>
-<li><a href="#analog-to-digital-conversion-adc">Analog-to-Digital Conversion (ADC)</a></li>
-<li><a href="#network-protocols-mqtt-vs-http">Network Protocols: MQTT vs. HTTP</a></li>
-</ul>
-</li>
-<li><a href="#3-compile-time-commands-firmware-generation">3. Compile-time Commands (Firmware Generation)</a></li>
-<li><a href="#4-runtime-commands-daemonization-etl-backhaul">4. Runtime Commands (Daemonization \&amp; ETL Backhaul)</a><ul>
-<li><a href="#internet-backhaul">Internet Backhaul</a></li>
-<li><a href="#tunneling-data-streams-into-etl-pipelines">Tunneling Data Streams into ETL Pipelines</a></li>
-</ul>
-</li>
-<li><a href="#5-debugging-radio-silence-data-loss">5. Debugging (Radio Silence \&amp; Data Loss)</a><ul>
-<li><a href="#edge-debugging">Edge Debugging</a></li>
-<li><a href="#backhaul-debugging">Backhaul Debugging</a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
-<p>Setting up an IoT development environment requires configuring toolchains capable of cross-compiling code for embedded architectures (ARM, ESP32, AVR).</p>
-<h3 id="linux-debianubuntu-strategy">Linux (Debian/Ubuntu) Strategy</h3>
-<p>Linux provides the most predictable environment for embedded toolchains and serial communication.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Install the GCC ARM cross-compiler and essential build tools</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1
+            id="iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul"
+          >
+            IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 26, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://learn.microsoft.com/en-us/azure/iot-edge/"
+              ><img
+                alt="Hardware"
+                src="https://img.shields.io/badge/Hardware-Edge_Compute-orange.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide details the end-to-end architecture of Internet of Things
+            (IoT) sensors, spanning from raw hardware data acquisition to
+            cloud-based ETL pipelines. It covers the crucial mechanics of
+            Analog-to-Digital Conversion (ADC), network telemetry protocols
+            (MQTT vs. HTTP), internet backhaul strategies, and large-scale data
+            tunneling.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a
+                href="#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul"
+                >IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and
+                Backhaul</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#1-configuration-windows-linux"
+                >1. Configuration (Windows \&amp; Linux)</a
+              >
+              <ul>
+                <li>
+                  <a href="#linux-debianubuntu-strategy"
+                    >Linux (Debian/Ubuntu) Strategy</a
+                  >
+                </li>
+                <li><a href="#windows-strategy">Windows Strategy</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#2-writing-basic-codescripts-adc-telemetry"
+                >2. Writing Basic Code/Scripts (ADC \&amp; Telemetry)</a
+              >
+              <ul>
+                <li>
+                  <a href="#analog-to-digital-conversion-adc"
+                    >Analog-to-Digital Conversion (ADC)</a
+                  >
+                </li>
+                <li>
+                  <a href="#network-protocols-mqtt-vs-http"
+                    >Network Protocols: MQTT vs. HTTP</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-compile-time-commands-firmware-generation"
+                >3. Compile-time Commands (Firmware Generation)</a
+              >
+            </li>
+            <li>
+              <a href="#4-runtime-commands-daemonization-etl-backhaul"
+                >4. Runtime Commands (Daemonization \&amp; ETL Backhaul)</a
+              >
+              <ul>
+                <li><a href="#internet-backhaul">Internet Backhaul</a></li>
+                <li>
+                  <a href="#tunneling-data-streams-into-etl-pipelines"
+                    >Tunneling Data Streams into ETL Pipelines</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#5-debugging-radio-silence-data-loss"
+                >5. Debugging (Radio Silence \&amp; Data Loss)</a
+              >
+              <ul>
+                <li><a href="#edge-debugging">Edge Debugging</a></li>
+                <li><a href="#backhaul-debugging">Backhaul Debugging</a></li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="1-configuration-windows-linux">
+            1. Configuration (Windows &amp; Linux)
+          </h2>
+          <p>
+            Setting up an IoT development environment requires configuring
+            toolchains capable of cross-compiling code for embedded
+            architectures (ARM, ESP32, AVR).
+          </p>
+          <h3 id="linux-debianubuntu-strategy">
+            Linux (Debian/Ubuntu) Strategy
+          </h3>
+          <p>
+            Linux provides the most predictable environment for embedded
+            toolchains and serial communication.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Install the GCC ARM cross-compiler and essential build tools</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential<span class="w"> </span>gcc-arm-none-eabi
 
 <span class="c1"># Add user to the dialout group to allow flashing over USB/Serial</span>
@@ -91,19 +183,45 @@ sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </
 
 <span class="c1"># Install Python packages required by most modern build systems (like PlatformIO or Espressif IDF)</span>
 pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>platformio
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="windows-strategy">Windows Strategy</h3>
-<p>Windows development requires strict path management and driver installations (usually CP210x or CH340 for USB-to-UART bridges). Toolchains are best managed via PlatformIO within VS Code to bypass native environment pathing nightmares.</p>
-<p><strong>Key Config Files:</strong>
-* <code>/etc/udev/rules.d/</code>: On Linux, defining udev rules ensures predictable mounting of serial devices (e.g., mapping a specific sensor to <code>/dev/ttySensor</code>).
-* <code>platformio.ini</code>: The central configuration file for modern embedded projects, specifying the target board, framework (Arduino vs. ESP-IDF), upload ports, and baud rates.</p>
-<hr />
-<h2 id="2-writing-basic-codescripts-adc-telemetry">2. Writing Basic Code/Scripts (ADC &amp; Telemetry)</h2>
-<p>The code lifecycle of an edge sensor dictates reading raw analog voltage, converting it to a discrete digital value via an ADC, synthesizing a payload, and pushing it out via a network protocol like MQTT or HTTP.</p>
-<h3 id="analog-to-digital-conversion-adc">Analog-to-Digital Conversion (ADC)</h3>
-<p>An ADC maps continuous voltage variations to discrete integer values based on its bit resolution (e.g., a 12-bit ADC provides 4096 discrete steps).</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Arduino.h&gt;</span>
+          <h3 id="windows-strategy">Windows Strategy</h3>
+          <p>
+            Windows development requires strict path management and driver
+            installations (usually CP210x or CH340 for USB-to-UART bridges).
+            Toolchains are best managed via PlatformIO within VS Code to bypass
+            native environment pathing nightmares.
+          </p>
+          <p>
+            <strong>Key Config Files:</strong> *
+            <code>/etc/udev/rules.d/</code>: On Linux, defining udev rules
+            ensures predictable mounting of serial devices (e.g., mapping a
+            specific sensor to <code>/dev/ttySensor</code>). *
+            <code>platformio.ini</code>: The central configuration file for
+            modern embedded projects, specifying the target board, framework
+            (Arduino vs. ESP-IDF), upload ports, and baud rates.
+          </p>
+          <hr />
+          <h2 id="2-writing-basic-codescripts-adc-telemetry">
+            2. Writing Basic Code/Scripts (ADC &amp; Telemetry)
+          </h2>
+          <p>
+            The code lifecycle of an edge sensor dictates reading raw analog
+            voltage, converting it to a discrete digital value via an ADC,
+            synthesizing a payload, and pushing it out via a network protocol
+            like MQTT or HTTP.
+          </p>
+          <h3 id="analog-to-digital-conversion-adc">
+            Analog-to-Digital Conversion (ADC)
+          </h3>
+          <p>
+            An ADC maps continuous voltage variations to discrete integer values
+            based on its bit resolution (e.g., a 12-bit ADC provides 4096
+            discrete steps).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Arduino.h&gt;</span>
 
 <span class="cp">#define SENSOR_PIN 34  </span><span class="c1">// Analog pin</span>
 <span class="cp">#define ADC_RESOLUTION 4095.0 </span><span class="c1">// 12-bit ADC</span>
@@ -125,11 +243,21 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
 <span class="w">    </span><span class="n">Serial</span><span class="p">.</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Raw: %d, Volts: %.2fV, Temp: %.2f°C</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">rawValue</span><span class="p">,</span><span class="w"> </span><span class="n">voltage</span><span class="p">,</span><span class="w"> </span><span class="n">temperatureC</span><span class="p">);</span>
 <span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">2000</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="network-protocols-mqtt-vs-http">Network Protocols: MQTT vs. HTTP</h3>
-<p>While HTTP requires significant overhead via headers and establishing new TCP sockets per request, <strong>MQTT is the industry standard for IoT</strong>. MQTT maintains a persistent, lightweight TCP connection to a broker, publishing tiny packets asynchronously on defined "topics."</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">paho.mqtt.client</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mqtt</span>
+          <h3 id="network-protocols-mqtt-vs-http">
+            Network Protocols: MQTT vs. HTTP
+          </h3>
+          <p>
+            While HTTP requires significant overhead via headers and
+            establishing new TCP sockets per request,
+            <strong>MQTT is the industry standard for IoT</strong>. MQTT
+            maintains a persistent, lightweight TCP connection to a broker,
+            publishing tiny packets asynchronously on defined "topics."
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">paho.mqtt.client</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mqtt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
 <span class="n">BROKER</span> <span class="o">=</span> <span class="s2">&quot;mqtt.enterprise.internal&quot;</span>
@@ -152,13 +280,22 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
 <span class="c1"># Publish to topic with Quality of Service (QoS) 1 (At least once delivery)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s2">&quot;telemetry/facility1/hvac&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">qos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">client</span><span class="o">.</span><span class="n">loop_start</span><span class="p">()</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="3-compile-time-commands-firmware-generation">3. Compile-time Commands (Firmware Generation)</h2>
-<p>Microcontrollers do not possess a runtime engine capable of interpreting raw source code. The code must be compiled, linked, and assembled into a <code>.bin</code> or <code>.hex</code> binary payload specific to the target silicon architecture.</p>
-<p>Using PlatformIO:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Clean previous build artifacts</span>
+          <hr />
+          <h2 id="3-compile-time-commands-firmware-generation">
+            3. Compile-time Commands (Firmware Generation)
+          </h2>
+          <p>
+            Microcontrollers do not possess a runtime engine capable of
+            interpreting raw source code. The code must be compiled, linked, and
+            assembled into a <code>.bin</code> or <code>.hex</code> binary
+            payload specific to the target silicon architecture.
+          </p>
+          <p>Using PlatformIO:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Clean previous build artifacts</span>
 pio<span class="w"> </span>run<span class="w"> </span>--target<span class="w"> </span>clean
 
 <span class="c1"># Compile the firmware for the target defined in platformio.ini</span>
@@ -166,80 +303,129 @@ pio<span class="w"> </span>run
 
 <span class="c1"># Compile and upload over the serial port to the physical hardware</span>
 pio<span class="w"> </span>run<span class="w"> </span>--target<span class="w"> </span>upload
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><em>Pre-execution analysis:</em> The compiler performs strict static typing and memory allocation checks. Because microcontrollers possess kilobytes (not gigabytes) of RAM, dynamic allocation (<code>malloc</code> or <code>new</code>) is highly discouraged. The compiler generates memory maps indicating <code>.bss</code> and <code>.data</code> segment usage to prevent stack collisions.</p>
-<hr />
-<h2 id="4-runtime-commands-daemonization-etl-backhaul">4. Runtime Commands (Daemonization &amp; ETL Backhaul)</h2>
-<p>While the edge devices execute firmware continuously in an infinite <code>loop()</code>, the receiving end—the telemetry backhaul—must daemonize its ingestion services to catch the datastream without interruption.</p>
-<h3 id="internet-backhaul">Internet Backhaul</h3>
-<p>Managing massive volumes of telemetry from edge gateways requires queueing systems. Services like Mosquitto (MQTT Broker) must run reliably under the system supervisor.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Enable the MQTT broker daemon on Ubuntu</span>
+          <p>
+            <em>Pre-execution analysis:</em> The compiler performs strict static
+            typing and memory allocation checks. Because microcontrollers
+            possess kilobytes (not gigabytes) of RAM, dynamic allocation (<code
+              >malloc</code
+            >
+            or <code>new</code>) is highly discouraged. The compiler generates
+            memory maps indicating <code>.bss</code> and
+            <code>.data</code> segment usage to prevent stack collisions.
+          </p>
+          <hr />
+          <h2 id="4-runtime-commands-daemonization-etl-backhaul">
+            4. Runtime Commands (Daemonization &amp; ETL Backhaul)
+          </h2>
+          <p>
+            While the edge devices execute firmware continuously in an infinite
+            <code>loop()</code>, the receiving end—the telemetry backhaul—must
+            daemonize its ingestion services to catch the datastream without
+            interruption.
+          </p>
+          <h3 id="internet-backhaul">Internet Backhaul</h3>
+          <p>
+            Managing massive volumes of telemetry from edge gateways requires
+            queueing systems. Services like Mosquitto (MQTT Broker) must run
+            reliably under the system supervisor.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Enable the MQTT broker daemon on Ubuntu</span>
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>mosquitto
 sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>mosquitto
 
 <span class="c1"># Check ingestion bandwidth</span>
 netstat<span class="w"> </span>-tulpn<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="m">1883</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="tunneling-data-streams-into-etl-pipelines">Tunneling Data Streams into ETL Pipelines</h3>
-<p>Once telemetry reaches the broker, a subscriber daemon immediately extracts, transforms, and loads (ETL) it into a timeseries database (like TimescaleDB or InfluxDB).</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Running an ingestion worker script as a background daemon</span>
+          <h3 id="tunneling-data-streams-into-etl-pipelines">
+            Tunneling Data Streams into ETL Pipelines
+          </h3>
+          <p>
+            Once telemetry reaches the broker, a subscriber daemon immediately
+            extracts, transforms, and loads (ETL) it into a timeseries database
+            (like TimescaleDB or InfluxDB).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Running an ingestion worker script as a background daemon</span>
 nohup<span class="w"> </span>python3<span class="w"> </span>/opt/telemetry/ingestion_worker.py<span class="w"> </span>&gt;<span class="w"> </span>/var/log/iot/ingestion.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
 
 <span class="c1"># Better approach: Establish a Systemd Service for the ETL worker</span>
 <span class="c1"># /etc/systemd/system/etl-worker.service</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="5-debugging-radio-silence-data-loss">5. Debugging (Radio Silence &amp; Data Loss)</h2>
-<p>Because hardware fails without throwing stack traces to a terminal, debugging IoT infrastructure relies heavily on signal persistence tools and log aggregation. Nothing builds character quite like deciphering why an I2C bus locked up purely because a pull-up resistor was rated 1k Ohm instead of 4.7k Ohm.</p>
-<h3 id="edge-debugging">Edge Debugging</h3>
-<ul>
-<li><strong>Serial Monitors:</strong> Hooking a USB cable directly to the UART bridge is your primary window into the microcontroller.
-  <code>bash
-  pio device monitor --baud 115200</code></li>
-<li><strong>Common Pitfalls:</strong> Ground loops introducing analog noise to the ADC, resulting in erratic sensor readings. Always tie sensor grounds directly to the microcontroller logic ground.</li>
-</ul>
-<h3 id="backhaul-debugging">Backhaul Debugging</h3>
-<ul>
-<li><strong>Topic Snooping:</strong> Subscribe to the wildcard topic <code>#</code> to verify data is actually hitting the network layer.
-  <code>bash
-  mosquitto_sub -h localhost -t "#" -v</code></li>
-<li><strong>Log Check:</strong> Tracebacks indicating connection drops (<code>EOF</code> or TCP timeouts) generally indicate poor signal strength at the edge or excessively aggressive keep-alive timers.
-  <code>bash
-  tail -f /var/log/mosquitto/mosquitto.log</code></li>
-</ul></article>
-        </div>
+          <hr />
+          <h2 id="5-debugging-radio-silence-data-loss">
+            5. Debugging (Radio Silence &amp; Data Loss)
+          </h2>
+          <p>
+            Because hardware fails without throwing stack traces to a terminal,
+            debugging IoT infrastructure relies heavily on signal persistence
+            tools and log aggregation. Nothing builds character quite like
+            deciphering why an I2C bus locked up purely because a pull-up
+            resistor was rated 1k Ohm instead of 4.7k Ohm.
+          </p>
+          <h3 id="edge-debugging">Edge Debugging</h3>
+          <ul>
+            <li>
+              <strong>Serial Monitors:</strong> Hooking a USB cable directly to
+              the UART bridge is your primary window into the microcontroller.
+              <code>bash pio device monitor --baud 115200</code>
+            </li>
+            <li>
+              <strong>Common Pitfalls:</strong> Ground loops introducing analog
+              noise to the ADC, resulting in erratic sensor readings. Always tie
+              sensor grounds directly to the microcontroller logic ground.
+            </li>
+          </ul>
+          <h3 id="backhaul-debugging">Backhaul Debugging</h3>
+          <ul>
+            <li>
+              <strong>Topic Snooping:</strong> Subscribe to the wildcard topic
+              <code>#</code> to verify data is actually hitting the network
+              layer. <code>bash mosquitto_sub -h localhost -t "#" -v</code>
+            </li>
+            <li>
+              <strong>Log Check:</strong> Tracebacks indicating connection drops
+              (<code>EOF</code> or TCP timeouts) generally indicate poor signal
+              strength at the edge or excessively aggressive keep-alive timers.
+              <code>bash tail -f /var/log/mosquitto/mosquitto.log</code>
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

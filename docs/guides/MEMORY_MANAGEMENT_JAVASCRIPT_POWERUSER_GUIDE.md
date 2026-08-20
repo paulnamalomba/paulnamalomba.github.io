@@ -2,18 +2,20 @@
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
+
 [![Language: JavaScript](https://img.shields.io/badge/Language-JavaScript-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Runtime: Node.js](https://img.shields.io/badge/Runtime-Node.js-339933.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
-## Overview 
+## Overview
 
 This guide explains how JavaScript handles memory and execution semantics on Windows using the Node.js runtime (V8 engine). It covers value vs reference types, memory allocation (heap-managed objects), copy semantics (shallow vs deep), and nullability (`undefined`/`null`). Examples are provided for typical Node.js usage.
 
@@ -54,6 +56,7 @@ This guide explains how JavaScript (Node.js V8 engine) handles memory and execut
 ---
 
 ## Contents
+
 - Data Structures: primitive vs object types
 - Storage: V8 heap and stack, hidden classes, optimization
 - Copy semantics: assignment, shallow vs deep copies
@@ -81,6 +84,7 @@ obj2.x = 5; // obj1.x also 5
 ```
 
 Notes:
+
 - Strings are immutable; operations create new strings.
 
 ---
@@ -92,6 +96,7 @@ Notes:
 - V8 optimizes objects with hidden classes and inline caches to improve property access performance.
 
 Windows/Node specifics:
+
 - Node.js uses V8's memory management; adjust `--max-old-space-size` to change heap size.
 - The event loop drives execution; asynchronous I/O operations do not block JS thread.
 
@@ -115,6 +120,7 @@ deep.a.b = 3; // orig unchanged
 ```
 
 Pitfalls:
+
 - `JSON`-based cloning loses functions, `undefined`, and special types (Date, Map, Set).
 
 ---
@@ -132,10 +138,11 @@ console.log(x === undefined); // true
 x = null;
 console.log(x === null); // true
 
-const name = user?.profile?.name ?? 'anonymous';
+const name = user?.profile?.name ?? "anonymous";
 ```
 
 Best practices:
+
 - Prefer `undefined` for absent values internally and `null` for intentionally empty API responses, or pick a consistent convention in your codebase.
 
 ---
@@ -168,7 +175,7 @@ console.log(a.x.y); // still 5
 
 // nullish
 let maybe;
-console.log(maybe ?? 'default');
+console.log(maybe ?? "default");
 ```
 
 Run with `node main.js`.
@@ -184,7 +191,8 @@ Run with `node main.js`.
 ---
 
 ## References
+
 - V8 blog and docs: https://v8.dev/
 - Node.js docs: https://nodejs.org/
 
-*End of JavaScript guide.*
+_End of JavaScript guide._

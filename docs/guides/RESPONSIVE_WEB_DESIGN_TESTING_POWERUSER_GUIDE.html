@@ -1,113 +1,282 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Responsive Web Design Testing PowerUser Guide (PowerShell & HTML) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Responsive Web Design Testing PowerUser Guide (PowerShell & HTML) - Paul
+      Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="responsive-web-design-testing-poweruser-guide-powershell-html">Responsive Web Design Testing PowerUser Guide (PowerShell &amp; HTML)</h1>
-<p><strong>Last updated</strong>: February 19, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://docs.python.org/3/library/http.server.html"><img alt="Framework" src="https://img.shields.io/badge/Python-3.x-blue.svg" /></a>
-<a href="https://developer.chrome.com/docs/devtools/"><img alt="Framework" src="https://img.shields.io/badge/Chrome_DevTools-130+-green.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Responsive web design testing ensures that HTML/CSS sites render correctly across all viewport sizes — from 320px mobile screens to 2560px desktop monitors. This guide covers serving sites locally with Python's built-in HTTP server, using Chrome/Edge/Firefox DevTools for device emulation, building custom HTML-based overflow debuggers, and automating viewport regression testing. Power users need to understand viewport meta tags, CSS media query breakpoints, overflow detection strategies, and local-first testing workflows to catch layout issues <strong>before</strong> deploying to production (e.g., GitHub Pages, Vercel, Netlify).</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#responsive-web-design-testing-poweruser-guide-powershell-html">Responsive Web Design Testing PowerUser Guide (PowerShell \&amp; HTML)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#serve-a-static-site-locally-with-python">Serve a Static Site Locally with Python</a></li>
-<li><a href="#chromeedge-devtools-device-emulation">Chrome/Edge DevTools Device Emulation</a></li>
-<li><a href="#firefox-responsive-design-mode">Firefox Responsive Design Mode</a></li>
-<li><a href="#build-a-custom-html-overflow-debugger">Build a Custom HTML Overflow Debugger</a></li>
-<li><a href="#javascript-console-overflow-detection-snippet">JavaScript Console Overflow Detection Snippet</a></li>
-<li><a href="#css-diagnostic-overlay-for-development">CSS Diagnostic Overlay for Development</a></li>
-<li><a href="#automated-viewport-screenshot-testing-with-playwright">Automated Viewport Screenshot Testing with Playwright</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Serve locally</strong>: <code>cd</code> into your site directory and run <code>python -m http.server 8080</code></li>
-<li><strong>Open in browser</strong>: Navigate to <code>http://localhost:8080</code></li>
-<li><strong>Toggle device toolbar</strong>: Press <code>F12</code> then <code>Ctrl+Shift+M</code> in Chrome/Edge</li>
-<li><strong>Select a device</strong>: Choose iPhone 12, Galaxy S20, iPad, etc. from the device dropdown</li>
-<li><strong>Inspect overflow</strong>: Right-click any element → Inspect → check if <code>scrollWidth &gt; clientWidth</code></li>
-<li><strong>Fix and reload</strong>: Edit CSS, save, reload the browser — changes are instant (no deploy needed)</li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Viewport</strong>: The visible area of the web page in the browser; controlled by <code>&lt;meta name="viewport"&gt;</code> tag</li>
-<li><strong>Media Query</strong>: CSS <code>@media</code> rule that applies styles conditionally based on viewport width, height, orientation, or resolution</li>
-<li><strong>Breakpoint</strong>: A specific viewport width at which the layout changes; common breakpoints are 320px, 480px, 768px, 1024px, 1200px</li>
-<li><strong>Overflow</strong>: When an element's rendered width or height exceeds its parent container or the viewport, causing horizontal scrollbars</li>
-<li><strong>Device Pixel Ratio (DPR)</strong>: Ratio of physical pixels to CSS pixels; Retina displays have DPR of 2x or 3x</li>
-<li><strong>DevTools Device Mode</strong>: Browser feature that simulates mobile viewports, touch events, user agents, and network throttling</li>
-<li><strong>Local HTTP Server</strong>: A lightweight server that serves files from a directory over HTTP; Python's <code>http.server</code> module is the simplest option</li>
-<li><strong>Viewport Meta Tag</strong>: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> — required for proper mobile rendering</li>
-<li><strong>Box Model</strong>: CSS layout model where <code>box-sizing: border-box</code> includes padding and border in width calculations, preventing overflow</li>
-<li><strong>Responsive Unit</strong>: CSS units that scale with viewport — <code>vw</code>, <code>vh</code>, <code>%</code>, <code>rem</code>, <code>em</code> — vs fixed units like <code>px</code></li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>Viewport Meta Tag</strong> (required in every HTML <code>&lt;head&gt;</code>):</p>
-<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Standard responsive viewport — MUST be present --&gt;</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1
+            id="responsive-web-design-testing-poweruser-guide-powershell-html"
+          >
+            Responsive Web Design Testing PowerUser Guide (PowerShell &amp;
+            HTML)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: February 19, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://docs.python.org/3/library/http.server.html"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Python-3.x-blue.svg"
+            /></a>
+            <a href="https://developer.chrome.com/docs/devtools/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Chrome_DevTools-130+-green.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Responsive web design testing ensures that HTML/CSS sites render
+            correctly across all viewport sizes — from 320px mobile screens to
+            2560px desktop monitors. This guide covers serving sites locally
+            with Python's built-in HTTP server, using Chrome/Edge/Firefox
+            DevTools for device emulation, building custom HTML-based overflow
+            debuggers, and automating viewport regression testing. Power users
+            need to understand viewport meta tags, CSS media query breakpoints,
+            overflow detection strategies, and local-first testing workflows to
+            catch layout issues <strong>before</strong> deploying to production
+            (e.g., GitHub Pages, Vercel, Netlify).
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a
+                href="#responsive-web-design-testing-poweruser-guide-powershell-html"
+                >Responsive Web Design Testing PowerUser Guide (PowerShell
+                \&amp; HTML)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#serve-a-static-site-locally-with-python"
+                    >Serve a Static Site Locally with Python</a
+                  >
+                </li>
+                <li>
+                  <a href="#chromeedge-devtools-device-emulation"
+                    >Chrome/Edge DevTools Device Emulation</a
+                  >
+                </li>
+                <li>
+                  <a href="#firefox-responsive-design-mode"
+                    >Firefox Responsive Design Mode</a
+                  >
+                </li>
+                <li>
+                  <a href="#build-a-custom-html-overflow-debugger"
+                    >Build a Custom HTML Overflow Debugger</a
+                  >
+                </li>
+                <li>
+                  <a href="#javascript-console-overflow-detection-snippet"
+                    >JavaScript Console Overflow Detection Snippet</a
+                  >
+                </li>
+                <li>
+                  <a href="#css-diagnostic-overlay-for-development"
+                    >CSS Diagnostic Overlay for Development</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#automated-viewport-screenshot-testing-with-playwright"
+                    >Automated Viewport Screenshot Testing with Playwright</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Serve locally</strong>: <code>cd</code> into your site
+              directory and run <code>python -m http.server 8080</code>
+            </li>
+            <li>
+              <strong>Open in browser</strong>: Navigate to
+              <code>http://localhost:8080</code>
+            </li>
+            <li>
+              <strong>Toggle device toolbar</strong>: Press
+              <code>F12</code> then <code>Ctrl+Shift+M</code> in Chrome/Edge
+            </li>
+            <li>
+              <strong>Select a device</strong>: Choose iPhone 12, Galaxy S20,
+              iPad, etc. from the device dropdown
+            </li>
+            <li>
+              <strong>Inspect overflow</strong>: Right-click any element →
+              Inspect → check if <code>scrollWidth &gt; clientWidth</code>
+            </li>
+            <li>
+              <strong>Fix and reload</strong>: Edit CSS, save, reload the
+              browser — changes are instant (no deploy needed)
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Viewport</strong>: The visible area of the web page in the
+              browser; controlled by
+              <code>&lt;meta name="viewport"&gt;</code> tag
+            </li>
+            <li>
+              <strong>Media Query</strong>: CSS <code>@media</code> rule that
+              applies styles conditionally based on viewport width, height,
+              orientation, or resolution
+            </li>
+            <li>
+              <strong>Breakpoint</strong>: A specific viewport width at which
+              the layout changes; common breakpoints are 320px, 480px, 768px,
+              1024px, 1200px
+            </li>
+            <li>
+              <strong>Overflow</strong>: When an element's rendered width or
+              height exceeds its parent container or the viewport, causing
+              horizontal scrollbars
+            </li>
+            <li>
+              <strong>Device Pixel Ratio (DPR)</strong>: Ratio of physical
+              pixels to CSS pixels; Retina displays have DPR of 2x or 3x
+            </li>
+            <li>
+              <strong>DevTools Device Mode</strong>: Browser feature that
+              simulates mobile viewports, touch events, user agents, and network
+              throttling
+            </li>
+            <li>
+              <strong>Local HTTP Server</strong>: A lightweight server that
+              serves files from a directory over HTTP; Python's
+              <code>http.server</code> module is the simplest option
+            </li>
+            <li>
+              <strong>Viewport Meta Tag</strong>:
+              <code
+                >&lt;meta name="viewport" content="width=device-width,
+                initial-scale=1.0"&gt;</code
+              >
+              — required for proper mobile rendering
+            </li>
+            <li>
+              <strong>Box Model</strong>: CSS layout model where
+              <code>box-sizing: border-box</code> includes padding and border in
+              width calculations, preventing overflow
+            </li>
+            <li>
+              <strong>Responsive Unit</strong>: CSS units that scale with
+              viewport — <code>vw</code>, <code>vh</code>, <code>%</code>,
+              <code>rem</code>, <code>em</code> — vs fixed units like
+              <code>px</code>
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p>
+            <strong>Viewport Meta Tag</strong> (required in every HTML
+            <code>&lt;head&gt;</code>):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cm">&lt;!-- Standard responsive viewport — MUST be present --&gt;</span>
 <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="p">&gt;</span>
 
 <span class="cm">&lt;!-- Prevent user zoom (accessibility concern — use sparingly) --&gt;</span>
 <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>CSS Defensive Defaults</strong> (prevent overflow globally):</p>
-<div class="codehilite"><pre><span></span><code><span class="c">/* Reset box model — prevents padding from breaking widths */</span>
+          <p>
+            <strong>CSS Defensive Defaults</strong> (prevent overflow globally):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c">/* Reset box model — prevents padding from breaking widths */</span>
 <span class="o">*,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">before</span><span class="o">,</span><span class="w"> </span><span class="o">*</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">box-sizing</span><span class="p">:</span><span class="w"> </span><span class="kc">border-box</span><span class="p">;</span>
 <span class="p">}</span>
@@ -134,10 +303,12 @@
 <span class="w">    </span><span class="k">overflow</span><span class="p">:</span><span class="w"> </span><span class="kc">hidden</span><span class="p">;</span>
 <span class="w">    </span><span class="k">overflow-wrap</span><span class="p">:</span><span class="w"> </span><span class="kc">break-word</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Common Breakpoint Strategy</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c">/* Mobile-first approach — base styles target small screens */</span>
+          <p><strong>Common Breakpoint Strategy</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c">/* Mobile-first approach — base styles target small screens */</span>
 
 <span class="c">/* Small phones (≤ 400px) */</span>
 <span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">max-width</span><span class="o">:</span><span class="w"> </span><span class="nt">400px</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
@@ -162,10 +333,12 @@
 <span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">min-width</span><span class="o">:</span><span class="w"> </span><span class="nt">1600px</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="p">.</span><span class="nc">container</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">1400</span><span class="kt">px</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Python HTTP Server Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Basic static server — serves current directory on port 8080</span>
+          <p><strong>Python HTTP Server Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Basic static server — serves current directory on port 8080</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span>
 
 <span class="c"># Bind to specific interface (useful for testing from phone on same network)</span>
@@ -176,33 +349,76 @@
 
 <span class="c"># Use a different port if 8080 is occupied</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">3000</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Always test locally before deploying to GitHub Pages, Vercel, or Netlify
-- Use mobile-first CSS (base styles target smallest screens, media queries add complexity)
-- Set <code>box-sizing: border-box</code> globally — prevents padding from breaking widths
-- Add <code>overflow-x: hidden</code> to <code>html</code> and <code>body</code> as a safety net
-- Add <code>max-width: 100%</code> to all images and media elements globally
-- Use <code>min()</code>, <code>clamp()</code>, and <code>%</code> for fluid widths instead of fixed <code>px</code> where possible
-- Test at least five widths: 320px, 375px, 768px, 1024px, 1440px
-- Use CSS Grid <code>minmax()</code> carefully — <code>minmax(300px, 1fr)</code> will force 300px minimum on screens &lt;300px
-- Always add <code>overflow-wrap: break-word</code> to card-like containers with user-generated or dynamic content
-- Keep the Python local server running during development to get instant feedback</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Local Server Binding</strong>: Bind to <code>127.0.0.1</code> (default) in untrusted networks; only use <code>0.0.0.0</code> on trusted LANs when testing from a phone</li>
-<li><strong>Port Exposure</strong>: Python's HTTP server has no authentication; never expose port 8080 to the public internet</li>
-<li><strong>Debug Files</strong>: Always <code>.gitignore</code> and delete debug/testing HTML files before committing to production</li>
-<li><strong>Viewport Manipulation</strong>: Disabling user zoom (<code>user-scalable=no</code>) is an accessibility violation (WCAG 1.4.4); avoid unless absolutely required</li>
-<li><strong>External Badge/Image Loading</strong>: Shields.io badges and external images can leak visitor IPs and referrer headers; consider self-hosting critical assets</li>
-<li><strong>DevTools Network Throttling</strong>: When testing with throttled networks, ensure no sensitive data is transmitted over unencrypted HTTP</li>
-<li><strong>Playwright/Puppeteer Scripts</strong>: Headless browser automation tools can execute arbitrary JavaScript; run only trusted test scripts</li>
-</ol>
-<h2 id="examples">Examples</h2>
-<h3 id="serve-a-static-site-locally-with-python">Serve a Static Site Locally with Python</h3>
-<p>Launch a local HTTP server to preview your site exactly as it will appear when deployed, without waiting for CI/CD pipelines or GitHub Pages builds.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Navigate to project root</span>
+          <p>
+            <strong>Best Practices</strong>: - Always test locally before
+            deploying to GitHub Pages, Vercel, or Netlify - Use mobile-first CSS
+            (base styles target smallest screens, media queries add complexity)
+            - Set <code>box-sizing: border-box</code> globally — prevents
+            padding from breaking widths - Add
+            <code>overflow-x: hidden</code> to <code>html</code> and
+            <code>body</code> as a safety net - Add
+            <code>max-width: 100%</code> to all images and media elements
+            globally - Use <code>min()</code>, <code>clamp()</code>, and
+            <code>%</code> for fluid widths instead of fixed
+            <code>px</code> where possible - Test at least five widths: 320px,
+            375px, 768px, 1024px, 1440px - Use CSS Grid
+            <code>minmax()</code> carefully —
+            <code>minmax(300px, 1fr)</code> will force 300px minimum on screens
+            &lt;300px - Always add <code>overflow-wrap: break-word</code> to
+            card-like containers with user-generated or dynamic content - Keep
+            the Python local server running during development to get instant
+            feedback
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Local Server Binding</strong>: Bind to
+              <code>127.0.0.1</code> (default) in untrusted networks; only use
+              <code>0.0.0.0</code> on trusted LANs when testing from a phone
+            </li>
+            <li>
+              <strong>Port Exposure</strong>: Python's HTTP server has no
+              authentication; never expose port 8080 to the public internet
+            </li>
+            <li>
+              <strong>Debug Files</strong>: Always <code>.gitignore</code> and
+              delete debug/testing HTML files before committing to production
+            </li>
+            <li>
+              <strong>Viewport Manipulation</strong>: Disabling user zoom
+              (<code>user-scalable=no</code>) is an accessibility violation
+              (WCAG 1.4.4); avoid unless absolutely required
+            </li>
+            <li>
+              <strong>External Badge/Image Loading</strong>: Shields.io badges
+              and external images can leak visitor IPs and referrer headers;
+              consider self-hosting critical assets
+            </li>
+            <li>
+              <strong>DevTools Network Throttling</strong>: When testing with
+              throttled networks, ensure no sensitive data is transmitted over
+              unencrypted HTTP
+            </li>
+            <li>
+              <strong>Playwright/Puppeteer Scripts</strong>: Headless browser
+              automation tools can execute arbitrary JavaScript; run only
+              trusted test scripts
+            </li>
+          </ol>
+          <h2 id="examples">Examples</h2>
+          <h3 id="serve-a-static-site-locally-with-python">
+            Serve a Static Site Locally with Python
+          </h3>
+          <p>
+            Launch a local HTTP server to preview your site exactly as it will
+            appear when deployed, without waiting for CI/CD pipelines or GitHub
+            Pages builds.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Navigate to project root</span>
 <span class="nb">cd </span><span class="s2">&quot;C:\Users\username\projects\my-website&quot;</span>
 
 <span class="c"># Start Python HTTP server on port 8080</span>
@@ -222,10 +438,15 @@
 <span class="c"># Then open http://&lt;your-ip&gt;:8080 on your phone browser</span>
 
 <span class="c"># Stop the server with Ctrl+C when done</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>PowerShell Function</strong> (add to <code>$PROFILE</code> for reuse):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">function</span> <span class="nb">Start-WebServer</span> <span class="p">{</span>
+          <p>
+            <strong>PowerShell Function</strong> (add to
+            <code>$PROFILE</code> for reuse):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">function</span> <span class="nb">Start-WebServer</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="no">[int]</span><span class="nv">$Port</span> <span class="p">=</span> <span class="n">8080</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$Directory</span> <span class="p">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
@@ -254,11 +475,19 @@
 <span class="c"># Start-WebServer -OpenBrowser             → opens browser automatically</span>
 <span class="c"># Start-WebServer -LAN                     → accessible from phone on same network</span>
 <span class="c"># Start-WebServer -LAN -OpenBrowser -Port 5500  → full options</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="chromeedge-devtools-device-emulation">Chrome/Edge DevTools Device Emulation</h3>
-<p>Use the built-in device emulation in Chromium-based browsers (Chrome, Edge, Brave) to simulate mobile viewports, DPR, touch events, and network throttling.</p>
-<div class="codehilite"><pre><span></span><code>STEPS:
+          <h3 id="chromeedge-devtools-device-emulation">
+            Chrome/Edge DevTools Device Emulation
+          </h3>
+          <p>
+            Use the built-in device emulation in Chromium-based browsers
+            (Chrome, Edge, Brave) to simulate mobile viewports, DPR, touch
+            events, and network throttling.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>STEPS:
 1. Open your site: http://localhost:8080
 2. Press F12 (or Ctrl+Shift+I) to open DevTools
 3. Press Ctrl+Shift+M to toggle Device Toolbar (or click the phone/tablet icon)
@@ -272,10 +501,12 @@
    - iPad Pro (1024×1366, DPR 2)
 5. Use &quot;Responsive&quot; mode to freely drag the viewport to any width
 6. Right-click any element → Inspect → check computed styles and layout
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Key DevTools Features for Responsive Testing</strong>:</p>
-<div class="codehilite"><pre><span></span><code>DEVICE TOOLBAR OPTIONS:
+          <p><strong>Key DevTools Features for Responsive Testing</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code>DEVICE TOOLBAR OPTIONS:
 ┌─────────────────────────────────────────────────────────────────┐
 │  [Device dropdown ▼]  [Width]x[Height]  [DPR ▼]  [Rotate ↻]  │
 │                                                                 │
@@ -296,10 +527,12 @@ KEYBOARD SHORTCUTS:
 - Ctrl+Shift+J    → Open Console directly
 - Ctrl+]          → Next panel
 - Ctrl+[          → Previous panel
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Adding Custom Device Profiles</strong>:</p>
-<div class="codehilite"><pre><span></span><code>1. Open Device Toolbar (Ctrl+Shift+M)
+          <p><strong>Adding Custom Device Profiles</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code>1. Open Device Toolbar (Ctrl+Shift+M)
 2. Click &quot;Edit...&quot; at the bottom of the device dropdown
 3. Click &quot;Add custom device...&quot;
 4. Fill in:
@@ -313,11 +546,19 @@ KEYBOARD SHORTCUTS:
    - &quot;4K Monitor&quot;: 3840×2160, DPR 1
    - &quot;Conference Projector&quot;: 1920×1080, DPR 1
    - &quot;Old iPhone SE&quot;: 320×568, DPR 2
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="firefox-responsive-design-mode">Firefox Responsive Design Mode</h3>
-<p>Firefox has a built-in responsive design mode that is independent of DevTools and offers unique features like network throttling and touch simulation.</p>
-<div class="codehilite"><pre><span></span><code>STEPS:
+          <h3 id="firefox-responsive-design-mode">
+            Firefox Responsive Design Mode
+          </h3>
+          <p>
+            Firefox has a built-in responsive design mode that is independent of
+            DevTools and offers unique features like network throttling and
+            touch simulation.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>STEPS:
 1. Open your site: http://localhost:8080
 2. Press Ctrl+Shift+M to toggle Responsive Design Mode directly
    (No need to open DevTools first — unlike Chrome)
@@ -333,12 +574,27 @@ KEYBOARD SHORTCUTS:
 - Ctrl+Shift+M    → Toggle responsive design mode
 - Ctrl+Shift+I    → Open full DevTools
 - Ctrl+Shift+K    → Open Web Console
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="build-a-custom-html-overflow-debugger">Build a Custom HTML Overflow Debugger</h3>
-<p>Create a self-contained HTML file that loads your site in a resizable iframe and programmatically scans every DOM element for overflow. This is the most reliable method for finding the exact CSS selectors causing horizontal scroll on mobile.</p>
-<p><strong>Save as <code>debug-overflow.html</code> in your project root</strong> (add to <code>.gitignore</code>):</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+          <h3 id="build-a-custom-html-overflow-debugger">
+            Build a Custom HTML Overflow Debugger
+          </h3>
+          <p>
+            Create a self-contained HTML file that loads your site in a
+            resizable iframe and programmatically scans every DOM element for
+            overflow. This is the most reliable method for finding the exact CSS
+            selectors causing horizontal scroll on mobile.
+          </p>
+          <p>
+            <strong
+              >Save as <code>debug-overflow.html</code> in your project
+              root</strong
+            >
+            (add to <code>.gitignore</code>):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span><span class="p">&gt;</span>
@@ -565,10 +821,12 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Usage</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># 1. Place debug-overflow.html in the same directory as index.html</span>
+          <p><strong>Usage</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># 1. Place debug-overflow.html in the same directory as index.html</span>
 <span class="c"># 2. Start local server</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span>
 
@@ -591,11 +849,18 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="nb">Remove-Item</span> <span class="nb">debug-overflow</span><span class="p">.</span><span class="n">html</span>
 <span class="c"># Or add to .gitignore:</span>
 <span class="nb">Add-Content</span> <span class="p">.</span><span class="n">gitignore</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">debug-overflow.html&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="javascript-console-overflow-detection-snippet">JavaScript Console Overflow Detection Snippet</h3>
-<p>Paste this directly into the browser console (F12 → Console) when viewing your site in device mode. No extra files needed.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Paste into DevTools Console while in device emulation mode</span>
+          <h3 id="javascript-console-overflow-detection-snippet">
+            JavaScript Console Overflow Detection Snippet
+          </h3>
+          <p>
+            Paste this directly into the browser console (F12 → Console) when
+            viewing your site in device mode. No extra files needed.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Paste into DevTools Console while in device emulation mode</span>
 <span class="c1">// Reports every element whose right edge exceeds the viewport</span>
 
 <span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">findOverflow</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -639,21 +904,33 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">groupEnd</span><span class="p">();</span>
 <span class="p">})();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Usage</strong>:</p>
-<div class="codehilite"><pre><span></span><code>1. Open http://localhost:8080 in Chrome/Edge
+          <p><strong>Usage</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code>1. Open http://localhost:8080 in Chrome/Edge
 2. Press F12 → Ctrl+Shift+M → select a mobile device
 3. Switch to the Console tab
 4. Paste the snippet above and press Enter
 5. Click any logged element reference to jump to it in the Elements panel
 6. The element is highlighted on the page — inspect its CSS to find the cause
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="css-diagnostic-overlay-for-development">CSS Diagnostic Overlay for Development</h3>
-<p>Add a temporary CSS file that outlines every element with a coloured border, making overflow visually obvious without any JavaScript.</p>
-<p><strong>Save as <code>debug.css</code></strong> (link it temporarily in <code>&lt;head&gt;</code>):</p>
-<div class="codehilite"><pre><span></span><code><span class="c">/* debug.css — TEMPORARY — remove before committing */</span>
+          <h3 id="css-diagnostic-overlay-for-development">
+            CSS Diagnostic Overlay for Development
+          </h3>
+          <p>
+            Add a temporary CSS file that outlines every element with a coloured
+            border, making overflow visually obvious without any JavaScript.
+          </p>
+          <p>
+            <strong>Save as <code>debug.css</code></strong> (link it temporarily
+            in <code>&lt;head&gt;</code>):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c">/* debug.css — TEMPORARY — remove before committing */</span>
 
 <span class="c">/* Outline every element to see box boundaries */</span>
 <span class="o">*</span><span class="w"> </span><span class="p">{</span>
@@ -682,30 +959,47 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="p">.</span><span class="nc">container</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="w"> </span><span class="kc">dashed</span><span class="w"> </span><span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w"> </span><span class="cp">!important</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Usage</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- Add temporarily to &lt;head&gt; for debugging — remove before deploy --&gt;</span>
+          <p><strong>Usage</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cm">&lt;!-- Add temporarily to &lt;head&gt; for debugging — remove before deploy --&gt;</span>
 <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;debug.css&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<div class="codehilite"><pre><span></span><code><span class="c"># Quick toggle: add debug.css to head</span>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Quick toggle: add debug.css to head</span>
 <span class="c"># When done, remove the &lt;link&gt; tag and delete the file</span>
 <span class="nb">Remove-Item</span> <span class="n">debug</span><span class="p">.</span><span class="n">css</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="automated-viewport-screenshot-testing-with-playwright">Automated Viewport Screenshot Testing with Playwright</h3>
-<p>Use Microsoft Playwright to programmatically capture screenshots at multiple viewport sizes. This is useful for regression testing — run it after every CSS change to verify nothing breaks.</p>
-<p><strong>Install Playwright</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Install Playwright with pip</span>
+          <h3 id="automated-viewport-screenshot-testing-with-playwright">
+            Automated Viewport Screenshot Testing with Playwright
+          </h3>
+          <p>
+            Use Microsoft Playwright to programmatically capture screenshots at
+            multiple viewport sizes. This is useful for regression testing — run
+            it after every CSS change to verify nothing breaks.
+          </p>
+          <p><strong>Install Playwright</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Install Playwright with pip</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">playwright</span>
 
 <span class="c"># Install browser binaries (Chromium, Firefox, WebKit)</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">playwright</span> <span class="n">install</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Save as <code>test_responsive.py</code></strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+          <p>
+            <strong>Save as <code>test_responsive.py</code></strong
+            >:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Automated responsive screenshot testing with Playwright.</span>
 <span class="sd">Captures screenshots at multiple viewport sizes and detects overflow.</span>
 <span class="sd">Run: python test_responsive.py</span>
@@ -797,10 +1091,12 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Usage</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># 1. Start local server in one terminal</span>
+          <p><strong>Usage</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># 1. Start local server in one terminal</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span>
 
 <span class="c"># 2. Run tests in another terminal</span>
@@ -823,83 +1119,134 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="c"># 3. Review screenshots visually</span>
 <span class="n">explorer</span><span class="p">.</span><span class="n">exe</span> <span class="p">.\</span><span class="n">screenshots</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<table>
-<thead>
-<tr>
-<th>Problem</th>
-<th>Cause</th>
-<th>Solution</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Horizontal scrollbar on mobile</td>
-<td>Element wider than viewport</td>
-<td>Run overflow scan → find the selector → add <code>max-width: 100%</code> or <code>overflow: hidden</code></td>
-</tr>
-<tr>
-<td><code>python -m http.server</code> not found</td>
-<td>Python not in PATH or wrong alias</td>
-<td>Use <code>python3 -m http.server</code> or check <code>Get-Command python</code></td>
-</tr>
-<tr>
-<td>Port 8080 already in use</td>
-<td>Another process occupies the port</td>
-<td>Use a different port: <code>python -m http.server 3000</code> or kill the process: <code>Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess \| Stop-Process</code></td>
-</tr>
-<tr>
-<td>Iframe blocked in debug tool</td>
-<td>Same-origin policy or X-Frame-Options</td>
-<td>Serve both files from the same local server (same origin)</td>
-</tr>
-<tr>
-<td>DevTools device mode shows desktop</td>
-<td>Viewport meta tag missing</td>
-<td>Add <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code> to <code>&lt;head&gt;</code></td>
-</tr>
-<tr>
-<td>CSS changes not reflecting</td>
-<td>Browser cache</td>
-<td>Hard reload with <code>Ctrl+Shift+R</code> or disable cache in DevTools (Network → Disable cache)</td>
-</tr>
-<tr>
-<td>Grid <code>minmax(300px, 1fr)</code> overflows</td>
-<td>Minimum 300px wider than viewport on small phones</td>
-<td>Override in media query: <code>@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }</code></td>
-</tr>
-<tr>
-<td>Badges/shield images overflow</td>
-<td>Flex container doesn't constrain image widths</td>
-<td>Add <code>max-width: 100%</code> to <code>.badges</code> and <code>.badges img { height: auto; max-width: 100%; }</code></td>
-</tr>
-<tr>
-<td>Long URLs/emails break layout</td>
-<td>No word-break on container</td>
-<td>Add <code>overflow-wrap: break-word; word-break: break-word;</code> to the parent container</td>
-</tr>
-<tr>
-<td><code>&lt;code&gt;</code> blocks overflow cards</td>
-<td>Monospace text doesn't wrap by default</td>
-<td>Add <code>code { word-break: break-all; max-width: 100%; }</code></td>
-</tr>
-<tr>
-<td>Phone can't access local server</td>
-<td>Server bound to 127.0.0.1 only</td>
-<td>Use <code>--bind 0.0.0.0</code> and connect via LAN IP</td>
-</tr>
-<tr>
-<td>Playwright screenshots are blank</td>
-<td>Page not fully loaded</td>
-<td>Use <code>wait_until="networkidle"</code> or add <code>await page.wait_for_timeout(2000)</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Python HTTP Server Alternatives</strong> (for faster local serving):</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Python http.server is single-threaded — fine for testing, not production</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Problem</th>
+                <th>Cause</th>
+                <th>Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Horizontal scrollbar on mobile</td>
+                <td>Element wider than viewport</td>
+                <td>
+                  Run overflow scan → find the selector → add
+                  <code>max-width: 100%</code> or <code>overflow: hidden</code>
+                </td>
+              </tr>
+              <tr>
+                <td><code>python -m http.server</code> not found</td>
+                <td>Python not in PATH or wrong alias</td>
+                <td>
+                  Use <code>python3 -m http.server</code> or check
+                  <code>Get-Command python</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Port 8080 already in use</td>
+                <td>Another process occupies the port</td>
+                <td>
+                  Use a different port:
+                  <code>python -m http.server 3000</code> or kill the process:
+                  <code
+                    >Get-Process -Id (Get-NetTCPConnection -LocalPort
+                    8080).OwningProcess \| Stop-Process</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Iframe blocked in debug tool</td>
+                <td>Same-origin policy or X-Frame-Options</td>
+                <td>
+                  Serve both files from the same local server (same origin)
+                </td>
+              </tr>
+              <tr>
+                <td>DevTools device mode shows desktop</td>
+                <td>Viewport meta tag missing</td>
+                <td>
+                  Add
+                  <code
+                    >&lt;meta name="viewport" content="width=device-width,
+                    initial-scale=1.0"&gt;</code
+                  >
+                  to <code>&lt;head&gt;</code>
+                </td>
+              </tr>
+              <tr>
+                <td>CSS changes not reflecting</td>
+                <td>Browser cache</td>
+                <td>
+                  Hard reload with <code>Ctrl+Shift+R</code> or disable cache in
+                  DevTools (Network → Disable cache)
+                </td>
+              </tr>
+              <tr>
+                <td>Grid <code>minmax(300px, 1fr)</code> overflows</td>
+                <td>Minimum 300px wider than viewport on small phones</td>
+                <td>
+                  Override in media query:
+                  <code
+                    >@media (max-width: 768px) { .grid { grid-template-columns:
+                    1fr; } }</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Badges/shield images overflow</td>
+                <td>Flex container doesn't constrain image widths</td>
+                <td>
+                  Add <code>max-width: 100%</code> to <code>.badges</code> and
+                  <code>.badges img { height: auto; max-width: 100%; }</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Long URLs/emails break layout</td>
+                <td>No word-break on container</td>
+                <td>
+                  Add
+                  <code
+                    >overflow-wrap: break-word; word-break: break-word;</code
+                  >
+                  to the parent container
+                </td>
+              </tr>
+              <tr>
+                <td><code>&lt;code&gt;</code> blocks overflow cards</td>
+                <td>Monospace text doesn't wrap by default</td>
+                <td>
+                  Add
+                  <code>code { word-break: break-all; max-width: 100%; }</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Phone can't access local server</td>
+                <td>Server bound to 127.0.0.1 only</td>
+                <td>Use <code>--bind 0.0.0.0</code> and connect via LAN IP</td>
+              </tr>
+              <tr>
+                <td>Playwright screenshots are blank</td>
+                <td>Page not fully loaded</td>
+                <td>
+                  Use <code>wait_until="networkidle"</code> or add
+                  <code>await page.wait_for_timeout(2000)</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p>
+            <strong>Python HTTP Server Alternatives</strong> (for faster local
+            serving):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Python http.server is single-threaded — fine for testing, not production</span>
 
 <span class="c"># Alternative: Node.js live-server (auto-reloads on file changes)</span>
 <span class="n">npx</span> <span class="n">live-server</span> <span class="p">-</span><span class="n">-port</span><span class="p">=</span><span class="n">8080</span>
@@ -910,18 +1257,22 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="c"># Alternative: PHP built-in server</span>
 <span class="n">php</span> <span class="n">-S</span> <span class="n">localhost</span><span class="p">:</span><span class="n">8080</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>DevTools Performance Tips</strong>:</p>
-<div class="codehilite"><pre><span></span><code>- Enable &quot;Disable cache&quot; in Network tab during development
+          <p><strong>DevTools Performance Tips</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code>- Enable &quot;Disable cache&quot; in Network tab during development
 - Use &quot;Capture screenshots&quot; in Performance tab to see rendering at each frame
 - CPU throttling: 4x or 6x slowdown simulates mobile CPU performance
 - Network throttling: &quot;Slow 3G&quot; simulates real mobile network conditions
 - Lighthouse: Run in DevTools (Lighthouse tab) for a full mobile audit score
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>CSS Performance for Responsive Layouts</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c">/* Use will-change sparingly for animated responsive transitions */</span>
+          <p><strong>CSS Performance for Responsive Layouts</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c">/* Use will-change sparingly for animated responsive transitions */</span>
 <span class="p">.</span><span class="nc">card</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">will-change</span><span class="p">:</span><span class="w"> </span><span class="k">transform</span><span class="p">;</span>
 <span class="p">}</span>
@@ -940,10 +1291,12 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="c">/* Avoid expensive selectors in media queries */</span>
 <span class="c">/* ❌ Bad: */</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nt">div</span><span class="p">.</span><span class="nc">card</span><span class="p">:</span><span class="nd">nth-child</span><span class="o">(</span><span class="nt">odd</span><span class="o">)</span><span class="w"> </span><span class="nt">ul</span><span class="w"> </span><span class="nt">li</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="c">/* ✅ Good: */</span><span class="w"> </span><span class="p">.</span><span class="nc">card-item</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Playwright Performance Tips</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Run tests in parallel across browsers</span>
+          <p><strong>Playwright Performance Tips</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Run tests in parallel across browsers</span>
 <span class="k">async</span> <span class="k">with</span> <span class="n">async_playwright</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
     <span class="n">browsers</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
         <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">(),</span>
@@ -962,51 +1315,104 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
     <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="c1"># ... test ...</span>
     <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://developer.chrome.com/docs/devtools/device-mode/">Chrome DevTools Device Mode</a> - Official Chromium device emulation documentation</li>
-<li><a href="https://firefox-source-docs.mozilla.org/devtools-user/responsive_design_mode/">Firefox Responsive Design Mode</a> - Mozilla responsive testing documentation</li>
-<li><a href="https://docs.python.org/3/library/http.server.html">Python http.server</a> - Python standard library HTTP server reference</li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design">MDN Responsive Design</a> - Comprehensive responsive web design guide</li>
-<li><a href="https://www.w3.org/TR/mediaqueries-4/">CSS Media Queries Level 4</a> - W3C specification for media queries</li>
-<li><a href="https://playwright.dev/python/docs/intro">Playwright Documentation</a> - Microsoft Playwright for Python — automated browser testing</li>
-<li><a href="https://developer.chrome.com/docs/lighthouse/">Google Lighthouse</a> - Automated auditing for performance, accessibility, and responsive design</li>
-<li><a href="https://caniuse.com/">Can I Use</a> - Browser support tables for CSS features, media queries, and viewport units</li>
-<li><a href="https://responsively.app/">Responsively App</a> - Open-source tool that displays your site at multiple viewports simultaneously</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">VS Code Live Server</a> - VS Code extension for live-reloading local server</li>
-</ul></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://developer.chrome.com/docs/devtools/device-mode/"
+                >Chrome DevTools Device Mode</a
+              >
+              - Official Chromium device emulation documentation
+            </li>
+            <li>
+              <a
+                href="https://firefox-source-docs.mozilla.org/devtools-user/responsive_design_mode/"
+                >Firefox Responsive Design Mode</a
+              >
+              - Mozilla responsive testing documentation
+            </li>
+            <li>
+              <a href="https://docs.python.org/3/library/http.server.html"
+                >Python http.server</a
+              >
+              - Python standard library HTTP server reference
+            </li>
+            <li>
+              <a
+                href="https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design"
+                >MDN Responsive Design</a
+              >
+              - Comprehensive responsive web design guide
+            </li>
+            <li>
+              <a href="https://www.w3.org/TR/mediaqueries-4/"
+                >CSS Media Queries Level 4</a
+              >
+              - W3C specification for media queries
+            </li>
+            <li>
+              <a href="https://playwright.dev/python/docs/intro"
+                >Playwright Documentation</a
+              >
+              - Microsoft Playwright for Python — automated browser testing
+            </li>
+            <li>
+              <a href="https://developer.chrome.com/docs/lighthouse/"
+                >Google Lighthouse</a
+              >
+              - Automated auditing for performance, accessibility, and
+              responsive design
+            </li>
+            <li>
+              <a href="https://caniuse.com/">Can I Use</a> - Browser support
+              tables for CSS features, media queries, and viewport units
+            </li>
+            <li>
+              <a href="https://responsively.app/">Responsively App</a> -
+              Open-source tool that displays your site at multiple viewports
+              simultaneously
+            </li>
+            <li>
+              <a
+                href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer"
+                >VS Code Live Server</a
+              >
+              - VS Code extension for live-reloading local server
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

@@ -2,10 +2,11 @@
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -61,6 +62,7 @@ SSL/TLS provides encrypted communication channels for secure data transmission. 
 ## Configuration and Best Practices
 
 **OpenSSL Configuration File** (`/etc/ssl/openssl.cnf` or `~/.openssl.cnf`):
+
 ```ini
 [req]
 default_bits = 4096
@@ -87,6 +89,7 @@ IP.1 = 192.168.1.100
 ```
 
 **Best Practices**:
+
 - Use 4096-bit RSA keys or 256-bit ECDSA keys minimum
 - Set certificate validity to 397 days maximum (browser requirement)
 - Always include Subject Alternative Names (SANs) for hostnames
@@ -105,6 +108,7 @@ IP.1 = 192.168.1.100
 7. **Certificate Transparency**: Monitor CT logs for unauthorized certificate issuance for your domains
 
 **Nginx TLS Hardening**:
+
 ```nginx
 ssl_protocols TLSv1.2 TLSv1.3;
 ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305';
@@ -366,15 +370,15 @@ LOG_FILE="/var/log/cert-monitor.log"
 check_cert() {
     local cert_file=$1
     local expiry_date=$(openssl x509 -in "$cert_file" -noout -enddate 2>/dev/null | cut -d= -f2)
-    
+
     if [ -z "$expiry_date" ]; then
         return
     fi
-    
+
     local expiry_epoch=$(date -d "$expiry_date" +%s)
     local current_epoch=$(date +%s)
     local days_left=$(( ($expiry_epoch - $current_epoch) / 86400 ))
-    
+
     if [ $days_left -lt 0 ]; then
         echo "EXPIRED: $cert_file (expired $((-days_left)) days ago)" | tee -a "$LOG_FILE"
     elif [ $days_left -lt $WARNING_DAYS ]; then
@@ -391,7 +395,7 @@ done
 check_remote() {
     local host=$1
     local port=${2:-443}
-    
+
     echo | openssl s_client -connect "$host:$port" -servername "$host" 2>/dev/null | \
         openssl x509 -noout -dates 2>/dev/null
 }
@@ -403,27 +407,32 @@ check_remote "example.com" 443
 ## Troubleshooting
 
 **Certificate Verification Failures**:
+
 - **Error**: "unable to get local issuer certificate"
   - **Cause**: Missing intermediate CA certificates in chain
   - **Fix**: Download intermediate certificates and create bundle: `cat cert.crt intermediate.crt > bundle.crt`
 
 **Private Key Mismatch**:
+
 - **Error**: "key values mismatch"
   - **Cause**: Private key doesn't match certificate public key
   - **Fix**: Compare modulus: `openssl x509 -noout -modulus -in cert.crt | openssl md5` vs `openssl rsa -noout -modulus -in key.pem | openssl md5`
 
 **Certificate Expired**:
+
 - **Error**: "certificate has expired"
   - **Check**: `openssl x509 -in cert.crt -noout -dates`
   - **Fix**: Renew certificate before expiration; automate with Let's Encrypt
 
 **Common Logs to Check**:
+
 - Nginx: `/var/log/nginx/error.log` for SSL handshake failures
 - Apache: `/var/log/apache2/error.log` or `/var/log/httpd/error_log`
 - System logs: `journalctl -u nginx -n 100` or `/var/log/syslog`
 - OpenSSL debug: Add `-debug` or `-msg` flags to s_client
 
 **Permission Errors**:
+
 - **Error**: "Permission denied" when reading private key
   - **Fix**: `sudo chmod 600 /path/to/private.key && sudo chown root:root /path/to/private.key`
 - **Error**: Nginx can't read certificate
@@ -432,11 +441,13 @@ check_remote "example.com" 443
 ## Performance and Tuning
 
 **Key Size vs Performance**:
+
 - RSA 2048-bit: Baseline performance, adequate for most use cases
 - RSA 4096-bit: 7x slower key generation, 2x slower handshakes, recommended for CA and long-lived certificates
 - ECDSA P-256: Faster handshakes than RSA, smaller key sizes, use for high-throughput servers
 
 **Session Resumption**:
+
 ```nginx
 # Nginx configuration for session caching
 ssl_session_cache shared:SSL:50m;
@@ -445,6 +456,7 @@ ssl_session_tickets on;
 ```
 
 **OCSP Stapling**:
+
 ```nginx
 # Nginx OCSP stapling configuration
 ssl_stapling on;
@@ -455,12 +467,14 @@ resolver_timeout 5s;
 ```
 
 **Hardware Acceleration**:
+
 - Use AES-NI CPU instructions for AES-GCM cipher suites (10x faster)
 - Verify support: `grep -o aes /proc/cpuinfo | uniq`
 - Test performance: `openssl speed -evp aes-256-gcm`
 - Offload to dedicated crypto hardware for >10Gbps workloads
 
 **Monitoring Commands**:
+
 ```bash
 # Measure TLS handshake time
 time echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null

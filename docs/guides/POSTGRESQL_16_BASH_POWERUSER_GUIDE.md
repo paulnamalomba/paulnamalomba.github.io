@@ -2,10 +2,11 @@
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -60,6 +61,7 @@ PostgreSQL 16 is an advanced open-source relational database with support for AC
 ## Configuration and Best Practices
 
 **postgresql.conf** (typically `/etc/postgresql/16/main/postgresql.conf` or `/var/lib/pgsql/16/data/postgresql.conf`):
+
 ```ini
 # Connection settings
 max_connections = 100
@@ -86,6 +88,7 @@ log_min_duration_statement = 1000      # Log queries > 1 second
 ```
 
 **pg_hba.conf** (same directory as postgresql.conf):
+
 ```
 # TYPE  DATABASE  USER      ADDRESS         METHOD
 local   all       all                       scram-sha-256
@@ -95,6 +98,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 ```
 
 **Best Practices**:
+
 - Use connection pooling (PgBouncer) for applications with >100 connections
 - Enable query logging for slow queries (>1000ms)
 - Implement regular VACUUM ANALYZE for table statistics
@@ -113,6 +117,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 7. **Data Encryption**: Use `pgcrypto` for column-level encryption; enable transparent data encryption (TDE) for data-at-rest
 
 **Create Secure Application User**:
+
 ```sql
 CREATE ROLE appuser WITH LOGIN PASSWORD 'SecurePassword123!';
 CREATE DATABASE appdb OWNER appuser;
@@ -300,7 +305,7 @@ sudo -u postgres psql -d production_db -c "EXPLAIN ANALYZE SELECT * FROM users W
 
 # Get table sizes
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     schemaname,
     tablename,
     pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,
@@ -313,7 +318,7 @@ EOF
 
 # Get index usage statistics
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
@@ -327,7 +332,7 @@ EOF
 
 # Find slow queries (requires pg_stat_statements extension)
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     query,
     calls,
     total_exec_time,
@@ -372,7 +377,7 @@ sudo -u postgres psql -d production_db -c "REINDEX TABLE CONCURRENTLY users;"
 
 # Get unused indexes
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     schemaname,
     tablename,
     indexname,
@@ -410,7 +415,7 @@ sudo -u postgres psql -d production_db -c "REINDEX DATABASE production_db;"
 
 # Check for bloat
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     schemaname,
     tablename,
     pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size,
@@ -451,6 +456,7 @@ sudo chmod +x /usr/local/bin/pg_maintenance.sh
 ## Troubleshooting
 
 **Connection Refused**:
+
 - **Error**: "could not connect to server: Connection refused"
   - **Check service**: `sudo systemctl status postgresql`
   - **Start service**: `sudo systemctl start postgresql`
@@ -458,22 +464,25 @@ sudo chmod +x /usr/local/bin/pg_maintenance.sh
   - **Check logs**: `sudo tail -f /var/log/postgresql/postgresql-16-main.log`
 
 **Authentication Failed**:
+
 - **Error**: "FATAL: password authentication failed"
   - **Check pg_hba.conf**: `sudo cat /etc/postgresql/16/main/pg_hba.conf`
   - **Reset password**: `sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'NewPassword123!';"`
   - **Reload config**: `sudo systemctl reload postgresql`
 
 **Out of Memory**:
+
 - **Error**: "out of memory" or "could not resize shared memory segment"
   - **Check shared_buffers**: Edit `/etc/postgresql/16/main/postgresql.conf`
   - **Increase shared memory**: Edit `/etc/sysctl.conf` and add `kernel.shmmax = 17179869184`
   - **Apply changes**: `sudo sysctl -p`
 
 **Lock Timeouts**:
+
 ```bash
 # Check blocking queries
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     pid,
     usename,
     pg_blocking_pids(pid) AS blocked_by,
@@ -487,6 +496,7 @@ sudo -u postgres psql -c "SELECT pg_terminate_backend(12345);"
 ```
 
 **Common Logs**:
+
 - PostgreSQL logs: `/var/log/postgresql/postgresql-16-main.log`
 - System logs: `sudo journalctl -u postgresql -n 100`
 - Authentication errors: `sudo grep "authentication failed" /var/log/postgresql/postgresql-16-main.log`
@@ -494,6 +504,7 @@ sudo -u postgres psql -c "SELECT pg_terminate_backend(12345);"
 ## Performance and Tuning
 
 **Memory Configuration**:
+
 ```ini
 # For 16GB RAM system (/etc/postgresql/16/main/postgresql.conf)
 shared_buffers = 4GB              # 25% of RAM
@@ -503,6 +514,7 @@ work_mem = 16MB                   # Per sort/hash operation
 ```
 
 **Connection Pooling with PgBouncer**:
+
 ```bash
 # Install PgBouncer
 sudo apt-get install pgbouncer
@@ -531,6 +543,7 @@ sudo systemctl enable pgbouncer
 ```
 
 **Query Optimization**:
+
 ```bash
 # Enable pg_stat_statements extension
 sudo -u postgres psql -d production_db -c "CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"
@@ -547,6 +560,7 @@ sudo systemctl restart postgresql
 ```
 
 **Monitoring Commands**:
+
 ```bash
 # Active connections
 sudo -u postgres psql -c "SELECT count(*) FROM pg_stat_activity;"
@@ -556,7 +570,7 @@ sudo -u postgres psql -c "SELECT pg_database.datname, pg_size_pretty(pg_database
 
 # Cache hit ratio (should be >99%)
 sudo -u postgres psql -d production_db << 'EOF'
-SELECT 
+SELECT
     sum(heap_blks_read) as heap_read,
     sum(heap_blks_hit) as heap_hit,
     sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS cache_hit_ratio

@@ -1,95 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 3: Building Event Streaming Pipelines Using Kafka</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 3: Building Event Streaming Pipelines Using Kafka</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html" class="active">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka
+              ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html" class="active"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 4 &mdash; Course 8: Course 8 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/index.html" class="active">Module 4 &mdash; Course 8: Course 8</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Module 4 &mdash; Course 8: Course 8 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/index.html" class="active"
+                >Module 4 &mdash; Course 8: Course 8</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 3 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/lecture-1.html">Lecture 1: Apache Kafka Overview & Architecture</a>
-            <a href="../../course-8/module-4/lecture-2.html">Lecture 2: Distributed Event Streaming Platform Components</a>
-            <a href="../../course-8/module-4/lecture-3.html" class="active">Lecture 3: Building Event Streaming Pipelines Using Kafka</a>
-            <a href="../../course-8/module-4/lecture-4.html">Lecture 4: Kafka Streaming Process & Stream Topology</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 3 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/lecture-1.html"
+                >Lecture 1: Apache Kafka Overview & Architecture</a
+              >
+              <a href="../../course-8/module-4/lecture-2.html"
+                >Lecture 2: Distributed Event Streaming Platform Components</a
+              >
+              <a href="../../course-8/module-4/lecture-3.html" class="active"
+                >Lecture 3: Building Event Streaming Pipelines Using Kafka</a
+              >
+              <a href="../../course-8/module-4/lecture-4.html"
+                >Lecture 4: Kafka Streaming Process & Stream Topology</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 8</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 4</a> <span>&rsaquo;</span> 
-      Lecture 3
-    </div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 8</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 4</a> <span>&rsaquo;</span>
+        Lecture 3
+      </div>
 
-    <h1 class="fade-in">Building Event Streaming Pipelines Using Kafka</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 4, Lecture 3
-    </p>
+      <h1 class="fade-in">Building Event Streaming Pipelines Using Kafka</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 4, Lecture 3
+      </p>
 
-
-<div class="section-card fade-in fade-in-d2"><h2>1. The Core Cluster Topology: Brokers and KRaft</h2>
-<p>At the hardware and network level, a Kafka environment is not a monolithic application; it is a distributed cluster of <strong>Brokers</strong>.</p>
-<ul>
-<li><strong>Brokers:</strong> These are dedicated servers responsible for receiving, storing, processing, and distributing events.</li>
-<li><strong>KRaft (Kafka Raft):</strong> Modern Kafka utilizes controller nodes running the KRaft consensus protocol to manage the cluster's metadata log. This replaces the legacy Zookeeper dependency, streamlining the architecture by keeping metadata state natively within Kafka.</li>
-</ul>
-<div class="mermaid-container"><pre class="mermaid">graph TD
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. The Core Cluster Topology: Brokers and KRaft</h2>
+        <p>
+          At the hardware and network level, a Kafka environment is not a
+          monolithic application; it is a distributed cluster of
+          <strong>Brokers</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Brokers:</strong> These are dedicated servers responsible
+            for receiving, storing, processing, and distributing events.
+          </li>
+          <li>
+            <strong>KRaft (Kafka Raft):</strong> Modern Kafka utilizes
+            controller nodes running the KRaft consensus protocol to manage the
+            cluster's metadata log. This replaces the legacy Zookeeper
+            dependency, streamlining the architecture by keeping metadata state
+            natively within Kafka.
+          </li>
+        </ul>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph TD
     subgraph "Kafka Cluster Topology"
         C1[KRaft Controller Node] &lt;--&gt; C2[KRaft Controller Node]
         C2 &lt;--&gt; C3[KRaft Controller Node]
@@ -99,18 +135,38 @@
         B3[Broker 2] --&gt; C3
     end
 
-</pre></div>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Data Organization: Topics, Partitions, and Replicas</h2>
-<p>Kafka organizes data into logical containers called <strong>Topics</strong>. You can conceptualize a topic as an append-only, distributed database table for a specific category of events (e.g., <code>log_topic</code>, <code>transaction_topic</code>, <code>gps_topic</code>).</p>
-<p>To achieve massive throughput and fault tolerance, topics are physically divided:</p>
-<ul>
-<li><strong>Partitions:</strong> A topic is split into multiple partitions distributed across different brokers. This allows parallel writing and reading.</li>
-<li><strong>Replications:</strong> Each partition is duplicated across multiple brokers. If Broker 0 fails, clients automatically failover to the replica on Broker 1.</li>
-</ul>
-<h3>CLI Topic Management</h3>
-<p>Kafka provides shell scripts to manage this infrastructure.</p>
-<pre><code class="language-bash"># Create a topic with explicit partitioning and fault tolerance
+</pre>
+        </div>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Data Organization: Topics, Partitions, and Replicas</h2>
+        <p>
+          Kafka organizes data into logical containers called
+          <strong>Topics</strong>. You can conceptualize a topic as an
+          append-only, distributed database table for a specific category of
+          events (e.g., <code>log_topic</code>, <code>transaction_topic</code>,
+          <code>gps_topic</code>).
+        </p>
+        <p>
+          To achieve massive throughput and fault tolerance, topics are
+          physically divided:
+        </p>
+        <ul>
+          <li>
+            <strong>Partitions:</strong> A topic is split into multiple
+            partitions distributed across different brokers. This allows
+            parallel writing and reading.
+          </li>
+          <li>
+            <strong>Replications:</strong> Each partition is duplicated across
+            multiple brokers. If Broker 0 fails, clients automatically failover
+            to the replica on Broker 1.
+          </li>
+        </ul>
+        <h3>CLI Topic Management</h3>
+        <p>Kafka provides shell scripts to manage this infrastructure.</p>
+        <pre><code class="language-bash"># Create a topic with explicit partitioning and fault tolerance
 kafka-topics.sh --create --topic log_topic --partitions 2 --replication-factor 2 --bootstrap-server localhost:9092
 
 # Verify the cluster's topics
@@ -120,13 +176,27 @@ kafka-topics.sh --list --bootstrap-server localhost:9092
 kafka-topics.sh --describe --topic log_topic --bootstrap-server localhost:9092
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Ingestion: Kafka Producers</h2>
-<p><strong>Producers</strong> are client applications that push event payloads into Kafka topics. Kafka guarantees that messages sent to a <em>specific partition</em> by a <em>single producer</em> will be appended in the exact order they were sent.</p>
-<h3>The Role of Partition Keys</h3>
-<p>By default, if a producer sends an event without a key, Kafka uses a round-robin strategy to balance the load across all partitions. However, if order matters for a specific entity (e.g., a specific user's web session), you must provide a <strong>Key</strong>. Kafka hashes the key to ensure that all events with the same key strictly route to the same partition.</p>
-<h3>CLI Producer Examples</h3>
-<pre><code class="language-bash"># Producing without keys (Round-robin distribution)
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Ingestion: Kafka Producers</h2>
+        <p>
+          <strong>Producers</strong> are client applications that push event
+          payloads into Kafka topics. Kafka guarantees that messages sent to a
+          <em>specific partition</em> by a <em>single producer</em> will be
+          appended in the exact order they were sent.
+        </p>
+        <h3>The Role of Partition Keys</h3>
+        <p>
+          By default, if a producer sends an event without a key, Kafka uses a
+          round-robin strategy to balance the load across all partitions.
+          However, if order matters for a specific entity (e.g., a specific
+          user's web session), you must provide a <strong>Key</strong>. Kafka
+          hashes the key to ensure that all events with the same key strictly
+          route to the same partition.
+        </p>
+        <h3>CLI Producer Examples</h3>
+        <pre><code class="language-bash"># Producing without keys (Round-robin distribution)
 kafka-console-producer.sh --topic log_topic --bootstrap-server localhost:9092
 &gt; log1
 &gt; log2
@@ -138,9 +208,12 @@ kafka-console-producer.sh --topic user_topic --property parse.key=true --propert
 &gt; user1,logout website
 
 </code></pre>
-<h3>C# Producer Implementation with Keys</h3>
-<p>To implement this programmatically in a robust backend, we use <code>Confluent.Kafka</code>.</p>
-<pre><code class="language-csharp">using System;
+        <h3>C# Producer Implementation with Keys</h3>
+        <p>
+          To implement this programmatically in a robust backend, we use
+          <code>Confluent.Kafka</code>.
+        </p>
+        <pre><code class="language-csharp">using System;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 
@@ -164,24 +237,42 @@ public class UserActivityProducer
 }
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. Extraction: Kafka Consumers</h2>
-<p><strong>Consumers</strong> are client applications that subscribe to topics. Because Kafka stores events durably on disk, producers and consumers are fully decoupled. A consumer can crash, stay offline for an hour, and resume exactly where it left off.</p>
-<ul>
-<li><strong>Offsets:</strong> Consumers track their read position using an integer called an offset.</li>
-<li><strong>Playback:</strong> By resetting the offset to <code>0</code>, a consumer can replay the entire historical stream (a very useful feature for auditing, provided you haven't configured a short retention policy).</li>
-</ul>
-<h3>CLI Consumer Examples</h3>
-<pre><code class="language-bash"># Read only new incoming events
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. Extraction: Kafka Consumers</h2>
+        <p>
+          <strong>Consumers</strong> are client applications that subscribe to
+          topics. Because Kafka stores events durably on disk, producers and
+          consumers are fully decoupled. A consumer can crash, stay offline for
+          an hour, and resume exactly where it left off.
+        </p>
+        <ul>
+          <li>
+            <strong>Offsets:</strong> Consumers track their read position using
+            an integer called an offset.
+          </li>
+          <li>
+            <strong>Playback:</strong> By resetting the offset to
+            <code>0</code>, a consumer can replay the entire historical stream
+            (a very useful feature for auditing, provided you haven't configured
+            a short retention policy).
+          </li>
+        </ul>
+        <h3>CLI Consumer Examples</h3>
+        <pre><code class="language-bash"># Read only new incoming events
 kafka-console-consumer.sh --topic log_topic --bootstrap-server localhost:9092
 
 # Time-travel: Playback all historical events
 kafka-console-consumer.sh --topic log_topic --from-beginning --bootstrap-server localhost:9092
 
 </code></pre>
-<h3>C# Consumer Implementation (Playback Mode)</h3>
-<p>Here is how to configure a C# consumer to act like the <code>--from-beginning</code> flag if no previous offset state exists.</p>
-<pre><code class="language-csharp">using System;
+        <h3>C# Consumer Implementation (Playback Mode)</h3>
+        <p>
+          Here is how to configure a C# consumer to act like the
+          <code>--from-beginning</code> flag if no previous offset state exists.
+        </p>
+        <pre><code class="language-csharp">using System;
 using Confluent.Kafka;
 
 public class UserActivityConsumer
@@ -208,11 +299,22 @@ public class UserActivityConsumer
 }
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>5. End-to-End Architecture: The Social Weather Pipeline</h2>
-<p>To synthesize these concepts, the lecture details a pipeline correlating extreme weather with social media sentiment.</p>
-<p>The architecture deserializes JSON data from external APIs, buffers it in Kafka, and eventually routes it to a structured relational database for analytical querying.</p>
-<div class="mermaid-container"><pre class="mermaid">graph LR
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>5. End-to-End Architecture: The Social Weather Pipeline</h2>
+        <p>
+          To synthesize these concepts, the lecture details a pipeline
+          correlating extreme weather with social media sentiment.
+        </p>
+        <p>
+          The architecture deserializes JSON data from external APIs, buffers it
+          in Kafka, and eventually routes it to a structured relational database
+          for analytical querying.
+        </p>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph LR
     subgraph "Event Sources"
         W_API[IBM Weather API]
         T_API[Twitter API]
@@ -254,12 +356,21 @@ public class UserActivityConsumer
     DB_Writer -- SQL INSERT --&gt; RDBMS
     RDBMS --&gt; Dash
 
-</pre></div>
-<p><em>Note: In modern enterprise pipelines, the "Consumer -&gt; DB Writer" step is often entirely replaced by </em><em>Kafka Connect</em>*, which offers pre-built JDBC sinks to write directly to relational databases without writing custom consumer application code.</p></div>
+</pre>
+        </div>
+        <p>
+          <em
+            >Note: In modern enterprise pipelines, the "Consumer -&gt; DB
+            Writer" step is often entirely replaced by </em
+          ><em>Kafka Connect</em>*, which offers pre-built JDBC sinks to write
+          directly to relational databases without writing custom consumer
+          application code.
+        </p>
+      </div>
 
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

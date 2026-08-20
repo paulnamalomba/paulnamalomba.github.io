@@ -1,125 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Language Runtimes: Memory, Architectures, and Execution - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Language Runtimes: Memory, Architectures, and Execution - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="language-runtimes-memory-architectures-and-execution">Language Runtimes: Memory, Architectures, and Execution</h1>
-<p><br>
-<strong>Last updated</strong>: February 26, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://isocpp.org/"><img alt="C++" src="https://img.shields.io/badge/Language-C++17-blue.svg" /></a>
-<a href="https://learn.microsoft.com/en-us/dotnet/csharp/"><img alt="C#" src="https://img.shields.io/badge/Language-C%23_11.0-purple.svg" /></a>
-<a href="https://python.org/"><img alt="Python" src="https://img.shields.io/badge/Language-Python_3.11-yellow.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>A language's execution environment fundamentally dictates its memory management and deployment constraints. This guide directly contrasts the raw, bare-metal memory control of C++ Native Binaries against the Managed Garbage Collection (GC) of the C# .NET Common Language Runtime (CLR), and the interpreted Global Interpreter Lock (GIL) limitations of the Python Virtual Machine. </p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#language-runtimes-memory-architectures-and-execution">Language Runtimes: Memory, Architectures, and Execution</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
-<li><a href="#c-native-compilation">C++ (Native Compilation)</a></li>
-<li><a href="#c-net-managed-runtime">C# .NET (Managed Runtime)</a></li>
-<li><a href="#python-interpreted-virtual-machine">Python (Interpreted Virtual Machine)</a></li>
-</ul>
-</li>
-<li><a href="#2-writing-basic-codescripts-memory-operations">2. Writing Basic Code/Scripts (Memory Operations)</a><ul>
-<li><a href="#c-manual-memory-management">C++: Manual Memory Management</a></li>
-<li><a href="#c-net-garbage-collected-gc">C# .NET: Garbage Collected (GC)</a></li>
-<li><a href="#python-reference-counting-the-gil">Python: Reference Counting \&amp; The GIL</a></li>
-</ul>
-</li>
-<li><a href="#3-compile-time-commands-compilers-vs-vms">3. Compile-time Commands (Compilers vs VMs)</a><ul>
-<li><a href="#c-native-binaries">C++: Native Binaries</a></li>
-<li><a href="#c-net-intermediate-language-il">C# .NET: Intermediate Language (IL)</a></li>
-<li><a href="#python-bytecode-caching">Python: Bytecode caching</a></li>
-</ul>
-</li>
-<li><a href="#4-runtime-commands-execution-contexts">4. Runtime Commands (Execution Contexts)</a><ul>
-<li><a href="#c-native-execution">C++ Native Execution</a></li>
-<li><a href="#net-core-runtime">.NET Core Runtime</a></li>
-<li><a href="#python-vm">Python VM</a></li>
-</ul>
-</li>
-<li><a href="#5-debugging-segfaults-vs-overflows">5. Debugging (Segfaults vs Overflows)</a><ul>
-<li><a href="#c-the-segmentation-fault">C++: The Segmentation Fault</a></li>
-<li><a href="#c-stackoverflows-gc-pauses">C#: StackOverflows \&amp; GC Pauses</a></li>
-<li><a href="#python-the-resource-bottleneck">Python: The Resource Bottleneck</a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
-<p>Setting up an environment depends heavily on how close to the hardware the language operates.</p>
-<h3 id="c-native-compilation">C++ (Native Compilation)</h3>
-<p>C++ compilers generate raw machine code. </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Linux: Install the GNU Compiler Collection (GCC) and Make</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="language-runtimes-memory-architectures-and-execution">
+            Language Runtimes: Memory, Architectures, and Execution
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 26, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://isocpp.org/"
+              ><img
+                alt="C++"
+                src="https://img.shields.io/badge/Language-C++17-blue.svg"
+            /></a>
+            <a href="https://learn.microsoft.com/en-us/dotnet/csharp/"
+              ><img
+                alt="C#"
+                src="https://img.shields.io/badge/Language-C%23_11.0-purple.svg"
+            /></a>
+            <a href="https://python.org/"
+              ><img
+                alt="Python"
+                src="https://img.shields.io/badge/Language-Python_3.11-yellow.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            A language's execution environment fundamentally dictates its memory
+            management and deployment constraints. This guide directly contrasts
+            the raw, bare-metal memory control of C++ Native Binaries against
+            the Managed Garbage Collection (GC) of the C# .NET Common Language
+            Runtime (CLR), and the interpreted Global Interpreter Lock (GIL)
+            limitations of the Python Virtual Machine.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#language-runtimes-memory-architectures-and-execution"
+                >Language Runtimes: Memory, Architectures, and Execution</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#1-configuration-windows-linux"
+                >1. Configuration (Windows \&amp; Linux)</a
+              >
+              <ul>
+                <li>
+                  <a href="#c-native-compilation">C++ (Native Compilation)</a>
+                </li>
+                <li>
+                  <a href="#c-net-managed-runtime">C# .NET (Managed Runtime)</a>
+                </li>
+                <li>
+                  <a href="#python-interpreted-virtual-machine"
+                    >Python (Interpreted Virtual Machine)</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#2-writing-basic-codescripts-memory-operations"
+                >2. Writing Basic Code/Scripts (Memory Operations)</a
+              >
+              <ul>
+                <li>
+                  <a href="#c-manual-memory-management"
+                    >C++: Manual Memory Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#c-net-garbage-collected-gc"
+                    >C# .NET: Garbage Collected (GC)</a
+                  >
+                </li>
+                <li>
+                  <a href="#python-reference-counting-the-gil"
+                    >Python: Reference Counting \&amp; The GIL</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-compile-time-commands-compilers-vs-vms"
+                >3. Compile-time Commands (Compilers vs VMs)</a
+              >
+              <ul>
+                <li><a href="#c-native-binaries">C++: Native Binaries</a></li>
+                <li>
+                  <a href="#c-net-intermediate-language-il"
+                    >C# .NET: Intermediate Language (IL)</a
+                  >
+                </li>
+                <li>
+                  <a href="#python-bytecode-caching"
+                    >Python: Bytecode caching</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#4-runtime-commands-execution-contexts"
+                >4. Runtime Commands (Execution Contexts)</a
+              >
+              <ul>
+                <li><a href="#c-native-execution">C++ Native Execution</a></li>
+                <li><a href="#net-core-runtime">.NET Core Runtime</a></li>
+                <li><a href="#python-vm">Python VM</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#5-debugging-segfaults-vs-overflows"
+                >5. Debugging (Segfaults vs Overflows)</a
+              >
+              <ul>
+                <li>
+                  <a href="#c-the-segmentation-fault"
+                    >C++: The Segmentation Fault</a
+                  >
+                </li>
+                <li>
+                  <a href="#c-stackoverflows-gc-pauses"
+                    >C#: StackOverflows \&amp; GC Pauses</a
+                  >
+                </li>
+                <li>
+                  <a href="#python-the-resource-bottleneck"
+                    >Python: The Resource Bottleneck</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="1-configuration-windows-linux">
+            1. Configuration (Windows &amp; Linux)
+          </h2>
+          <p>
+            Setting up an environment depends heavily on how close to the
+            hardware the language operates.
+          </p>
+          <h3 id="c-native-compilation">C++ (Native Compilation)</h3>
+          <p>C++ compilers generate raw machine code.</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Linux: Install the GNU Compiler Collection (GCC) and Make</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>gdb
 
 <span class="c1"># Windows: Install MSVC via Visual Studio Build Tools, or MinGW</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Variables:</strong> The <code>LD_LIBRARY_PATH</code> (Linux) or <code>PATH</code> (Windows) must explicitly expose your <code>.so</code> or <code>.dll</code> shared libraries, otherwise the binary will crash instantly at launch.</li>
-</ul>
-<h3 id="c-net-managed-runtime">C# .NET (Managed Runtime)</h3>
-<p>C# compiles to Intermediate Language (IL) targeting the .NET Core / 8/9+ cross-platform runtime.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Linux/Windows: Install the official cross-platform .NET SDK</span>
+          <ul>
+            <li>
+              <strong>Variables:</strong> The
+              <code>LD_LIBRARY_PATH</code> (Linux) or
+              <code>PATH</code> (Windows) must explicitly expose your
+              <code>.so</code> or <code>.dll</code> shared libraries, otherwise
+              the binary will crash instantly at launch.
+            </li>
+          </ul>
+          <h3 id="c-net-managed-runtime">C# .NET (Managed Runtime)</h3>
+          <p>
+            C# compiles to Intermediate Language (IL) targeting the .NET Core /
+            8/9+ cross-platform runtime.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Linux/Windows: Install the official cross-platform .NET SDK</span>
 dotnet<span class="w"> </span>--version
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="python-interpreted-virtual-machine">Python (Interpreted Virtual Machine)</h3>
-<p>Python requires an interpreter to read source code line-by-line via the Python Virtual Machine.</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3<span class="w"> </span>python3-venv
+          <h3 id="python-interpreted-virtual-machine">
+            Python (Interpreted Virtual Machine)
+          </h3>
+          <p>
+            Python requires an interpreter to read source code line-by-line via
+            the Python Virtual Machine.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3<span class="w"> </span>python3-venv
 python3<span class="w"> </span>--version
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="2-writing-basic-codescripts-memory-operations">2. Writing Basic Code/Scripts (Memory Operations)</h2>
-<p>The foundational difference between these languages is who holds responsibility for cleaning up heap memory after a function completes.</p>
-<h3 id="c-manual-memory-management">C++: Manual Memory Management</h3>
-<p>In C++, invoking the <code>new</code> keyword reserves physical RAM bytes. It is entirely the developer's responsibility to delete those bytes. Failure yields the infamous memory leak.</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+          <hr />
+          <h2 id="2-writing-basic-codescripts-memory-operations">
+            2. Writing Basic Code/Scripts (Memory Operations)
+          </h2>
+          <p>
+            The foundational difference between these languages is who holds
+            responsibility for cleaning up heap memory after a function
+            completes.
+          </p>
+          <h3 id="c-manual-memory-management">C++: Manual Memory Management</h3>
+          <p>
+            In C++, invoking the <code>new</code> keyword reserves physical RAM
+            bytes. It is entirely the developer's responsibility to delete those
+            bytes. Failure yields the infamous memory leak.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">processRawData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Manually allocating 1 million bytes on the heap</span>
@@ -130,12 +269,28 @@ python3<span class="w"> </span>--version
 <span class="w">    </span><span class="c1">// Developer MUST manually release memory back to the Operating System</span>
 <span class="w">    </span><span class="k">delete</span><span class="p">[]</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span><span class="w"> </span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><em>Modern architecture favors Smart Pointers (<code>std::unique_ptr</code>) automatically triggering destruction via Reference Counting, mitigating human-induced leaks.</em></p>
-<h3 id="c-net-garbage-collected-gc">C# .NET: Garbage Collected (GC)</h3>
-<p>C# .NET abstracts raw memory. The CLR allocates objects inside Managed Memory heaps. When an object loses all references, the Garbage Collector periodically suspends execution, crawls the heap, and destroys orphaned objects automatically.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+          <p>
+            <em
+              >Modern architecture favors Smart Pointers
+              (<code>std::unique_ptr</code>) automatically triggering
+              destruction via Reference Counting, mitigating human-induced
+              leaks.</em
+            >
+          </p>
+          <h3 id="c-net-garbage-collected-gc">
+            C# .NET: Garbage Collected (GC)
+          </h3>
+          <p>
+            C# .NET abstracts raw memory. The CLR allocates objects inside
+            Managed Memory heaps. When an object loses all references, the
+            Garbage Collector periodically suspends execution, crawls the heap,
+            and destroys orphaned objects automatically.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// The CLR handles heap allocation. </span>
 <span class="w">    </span><span class="kt">byte</span><span class="p">[]</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>
 
@@ -144,109 +299,213 @@ python3<span class="w"> </span>--version
 <span class="w">    </span><span class="c1">// No explicit delete. The .NET Garbage Collector will free this byte array</span>
 <span class="w">    </span><span class="c1">// when &#39;buffer&#39; falls out of scope and memory pressure rises.</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="python-reference-counting-the-gil">Python: Reference Counting &amp; The GIL</h3>
-<p>Python acts as an elegant C-wrapper. Memory is handled automatically via Reference Counting. When a variable's reference count drops to 0, Python instantly frees it. </p>
-<p><em>Crucially</em>, Python is hindered by the Global Interpreter Lock (GIL), a mutex preventing multiple OS threads from executing Python bytecodes concurrently, forcing multithreading to behave sequentially on a single CPU core.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">():</span>
+          <h3 id="python-reference-counting-the-gil">
+            Python: Reference Counting &amp; The GIL
+          </h3>
+          <p>
+            Python acts as an elegant C-wrapper. Memory is handled automatically
+            via Reference Counting. When a variable's reference count drops to
+            0, Python instantly frees it.
+          </p>
+          <p>
+            <em>Crucially</em>, Python is hindered by the Global Interpreter
+            Lock (GIL), a mutex preventing multiple OS threads from executing
+            Python bytecodes concurrently, forcing multithreading to behave
+            sequentially on a single CPU core.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">():</span>
     <span class="c1"># Python VM handles the C-level memory allocation</span>
     <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
     <span class="c1"># Automatically freed via reference decrementing when function exits</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="3-compile-time-commands-compilers-vs-vms">3. Compile-time Commands (Compilers vs VMs)</h2>
-<p>The build phase prepares the code for its specific runtime context.</p>
-<h3 id="c-native-binaries">C++: Native Binaries</h3>
-<p>C++ directly translates source text into Assembly and finally Binary Machine Code targeted strictly for the physical CPU architecture (x86, ARM).</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Compiling for an x86 Linux machine</span>
+          <hr />
+          <h2 id="3-compile-time-commands-compilers-vs-vms">
+            3. Compile-time Commands (Compilers vs VMs)
+          </h2>
+          <p>
+            The build phase prepares the code for its specific runtime context.
+          </p>
+          <h3 id="c-native-binaries">C++: Native Binaries</h3>
+          <p>
+            C++ directly translates source text into Assembly and finally Binary
+            Machine Code targeted strictly for the physical CPU architecture
+            (x86, ARM).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Compiling for an x86 Linux machine</span>
 g++<span class="w"> </span>-O3<span class="w"> </span>-o<span class="w"> </span>server_binary<span class="w"> </span>main.cpp
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><em>A binary compiled on Linux will absolutely not run on Windows.</em></p>
-<h3 id="c-net-intermediate-language-il">C# .NET: Intermediate Language (IL)</h3>
-<p>C# translates source into a generic bytecode known as MSIL. This is portable across OS architectures. </p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Generates cross-platform .dll bytecodes </span>
+          <p>
+            <em
+              >A binary compiled on Linux will absolutely not run on
+              Windows.</em
+            >
+          </p>
+          <h3 id="c-net-intermediate-language-il">
+            C# .NET: Intermediate Language (IL)
+          </h3>
+          <p>
+            C# translates source into a generic bytecode known as MSIL. This is
+            portable across OS architectures.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Generates cross-platform .dll bytecodes </span>
 dotnet<span class="w"> </span>build<span class="w"> </span>--configuration<span class="w"> </span>Release
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><em>At runtime, the .NET CLR detects the host OS and Just-In-Time (JIT) compiles the IL into native machine code.</em></p>
-<h3 id="python-bytecode-caching">Python: Bytecode caching</h3>
-<p>Python uses an interpreter. It skips explicit compilation entirely, though it automatically generates <code>.pyc</code> bytecode caches to speed up subsequent load times.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Pure execution, compilation phase is implicit</span>
+          <p>
+            <em
+              >At runtime, the .NET CLR detects the host OS and Just-In-Time
+              (JIT) compiles the IL into native machine code.</em
+            >
+          </p>
+          <h3 id="python-bytecode-caching">Python: Bytecode caching</h3>
+          <p>
+            Python uses an interpreter. It skips explicit compilation entirely,
+            though it automatically generates <code>.pyc</code> bytecode caches
+            to speed up subsequent load times.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Pure execution, compilation phase is implicit</span>
 python3<span class="w"> </span>my_script.py
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="4-runtime-commands-execution-contexts">4. Runtime Commands (Execution Contexts)</h2>
-<p>How these programs are daemonized dictates their scaling capabilities.</p>
-<h3 id="c-native-execution">C++ Native Execution</h3>
-<p>The binary runs directly against the OS Kernel. Interaction is blistering fast but highly unforgiving.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Run directly as an OS process</span>
+          <hr />
+          <h2 id="4-runtime-commands-execution-contexts">
+            4. Runtime Commands (Execution Contexts)
+          </h2>
+          <p>
+            How these programs are daemonized dictates their scaling
+            capabilities.
+          </p>
+          <h3 id="c-native-execution">C++ Native Execution</h3>
+          <p>
+            The binary runs directly against the OS Kernel. Interaction is
+            blistering fast but highly unforgiving.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Run directly as an OS process</span>
 ./server_binary<span class="w"> </span><span class="p">&amp;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="net-core-runtime">.NET Core Runtime</h3>
-<p>The <code>dotnet</code> executable creates the CLR environment, loads the application <code>.dll</code>, tracks garbage collection generations (Gen0, Gen1, Gen2), and controls JIT compilation.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># The runtime executes the intermediate DLL</span>
+          <h3 id="net-core-runtime">.NET Core Runtime</h3>
+          <p>
+            The <code>dotnet</code> executable creates the CLR environment,
+            loads the application <code>.dll</code>, tracks garbage collection
+            generations (Gen0, Gen1, Gen2), and controls JIT compilation.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># The runtime executes the intermediate DLL</span>
 dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w"> </span>API/API.csproj
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="python-vm">Python VM</h3>
-<p>The python interpreter boots, reserves a massive RAM block, locks the GIL, and incrementally interprets logic. For heavy CPU tasks, true parallelism requires Multi-processing (spawning entirely separate physical Python interpreters) rather than multi-threading.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Using Gunicorn to spawn multiple distinct Python process workers </span>
+          <h3 id="python-vm">Python VM</h3>
+          <p>
+            The python interpreter boots, reserves a massive RAM block, locks
+            the GIL, and incrementally interprets logic. For heavy CPU tasks,
+            true parallelism requires Multi-processing (spawning entirely
+            separate physical Python interpreters) rather than multi-threading.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Using Gunicorn to spawn multiple distinct Python process workers </span>
 gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w"> </span><span class="m">4</span><span class="w"> </span>-k<span class="w"> </span>uvicorn.workers.UvicornWorker
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="5-debugging-segfaults-vs-overflows">5. Debugging (Segfaults vs Overflows)</h2>
-<p>Each architecture's failure mode strictly reflects its memory design.</p>
-<h3 id="c-the-segmentation-fault">C++: The Segmentation Fault</h3>
-<p>Attempting to read or write memory you haven't explicitly asked the OS for invokes a Kernel panic, crashing the process immediately.
-* <strong>The Tools:</strong> <code>gdb</code> (GNU Debugger) and <code>valgrind</code>. Valgrind acts as a virtual CPU, tracking every single memory allocation to pinpoint exactly which line leaked bytes.</p>
-<div class="codehilite"><pre><span></span><code>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./server_binary
-</code></pre></div>
+          <hr />
+          <h2 id="5-debugging-segfaults-vs-overflows">
+            5. Debugging (Segfaults vs Overflows)
+          </h2>
+          <p>
+            Each architecture's failure mode strictly reflects its memory
+            design.
+          </p>
+          <h3 id="c-the-segmentation-fault">C++: The Segmentation Fault</h3>
+          <p>
+            Attempting to read or write memory you haven't explicitly asked the
+            OS for invokes a Kernel panic, crashing the process immediately. *
+            <strong>The Tools:</strong> <code>gdb</code> (GNU Debugger) and
+            <code>valgrind</code>. Valgrind acts as a virtual CPU, tracking
+            every single memory allocation to pinpoint exactly which line leaked
+            bytes.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./server_binary
+</code></pre>
+          </div>
 
-<h3 id="c-stackoverflows-gc-pauses">C#: StackOverflows &amp; GC Pauses</h3>
-<p>While memory leaks are rare, keeping a reference to an object in a static dictionary permanently prevents the Garbage Collector from freeing it—an effective memory leak.
-* <strong>The Pitfall:</strong> The CLR guarantees memory safety, but recursively calling functions endlessly exhausts the strictly constrained frame <code>Stack</code>, crashing the runtime via a <code>StackOverflowException</code>.
-* <strong>The Tools:</strong> PerfView or the Visual Studio Diagnostic Tools to analyze Gen2 Garbage Collection pauses.</p>
-<h3 id="python-the-resource-bottleneck">Python: The Resource Bottleneck</h3>
-<p>Python rarely crashes the OS (because standard memory violations are caught safely by the interpreter). The danger lies in loading a massive pandas DataFrame that exceeds RAM, prompting the OS OOM (Out Of Memory) Killer to brutally terminate the <code>python3</code> process.
-* <strong>The Tools:</strong> Utilizing <code>cProfile</code> to determine exactly which line is trapping the GIL and blocking event loops.</p>
-<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>cProfile<span class="w"> </span>-s<span class="w"> </span>cumtime<span class="w"> </span>my_script.py
-</code></pre></div></article>
-        </div>
+          <h3 id="c-stackoverflows-gc-pauses">
+            C#: StackOverflows &amp; GC Pauses
+          </h3>
+          <p>
+            While memory leaks are rare, keeping a reference to an object in a
+            static dictionary permanently prevents the Garbage Collector from
+            freeing it—an effective memory leak. *
+            <strong>The Pitfall:</strong> The CLR guarantees memory safety, but
+            recursively calling functions endlessly exhausts the strictly
+            constrained frame <code>Stack</code>, crashing the runtime via a
+            <code>StackOverflowException</code>. *
+            <strong>The Tools:</strong> PerfView or the Visual Studio Diagnostic
+            Tools to analyze Gen2 Garbage Collection pauses.
+          </p>
+          <h3 id="python-the-resource-bottleneck">
+            Python: The Resource Bottleneck
+          </h3>
+          <p>
+            Python rarely crashes the OS (because standard memory violations are
+            caught safely by the interpreter). The danger lies in loading a
+            massive pandas DataFrame that exceeds RAM, prompting the OS OOM (Out
+            Of Memory) Killer to brutally terminate the
+            <code>python3</code> process. *
+            <strong>The Tools:</strong> Utilizing <code>cProfile</code> to
+            determine exactly which line is trapping the GIL and blocking event
+            loops.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>cProfile<span class="w"> </span>-s<span class="w"> </span>cumtime<span class="w"> </span>my_script.py
+</code></pre>
+          </div>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

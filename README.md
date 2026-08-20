@@ -2,7 +2,7 @@
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
-[![Resume (CV)](https://img.shields.io/badge/-Resume--(CV)-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white)](./Paul-Namalomba_Curriculum-Vitae.pdf)
+[![Resume (CV)](<https://img.shields.io/badge/-Resume--(CV)-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white>)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
 ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square)
@@ -34,10 +34,10 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 
 ## Current Focus!
 
-- **Backend Development**: Building scalable *Django* applications with *PostgreSQL* databases. Building *Python* apps and modules for data processing and analysis. Building *RESTful APIs* for data access and integration with *C#*.
+- **Backend Development**: Building scalable _Django_ applications with _PostgreSQL_ databases. Building _Python_ apps and modules for data processing and analysis. Building _RESTful APIs_ for data access and integration with _C#_.
 - **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
 - **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization.
-- **Machine Learning & Data Science**: Implementing *machine learning*-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using *Google Generative AI* and *OpenAI* APIs.
+- **Machine Learning & Data Science**: Implementing _machine learning_-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using _Google Generative AI_ and _OpenAI_ APIs.
 
 ---
 
@@ -45,7 +45,7 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 
 ### **Chief Innovation Officer & Lead Backend Engineer - ComputeMore Africa Technologies**
 
-*Current Position* (<span style="color:green">[**Oct 2025 - present**]</span>)
+_Current Position_ (<span style="color:green">[**Oct 2025 - present**]</span>)
 
 - Developed backend services for ride-sharing application
 - OpenAPI compliant RESTful API development
@@ -59,7 +59,7 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 
 ### **SESKA Computational Engineer**
 
-*Current Position* (Concurrent with PhD studies <span style="color:green">[**September 2023 - Present**]</span>)
+_Current Position_ (Concurrent with PhD studies <span style="color:green">[**September 2023 - Present**]</span>)
 
 - Develop advanced material analysis software in **C++** and **Fortran** for engineering applications
 - Create algorithms for LVDT (Linear Variable Differential Transformer) sensor data processing
@@ -72,7 +72,7 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 
 ### **SEAT Backend Developer | SEAT Backend Development Consultant**
 
-*Current Position* (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 - July 2025, Nov 2025 - Feb 2026**]</span>)
+_Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 - July 2025, Nov 2025 - Feb 2026**]</span>)
 
 - Develop and maintain Django-based enrollment management system
 - Design and implement PostgreSQL database schemas
@@ -127,6 +127,7 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 ### **Frameworks & Libraries**
 
 <!-- ![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F61?style=flat-square&logo=tensorflow&logoColor=white) -->
+
 ![Django](https://img.shields.io/badge/-Django-092E20?style=flat-square&logo=django)
 ![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy)
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
@@ -201,7 +202,7 @@ I currently am working for a startup called ComputeMore Africa as a **Lead Backe
 
 ### **Ecoride Ride-Sharing App (Android + iOS + Admin Dashboard + Web Services)**
 
-*Professional Project - Backend & API Development, Flutter Apps for Android and iOS*
+_Professional Project - Backend & API Development, Flutter Apps for Android and iOS_
 C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
 
 **Key Features:**
@@ -209,7 +210,7 @@ C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL
 - User authentication and role management, custom Auth API with JWT
 - API documentation with Swagger UI
 - API endpoints for ride management with full, hard Google Maps API integration
-- SignalR for real-time ride tracking and updates across driver and user clients 
+- SignalR for real-time ride tracking and updates across driver and user clients
 - RESTful API design for enrollment management
 - PostgreSQL database with optimized schemas
 - Data validation and integrity checks
@@ -224,7 +225,7 @@ C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL
 
 ### **SESKA Finite Element Analysis Software**
 
-*Professional Project - SESKA*
+_Professional Project - SESKA_
 A sophisticated finite element analysis software written in C++ and Fortran for advanced materials testing and computational mechanics applications.
 
 **Key Features:**
@@ -250,7 +251,7 @@ A sophisticated finite element analysis software written in C++ and Fortran for 
 
 ### **SEAT Enrollment Management System**
 
-*Professional Project - Backend Development*
+_Professional Project - Backend Development_
 Django-based web application for managing student enrollment and academic data.
 
 **Key Features:**
@@ -466,7 +467,8 @@ All guides follow a consistent template with quickstart instructions, key concep
 Educational **mathematical tool** for solving systems of **simultaneous equations** with user-friendly input interface.
 
 **Features:**
-- **Multiple equation solving methods** two-variable and three-variable, multiple equation types 
+
+- **Multiple equation solving methods** two-variable and three-variable, multiple equation types
 - **Step-by-step solution display**
 - **Error handling** and validation
 - Cross-platform **Mathematics tool** interactable through shell
@@ -487,24 +489,28 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 ## Technical Expertise Areas
 
 ### **Computational Science**
+
 - Materials testing and analysis
 - Scientific data processing
 - Statistical analysis and modeling
 - Algorithm development for engineering applications
 
 ### **Data Engineering**
+
 - ETL pipeline design and implementation
 - Data validation and quality assurance
 - Database design and optimization
 - Real-time data processing systems
 
 ### **Software Development**
+
 - Full-stack web development
 - API design and implementation
 - Database architecture
 - System integration and automation
 
 ### **Machine Learning & AI**
+
 - Clustering algorithms (K-means, DBSCAN)
 - Outlier detection methods
 - Regression analysis and modeling
@@ -590,6 +596,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
       <p><strong>Email:</strong> <code>keith.machutchon@uct.ac.za</code></p>
 
     </td>
+
   </tr>
 </table>
 
@@ -602,7 +609,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 - Microservices architecture and distributed systems
 - DevOps and CI/CD pipelines for C#/.NET applications
 - Advanced Docker and Kubernetes orchestration
-- Advanced PostgreSQL workflow optimization with *MPI*
+- Advanced PostgreSQL workflow optimization with _MPI_
 
 ---
 
@@ -611,6 +618,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 I'm always interested in discussing new opportunities, collaboration on interesting projects, or sharing knowledge about computational science and software development.
 
 **Professional Interests:**
+
 - Materials science computing
 - Backend and API development
 - Data engineering and analytics
@@ -628,6 +636,6 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
-*"Combining computational science with practical software engineering to solve real-world problems and drive digital innovation."*
+_"Combining computational science with practical software engineering to solve real-world problems and drive digital innovation."_
 
 <!-- ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square) -->

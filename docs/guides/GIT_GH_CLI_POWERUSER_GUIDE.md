@@ -140,6 +140,7 @@ gh pr create
 ### Git
 
 **Windows (recommended: Git for Windows + Git Credential Manager)**
+
 ```powershell
 winget install --id Git.Git -e
 # Optional: verify
@@ -147,12 +148,14 @@ git --version
 ```
 
 **macOS**
+
 ```bash
 brew install git
 git --version
 ```
 
 **Ubuntu/Debian**
+
 ```bash
 sudo apt update
 sudo apt install -y git
@@ -162,18 +165,21 @@ git --version
 ### GitHub CLI (`gh`)
 
 **Windows**
+
 ```powershell
 winget install --id GitHub.cli -e
 gh --version
 ```
 
 **macOS**
+
 ```bash
 brew install gh
 gh --version
 ```
 
 **Ubuntu/Debian** (many distros package `gh`; use official instructions if you need latest)
+
 ```bash
 sudo apt update
 sudo apt install -y gh
@@ -185,12 +191,14 @@ gh --version
 ## 2. Identity, Config, and Safety Defaults
 
 ### Set user identity (global)
+
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
 ### Useful global defaults
+
 ```bash
 # Use a modern default branch name (optional)
 git config --global init.defaultBranch main
@@ -212,6 +220,7 @@ git config --global rerere.enabled true
 ```
 
 Inspect config sources (useful for debugging surprises):
+
 ```bash
 git config --list --show-origin
 ```
@@ -221,12 +230,14 @@ git config --list --show-origin
 If you collaborate cross-platform, decide on a policy and enforce it:
 
 **Windows typical**
+
 ```bash
 # Converts CRLF <-> LF automatically (works for many repos, but be consistent)
 git config --global core.autocrlf true
 ```
 
 **Linux/macOS typical**
+
 ```bash
 git config --global core.autocrlf input
 ```
@@ -234,6 +245,7 @@ git config --global core.autocrlf input
 If the repo already has a `.gitattributes`, follow the repo policy (repo settings should win over personal preference).
 
 ### Quality-of-life aliases (optional)
+
 ```bash
 git config --global alias.s "status -sb"
 git config --global alias.l "log --oneline --decorate --graph --all"
@@ -253,19 +265,24 @@ You have two separate concepts:
 ### 3.1 Git over HTTPS (PAT) + Credential Manager
 
 GitHub no longer supports password auth for Git operations. Use:
+
 - Personal Access Token (PAT)
 - Git Credential Manager (recommended on Windows)
 
 When using HTTPS remotes like:
+
 ```bash
 git remote -v
 # https://github.com/OWNER/REPO.git
 ```
+
 Git will prompt for credentials; use:
+
 - Username: your GitHub username
 - Password: your PAT
 
 To inspect credential helper:
+
 ```bash
 git config --global credential.helper
 ```
@@ -273,6 +290,7 @@ git config --global credential.helper
 ### 3.2 Git over SSH (recommended for power users)
 
 **Generate an SSH key**
+
 ```bash
 ssh-keygen -t ed25519 -C "you@example.com"
 # Press enter for default path; set a passphrase
@@ -281,12 +299,14 @@ ssh-keygen -t ed25519 -C "you@example.com"
 **Start ssh-agent and add key**
 
 Linux/macOS:
+
 ```bash
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
 ```
 
 Windows (PowerShell):
+
 ```powershell
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 Start-Service ssh-agent
@@ -294,12 +314,15 @@ ssh-add $env:USERPROFILE\.ssh\id_ed25519
 ```
 
 **Add public key to GitHub**
+
 ```bash
 cat ~/.ssh/id_ed25519.pub
 ```
+
 Copy into GitHub: Settings → SSH and GPG keys.
 
 **Use SSH remote**
+
 ```bash
 git remote set-url origin git@github.com:OWNER/REPO.git
 ssh -T git@github.com
@@ -308,11 +331,13 @@ ssh -T git@github.com
 ### 3.3 GitHub CLI authentication
 
 **Login**
+
 ```bash
 gh auth login
 ```
 
 Explicit login patterns:
+
 ```bash
 # Prefer SSH for Git operations
 gh auth login -p ssh
@@ -322,31 +347,37 @@ gh auth login --hostname github.company.com
 ```
 
 Configure Git to use your `gh` auth for HTTPS operations (optional):
+
 ```bash
 gh auth setup-git
 ```
 
 **Status + active account**
+
 ```bash
 gh auth status
 ```
 
 **Logout**
+
 ```bash
 gh auth logout
 ```
 
 Refresh scopes/token (useful if Actions/Packages commands fail):
+
 ```bash
 gh auth refresh
 ```
 
 Print the active token (avoid pasting this into logs):
+
 ```bash
 gh auth token
 ```
 
 **Select default protocol for Git operations**
+
 ```bash
 gh config set git_protocol ssh
 # or
@@ -434,11 +465,13 @@ gh repo delete OWNER/REPO --confirm
 ## 5. Daily Git Workflow (Add/Commit/Log/Diff)
 
 ### 5.1 Inspect state
+
 ```bash
 git status
 ```
 
 ### 5.2 Stage changes
+
 ```bash
 # stage all tracked edits + new files
 git add -A
@@ -448,26 +481,31 @@ git add -p
 ```
 
 ### 5.3 Commit
+
 ```bash
 git commit -m "Explain what changed"
 ```
 
 Amend the last commit (common for small fixes):
+
 ```bash
 git commit --amend
 ```
 
 Create a fixup commit (pairs well with `git rebase -i --autosquash`):
+
 ```bash
 git commit --fixup <commit_sha>
 ```
 
 Commit with editor message:
+
 ```bash
 git commit
 ```
 
 ### 5.4 View history
+
 ```bash
 git log
 
@@ -475,6 +513,7 @@ git log --oneline --decorate --graph --all
 ```
 
 ### 5.5 Compare changes
+
 ```bash
 # unstaged differences
 git diff
@@ -489,11 +528,13 @@ git diff main..feature-branch
 ### 5.6 File operations (tracked content)
 
 Rename/move a file:
+
 ```bash
 git mv oldname newname
 ```
 
 Remove a tracked file:
+
 ```bash
 git rm path/to/file
 ```
@@ -503,6 +544,7 @@ git rm path/to/file
 Add patterns to `.gitignore` to prevent files being tracked.
 
 Debug why a path is ignored:
+
 ```bash
 git check-ignore -v path/to/file
 ```
@@ -512,6 +554,7 @@ git check-ignore -v path/to/file
 ## 6. Branching and Integration (Merge, Rebase, Cherry-pick)
 
 ### 6.1 Branch basics
+
 ```bash
 git branch
 
@@ -521,11 +564,13 @@ git switch -c feature/login
 ```
 
 Push a new branch to origin:
+
 ```bash
 git push -u origin feature/login
 ```
 
 Delete branches:
+
 ```bash
 # local
 git branch -d feature/login
@@ -537,6 +582,7 @@ git push origin --delete feature/login
 ```
 
 ### 6.2 Merge (preserves branch topology)
+
 ```bash
 git switch main
 git pull
@@ -547,6 +593,7 @@ git merge feature/login
 ### 6.3 Rebase (rewrites history; keep it disciplined)
 
 Common workflow: keep your feature branch updated on top of `main`.
+
 ```bash
 git switch feature/login
 git fetch origin
@@ -554,17 +601,21 @@ git rebase origin/main
 ```
 
 Interactive rebase (squash / reorder / edit messages):
+
 ```bash
 git rebase -i origin/main
 ```
 
 If you already pushed and you rebase, you will need a force push:
+
 ```bash
 git push --force-with-lease
 ```
+
 `--force-with-lease` is safer than `--force` because it refuses to overwrite someone else’s new pushes.
 
 ### 6.4 Cherry-pick (copy a commit)
+
 ```bash
 # apply a specific commit onto current branch
 git cherry-pick <commit_sha>
@@ -573,6 +624,7 @@ git cherry-pick <commit_sha>
 ### 6.5 Resolve conflicts efficiently
 
 When a conflict happens:
+
 ```bash
 git status
 # edit files to resolve
@@ -585,6 +637,7 @@ git rebase --continue
 ```
 
 Abort a rebase if needed:
+
 ```bash
 git rebase --abort
 ```
@@ -598,16 +651,19 @@ These are the commands that differentiate beginners from professionals.
 ### 7.1 Discard local file edits
 
 Discard unstaged edits for a file:
+
 ```bash
 git restore path/to/file
 ```
 
 Unstage (move from index back to working tree):
+
 ```bash
 git restore --staged path/to/file
 ```
 
 Restore a file from a specific commit:
+
 ```bash
 git restore --source <commit_sha> -- path/to/file
 ```
@@ -630,6 +686,7 @@ git reset --hard HEAD~1
 ### 7.3 Revert (safe for shared branches)
 
 Revert creates a new commit that undoes changes (no history rewrite):
+
 ```bash
 git revert <commit_sha>
 ```
@@ -637,6 +694,7 @@ git revert <commit_sha>
 ### 7.4 Reflog (time machine)
 
 If you “lost” commits after a reset/rebase, reflog usually saves you:
+
 ```bash
 git reflog
 # find the previous HEAD state
@@ -645,6 +703,7 @@ git reset --hard HEAD@{1}
 ```
 
 ### 7.5 Investigate who changed what
+
 ```bash
 # who changed each line
 git blame path/to/file
@@ -656,6 +715,7 @@ git log -S "some text" -- path/to/file
 ### 7.6 Stash (parking local changes)
 
 Stash tracked changes:
+
 ```bash
 git stash push -m "wip"
 git stash list
@@ -663,11 +723,13 @@ git stash pop
 ```
 
 Include untracked files:
+
 ```bash
 git stash push -u -m "wip + untracked"
 ```
 
 Apply a specific stash without dropping it:
+
 ```bash
 git stash apply stash@{1}
 ```
@@ -683,7 +745,7 @@ git clean -nd
 Remove untracked files + directories:
 
 ```bash
-git clean -fd 
+git clean -fd
 ```
 
 ---
@@ -761,7 +823,7 @@ git push origin main # update your fork's main branch
 Lightweight tag:
 
 ```bash
-git tag v1.2.3 
+git tag v1.2.3
 ```
 
 Annotated tag (recommended):
@@ -853,7 +915,7 @@ git clone --filter=blob:none --no-checkout git@github.com:OWNER/REPO.git
 cd REPO
 
 git sparse-checkout init --cone # use cone mode for simple directory patterns
-git sparse-checkout set path/to/subdir another/subdir # 
+git sparse-checkout set path/to/subdir another/subdir #
 
 git checkout # checkout the default branch with only the specified paths
 ```
@@ -879,11 +941,13 @@ Use history rewriting only when you understand the consequences.
 ### 10.6 Hooks (local automation)
 
 Hooks run scripts at certain points (`pre-commit`, `commit-msg`, `pre-push`). Common uses:
+
 - Format/lint before committing
 - Block committing secrets
 - Enforce commit message rules
 
 Local hooks live in `.git/hooks/` by default. To share hooks across a team, store them in the repo and set a hooks path:
+
 ```bash
 git config core.hooksPath .githooks
 ```
@@ -900,7 +964,7 @@ git lfs track "*.psd"
 git lfs track "*.mp4"
 
 # below: add to gitattributes and commit
-git add .gitattributes 
+git add .gitattributes
 git commit -m "Configure Git LFS"
 ```
 
@@ -951,7 +1015,7 @@ gh pr status
 
 ### 11.3 Issues
 
-```bash 
+```bash
 gh issue create # create a new issue interactively
 
 gh issue list # list issues
@@ -1018,11 +1082,13 @@ gh secret list
 ```
 
 Set an Actions variable:
+
 ```bash
 printf "%s" "staging" | gh variable set DEPLOY_ENV
 ```
 
 List variables:
+
 ```bash
 gh variable list
 ```
@@ -1032,11 +1098,13 @@ gh variable list
 When `gh` doesn’t have a subcommand, `gh api` gives you raw GitHub API access.
 
 Example: list repo webhooks:
+
 ```bash
 gh api repos/OWNER/REPO/hooks
 ```
 
 Example: create a label:
+
 ```bash
 gh api repos/OWNER/REPO/labels -f name="priority:high" -f color="B60205"
 ```
@@ -1044,11 +1112,13 @@ gh api repos/OWNER/REPO/labels -f name="priority:high" -f color="B60205"
 ### 11.7 Aliases and extensions
 
 Aliases:
+
 ```bash
 gh alias set prs "pr list --limit 50"
 ```
 
 Extensions (install community tooling):
+
 ```bash
 gh extension list
 # gh extension install OWNER/EXTENSION
@@ -1067,6 +1137,7 @@ Deployment is usually one of these patterns:
 ### 12.1 Push-to-deploy via GitHub Actions (operate with gh)
 
 Typical flow:
+
 - You push to `main` or a tag
 - GitHub Actions deploy workflow runs
 - You observe, re-run, and troubleshoot with `gh`
@@ -1083,6 +1154,7 @@ gh run watch
 ```
 
 Manual deployment trigger:
+
 ```bash
 gh workflow run "Deploy" -f environment=staging
 ```
@@ -1107,6 +1179,7 @@ This is the classic **"git push production"** pattern.
 **On the server (Linux)**
 
 Create a dedicated deploy user and a bare repo:
+
 ```bash
 sudo adduser --disabled-password deploy
 
@@ -1117,17 +1190,20 @@ sudo -u deploy git init --bare /srv/git/myapp.git
 ```
 
 Create a working tree path:
+
 ```bash
 sudo mkdir -p /var/www/myapp
 sudo chown deploy:deploy /var/www/myapp
 ```
 
 Add a `post-receive` hook to deploy on push:
+
 ```bash
 sudo -u deploy nano /srv/git/myapp.git/hooks/post-receive
 ```
 
 Hook example (minimal):
+
 ```bash
 #!/bin/sh
 set -eu
@@ -1146,6 +1222,7 @@ done
 ```
 
 Make it executable:
+
 ```bash
 sudo -u deploy chmod +x /srv/git/myapp.git/hooks/post-receive
 ```
@@ -1153,6 +1230,7 @@ sudo -u deploy chmod +x /srv/git/myapp.git/hooks/post-receive
 **On your local machine**
 
 Add a remote and push:
+
 ```bash
 git remote add production deploy@YOUR_SERVER:/srv/git/myapp.git
 
@@ -1160,16 +1238,19 @@ git push production main
 ```
 
 Notes:
+
 - This is intentionally minimal. In production, you typically add build steps, atomic deploy directories, and rollbacks.
 - You must manage permissions carefully (deploy user, SSH keys, and service restart permissions).
 
 ### 12.4 Remote deployment key management (GitHub + servers)
 
 Common pattern:
+
 - Use SSH deploy keys (server-only key)
 - Store tokens/keys as GitHub secrets
 
 Use `gh secret set` for CI/CD secrets:
+
 ```bash
 printf "%s" "ssh-private-key-material" | gh secret set DEPLOY_SSH_KEY
 ```
@@ -1185,6 +1266,7 @@ printf "%s" "ssh-private-key-material" | gh secret set DEPLOY_SSH_KEY
 - Use environment variables and secret stores in CI/CD
 
 Quick checks:
+
 ```bash
 # scan tracked files for suspicious strings
 git grep -n "BEGIN RSA PRIVATE KEY" || true
@@ -1196,11 +1278,13 @@ git grep -n "AKIA" || true
 Modern Git can sign commits/tags using either GPG or SSH signing, depending on your setup.
 
 General idea:
+
 - generate signing key
 - configure Git to sign
 - verify on GitHub
 
 Example: SSH-based commit signing (modern approach):
+
 ```bash
 # Tell Git to use SSH keys for signing
 git config --global gpg.format ssh
@@ -1241,6 +1325,7 @@ gh auth status
 ### Detached HEAD
 
 You checked out a commit directly. Create a branch to keep work:
+
 ```bash
 git switch -c fix/detached
 ```
@@ -1248,6 +1333,7 @@ git switch -c fix/detached
 ### “non-fast-forward” push rejected
 
 You’re behind the remote:
+
 ```bash
 git fetch origin
 git rebase origin/main
@@ -1260,6 +1346,7 @@ git push
 ### Accidental `git reset --hard`
 
 Try reflog recovery:
+
 ```bash
 git reflog
 # find old HEAD

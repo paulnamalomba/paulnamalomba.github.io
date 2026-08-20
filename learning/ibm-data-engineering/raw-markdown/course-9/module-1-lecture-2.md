@@ -8,9 +8,9 @@ Selecting a data warehouse platform is an architectural commitment comparable to
 
 Most data warehouse systems are delivered through one or more of three deployment models:
 
-* **Appliances:** Pre-integrated bundles of hardware and software engineered for high-performance analytical workloads with minimal administration overhead.
-* **Cloud-Only:** Fully managed services that leverage cloud scalability and pay-per-use economics—no infrastructure provisioning required.
-* **On-Premises / Hybrid:** Traditionally installed within private data centers, though most vendors in this category now also offer cloud deployment options and hybrid configurations.
+- **Appliances:** Pre-integrated bundles of hardware and software engineered for high-performance analytical workloads with minimal administration overhead.
+- **Cloud-Only:** Fully managed services that leverage cloud scalability and pay-per-use economics—no infrastructure provisioning required.
+- **On-Premises / Hybrid:** Traditionally installed within private data centers, though most vendors in this category now also offer cloud deployment options and hybrid configurations.
 
 ---
 
@@ -40,9 +40,9 @@ Snowflake provides a **multi-cloud analytics solution** with strong data privacy
 
 Google BigQuery markets itself as a "flexible, multi-cloud data warehouse solution" delivering:
 
-* **99.99% uptime**
-* **Sub-second query response** from any BI tool
-* **Petabyte-scale speed** with massive concurrency for real-time analytics
+- **99.99% uptime**
+- **Sub-second query response** from any BI tool
+- **Petabyte-scale speed** with massive concurrency for real-time analytics
 
 ---
 
@@ -56,18 +56,18 @@ Azure Synapse Analytics offers **code-free visual ETL/ELT** processes with over 
 
 Teradata Vantage takes a unified approach, advertising a multi-cloud data platform that brings together data lakes, data warehouses, analytics, and new data sources under a single umbrella. Key differentiators include:
 
-* Combination of open-source and commercial technologies
-* High query concurrency via workload management and adaptive optimization
-* A single point of contact for operational support—monitoring, change requests, performance tuning, security management, and reporting
+- Combination of open-source and commercial technologies
+- High query concurrency via workload management and adaptive optimization
+- A single point of contact for operational support—monitoring, change requests, performance tuning, security management, and reporting
 
 ### 4.3 IBM Db2 Warehouse
 
 IBM Db2 Warehouse is a **containerized, scale-out** data warehousing solution recognized for:
 
-* **Massively parallel processing (MPP)** capabilities
-* **Petaflop-level speeds**
-* **99.99% service uptime**
-* Seamless workload portability across public cloud, private cloud, and on-premises environments with minimal or no code changes
+- **Massively parallel processing (MPP)** capabilities
+- **Petaflop-level speeds**
+- **99.99% service uptime**
+- Seamless workload portability across public cloud, private cloud, and on-premises environments with minimal or no code changes
 
 ### 4.4 Vertica
 
@@ -77,19 +77,19 @@ Vertica offers multi-cloud support across **AWS**, **Google Cloud**, **Microsoft
 
 Oracle Autonomous Data Warehouse runs in **Oracle Public Cloud** and on-premises, supporting multi-model data and multiple workloads. Oracle describes the system as built to eliminate manual data management, with extensive automated security features:
 
-* Autonomous data encryption at rest and in motion
-* Protection of regulated data
-* Automated security patch application
-* Threat detection
+- Autonomous data encryption at rest and in motion
+- Protection of regulated data
+- Automated security patch application
+- Threat detection
 
 ---
 
 ## 5. Vendor Landscape Summary
 
-| Category | Vendors |
-| --- | --- |
-| **Appliance** | Oracle Exadata, IBM Netezza |
-| **Cloud-Native** | Amazon Redshift, Snowflake, Google BigQuery |
+| Category                     | Vendors                                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------- |
+| **Appliance**                | Oracle Exadata, IBM Netezza                                                                 |
+| **Cloud-Native**             | Amazon Redshift, Snowflake, Google BigQuery                                                 |
 | **Hybrid (On-Prem + Cloud)** | Microsoft Azure Synapse, Teradata Vantage, IBM Db2 Warehouse, Vertica, Oracle Autonomous DW |
 
 ---

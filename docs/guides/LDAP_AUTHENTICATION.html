@@ -1,110 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>LDAP & LDAPS: The Enterprise Authority Architecture - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      LDAP & LDAPS: The Enterprise Authority Architecture - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="ldap-ldaps-the-enterprise-authority-architecture">LDAP &amp; LDAPS: The Enterprise Authority Architecture</h1>
-<p><br>
-<strong>Last updated</strong>: February 26, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://en.wikipedia.org/wiki/Transport_Layer_Security"><img alt="Security" src="https://img.shields.io/badge/Security-SSL%2FTLS-green.svg" /></a>
-<a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol"><img alt="Network" src="https://img.shields.io/badge/Protocol-TCP%2F389-red.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>The Lightweight Directory Access Protocol (LDAP) stands as the primary authoritative mechanism for hierarchical, institutional network identity management and authentication. This module demystifies the Directory Information Tree (DIT), the necessity of encrypted transport layers (LDAPS), and the harsh reality of navigating complex organizational structures through Binding logic.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#ldap-ldaps-the-enterprise-authority-architecture">LDAP \&amp; LDAPS: The Enterprise Authority Architecture</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
-<li><a href="#ports-and-security-posture">Ports and Security Posture</a></li>
-<li><a href="#linux-testing-utilities">Linux Testing Utilities</a></li>
-</ul>
-</li>
-<li><a href="#2-writing-basic-codescripts-connecting-binding">2. Writing Basic Code/Scripts (Connecting \&amp; Binding)</a><ul>
-<li><a href="#the-directory-structure">The Directory Structure</a></li>
-<li><a href="#python-integration-via-ldap3">Python Integration (via <code>ldap3</code>)</a></li>
-</ul>
-</li>
-<li><a href="#3-pre-execution-commands-certificate-verification">3. Pre-execution Commands (Certificate Verification)</a></li>
-<li><a href="#4-runtime-commands-authentication-handshakes">4. Runtime Commands (Authentication Handshakes)</a><ul>
-<li><a href="#the-standard-bind-test">The Standard Bind Test</a></li>
-</ul>
-</li>
-<li><a href="#5-debugging-ssl-chain-failures-invalid-credentials">5. Debugging (SSL Chain Failures \&amp; Invalid Credentials)</a><ul>
-<li><a href="#common-pitfalls-and-codes">Common Pitfalls and Codes</a></li>
-<li><a href="#wireshark-protocol-sniffing">Wireshark Protocol Sniffing</a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
-<p>Interfacing with an enterprise domain controller—like Windows Active Directory or OpenLDAP on Linux—requires strict local system configuration and network exposure.</p>
-<h3 id="ports-and-security-posture">Ports and Security Posture</h3>
-<ul>
-<li><strong>Standard over TCP (Insecure):</strong> Port <code>389</code>. Credentials traverse the internal network in raw, unencrypted plaintext. Exclusively reserved for heavily segmented internal subnets.</li>
-<li><strong>Encrypted LDAPS (Secure):</strong> Port <code>636</code>. Traffic is fundamentally forced through an SSL/TLS tunnel prior to any authentication handshakes taking place.</li>
-</ul>
-<h3 id="linux-testing-utilities">Linux Testing Utilities</h3>
-<p>Ubuntu requires the explicit installation of the LDAP networking toolset.</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="ldap-ldaps-the-enterprise-authority-architecture">
+            LDAP &amp; LDAPS: The Enterprise Authority Architecture
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 26, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security"
+              ><img
+                alt="Security"
+                src="https://img.shields.io/badge/Security-SSL%2FTLS-green.svg"
+            /></a>
+            <a
+              href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol"
+              ><img
+                alt="Network"
+                src="https://img.shields.io/badge/Protocol-TCP%2F389-red.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            The Lightweight Directory Access Protocol (LDAP) stands as the
+            primary authoritative mechanism for hierarchical, institutional
+            network identity management and authentication. This module
+            demystifies the Directory Information Tree (DIT), the necessity of
+            encrypted transport layers (LDAPS), and the harsh reality of
+            navigating complex organizational structures through Binding logic.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#ldap-ldaps-the-enterprise-authority-architecture"
+                >LDAP \&amp; LDAPS: The Enterprise Authority Architecture</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#1-configuration-windows-linux"
+                >1. Configuration (Windows \&amp; Linux)</a
+              >
+              <ul>
+                <li>
+                  <a href="#ports-and-security-posture"
+                    >Ports and Security Posture</a
+                  >
+                </li>
+                <li>
+                  <a href="#linux-testing-utilities">Linux Testing Utilities</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#2-writing-basic-codescripts-connecting-binding"
+                >2. Writing Basic Code/Scripts (Connecting \&amp; Binding)</a
+              >
+              <ul>
+                <li>
+                  <a href="#the-directory-structure">The Directory Structure</a>
+                </li>
+                <li>
+                  <a href="#python-integration-via-ldap3"
+                    >Python Integration (via <code>ldap3</code>)</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-pre-execution-commands-certificate-verification"
+                >3. Pre-execution Commands (Certificate Verification)</a
+              >
+            </li>
+            <li>
+              <a href="#4-runtime-commands-authentication-handshakes"
+                >4. Runtime Commands (Authentication Handshakes)</a
+              >
+              <ul>
+                <li>
+                  <a href="#the-standard-bind-test">The Standard Bind Test</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#5-debugging-ssl-chain-failures-invalid-credentials"
+                >5. Debugging (SSL Chain Failures \&amp; Invalid Credentials)</a
+              >
+              <ul>
+                <li>
+                  <a href="#common-pitfalls-and-codes"
+                    >Common Pitfalls and Codes</a
+                  >
+                </li>
+                <li>
+                  <a href="#wireshark-protocol-sniffing"
+                    >Wireshark Protocol Sniffing</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="1-configuration-windows-linux">
+            1. Configuration (Windows &amp; Linux)
+          </h2>
+          <p>
+            Interfacing with an enterprise domain controller—like Windows Active
+            Directory or OpenLDAP on Linux—requires strict local system
+            configuration and network exposure.
+          </p>
+          <h3 id="ports-and-security-posture">Ports and Security Posture</h3>
+          <ul>
+            <li>
+              <strong>Standard over TCP (Insecure):</strong> Port
+              <code>389</code>. Credentials traverse the internal network in
+              raw, unencrypted plaintext. Exclusively reserved for heavily
+              segmented internal subnets.
+            </li>
+            <li>
+              <strong>Encrypted LDAPS (Secure):</strong> Port <code>636</code>.
+              Traffic is fundamentally forced through an SSL/TLS tunnel prior to
+              any authentication handshakes taking place.
+            </li>
+          </ul>
+          <h3 id="linux-testing-utilities">Linux Testing Utilities</h3>
+          <p>
+            Ubuntu requires the explicit installation of the LDAP networking
+            toolset.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
 sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ldap-utils
 
 <span class="c1"># Ensure the core configuration knows to verify local Institutional SSL certs</span>
 cat<span class="w"> </span>/etc/ldap/ldap.conf
 <span class="c1"># Expected config: TLS_CACERT  /etc/ssl/certs/ca-certificates.crt</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="2-writing-basic-codescripts-connecting-binding">2. Writing Basic Code/Scripts (Connecting &amp; Binding)</h2>
-<p>Accessing an LDAP endpoint relies entirely on navigating the hierarchical database structure. </p>
-<h3 id="the-directory-structure">The Directory Structure</h3>
-<p>Entries are localized by navigating downward through a tree containing Domains (DC), Organizational Units (OU), and Common Names (CN).
-* <strong>Distinguished Name (DN):</strong> The explicit absolute path to an object inside the tree.
-  * <em>Example:</em> <code>CN=Paul Namalomba,OU=Engineering,DC=enterprise,DC=local</code></p>
-<h3 id="python-integration-via-ldap3">Python Integration (via <code>ldap3</code>)</h3>
-<p>Connecting involves initializing a Server object, establishing the connection matrix, and proving identity via a <strong>Bind</strong>. A Bind attempts to match the provided Distinguish Name against the password string supplied.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ldap3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Server</span><span class="p">,</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">Tls</span><span class="p">,</span> <span class="n">ALL</span><span class="p">,</span> <span class="n">NTLM</span>
+          <hr />
+          <h2 id="2-writing-basic-codescripts-connecting-binding">
+            2. Writing Basic Code/Scripts (Connecting &amp; Binding)
+          </h2>
+          <p>
+            Accessing an LDAP endpoint relies entirely on navigating the
+            hierarchical database structure.
+          </p>
+          <h3 id="the-directory-structure">The Directory Structure</h3>
+          <p>
+            Entries are localized by navigating downward through a tree
+            containing Domains (DC), Organizational Units (OU), and Common Names
+            (CN). * <strong>Distinguished Name (DN):</strong> The explicit
+            absolute path to an object inside the tree. * <em>Example:</em>
+            <code>CN=Paul Namalomba,OU=Engineering,DC=enterprise,DC=local</code>
+          </p>
+          <h3 id="python-integration-via-ldap3">
+            Python Integration (via <code>ldap3</code>)
+          </h3>
+          <p>
+            Connecting involves initializing a Server object, establishing the
+            connection matrix, and proving identity via a <strong>Bind</strong>.
+            A Bind attempts to match the provided Distinguish Name against the
+            password string supplied.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ldap3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Server</span><span class="p">,</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">Tls</span><span class="p">,</span> <span class="n">ALL</span><span class="p">,</span> <span class="n">NTLM</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">ssl</span>
 
 <span class="c1"># Define the Enterprise Authority target</span>
@@ -141,83 +262,152 @@ cat<span class="w"> </span>/etc/ldap/ldap.conf
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Network / TLS Failure: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">False</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="3-pre-execution-commands-certificate-verification">3. Pre-execution Commands (Certificate Verification)</h2>
-<p>LDAPS failures are fundamentally guaranteed if the physical underlying operating system refuses to mutually verify the enterprise domain certificates. LDAPS demands strict TLS. </p>
-<p>Because nothing says "I love my job" quite like debugging SSL certificate chain failures during an LDAPS bind attempt, validating the cert chain directly using OpenSSL is the absolute prerequisite to writing any real code.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Force OpenSSL to perform an LDAPS handshake manually without any Python middleware</span>
+          <hr />
+          <h2 id="3-pre-execution-commands-certificate-verification">
+            3. Pre-execution Commands (Certificate Verification)
+          </h2>
+          <p>
+            LDAPS failures are fundamentally guaranteed if the physical
+            underlying operating system refuses to mutually verify the
+            enterprise domain certificates. LDAPS demands strict TLS.
+          </p>
+          <p>
+            Because nothing says "I love my job" quite like debugging SSL
+            certificate chain failures during an LDAPS bind attempt, validating
+            the cert chain directly using OpenSSL is the absolute prerequisite
+            to writing any real code.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Force OpenSSL to perform an LDAPS handshake manually without any Python middleware</span>
 openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>dc01.enterprise.local:636<span class="w"> </span>-showcerts
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><em>If OpenSSL reports <code>Verify return code: 21 (unable to verify the first certificate)</code>, the local execution environment (the VM / Container) lacks the organization's Root CA certificate.</em></p>
-<p><strong>Importing the Institutional Root CA (Linux):</strong></p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>cp<span class="w"> </span>enterprise-root-ca.crt<span class="w"> </span>/usr/local/share/ca-certificates/
+          <p>
+            <em
+              >If OpenSSL reports
+              <code
+                >Verify return code: 21 (unable to verify the first
+                certificate)</code
+              >, the local execution environment (the VM / Container) lacks the
+              organization's Root CA certificate.</em
+            >
+          </p>
+          <p><strong>Importing the Institutional Root CA (Linux):</strong></p>
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>cp<span class="w"> </span>enterprise-root-ca.crt<span class="w"> </span>/usr/local/share/ca-certificates/
 sudo<span class="w"> </span>update-ca-certificates
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="4-runtime-commands-authentication-handshakes">4. Runtime Commands (Authentication Handshakes)</h2>
-<p>Operating against LDAP from the terminal permits executing raw search filters quickly, immensely aiding script development.</p>
-<h3 id="the-standard-bind-test">The Standard Bind Test</h3>
-<p>Executing an <code>ldapsearch</code> using the terminal establishes a temporary local connection tunnel, testing the Bind sequence immediately.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Structure: ldapsearch -H [URL] -D [Bind DN] -w [Password] -b [Search Base] [Filter]</span>
+          <hr />
+          <h2 id="4-runtime-commands-authentication-handshakes">
+            4. Runtime Commands (Authentication Handshakes)
+          </h2>
+          <p>
+            Operating against LDAP from the terminal permits executing raw
+            search filters quickly, immensely aiding script development.
+          </p>
+          <h3 id="the-standard-bind-test">The Standard Bind Test</h3>
+          <p>
+            Executing an <code>ldapsearch</code> using the terminal establishes
+            a temporary local connection tunnel, testing the Bind sequence
+            immediately.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Structure: ldapsearch -H [URL] -D [Bind DN] -w [Password] -b [Search Base] [Filter]</span>
 ldapsearch<span class="w"> </span>-H<span class="w"> </span>ldaps://dc01.enterprise.local:636<span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-D<span class="w"> </span><span class="s2">&quot;CN=ldap_service_account,OU=Services,DC=enterprise,DC=local&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-w<span class="w"> </span><span class="s2">&quot;securePassword123!&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span>-b<span class="w"> </span><span class="s2">&quot;DC=enterprise,DC=local&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">           </span><span class="s2">&quot;(sAMAccountName=kabwenze)&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Common LDAP Filters:</strong>
-* All employees: <code>(&amp;(objectClass=user)(objectCategory=person))</code>
-* Specific email suffix: <code>(mail=*@enterprise.local)</code>
-* Active users only (Windows AD specificity): <code>(!(userAccountControl:1.2.840.113556.1.4.803:=2))</code></p>
-<hr />
-<h2 id="5-debugging-ssl-chain-failures-invalid-credentials">5. Debugging (SSL Chain Failures &amp; Invalid Credentials)</h2>
-<p>LDAP errors are consistently cryptic string payloads returning raw numerical code evaluations originating deep from the Active Directory NTDS engine.</p>
-<h3 id="common-pitfalls-and-codes">Common Pitfalls and Codes</h3>
-<ul>
-<li><strong>LDAP Error 49 (Invalid Credentials):</strong> The server actively reached out, validated the TLS chain, found the user inside the Directory Information Tree, but strictly rejected the raw password hash.</li>
-<li><strong>LDAP Error 32 (No Such Object):</strong> The Bind succeeded seamlessly, but the subsequent search function targeted a <code>SEARCH_BASE</code> that simply does not exist structurally on the server. Double check for typos in the organizational unit (<code>OU=Enginering</code> instead of <code>OU=Engineering</code>).</li>
-<li><strong>Connection Timeout / Reset by Peer:</strong> The script is attempting to establish basic LDAP protocol handshakes using port <code>389</code> over an explicit <code>ldaps://</code> prefix, causing the Authority firewall to actively terminate the socket instantly. Ensure the port targets <code>636</code>.</li>
-</ul>
-<h3 id="wireshark-protocol-sniffing">Wireshark Protocol Sniffing</h3>
-<p>If you are debugging a standard plaintext LDAP handshake (Not LDAPS, strictly internal subnets via Port 389), capturing raw domain packets reveals exactly exactly which DN the system attempted to authenticate.</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>tcpdump<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>port<span class="w"> </span><span class="m">389</span><span class="w"> </span>-w<span class="w"> </span>ldap_capture.pcap
+          <p>
+            <strong>Common LDAP Filters:</strong> * All employees:
+            <code>(&amp;(objectClass=user)(objectCategory=person))</code> *
+            Specific email suffix: <code>(mail=*@enterprise.local)</code> *
+            Active users only (Windows AD specificity):
+            <code>(!(userAccountControl:1.2.840.113556.1.4.803:=2))</code>
+          </p>
+          <hr />
+          <h2 id="5-debugging-ssl-chain-failures-invalid-credentials">
+            5. Debugging (SSL Chain Failures &amp; Invalid Credentials)
+          </h2>
+          <p>
+            LDAP errors are consistently cryptic string payloads returning raw
+            numerical code evaluations originating deep from the Active
+            Directory NTDS engine.
+          </p>
+          <h3 id="common-pitfalls-and-codes">Common Pitfalls and Codes</h3>
+          <ul>
+            <li>
+              <strong>LDAP Error 49 (Invalid Credentials):</strong> The server
+              actively reached out, validated the TLS chain, found the user
+              inside the Directory Information Tree, but strictly rejected the
+              raw password hash.
+            </li>
+            <li>
+              <strong>LDAP Error 32 (No Such Object):</strong> The Bind
+              succeeded seamlessly, but the subsequent search function targeted
+              a <code>SEARCH_BASE</code> that simply does not exist structurally
+              on the server. Double check for typos in the organizational unit
+              (<code>OU=Enginering</code> instead of
+              <code>OU=Engineering</code>).
+            </li>
+            <li>
+              <strong>Connection Timeout / Reset by Peer:</strong> The script is
+              attempting to establish basic LDAP protocol handshakes using port
+              <code>389</code> over an explicit <code>ldaps://</code> prefix,
+              causing the Authority firewall to actively terminate the socket
+              instantly. Ensure the port targets <code>636</code>.
+            </li>
+          </ul>
+          <h3 id="wireshark-protocol-sniffing">Wireshark Protocol Sniffing</h3>
+          <p>
+            If you are debugging a standard plaintext LDAP handshake (Not LDAPS,
+            strictly internal subnets via Port 389), capturing raw domain
+            packets reveals exactly exactly which DN the system attempted to
+            authenticate.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>tcpdump<span class="w"> </span>-i<span class="w"> </span>eth0<span class="w"> </span>port<span class="w"> </span><span class="m">389</span><span class="w"> </span>-w<span class="w"> </span>ldap_capture.pcap
 <span class="c1"># Open the .pcap file in Wireshark and filter by: ldap</span>
-</code></pre></div></article>
-        </div>
+</code></pre>
+          </div>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

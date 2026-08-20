@@ -1,117 +1,231 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Memory Management and Execution on Windows — C++ (MSVC) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Memory Management and Execution on Windows — C++ (MSVC) - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="memory-management-and-execution-on-windows-c-msvc">Memory Management and Execution on Windows — C++ (MSVC)</h1>
-<p><strong>Last updated</strong>: December 13, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://learn.microsoft.com/cpp"><img alt="Language: C++" src="https://img.shields.io/badge/Language-C%2B%2B-blue.svg" /></a>
-<a href="https://learn.microsoft.com/cpp/build/overview-of-the-microsoft-cpp-compiler"><img alt="Compiler: MSVC" src="https://img.shields.io/badge/Compiler-MSVC-0078D7.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide explains how C++ (MSVC on Windows) handles key memory and execution concepts: value vs reference semantics, stack vs heap storage, copy semantics (deep vs shallow), and nullability. The content focuses on what actually happens under the hood on Windows using MSVC, with short, runnable examples and Windows-specific notes.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#memory-management-and-execution-on-windows-c-msvc">Memory Management and Execution on Windows — C++ (MSVC)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#windows-compile-run-developer-command-prompt-powershell">Windows — Compile \&amp; Run (Developer Command Prompt / PowerShell)</a></li>
-<li><a href="#overview_1">Overview</a></li>
-<li><a href="#contents_1">Contents</a></li>
-<li><a href="#1-data-structures-value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</a></li>
-<li><a href="#2-storage-stack-vs-heap">2) Storage — Stack vs Heap</a></li>
-<li><a href="#3-copy-semantics-shallow-vs-deep-move-semantics">3) Copy Semantics — Shallow vs Deep \&amp; Move Semantics</a></li>
-<li><a href="#4-nullability">4) Nullability</a></li>
-<li><a href="#examples-small-runnable-snippets">Examples — Small Runnable Snippets</a></li>
-<li><a href="#windows-msvc-specific-notes-and-pitfalls">Windows / MSVC Specific Notes and Pitfalls</a></li>
-<li><a href="#references">References</a></li>
-</ul>
-<hr />
-<h2 id="windows-compile-run-developer-command-prompt-powershell">Windows — Compile &amp; Run (Developer Command Prompt / PowerShell)</h2>
-<p>Notes: Use the "Developer Command Prompt for VS" (recommended) which sets up MSVC environment variables. If using PowerShell, run the <code>vcvarsall.bat</code> script from your Visual Studio installation first.</p>
-<ul>
-<li>Developer Command Prompt (cmd.exe):</li>
-</ul>
-<p><code>cmd
-  REM open "Developer Command Prompt for VS"
-  cl /EHsc main.cpp /Fe:main.exe
-  main.exe</code></p>
-<ul>
-<li>PowerShell (example, adjust path to match your VS install):</li>
-</ul>
-<p><code>powershell
-  &amp; 'C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat' x64
-  cl.exe /EHsc main.cpp /Fe:main.exe
-  .\main.exe</code></p>
-<ul>
-<li>Notes: <code>/EHsc</code> enables C++ exception handling model, optimize flags as needed (<code>/O2</code>).</li>
-</ul>
-<hr />
-<h2 id="overview_1">Overview</h2>
-<p>This guide explains how C++ (MSVC on Windows) handles key memory and execution concepts: value vs reference semantics, stack vs heap storage, copy semantics (deep vs shallow), and nullability. The content focuses on what actually happens under the hood on Windows using MSVC, with short, runnable examples and Windows-specific notes.</p>
-<hr />
-<h2 id="contents_1">Contents</h2>
-<ul>
-<li>Data Structures: value-types vs reference-types</li>
-<li>Storage: stack vs heap (allocation, lifetime)</li>
-<li>Copy Semantics: shallow vs deep copying, move semantics</li>
-<li>Nullability: <code>nullptr</code>, raw pointers, smart pointers, <code>std::optional</code></li>
-<li>Examples &amp; Best Practices</li>
-<li>Windows / MSVC specific notes and pitfalls</li>
-</ul>
-<hr />
-<h2 id="1-data-structures-value-type-vs-reference-type">1) Data Structures — Value-Type vs Reference-Type</h2>
-<p>C++ does not have a single runtime-managed split of "value vs reference" like some managed languages. Instead:</p>
-<ul>
-<li>Primitive built-in types and user-defined <code>struct</code> / <code>class</code> objects are by default value types (their semantics depend on how you use them).</li>
-<li>An actual <em>reference type</em> in C++ is a reference (<code>T&amp;</code>) or pointer (<code>T*</code>) — these are not objects themselves but aliases or addresses referring to other objects.</li>
-</ul>
-<p>Key points:
-- Declaring an object <code>MyType x;</code> instantiates a value object. If you use <code>MyType* p = new MyType();</code> you allocate an object on the heap and <code>p</code> stores its address.
-- <code>struct</code> vs <code>class</code> in C++ differ only by default access (public vs private).</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="memory-management-and-execution-on-windows-c-msvc">
+            Memory Management and Execution on Windows — C++ (MSVC)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 13, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://learn.microsoft.com/cpp"
+              ><img
+                alt="Language: C++"
+                src="https://img.shields.io/badge/Language-C%2B%2B-blue.svg"
+            /></a>
+            <a
+              href="https://learn.microsoft.com/cpp/build/overview-of-the-microsoft-cpp-compiler"
+              ><img
+                alt="Compiler: MSVC"
+                src="https://img.shields.io/badge/Compiler-MSVC-0078D7.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide explains how C++ (MSVC on Windows) handles key memory and
+            execution concepts: value vs reference semantics, stack vs heap
+            storage, copy semantics (deep vs shallow), and nullability. The
+            content focuses on what actually happens under the hood on Windows
+            using MSVC, with short, runnable examples and Windows-specific
+            notes.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#memory-management-and-execution-on-windows-c-msvc"
+                >Memory Management and Execution on Windows — C++ (MSVC)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#windows-compile-run-developer-command-prompt-powershell"
+                >Windows — Compile \&amp; Run (Developer Command Prompt /
+                PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview_1">Overview</a></li>
+            <li><a href="#contents_1">Contents</a></li>
+            <li>
+              <a href="#1-data-structures-value-type-vs-reference-type"
+                >1) Data Structures — Value-Type vs Reference-Type</a
+              >
+            </li>
+            <li>
+              <a href="#2-storage-stack-vs-heap">2) Storage — Stack vs Heap</a>
+            </li>
+            <li>
+              <a href="#3-copy-semantics-shallow-vs-deep-move-semantics"
+                >3) Copy Semantics — Shallow vs Deep \&amp; Move Semantics</a
+              >
+            </li>
+            <li><a href="#4-nullability">4) Nullability</a></li>
+            <li>
+              <a href="#examples-small-runnable-snippets"
+                >Examples — Small Runnable Snippets</a
+              >
+            </li>
+            <li>
+              <a href="#windows-msvc-specific-notes-and-pitfalls"
+                >Windows / MSVC Specific Notes and Pitfalls</a
+              >
+            </li>
+            <li><a href="#references">References</a></li>
+          </ul>
+          <hr />
+          <h2 id="windows-compile-run-developer-command-prompt-powershell">
+            Windows — Compile &amp; Run (Developer Command Prompt / PowerShell)
+          </h2>
+          <p>
+            Notes: Use the "Developer Command Prompt for VS" (recommended) which
+            sets up MSVC environment variables. If using PowerShell, run the
+            <code>vcvarsall.bat</code> script from your Visual Studio
+            installation first.
+          </p>
+          <ul>
+            <li>Developer Command Prompt (cmd.exe):</li>
+          </ul>
+          <p>
+            <code
+              >cmd REM open "Developer Command Prompt for VS" cl /EHsc main.cpp
+              /Fe:main.exe main.exe</code
+            >
+          </p>
+          <ul>
+            <li>PowerShell (example, adjust path to match your VS install):</li>
+          </ul>
+          <p>
+            <code
+              >powershell &amp; 'C:\Program Files (x86)\Microsoft Visual
+              Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat' x64 cl.exe
+              /EHsc main.cpp /Fe:main.exe .\main.exe</code
+            >
+          </p>
+          <ul>
+            <li>
+              Notes: <code>/EHsc</code> enables C++ exception handling model,
+              optimize flags as needed (<code>/O2</code>).
+            </li>
+          </ul>
+          <hr />
+          <h2 id="overview_1">Overview</h2>
+          <p>
+            This guide explains how C++ (MSVC on Windows) handles key memory and
+            execution concepts: value vs reference semantics, stack vs heap
+            storage, copy semantics (deep vs shallow), and nullability. The
+            content focuses on what actually happens under the hood on Windows
+            using MSVC, with short, runnable examples and Windows-specific
+            notes.
+          </p>
+          <hr />
+          <h2 id="contents_1">Contents</h2>
+          <ul>
+            <li>Data Structures: value-types vs reference-types</li>
+            <li>Storage: stack vs heap (allocation, lifetime)</li>
+            <li>Copy Semantics: shallow vs deep copying, move semantics</li>
+            <li>
+              Nullability: <code>nullptr</code>, raw pointers, smart pointers,
+              <code>std::optional</code>
+            </li>
+            <li>Examples &amp; Best Practices</li>
+            <li>Windows / MSVC specific notes and pitfalls</li>
+          </ul>
+          <hr />
+          <h2 id="1-data-structures-value-type-vs-reference-type">
+            1) Data Structures — Value-Type vs Reference-Type
+          </h2>
+          <p>
+            C++ does not have a single runtime-managed split of "value vs
+            reference" like some managed languages. Instead:
+          </p>
+          <ul>
+            <li>
+              Primitive built-in types and user-defined <code>struct</code> /
+              <code>class</code> objects are by default value types (their
+              semantics depend on how you use them).
+            </li>
+            <li>
+              An actual <em>reference type</em> in C++ is a reference
+              (<code>T&amp;</code>) or pointer (<code>T*</code>) — these are not
+              objects themselves but aliases or addresses referring to other
+              objects.
+            </li>
+          </ul>
+          <p>
+            Key points: - Declaring an object
+            <code>MyType x;</code> instantiates a value object. If you use
+            <code>MyType* p = new MyType();</code> you allocate an object on the
+            heap and <code>p</code> stores its address. - <code>struct</code> vs
+            <code>class</code> in C++ differ only by default access (public vs
+            private).
+          </p>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 
 <span class="kt">void</span><span class="w"> </span><span class="nf">example</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">};</span><span class="w">        </span><span class="c1">// value: object `a` exists directly</span>
@@ -120,43 +234,80 @@
 <span class="w">    </span><span class="n">Point</span><span class="o">*</span><span class="w"> </span><span class="n">ph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Point</span><span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">};</span><span class="w"> </span><span class="c1">// heap allocation</span>
 <span class="w">    </span><span class="k">delete</span><span class="w"> </span><span class="n">ph</span><span class="p">;</span><span class="w">                 </span><span class="c1">// must free</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Notes/Tips:
-- Value semantics by default makes copying cheap for small objects but expensive for large ones.
-- Use pointers/references for polymorphism and dynamic lifetime control.</p>
-<hr />
-<h2 id="2-storage-stack-vs-heap">2) Storage — Stack vs Heap</h2>
-<p>Where objects live depends on how they are created:</p>
-<ul>
-<li>Stack (automatic storage): local variables defined without <code>new</code> inside a function are typically placed on the stack (or may be optimized into registers). Stack allocation is fast and automatically freed when the function returns.</li>
-<li>Heap (dynamic storage): <code>new</code>/<code>malloc</code> allocate memory on the heap. Heap allocations are relatively slow and the programmer (or RAII wrappers) must free them.</li>
-</ul>
-<p>Windows/MSVC specifics:
-- MSVC uses the OS virtual memory APIs for heap allocation; default CRT heap allows fragmentation handling, low-fragmentation heap options exist for production (LFH).
-- Stack size is configurable per-thread (default ~1MB for Windows threads created by the runtime). Watch recursion and large stack arrays.</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+          <p>
+            Notes/Tips: - Value semantics by default makes copying cheap for
+            small objects but expensive for large ones. - Use
+            pointers/references for polymorphism and dynamic lifetime control.
+          </p>
+          <hr />
+          <h2 id="2-storage-stack-vs-heap">2) Storage — Stack vs Heap</h2>
+          <p>Where objects live depends on how they are created:</p>
+          <ul>
+            <li>
+              Stack (automatic storage): local variables defined without
+              <code>new</code> inside a function are typically placed on the
+              stack (or may be optimized into registers). Stack allocation is
+              fast and automatically freed when the function returns.
+            </li>
+            <li>
+              Heap (dynamic storage): <code>new</code>/<code>malloc</code>
+              allocate memory on the heap. Heap allocations are relatively slow
+              and the programmer (or RAII wrappers) must free them.
+            </li>
+          </ul>
+          <p>
+            Windows/MSVC specifics: - MSVC uses the OS virtual memory APIs for
+            heap allocation; default CRT heap allows fragmentation handling,
+            low-fragmentation heap options exist for production (LFH). - Stack
+            size is configurable per-thread (default ~1MB for Windows threads
+            created by the runtime). Watch recursion and large stack arrays.
+          </p>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">stackArray</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span><span class="w"> </span><span class="c1">// on the stack</span>
 <span class="w">    </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">heapArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span><span class="w"> </span><span class="c1">// on the heap</span>
 <span class="w">    </span><span class="c1">// ...</span>
 <span class="w">    </span><span class="k">delete</span><span class="p">[]</span><span class="w"> </span><span class="n">heapArray</span><span class="p">;</span><span class="w"> </span><span class="c1">// free heap memory</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Pitfalls:
-- Stack overflow if you allocate huge local arrays or have deep recursion.
-- Memory leaks if <code>delete</code> not called or exceptions bypass cleanup. Use RAII and smart pointers.</p>
-<hr />
-<h2 id="3-copy-semantics-shallow-vs-deep-move-semantics">3) Copy Semantics — Shallow vs Deep &amp; Move Semantics</h2>
-<p>C++ copy semantics are controlled by copy constructor and assignment operator. By default the compiler-generated copy is a member-wise copy (shallow copy of fields).</p>
-<ul>
-<li>Shallow copy: copies pointer values — both objects point to same memory (danger if both manage lifetime).</li>
-<li>Deep copy: allocate new internal storage and copy the content — safer for ownership transfer.</li>
-<li>Move semantics (C++11+): <code>std::move</code> and move constructors/operators enable ownership transfer without expensive deep copies.</li>
-</ul>
-<p>Example (shallow vs deep):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Buffer</span><span class="w"> </span><span class="p">{</span>
+          <p>
+            Pitfalls: - Stack overflow if you allocate huge local arrays or have
+            deep recursion. - Memory leaks if <code>delete</code> not called or
+            exceptions bypass cleanup. Use RAII and smart pointers.
+          </p>
+          <hr />
+          <h2 id="3-copy-semantics-shallow-vs-deep-move-semantics">
+            3) Copy Semantics — Shallow vs Deep &amp; Move Semantics
+          </h2>
+          <p>
+            C++ copy semantics are controlled by copy constructor and assignment
+            operator. By default the compiler-generated copy is a member-wise
+            copy (shallow copy of fields).
+          </p>
+          <ul>
+            <li>
+              Shallow copy: copies pointer values — both objects point to same
+              memory (danger if both manage lifetime).
+            </li>
+            <li>
+              Deep copy: allocate new internal storage and copy the content —
+              safer for ownership transfer.
+            </li>
+            <li>
+              Move semantics (C++11+): <code>std::move</code> and move
+              constructors/operators enable ownership transfer without expensive
+              deep copies.
+            </li>
+          </ul>
+          <p>Example (shallow vs deep):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Buffer</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
 <span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 
@@ -174,39 +325,66 @@
 
 <span class="w">    </span><span class="o">~</span><span class="n">Buffer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">delete</span><span class="p">[]</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Best practices:
-- Prefer RAII containers (<code>std::vector</code>, <code>std::string</code>) which implement deep/move semantics correctly.
-- Implement move operations for expensive-to-copy resources.
-- Rule of five / zero: if you implement destructor/copy/move, follow the rule of five (or prefer no manual resource management and rely on standard containers).</p>
-<hr />
-<h2 id="4-nullability">4) Nullability</h2>
-<ul>
-<li>The C++ null pointer literal is <code>nullptr</code> (C++11+). Raw pointers can be <code>nullptr</code>.</li>
-<li>Raw pointers do not express ownership; prefer smart pointers:</li>
-<li><code>std::unique_ptr&lt;T&gt;</code> for sole ownership; cannot be null-checked for lifetime but can hold <code>nullptr</code>.</li>
-<li><code>std::shared_ptr&lt;T&gt;</code> for shared ownership with ref-counting.</li>
-<li><code>std::weak_ptr&lt;T&gt;</code> to break cycles.</li>
-<li><code>std::optional&lt;T&gt;</code> represents optional values without heap allocation for inline small types (C++17+).</li>
-</ul>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">();</span>
+          <p>
+            Best practices: - Prefer RAII containers (<code>std::vector</code>,
+            <code>std::string</code>) which implement deep/move semantics
+            correctly. - Implement move operations for expensive-to-copy
+            resources. - Rule of five / zero: if you implement
+            destructor/copy/move, follow the rule of five (or prefer no manual
+            resource management and rely on standard containers).
+          </p>
+          <hr />
+          <h2 id="4-nullability">4) Nullability</h2>
+          <ul>
+            <li>
+              The C++ null pointer literal is <code>nullptr</code> (C++11+). Raw
+              pointers can be <code>nullptr</code>.
+            </li>
+            <li>
+              Raw pointers do not express ownership; prefer smart pointers:
+            </li>
+            <li>
+              <code>std::unique_ptr&lt;T&gt;</code> for sole ownership; cannot
+              be null-checked for lifetime but can hold <code>nullptr</code>.
+            </li>
+            <li>
+              <code>std::shared_ptr&lt;T&gt;</code> for shared ownership with
+              ref-counting.
+            </li>
+            <li><code>std::weak_ptr&lt;T&gt;</code> to break cycles.</li>
+            <li>
+              <code>std::optional&lt;T&gt;</code> represents optional values
+              without heap allocation for inline small types (C++17+).
+            </li>
+          </ul>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">Do</span><span class="p">();</span><span class="w"> </span><span class="c1">// check for non-null</span>
 
 <span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">maybe</span><span class="p">;</span>
 <span class="n">maybe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">maybe</span><span class="p">.</span><span class="n">has_value</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">maybe</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Pitfalls:
-- Do not mix <code>delete</code> and <code>delete[]</code> incorrectly.
-- Avoid raw owning pointers; prefer <code>unique_ptr</code>/<code>shared_ptr</code>.
-- Beware of <code>shared_ptr</code> cycles causing leaks — use <code>weak_ptr</code> to break cycles.</p>
-<hr />
-<h2 id="examples-small-runnable-snippets">Examples — Small Runnable Snippets</h2>
-<p><code>main.cpp</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+          <p>
+            Pitfalls: - Do not mix <code>delete</code> and
+            <code>delete[]</code> incorrectly. - Avoid raw owning pointers;
+            prefer <code>unique_ptr</code>/<code>shared_ptr</code>. - Beware of
+            <code>shared_ptr</code> cycles causing leaks — use
+            <code>weak_ptr</code> to break cycles.
+          </p>
+          <hr />
+          <h2 id="examples-small-runnable-snippets">
+            Examples — Small Runnable Snippets
+          </h2>
+          <p><code>main.cpp</code>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
@@ -233,57 +411,79 @@
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Compile &amp; run with MSVC as described earlier.</p>
-<hr />
-<h2 id="windows-msvc-specific-notes-and-pitfalls">Windows / MSVC Specific Notes and Pitfalls</h2>
-<ul>
-<li>Stack size: default thread stack ~1MB. Use <code>/F</code> linker option to change stack size if needed.</li>
-<li>Heap performance: Windows has low-fragmentation heap options; CRT debug heap introduces overhead — test release builds for performance.</li>
-<li>Enable security checks: use <code>/GS</code>, buffer security mitigations and enable <code>/RTC</code> for runtime checks in debug.</li>
-<li>Use <code>/MD</code> or <code>/MT</code> consistently for runtime library selection (DLL vs static CRT).</li>
-<li>Use AddressSanitizer (ASan) in MSVC (available in modern toolchains) for detecting memory issues.</li>
-</ul>
-<hr />
-<h2 id="references">References</h2>
-<ul>
-<li>Microsoft C++ docs: https://learn.microsoft.com/cpp</li>
-<li>C++ Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines</li>
-<li>Herb Sutter et al. Resources on move semantics and RAII</li>
-</ul>
-<hr />
-<p><em>End of C++ guide.</em></p></article>
-        </div>
+          <p>Compile &amp; run with MSVC as described earlier.</p>
+          <hr />
+          <h2 id="windows-msvc-specific-notes-and-pitfalls">
+            Windows / MSVC Specific Notes and Pitfalls
+          </h2>
+          <ul>
+            <li>
+              Stack size: default thread stack ~1MB. Use <code>/F</code> linker
+              option to change stack size if needed.
+            </li>
+            <li>
+              Heap performance: Windows has low-fragmentation heap options; CRT
+              debug heap introduces overhead — test release builds for
+              performance.
+            </li>
+            <li>
+              Enable security checks: use <code>/GS</code>, buffer security
+              mitigations and enable <code>/RTC</code> for runtime checks in
+              debug.
+            </li>
+            <li>
+              Use <code>/MD</code> or <code>/MT</code> consistently for runtime
+              library selection (DLL vs static CRT).
+            </li>
+            <li>
+              Use AddressSanitizer (ASan) in MSVC (available in modern
+              toolchains) for detecting memory issues.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="references">References</h2>
+          <ul>
+            <li>Microsoft C++ docs: https://learn.microsoft.com/cpp</li>
+            <li>
+              C++ Core Guidelines:
+              https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+            </li>
+            <li>Herb Sutter et al. Resources on move semantics and RAII</li>
+          </ul>
+          <hr />
+          <p><em>End of C++ guide.</em></p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

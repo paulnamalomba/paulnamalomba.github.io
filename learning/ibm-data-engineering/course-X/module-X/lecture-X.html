@@ -1,164 +1,279 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture X: Data Lakes, Data Warehouses, and the Data Lakehouse</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Lecture X: Data Lakes, Data Warehouses, and the Data Lakehouse
+    </title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course X ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-X/index.html" class="active">Course X</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Course X ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-X/index.html" class="active">Course X</a>
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module X ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-X/module-X/index.html" class="active">Module X</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Module X ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-X/module-X/index.html" class="active"
+                >Module X</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture X ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Apache Kafka Overview & Architecture</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Distributed Event Streaming Platform Components</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Building Event Streaming Pipelines Using Kafka</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Kafka Streaming Process & Stream Topology</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Data Warehouse Overview</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Popular Data Warehouse Systems</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Selecting a Data Warehouse System</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Data Marts Overview</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: IBM Db2 Warehouse</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Data Lakes Overview</a>
-            <a href="../../course-X/module-X/lecture-X.html" class="active">Lecture X: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture X ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Apache Kafka Overview & Architecture</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Distributed Event Streaming Platform Components</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Building Event Streaming Pipelines Using Kafka</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Kafka Streaming Process & Stream Topology</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Data Warehouse Overview</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Popular Data Warehouse Systems</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Selecting a Data Warehouse System</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Data Marts Overview</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: IBM Db2 Warehouse</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Data Lakes Overview</a
+              >
+              <a href="../../course-X/module-X/lecture-X.html" class="active"
+                >Lecture X: Data Lakes, Data Warehouses, and the Data
+                Lakehouse</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course X</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module X</a> <span>&rsaquo;</span> 
-      Lecture X
-    </div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course X</a> <span>&rsaquo;</span>
+        <a href="index.html">Module X</a> <span>&rsaquo;</span>
+        Lecture X
+      </div>
 
-    <h1 class="fade-in">Data Lakes, Data Warehouses, and the Data Lakehouse</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module X, Lecture X
-    </p>
+      <h1 class="fade-in">
+        Data Lakes, Data Warehouses, and the Data Lakehouse
+      </h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module X, Lecture X
+      </p>
 
-
-<p class="fade-in fade-in-d2">Understanding data architecture through analogy clarifies why no single storage paradigm solves every problem. A commercial kitchen—where raw ingredients must be received, sorted, stored under specific conditions, and prepared to order—mirrors the data flows that modern organizations must orchestrate. The data lakehouse is the architectural response to the limitations encountered when data lakes and data warehouses operate in isolation.</p>
-<hr/>
-<div class="section-card fade-in fade-in-d2"><h2>1. The Kitchen Analogy: From Raw Ingredients to Insights</h2>
-<h3>1.1 The Loading Dock — Data Ingestion</h3>
-<p>In a commercial kitchen, raw ingredients arrive on palettes from supplier trucks. They must be immediately unwrapped, sorted, labelled, and routed to the correct storage area—pantries for dry goods, walk-in fridges and freezers for perishables. Speed is critical: delays cause spoilage and waste.</p>
-<p>In a data architecture, the equivalent is <strong>data ingestion</strong>—raw data arriving from diverse sources: cloud environments, operational applications, social media streams, IoT sensors. It arrives in different formats, at different velocities, and must be captured quickly before it loses value.</p>
-<h3>1.2 The Pantry and Freezer — Storage and Governance</h3>
-<p>Kitchen storage requires organization: FIFO (first in, first out) rotation, contamination separation, temperature controls. Without this governance, the cooks cannot do their job safely or efficiently—they would spend more time searching for ingredients than actually cooking.</p>
-<p>Similarly, data must be <strong>cleaned, organized, and governed</strong> in storage systems before it can be reliably consumed by downstream analytics.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Data Lakes: The Loading Dock of Data Architecture</h2>
-<p><strong>Data lakes</strong> provide a low-cost, high-speed repository for capturing raw data in all formats—structured, semi-structured, and unstructured. They serve the same function as the loading dock: get everything off the truck and into storage as quickly as possible.</p>
-<h3>Challenges with Data Lakes</h3>
-<table>
-<thead>
-<tr>
-<th>Challenge</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Data Governance &amp; Quality</strong></td>
-<td>Without rigorous governance, data lakes degrade into <strong>data swamps</strong>—filled with duplicate, inaccurate, or incomplete data that is difficult to track and manage.</td>
-</tr>
-<tr>
-<td><strong>Data Staleness</strong></td>
-<td>Ungoverned data degrades over time, losing its value for generating insights—just as unused kitchen ingredients eventually spoil.</td>
-</tr>
-<tr>
-<td><strong>Query Performance</strong></td>
-<td>Data lakes are not optimized for complex analytical queries. Extracting insights directly from a lake can be slow and operationally difficult.</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Enterprise Data Warehouses: The Organized Kitchen</h2>
-<p><strong>Enterprise Data Warehouses (EDWs)</strong> are the organized pantries and freezers of data architecture. Data is loaded—sometimes from a data lake, sometimes directly from operational applications—then <strong>cleaned, structured, and optimized</strong> for specific analytical tasks.</p>
-<p>EDWs excel at powering:</p>
-<ul>
-<li><strong>Business Intelligence (BI) workloads</strong> — dashboards, reports, and visualizations</li>
-<li><strong>Structured analytical queries</strong> with high performance and concurrency</li>
-</ul>
-<h3>Challenges with Data Warehouses</h3>
-<table>
-<thead>
-<tr>
-<th>Challenge</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>High Cost</strong></td>
-<td>Like enterprise-grade walk-in freezers, data warehouses are expensive to operate. Not everything can—or should—be loaded into one.</td>
-</tr>
-<tr>
-<td><strong>Limited Unstructured Data Support</strong></td>
-<td>Warehouses have limited support for semi-structured and unstructured data—precisely the data types growing fastest in most organizations.</td>
-</tr>
-<tr>
-<td><strong>Latency</strong></td>
-<td>The time required to sort, clean, and load data into the warehouse can make it too slow for applications requiring the freshest data.</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. The Data Lakehouse: Best of Both Worlds</h2>
-<p>Recognizing the complementary strengths and opposing weaknesses of data lakes and data warehouses, engineers developed a convergent architecture: the <strong>data lakehouse</strong>.</p>
-<div class="mermaid-container"><pre class="mermaid">graph TD
+      <p class="fade-in fade-in-d2">
+        Understanding data architecture through analogy clarifies why no single
+        storage paradigm solves every problem. A commercial kitchen—where raw
+        ingredients must be received, sorted, stored under specific conditions,
+        and prepared to order—mirrors the data flows that modern organizations
+        must orchestrate. The data lakehouse is the architectural response to
+        the limitations encountered when data lakes and data warehouses operate
+        in isolation.
+      </p>
+      <hr />
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. The Kitchen Analogy: From Raw Ingredients to Insights</h2>
+        <h3>1.1 The Loading Dock — Data Ingestion</h3>
+        <p>
+          In a commercial kitchen, raw ingredients arrive on palettes from
+          supplier trucks. They must be immediately unwrapped, sorted, labelled,
+          and routed to the correct storage area—pantries for dry goods, walk-in
+          fridges and freezers for perishables. Speed is critical: delays cause
+          spoilage and waste.
+        </p>
+        <p>
+          In a data architecture, the equivalent is
+          <strong>data ingestion</strong>—raw data arriving from diverse
+          sources: cloud environments, operational applications, social media
+          streams, IoT sensors. It arrives in different formats, at different
+          velocities, and must be captured quickly before it loses value.
+        </p>
+        <h3>1.2 The Pantry and Freezer — Storage and Governance</h3>
+        <p>
+          Kitchen storage requires organization: FIFO (first in, first out)
+          rotation, contamination separation, temperature controls. Without this
+          governance, the cooks cannot do their job safely or efficiently—they
+          would spend more time searching for ingredients than actually cooking.
+        </p>
+        <p>
+          Similarly, data must be
+          <strong>cleaned, organized, and governed</strong> in storage systems
+          before it can be reliably consumed by downstream analytics.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Data Lakes: The Loading Dock of Data Architecture</h2>
+        <p>
+          <strong>Data lakes</strong> provide a low-cost, high-speed repository
+          for capturing raw data in all formats—structured, semi-structured, and
+          unstructured. They serve the same function as the loading dock: get
+          everything off the truck and into storage as quickly as possible.
+        </p>
+        <h3>Challenges with Data Lakes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Challenge</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Data Governance &amp; Quality</strong></td>
+              <td>
+                Without rigorous governance, data lakes degrade into
+                <strong>data swamps</strong>—filled with duplicate, inaccurate,
+                or incomplete data that is difficult to track and manage.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Data Staleness</strong></td>
+              <td>
+                Ungoverned data degrades over time, losing its value for
+                generating insights—just as unused kitchen ingredients
+                eventually spoil.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Query Performance</strong></td>
+              <td>
+                Data lakes are not optimized for complex analytical queries.
+                Extracting insights directly from a lake can be slow and
+                operationally difficult.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Enterprise Data Warehouses: The Organized Kitchen</h2>
+        <p>
+          <strong>Enterprise Data Warehouses (EDWs)</strong> are the organized
+          pantries and freezers of data architecture. Data is loaded—sometimes
+          from a data lake, sometimes directly from operational
+          applications—then
+          <strong>cleaned, structured, and optimized</strong> for specific
+          analytical tasks.
+        </p>
+        <p>EDWs excel at powering:</p>
+        <ul>
+          <li>
+            <strong>Business Intelligence (BI) workloads</strong> — dashboards,
+            reports, and visualizations
+          </li>
+          <li>
+            <strong>Structured analytical queries</strong> with high performance
+            and concurrency
+          </li>
+        </ul>
+        <h3>Challenges with Data Warehouses</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Challenge</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>High Cost</strong></td>
+              <td>
+                Like enterprise-grade walk-in freezers, data warehouses are
+                expensive to operate. Not everything can—or should—be loaded
+                into one.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Limited Unstructured Data Support</strong></td>
+              <td>
+                Warehouses have limited support for semi-structured and
+                unstructured data—precisely the data types growing fastest in
+                most organizations.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Latency</strong></td>
+              <td>
+                The time required to sort, clean, and load data into the
+                warehouse can make it too slow for applications requiring the
+                freshest data.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. The Data Lakehouse: Best of Both Worlds</h2>
+        <p>
+          Recognizing the complementary strengths and opposing weaknesses of
+          data lakes and data warehouses, engineers developed a convergent
+          architecture: the <strong>data lakehouse</strong>.
+        </p>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph TD
     subgraph "Data Sources"
         S1[Cloud Environments]
         S2[Operational Applications]
@@ -183,75 +298,102 @@
     GOV --&gt; ENGINE
     ENGINE --&gt; BI
     ENGINE --&gt; ML
-</pre></div>
-<h3>4.1 Core Value Proposition</h3>
-<p>The data lakehouse combines:</p>
-<ul>
-<li><strong>The flexibility and cost-effectiveness of a data lake</strong> — store data from an exploding number of sources at low cost</li>
-<li><strong>The performance and structure of a data warehouse</strong> — built-in data management and governance layers enable both BI and high-performance ML workloads</li>
-</ul>
-<h3>4.2 Adoption Paths</h3>
-<p>Organizations can approach the data lakehouse through several routes:</p>
-<ul>
-<li><strong>Modernize existing data lakes</strong> — layer governance and query optimization on top of current lake infrastructure</li>
-<li><strong>Complement existing data warehouses</strong> — extend warehouse capabilities to support new AI and machine learning-driven workloads that require semi-structured and unstructured data</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>5. Comparative Summary</h2>
-<table>
-<thead>
-<tr>
-<th>Dimension</th>
-<th>Data Lake</th>
-<th>Data Warehouse</th>
-<th>Data Lakehouse</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Cost</strong></td>
-<td>Low</td>
-<td>High</td>
-<td>Moderate</td>
-</tr>
-<tr>
-<td><strong>Data Types</strong></td>
-<td>All (structured, semi-structured, unstructured)</td>
-<td>Primarily structured</td>
-<td>All</td>
-</tr>
-<tr>
-<td><strong>Governance</strong></td>
-<td>Weak (risk of data swamp)</td>
-<td>Strong</td>
-<td>Strong (built-in)</td>
-</tr>
-<tr>
-<td><strong>Query Performance</strong></td>
-<td>Low for complex analytics</td>
-<td>High</td>
-<td>High</td>
-</tr>
-<tr>
-<td><strong>ML/AI Support</strong></td>
-<td>High (raw data access)</td>
-<td>Limited</td>
-<td>High</td>
-</tr>
-<tr>
-<td><strong>BI Support</strong></td>
-<td>Limited</td>
-<td>High</td>
-<td>High</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-<p>Would you like to dive into the specific architectural components of a data lakehouse—such as the open table format layer (Delta Lake, Apache Iceberg)—or should we examine how ETL and ELT pipelines are redesigned to feed lakehouse architectures?</p></div>
+</pre>
+        </div>
+        <h3>4.1 Core Value Proposition</h3>
+        <p>The data lakehouse combines:</p>
+        <ul>
+          <li>
+            <strong
+              >The flexibility and cost-effectiveness of a data lake</strong
+            >
+            — store data from an exploding number of sources at low cost
+          </li>
+          <li>
+            <strong>The performance and structure of a data warehouse</strong> —
+            built-in data management and governance layers enable both BI and
+            high-performance ML workloads
+          </li>
+        </ul>
+        <h3>4.2 Adoption Paths</h3>
+        <p>
+          Organizations can approach the data lakehouse through several routes:
+        </p>
+        <ul>
+          <li>
+            <strong>Modernize existing data lakes</strong> — layer governance
+            and query optimization on top of current lake infrastructure
+          </li>
+          <li>
+            <strong>Complement existing data warehouses</strong> — extend
+            warehouse capabilities to support new AI and machine learning-driven
+            workloads that require semi-structured and unstructured data
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>5. Comparative Summary</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Data Lake</th>
+              <th>Data Warehouse</th>
+              <th>Data Lakehouse</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cost</strong></td>
+              <td>Low</td>
+              <td>High</td>
+              <td>Moderate</td>
+            </tr>
+            <tr>
+              <td><strong>Data Types</strong></td>
+              <td>All (structured, semi-structured, unstructured)</td>
+              <td>Primarily structured</td>
+              <td>All</td>
+            </tr>
+            <tr>
+              <td><strong>Governance</strong></td>
+              <td>Weak (risk of data swamp)</td>
+              <td>Strong</td>
+              <td>Strong (built-in)</td>
+            </tr>
+            <tr>
+              <td><strong>Query Performance</strong></td>
+              <td>Low for complex analytics</td>
+              <td>High</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td><strong>ML/AI Support</strong></td>
+              <td>High (raw data access)</td>
+              <td>Limited</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td><strong>BI Support</strong></td>
+              <td>Limited</td>
+              <td>High</td>
+              <td>High</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <p>
+          Would you like to dive into the specific architectural components of a
+          data lakehouse—such as the open table format layer (Delta Lake, Apache
+          Iceberg)—or should we examine how ETL and ELT pipelines are redesigned
+          to feed lakehouse architectures?
+        </p>
+      </div>
 
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

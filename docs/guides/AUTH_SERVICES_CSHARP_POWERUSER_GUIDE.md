@@ -2,13 +2,15 @@
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
+
 [![Framework](https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg)](https://learn.microsoft.com/en-us/azure/active-directory/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
@@ -109,6 +111,7 @@ app.Run();
 ```
 
 **Best Practices**:
+
 - Use managed identities or KeyVault for client secrets; never hardcode credentials
 - Implement token caching to reduce IdP calls; use `IDistributedCache` with Redis
 - Validate token signature, issuer, audience, and expiration on every request
@@ -123,6 +126,7 @@ app.Run();
 ## Security Considerations
 
 **Token Security**:
+
 ```csharp
 // Custom token validation with additional security checks
 builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -146,7 +150,7 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
             var tokenId = context.Principal?.FindFirst("jti")?.Value;
             var cache = context.HttpContext.RequestServices.GetRequiredService<IDistributedCache>();
             var revoked = await cache.GetStringAsync($"revoked:{tokenId}");
-            
+
             if (revoked != null)
             {
                 context.Fail("Token has been revoked");
@@ -169,6 +173,7 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
 ```
 
 **Certificate-Based Authentication**:
+
 ```csharp
 // Mutual TLS authentication with client certificates
 builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
@@ -177,7 +182,7 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
         options.AllowedCertificateTypes = CertificateTypes.All;
         options.RevocationMode = X509RevocationMode.Online;
         options.ValidateCertificateUse = true;
-        
+
         options.Events = new CertificateAuthenticationEvents
         {
             OnCertificateValidated = context =>
@@ -185,23 +190,23 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
                 // Validate against trusted certificate store
                 var validationService = context.HttpContext.RequestServices
                     .GetRequiredService<ICertificateValidationService>();
-                    
+
                 if (!validationService.IsTrusted(context.ClientCertificate))
                 {
                     context.Fail("Certificate not trusted");
                 }
-                
+
                 // Add certificate thumbprint as claim
                 var claims = new[]
                 {
                     new Claim("cert_thumbprint", context.ClientCertificate.Thumbprint),
                     new Claim("cert_subject", context.ClientCertificate.Subject)
                 };
-                
+
                 context.Principal = new ClaimsPrincipal(
                     new ClaimsIdentity(claims, context.Scheme.Name));
                 context.Success();
-                
+
                 return Task.CompletedTask;
             }
         };
@@ -223,6 +228,7 @@ builder.WebHost.ConfigureKestrel(options =>
 ```
 
 **Key Security Measures**:
+
 - Use Azure KeyVault or AWS Secrets Manager for signing keys; rotate every 90 days
 - Implement key versioning with graceful rollover period (accept both old and new keys for 24 hours)
 - Store private keys in HSM (Hardware Security Module) for production environments
@@ -250,7 +256,7 @@ public class OAuth2Controller : ControllerBase
     private readonly IConfiguration _config;
     private readonly IDistributedCache _cache;
 
-    public OAuth2Controller(IHttpClientFactory httpClientFactory, 
+    public OAuth2Controller(IHttpClientFactory httpClientFactory,
         IConfiguration config, IDistributedCache cache)
     {
         _httpClientFactory = httpClientFactory;
@@ -267,7 +273,7 @@ public class OAuth2Controller : ControllerBase
         var state = Guid.NewGuid().ToString("N");
 
         // Store code verifier and state in cache
-        _cache.SetString($"verifier:{state}", codeVerifier, 
+        _cache.SetString($"verifier:{state}", codeVerifier,
             new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) });
 
         // Build authorization URL
@@ -420,7 +426,7 @@ public class PermissionRequirement : IAuthorizationRequirement
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {
     protected override Task HandleRequirementAsync(
-        AuthorizationHandlerContext context, 
+        AuthorizationHandlerContext context,
         PermissionRequirement requirement)
     {
         if (context.User.HasClaim("permission", requirement.Permission))
@@ -435,9 +441,9 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
 // Register authorization policies
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("CanCreateUsers", policy => 
+    .AddPolicy("CanCreateUsers", policy =>
         policy.Requirements.Add(new PermissionRequirement("users.create")))
-    .AddPolicy("CanDeleteUsers", policy => 
+    .AddPolicy("CanDeleteUsers", policy =>
         policy.Requirements.Add(new PermissionRequirement("users.delete")));
 
 // Use in controllers
@@ -470,12 +476,12 @@ public class ScimUsersController : ControllerBase
 
     [HttpGet("Users")]
     public async Task<IActionResult> GetUsers(
-        [FromQuery] string filter, 
-        [FromQuery] int startIndex = 1, 
+        [FromQuery] string filter,
+        [FromQuery] int startIndex = 1,
         [FromQuery] int count = 100)
     {
         var users = await _provisioningService.GetUsersAsync(filter, startIndex, count);
-        
+
         return Ok(new
         {
             schemas = new[] { "urn:ietf:params:scim:api:messages:2.0:ListResponse" },
@@ -600,9 +606,9 @@ public class TokenRefreshService
         var response = await client.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Token refresh failed for user {UserId}: {StatusCode}", 
+            _logger.LogError("Token refresh failed for user {UserId}: {StatusCode}",
                 userId, response.StatusCode);
-            
+
             // If refresh token is invalid, revoke and force re-authentication
             await _tokenStore.RevokeRefreshTokenAsync(userId);
             throw new InvalidOperationException("Token refresh failed");
@@ -668,6 +674,7 @@ public record RefreshTokenData
 ## Troubleshooting
 
 **Token Validation Failures**:
+
 ```csharp
 // Enhanced logging for token validation issues
 builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -677,7 +684,7 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
         OnAuthenticationFailed = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            
+
             // Log detailed token validation errors
             if (context.Exception is SecurityTokenExpiredException)
             {
@@ -700,13 +707,13 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
             {
                 logger.LogError(context.Exception, "Authentication failed");
             }
-            
+
             return Task.CompletedTask;
         },
         OnMessageReceived = context =>
         {
             var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-            logger.LogDebug("Token received from {Source}", 
+            logger.LogDebug("Token received from {Source}",
                 context.Request.Headers.Authorization.FirstOrDefault()?.Substring(0, 20) ?? "none");
             return Task.CompletedTask;
         }
@@ -715,6 +722,7 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
 ```
 
 **Common Issues**:
+
 - **401 Unauthorized**: Check token expiration, signature validation, issuer/audience mismatch
 - **403 Forbidden**: User lacks required claims/roles; verify claims transformation pipeline
 - **Token refresh loop**: Ensure refresh token rotation logic doesn't create circular dependencies
@@ -724,6 +732,7 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
 - **Certificate validation failures**: Verify certificate chain, CRL/OCSP endpoints, and trust store configuration
 
 **Diagnostic Commands**:
+
 ```bash
 # Decode JWT token (use jwt.io or jwt-cli)
 dotnet tool install --global jwt-cli
@@ -740,6 +749,7 @@ openssl verify -CAfile ca-bundle.pem certificate.pem
 ## Performance and Tuning
 
 **Token Caching Strategy**:
+
 ```csharp
 // Implement distributed token cache with Redis
 public class RedisTokenCache
@@ -757,12 +767,12 @@ public class RedisTokenCache
     {
         var cacheKey = $"access_token:{userId}";
         var token = await _cache.GetStringAsync(cacheKey);
-        
+
         if (token != null)
         {
             _logger.LogDebug("Cache hit for user {UserId}", userId);
         }
-        
+
         return token;
     }
 
@@ -773,7 +783,7 @@ public class RedisTokenCache
         {
             AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expiresIn - 60) // 60s buffer
         };
-        
+
         await _cache.SetStringAsync(cacheKey, token, options);
         _logger.LogDebug("Cached token for user {UserId} with expiry {ExpiresIn}s", userId, expiresIn);
     }
@@ -796,13 +806,14 @@ public class SecureApiClient
         // Fetch new token and cache
         var tokenResponse = await _tokenService.GetTokenAsync(userId);
         await _tokenCache.SetAccessTokenAsync(userId, tokenResponse.AccessToken, tokenResponse.ExpiresIn);
-        
+
         return tokenResponse.AccessToken;
     }
 }
 ```
 
 **Performance Optimizations**:
+
 - Cache validated tokens in memory for duration of their lifetime; use `MemoryCache` for single-instance apps
 - Use Redis or another distributed cache for multi-instance deployments to share token validation cache
 - Implement connection pooling for HTTP clients calling IdP endpoints; use `IHttpClientFactory`
@@ -815,6 +826,7 @@ public class SecureApiClient
 - Monitor authentication latency and set alerts for p95 > 500ms
 
 **Monitoring Metrics**:
+
 ```csharp
 // Custom metrics for authentication monitoring
 using System.Diagnostics.Metrics;
@@ -836,23 +848,24 @@ public class AuthenticationMetrics
         _tokenRefreshDuration = _meter.CreateHistogram<double>("auth.refresh.duration", "ms");
     }
 
-    public void RecordAuthSuccess(string provider) 
+    public void RecordAuthSuccess(string provider)
         => _authSuccessCounter.Add(1, new KeyValuePair<string, object?>("provider", provider));
 
-    public void RecordAuthFailure(string provider, string reason) 
-        => _authFailureCounter.Add(1, 
+    public void RecordAuthFailure(string provider, string reason)
+        => _authFailureCounter.Add(1,
             new KeyValuePair<string, object?>("provider", provider),
             new KeyValuePair<string, object?>("reason", reason));
 
-    public void RecordTokenValidation(double milliseconds) 
+    public void RecordTokenValidation(double milliseconds)
         => _tokenValidationDuration.Record(milliseconds);
 
-    public void RecordTokenRefresh(double milliseconds) 
+    public void RecordTokenRefresh(double milliseconds)
         => _tokenRefreshDuration.Record(milliseconds);
 }
 ```
 
 **Scaling Considerations**:
+
 - Deploy multiple instances behind load balancer with sticky sessions if using in-memory cache
 - Use Redis Cluster for distributed cache in high-throughput scenarios (>10K req/s)
 - Implement rate limiting per user/IP to prevent abuse (use AspNetCoreRateLimit library)
@@ -864,6 +877,7 @@ public class AuthenticationMetrics
 ## References and Further Reading
 
 **Official Documentation**:
+
 - [Microsoft Identity Platform](https://learn.microsoft.com/en-us/azure/active-directory/develop/)
 - [OAuth 2.0 RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
 - [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
@@ -873,6 +887,7 @@ public class AuthenticationMetrics
 - [PKCE RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
 
 **Libraries and Tools**:
+
 - [Microsoft.Identity.Web](https://github.com/AzureAD/microsoft-identity-web) - Azure AD integration
 - [IdentityServer](https://duendesoftware.com/products/identityserver) - .NET OAuth/OIDC server
 - [Auth0 .NET SDK](https://github.com/auth0/auth0.net) - Auth0 integration
@@ -881,12 +896,14 @@ public class AuthenticationMetrics
 - [BouncyCastle](https://www.bouncycastle.org/csharp/) - Cryptography library
 
 **Best Practices Guides**:
+
 - [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics)
 - [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
 - [NIST Digital Identity Guidelines](https://pages.nist.gov/800-63-3/)
 - [Microsoft Identity Platform Best Practices](https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist)
 
 **Community Resources**:
+
 - [Auth0 Blog - Identity & Security](https://auth0.com/blog/)
 - [Identity Server Documentation](https://docs.duendesoftware.com/)
 - [.NET Security on GitHub](https://github.com/dotnet/aspnetcore/tree/main/src/Security)

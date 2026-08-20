@@ -1,97 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>DOTNET RabbitMQ PowerUser Guide (C#) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="dotnet-rabbitmq-poweruser-guide-c">DOTNET RabbitMQ PowerUser Guide (C#)</h1>
-<p><strong>Last updated</strong>: December 05, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://www.rabbitmq.com/dotnet.html"><img alt="Framework" src="https://img.shields.io/badge/.NET-RabbitMQ-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol for asynchronous communication between distributed systems. This guide covers connection management, queue/exchange configuration, message publishing/consuming, acknowledgements, prefetch settings, and TLS security using the official .NET client library. Power users need to understand durability, routing patterns, dead-letter queues, and high-availability strategies for production message-driven architectures.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#dotnet-rabbitmq-poweruser-guide-c">DOTNET RabbitMQ PowerUser Guide (C#)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#basic-message-publishing-and-consuming">Basic Message Publishing and Consuming</a></li>
-<li><a href="#exchange-routing-patterns">Exchange Routing Patterns</a></li>
-<li><a href="#aspnet-core-integration-with-dependency-injection">ASP.NET Core Integration with Dependency Injection</a></li>
-<li><a href="#dead-letter-exchange-and-retry-strategy">Dead Letter Exchange and Retry Strategy</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install package</strong>: <code>dotnet add package RabbitMQ.Client</code></li>
-<li><strong>Create connection factory</strong>: Configure hostname, port, and credentials</li>
-<li><strong>Publish message</strong>: Create channel, declare queue, publish byte array with routing key</li>
-<li><strong>Consume message</strong>: Create consumer, bind to queue, process messages with manual acknowledgement</li>
-<li><strong>Enable durability</strong>: Set durable flags on queues and persistent delivery mode on messages</li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Connection</strong>: Long-lived TCP connection to RabbitMQ broker; expensive to create, should be reused across application</li>
-<li><strong>Channel</strong>: Lightweight virtual connection multiplexed over a single TCP connection; used for all AMQP operations</li>
-<li><strong>Exchange</strong>: Message routing component that receives messages and routes to queues based on bindings and routing keys; types include direct, topic, fanout, headers</li>
-<li><strong>Queue</strong>: Buffer that stores messages until consumed; can be durable (survives broker restart) or transient</li>
-<li><strong>Binding</strong>: Link between exchange and queue with optional routing key pattern for message filtering</li>
-<li><strong>Acknowledgement (Ack)</strong>: Consumer confirms message processing; manual ack provides at-least-once delivery guarantee</li>
-<li><strong>Prefetch (QoS)</strong>: Limits number of unacknowledged messages per consumer; prevents overwhelming slow consumers</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>Connection Factory Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="dotnet-rabbitmq-poweruser-guide-c">
+            DOTNET RabbitMQ PowerUser Guide (C#)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 05, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://www.rabbitmq.com/dotnet.html"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/.NET-RabbitMQ-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol
+            for asynchronous communication between distributed systems. This
+            guide covers connection management, queue/exchange configuration,
+            message publishing/consuming, acknowledgements, prefetch settings,
+            and TLS security using the official .NET client library. Power users
+            need to understand durability, routing patterns, dead-letter queues,
+            and high-availability strategies for production message-driven
+            architectures.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#dotnet-rabbitmq-poweruser-guide-c"
+                >DOTNET RabbitMQ PowerUser Guide (C#)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#basic-message-publishing-and-consuming"
+                    >Basic Message Publishing and Consuming</a
+                  >
+                </li>
+                <li>
+                  <a href="#exchange-routing-patterns"
+                    >Exchange Routing Patterns</a
+                  >
+                </li>
+                <li>
+                  <a href="#aspnet-core-integration-with-dependency-injection"
+                    >ASP.NET Core Integration with Dependency Injection</a
+                  >
+                </li>
+                <li>
+                  <a href="#dead-letter-exchange-and-retry-strategy"
+                    >Dead Letter Exchange and Retry Strategy</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install package</strong>:
+              <code>dotnet add package RabbitMQ.Client</code>
+            </li>
+            <li>
+              <strong>Create connection factory</strong>: Configure hostname,
+              port, and credentials
+            </li>
+            <li>
+              <strong>Publish message</strong>: Create channel, declare queue,
+              publish byte array with routing key
+            </li>
+            <li>
+              <strong>Consume message</strong>: Create consumer, bind to queue,
+              process messages with manual acknowledgement
+            </li>
+            <li>
+              <strong>Enable durability</strong>: Set durable flags on queues
+              and persistent delivery mode on messages
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Connection</strong>: Long-lived TCP connection to RabbitMQ
+              broker; expensive to create, should be reused across application
+            </li>
+            <li>
+              <strong>Channel</strong>: Lightweight virtual connection
+              multiplexed over a single TCP connection; used for all AMQP
+              operations
+            </li>
+            <li>
+              <strong>Exchange</strong>: Message routing component that receives
+              messages and routes to queues based on bindings and routing keys;
+              types include direct, topic, fanout, headers
+            </li>
+            <li>
+              <strong>Queue</strong>: Buffer that stores messages until
+              consumed; can be durable (survives broker restart) or transient
+            </li>
+            <li>
+              <strong>Binding</strong>: Link between exchange and queue with
+              optional routing key pattern for message filtering
+            </li>
+            <li>
+              <strong>Acknowledgement (Ack)</strong>: Consumer confirms message
+              processing; manual ack provides at-least-once delivery guarantee
+            </li>
+            <li>
+              <strong>Prefetch (QoS)</strong>: Limits number of unacknowledged
+              messages per consumer; prevents overwhelming slow consumers
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p><strong>Connection Factory Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5672</span><span class="p">,</span>
@@ -117,29 +229,57 @@
 <span class="w">        </span><span class="n">AcceptablePolicyErrors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SslPolicyErrors</span><span class="p">.</span><span class="n">RemoteCertificateNameMismatch</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Create one connection per application; share across threads
-- Use one channel per thread; channels are not thread-safe
-- Always declare queues and exchanges before publishing to ensure they exist
-- Set <code>durable = true</code> for queues and <code>persistent = true</code> for messages in production
-- Implement manual acknowledgements with proper error handling
-- Use prefetch (QoS) to limit unacknowledged messages per consumer
-- Enable automatic recovery for connection failures
-- Set heartbeat interval to detect network failures quickly</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Authentication</strong>: Use strong credentials; avoid default <code>guest/guest</code> in production; integrate with LDAP or OAuth</li>
-<li><strong>TLS Encryption</strong>: Enable SSL/TLS for all connections; use valid certificates; disable weak cipher suites</li>
-<li><strong>Virtual Hosts</strong>: Isolate environments using virtual hosts; restrict user permissions per vhost</li>
-<li><strong>Access Control</strong>: Use fine-grained permissions (configure, write, read) per user and resource</li>
-<li><strong>Message Validation</strong>: Sanitize and validate all message payloads; implement schema validation</li>
-<li><strong>Network Security</strong>: Bind RabbitMQ to specific interfaces; use firewall rules; avoid exposing management plugin publicly</li>
-<li><strong>Audit Logging</strong>: Enable audit logs for security events; monitor failed login attempts and permission violations</li>
-</ol>
-<p><strong>Secure Connection Setup</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
+          <p>
+            <strong>Best Practices</strong>: - Create one connection per
+            application; share across threads - Use one channel per thread;
+            channels are not thread-safe - Always declare queues and exchanges
+            before publishing to ensure they exist - Set
+            <code>durable = true</code> for queues and
+            <code>persistent = true</code> for messages in production -
+            Implement manual acknowledgements with proper error handling - Use
+            prefetch (QoS) to limit unacknowledged messages per consumer -
+            Enable automatic recovery for connection failures - Set heartbeat
+            interval to detect network failures quickly
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Authentication</strong>: Use strong credentials; avoid
+              default <code>guest/guest</code> in production; integrate with
+              LDAP or OAuth
+            </li>
+            <li>
+              <strong>TLS Encryption</strong>: Enable SSL/TLS for all
+              connections; use valid certificates; disable weak cipher suites
+            </li>
+            <li>
+              <strong>Virtual Hosts</strong>: Isolate environments using virtual
+              hosts; restrict user permissions per vhost
+            </li>
+            <li>
+              <strong>Access Control</strong>: Use fine-grained permissions
+              (configure, write, read) per user and resource
+            </li>
+            <li>
+              <strong>Message Validation</strong>: Sanitize and validate all
+              message payloads; implement schema validation
+            </li>
+            <li>
+              <strong>Network Security</strong>: Bind RabbitMQ to specific
+              interfaces; use firewall rules; avoid exposing management plugin
+              publicly
+            </li>
+            <li>
+              <strong>Audit Logging</strong>: Enable audit logs for security
+              events; monitor failed login attempts and permission violations
+            </li>
+          </ol>
+          <p><strong>Secure Connection Setup</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.production.com&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5671</span><span class="p">,</span><span class="w"> </span><span class="c1">// TLS port</span>
@@ -160,12 +300,19 @@
 <span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">    </span><span class="n">NetworkRecoveryInterval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="basic-message-publishing-and-consuming">Basic Message Publishing and Consuming</h3>
-<p>Create durable queues, publish messages with persistence, and consume with manual acknowledgements for reliable delivery.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="basic-message-publishing-and-consuming">
+            Basic Message Publishing and Consuming
+          </h3>
+          <p>
+            Create durable queues, publish messages with persistence, and
+            consume with manual acknowledgements for reliable delivery.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client.Events</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
 
@@ -261,11 +408,16 @@
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="exchange-routing-patterns">Exchange Routing Patterns</h3>
-<p>Implement direct, topic, and fanout exchange patterns for flexible message routing across multiple consumers.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+          <h3 id="exchange-routing-patterns">Exchange Routing Patterns</h3>
+          <p>
+            Implement direct, topic, and fanout exchange patterns for flexible
+            message routing across multiple consumers.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ExchangeRoutingExample</span>
@@ -409,11 +561,18 @@
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Broadcast: {message}&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="aspnet-core-integration-with-dependency-injection">ASP.NET Core Integration with Dependency Injection</h3>
-<p>Implement RabbitMQ producer and consumer services with proper connection management and graceful shutdown in ASP.NET Core.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.DependencyInjection</span><span class="p">;</span>
+          <h3 id="aspnet-core-integration-with-dependency-injection">
+            ASP.NET Core Integration with Dependency Injection
+          </h3>
+          <p>
+            Implement RabbitMQ producer and consumer services with proper
+            connection management and graceful shutdown in ASP.NET Core.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.DependencyInjection</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.Hosting</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Extensions.Options</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
@@ -650,11 +809,18 @@
 <span class="p">{</span>
 <span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="nf">ProcessOrderAsync</span><span class="p">(</span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="dead-letter-exchange-and-retry-strategy">Dead Letter Exchange and Retry Strategy</h3>
-<p>Implement dead letter queues for handling failed messages with automatic retry logic and exponential backoff.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
+          <h3 id="dead-letter-exchange-and-retry-strategy">
+            Dead Letter Exchange and Retry Strategy
+          </h3>
+          <p>
+            Implement dead letter queues for handling failed messages with
+            automatic retry logic and exponential backoff.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">RabbitMQ.Client.Events</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
@@ -855,28 +1021,44 @@
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Serialize</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JsonSerializerOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">WriteIndented</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="p">}));</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Connection Refused</strong>:
-- <strong>Error</strong>: "None of the specified endpoints were reachable"
-  - <strong>Check service</strong>: Verify RabbitMQ is running: <code>rabbitmqctl status</code>
-  - <strong>Check firewall</strong>: Ensure port 5672 (AMQP) or 5671 (AMQPS) is open
-  - <strong>Check hostname</strong>: Verify DNS resolution or use IP address
-  - <strong>Check credentials</strong>: Test with <code>rabbitmqctl authenticate_user username password</code></p>
-<p><strong>Channel Shutdown Errors</strong>:
-- <strong>Error</strong>: "Channel shutdown: PRECONDITION_FAILED"
-  - <strong>Queue mismatch</strong>: Declaring queue with different parameters than existing
-  - <strong>Fix</strong>: Delete queue or use matching parameters (durable, exclusive, autodelete)
-  - <strong>Check</strong>: Use RabbitMQ management UI to inspect queue configuration</p>
-<p><strong>Memory/Disk Alarms</strong>:
-- <strong>Error</strong>: "Connection blocked: LOW on memory/disk"
-  - <strong>Check status</strong>: <code>rabbitmqctl status</code> to see alarm details
-  - <strong>Clear disk</strong>: Free up disk space (RabbitMQ needs 50MB minimum)
-  - <strong>Increase memory</strong>: Configure <code>vm_memory_high_watermark</code> in rabbitmq.conf
-  - <strong>Temporary fix</strong>: Clear alarms with <code>rabbitmqctl eval 'rabbit_alarm:clear_alarm(disk_limit).'</code></p>
-<p><strong>Message Loss</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Ensure durability at all levels</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Connection Refused</strong>: - <strong>Error</strong>: "None
+            of the specified endpoints were reachable" -
+            <strong>Check service</strong>: Verify RabbitMQ is running:
+            <code>rabbitmqctl status</code> - <strong>Check firewall</strong>:
+            Ensure port 5672 (AMQP) or 5671 (AMQPS) is open -
+            <strong>Check hostname</strong>: Verify DNS resolution or use IP
+            address - <strong>Check credentials</strong>: Test with
+            <code>rabbitmqctl authenticate_user username password</code>
+          </p>
+          <p>
+            <strong>Channel Shutdown Errors</strong>: - <strong>Error</strong>:
+            "Channel shutdown: PRECONDITION_FAILED" -
+            <strong>Queue mismatch</strong>: Declaring queue with different
+            parameters than existing - <strong>Fix</strong>: Delete queue or use
+            matching parameters (durable, exclusive, autodelete) -
+            <strong>Check</strong>: Use RabbitMQ management UI to inspect queue
+            configuration
+          </p>
+          <p>
+            <strong>Memory/Disk Alarms</strong>: - <strong>Error</strong>:
+            "Connection blocked: LOW on memory/disk" -
+            <strong>Check status</strong>: <code>rabbitmqctl status</code> to
+            see alarm details - <strong>Clear disk</strong>: Free up disk space
+            (RabbitMQ needs 50MB minimum) - <strong>Increase memory</strong>:
+            Configure <code>vm_memory_high_watermark</code> in rabbitmq.conf -
+            <strong>Temporary fix</strong>: Clear alarms with
+            <code
+              >rabbitmqctl eval 'rabbit_alarm:clear_alarm(disk_limit).'</code
+            >
+          </p>
+          <p><strong>Message Loss</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Ensure durability at all levels</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="c1">// Recover connections automatically</span>
@@ -901,15 +1083,19 @@
 <span class="w">    </span><span class="c1">// Process message</span>
 <span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 <span class="p">};</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Common Logs</strong>:
-- RabbitMQ logs: <code>/var/log/rabbitmq/rabbit@hostname.log</code>
-- Check with: <code>rabbitmqctl log_tail</code>
-- Management UI: <code>http://localhost:15672</code> (default guest/guest)</p>
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Connection and Channel Pooling</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqChannelPool</span>
+          <p>
+            <strong>Common Logs</strong>: - RabbitMQ logs:
+            <code>/var/log/rabbitmq/rabbit@hostname.log</code> - Check with:
+            <code>rabbitmqctl log_tail</code> - Management UI:
+            <code>http://localhost:15672</code> (default guest/guest)
+          </p>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Connection and Channel Pooling</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqChannelPool</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IConnection</span><span class="w"> </span><span class="n">_connection</span><span class="p">;</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">ConcurrentBag</span><span class="o">&lt;</span><span class="n">IModel</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span>
@@ -947,10 +1133,12 @@
 <span class="w">        </span><span class="n">_semaphore</span><span class="p">.</span><span class="n">Release</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Prefetch (QoS) Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Low prefetch (1-10) for slow/CPU-intensive consumers</span>
+          <p><strong>Prefetch (QoS) Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Low prefetch (1-10) for slow/CPU-intensive consumers</span>
 <span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 
 <span class="c1">// Medium prefetch (20-50) for balanced workloads</span>
@@ -958,10 +1146,12 @@
 
 <span class="c1">// High prefetch (100+) for fast/I/O-bound consumers</span>
 <span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Batch Publishing</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishBatch</span><span class="p">(</span><span class="n">IModel</span><span class="w"> </span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
+          <p><strong>Batch Publishing</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishBatch</span><span class="p">(</span><span class="n">IModel</span><span class="w"> </span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="c1">// Use transactions for batching (slower but atomic)</span>
 <span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">TxSelect</span><span class="p">();</span>
@@ -985,10 +1175,12 @@
 
 <span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">WaitForConfirmsOrDie</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Monitoring Metrics</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Get queue message count</span>
+          <p><strong>Monitoring Metrics</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Get queue message count</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">queueInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclarePassive</span><span class="p">(</span><span class="s">&quot;my_queue&quot;</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Messages: {queueInfo.MessageCount}&quot;</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Consumers: {queueInfo.ConsumerCount}&quot;</span><span class="p">);</span>
@@ -1001,53 +1193,87 @@
 
 <span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">httpClient</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">&quot;http://localhost:15672/api/queues&quot;</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Performance Recommendations</strong>:
-- <strong>Connections</strong>: 1 per application (shared, thread-safe)
-- <strong>Channels</strong>: 1 per thread or use pooling (not thread-safe)
-- <strong>Prefetch</strong>: Start with 10-30, tune based on consumer performance
-- <strong>Message size</strong>: Keep &lt;128KB; use external storage for large payloads
-- <strong>Durability</strong>: Trade-off with throughput; use transient queues for non-critical data
-- <strong>Clustering</strong>: Use mirrored queues for HA; avoid clustering across WANs</p>
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://www.rabbitmq.com/dotnet.html">RabbitMQ .NET Client Documentation</a> - Official .NET client library guide</li>
-<li><a href="https://www.rabbitmq.com/getstarted.html">RabbitMQ Tutorials</a> - Step-by-step tutorials covering all patterns</li>
-<li><a href="https://www.rabbitmq.com/amqp-0-9-1-reference.html">AMQP 0-9-1 Protocol Reference</a> - Complete AMQP protocol specification</li>
-<li><a href="https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html">RabbitMQ Best Practices</a> - Production deployment patterns</li>
-<li><a href="https://www.rabbitmq.com/blog/2012/04/25/rabbitmq-performance-measurements-part-2">RabbitMQ Performance Testing</a> - Benchmarking and tuning guide</li>
-</ul></article>
-        </div>
+          <p>
+            <strong>Performance Recommendations</strong>: -
+            <strong>Connections</strong>: 1 per application (shared,
+            thread-safe) - <strong>Channels</strong>: 1 per thread or use
+            pooling (not thread-safe) - <strong>Prefetch</strong>: Start with
+            10-30, tune based on consumer performance -
+            <strong>Message size</strong>: Keep &lt;128KB; use external storage
+            for large payloads - <strong>Durability</strong>: Trade-off with
+            throughput; use transient queues for non-critical data -
+            <strong>Clustering</strong>: Use mirrored queues for HA; avoid
+            clustering across WANs
+          </p>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://www.rabbitmq.com/dotnet.html"
+                >RabbitMQ .NET Client Documentation</a
+              >
+              - Official .NET client library guide
+            </li>
+            <li>
+              <a href="https://www.rabbitmq.com/getstarted.html"
+                >RabbitMQ Tutorials</a
+              >
+              - Step-by-step tutorials covering all patterns
+            </li>
+            <li>
+              <a href="https://www.rabbitmq.com/amqp-0-9-1-reference.html"
+                >AMQP 0-9-1 Protocol Reference</a
+              >
+              - Complete AMQP protocol specification
+            </li>
+            <li>
+              <a
+                href="https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html"
+                >RabbitMQ Best Practices</a
+              >
+              - Production deployment patterns
+            </li>
+            <li>
+              <a
+                href="https://www.rabbitmq.com/blog/2012/04/25/rabbitmq-performance-measurements-part-2"
+                >RabbitMQ Performance Testing</a
+              >
+              - Benchmarking and tuning guide
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

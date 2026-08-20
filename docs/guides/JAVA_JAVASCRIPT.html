@@ -1,147 +1,295 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Java vs JavaScript: Runtimes, Execution, and Architecture - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Java vs JavaScript: Runtimes, Execution, and Architecture - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="java-vs-javascript-runtimes-execution-and-architecture">Java vs JavaScript: Runtimes, Execution, and Architecture</h1>
-<p><br>
-<strong>Last updated</strong>: February 26, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://adoptium.net/"><img alt="JVM" src="https://img.shields.io/badge/Runtime-JVM_21-red.svg" /></a>
-<a href="https://nodejs.org/"><img alt="NodeJS" src="https://img.shields.io/badge/Runtime-V8_NodeJS-green.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Despite sharing a substring in their names, Java and JavaScript possess fundamentally opposing architectures. Java is strictly typed, deeply object-oriented, and compiles down to portable bytecode executed natively by the JVM. JavaScript is dynamic, prototype-based, and runs inside Event-Loop driven Just-In-Time (JIT) engines like V8 (Node.js/Browsers). This guide breaks down the divergence in their compile-time behaviors, typing paradigms, and asynchronous mechanisms.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#java-vs-javascript-runtimes-execution-and-architecture">Java vs JavaScript: Runtimes, Execution, and Architecture</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#1-configuration-windows-linux">1. Configuration (Windows \&amp; Linux)</a><ul>
-<li><a href="#java-jdk-installation">Java (JDK Installation)</a></li>
-<li><a href="#javascript-nodejs-npm">JavaScript (Node.js \&amp; NPM)</a></li>
-</ul>
-</li>
-<li><a href="#2-writing-basic-codescripts-typing-async-handling">2. Writing Basic Code/Scripts (Typing \&amp; Async Handling)</a><ul>
-<li><a href="#typing-mechanisms">Typing Mechanisms</a></li>
-<li><a href="#concurrency-multi-threading-vs-the-event-loop">Concurrency: Multi-Threading vs The Event Loop</a></li>
-</ul>
-</li>
-<li><a href="#3-compile-time-commands-javac-vs-transpilation">3. Compile-time Commands (Javac vs Transpilation)</a><ul>
-<li><a href="#java-bytecode-compilation">Java (Bytecode Compilation)</a></li>
-<li><a href="#javascript-transpilation-bundling">JavaScript (Transpilation \&amp; Bundling)</a></li>
-</ul>
-</li>
-<li><a href="#4-runtime-commands-jvm-execution-vs-event-loop">4. Runtime Commands (JVM Execution vs Event Loop)</a><ul>
-<li><a href="#java-execution">Java Execution</a></li>
-<li><a href="#nodejs-execution">Node.js Execution</a></li>
-</ul>
-</li>
-<li><a href="#5-debugging-nullpointers-vs-undefined">5. Debugging (NullPointers vs Undefined)</a><ul>
-<li><a href="#java-the-nullpointerexception">Java (The NullPointerException)</a></li>
-<li><a href="#javascript-undefined-is-not-a-function">JavaScript (<code>undefined is not a function</code>)</a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="1-configuration-windows-linux">1. Configuration (Windows &amp; Linux)</h2>
-<p>Setting up an environment for these languages requires managing drastically different tooling ecosystems.</p>
-<h3 id="java-jdk-installation">Java (JDK Installation)</h3>
-<p>Java requires a Development Kit (JDK) containing <code>javac</code> (the compiler) and <code>java</code> (the execution runtime).</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Linux (Ubuntu) - Installing OpenJDK</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="java-vs-javascript-runtimes-execution-and-architecture">
+            Java vs JavaScript: Runtimes, Execution, and Architecture
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 26, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://adoptium.net/"
+              ><img
+                alt="JVM"
+                src="https://img.shields.io/badge/Runtime-JVM_21-red.svg"
+            /></a>
+            <a href="https://nodejs.org/"
+              ><img
+                alt="NodeJS"
+                src="https://img.shields.io/badge/Runtime-V8_NodeJS-green.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Despite sharing a substring in their names, Java and JavaScript
+            possess fundamentally opposing architectures. Java is strictly
+            typed, deeply object-oriented, and compiles down to portable
+            bytecode executed natively by the JVM. JavaScript is dynamic,
+            prototype-based, and runs inside Event-Loop driven Just-In-Time
+            (JIT) engines like V8 (Node.js/Browsers). This guide breaks down the
+            divergence in their compile-time behaviors, typing paradigms, and
+            asynchronous mechanisms.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#java-vs-javascript-runtimes-execution-and-architecture"
+                >Java vs JavaScript: Runtimes, Execution, and Architecture</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#1-configuration-windows-linux"
+                >1. Configuration (Windows \&amp; Linux)</a
+              >
+              <ul>
+                <li>
+                  <a href="#java-jdk-installation">Java (JDK Installation)</a>
+                </li>
+                <li>
+                  <a href="#javascript-nodejs-npm"
+                    >JavaScript (Node.js \&amp; NPM)</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#2-writing-basic-codescripts-typing-async-handling"
+                >2. Writing Basic Code/Scripts (Typing \&amp; Async Handling)</a
+              >
+              <ul>
+                <li><a href="#typing-mechanisms">Typing Mechanisms</a></li>
+                <li>
+                  <a href="#concurrency-multi-threading-vs-the-event-loop"
+                    >Concurrency: Multi-Threading vs The Event Loop</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-compile-time-commands-javac-vs-transpilation"
+                >3. Compile-time Commands (Javac vs Transpilation)</a
+              >
+              <ul>
+                <li>
+                  <a href="#java-bytecode-compilation"
+                    >Java (Bytecode Compilation)</a
+                  >
+                </li>
+                <li>
+                  <a href="#javascript-transpilation-bundling"
+                    >JavaScript (Transpilation \&amp; Bundling)</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#4-runtime-commands-jvm-execution-vs-event-loop"
+                >4. Runtime Commands (JVM Execution vs Event Loop)</a
+              >
+              <ul>
+                <li><a href="#java-execution">Java Execution</a></li>
+                <li><a href="#nodejs-execution">Node.js Execution</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#5-debugging-nullpointers-vs-undefined"
+                >5. Debugging (NullPointers vs Undefined)</a
+              >
+              <ul>
+                <li>
+                  <a href="#java-the-nullpointerexception"
+                    >Java (The NullPointerException)</a
+                  >
+                </li>
+                <li>
+                  <a href="#javascript-undefined-is-not-a-function"
+                    >JavaScript (<code>undefined is not a function</code>)</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="1-configuration-windows-linux">
+            1. Configuration (Windows &amp; Linux)
+          </h2>
+          <p>
+            Setting up an environment for these languages requires managing
+            drastically different tooling ecosystems.
+          </p>
+          <h3 id="java-jdk-installation">Java (JDK Installation)</h3>
+          <p>
+            Java requires a Development Kit (JDK) containing
+            <code>javac</code> (the compiler) and <code>java</code> (the
+            execution runtime).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Linux (Ubuntu) - Installing OpenJDK</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openjdk-21-jdk<span class="w"> </span>maven
 
 <span class="c1"># Verifying the path bindings</span>
 java<span class="w"> </span>-version
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Windows <code>PATH</code></strong>: The environmental variable <code>JAVA_HOME</code> must point to <code>C:\Program Files\Java\jdk-21</code>. The <code>Path</code> variable must append <code>%JAVA_HOME%\bin</code> or all build tools (like Maven or Gradle) will fail silently.</li>
-</ul>
-<h3 id="javascript-nodejs-npm">JavaScript (Node.js &amp; NPM)</h3>
-<p>JavaScript natively lives inside the browser environment, but server-side Javascript executes over Node.js.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Linux (Ubuntu) - Installing via NVM (Node Version Manager)</span>
+          <ul>
+            <li>
+              <strong>Windows <code>PATH</code></strong
+              >: The environmental variable <code>JAVA_HOME</code> must point to
+              <code>C:\Program Files\Java\jdk-21</code>. The
+              <code>Path</code> variable must append
+              <code>%JAVA_HOME%\bin</code> or all build tools (like Maven or
+              Gradle) will fail silently.
+            </li>
+          </ul>
+          <h3 id="javascript-nodejs-npm">JavaScript (Node.js &amp; NPM)</h3>
+          <p>
+            JavaScript natively lives inside the browser environment, but
+            server-side Javascript executes over Node.js.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Linux (Ubuntu) - Installing via NVM (Node Version Manager)</span>
 curl<span class="w"> </span>-o-<span class="w"> </span>https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 <span class="nb">source</span><span class="w"> </span>~/.bashrc
 nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Windows</strong>: Download the <code>.msi</code> ensuring "Add to PATH" is checked. This guarantees <code>node</code> and <code>npm</code> are globally accessible. Configure an <code>.npmrc</code> file if operating behind a corporate proxy.</li>
-</ul>
-<hr />
-<h2 id="2-writing-basic-codescripts-typing-async-handling">2. Writing Basic Code/Scripts (Typing &amp; Async Handling)</h2>
-<p>The syntax differences highlight Java's strictness versus JavaScript's flexibility and event-driven concurrency model.</p>
-<h3 id="typing-mechanisms">Typing Mechanisms</h3>
-<p><strong>Java (Static Typing):</strong> Memory footprints for variables are explicitly allocated before runtime. If a variable is declared an <code>Integer</code>, it will permanently reject a string assignment at compilation.</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserService</span><span class="w"> </span><span class="p">{</span>
+          <ul>
+            <li>
+              <strong>Windows</strong>: Download the <code>.msi</code> ensuring
+              "Add to PATH" is checked. This guarantees <code>node</code> and
+              <code>npm</code> are globally accessible. Configure an
+              <code>.npmrc</code> file if operating behind a corporate proxy.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="2-writing-basic-codescripts-typing-async-handling">
+            2. Writing Basic Code/Scripts (Typing &amp; Async Handling)
+          </h2>
+          <p>
+            The syntax differences highlight Java's strictness versus
+            JavaScript's flexibility and event-driven concurrency model.
+          </p>
+          <h3 id="typing-mechanisms">Typing Mechanisms</h3>
+          <p>
+            <strong>Java (Static Typing):</strong> Memory footprints for
+            variables are explicitly allocated before runtime. If a variable is
+            declared an <code>Integer</code>, it will permanently reject a
+            string assignment at compilation.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserService</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">calculateAge</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">dob</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Strict typing necessitates explicit casting/parsing</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">birthYear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">parseInt</span><span class="p">(</span><span class="n">dob</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">));</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2026</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">birthYear</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>JavaScript (Dynamic Typing):</strong> Variables assume their types implicitly based on the data assigned to them, mutating safely across types during runtime—a blessing for speed, a curse for reliability.</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">25</span><span class="p">;</span><span class="w">       </span><span class="c1">// Number</span>
+          <p>
+            <strong>JavaScript (Dynamic Typing):</strong> Variables assume their
+            types implicitly based on the data assigned to them, mutating safely
+            across types during runtime—a blessing for speed, a curse for
+            reliability.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">25</span><span class="p">;</span><span class="w">       </span><span class="c1">// Number</span>
 <span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Twenty Five&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Now a String (Completely valid JS)</span>
 
 <span class="c1">// Modern architecture relies on TypeScript to retrofit static typing onto JS</span>
 <span class="kd">function</span><span class="w"> </span><span class="nx">calculateAge</span><span class="p">(</span><span class="nx">dob</span><span class="w"> </span><span class="cm">/*: string*/</span><span class="p">)</span><span class="w"> </span><span class="cm">/*: number*/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mf">2026</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">parseInt</span><span class="p">(</span><span class="nx">dob</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">4</span><span class="p">));</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="concurrency-multi-threading-vs-the-event-loop">Concurrency: Multi-Threading vs The Event Loop</h3>
-<p><strong>Java:</strong> Deeply integrates real multithreading. It spawns independent OS-level physical threads executing parallel logic (or virtual threads via Project Loom).</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// CompletableFuture offloads task to an internal thread pool</span>
+          <h3 id="concurrency-multi-threading-vs-the-event-loop">
+            Concurrency: Multi-Threading vs The Event Loop
+          </h3>
+          <p>
+            <strong>Java:</strong> Deeply integrates real multithreading. It
+            spawns independent OS-level physical threads executing parallel
+            logic (or virtual threads via Project Loom).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// CompletableFuture offloads task to an internal thread pool</span>
 <span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dbCall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">database</span><span class="p">.</span><span class="na">fetchUser</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span><span class="w"> </span><span class="c1">// Blocks only this background thread</span>
 <span class="p">});</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>JavaScript:</strong> Single-threaded execution. It offsets blocking queries to libuv's external OS thread pool, suspending local execution via <code>async/await</code> until the event loop dequeues the resolved calculation back onto the primary call stack.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// The primary thread does NOT block during the fetch. </span>
+          <p>
+            <strong>JavaScript:</strong> Single-threaded execution. It offsets
+            blocking queries to libuv's external OS thread pool, suspending
+            local execution via <code>async/await</code> until the event loop
+            dequeues the resolved calculation back onto the primary call stack.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// The primary thread does NOT block during the fetch. </span>
 <span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">fetchUser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://api.db.com/user/123&#39;</span><span class="p">);</span>
@@ -151,103 +299,181 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
 <span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="3-compile-time-commands-javac-vs-transpilation">3. Compile-time Commands (Javac vs Transpilation)</h2>
-<p>Both languages impose processing phases prior to server deployment, but the output formats have entirely divergent purposes.</p>
-<h3 id="java-bytecode-compilation">Java (Bytecode Compilation)</h3>
-<p>Java source code (<code>.java</code>) is strongly statically analyzed, compiled by <code>javac</code>, and converted into portable <code>.class</code> files comprising bytecode—a universal language understood strictly by the Java Virtual Machine.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Manual compilation and execution (Rarely done explicitly today)</span>
+          <hr />
+          <h2 id="3-compile-time-commands-javac-vs-transpilation">
+            3. Compile-time Commands (Javac vs Transpilation)
+          </h2>
+          <p>
+            Both languages impose processing phases prior to server deployment,
+            but the output formats have entirely divergent purposes.
+          </p>
+          <h3 id="java-bytecode-compilation">Java (Bytecode Compilation)</h3>
+          <p>
+            Java source code (<code>.java</code>) is strongly statically
+            analyzed, compiled by <code>javac</code>, and converted into
+            portable <code>.class</code> files comprising bytecode—a universal
+            language understood strictly by the Java Virtual Machine.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Manual compilation and execution (Rarely done explicitly today)</span>
 javac<span class="w"> </span>Authenticator.java
 java<span class="w"> </span>Authenticator
 
 <span class="c1"># Enterprise standard: Compiling and linking dependencies via Maven</span>
 mvn<span class="w"> </span>clean<span class="w"> </span>install
 <span class="c1"># This packages compiled bytecode into a deployable self-contained .jar file.</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="javascript-transpilation-bundling">JavaScript (Transpilation &amp; Bundling)</h3>
-<p>JavaScript itself does not strictly "compile." However, modern architectures use TypeScript (which <em>does</em> carry static compile checks). TS code must be stripped of its types and <strong>transpiled</strong> down to raw backwards-compatible Javascript (ES6) for the Node engine or browsers.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Compiling raw TypeScript syntax checking </span>
+          <h3 id="javascript-transpilation-bundling">
+            JavaScript (Transpilation &amp; Bundling)
+          </h3>
+          <p>
+            JavaScript itself does not strictly "compile." However, modern
+            architectures use TypeScript (which <em>does</em> carry static
+            compile checks). TS code must be stripped of its types and
+            <strong>transpiled</strong> down to raw backwards-compatible
+            Javascript (ES6) for the Node engine or browsers.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Compiling raw TypeScript syntax checking </span>
 npx<span class="w"> </span>tsc<span class="w"> </span>--noEmit
 
 <span class="c1"># Running the production bundler (Vite/Webpack) </span>
 npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </span>
 <span class="c1"># Generates minified, obfuscated `.js` chunks optimized for network transfer.</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="4-runtime-commands-jvm-execution-vs-event-loop">4. Runtime Commands (JVM Execution vs Event Loop)</h2>
-<p>How code hits the processor dictates memory management and server architecture.</p>
-<h3 id="java-execution">Java Execution</h3>
-<p>The JVM takes the <code>.jar</code> bytecode snippet, dynamically allocates heap memory, manages internal OS thread synchronization, and utilizes a Garbage Collector (GC) to periodically wipe dead allocations.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Deploying the application, capping the JVM&#39;s max allocatable RAM (-Xmx) to 2GB</span>
+          <hr />
+          <h2 id="4-runtime-commands-jvm-execution-vs-event-loop">
+            4. Runtime Commands (JVM Execution vs Event Loop)
+          </h2>
+          <p>
+            How code hits the processor dictates memory management and server
+            architecture.
+          </p>
+          <h3 id="java-execution">Java Execution</h3>
+          <p>
+            The JVM takes the <code>.jar</code> bytecode snippet, dynamically
+            allocates heap memory, manages internal OS thread synchronization,
+            and utilizes a Garbage Collector (GC) to periodically wipe dead
+            allocations.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Deploying the application, capping the JVM&#39;s max allocatable RAM (-Xmx) to 2GB</span>
 java<span class="w"> </span>-Xmx2048m<span class="w"> </span>-jar<span class="w"> </span>myenterprise-app-1.0.jar
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="nodejs-execution">Node.js Execution</h3>
-<p>Node feeds <code>.js</code> scripts into V8, heavily utilizing the non-blocking Node Event Loop. For scaling, Node requires spawning multiple distinct independent processes mapping to physical CPU cores, since a single thread can only utilize one core.</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Daemonizing a Node process using PM2 to manage multiple cores</span>
+          <h3 id="nodejs-execution">Node.js Execution</h3>
+          <p>
+            Node feeds <code>.js</code> scripts into V8, heavily utilizing the
+            non-blocking Node Event Loop. For scaling, Node requires spawning
+            multiple distinct independent processes mapping to physical CPU
+            cores, since a single thread can only utilize one core.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Daemonizing a Node process using PM2 to manage multiple cores</span>
 npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>pm2
 pm2<span class="w"> </span>start<span class="w"> </span>server.js<span class="w"> </span>-i<span class="w"> </span>max<span class="w"> </span><span class="c1"># Spins up a distinct event loop per available CPU core</span>
 pm2<span class="w"> </span>save
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="5-debugging-nullpointers-vs-undefined">5. Debugging (NullPointers vs Undefined)</h2>
-<p>Because Java fails at compile-time and Javascript mutates at runtime, their failure modes require distinct inspection strategies.</p>
-<h3 id="java-the-nullpointerexception">Java (The NullPointerException)</h3>
-<ul>
-<li><strong>The Pitfall:</strong> The notorious <code>NullPointerException</code> (NPE). Occurs when attempting to invoke a method on an object memory reference pointing to nothing.</li>
-<li><strong>The Tools:</strong> Deep stack traces dumping all loaded frames, and leveraging the Java Debug Wire Protocol (JDWP). You can physically connect IntelliJ to a remote spinning Linux JVM memory structure.</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Restart the server opening port 5005 for remote debugger tunnel attachments</span>
+          <hr />
+          <h2 id="5-debugging-nullpointers-vs-undefined">
+            5. Debugging (NullPointers vs Undefined)
+          </h2>
+          <p>
+            Because Java fails at compile-time and Javascript mutates at
+            runtime, their failure modes require distinct inspection strategies.
+          </p>
+          <h3 id="java-the-nullpointerexception">
+            Java (The NullPointerException)
+          </h3>
+          <ul>
+            <li>
+              <strong>The Pitfall:</strong> The notorious
+              <code>NullPointerException</code> (NPE). Occurs when attempting to
+              invoke a method on an object memory reference pointing to nothing.
+            </li>
+            <li>
+              <strong>The Tools:</strong> Deep stack traces dumping all loaded
+              frames, and leveraging the Java Debug Wire Protocol (JDWP). You
+              can physically connect IntelliJ to a remote spinning Linux JVM
+              memory structure.
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Restart the server opening port 5005 for remote debugger tunnel attachments</span>
 java<span class="w"> </span>-agentlib:jdwp<span class="o">=</span><span class="nv">transport</span><span class="o">=</span>dt_socket,server<span class="o">=</span>y,suspend<span class="o">=</span>n,address<span class="o">=</span><span class="m">5005</span><span class="w"> </span>-jar<span class="w"> </span>app.jar
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="javascript-undefined-is-not-a-function">JavaScript (<code>undefined is not a function</code>)</h3>
-<ul>
-<li><strong>The Pitfall:</strong> Attempting to iterate or call a property on a variable that the V8 engine implicitly classified as <code>undefined</code> at runtime.</li>
-<li><strong>The Tools:</strong> <code>console.log()</code> tracing or attaching Chrome DevTools heavily relying on Source Maps to correlate the executing minified JavaScript back to your readable TypeScript origin files.</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Boot the application in inspection mode to tunnel into the event loop</span>
+          <h3 id="javascript-undefined-is-not-a-function">
+            JavaScript (<code>undefined is not a function</code>)
+          </h3>
+          <ul>
+            <li>
+              <strong>The Pitfall:</strong> Attempting to iterate or call a
+              property on a variable that the V8 engine implicitly classified as
+              <code>undefined</code> at runtime.
+            </li>
+            <li>
+              <strong>The Tools:</strong> <code>console.log()</code> tracing or
+              attaching Chrome DevTools heavily relying on Source Maps to
+              correlate the executing minified JavaScript back to your readable
+              TypeScript origin files.
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Boot the application in inspection mode to tunnel into the event loop</span>
 node<span class="w"> </span>--inspect<span class="w"> </span>index.js
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Tracebacks:</strong> JavaScript stack traces are fundamentally shallower because asynchronous callbacks wipe the callstack hierarchy when deferred to the Event Loop. Leverage <code>async/await</code> rigorously over raw <code>.then()</code> promises to preserve native trace depth.</li>
-</ul></article>
-        </div>
+          <ul>
+            <li>
+              <strong>Tracebacks:</strong> JavaScript stack traces are
+              fundamentally shallower because asynchronous callbacks wipe the
+              callstack hierarchy when deferred to the Event Loop. Leverage
+              <code>async/await</code> rigorously over raw
+              <code>.then()</code> promises to preserve native trace depth.
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

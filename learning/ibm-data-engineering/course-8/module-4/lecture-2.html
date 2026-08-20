@@ -1,110 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 2: Distributed Event Streaming Platform Components</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 2: Distributed Event Streaming Platform Components</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html" class="active">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka
+              ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html" class="active"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 4 &mdash; Course 8: Course 8 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/index.html" class="active">Module 4 &mdash; Course 8: Course 8</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Module 4 &mdash; Course 8: Course 8 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/index.html" class="active"
+                >Module 4 &mdash; Course 8: Course 8</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 2 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/lecture-1.html">Lecture 1: Apache Kafka Overview & Architecture</a>
-            <a href="../../course-8/module-4/lecture-2.html" class="active">Lecture 2: Distributed Event Streaming Platform Components</a>
-            <a href="../../course-8/module-4/lecture-3.html">Lecture 3: Building Event Streaming Pipelines Using Kafka</a>
-            <a href="../../course-8/module-4/lecture-4.html">Lecture 4: Kafka Streaming Process & Stream Topology</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 2 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/lecture-1.html"
+                >Lecture 1: Apache Kafka Overview & Architecture</a
+              >
+              <a href="../../course-8/module-4/lecture-2.html" class="active"
+                >Lecture 2: Distributed Event Streaming Platform Components</a
+              >
+              <a href="../../course-8/module-4/lecture-3.html"
+                >Lecture 3: Building Event Streaming Pipelines Using Kafka</a
+              >
+              <a href="../../course-8/module-4/lecture-4.html"
+                >Lecture 4: Kafka Streaming Process & Stream Topology</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 8</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 4</a> <span>&rsaquo;</span> 
-      Lecture 2
-    </div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 8</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 4</a> <span>&rsaquo;</span>
+        Lecture 2
+      </div>
 
-    <h1 class="fade-in">Distributed Event Streaming Platform Components</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 4, Lecture 2
-    </p>
+      <h1 class="fade-in">Distributed Event Streaming Platform Components</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 4, Lecture 2
+      </p>
 
-
-<div class="section-card fade-in fade-in-d2"><h2>1. The Anatomy of an Event</h2>
-<p>In system architecture, an <strong>event</strong> is an immutable record indicating that "something worth noticing has happened." More formally, it is a data point describing an entity's observable state update at a specific point in time.</p>
-<p>Because events are immutable (they represent history, which cannot be changed), they are ideal for distributed systems where state must be reconstructed or audited.</p>
-<h3>1.1 Common Event Formats</h3>
-<p>Events can range from simple scalar values to complex nested structures. Modern data engineering typically categorizes them into three formats.</p>
-<p>Below are C# representations using <code>record</code> types, which are perfectly suited for events due to their inherent immutability and value-based equality.</p>
-<p><strong>A. Primitive Type</strong>
-The simplest form of an event, carrying only a raw value (e.g., plain text, a number, or a boolean).</p>
-<pre><code class="language-csharp">// Example: A raw temperature reading without context.
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. The Anatomy of an Event</h2>
+        <p>
+          In system architecture, an <strong>event</strong> is an immutable
+          record indicating that "something worth noticing has happened." More
+          formally, it is a data point describing an entity's observable state
+          update at a specific point in time.
+        </p>
+        <p>
+          Because events are immutable (they represent history, which cannot be
+          changed), they are ideal for distributed systems where state must be
+          reconstructed or audited.
+        </p>
+        <h3>1.1 Common Event Formats</h3>
+        <p>
+          Events can range from simple scalar values to complex nested
+          structures. Modern data engineering typically categorizes them into
+          three formats.
+        </p>
+        <p>
+          Below are C# representations using <code>record</code> types, which
+          are perfectly suited for events due to their inherent immutability and
+          value-based equality.
+        </p>
+        <p>
+          <strong>A. Primitive Type</strong> The simplest form of an event,
+          carrying only a raw value (e.g., plain text, a number, or a boolean).
+        </p>
+        <pre><code class="language-csharp">// Example: A raw temperature reading without context.
 public record PrimitiveEvent(double Value);
 
 </code></pre>
-<p><strong>B. Key-Value Format</strong>
-Provides context by associating a specific identifier (the key) with a state (the value). The value can be primitive or complex (JSON, XML, binary tuple).</p>
-<pre><code class="language-csharp">// Example: GPS coordinates tied to a specific vehicle.
+        <p>
+          <strong>B. Key-Value Format</strong> Provides context by associating a
+          specific identifier (the key) with a state (the value). The value can
+          be primitive or complex (JSON, XML, binary tuple).
+        </p>
+        <pre><code class="language-csharp">// Example: GPS coordinates tied to a specific vehicle.
 public record GpsState(double Latitude, double Longitude);
 public record CarGpsEvent(string CarId, GpsState Coordinates);
 
 </code></pre>
-<p><strong>C. Key-Value with Timestamp (Time-Series)</strong>
-The most robust and common format in streaming. It injects temporal context, allowing systems to handle out-of-order delivery, windowing, and time-series analysis.</p>
-<pre><code class="language-csharp">// Example: Blood pressure reading with temporal context.
+        <p>
+          <strong>C. Key-Value with Timestamp (Time-Series)</strong> The most
+          robust and common format in streaming. It injects temporal context,
+          allowing systems to handle out-of-order delivery, windowing, and
+          time-series analysis.
+        </p>
+        <pre><code class="language-csharp">// Example: Blood pressure reading with temporal context.
 public record BloodPressureMeasurement(int Systolic, int Diastolic);
 public record PatientVitalsEvent(
     string PatientId, 
@@ -113,12 +160,25 @@ public record PatientVitalsEvent(
 );
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. The "N-to-N" Integration Problem</h2>
-<p>Event streaming is the continuous transportation of these events from a source (sensors, databases, applications) to a destination (data warehouses, file systems, other applications).</p>
-<p>In a naive architecture, engineers might build direct ETL pipelines between every source and destination using various protocols (HTTP, FTP, JDBC). As the system scales, this results in an unmaintainable "spaghetti" architecture.</p>
-<h3>Architectural Comparison</h3>
-<div class="mermaid-container"><pre class="mermaid">graph TD
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. The "N-to-N" Integration Problem</h2>
+        <p>
+          Event streaming is the continuous transportation of these events from
+          a source (sensors, databases, applications) to a destination (data
+          warehouses, file systems, other applications).
+        </p>
+        <p>
+          In a naive architecture, engineers might build direct ETL pipelines
+          between every source and destination using various protocols (HTTP,
+          FTP, JDBC). As the system scales, this results in an unmaintainable
+          "spaghetti" architecture.
+        </p>
+        <h3>Architectural Comparison</h3>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph TD
     subgraph "The N-to-N Problem (Without ESP)"
         Source1 --&gt; Dest1
         Source1 --&gt; Dest2
@@ -137,53 +197,91 @@ public record PatientVitalsEvent(
         ESP --&gt; D3[Dest 3]
     end
 
-</pre></div>
-<p>To solve the $O(N^2)$ complexity of direct connections, we introduce an intermediary layer.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Event Streaming Platform (ESP) Architecture</h2>
-<p>An ESP acts as a highly scalable, fault-tolerant middle layer. It decouples the producers of data from the consumers, providing a unified interface for event-based ETL.</p>
-<h3>3.1 Core Components of an ESP</h3>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Description</th>
-<th>Technical Responsibility</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Event Broker</strong></td>
-<td>The central nervous system of the ESP.</td>
-<td>Handles the ingestion, processing, and routing of data streams.</td>
-</tr>
-<tr>
-<td><strong>Event Storage</strong></td>
-<td>The persistence layer.</td>
-<td>Buffers events to disk or memory, allowing consumers to process data at their own pace without dropping messages.</td>
-</tr>
-<tr>
-<td><strong>Query/Analytic Engine</strong></td>
-<td>The computation layer.</td>
-<td>Allows for real-time aggregations, filtering, and windowing directly on the stream (e.g., ksqlDB).</td>
-</tr>
-</tbody>
-</table>
-<h3>3.2 Deep Dive: The Event Broker</h3>
-<p>The Event Broker is the engine of the platform and is generally divided into three sub-routines:</p>
-<ol>
-<li><strong>Ingester:</strong> Efficiently accepts high-throughput incoming connections from varied sources.</li>
-<li><strong>Processor:</strong> Executes middleware logic such as:</li>
-<li><em>Serialization/Deserialization</em> (e.g., converting C# objects to Protobuf or Avro).</li>
-<li><em>Compression/Decompression</em> (e.g., Snappy, Gzip) to reduce network payload.</li>
-<li>
-<p><em>Encryption/Decryption</em> (TLS/SSL).</p>
-</li>
-<li>
-<p><strong>Consumption (Dispatcher):</strong> Manages subscriber offsets and efficiently pushes or allows pulling of events to the destinations.</p>
-</li>
-</ol>
-<div class="mermaid-container"><pre class="mermaid">sequenceDiagram
+</pre>
+        </div>
+        <p>
+          To solve the $O(N^2)$ complexity of direct connections, we introduce
+          an intermediary layer.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Event Streaming Platform (ESP) Architecture</h2>
+        <p>
+          An ESP acts as a highly scalable, fault-tolerant middle layer. It
+          decouples the producers of data from the consumers, providing a
+          unified interface for event-based ETL.
+        </p>
+        <h3>3.1 Core Components of an ESP</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Description</th>
+              <th>Technical Responsibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Event Broker</strong></td>
+              <td>The central nervous system of the ESP.</td>
+              <td>
+                Handles the ingestion, processing, and routing of data streams.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Event Storage</strong></td>
+              <td>The persistence layer.</td>
+              <td>
+                Buffers events to disk or memory, allowing consumers to process
+                data at their own pace without dropping messages.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Query/Analytic Engine</strong></td>
+              <td>The computation layer.</td>
+              <td>
+                Allows for real-time aggregations, filtering, and windowing
+                directly on the stream (e.g., ksqlDB).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>3.2 Deep Dive: The Event Broker</h3>
+        <p>
+          The Event Broker is the engine of the platform and is generally
+          divided into three sub-routines:
+        </p>
+        <ol>
+          <li>
+            <strong>Ingester:</strong> Efficiently accepts high-throughput
+            incoming connections from varied sources.
+          </li>
+          <li>
+            <strong>Processor:</strong> Executes middleware logic such as:
+          </li>
+          <li>
+            <em>Serialization/Deserialization</em> (e.g., converting C# objects
+            to Protobuf or Avro).
+          </li>
+          <li>
+            <em>Compression/Decompression</em> (e.g., Snappy, Gzip) to reduce
+            network payload.
+          </li>
+          <li>
+            <p><em>Encryption/Decryption</em> (TLS/SSL).</p>
+          </li>
+          <li>
+            <p>
+              <strong>Consumption (Dispatcher):</strong> Manages subscriber
+              offsets and efficiently pushes or allows pulling of events to the
+              destinations.
+            </p>
+          </li>
+        </ol>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+sequenceDiagram
     participant Producer (Source)
     box Event Broker
         participant Ingester
@@ -200,10 +298,14 @@ public record PatientVitalsEvent(
     Storage--&gt;&gt;Consumption: Notify new offset available
     Consumption-&gt;&gt;Consumer: Push/Pull Event
 
-</pre></div>
-<h3>3.3 C# Conceptual Implementation of a Broker Interface</h3>
-<p>To understand how these components interact programmatically, consider this abstracted C# interface defining a basic broker's contract:</p>
-<pre><code class="language-csharp">using System.Threading.Tasks;
+</pre>
+        </div>
+        <h3>3.3 C# Conceptual Implementation of a Broker Interface</h3>
+        <p>
+          To understand how these components interact programmatically, consider
+          this abstracted C# interface defining a basic broker's contract:
+        </p>
+        <pre><code class="language-csharp">using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace StreamingPlatform.Core
@@ -222,22 +324,51 @@ namespace StreamingPlatform.Core
 }
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. The Industry Landscape</h2>
-<p>While the architectural principles remain consistent, various tools have been developed to handle ESP requirements, each with specific strengths:</p>
-<ul>
-<li><strong>Apache Kafka:</strong> The industry standard. An open-source, distributed commit log known for massive throughput and fault tolerance.</li>
-<li><strong>Amazon Kinesis:</strong> AWS's fully managed real-time streaming service.</li>
-<li><strong>Apache Flink:</strong> Highly focused on stateful computations and exact real-time stream processing (often paired with Kafka).</li>
-<li><strong>Azure Event Hubs:</strong> Microsoft’s fully managed, Kafka-compatible data streaming platform.</li>
-<li><strong>IBM Event Streams:</strong> An enterprise-grade event streaming platform built on Apache Kafka.</li>
-</ul>
-<p>Here is a highly technical, expanded breakdown of Module 4, Lecture 1: "Distributed Event Streaming Platform Components." This lecture transitions from traditional batch ETL to the paradigm of continuous, asynchronous data flow.</p>
-<hr/></div>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. The Industry Landscape</h2>
+        <p>
+          While the architectural principles remain consistent, various tools
+          have been developed to handle ESP requirements, each with specific
+          strengths:
+        </p>
+        <ul>
+          <li>
+            <strong>Apache Kafka:</strong> The industry standard. An
+            open-source, distributed commit log known for massive throughput and
+            fault tolerance.
+          </li>
+          <li>
+            <strong>Amazon Kinesis:</strong> AWS's fully managed real-time
+            streaming service.
+          </li>
+          <li>
+            <strong>Apache Flink:</strong> Highly focused on stateful
+            computations and exact real-time stream processing (often paired
+            with Kafka).
+          </li>
+          <li>
+            <strong>Azure Event Hubs:</strong> Microsoft’s fully managed,
+            Kafka-compatible data streaming platform.
+          </li>
+          <li>
+            <strong>IBM Event Streams:</strong> An enterprise-grade event
+            streaming platform built on Apache Kafka.
+          </li>
+        </ul>
+        <p>
+          Here is a highly technical, expanded breakdown of Module 4, Lecture 1:
+          "Distributed Event Streaming Platform Components." This lecture
+          transitions from traditional batch ETL to the paradigm of continuous,
+          asynchronous data flow.
+        </p>
+        <hr />
+      </div>
 
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

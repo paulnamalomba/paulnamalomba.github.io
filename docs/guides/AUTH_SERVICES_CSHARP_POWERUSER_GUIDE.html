@@ -1,101 +1,248 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>AUTH_SERVICES PowerUser Guide (C#) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="auth_services-poweruser-guide-c">AUTH_SERVICES PowerUser Guide (C#)</h1>
-<p><strong>Last updated</strong>: December 05, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols (OAuth2, OIDC, SAML) for securing distributed systems at scale. This guide covers implementation patterns in C# for integrating with identity providers, token validation, claim-based authorization, SCIM provisioning, certificate-based authentication, and audit logging. Power users need to understand token lifecycle management, refresh strategies, key rotation, HSM/KeyVault integration, and high-availability architectures for production authentication infrastructure.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#auth_services-poweruser-guide-c">AUTH_SERVICES PowerUser Guide (C#)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstarts">Quickstarts</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#example-1-oauth-20-authorization-code-flow-with-pkce">Example 1: OAuth 2.0 Authorization Code Flow with PKCE</a></li>
-<li><a href="#example-2-custom-claims-transformation-and-policy-based-authorization">Example 2: Custom Claims Transformation and Policy-Based Authorization</a></li>
-<li><a href="#example-3-scim-20-user-provisioning-implementation">Example 3: SCIM 2.0 User Provisioning Implementation</a></li>
-<li><a href="#example-4-token-refresh-and-rotation-strategy">Example 4: Token Refresh and Rotation Strategy</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstarts">Quickstarts</h2>
-<ol>
-<li><strong>Install packages</strong>: <code>dotnet add package Microsoft.Identity.Web</code> and <code>dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer</code></li>
-<li><strong>Configure identity provider</strong>: Register application in Azure AD, Okta, Auth0, or Keycloak; obtain client ID, tenant ID, and client secret</li>
-<li><strong>Add authentication middleware</strong>: Configure <code>AddMicrosoftIdentityWebApi()</code> or <code>AddJwtBearer()</code> in <code>Program.cs</code></li>
-<li><strong>Protect endpoints</strong>: Apply <code>[Authorize]</code> attribute to controllers or endpoints requiring authentication</li>
-<li><strong>Validate tokens</strong>: Use built-in token validation with issuer, audience, and signing key verification</li>
-<li><strong>Extract claims</strong>: Access <code>User.Claims</code> in controllers for user identity, roles, and permissions</li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Identity Provider (IdP)</strong>: Centralized service that authenticates users and issues tokens (Azure AD, Okta, Auth0, Keycloak, Ping Identity)</li>
-<li><strong>OAuth 2.0</strong>: Authorization framework enabling third-party applications to obtain limited access to resources; uses authorization code, client credentials, refresh token flows</li>
-<li><strong>OpenID Connect (OIDC)</strong>: Identity layer on top of OAuth 2.0 providing authentication and user profile information via ID tokens</li>
-<li><strong>SAML 2.0</strong>: XML-based protocol for exchanging authentication and authorization data between identity provider and service provider; common in legacy enterprise systems</li>
-<li><strong>JWT (JSON Web Token)</strong>: Compact, self-contained token format for securely transmitting claims between parties; consists of header, payload, and signature</li>
-<li><strong>Claims</strong>: Key-value pairs representing user attributes (identity, roles, permissions); included in JWT payload and accessible in application code</li>
-<li><strong>Token Lifetime</strong>: Time period during which token is valid; access tokens typically short-lived (5-60 min), refresh tokens long-lived (days/months)</li>
-<li><strong>Refresh Token</strong>: Long-lived credential for obtaining new access tokens without re-authentication; must be stored securely and rotated periodically</li>
-<li><strong>SCIM (System for Cross-domain Identity Management)</strong>: RESTful protocol for automating user provisioning and de-provisioning across systems</li>
-<li><strong>Token Revocation</strong>: Process of invalidating tokens before expiration; requires centralized token store or distributed cache for validation</li>
-<li><strong>Certificate-Based Authentication</strong>: Uses X.509 certificates for mutual TLS authentication; common in B2B scenarios and high-security environments</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Program.cs - ASP.NET Core minimal API with Azure AD authentication</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="auth_services-poweruser-guide-c">
+            AUTH_SERVICES PowerUser Guide (C#)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 05, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://learn.microsoft.com/en-us/azure/active-directory/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Enterprise authentication services provide centralized identity
+            management, single sign-on (SSO), multi-factor authentication (MFA),
+            and federated identity protocols (OAuth2, OIDC, SAML) for securing
+            distributed systems at scale. This guide covers implementation
+            patterns in C# for integrating with identity providers, token
+            validation, claim-based authorization, SCIM provisioning,
+            certificate-based authentication, and audit logging. Power users
+            need to understand token lifecycle management, refresh strategies,
+            key rotation, HSM/KeyVault integration, and high-availability
+            architectures for production authentication infrastructure.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#auth_services-poweruser-guide-c"
+                >AUTH_SERVICES PowerUser Guide (C#)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstarts">Quickstarts</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a
+                    href="#example-1-oauth-20-authorization-code-flow-with-pkce"
+                    >Example 1: OAuth 2.0 Authorization Code Flow with PKCE</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#example-2-custom-claims-transformation-and-policy-based-authorization"
+                    >Example 2: Custom Claims Transformation and Policy-Based
+                    Authorization</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-3-scim-20-user-provisioning-implementation"
+                    >Example 3: SCIM 2.0 User Provisioning Implementation</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-4-token-refresh-and-rotation-strategy"
+                    >Example 4: Token Refresh and Rotation Strategy</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstarts">Quickstarts</h2>
+          <ol>
+            <li>
+              <strong>Install packages</strong>:
+              <code>dotnet add package Microsoft.Identity.Web</code> and
+              <code
+                >dotnet add package
+                Microsoft.AspNetCore.Authentication.JwtBearer</code
+              >
+            </li>
+            <li>
+              <strong>Configure identity provider</strong>: Register application
+              in Azure AD, Okta, Auth0, or Keycloak; obtain client ID, tenant
+              ID, and client secret
+            </li>
+            <li>
+              <strong>Add authentication middleware</strong>: Configure
+              <code>AddMicrosoftIdentityWebApi()</code> or
+              <code>AddJwtBearer()</code> in <code>Program.cs</code>
+            </li>
+            <li>
+              <strong>Protect endpoints</strong>: Apply
+              <code>[Authorize]</code> attribute to controllers or endpoints
+              requiring authentication
+            </li>
+            <li>
+              <strong>Validate tokens</strong>: Use built-in token validation
+              with issuer, audience, and signing key verification
+            </li>
+            <li>
+              <strong>Extract claims</strong>: Access
+              <code>User.Claims</code> in controllers for user identity, roles,
+              and permissions
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Identity Provider (IdP)</strong>: Centralized service that
+              authenticates users and issues tokens (Azure AD, Okta, Auth0,
+              Keycloak, Ping Identity)
+            </li>
+            <li>
+              <strong>OAuth 2.0</strong>: Authorization framework enabling
+              third-party applications to obtain limited access to resources;
+              uses authorization code, client credentials, refresh token flows
+            </li>
+            <li>
+              <strong>OpenID Connect (OIDC)</strong>: Identity layer on top of
+              OAuth 2.0 providing authentication and user profile information
+              via ID tokens
+            </li>
+            <li>
+              <strong>SAML 2.0</strong>: XML-based protocol for exchanging
+              authentication and authorization data between identity provider
+              and service provider; common in legacy enterprise systems
+            </li>
+            <li>
+              <strong>JWT (JSON Web Token)</strong>: Compact, self-contained
+              token format for securely transmitting claims between parties;
+              consists of header, payload, and signature
+            </li>
+            <li>
+              <strong>Claims</strong>: Key-value pairs representing user
+              attributes (identity, roles, permissions); included in JWT payload
+              and accessible in application code
+            </li>
+            <li>
+              <strong>Token Lifetime</strong>: Time period during which token is
+              valid; access tokens typically short-lived (5-60 min), refresh
+              tokens long-lived (days/months)
+            </li>
+            <li>
+              <strong>Refresh Token</strong>: Long-lived credential for
+              obtaining new access tokens without re-authentication; must be
+              stored securely and rotated periodically
+            </li>
+            <li>
+              <strong>SCIM (System for Cross-domain Identity Management)</strong
+              >: RESTful protocol for automating user provisioning and
+              de-provisioning across systems
+            </li>
+            <li>
+              <strong>Token Revocation</strong>: Process of invalidating tokens
+              before expiration; requires centralized token store or distributed
+              cache for validation
+            </li>
+            <li>
+              <strong>Certificate-Based Authentication</strong>: Uses X.509
+              certificates for mutual TLS authentication; common in B2B
+              scenarios and high-security environments
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Program.cs - ASP.NET Core minimal API with Azure AD authentication</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Authentication.JwtBearer</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.Identity.Web</span><span class="p">;</span>
 
@@ -122,9 +269,11 @@
 <span class="w">    </span><span class="p">.</span><span class="n">RequireAuthorization</span><span class="p">(</span><span class="s">&quot;AdminOnly&quot;</span><span class="p">);</span>
 
 <span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<div class="codehilite"><pre><span></span><code><span class="c1">// appsettings.json - Azure AD configuration</span>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// appsettings.json - Azure AD configuration</span>
 <span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;AzureAd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;Instance&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://login.microsoftonline.com/&quot;</span><span class="p">,</span>
@@ -138,22 +287,27 @@
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use managed identities or KeyVault for client secrets; never hardcode credentials
-- Implement token caching to reduce IdP calls; use <code>IDistributedCache</code> with Redis
-- Validate token signature, issuer, audience, and expiration on every request
-- Use short-lived access tokens (15-30 min) with refresh token rotation
-- Implement proper CORS policies; avoid wildcard origins in production
-- Log authentication failures with correlation IDs for security auditing
-- Use HTTPS only; disable insecure protocols (TLS &lt; 1.2)
-- Implement rate limiting to prevent token endpoint abuse
-- Store refresh tokens encrypted in database; rotate on each use
-- Use PKCE (Proof Key for Code Exchange) for public clients (SPAs, mobile)</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<p><strong>Token Security</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Custom token validation with additional security checks</span>
+          <p>
+            <strong>Best Practices</strong>: - Use managed identities or
+            KeyVault for client secrets; never hardcode credentials - Implement
+            token caching to reduce IdP calls; use
+            <code>IDistributedCache</code> with Redis - Validate token
+            signature, issuer, audience, and expiration on every request - Use
+            short-lived access tokens (15-30 min) with refresh token rotation -
+            Implement proper CORS policies; avoid wildcard origins in production
+            - Log authentication failures with correlation IDs for security
+            auditing - Use HTTPS only; disable insecure protocols (TLS &lt; 1.2)
+            - Implement rate limiting to prevent token endpoint abuse - Store
+            refresh tokens encrypted in database; rotate on each use - Use PKCE
+            (Proof Key for Code Exchange) for public clients (SPAs, mobile)
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <p><strong>Token Security</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Custom token validation with additional security checks</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">JwtBearerOptions</span><span class="o">&gt;</span><span class="p">(</span><span class="n">JwtBearerDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">TokenValidationParameters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TokenValidationParameters</span>
@@ -195,10 +349,12 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">});</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Certificate-Based Authentication</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Mutual TLS authentication with client certificates</span>
+          <p><strong>Certificate-Based Authentication</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Mutual TLS authentication with client certificates</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddAuthentication</span><span class="p">(</span><span class="n">CertificateAuthenticationDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">)</span>
 <span class="w">    </span><span class="p">.</span><span class="n">AddCertificate</span><span class="p">(</span><span class="n">options</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="w">    </span><span class="p">{</span>
@@ -248,22 +404,30 @@
 <span class="w">        </span><span class="p">};</span>
 <span class="w">    </span><span class="p">});</span>
 <span class="p">});</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Key Security Measures</strong>:
-- Use Azure KeyVault or AWS Secrets Manager for signing keys; rotate every 90 days
-- Implement key versioning with graceful rollover period (accept both old and new keys for 24 hours)
-- Store private keys in HSM (Hardware Security Module) for production environments
-- Use separate signing keys per environment (dev, staging, production)
-- Implement token binding to prevent token replay attacks
-- Use nonce values in authentication requests to prevent replay
-- Implement proper session management with secure, httponly, samesite cookies
-- Use content security policy (CSP) headers to prevent XSS attacks
-- Implement account lockout after failed login attempts (5 attempts, 15 min lockout)
-- Audit all authentication events with user context, IP, user-agent, timestamp</p>
-<h2 id="examples">Examples</h2>
-<h3 id="example-1-oauth-20-authorization-code-flow-with-pkce">Example 1: OAuth 2.0 Authorization Code Flow with PKCE</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// OAuth2 client implementation with PKCE</span>
+          <p>
+            <strong>Key Security Measures</strong>: - Use Azure KeyVault or AWS
+            Secrets Manager for signing keys; rotate every 90 days - Implement
+            key versioning with graceful rollover period (accept both old and
+            new keys for 24 hours) - Store private keys in HSM (Hardware
+            Security Module) for production environments - Use separate signing
+            keys per environment (dev, staging, production) - Implement token
+            binding to prevent token replay attacks - Use nonce values in
+            authentication requests to prevent replay - Implement proper session
+            management with secure, httponly, samesite cookies - Use content
+            security policy (CSP) headers to prevent XSS attacks - Implement
+            account lockout after failed login attempts (5 attempts, 15 min
+            lockout) - Audit all authentication events with user context, IP,
+            user-agent, timestamp
+          </p>
+          <h2 id="examples">Examples</h2>
+          <h3 id="example-1-oauth-20-authorization-code-flow-with-pkce">
+            Example 1: OAuth 2.0 Authorization Code Flow with PKCE
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// OAuth2 client implementation with PKCE</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Security.Cryptography</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
@@ -379,10 +543,17 @@
 <span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">TokenType</span><span class="p">,</span>
 <span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">IdToken</span>
 <span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-2-custom-claims-transformation-and-policy-based-authorization">Example 2: Custom Claims Transformation and Policy-Based Authorization</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Claims transformation service</span>
+          <h3
+            id="example-2-custom-claims-transformation-and-policy-based-authorization"
+          >
+            Example 2: Custom Claims Transformation and Policy-Based
+            Authorization
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Claims transformation service</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Authentication</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Security.Claims</span><span class="p">;</span>
 
@@ -470,10 +641,14 @@
 <span class="w">    </span><span class="c1">// Implementation</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-3-scim-20-user-provisioning-implementation">Example 3: SCIM 2.0 User Provisioning Implementation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// SCIM user provisioning controller</span>
+          <h3 id="example-3-scim-20-user-provisioning-implementation">
+            Example 3: SCIM 2.0 User Provisioning Implementation
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// SCIM user provisioning controller</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
 
 <span class="na">[ApiController]</span>
@@ -568,10 +743,14 @@
 <span class="p">);</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">ScimPatchOperation</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Op</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Path</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="w"> </span><span class="n">Value</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-4-token-refresh-and-rotation-strategy">Example 4: Token Refresh and Rotation Strategy</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Token refresh service with rotation</span>
+          <h3 id="example-4-token-refresh-and-rotation-strategy">
+            Example 4: Token Refresh and Rotation Strategy
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Token refresh service with rotation</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TokenRefreshService</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IHttpClientFactory</span><span class="w"> </span><span class="n">_httpClientFactory</span><span class="p">;</span>
@@ -681,11 +860,13 @@
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DateTime</span><span class="w"> </span><span class="n">ExpiresAt</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">init</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DateTime</span><span class="w"> </span><span class="n">IssuedAt</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">init</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Token Validation Failures</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Enhanced logging for token validation issues</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p><strong>Token Validation Failures</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Enhanced logging for token validation issues</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">JwtBearerOptions</span><span class="o">&gt;</span><span class="p">(</span><span class="n">JwtBearerDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="n">options</span><span class="p">.</span><span class="n">Events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JwtBearerEvents</span>
@@ -728,18 +909,28 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">});</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Common Issues</strong>:
-- <strong>401 Unauthorized</strong>: Check token expiration, signature validation, issuer/audience mismatch
-- <strong>403 Forbidden</strong>: User lacks required claims/roles; verify claims transformation pipeline
-- <strong>Token refresh loop</strong>: Ensure refresh token rotation logic doesn't create circular dependencies
-- <strong>CORS errors</strong>: Configure proper CORS policy with credentials support for cross-origin requests
-- <strong>Clock skew</strong>: Adjust <code>ClockSkew</code> parameter in token validation; default 5 minutes may be too large
-- <strong>Missing claims</strong>: Ensure IdP is configured to include required claims in tokens; check scope mappings
-- <strong>Certificate validation failures</strong>: Verify certificate chain, CRL/OCSP endpoints, and trust store configuration</p>
-<p><strong>Diagnostic Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Decode JWT token (use jwt.io or jwt-cli)</span>
+          <p>
+            <strong>Common Issues</strong>: - <strong>401 Unauthorized</strong>:
+            Check token expiration, signature validation, issuer/audience
+            mismatch - <strong>403 Forbidden</strong>: User lacks required
+            claims/roles; verify claims transformation pipeline -
+            <strong>Token refresh loop</strong>: Ensure refresh token rotation
+            logic doesn't create circular dependencies -
+            <strong>CORS errors</strong>: Configure proper CORS policy with
+            credentials support for cross-origin requests -
+            <strong>Clock skew</strong>: Adjust <code>ClockSkew</code> parameter
+            in token validation; default 5 minutes may be too large -
+            <strong>Missing claims</strong>: Ensure IdP is configured to include
+            required claims in tokens; check scope mappings -
+            <strong>Certificate validation failures</strong>: Verify certificate
+            chain, CRL/OCSP endpoints, and trust store configuration
+          </p>
+          <p><strong>Diagnostic Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Decode JWT token (use jwt.io or jwt-cli)</span>
 dotnet<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>--global<span class="w"> </span>jwt-cli
 jwt<span class="w"> </span>decode<span class="w"> </span>&lt;token&gt;
 
@@ -749,11 +940,13 @@ curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Aut
 <span class="c1"># Check certificate validity</span>
 openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.pem<span class="w"> </span>-text<span class="w"> </span>-noout
 openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem<span class="w"> </span>certificate.pem
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Token Caching Strategy</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Implement distributed token cache with Redis</span>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Token Caching Strategy</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Implement distributed token cache with Redis</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RedisTokenCache</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IDistributedCache</span><span class="w"> </span><span class="n">_cache</span><span class="p">;</span>
@@ -812,21 +1005,29 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Performance Optimizations</strong>:
-- Cache validated tokens in memory for duration of their lifetime; use <code>MemoryCache</code> for single-instance apps
-- Use Redis or another distributed cache for multi-instance deployments to share token validation cache
-- Implement connection pooling for HTTP clients calling IdP endpoints; use <code>IHttpClientFactory</code>
-- Enable response compression for token endpoints returning large ID tokens
-- Use async/await throughout authentication pipeline to prevent thread pool starvation
-- Implement circuit breaker pattern for IdP calls to handle temporary outages gracefully
-- Pre-fetch signing keys from JWKS endpoint on startup and cache with background refresh
-- Use bulk operations for SCIM provisioning instead of individual API calls
-- Implement pagination for large user/group queries (max 100-200 items per page)
-- Monitor authentication latency and set alerts for p95 &gt; 500ms</p>
-<p><strong>Monitoring Metrics</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Custom metrics for authentication monitoring</span>
+          <p>
+            <strong>Performance Optimizations</strong>: - Cache validated tokens
+            in memory for duration of their lifetime; use
+            <code>MemoryCache</code> for single-instance apps - Use Redis or
+            another distributed cache for multi-instance deployments to share
+            token validation cache - Implement connection pooling for HTTP
+            clients calling IdP endpoints; use <code>IHttpClientFactory</code> -
+            Enable response compression for token endpoints returning large ID
+            tokens - Use async/await throughout authentication pipeline to
+            prevent thread pool starvation - Implement circuit breaker pattern
+            for IdP calls to handle temporary outages gracefully - Pre-fetch
+            signing keys from JWKS endpoint on startup and cache with background
+            refresh - Use bulk operations for SCIM provisioning instead of
+            individual API calls - Implement pagination for large user/group
+            queries (max 100-200 items per page) - Monitor authentication
+            latency and set alerts for p95 &gt; 500ms
+          </p>
+          <p><strong>Monitoring Metrics</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Custom metrics for authentication monitoring</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Diagnostics.Metrics</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AuthenticationMetrics</span>
@@ -860,71 +1061,140 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RecordTokenRefresh</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">milliseconds</span><span class="p">)</span><span class="w"> </span>
 <span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_tokenRefreshDuration</span><span class="p">.</span><span class="n">Record</span><span class="p">(</span><span class="n">milliseconds</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Scaling Considerations</strong>:
-- Deploy multiple instances behind load balancer with sticky sessions if using in-memory cache
-- Use Redis Cluster for distributed cache in high-throughput scenarios (&gt;10K req/s)
-- Implement rate limiting per user/IP to prevent abuse (use AspNetCoreRateLimit library)
-- Consider dedicated authentication service/sidecar pattern for microservices architecture
-- Use connection multiplexing for HTTP/2 to IdP endpoints
-- Implement background token refresh for long-running processes to avoid synchronous delays
-- Monitor IdP rate limits and implement backoff/retry strategies</p>
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<p><strong>Official Documentation</strong>:
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/">Microsoft Identity Platform</a>
-- <a href="https://datatracker.ietf.org/doc/html/rfc6749">OAuth 2.0 RFC 6749</a>
-- <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a>
-- <a href="http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html">SAML 2.0 Technical Overview</a>
-- <a href="https://datatracker.ietf.org/doc/html/rfc7643">SCIM 2.0 RFC 7643</a>
-- <a href="https://datatracker.ietf.org/doc/html/rfc7519">JWT RFC 7519</a>
-- <a href="https://datatracker.ietf.org/doc/html/rfc7636">PKCE RFC 7636</a></p>
-<p><strong>Libraries and Tools</strong>:
-- <a href="https://github.com/AzureAD/microsoft-identity-web">Microsoft.Identity.Web</a> - Azure AD integration
-- <a href="https://duendesoftware.com/products/identityserver">IdentityServer</a> - .NET OAuth/OIDC server
-- <a href="https://github.com/auth0/auth0.net">Auth0 .NET SDK</a> - Auth0 integration
-- <a href="https://github.com/okta/okta-sdk-dotnet">Okta .NET SDK</a> - Okta integration
-- <a href="https://github.com/jwt-dotnet/jwt">JWT.NET</a> - JWT encoding/decoding
-- <a href="https://www.bouncycastle.org/csharp/">BouncyCastle</a> - Cryptography library</p>
-<p><strong>Best Practices Guides</strong>:
-- <a href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics">OAuth 2.0 Security Best Current Practice</a>
-- <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html">OWASP Authentication Cheat Sheet</a>
-- <a href="https://pages.nist.gov/800-63-3/">NIST Digital Identity Guidelines</a>
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist">Microsoft Identity Platform Best Practices</a></p>
-<p><strong>Community Resources</strong>:
-- <a href="https://auth0.com/blog/">Auth0 Blog - Identity &amp; Security</a>
-- <a href="https://docs.duendesoftware.com/">Identity Server Documentation</a>
-- <a href="https://github.com/dotnet/aspnetcore/tree/main/src/Security">.NET Security on GitHub</a></p></article>
-        </div>
+          <p>
+            <strong>Scaling Considerations</strong>: - Deploy multiple instances
+            behind load balancer with sticky sessions if using in-memory cache -
+            Use Redis Cluster for distributed cache in high-throughput scenarios
+            (&gt;10K req/s) - Implement rate limiting per user/IP to prevent
+            abuse (use AspNetCoreRateLimit library) - Consider dedicated
+            authentication service/sidecar pattern for microservices
+            architecture - Use connection multiplexing for HTTP/2 to IdP
+            endpoints - Implement background token refresh for long-running
+            processes to avoid synchronous delays - Monitor IdP rate limits and
+            implement backoff/retry strategies
+          </p>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <p>
+            <strong>Official Documentation</strong>: -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/develop/"
+              >Microsoft Identity Platform</a
+            >
+            -
+            <a href="https://datatracker.ietf.org/doc/html/rfc6749"
+              >OAuth 2.0 RFC 6749</a
+            >
+            -
+            <a href="https://openid.net/specs/openid-connect-core-1_0.html"
+              >OpenID Connect Core 1.0</a
+            >
+            -
+            <a
+              href="http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-tech-overview-2.0.html"
+              >SAML 2.0 Technical Overview</a
+            >
+            -
+            <a href="https://datatracker.ietf.org/doc/html/rfc7643"
+              >SCIM 2.0 RFC 7643</a
+            >
+            -
+            <a href="https://datatracker.ietf.org/doc/html/rfc7519"
+              >JWT RFC 7519</a
+            >
+            -
+            <a href="https://datatracker.ietf.org/doc/html/rfc7636"
+              >PKCE RFC 7636</a
+            >
+          </p>
+          <p>
+            <strong>Libraries and Tools</strong>: -
+            <a href="https://github.com/AzureAD/microsoft-identity-web"
+              >Microsoft.Identity.Web</a
+            >
+            - Azure AD integration -
+            <a href="https://duendesoftware.com/products/identityserver"
+              >IdentityServer</a
+            >
+            - .NET OAuth/OIDC server -
+            <a href="https://github.com/auth0/auth0.net">Auth0 .NET SDK</a> -
+            Auth0 integration -
+            <a href="https://github.com/okta/okta-sdk-dotnet">Okta .NET SDK</a>
+            - Okta integration -
+            <a href="https://github.com/jwt-dotnet/jwt">JWT.NET</a> - JWT
+            encoding/decoding -
+            <a href="https://www.bouncycastle.org/csharp/">BouncyCastle</a> -
+            Cryptography library
+          </p>
+          <p>
+            <strong>Best Practices Guides</strong>: -
+            <a
+              href="https://datatracker.ietf.org/doc/html/draft-ietf-oauth-security-topics"
+              >OAuth 2.0 Security Best Current Practice</a
+            >
+            -
+            <a
+              href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+              >OWASP Authentication Cheat Sheet</a
+            >
+            -
+            <a href="https://pages.nist.gov/800-63-3/"
+              >NIST Digital Identity Guidelines</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist"
+              >Microsoft Identity Platform Best Practices</a
+            >
+          </p>
+          <p>
+            <strong>Community Resources</strong>: -
+            <a href="https://auth0.com/blog/"
+              >Auth0 Blog - Identity &amp; Security</a
+            >
+            -
+            <a href="https://docs.duendesoftware.com/"
+              >Identity Server Documentation</a
+            >
+            -
+            <a
+              href="https://github.com/dotnet/aspnetcore/tree/main/src/Security"
+              >.NET Security on GitHub</a
+            >
+          </p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

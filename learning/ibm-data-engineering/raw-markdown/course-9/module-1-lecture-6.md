@@ -10,16 +10,16 @@ A **data lake** is a storage repository that can hold large amounts of **structu
 
 Key distinctions from a data warehouse:
 
-* **Schema-on-read** — you do not need to define the structure and schema of data before loading it into the data lake
-* **Use-case agnostic** — you do not need to know all the analytical use cases at ingestion time
-* **Raw data preservation** — data exists in its original form, straight from the source, and is transformed only when needed for a specific analytical task
+- **Schema-on-read** — you do not need to define the structure and schema of data before loading it into the data lake
+- **Use-case agnostic** — you do not need to know all the analytical use cases at ingestion time
+- **Raw data preservation** — data exists in its original form, straight from the source, and is transformed only when needed for a specific analytical task
 
 A data lake is also a **reference architecture** that is independent of any specific technology. It can be deployed on:
 
-* **Cloud object storage** — e.g., Amazon S3
-* **Distributed systems** — e.g., Apache Hadoop for Big Data processing
-* **Relational database management systems**
-* **NoSQL data repositories** capable of storing very large data volumes
+- **Cloud object storage** — e.g., Amazon S3
+- **Distributed systems** — e.g., Apache Hadoop for Big Data processing
+- **Relational database management systems**
+- **NoSQL data repositories** capable of storing very large data volumes
 
 > A data lake is not a data dump. Governance, metadata management, and cataloguing are essential to prevent it from degrading into an unusable data swamp.
 
@@ -31,9 +31,9 @@ A data lake is also a **reference architecture** that is independent of any spec
 
 Data lakes can store all data types without format conversion:
 
-* **Unstructured data** — documents, emails, images, audio
-* **Semi-structured data** — JSON, XML, CSV, log files
-* **Structured data** — rows and columns from relational databases
+- **Unstructured data** — documents, emails, images, audio
+- **Semi-structured data** — JSON, XML, CSV, log files
+- **Structured data** — rows and columns from relational databases
 
 ### 2.2 Scalable Storage Capacity
 
@@ -53,12 +53,12 @@ The ability to access data in its original format enables fast, flexible reuse a
 
 Technologies, platforms, and reference architectures for data lakes are offered by:
 
-| Vendor | Vendor |
-| --- | --- |
-| Amazon | Microsoft |
-| Cloudera | Oracle |
-| Google | SAS |
-| IBM | Snowflake |
+| Vendor      | Vendor            |
+| ----------- | ----------------- |
+| Amazon      | Microsoft         |
+| Cloudera    | Oracle            |
+| Google      | SAS               |
+| IBM         | Snowflake         |
 | Informatica | Teradata / Zaloni |
 
 ---
@@ -67,13 +67,13 @@ Technologies, platforms, and reference architectures for data lakes are offered 
 
 Data lakes were designed in response to the limitations of data warehouses. Most organizations require **both**, as they serve fundamentally different needs.
 
-| Dimension | Data Lake | Data Warehouse |
-| --- | --- | --- |
-| **Data Format** | Raw, unstructured, integrated in native form | Processed, conformed to standards prior to loading |
-| **Schema** | Schema-on-read — no schema required before loading | Schema-on-write — strict conformance required before loading |
-| **Data Quality** | May contain uncurated, raw data; does not necessarily comply with governance guidelines | Curated, governed, and quality-controlled |
-| **Primary Users** | Data scientists, data developers, ML engineers | Business analysts, data analysts |
-| **Staging Role** | Often used as a staging area before loading into warehouses or data marts | Final analytical destination for BI workloads |
+| Dimension         | Data Lake                                                                               | Data Warehouse                                               |
+| ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| **Data Format**   | Raw, unstructured, integrated in native form                                            | Processed, conformed to standards prior to loading           |
+| **Schema**        | Schema-on-read — no schema required before loading                                      | Schema-on-write — strict conformance required before loading |
+| **Data Quality**  | May contain uncurated, raw data; does not necessarily comply with governance guidelines | Curated, governed, and quality-controlled                    |
+| **Primary Users** | Data scientists, data developers, ML engineers                                          | Business analysts, data analysts                             |
+| **Staging Role**  | Often used as a staging area before loading into warehouses or data marts               | Final analytical destination for BI workloads                |
 
 ---
 
@@ -81,9 +81,9 @@ Data lakes were designed in response to the limitations of data warehouses. Most
 
 Data lakes are frequently used as a **self-serve staging area** for a variety of downstream use cases:
 
-* Machine learning model development and training
-* Advanced analytics and exploratory data science
-* Data transformation pipelines feeding enterprise data warehouses and data marts
+- Machine learning model development and training
+- Advanced analytics and exploratory data science
+- Data transformation pipelines feeding enterprise data warehouses and data marts
 
 This positioning makes the data lake a complementary—not competing—component in a modern data architecture.
 

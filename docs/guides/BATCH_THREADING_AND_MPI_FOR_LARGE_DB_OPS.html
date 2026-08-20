@@ -1,162 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Memory-Aware Batching, Threading & MPI Chunking for Large Database Operations - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Memory-Aware Batching, Threading & MPI Chunking for Large Database
+      Operations - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database Operations</h1>
-<p><br>
-<strong>Last updated</strong>: February 16, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://www.python.org/"><img alt="Language: Python" src="https://img.shields.io/badge/Language-Python-3776AB.svg" /></a></p>
-<!-- [![Language: C++](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://learn.microsoft.com/cpp) -->
-<p><a href="https://www.mpi-forum.org/"><img alt="HPC: MPI" src="https://img.shields.io/badge/HPC-MPI-orange.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a>
-<br>
-<em>C++ will come in a future update. For now, the Python implementation demonstrates the core algorithm effectively.</em></p>
-<h2 id="context">Context</h2>
-<p>We innovated this idea at database-level for our platform (SEAT) backend. That platform is written in Python with the Django framework, and uses PostgreSQL as the database engine. We had to perform bulk updates on tables with millions of rows, and found that naive/server-native/pessimistic approaches either exhausted RAM, underutilised the CPU, or saturated server disk I/O leading to quite frankly, insane performance inefficiencies that trickle down into affecting platform availability and uptime. This guide distills our solution into a general-purpose algorithm that can be applied in any language or database context. With examples given in both Python and C++, and a detailed numerical breakdown of how the algorithm adapts to different RAM profiles and data sizes, this guide is a practical resource for developers facing similar challenges with large database operations. The three-stage pipeline we present — <em>Memory-Aware Batching → Thread-Level Buffering → MPI Core-Level Chunking</em> — is designed to dynamically adapt to available system resources, ensuring efficient processing without overwhelming the server.</p>
-<h2 id="foundational-assumptions">Foundational Assumptions</h2>
-<p>The algorithm presented here is a self-tuning algorithm with respect to the host machine characteristics: it reads total <strong>available physical RAM</strong>, reserves a <strong>10% safety overhead</strong>, <strong>partitions the remaining budget into lightweight thread buffers</strong>, and then <strong>distributes each buffer's workload across logical cores via MPI scatter/gather</strong>. We assume disk I/O throughput is that of a PCIe Gen 4 NVMe at ~5.5 GB/s maximum. This is factored into the algorithm so that neither the storage subsystem nor the memory subsystem becomes the bottleneck.</p>
-<p>Two real-world scenarios are analysed in detail:</p>
-<table>
-<thead>
-<tr>
-<th>Scenario</th>
-<th>Total data</th>
-<th>Row size</th>
-<th>Row count</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>A</strong> — Heavy update</td>
-<td>10 GB</td>
-<td>5 KB</td>
-<td>2 097 152 rows</td>
-</tr>
-<tr>
-<td><strong>B</strong> — Moderate update</td>
-<td>3 GB</td>
-<td>20 KB</td>
-<td>157 286 rows</td>
-</tr>
-</tbody>
-</table>
-<p>Each scenario is evaluated against three theoretical RAM profiles: <strong>24 GB</strong>, <strong>8 GB</strong>, and <strong>4 GB</strong>.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#memory-aware-batching-threading-mpi-chunking-for-large-database-operations">Memory-Aware Batching, Threading \&amp; MPI Chunking for Large Database Operations</a></li>
-<li><a href="#context">Context</a></li>
-<li><a href="#foundational-assumptions">Foundational Assumptions</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#1-problem-statement-hardware-model">1) Problem Statement \&amp; Hardware Model</a></li>
-<li><a href="#2-the-three-stage-pipeline">2) The Three-Stage Pipeline</a></li>
-<li><a href="#3-stage-1-memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</a></li>
-<li><a href="#4-stage-2-thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</a></li>
-<li><a href="#5-stage-3-mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</a></li>
-<li><a href="#6-disk-io-constraint-nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</a></li>
-<li><a href="#7-worked-scenarios-numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</a><ul>
-<li><a href="#scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</a></li>
-<li><a href="#scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</a></li>
-<li><a href="#discussion-why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</a></li>
-</ul>
-</li>
-<li><a href="#8-python-reference-implementation">8) Python Reference Implementation</a></li>
-<li><a href="#9-performance-notes-pitfalls">9) Performance Notes \&amp; Pitfalls</a></li>
-<li><a href="#references">References</a></li>
-</ul>
-<hr />
-<h2 id="1-problem-statement-hardware-model">1) Problem Statement &amp; Hardware Model</h2>
-<p>You have a database with <code>N</code> rows, each of size <code>R</code> bytes, requiring a bulk update of total size <code>D = N × R</code>. The machine has:</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Symbol</th>
-<th>Typical values</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Total physical RAM</td>
-<td><code>RAM_total</code></td>
-<td>4 GB / 8 GB / 24 GB</td>
-</tr>
-<tr>
-<td>OS + base process overhead</td>
-<td><code>RAM_os</code></td>
-<td>~1.5 GB (Windows), ~0.8 GB (Linux)</td>
-</tr>
-<tr>
-<td>Safety overhead (always reserved)</td>
-<td><code>α</code></td>
-<td>10 % of <code>RAM_total</code></td>
-</tr>
-<tr>
-<td>Logical CPU cores</td>
-<td><code>C</code></td>
-<td>4 / 8 / 16</td>
-</tr>
-<tr>
-<td>Disk sequential read/write</td>
-<td><code>IO_max</code></td>
-<td>~5.5 GB/s (PCIe Gen 4 NVMe SSD)</td>
-</tr>
-<tr>
-<td>Disk queue depth (NVMe)</td>
-<td><code>QD</code></td>
-<td>32–64</td>
-</tr>
-</tbody>
-</table>
-<p>The <strong>usable budget</strong> or in other words <strong>maximum expendable data-effort</strong> for the batcher is:</p>
-<div class="codehilite"><pre><span></span><code>RAM_usable = RAM_total − RAM_os − (α × RAM_total)
-</code></pre></div>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1
+            id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations"
+          >
+            Memory-Aware Batching, Threading &amp; MPI Chunking for Large
+            Database Operations
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 16, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://www.python.org/"
+              ><img
+                alt="Language: Python"
+                src="https://img.shields.io/badge/Language-Python-3776AB.svg"
+            /></a>
+          </p>
+          <!-- [![Language: C++](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://learn.microsoft.com/cpp) -->
+          <p>
+            <a href="https://www.mpi-forum.org/"
+              ><img
+                alt="HPC: MPI"
+                src="https://img.shields.io/badge/HPC-MPI-orange.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+            <br />
+            <em
+              >C++ will come in a future update. For now, the Python
+              implementation demonstrates the core algorithm effectively.</em
+            >
+          </p>
+          <h2 id="context">Context</h2>
+          <p>
+            We innovated this idea at database-level for our platform (SEAT)
+            backend. That platform is written in Python with the Django
+            framework, and uses PostgreSQL as the database engine. We had to
+            perform bulk updates on tables with millions of rows, and found that
+            naive/server-native/pessimistic approaches either exhausted RAM,
+            underutilised the CPU, or saturated server disk I/O leading to quite
+            frankly, insane performance inefficiencies that trickle down into
+            affecting platform availability and uptime. This guide distills our
+            solution into a general-purpose algorithm that can be applied in any
+            language or database context. With examples given in both Python and
+            C++, and a detailed numerical breakdown of how the algorithm adapts
+            to different RAM profiles and data sizes, this guide is a practical
+            resource for developers facing similar challenges with large
+            database operations. The three-stage pipeline we present —
+            <em
+              >Memory-Aware Batching → Thread-Level Buffering → MPI Core-Level
+              Chunking</em
+            >
+            — is designed to dynamically adapt to available system resources,
+            ensuring efficient processing without overwhelming the server.
+          </p>
+          <h2 id="foundational-assumptions">Foundational Assumptions</h2>
+          <p>
+            The algorithm presented here is a self-tuning algorithm with respect
+            to the host machine characteristics: it reads total
+            <strong>available physical RAM</strong>, reserves a
+            <strong>10% safety overhead</strong>,
+            <strong
+              >partitions the remaining budget into lightweight thread
+              buffers</strong
+            >, and then
+            <strong
+              >distributes each buffer's workload across logical cores via MPI
+              scatter/gather</strong
+            >. We assume disk I/O throughput is that of a PCIe Gen 4 NVMe at
+            ~5.5 GB/s maximum. This is factored into the algorithm so that
+            neither the storage subsystem nor the memory subsystem becomes the
+            bottleneck.
+          </p>
+          <p>Two real-world scenarios are analysed in detail:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Total data</th>
+                <th>Row size</th>
+                <th>Row count</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>A</strong> — Heavy update</td>
+                <td>10 GB</td>
+                <td>5 KB</td>
+                <td>2 097 152 rows</td>
+              </tr>
+              <tr>
+                <td><strong>B</strong> — Moderate update</td>
+                <td>3 GB</td>
+                <td>20 KB</td>
+                <td>157 286 rows</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Each scenario is evaluated against three theoretical RAM profiles:
+            <strong>24 GB</strong>, <strong>8 GB</strong>, and
+            <strong>4 GB</strong>.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a
+                href="#memory-aware-batching-threading-mpi-chunking-for-large-database-operations"
+                >Memory-Aware Batching, Threading \&amp; MPI Chunking for Large
+                Database Operations</a
+              >
+            </li>
+            <li><a href="#context">Context</a></li>
+            <li>
+              <a href="#foundational-assumptions">Foundational Assumptions</a>
+            </li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#1-problem-statement-hardware-model"
+                >1) Problem Statement \&amp; Hardware Model</a
+              >
+            </li>
+            <li>
+              <a href="#2-the-three-stage-pipeline"
+                >2) The Three-Stage Pipeline</a
+              >
+            </li>
+            <li>
+              <a href="#3-stage-1-memory-aware-batch-sizing-algorithm"
+                >3) Stage 1 — Memory-Aware Batch Sizing Algorithm</a
+              >
+            </li>
+            <li>
+              <a href="#4-stage-2-thread-level-buffer-partitioning"
+                >4) Stage 2 — Thread-Level Buffer Partitioning</a
+              >
+            </li>
+            <li>
+              <a href="#5-stage-3-mpi-core-level-chunking"
+                >5) Stage 3 — MPI Core-Level Chunking</a
+              >
+            </li>
+            <li>
+              <a href="#6-disk-io-constraint-nvme-throughput-gate"
+                >6) Disk I/O Constraint — NVMe Throughput Gate</a
+              >
+            </li>
+            <li>
+              <a href="#7-worked-scenarios-numerical-breakdown"
+                >7) Worked Scenarios — Numerical Breakdown</a
+              >
+              <ul>
+                <li>
+                  <a
+                    href="#scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows"
+                    >Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152
+                    rows)</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows"
+                    >Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286
+                    rows)</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#discussion-why-does-total-io-time-converge-across-all-ram-sizes"
+                    >Discussion — Why Does Total I/O Time Converge Across All
+                    RAM Sizes?</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#8-python-reference-implementation"
+                >8) Python Reference Implementation</a
+              >
+            </li>
+            <li>
+              <a href="#9-performance-notes-pitfalls"
+                >9) Performance Notes \&amp; Pitfalls</a
+              >
+            </li>
+            <li><a href="#references">References</a></li>
+          </ul>
+          <hr />
+          <h2 id="1-problem-statement-hardware-model">
+            1) Problem Statement &amp; Hardware Model
+          </h2>
+          <p>
+            You have a database with <code>N</code> rows, each of size
+            <code>R</code> bytes, requiring a bulk update of total size
+            <code>D = N × R</code>. The machine has:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Symbol</th>
+                <th>Typical values</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total physical RAM</td>
+                <td><code>RAM_total</code></td>
+                <td>4 GB / 8 GB / 24 GB</td>
+              </tr>
+              <tr>
+                <td>OS + base process overhead</td>
+                <td><code>RAM_os</code></td>
+                <td>~1.5 GB (Windows), ~0.8 GB (Linux)</td>
+              </tr>
+              <tr>
+                <td>Safety overhead (always reserved)</td>
+                <td><code>α</code></td>
+                <td>10 % of <code>RAM_total</code></td>
+              </tr>
+              <tr>
+                <td>Logical CPU cores</td>
+                <td><code>C</code></td>
+                <td>4 / 8 / 16</td>
+              </tr>
+              <tr>
+                <td>Disk sequential read/write</td>
+                <td><code>IO_max</code></td>
+                <td>~5.5 GB/s (PCIe Gen 4 NVMe SSD)</td>
+              </tr>
+              <tr>
+                <td>Disk queue depth (NVMe)</td>
+                <td><code>QD</code></td>
+                <td>32–64</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            The <strong>usable budget</strong> or in other words
+            <strong>maximum expendable data-effort</strong> for the batcher is:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>RAM_usable = RAM_total − RAM_os − (α × RAM_total)
+</code></pre>
+          </div>
 
-<p>This is the ceiling the algorithm must never exceed.</p>
-<hr />
-<h2 id="2-the-three-stage-pipeline">2) The Three-Stage Pipeline</h2>
-<div class="codehilite"><pre><span></span><code>┌─────────────────────────────────────────────────────────────────────┐
+          <p>This is the ceiling the algorithm must never exceed.</p>
+          <hr />
+          <h2 id="2-the-three-stage-pipeline">2) The Three-Stage Pipeline</h2>
+          <div class="codehilite">
+            <pre><span></span><code>┌─────────────────────────────────────────────────────────────────────┐
 │                        DATA SOURCE  (D bytes)                       │
 └───────────────────────────────┬─────────────────────────────────────┘
                                 │
@@ -185,40 +341,50 @@
                     ┌───────────▼───────────┐
                     │   COMMIT / WRITE-BACK │   ← disk I/O gated
                     └───────────────────────┘
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Each stage enforces a different resource constraint:</p>
-<table>
-<thead>
-<tr>
-<th>Stage</th>
-<th>Governs</th>
-<th>Constraint</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Batcher</td>
-<td>RAM ceiling</td>
-<td><code>batch_size ≤ RAM_usable</code></td>
-</tr>
-<tr>
-<td>Threader</td>
-<td>Concurrency</td>
-<td><code>thread_buffer = batch_size / T</code></td>
-</tr>
-<tr>
-<td>MPI Chunker</td>
-<td>Core utilisation</td>
-<td><code>chunk = thread_buffer / C</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="3-stage-1-memory-aware-batch-sizing-algorithm">3) Stage 1 — Memory-Aware Batch Sizing Algorithm</h2>
-<p>The batcher answers one question: <em>how many rows can I hold in RAM at once without exceeding the usable budget?</em></p>
-<p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code>INPUT:  RAM_total, RAM_os, α, row_size, total_rows
+          <p>Each stage enforces a different resource constraint:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Governs</th>
+                <th>Constraint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Batcher</td>
+                <td>RAM ceiling</td>
+                <td><code>batch_size ≤ RAM_usable</code></td>
+              </tr>
+              <tr>
+                <td>Threader</td>
+                <td>Concurrency</td>
+                <td><code>thread_buffer = batch_size / T</code></td>
+              </tr>
+              <tr>
+                <td>MPI Chunker</td>
+                <td>Core utilisation</td>
+                <td><code>chunk = thread_buffer / C</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+          <h2 id="3-stage-1-memory-aware-batch-sizing-algorithm">
+            3) Stage 1 — Memory-Aware Batch Sizing Algorithm
+          </h2>
+          <p>
+            The batcher answers one question:
+            <em
+              >how many rows can I hold in RAM at once without exceeding the
+              usable budget?</em
+            >
+          </p>
+          <p><strong>Algorithm:</strong></p>
+          <div class="codehilite">
+            <pre><span></span><code>INPUT:  RAM_total, RAM_os, α, row_size, total_rows
 OUTPUT: batch_size (bytes), rows_per_batch, num_batches
 
 1.  RAM_usable  = RAM_total − RAM_os − (α × RAM_total)
@@ -226,17 +392,35 @@ OUTPUT: batch_size (bytes), rows_per_batch, num_batches
 3.  rows_per_batch = floor(batch_size / row_size)
 4.  num_batches    = ceil(total_rows / rows_per_batch)
 5.  RETURN batch_size, rows_per_batch, num_batches
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>The batch size dynamically adapts: on a 24 GB machine you get large batches (few iterations), on a 4 GB machine you get small batches (many iterations). The total work is identical; only the iteration count changes.</p>
-<p>Notes:
-- <code>RAM_os</code> should be measured, not assumed. On Windows, use <code>GlobalMemoryStatusEx</code>; on Linux, read <code>/proc/meminfo</code>. In Python, <code>psutil.virtual_memory()</code> provides this portably.
-- The 10 % overhead (<code>α = 0.10</code>) absorbs transient allocations: serialisation buffers, ORM object headers, GC pressure spikes.</p>
-<hr />
-<h2 id="4-stage-2-thread-level-buffer-partitioning">4) Stage 2 — Thread-Level Buffer Partitioning</h2>
-<p>Once a batch is loaded into RAM, it is subdivided into <code>T</code> independent thread buffers. Each thread operates on a non-overlapping slice of the batch.</p>
-<p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code>INPUT:  batch_size, T (num threads)
+          <p>
+            The batch size dynamically adapts: on a 24 GB machine you get large
+            batches (few iterations), on a 4 GB machine you get small batches
+            (many iterations). The total work is identical; only the iteration
+            count changes.
+          </p>
+          <p>
+            Notes: - <code>RAM_os</code> should be measured, not assumed. On
+            Windows, use <code>GlobalMemoryStatusEx</code>; on Linux, read
+            <code>/proc/meminfo</code>. In Python,
+            <code>psutil.virtual_memory()</code> provides this portably. - The
+            10 % overhead (<code>α = 0.10</code>) absorbs transient allocations:
+            serialisation buffers, ORM object headers, GC pressure spikes.
+          </p>
+          <hr />
+          <h2 id="4-stage-2-thread-level-buffer-partitioning">
+            4) Stage 2 — Thread-Level Buffer Partitioning
+          </h2>
+          <p>
+            Once a batch is loaded into RAM, it is subdivided into
+            <code>T</code> independent thread buffers. Each thread operates on a
+            non-overlapping slice of the batch.
+          </p>
+          <p><strong>Algorithm:</strong></p>
+          <div class="codehilite">
+            <pre><span></span><code>INPUT:  batch_size, T (num threads)
 OUTPUT: thread_buffer_size, rows_per_thread
 
 1.  thread_buffer_size = floor(batch_size / T)
@@ -244,24 +428,60 @@ OUTPUT: thread_buffer_size, rows_per_thread
 3.  remainder_rows     = rows_per_batch − (T × rows_per_thread)
 4.  Assign remainder_rows to the last thread (or distribute round-robin)
 5.  RETURN thread_buffer_size, rows_per_thread
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>T must either be chosen based on your target buffer size (<code>thread_buffer_size</code>) of scaled by number of logical cores or simply an arbitrary number as per your choice. How to choose <code>T</code>:</p>
-<ul>
-<li><code>T</code> should not exceed the logical core count <code>C</code>; going beyond causes context-switch overhead.</li>
-<li>For I/O-bound workloads (database writes), <code>T = 2 × C</code> can be acceptable because threads spend time waiting on I/O.</li>
-<li>For CPU-bound transforms, <code>T = C</code> is optimal.</li>
-</ul>
-<p>A better way would be to choose <code>thread_buffer_size</code> first (e.g. 50 MB), then derive <code>T = floor(batch_size / thread_buffer_size)</code>, capping at <code>C</code>.</p>
-<p>Notes:
-- In <code>Python</code>, the GIL prevents true parallel CPU execution across threads. Use <code>multiprocessing</code> or <code>concurrent.futures.ProcessPoolExecutor</code> for CPU-bound work. For I/O-bound database calls, <code>threading</code> / <code>ThreadPoolExecutor</code> is effective because the GIL is released during I/O waits.
-- In <code>C++</code>, <code>std::thread</code> or OpenMP libraries give true shared-memory parallelism without a GIL.
-- GIL: Global Interpreter Lock disallows more than 1 thread to control the process <a href="https://realpython.com/python-gil">read more @ https://realpython.com/python-gil/</a>.</p>
-<hr />
-<h2 id="5-stage-3-mpi-core-level-chunking">5) Stage 3 — MPI Core-Level Chunking</h2>
-<p>Each thread buffer is further decomposed into <code>C</code> chunks, one per logical core, distributed via MPI <code>Scatter</code> / <code>Gather</code> (or in a shared-memory context, via OpenMP work-sharing).</p>
-<p><strong>Algorithm:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="nl">INPUT:</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="p">(</span><span class="n">logical</span><span class="w"> </span><span class="n">cores</span><span class="p">)</span>
+          <p>
+            T must either be chosen based on your target buffer size
+            (<code>thread_buffer_size</code>) of scaled by number of logical
+            cores or simply an arbitrary number as per your choice. How to
+            choose <code>T</code>:
+          </p>
+          <ul>
+            <li>
+              <code>T</code> should not exceed the logical core count
+              <code>C</code>; going beyond causes context-switch overhead.
+            </li>
+            <li>
+              For I/O-bound workloads (database writes),
+              <code>T = 2 × C</code> can be acceptable because threads spend
+              time waiting on I/O.
+            </li>
+            <li>For CPU-bound transforms, <code>T = C</code> is optimal.</li>
+          </ul>
+          <p>
+            A better way would be to choose
+            <code>thread_buffer_size</code> first (e.g. 50 MB), then derive
+            <code>T = floor(batch_size / thread_buffer_size)</code>, capping at
+            <code>C</code>.
+          </p>
+          <p>
+            Notes: - In <code>Python</code>, the GIL prevents true parallel CPU
+            execution across threads. Use <code>multiprocessing</code> or
+            <code>concurrent.futures.ProcessPoolExecutor</code> for CPU-bound
+            work. For I/O-bound database calls, <code>threading</code> /
+            <code>ThreadPoolExecutor</code> is effective because the GIL is
+            released during I/O waits. - In <code>C++</code>,
+            <code>std::thread</code> or OpenMP libraries give true shared-memory
+            parallelism without a GIL. - GIL: Global Interpreter Lock disallows
+            more than 1 thread to control the process
+            <a href="https://realpython.com/python-gil"
+              >read more @ https://realpython.com/python-gil/</a
+            >.
+          </p>
+          <hr />
+          <h2 id="5-stage-3-mpi-core-level-chunking">
+            5) Stage 3 — MPI Core-Level Chunking
+          </h2>
+          <p>
+            Each thread buffer is further decomposed into <code>C</code> chunks,
+            one per logical core, distributed via MPI <code>Scatter</code> /
+            <code>Gather</code> (or in a shared-memory context, via OpenMP
+            work-sharing).
+          </p>
+          <p><strong>Algorithm:</strong></p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nl">INPUT:</span><span class="w">  </span><span class="n">thread_buffer_size</span><span class="p">,</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="p">(</span><span class="n">logical</span><span class="w"> </span><span class="n">cores</span><span class="p">)</span>
 <span class="nl">OUTPUT:</span><span class="w"> </span><span class="n">chunk_size</span><span class="p">,</span><span class="w"> </span><span class="n">rows_per_chunk</span>
 
 <span class="mf">1.</span><span class="w">  </span><span class="n">chunk_size</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">floor</span><span class="p">(</span><span class="n">thread_buffer_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">C</span><span class="p">)</span>
@@ -270,194 +490,301 @@ OUTPUT: thread_buffer_size, rows_per_thread
 <span class="mf">4.</span><span class="w">  </span><span class="n">Each</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="n">processes</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">chunk</span><span class="w"> </span><span class="n">independently</span>
 <span class="mf">5.</span><span class="w">  </span><span class="n">MPI_Gather</span><span class="p">(</span><span class="n">results</span><span class="p">,</span><span class="w"> </span><span class="n">root</span><span class="o">=</span><span class="mh">0</span><span class="p">)</span>
 <span class="mf">6.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">aggregated</span><span class="w"> </span><span class="n">results</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Example — if <code>thread_buffer_size = 50 MB</code> and <code>C = 10</code>:</p>
-<div class="codehilite"><pre><span></span><code>chunk_size = 50 MB / 10 = 5 MB per core
-</code></pre></div>
+          <p>
+            Example — if <code>thread_buffer_size = 50 MB</code> and
+            <code>C = 10</code>:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>chunk_size = 50 MB / 10 = 5 MB per core
+</code></pre>
+          </div>
 
-<p><strong>All 10 cores execute concurrently. Wall-clock time for this thread's work drops to ≈ 1/10th of sequential.</strong></p>
-<p>Notes:
-- MPI ranks can span multiple nodes (distributed memory) or be confined to a single node (shared memory). For database batching on a single server, <code>MPI_COMM_WORLD</code> maps to local cores.
-- Prefer <code>MPI_Scatterv</code> / <code>MPI_Gatherv</code> when chunk sizes are uneven (remainder rows).
-- In Python, <code>mpi4py</code> provides full MPI bindings. In C++, use the native MPI C API or Boost.MPI.</p>
-<hr />
-<h2 id="6-disk-io-constraint-nvme-throughput-gate">6) Disk I/O Constraint — NVMe Throughput Gate</h2>
-<p>Even with unlimited RAM and cores, the disk is the final bottleneck. A PCIe Gen 4 NVMe SSD delivers:</p>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sequential read</td>
-<td>~5.5 GB/s</td>
-</tr>
-<tr>
-<td>Sequential write</td>
-<td>~5.0 GB/s</td>
-</tr>
-<tr>
-<td>Random 4K read (QD32)</td>
-<td>~700K IOPS → ~2.7 GB/s</td>
-</tr>
-<tr>
-<td>Random 4K write (QD32)</td>
-<td>~500K IOPS → ~1.9 GB/s</td>
-</tr>
-</tbody>
-</table>
-<p>Database writes are typically <strong>random</strong> (updating rows at arbitrary offsets), so effective throughput may drop to ~1.5–2.5 GB/s depending on the database engine and WAL configuration.</p>
-<p><strong>I/O gate rule:</strong> the batcher should not produce batches faster than the disk can absorb them. If <code>batch_size / IO_effective &gt; batch_compute_time</code>, insert a throttle:</p>
-<div class="codehilite"><pre><span></span><code>IO_time_estimate = batch_size / IO_effective
+          <p>
+            <strong
+              >All 10 cores execute concurrently. Wall-clock time for this
+              thread's work drops to ≈ 1/10th of sequential.</strong
+            >
+          </p>
+          <p>
+            Notes: - MPI ranks can span multiple nodes (distributed memory) or
+            be confined to a single node (shared memory). For database batching
+            on a single server, <code>MPI_COMM_WORLD</code> maps to local cores.
+            - Prefer <code>MPI_Scatterv</code> / <code>MPI_Gatherv</code> when
+            chunk sizes are uneven (remainder rows). - In Python,
+            <code>mpi4py</code> provides full MPI bindings. In C++, use the
+            native MPI C API or Boost.MPI.
+          </p>
+          <hr />
+          <h2 id="6-disk-io-constraint-nvme-throughput-gate">
+            6) Disk I/O Constraint — NVMe Throughput Gate
+          </h2>
+          <p>
+            Even with unlimited RAM and cores, the disk is the final bottleneck.
+            A PCIe Gen 4 NVMe SSD delivers:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sequential read</td>
+                <td>~5.5 GB/s</td>
+              </tr>
+              <tr>
+                <td>Sequential write</td>
+                <td>~5.0 GB/s</td>
+              </tr>
+              <tr>
+                <td>Random 4K read (QD32)</td>
+                <td>~700K IOPS → ~2.7 GB/s</td>
+              </tr>
+              <tr>
+                <td>Random 4K write (QD32)</td>
+                <td>~500K IOPS → ~1.9 GB/s</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Database writes are typically <strong>random</strong> (updating rows
+            at arbitrary offsets), so effective throughput may drop to ~1.5–2.5
+            GB/s depending on the database engine and WAL configuration.
+          </p>
+          <p>
+            <strong>I/O gate rule:</strong> the batcher should not produce
+            batches faster than the disk can absorb them. If
+            <code>batch_size / IO_effective &gt; batch_compute_time</code>,
+            insert a throttle:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>IO_time_estimate = batch_size / IO_effective
 if compute_time &lt; IO_time_estimate:
     sleep(IO_time_estimate − compute_time)   # or use backpressure
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>In practice, the database engine's write-ahead log (WAL) and <code>fsync</code> latency naturally throttle throughput. The batcher simply needs to avoid queuing dozens of batches in memory while the disk is still flushing earlier ones — hence the single-batch-at-a-time design in Stage 1.</p>
-<hr />
-<h2 id="7-worked-scenarios-numerical-breakdown">7) Worked Scenarios — Numerical Breakdown</h2>
-<p>Assumptions for all scenarios:
-- <code>RAM_os</code> = 1.5 GB (Windows with typical services)
-- <code>α</code> = 0.10 (10 % safety overhead)
-- <code>C</code> = 8 logical cores
-- <code>T</code> = 8 threads (1 thread per core, CPU-bound model)
-- <code>thread_buffer_size</code> = 50 MB</p>
-<h3 id="scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)</h3>
-<table>
-<thead>
-<tr>
-<th>Machine</th>
-<th>RAM_total</th>
-<th>RAM_usable</th>
-<th>batch_size</th>
-<th>rows/batch</th>
-<th>num_batches</th>
-<th>thread_buf</th>
-<th>chunk/core</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>24 GB</strong></td>
-<td>24 GB</td>
-<td>24 − 1.5 − 2.4 = <strong>20.1 GB</strong></td>
-<td>10 GB (data fits ×2)</td>
-<td>2 097 152 (all)</td>
-<td><strong>1</strong></td>
-<td>1.25 GB</td>
-<td>160 MB</td>
-</tr>
-<tr>
-<td><strong>8 GB</strong></td>
-<td>8 GB</td>
-<td>8 − 1.5 − 0.8 = <strong>5.7 GB</strong></td>
-<td>5.7 GB</td>
-<td>1 196 236</td>
-<td><strong>2</strong></td>
-<td>731 MB</td>
-<td>91.4 MB</td>
-</tr>
-<tr>
-<td><strong>4 GB</strong></td>
-<td>4 GB</td>
-<td>4 − 1.5 − 0.4 = <strong>2.1 GB</strong></td>
-<td>2.1 GB</td>
-<td>440 401</td>
-<td><strong>5</strong></td>
-<td>268 MB</td>
-<td>33.6 MB</td>
-</tr>
-</tbody>
-</table>
-<p>Observations (Different Buffer Sizes &amp; Iteration Counts):
-- The 24 GB machine loads the entire 10 GB dataset in a single batch with ~10 GB headroom remaining. No iteration needed.
-- The 8 GB machine runs 2 batches. Each batch fills ~5.7 GB, processes it across 8 cores, commits, then loads the next.
-- The 4 GB machine runs 5 batches of ~2.1 GB each. More iterations but each is fully parallelised.</p>
-<p>I/O check (worst case, random writes at ~2 GB/s):
-- 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
-- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>.
-- 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
-<p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
-<p>Observations (Same Buffer Sizes):
-- The 24 GB machine loads the entire 10 GB dataset in 25 batches (<code>8 x 50 MB = 400 MB</code> each) with ~10 GB headroom remaining. No iteration needed.
-- The 8 GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each). but can only load 14 batches at a time. Means 1 iterations of 14 batches then another of 11 batches.
-- The 4 GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each), but can only load 5 batches at a time. Means 5 iterations of 5 batches each.</p>
-<p>I/O check (worst case, random writes at ~2 GB/s):
-- 24 GB: 10 GB / 2 GB/s = <strong>5.0 s</strong> wall-clock per <strong>write function call</strong>.
-- 8 GB: 5.7 GB / 2 GB/s = <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total per <strong>write function call</strong>.
-- 4 GB: 2.1 GB / 2 GB/s = <strong>1.05 s</strong> per batch × 5 = <strong>5.25 s</strong> total per <strong>write function call</strong>.</p>
-<p>All converge to roughly the same total I/O time — the disk is the equaliser.</p>
-<h3 id="scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)</h3>
-<table>
-<thead>
-<tr>
-<th>Machine</th>
-<th>RAM_total</th>
-<th>RAM_usable</th>
-<th>batch_size</th>
-<th>rows/batch</th>
-<th>num_batches</th>
-<th>thread_buf</th>
-<th>chunk/core</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>24 GB</strong></td>
-<td>24 GB</td>
-<td>20.1 GB</td>
-<td>3 GB (all)</td>
-<td>157 286 (all)</td>
-<td><strong>1</strong></td>
-<td>384 MB</td>
-<td>48 MB</td>
-</tr>
-<tr>
-<td><strong>8 GB</strong></td>
-<td>8 GB</td>
-<td>5.7 GB</td>
-<td>3 GB (all)</td>
-<td>157 286 (all)</td>
-<td><strong>1</strong></td>
-<td>384 MB</td>
-<td>48 MB</td>
-</tr>
-<tr>
-<td><strong>4 GB</strong></td>
-<td>4 GB</td>
-<td>2.1 GB</td>
-<td>2.1 GB</td>
-<td>110 100</td>
-<td><strong>2</strong></td>
-<td>268 MB</td>
-<td>33.6 MB</td>
-</tr>
-</tbody>
-</table>
-<p>Observations:
-- Both the 24 GB and 8 GB machines fit the entire 3 GB payload in one batch.
-- Only the 4 GB machine needs 2 batches.
-- Larger row sizes (20 KB) mean fewer rows and lower ORM overhead per row.</p>
-<h3 id="discussion-why-does-total-io-time-converge-across-all-ram-sizes">Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?</h3>
-<p>This is the most important insight in the entire guide. Notice that whether we use 24 GB, 8 GB, or 4 GB of RAM — and whether we use variable or fixed buffer sizes — the total wall-clock time for disk writes always lands at roughly <strong>5 seconds</strong> for Scenario A. This is not a coincidence. It is a mathematical inevitability. So you do not have to have a MEGA RAM machine to achieve good performance on large database operations. The algorithm adapts to the RAM you have, and the disk I/O time converges to the same value, based on smart batching and parallelism. The key would actually be a faster SSD and faster RAM, perhaps faster PostgreSQL configuration such as dedicated RAM pool (e.g. WAL settings, checkpoint intervals) to reduce the I/O bottleneck.</p>
-<p><strong>The total bytes written to disk is constant.</strong> The disk does not care how you partition the work in RAM. It receives the same 10 GB of row updates regardless of batching strategy:</p>
-<div class="codehilite"><pre><span></span><code> 24 GB machine:   1 batch  × 10.0 GB  =  10 GB hits the disk
+          <p>
+            In practice, the database engine's write-ahead log (WAL) and
+            <code>fsync</code> latency naturally throttle throughput. The
+            batcher simply needs to avoid queuing dozens of batches in memory
+            while the disk is still flushing earlier ones — hence the
+            single-batch-at-a-time design in Stage 1.
+          </p>
+          <hr />
+          <h2 id="7-worked-scenarios-numerical-breakdown">
+            7) Worked Scenarios — Numerical Breakdown
+          </h2>
+          <p>
+            Assumptions for all scenarios: - <code>RAM_os</code> = 1.5 GB
+            (Windows with typical services) - <code>α</code> = 0.10 (10 % safety
+            overhead) - <code>C</code> = 8 logical cores - <code>T</code> = 8
+            threads (1 thread per core, CPU-bound model) -
+            <code>thread_buffer_size</code> = 50 MB
+          </p>
+          <h3 id="scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">
+            Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Machine</th>
+                <th>RAM_total</th>
+                <th>RAM_usable</th>
+                <th>batch_size</th>
+                <th>rows/batch</th>
+                <th>num_batches</th>
+                <th>thread_buf</th>
+                <th>chunk/core</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>24 GB</strong></td>
+                <td>24 GB</td>
+                <td>24 − 1.5 − 2.4 = <strong>20.1 GB</strong></td>
+                <td>10 GB (data fits ×2)</td>
+                <td>2 097 152 (all)</td>
+                <td><strong>1</strong></td>
+                <td>1.25 GB</td>
+                <td>160 MB</td>
+              </tr>
+              <tr>
+                <td><strong>8 GB</strong></td>
+                <td>8 GB</td>
+                <td>8 − 1.5 − 0.8 = <strong>5.7 GB</strong></td>
+                <td>5.7 GB</td>
+                <td>1 196 236</td>
+                <td><strong>2</strong></td>
+                <td>731 MB</td>
+                <td>91.4 MB</td>
+              </tr>
+              <tr>
+                <td><strong>4 GB</strong></td>
+                <td>4 GB</td>
+                <td>4 − 1.5 − 0.4 = <strong>2.1 GB</strong></td>
+                <td>2.1 GB</td>
+                <td>440 401</td>
+                <td><strong>5</strong></td>
+                <td>268 MB</td>
+                <td>33.6 MB</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Observations (Different Buffer Sizes &amp; Iteration Counts): - The
+            24 GB machine loads the entire 10 GB dataset in a single batch with
+            ~10 GB headroom remaining. No iteration needed. - The 8 GB machine
+            runs 2 batches. Each batch fills ~5.7 GB, processes it across 8
+            cores, commits, then loads the next. - The 4 GB machine runs 5
+            batches of ~2.1 GB each. More iterations but each is fully
+            parallelised.
+          </p>
+          <p>
+            I/O check (worst case, random writes at ~2 GB/s): - 24 GB: 10 GB / 2
+            GB/s = <strong>5.0 s</strong> wall-clock per
+            <strong>write function call</strong>. - 8 GB: 5.7 GB / 2 GB/s =
+            <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total
+            per <strong>write function call</strong>. - 4 GB: 2.1 GB / 2 GB/s =
+            <strong>1.05 s</strong> per batch × 5 =
+            <strong>5.25 s</strong> total per
+            <strong>write function call</strong>.
+          </p>
+          <p>
+            All converge to roughly the same total I/O time — the disk is the
+            equaliser.
+          </p>
+          <p>
+            Observations (Same Buffer Sizes): - The 24 GB machine loads the
+            entire 10 GB dataset in 25 batches (<code>8 x 50 MB = 400 MB</code>
+            each) with ~10 GB headroom remaining. No iteration needed. - The 8
+            GB machine runs 25 batches (<code>8 x 50 MB = 400 MB</code> each).
+            but can only load 14 batches at a time. Means 1 iterations of 14
+            batches then another of 11 batches. - The 4 GB machine runs 25
+            batches (<code>8 x 50 MB = 400 MB</code> each), but can only load 5
+            batches at a time. Means 5 iterations of 5 batches each.
+          </p>
+          <p>
+            I/O check (worst case, random writes at ~2 GB/s): - 24 GB: 10 GB / 2
+            GB/s = <strong>5.0 s</strong> wall-clock per
+            <strong>write function call</strong>. - 8 GB: 5.7 GB / 2 GB/s =
+            <strong>2.85 s</strong> per batch × 2 = <strong>5.7 s</strong> total
+            per <strong>write function call</strong>. - 4 GB: 2.1 GB / 2 GB/s =
+            <strong>1.05 s</strong> per batch × 5 =
+            <strong>5.25 s</strong> total per
+            <strong>write function call</strong>.
+          </p>
+          <p>
+            All converge to roughly the same total I/O time — the disk is the
+            equaliser.
+          </p>
+          <h3 id="scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">
+            Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Machine</th>
+                <th>RAM_total</th>
+                <th>RAM_usable</th>
+                <th>batch_size</th>
+                <th>rows/batch</th>
+                <th>num_batches</th>
+                <th>thread_buf</th>
+                <th>chunk/core</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>24 GB</strong></td>
+                <td>24 GB</td>
+                <td>20.1 GB</td>
+                <td>3 GB (all)</td>
+                <td>157 286 (all)</td>
+                <td><strong>1</strong></td>
+                <td>384 MB</td>
+                <td>48 MB</td>
+              </tr>
+              <tr>
+                <td><strong>8 GB</strong></td>
+                <td>8 GB</td>
+                <td>5.7 GB</td>
+                <td>3 GB (all)</td>
+                <td>157 286 (all)</td>
+                <td><strong>1</strong></td>
+                <td>384 MB</td>
+                <td>48 MB</td>
+              </tr>
+              <tr>
+                <td><strong>4 GB</strong></td>
+                <td>4 GB</td>
+                <td>2.1 GB</td>
+                <td>2.1 GB</td>
+                <td>110 100</td>
+                <td><strong>2</strong></td>
+                <td>268 MB</td>
+                <td>33.6 MB</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Observations: - Both the 24 GB and 8 GB machines fit the entire 3 GB
+            payload in one batch. - Only the 4 GB machine needs 2 batches. -
+            Larger row sizes (20 KB) mean fewer rows and lower ORM overhead per
+            row.
+          </p>
+          <h3
+            id="discussion-why-does-total-io-time-converge-across-all-ram-sizes"
+          >
+            Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?
+          </h3>
+          <p>
+            This is the most important insight in the entire guide. Notice that
+            whether we use 24 GB, 8 GB, or 4 GB of RAM — and whether we use
+            variable or fixed buffer sizes — the total wall-clock time for disk
+            writes always lands at roughly <strong>5 seconds</strong> for
+            Scenario A. This is not a coincidence. It is a mathematical
+            inevitability. So you do not have to have a MEGA RAM machine to
+            achieve good performance on large database operations. The algorithm
+            adapts to the RAM you have, and the disk I/O time converges to the
+            same value, based on smart batching and parallelism. The key would
+            actually be a faster SSD and faster RAM, perhaps faster PostgreSQL
+            configuration such as dedicated RAM pool (e.g. WAL settings,
+            checkpoint intervals) to reduce the I/O bottleneck.
+          </p>
+          <p>
+            <strong>The total bytes written to disk is constant.</strong> The
+            disk does not care how you partition the work in RAM. It receives
+            the same 10 GB of row updates regardless of batching strategy:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code> 24 GB machine:   1 batch  × 10.0 GB  =  10 GB hits the disk
   8 GB machine:   2 batches ×  5.7 GB ≈  10 GB hits the disk
   4 GB machine:   5 batches ×  2.1 GB ≈  10 GB hits the disk
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>The disk writes at ~2 GB/s (random 4K writes on NVMe). Therefore:</p>
-<div class="codehilite"><pre><span></span><code>Total I/O time  =  Total data  ÷  Disk throughput
+          <p>
+            The disk writes at ~2 GB/s (random 4K writes on NVMe). Therefore:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code>Total I/O time  =  Total data  ÷  Disk throughput
                 =  10 GB       ÷  2 GB/s
                 ≈  5.0 s          (always)
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>This holds no matter how you slice the data. Think of it as a funnel:</p>
-<div class="codehilite"><pre><span></span><code><span class="w">        </span><span class="err">┌──────────────────────┐</span>
+          <p>
+            This holds no matter how you slice the data. Think of it as a
+            funnel:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="w">        </span><span class="err">┌──────────────────────┐</span>
 <span class="w">        </span><span class="err">│</span><span class="w">    </span><span class="n">RAM</span><span class="w"> </span><span class="p">(</span><span class="n">wide</span><span class="w"> </span><span class="n">top</span><span class="p">)</span><span class="w">    </span><span class="err">│</span><span class="w">   </span><span class="err">←</span><span class="w"> </span><span class="n">batching</span><span class="p">:</span><span class="w"> </span><span class="n">variable</span><span class="p">,</span><span class="w"> </span><span class="n">adapts</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">machine</span>
 <span class="w">        </span><span class="err">│</span><span class="w">  </span><span class="err">████████████████</span><span class="w">    </span><span class="err">│</span>
 <span class="w">        </span><span class="err">└──────────┬───────────┘</span>
@@ -471,48 +798,106 @@ if compute_time &lt; IO_time_estimate:
 <span class="w">              </span><span class="err">│</span><span class="w">  </span><span class="n">DISK</span><span class="w">   </span><span class="err">│</span><span class="w">          </span><span class="err">←</span><span class="w"> </span><span class="n">fixed</span><span class="w"> </span><span class="n">throughput</span><span class="p">:</span><span class="w"> </span><span class="o">~</span><span class="mi">2</span><span class="w"> </span><span class="n">GB</span><span class="o">/</span><span class="n">s</span>
 <span class="w">              </span><span class="err">│</span><span class="w">  </span><span class="err">█████</span><span class="w">  </span><span class="err">│</span><span class="w">            </span><span class="n">this</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">narrow</span><span class="w"> </span><span class="n">spout</span>
 <span class="w">              </span><span class="err">└─────────┘</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>RAM and cores control how fast you <em>prepare</em> data (compute phase: ORM serialisation, row transforms, query construction). But for database bulk writes, compute cost is microseconds-per-row while disk I/O is the dominant wall-clock cost by orders of magnitude. The compute phase is effectively instantaneous relative to the I/O phase.</p>
-<p><strong>Where more RAM does provide a measurable (but small) advantage:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Benefit</th>
-<th>Mechanism</th>
-<th>Magnitude</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Fewer <code>COMMIT</code> / <code>fsync</code> round-trips</td>
-<td>Each transaction commit forces a WAL flush; fewer batches = fewer flushes</td>
-<td>~0.1–5 ms per commit</td>
-</tr>
-<tr>
-<td>Less orchestration overhead</td>
-<td>Fewer batch loop iterations, fewer <code>ProcessPoolExecutor</code> startups</td>
-<td>~10–50 ms per batch</td>
-</tr>
-<tr>
-<td>Better CPU cache locality</td>
-<td>One large contiguous buffer vs many small ones reduces L2/L3 cache misses</td>
-<td>Marginal for I/O-bound work</td>
-</tr>
-<tr>
-<td>Reduced context switching</td>
-<td>Fewer batch transitions = fewer OS scheduler interruptions</td>
-<td>~1–10 ms per switch</td>
-</tr>
-</tbody>
-</table>
-<p>These savings total perhaps <strong>50–200 ms</strong> across the entire 10 GB operation — negligible against <strong>5 000 ms</strong> of disk I/O. The disk is the equaliser.</p>
-<p><strong>When does more RAM actually matter?</strong> When the <em>compute</em> phase is expensive relative to I/O — for example, if each row requires a heavy cryptographic hash, a machine learning inference, or a complex geometric transform before writing. In that case, larger batches mean fewer re-initialisations of the compute pipeline, and the CPU (not the disk) becomes the bottleneck. For straightforward database <code>UPDATE</code> / <code>INSERT</code> operations, the disk dominates.</p>
-<p><strong>Scaling context — per-process view:</strong> The numbers above are for a single process (i.e. one function call writing row-level data in bulk to the database). In a real system with a module that performs hundreds of Django <code>filter → update → save</code> operations, each call independently hits this same I/O floor. If you have 100 such calls each writing 10 GB, the total time is ~100 × 5 s = <strong>500 s</strong> (~8.3 minutes), regardless of RAM. The only way to reduce this is to upgrade the disk (PCIe Gen 5, RAID-0 striping) or reduce the total data volume.</p>
-<hr />
-<h2 id="8-python-reference-implementation">8) Python Reference Implementation</h2>
-<p>A minimal, platform-agnostic implementation demonstrating the three-stage algorithm. Uses <code>psutil</code> for RAM detection and <code>multiprocessing</code> for core-level parallelism (substituting for MPI in single-node deployments).</p>
-<div class="codehilite"><pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+          <p>
+            RAM and cores control how fast you <em>prepare</em> data (compute
+            phase: ORM serialisation, row transforms, query construction). But
+            for database bulk writes, compute cost is microseconds-per-row while
+            disk I/O is the dominant wall-clock cost by orders of magnitude. The
+            compute phase is effectively instantaneous relative to the I/O
+            phase.
+          </p>
+          <p>
+            <strong
+              >Where more RAM does provide a measurable (but small)
+              advantage:</strong
+            >
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Benefit</th>
+                <th>Mechanism</th>
+                <th>Magnitude</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Fewer <code>COMMIT</code> / <code>fsync</code> round-trips
+                </td>
+                <td>
+                  Each transaction commit forces a WAL flush; fewer batches =
+                  fewer flushes
+                </td>
+                <td>~0.1–5 ms per commit</td>
+              </tr>
+              <tr>
+                <td>Less orchestration overhead</td>
+                <td>
+                  Fewer batch loop iterations, fewer
+                  <code>ProcessPoolExecutor</code> startups
+                </td>
+                <td>~10–50 ms per batch</td>
+              </tr>
+              <tr>
+                <td>Better CPU cache locality</td>
+                <td>
+                  One large contiguous buffer vs many small ones reduces L2/L3
+                  cache misses
+                </td>
+                <td>Marginal for I/O-bound work</td>
+              </tr>
+              <tr>
+                <td>Reduced context switching</td>
+                <td>
+                  Fewer batch transitions = fewer OS scheduler interruptions
+                </td>
+                <td>~1–10 ms per switch</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            These savings total perhaps <strong>50–200 ms</strong> across the
+            entire 10 GB operation — negligible against
+            <strong>5 000 ms</strong> of disk I/O. The disk is the equaliser.
+          </p>
+          <p>
+            <strong>When does more RAM actually matter?</strong> When the
+            <em>compute</em> phase is expensive relative to I/O — for example,
+            if each row requires a heavy cryptographic hash, a machine learning
+            inference, or a complex geometric transform before writing. In that
+            case, larger batches mean fewer re-initialisations of the compute
+            pipeline, and the CPU (not the disk) becomes the bottleneck. For
+            straightforward database <code>UPDATE</code> /
+            <code>INSERT</code> operations, the disk dominates.
+          </p>
+          <p>
+            <strong>Scaling context — per-process view:</strong> The numbers
+            above are for a single process (i.e. one function call writing
+            row-level data in bulk to the database). In a real system with a
+            module that performs hundreds of Django
+            <code>filter → update → save</code> operations, each call
+            independently hits this same I/O floor. If you have 100 such calls
+            each writing 10 GB, the total time is ~100 × 5 s =
+            <strong>500 s</strong> (~8.3 minutes), regardless of RAM. The only
+            way to reduce this is to upgrade the disk (PCIe Gen 5, RAID-0
+            striping) or reduce the total data volume.
+          </p>
+          <hr />
+          <h2 id="8-python-reference-implementation">
+            8) Python Reference Implementation
+          </h2>
+          <p>
+            A minimal, platform-agnostic implementation demonstrating the
+            three-stage algorithm. Uses <code>psutil</code> for RAM detection
+            and <code>multiprocessing</code> for core-level parallelism
+            (substituting for MPI in single-node deployments).
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">memory_aware_batcher.py</span>
 <span class="sd">Demonstrates the Memory-Aware Batcher algorithm.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -692,17 +1077,24 @@ if compute_time &lt; IO_time_estimate:
         <span class="k">for</span> <span class="n">ram</span> <span class="ow">in</span> <span class="n">ram_profiles</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Scenario </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> | RAM = </span><span class="si">{</span><span class="n">ram</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">GB</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
             <span class="n">run_batcher</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">ram_total</span><span class="o">=</span><span class="n">ram</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Run:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">py</span>
-</code></pre></div>
+          <p>Run:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">python</span> <span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">py</span>
+</code></pre>
+          </div>
 
-<p>Notes:
-- <code>ProcessPoolExecutor</code> sidesteps the GIL for CPU-bound chunk processing.
-- For true MPI across nodes, replace <code>ProcessPoolExecutor</code> with <code>mpi4py.MPI.COMM_WORLD.Scatter</code> / <code>Gather</code>.
-- The <code>_process_chunk</code> worker is the integration point — plug in your ORM / raw SQL update logic there.</p>
-<!-- ---
+          <p>
+            Notes: - <code>ProcessPoolExecutor</code> sidesteps the GIL for
+            CPU-bound chunk processing. - For true MPI across nodes, replace
+            <code>ProcessPoolExecutor</code> with
+            <code>mpi4py.MPI.COMM_WORLD.Scatter</code> / <code>Gather</code>. -
+            The <code>_process_chunk</code> worker is the integration point —
+            plug in your ORM / raw SQL update logic there.
+          </p>
+          <!-- ---
 
 ## 9) C++ Reference Implementation
 
@@ -846,73 +1238,140 @@ Notes:
 - For uneven distributions, `MPI_Scatterv` / `MPI_Gatherv` with per-rank displacement arrays is preferred.
 - The `process_chunk` function is the integration point — plug in your database driver calls there. -->
 
-<hr />
-<h2 id="9-performance-notes-pitfalls">9) Performance Notes &amp; Pitfalls</h2>
-<p><strong>RAM management:</strong>
-- Always measure, never assume. <code>import psutil; psutil.virtual_memory()</code> (Python) give live values.
-- The 10 % overhead (<code>α</code>) is a conservative default. In garbage-in-garbage-out style runtimes like Python, consider 25–30 %.
-- Monitor RSS (Resident Set Size) at runtime. If it approaches <code>RAM_usable</code>, reduce <code>batch_size</code> dynamically.</p>
-<p><strong>Threading:</strong>
-- CPython's GIL prevents parallel CPU-bound threads. Use <code>multiprocessing</code> or <code>ProcessPoolExecutor</code>.</p>
-<!-- - In C++, `std::thread` or OpenMP provide true parallelism. Avoid false sharing on cache lines (64-byte alignment). -->
-<ul>
-<li>Thread count beyond core count is only beneficial for I/O-bound workloads.</li>
-</ul>
-<p><strong>MPI considerations:</strong>
-- <code>MPI_Init</code> / <code>MPI_Finalize</code> must bracket all MPI calls.
-- Prefer non-blocking collectives (<code>MPI_Iscatter</code>, <code>MPI_Igather</code>) for overlapping computation and communication.
-- On a single node, MPI over shared memory (<code>--mca btl sm,self</code> in OpenMPI) avoids network stack overhead.</p>
-<p><strong>Disk I/O:</strong>
-- NVMe sequential throughput (5.5 GB/s) applies only to large contiguous reads/writes. Database row updates are random-access.
-- Effective random write throughput on NVMe is typically 1.5–2.5 GB/s depending on block size and queue depth.
-- Batch commits should align with database page sizes (typically 8 KB for PostgreSQL, 16 KB for InnoDB) to minimise write amplification.
-- Disk WAL (Write-Ahead Log) flushes are the true bottleneck for transactional databases. Tuning <code>wal_buffers</code> (PostgreSQL) or <code>innodb_log_buffer_size</code> (MySQL) can help --- logs are huge-space eaters, to keep it stupid and simple.</p>
-<p><strong>Database-specific tips:</strong>
-- Use <code>COPY</code> (PostgreSQL) or <code>LOAD DATA INFILE</code> (MySQL) for bulk inserts — orders of magnitude faster than row-by-row <code>INSERT</code>.
-- Wrap each batch in a single transaction. Committing per-row is catastrophically slow.
-- Disable indexes and constraints during bulk loads, rebuild afterwards.
-- Use <code>UNLOGGED</code> tables (PostgreSQL) for intermediate staging if crash-safety is not required during the load.</p>
-<hr />
-<h2 id="references">References</h2>
-<ul>
-<li>MPI Forum specification: <a href="https://www.mpi-forum.org/docs/">https://www.mpi-forum.org/docs/</a></li>
-<li>mpi4py documentation: <a href="https://mpi4py.readthedocs.io/">https://mpi4py.readthedocs.io/</a></li>
-<li>Python <code>multiprocessing</code> module: <a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a></li>
-<li>NVMe specification (NVM Express): <a href="https://nvmexpress.org/specifications/">https://nvmexpress.org/specifications/</a></li>
-<li>PostgreSQL bulk loading: <a href="https://www.postgresql.org/docs/current/populate.html">https://www.postgresql.org/docs/current/populate.html</a></li>
-<li>psutil — cross-platform system monitoring: <a href="https://psutil.readthedocs.io/">https://psutil.readthedocs.io/</a></li>
-<li>Python GIL explained: <a href="https://realpython.com/python-gil/">https://realpython.com/python-gil/</a></li>
-</ul></article>
-        </div>
+          <hr />
+          <h2 id="9-performance-notes-pitfalls">
+            9) Performance Notes &amp; Pitfalls
+          </h2>
+          <p>
+            <strong>RAM management:</strong> - Always measure, never assume.
+            <code>import psutil; psutil.virtual_memory()</code> (Python) give
+            live values. - The 10 % overhead (<code>α</code>) is a conservative
+            default. In garbage-in-garbage-out style runtimes like Python,
+            consider 25–30 %. - Monitor RSS (Resident Set Size) at runtime. If
+            it approaches <code>RAM_usable</code>, reduce
+            <code>batch_size</code> dynamically.
+          </p>
+          <p>
+            <strong>Threading:</strong> - CPython's GIL prevents parallel
+            CPU-bound threads. Use <code>multiprocessing</code> or
+            <code>ProcessPoolExecutor</code>.
+          </p>
+          <!-- - In C++, `std::thread` or OpenMP provide true parallelism. Avoid false sharing on cache lines (64-byte alignment). -->
+          <ul>
+            <li>
+              Thread count beyond core count is only beneficial for I/O-bound
+              workloads.
+            </li>
+          </ul>
+          <p>
+            <strong>MPI considerations:</strong> - <code>MPI_Init</code> /
+            <code>MPI_Finalize</code> must bracket all MPI calls. - Prefer
+            non-blocking collectives (<code>MPI_Iscatter</code>,
+            <code>MPI_Igather</code>) for overlapping computation and
+            communication. - On a single node, MPI over shared memory (<code
+              >--mca btl sm,self</code
+            >
+            in OpenMPI) avoids network stack overhead.
+          </p>
+          <p>
+            <strong>Disk I/O:</strong> - NVMe sequential throughput (5.5 GB/s)
+            applies only to large contiguous reads/writes. Database row updates
+            are random-access. - Effective random write throughput on NVMe is
+            typically 1.5–2.5 GB/s depending on block size and queue depth. -
+            Batch commits should align with database page sizes (typically 8 KB
+            for PostgreSQL, 16 KB for InnoDB) to minimise write amplification. -
+            Disk WAL (Write-Ahead Log) flushes are the true bottleneck for
+            transactional databases. Tuning
+            <code>wal_buffers</code> (PostgreSQL) or
+            <code>innodb_log_buffer_size</code> (MySQL) can help --- logs are
+            huge-space eaters, to keep it stupid and simple.
+          </p>
+          <p>
+            <strong>Database-specific tips:</strong> - Use
+            <code>COPY</code> (PostgreSQL) or
+            <code>LOAD DATA INFILE</code> (MySQL) for bulk inserts — orders of
+            magnitude faster than row-by-row <code>INSERT</code>. - Wrap each
+            batch in a single transaction. Committing per-row is
+            catastrophically slow. - Disable indexes and constraints during bulk
+            loads, rebuild afterwards. - Use <code>UNLOGGED</code> tables
+            (PostgreSQL) for intermediate staging if crash-safety is not
+            required during the load.
+          </p>
+          <hr />
+          <h2 id="references">References</h2>
+          <ul>
+            <li>
+              MPI Forum specification:
+              <a href="https://www.mpi-forum.org/docs/"
+                >https://www.mpi-forum.org/docs/</a
+              >
+            </li>
+            <li>
+              mpi4py documentation:
+              <a href="https://mpi4py.readthedocs.io/"
+                >https://mpi4py.readthedocs.io/</a
+              >
+            </li>
+            <li>
+              Python <code>multiprocessing</code> module:
+              <a href="https://docs.python.org/3/library/multiprocessing.html"
+                >https://docs.python.org/3/library/multiprocessing.html</a
+              >
+            </li>
+            <li>
+              NVMe specification (NVM Express):
+              <a href="https://nvmexpress.org/specifications/"
+                >https://nvmexpress.org/specifications/</a
+              >
+            </li>
+            <li>
+              PostgreSQL bulk loading:
+              <a href="https://www.postgresql.org/docs/current/populate.html"
+                >https://www.postgresql.org/docs/current/populate.html</a
+              >
+            </li>
+            <li>
+              psutil — cross-platform system monitoring:
+              <a href="https://psutil.readthedocs.io/"
+                >https://psutil.readthedocs.io/</a
+              >
+            </li>
+            <li>
+              Python GIL explained:
+              <a href="https://realpython.com/python-gil/"
+                >https://realpython.com/python-gil/</a
+              >
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

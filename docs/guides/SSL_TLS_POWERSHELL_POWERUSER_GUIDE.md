@@ -2,13 +2,15 @@
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
+
 [![Framework](https://img.shields.io/badge/OpenSSL-3.x-red.svg)](https://www.openssl.org/docs/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
@@ -59,6 +61,7 @@ SSL/TLS provides encrypted communication channels for secure data transmission. 
 ## Configuration and Best Practices
 
 **OpenSSL Configuration File** (`openssl.cnf`):
+
 ```ini
 [req]
 default_bits = 4096
@@ -85,6 +88,7 @@ IP.1 = 192.168.1.100
 ```
 
 **Best Practices**:
+
 - Use 4096-bit RSA keys or 256-bit ECDSA keys minimum
 - Set certificate validity to 397 days maximum (browser requirement)
 - Always include Subject Alternative Names (SANs) for hostnames
@@ -103,6 +107,7 @@ IP.1 = 192.168.1.100
 7. **Certificate Transparency**: Monitor CT logs for unauthorized certificate issuance for your domains
 
 **Windows Registry Hardening**:
+
 ```powershell
 # Disable TLS 1.0 and 1.1
 New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -Force
@@ -300,27 +305,32 @@ Export-Certificate -Cert $cert -FilePath "exported-cert.cer"
 ## Troubleshooting
 
 **Certificate Verification Failures**:
+
 - **Error**: "unable to get local issuer certificate"
   - **Cause**: Missing intermediate CA certificates in chain
   - **Fix**: Download intermediate certificates from CA and include in bundle: `openssl verify -CAfile full-chain.pem cert.crt`
 
 **Private Key Mismatch**:
+
 - **Error**: "key values mismatch"
   - **Cause**: Private key doesn't match certificate public key
   - **Fix**: Compare modulus: `openssl x509 -noout -modulus -in cert.crt | openssl md5` vs `openssl rsa -noout -modulus -in key.pem | openssl md5`
 
 **Certificate Expired**:
+
 - **Error**: "certificate has expired"
   - **Check**: `openssl x509 -in cert.crt -noout -dates`
   - **Fix**: Renew certificate before expiration; automate with Let's Encrypt or ACME protocol
 
 **Common Logs to Check**:
+
 - Windows Event Viewer: Security logs (Event ID 36888 for certificate errors)
 - Application logs for TLS handshake failures
 - IIS logs: `%SystemDrive%\inetpub\logs\LogFiles`
 - OpenSSL debug output: Add `-debug` or `-msg` flags to s_client
 
 **Cipher Suite Negotiation Failures**:
+
 - **Check supported ciphers**: `openssl ciphers -v | Select-String "TLSv1.2"`
 - **Server preference**: Use `-cipher` flag to test specific suites
 - **Client/server mismatch**: Ensure overlap in supported cipher suites
@@ -328,11 +338,13 @@ Export-Certificate -Cert $cert -FilePath "exported-cert.cer"
 ## Performance and Tuning
 
 **Key Size vs Performance**:
+
 - RSA 2048-bit: Baseline performance, adequate for most use cases
 - RSA 4096-bit: 7x slower key generation, 2x slower handshakes, recommended for CA and long-lived certificates
 - ECDSA P-256: Faster handshakes than RSA, smaller key sizes, use for high-throughput servers
 
 **Session Resumption**:
+
 ```powershell
 # Enable TLS session tickets in IIS (reduces handshake overhead)
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL" -Name "EnableSessionTicket" -Value 1
@@ -342,16 +354,19 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders
 ```
 
 **OCSP Stapling**:
+
 - Reduces client-side latency by 200-300ms per handshake
 - Enable in IIS 8.0+: Enabled by default
 - Verify: `openssl s_client -connect example.com:443 -status -servername example.com | Select-String "OCSP"`
 
 **Hardware Acceleration**:
+
 - Use AES-NI CPU instructions for AES-GCM cipher suites (10x faster)
 - Verify support: `openssl speed -evp aes-256-gcm`
 - Offload to dedicated crypto hardware for >10Gbps workloads
 
 **Monitoring Commands**:
+
 ```powershell
 # Measure TLS handshake time
 Measure-Command { openssl s_client -connect example.com:443 -servername example.com < $null }

@@ -2,10 +2,11 @@
 
 **Last updated**: December 13, 2025  
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -71,12 +72,14 @@ Use this guide as a reference when designing APIs, choosing data structures, wri
 - .NET versions: .NET Framework (Windows only), .NET Core/.NET (cross-platform modern runtime), Mono (older cross-platform/runtime for mobile).
 
 Key steps:
+
 1. Source (.cs) → Roslyn compiler → IL (assembly)
 2. CLR loads assembly, verifies metadata
 3. JIT compiles IL methods on first use to native code
 4. Execution under CLR with GC, security, and interop
 
 Notes:
+
 - Roslyn provides compiler-as-a-service APIs used by analyzers and IDE tooling.
 - Ahead-of-Time (AOT) compilation and ReadyToRun options exist for performance-sensitive scenarios.
 
@@ -88,21 +91,23 @@ Notes:
 - Deterministic disposal: implement `IDisposable` for unmanaged resources and use `using`/`using var` for scope-based disposal.
 
 Memory tips:
+
 - Avoid large allocations on LOH when possible.
 - Prefer pooling (`ArrayPool<T>`) for frequently allocated buffers.
 - Use `Span<T>`, `Memory<T>` to work with slices without allocations for high-performance workloads.
 
 ### Type System (Value vs Reference)
 
-| Aspect | Value Types | Reference Types |
-|---|---:|---|
-| Examples | `int`, `float`, `struct`, `bool` | `class`, `string`, `object`, arrays, delegates |
-| Storage | Stack (or inline in object) | Heap (object referenced by pointer) |
-| Copy semantics | Copy the value (deep copy of fields) | Copy the reference (shallow copy) |
-| Nullability | Non-nullable (unless nullable T?) | Can be null (nullable reference types in C#8+ enabled) |
-| Default | Zero-initialized | `null` reference |
+| Aspect         |                          Value Types | Reference Types                                        |
+| -------------- | -----------------------------------: | ------------------------------------------------------ |
+| Examples       |     `int`, `float`, `struct`, `bool` | `class`, `string`, `object`, arrays, delegates         |
+| Storage        |          Stack (or inline in object) | Heap (object referenced by pointer)                    |
+| Copy semantics | Copy the value (deep copy of fields) | Copy the reference (shallow copy)                      |
+| Nullability    |    Non-nullable (unless nullable T?) | Can be null (nullable reference types in C#8+ enabled) |
+| Default        |                     Zero-initialized | `null` reference                                       |
 
 Pitfalls:
+
 - Boxing/unboxing: avoid unnecessary boxing of value types into `object` (performance overhead).
 - Structs should be small and immutable; large structs cause copies and performance overhead.
 
@@ -152,6 +157,7 @@ jagged[0] = new int[] {1,2};
 ```
 
 Notes/tips:
+
 - Arrays have `Length`, not `Count`.
 - When you need dynamic sizing use `List<T>`.
 
@@ -170,6 +176,7 @@ foreach(var s in list) Console.WriteLine(s);
 ```
 
 Performance:
+
 - `List<T>` has amortized O(1) append; use `Capacity` property to pre-allocate when size known.
 
 ### Dictionary, HashSet, Queue, Stack
@@ -197,6 +204,7 @@ s.Push(1); var top = s.Pop();
 ```
 
 Pitfalls:
+
 - `Dictionary` throws if key not present with indexer; use `TryGetValue`.
 - Choose good `Equals`/`GetHashCode` implementations for keys.
 
@@ -248,6 +256,7 @@ public class SinglyLinkedList<T>
 ```
 
 Tips:
+
 - Avoid using linked lists for cache-friendly workloads; arrays/Lists are often faster due to contiguous memory.
 
 ### Trees and Binary Trees
@@ -280,6 +289,7 @@ public class BinarySearchTree<T> where T : IComparable<T>
 Traversal: In-order (sorted), pre-order, post-order.
 
 Notes:
+
 - Self-balancing trees (AVL, Red-Black) are used in production for predictable performance.
 - `SortedSet<T>` and `SortedDictionary<TKey,TValue>` implement tree-based collections in BCL.
 
@@ -311,6 +321,7 @@ public IEnumerable<int> BFS(int start)
 ```
 
 Pitfalls:
+
 - For weighted graphs use Dijkstra/A* algorithms; for negative weights use Bellman-Ford.
 
 ### Hash Tables & Collision Strategies
@@ -357,6 +368,7 @@ public record User(string Username, string Email);
 ```
 
 When to use what:
+
 - Use `struct` for small (<16 bytes commonly) and immutable types.
 - Use `record` for DTOs/immutable data carriers where value equality is desired.
 
@@ -411,6 +423,7 @@ Animal a = new Dog(); Console.WriteLine(a.Speak()); // "woof"
 ```
 
 Pitfalls:
+
 - Avoid deep inheritance hierarchies; prefer composition and explicit interfaces.
 - Virtual methods in constructors are dangerous (override called before derived constructor runs).
 
@@ -419,6 +432,7 @@ Pitfalls:
 Modifiers: `public`, `internal`, `protected`, `private`, `protected internal`, `private protected`.
 
 Rules:
+
 - Expose behaviour (methods) not internal state (fields).
 - Use properties with validation rather than public fields.
 
@@ -466,6 +480,7 @@ using System.Collections.Generic;
 ```
 
 Notes:
+
 - Avoid wildcard imports; prefer explicit naming to reduce ambiguity in large projects.
 
 ### Assemblies & `csproj`
@@ -545,6 +560,7 @@ public User? GetUser(int id) { ... }
 - Avoid exceptions for control flow — they are expensive.
 
 Performance-specific:
+
 - Use `Span<T>`/`Memory<T>` for zero-copy slices.
 - Prefer `struct` for small value types; prefer `class` for entities and polymorphic behavior.
 - Use `ArrayPool<T>` to reduce allocations in hot paths.
@@ -573,6 +589,7 @@ public class CalculatorTests
 ```
 
 Debugging tips:
+
 - Use conditional breakpoints and tracepoints to collect runtime info without stopping.
 - Use `dotnet test --filter` to run subsets of tests.
 
@@ -585,10 +602,12 @@ Debugging tips:
 - Modern .NET supports AOT, trimming, single-file publish for small deployment surfaces.
 
 Interoperability:
+
 - Use P/Invoke and `DllImport` to call native libraries.
 - Use `System.Text.Json` for high-performance JSON; fallback to `Newtonsoft.Json` for advanced scenarios.
 
 Deployment patterns:
+
 - Containerize with `mcr.microsoft.com/dotnet/aspnet` or SDK images.
 - Use CI/CD to build and publish NuGet artifacts and container images.
 
@@ -634,4 +653,4 @@ using var conn = new SqlConnection(connStr);
 
 ---
 
-*This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, pitfalls, and practical recommendations.*
+_This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, pitfalls, and practical recommendations._

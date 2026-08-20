@@ -1,99 +1,222 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>Docker PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="docker-poweruser-guide-powershell">Docker PowerUser Guide (PowerShell)</h1>
-<p><strong>Last updated</strong>: December 05, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://docs.docker.com/"><img alt="Framework" src="https://img.shields.io/badge/Docker-27.x-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Docker is a containerization platform enabling consistent application deployment across environments using lightweight, portable containers. This guide covers installation, image management, container orchestration, Docker Compose, networking, volume management, and security using PowerShell 7+ on Windows. Power users need to understand multi-stage builds, resource limits, health checks, and production deployment patterns for Windows container workloads.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#docker-poweruser-guide-powershell">Docker PowerUser Guide (PowerShell)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#container-lifecycle-management">Container Lifecycle Management</a></li>
-<li><a href="#building-and-managing-images">Building and Managing Images</a></li>
-<li><a href="#docker-compose-multi-container-applications">Docker Compose Multi-Container Applications</a></li>
-<li><a href="#volume-and-network-management">Volume and Network Management</a></li>
-<li><a href="#system-monitoring-and-cleanup">System Monitoring and Cleanup</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install Docker Desktop</strong>: Download from docker.com and enable WSL 2 backend</li>
-<li><strong>Verify installation</strong>: <code>docker --version</code> and <code>docker run hello-world</code></li>
-<li><strong>Pull image</strong>: <code>docker pull nginx:latest</code></li>
-<li><strong>Run container</strong>: <code>docker run -d -p 8080:80 --name webserver nginx</code></li>
-<li><strong>Stop container</strong>: <code>docker stop webserver</code></li>
-<li><strong>Remove container</strong>: <code>docker rm webserver</code></li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Image</strong>: Read-only template containing application code, runtime, libraries, and dependencies; built from Dockerfile layers</li>
-<li><strong>Container</strong>: Running instance of an image with isolated filesystem, networking, and process space; ephemeral by default</li>
-<li><strong>Volume</strong>: Persistent data storage mechanism that survives container lifecycle; stored outside container union filesystem</li>
-<li><strong>Network</strong>: Virtual network enabling container-to-container communication; types include bridge, host, overlay, macvlan</li>
-<li><strong>Registry</strong>: Storage and distribution system for Docker images; Docker Hub is public default, private registries available</li>
-<li><strong>Dockerfile</strong>: Text file with instructions to build Docker images; supports multi-stage builds for optimized image sizes</li>
-<li><strong>Docker Compose</strong>: Tool for defining and running multi-container applications using YAML configuration files</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>Docker Desktop Settings (Windows)</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Configure Docker Desktop via settings.json</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="docker-poweruser-guide-powershell">
+            Docker PowerUser Guide (PowerShell)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 05, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://docs.docker.com/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Docker-27.x-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Docker is a containerization platform enabling consistent
+            application deployment across environments using lightweight,
+            portable containers. This guide covers installation, image
+            management, container orchestration, Docker Compose, networking,
+            volume management, and security using PowerShell 7+ on Windows.
+            Power users need to understand multi-stage builds, resource limits,
+            health checks, and production deployment patterns for Windows
+            container workloads.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#docker-poweruser-guide-powershell"
+                >Docker PowerUser Guide (PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#container-lifecycle-management"
+                    >Container Lifecycle Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#building-and-managing-images"
+                    >Building and Managing Images</a
+                  >
+                </li>
+                <li>
+                  <a href="#docker-compose-multi-container-applications"
+                    >Docker Compose Multi-Container Applications</a
+                  >
+                </li>
+                <li>
+                  <a href="#volume-and-network-management"
+                    >Volume and Network Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#system-monitoring-and-cleanup"
+                    >System Monitoring and Cleanup</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install Docker Desktop</strong>: Download from docker.com
+              and enable WSL 2 backend
+            </li>
+            <li>
+              <strong>Verify installation</strong>:
+              <code>docker --version</code> and
+              <code>docker run hello-world</code>
+            </li>
+            <li>
+              <strong>Pull image</strong>: <code>docker pull nginx:latest</code>
+            </li>
+            <li>
+              <strong>Run container</strong>:
+              <code>docker run -d -p 8080:80 --name webserver nginx</code>
+            </li>
+            <li>
+              <strong>Stop container</strong>:
+              <code>docker stop webserver</code>
+            </li>
+            <li>
+              <strong>Remove container</strong>:
+              <code>docker rm webserver</code>
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Image</strong>: Read-only template containing application
+              code, runtime, libraries, and dependencies; built from Dockerfile
+              layers
+            </li>
+            <li>
+              <strong>Container</strong>: Running instance of an image with
+              isolated filesystem, networking, and process space; ephemeral by
+              default
+            </li>
+            <li>
+              <strong>Volume</strong>: Persistent data storage mechanism that
+              survives container lifecycle; stored outside container union
+              filesystem
+            </li>
+            <li>
+              <strong>Network</strong>: Virtual network enabling
+              container-to-container communication; types include bridge, host,
+              overlay, macvlan
+            </li>
+            <li>
+              <strong>Registry</strong>: Storage and distribution system for
+              Docker images; Docker Hub is public default, private registries
+              available
+            </li>
+            <li>
+              <strong>Dockerfile</strong>: Text file with instructions to build
+              Docker images; supports multi-stage builds for optimized image
+              sizes
+            </li>
+            <li>
+              <strong>Docker Compose</strong>: Tool for defining and running
+              multi-container applications using YAML configuration files
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p><strong>Docker Desktop Settings (Windows)</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Configure Docker Desktop via settings.json</span>
 <span class="c"># Location: %APPDATA%\Docker\settings.json</span>
 
 <span class="p">{</span>
@@ -105,10 +228,12 @@
   <span class="s2">&quot;useWindowsContainers&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;kernelForUDP&quot;</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>PowerShell Profile Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Add to $PROFILE for Docker aliases</span>
+          <p><strong>PowerShell Profile Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Add to $PROFILE for Docker aliases</span>
 <span class="nb">Set-Alias</span> <span class="n">-Name</span> <span class="n">d</span> <span class="n">-Value</span> <span class="n">docker</span>
 <span class="nb">Set-Alias</span> <span class="n">-Name</span> <span class="n">dc</span> <span class="n">-Value</span> <span class="n">docker-compose</span>
 
@@ -117,29 +242,56 @@
 <span class="k">function</span> <span class="n">dprune</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">system</span> <span class="n">prune</span> <span class="n">-af</span> <span class="p">-</span><span class="n">-volumes</span> <span class="p">}</span>
 <span class="k">function</span> <span class="n">dlogs</span> <span class="p">{</span> <span class="k">param</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span> <span class="n">docker</span> <span class="n">logs</span> <span class="o">-f</span> <span class="nv">$container</span> <span class="p">}</span>
 <span class="k">function</span> <span class="n">dexec</span> <span class="p">{</span> <span class="k">param</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span> <span class="n">docker</span> <span class="n">exec</span> <span class="n">-it</span> <span class="nv">$container</span> <span class="n">powershell</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use official base images from verified publishers
-- Implement multi-stage builds to reduce final image size
-- Run containers as non-root users when possible
-- Use specific image tags instead of <code>latest</code> for reproducibility
-- Implement health checks for production containers
-- Use <code>.dockerignore</code> to exclude unnecessary files from build context
-- Set resource limits (CPU, memory) to prevent resource exhaustion
-- Use Docker Compose for multi-container applications</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Image Security</strong>: Scan images for vulnerabilities with <code>docker scan &lt;image&gt;</code> or third-party tools like Trivy</li>
-<li><strong>Least Privilege</strong>: Run containers with minimal permissions; avoid <code>--privileged</code> flag unless absolutely necessary</li>
-<li><strong>Network Isolation</strong>: Use custom bridge networks instead of default bridge; implement network segmentation</li>
-<li><strong>Secrets Management</strong>: Never bake secrets into images; use Docker secrets, environment files, or external vaults</li>
-<li><strong>Resource Limits</strong>: Set memory and CPU limits to prevent DoS attacks and resource exhaustion</li>
-<li><strong>Read-Only Filesystems</strong>: Mount volumes as read-only when possible; use <code>--read-only</code> flag</li>
-<li><strong>Registry Security</strong>: Use private registries with authentication; enable Docker Content Trust for image signing</li>
-</ol>
-<p><strong>Secure Container Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Run container with security constraints</span>
+          <p>
+            <strong>Best Practices</strong>: - Use official base images from
+            verified publishers - Implement multi-stage builds to reduce final
+            image size - Run containers as non-root users when possible - Use
+            specific image tags instead of <code>latest</code> for
+            reproducibility - Implement health checks for production containers
+            - Use <code>.dockerignore</code> to exclude unnecessary files from
+            build context - Set resource limits (CPU, memory) to prevent
+            resource exhaustion - Use Docker Compose for multi-container
+            applications
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Image Security</strong>: Scan images for vulnerabilities
+              with <code>docker scan &lt;image&gt;</code> or third-party tools
+              like Trivy
+            </li>
+            <li>
+              <strong>Least Privilege</strong>: Run containers with minimal
+              permissions; avoid <code>--privileged</code> flag unless
+              absolutely necessary
+            </li>
+            <li>
+              <strong>Network Isolation</strong>: Use custom bridge networks
+              instead of default bridge; implement network segmentation
+            </li>
+            <li>
+              <strong>Secrets Management</strong>: Never bake secrets into
+              images; use Docker secrets, environment files, or external vaults
+            </li>
+            <li>
+              <strong>Resource Limits</strong>: Set memory and CPU limits to
+              prevent DoS attacks and resource exhaustion
+            </li>
+            <li>
+              <strong>Read-Only Filesystems</strong>: Mount volumes as read-only
+              when possible; use <code>--read-only</code> flag
+            </li>
+            <li>
+              <strong>Registry Security</strong>: Use private registries with
+              authentication; enable Docker Content Trust for image signing
+            </li>
+          </ol>
+          <p><strong>Secure Container Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Run container with security constraints</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-d</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-name</span> <span class="n">secure-app</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
@@ -159,12 +311,19 @@
 <span class="c"># Use secrets for sensitive data</span>
 <span class="nb">echo </span><span class="s2">&quot;mypassword&quot;</span> <span class="p">|</span> <span class="n">docker</span> <span class="n">secret</span> <span class="n">create</span> <span class="n">db_password</span> <span class="p">-</span>
 <span class="n">docker</span> <span class="n">service</span> <span class="n">create</span> <span class="p">-</span><span class="n">-name</span> <span class="n">db</span> <span class="p">-</span><span class="n">-secret</span> <span class="n">db_password</span> <span class="n">postgres</span><span class="p">:</span><span class="n">15</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="container-lifecycle-management">Container Lifecycle Management</h3>
-<p>Manage container creation, execution, monitoring, and cleanup with comprehensive PowerShell commands.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Pull image from Docker Hub</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="container-lifecycle-management">
+            Container Lifecycle Management
+          </h3>
+          <p>
+            Manage container creation, execution, monitoring, and cleanup with
+            comprehensive PowerShell commands.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Pull image from Docker Hub</span>
 <span class="n">docker</span> <span class="n">pull</span> <span class="n">nginx</span><span class="p">:</span><span class="n">alpine</span>
 
 <span class="c"># Run container in detached mode with port mapping</span>
@@ -229,11 +388,18 @@
 
 <span class="c"># Copy files from host to container</span>
 <span class="n">docker</span> <span class="nb">cp </span><span class="p">./</span><span class="n">index</span><span class="p">.</span><span class="n">html</span> <span class="n">webserver</span><span class="p">:/</span><span class="n">usr</span><span class="p">/</span><span class="n">share</span><span class="p">/</span><span class="n">nginx</span><span class="p">/</span><span class="n">html</span><span class="p">/</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="building-and-managing-images">Building and Managing Images</h3>
-<p>Create optimized Docker images with multi-stage builds, tagging strategies, and registry operations.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Create Dockerfile for .NET application</span>
+          <h3 id="building-and-managing-images">
+            Building and Managing Images
+          </h3>
+          <p>
+            Create optimized Docker images with multi-stage builds, tagging
+            strategies, and registry operations.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Create Dockerfile for .NET application</span>
 <span class="sh">@&quot;</span>
 <span class="sh"># Multi-stage build for .NET 8 app</span>
 <span class="sh">FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build</span>
@@ -317,11 +483,18 @@
 <span class="c"># Build and tag for multiple platforms (buildx)</span>
 <span class="n">docker</span> <span class="n">buildx</span> <span class="n">create</span> <span class="p">-</span><span class="n">-use</span>
 <span class="n">docker</span> <span class="n">buildx</span> <span class="n">build</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">linux</span><span class="p">/</span><span class="n">amd64</span><span class="p">,</span><span class="n">linux</span><span class="p">/</span><span class="n">arm64</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">-</span><span class="n">-push</span> <span class="p">.</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="docker-compose-multi-container-applications">Docker Compose Multi-Container Applications</h3>
-<p>Orchestrate complex multi-container applications with Docker Compose including databases, caching, and web services.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Create docker-compose.yml for full-stack application</span>
+          <h3 id="docker-compose-multi-container-applications">
+            Docker Compose Multi-Container Applications
+          </h3>
+          <p>
+            Orchestrate complex multi-container applications with Docker Compose
+            including databases, caching, and web services.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Create docker-compose.yml for full-stack application</span>
 <span class="sh">@&quot;</span>
 <span class="sh">version: &#39;3.8&#39;</span>
 
@@ -473,11 +646,18 @@
 
 <span class="c"># Pull latest images for all services</span>
 <span class="n">docker-compose</span> <span class="n">pull</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="volume-and-network-management">Volume and Network Management</h3>
-<p>Manage persistent data storage and container networking with Docker volumes and custom network configurations.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Create named volume</span>
+          <h3 id="volume-and-network-management">
+            Volume and Network Management
+          </h3>
+          <p>
+            Manage persistent data storage and container networking with Docker
+            volumes and custom network configurations.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Create named volume</span>
 <span class="n">docker</span> <span class="n">volume</span> <span class="n">create</span> <span class="n">app_data</span>
 
 <span class="c"># Create volume with specific driver options</span>
@@ -573,11 +753,18 @@
 
 <span class="c"># Remove specific network</span>
 <span class="n">docker</span> <span class="n">network</span> <span class="nb">rm </span><span class="n">app_network</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="system-monitoring-and-cleanup">System Monitoring and Cleanup</h3>
-<p>Monitor Docker system resources, clean up unused resources, and maintain optimal Docker environment.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># View Docker disk usage</span>
+          <h3 id="system-monitoring-and-cleanup">
+            System Monitoring and Cleanup
+          </h3>
+          <p>
+            Monitor Docker system resources, clean up unused resources, and
+            maintain optimal Docker environment.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># View Docker disk usage</span>
 <span class="n">docker</span> <span class="n">system</span> <span class="n">df</span>
 
 <span class="c"># Detailed disk usage with container sizes</span>
@@ -651,22 +838,37 @@
 
 <span class="c"># Get Docker daemon logs (Windows)</span>
 <span class="nb">Get-EventLog</span> <span class="n">-LogName</span> <span class="n">Application</span> <span class="n">-Source</span> <span class="n">Docker</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">50</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Docker Desktop Not Starting</strong>:
-- <strong>Error</strong>: "Docker Desktop starting..." indefinitely
-  - <strong>Check WSL 2</strong>: <code>wsl --status</code> and <code>wsl --set-default-version 2</code>
-  - <strong>Reset Docker</strong>: Right-click Docker Desktop tray icon → Troubleshoot → Reset to factory defaults
-  - <strong>Check Hyper-V</strong>: Ensure Hyper-V and Windows Hypervisor Platform are enabled
-  - <strong>View logs</strong>: <code>Get-Content "$env:LOCALAPPDATA\Docker\log.txt" -Tail 50</code></p>
-<p><strong>Port Already in Use</strong>:
-- <strong>Error</strong>: "Bind for 0.0.0.0:8080 failed: port is already allocated"
-  - <strong>Find process</strong>: <code>Get-NetTCPConnection -LocalPort 8080 | Select-Object OwningProcess | Get-Process</code>
-  - <strong>Kill process</strong>: <code>Stop-Process -Id &lt;ProcessId&gt; -Force</code>
-  - <strong>Use different port</strong>: Change port mapping to <code>-p 8081:80</code></p>
-<p><strong>Container Exits Immediately</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Check container logs</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Docker Desktop Not Starting</strong>: -
+            <strong>Error</strong>: "Docker Desktop starting..." indefinitely -
+            <strong>Check WSL 2</strong>: <code>wsl --status</code> and
+            <code>wsl --set-default-version 2</code> -
+            <strong>Reset Docker</strong>: Right-click Docker Desktop tray icon
+            → Troubleshoot → Reset to factory defaults -
+            <strong>Check Hyper-V</strong>: Ensure Hyper-V and Windows
+            Hypervisor Platform are enabled - <strong>View logs</strong>:
+            <code>Get-Content "$env:LOCALAPPDATA\Docker\log.txt" -Tail 50</code>
+          </p>
+          <p>
+            <strong>Port Already in Use</strong>: - <strong>Error</strong>:
+            "Bind for 0.0.0.0:8080 failed: port is already allocated" -
+            <strong>Find process</strong>:
+            <code
+              >Get-NetTCPConnection -LocalPort 8080 | Select-Object
+              OwningProcess | Get-Process</code
+            >
+            - <strong>Kill process</strong>:
+            <code>Stop-Process -Id &lt;ProcessId&gt; -Force</code> -
+            <strong>Use different port</strong>: Change port mapping to
+            <code>-p 8081:80</code>
+          </p>
+          <p><strong>Container Exits Immediately</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Check container logs</span>
 <span class="n">docker</span> <span class="n">logs</span> <span class="p">&lt;</span><span class="n">container_id</span><span class="p">&gt;</span>
 
 <span class="c"># View exit code</span>
@@ -677,10 +879,12 @@
 
 <span class="c"># Override CMD/ENTRYPOINT for troubleshooting</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-it</span> <span class="p">-</span><span class="n">-entrypoint</span> <span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">bash</span> <span class="n">myimage</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Network Connectivity Issues</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Test DNS resolution inside container</span>
+          <p><strong>Network Connectivity Issues</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Test DNS resolution inside container</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">alpine</span> <span class="n">nslookup</span> <span class="n">google</span><span class="p">.</span><span class="n">com</span>
 
 <span class="c"># Test network connectivity</span>
@@ -691,19 +895,23 @@
 
 <span class="c"># Restart Docker network service</span>
 <span class="nb">Restart-Service</span> <span class="n">docker</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Volume Permission Issues</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Check volume mount permissions</span>
+          <p><strong>Volume Permission Issues</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Check volume mount permissions</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">-v</span> <span class="n">myvolume</span><span class="p">:/</span><span class="n">data</span> <span class="n">alpine</span> <span class="nb">ls </span><span class="n">-la</span> <span class="p">/</span><span class="n">data</span>
 
 <span class="c"># Fix Windows file permissions</span>
 <span class="n">icacls</span> <span class="s2">&quot;C:\path\to\folder&quot;</span> <span class="p">/</span><span class="n">grant</span> <span class="s2">&quot;Everyone:(OI)(CI)F&quot;</span> <span class="p">/</span><span class="n">T</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Docker Desktop Resource Allocation</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Optimal settings for development (16GB RAM system)</span>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Docker Desktop Resource Allocation</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Optimal settings for development (16GB RAM system)</span>
 <span class="nv">$settings</span> <span class="p">=</span> <span class="p">@{</span>
     <span class="n">memoryMiB</span> <span class="p">=</span> <span class="n">8192</span>
     <span class="n">cpus</span> <span class="p">=</span> <span class="n">4</span>
@@ -717,10 +925,12 @@
 <span class="nv">$currentSettings</span><span class="p">.</span><span class="n">memoryMiB</span> <span class="p">=</span> <span class="nv">$settings</span><span class="p">.</span><span class="n">memoryMiB</span>
 <span class="nv">$currentSettings</span><span class="p">.</span><span class="n">cpus</span> <span class="p">=</span> <span class="nv">$settings</span><span class="p">.</span><span class="n">cpus</span>
 <span class="nv">$currentSettings</span> <span class="p">|</span> <span class="nb">ConvertTo-Json</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="nv">$settingsPath</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Container Resource Limits</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Set memory and CPU limits</span>
+          <p><strong>Container Resource Limits</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Set memory and CPU limits</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-d</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-name</span> <span class="n">limited-app</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
@@ -732,10 +942,12 @@
 
 <span class="c"># Monitor resource usage</span>
 <span class="n">docker</span> <span class="n">stats</span> <span class="n">limited-app</span> <span class="p">-</span><span class="n">-no-stream</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Build Performance Optimization</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Use BuildKit for faster builds</span>
+          <p><strong>Build Performance Optimization</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Use BuildKit for faster builds</span>
 <span class="nv">$env:DOCKER_BUILDKIT</span><span class="p">=</span><span class="n">1</span>
 <span class="n">docker</span> <span class="n">build</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">.</span>
 
@@ -753,10 +965,12 @@
 
 <span class="c"># Parallel builds with docker-compose</span>
 <span class="n">docker-compose</span> <span class="n">build</span> <span class="p">-</span><span class="n">-parallel</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Image Size Optimization</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Use multi-stage builds</span>
+          <p><strong>Image Size Optimization</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Use multi-stage builds</span>
 <span class="c"># Use alpine/slim base images</span>
 <span class="c"># Remove build dependencies in same layer</span>
 <span class="c"># Minimize layers by combining RUN commands</span>
@@ -775,10 +989,12 @@
 <span class="sh">USER node</span>
 <span class="sh">CMD [&quot;node&quot;, &quot;index.js&quot;]</span>
 <span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">Dockerfile</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Performance Monitoring</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Continuous monitoring script</span>
+          <p><strong>Performance Monitoring</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Continuous monitoring script</span>
 <span class="k">while</span> <span class="p">(</span><span class="nv">$true</span><span class="p">)</span> <span class="p">{</span>
     <span class="nb">Clear-Host</span>
     <span class="nb">Write-Host</span> <span class="s2">&quot;Docker Performance Monitor - </span><span class="p">$(</span><span class="nb">Get-Date</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
@@ -793,46 +1009,67 @@
 
     <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://docs.docker.com/">Docker Documentation</a> - Official comprehensive Docker documentation</li>
-<li><a href="https://hub.docker.com/">Docker Hub</a> - Public registry with official and community images</li>
-<li><a href="https://docs.docker.com/compose/">Docker Compose Documentation</a> - Multi-container application orchestration</li>
-<li><a href="https://docs.docker.com/develop/dev-best-practices/">Best Practices for Writing Dockerfiles</a> - Official optimization guide</li>
-<li><a href="https://labs.play-with-docker.com/">Play with Docker</a> - Free online Docker playground for testing</li>
-</ul></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://docs.docker.com/">Docker Documentation</a> -
+              Official comprehensive Docker documentation
+            </li>
+            <li>
+              <a href="https://hub.docker.com/">Docker Hub</a> - Public registry
+              with official and community images
+            </li>
+            <li>
+              <a href="https://docs.docker.com/compose/"
+                >Docker Compose Documentation</a
+              >
+              - Multi-container application orchestration
+            </li>
+            <li>
+              <a href="https://docs.docker.com/develop/dev-best-practices/"
+                >Best Practices for Writing Dockerfiles</a
+              >
+              - Official optimization guide
+            </li>
+            <li>
+              <a href="https://labs.play-with-docker.com/">Play with Docker</a>
+              - Free online Docker playground for testing
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

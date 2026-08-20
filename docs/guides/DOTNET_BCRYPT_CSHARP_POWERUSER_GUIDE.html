@@ -1,95 +1,211 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>DOTNET BCrypt PowerUser Guide (C#) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="dotnet-bcrypt-poweruser-guide-c">DOTNET BCrypt PowerUser Guide (C#)</h1>
-<p><strong>Last updated</strong>: December 05, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://github.com/BcryptNet/bcrypt.net"><img alt="Framework" src="https://img.shields.io/badge/.NET-BCrypt-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>BCrypt.Net-Next is a robust password hashing library for .NET implementing the OpenBSD bcrypt algorithm with adaptive cost factors for future-proof security. This guide covers password hashing, verification, work factor selection, salt generation, and secure defaults for authentication systems. Power users need to understand computational cost tuning, hash format compatibility, and migration strategies for production applications.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#dotnet-bcrypt-poweruser-guide-c">DOTNET BCrypt PowerUser Guide (C#)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#basic-password-hashing-and-verification">Basic Password Hashing and Verification</a></li>
-<li><a href="#custom-work-factor-and-enhanced-entropy">Custom Work Factor and Enhanced Entropy</a></li>
-<li><a href="#aspnet-core-authentication-implementation">ASP.NET Core Authentication Implementation</a></li>
-<li><a href="#password-migration-and-rehashing-strategy">Password Migration and Rehashing Strategy</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install package</strong>: <code>dotnet add package BCrypt.Net-Next</code></li>
-<li><strong>Hash password</strong>: <code>string hash = BCrypt.Net.BCrypt.HashPassword("password123");</code></li>
-<li><strong>Verify password</strong>: <code>bool isValid = BCrypt.Net.BCrypt.Verify("password123", hash);</code></li>
-<li><strong>Use in ASP.NET Core</strong>: Add to dependency injection and use in user registration/login endpoints</li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Work Factor (Cost)</strong>: Number of hashing rounds (2^cost); default is 11, recommended range 10-12 for production; higher values increase security but slow down hashing</li>
-<li><strong>Salt</strong>: Random data automatically generated and embedded in hash output; prevents rainbow table attacks and ensures identical passwords produce different hashes</li>
-<li><strong>Hash Format</strong>: Output format is <code>$2a$[cost]$[22-char salt][31-char hash]</code>; compatible with bcrypt implementations across languages</li>
-<li><strong>Enhanced Entropy</strong>: BCrypt.Net supports enhanced hashing with SHA-384 pre-hashing for passwords &gt;72 bytes to overcome bcrypt's built-in length limitation</li>
-<li><strong>Verification</strong>: Constant-time comparison prevents timing attacks; always use <code>Verify()</code> method instead of string comparison</li>
-<li><strong>Hash Revision</strong>: <code>$2a$</code> is standard; <code>$2b$</code> fixes rare edge cases; <code>$2y$</code> is PHP-specific; stick with <code>$2a$</code> or <code>$2b$</code> for interoperability</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>ASP.NET Core Dependency Injection Setup</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Program.cs or Startup.cs</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="dotnet-bcrypt-poweruser-guide-c">
+            DOTNET BCrypt PowerUser Guide (C#)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 05, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://github.com/BcryptNet/bcrypt.net"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/.NET-BCrypt-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            BCrypt.Net-Next is a robust password hashing library for .NET
+            implementing the OpenBSD bcrypt algorithm with adaptive cost factors
+            for future-proof security. This guide covers password hashing,
+            verification, work factor selection, salt generation, and secure
+            defaults for authentication systems. Power users need to understand
+            computational cost tuning, hash format compatibility, and migration
+            strategies for production applications.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#dotnet-bcrypt-poweruser-guide-c"
+                >DOTNET BCrypt PowerUser Guide (C#)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#basic-password-hashing-and-verification"
+                    >Basic Password Hashing and Verification</a
+                  >
+                </li>
+                <li>
+                  <a href="#custom-work-factor-and-enhanced-entropy"
+                    >Custom Work Factor and Enhanced Entropy</a
+                  >
+                </li>
+                <li>
+                  <a href="#aspnet-core-authentication-implementation"
+                    >ASP.NET Core Authentication Implementation</a
+                  >
+                </li>
+                <li>
+                  <a href="#password-migration-and-rehashing-strategy"
+                    >Password Migration and Rehashing Strategy</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install package</strong>:
+              <code>dotnet add package BCrypt.Net-Next</code>
+            </li>
+            <li>
+              <strong>Hash password</strong>:
+              <code
+                >string hash =
+                BCrypt.Net.BCrypt.HashPassword("password123");</code
+              >
+            </li>
+            <li>
+              <strong>Verify password</strong>:
+              <code
+                >bool isValid = BCrypt.Net.BCrypt.Verify("password123",
+                hash);</code
+              >
+            </li>
+            <li>
+              <strong>Use in ASP.NET Core</strong>: Add to dependency injection
+              and use in user registration/login endpoints
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Work Factor (Cost)</strong>: Number of hashing rounds
+              (2^cost); default is 11, recommended range 10-12 for production;
+              higher values increase security but slow down hashing
+            </li>
+            <li>
+              <strong>Salt</strong>: Random data automatically generated and
+              embedded in hash output; prevents rainbow table attacks and
+              ensures identical passwords produce different hashes
+            </li>
+            <li>
+              <strong>Hash Format</strong>: Output format is
+              <code>$2a$[cost]$[22-char salt][31-char hash]</code>; compatible
+              with bcrypt implementations across languages
+            </li>
+            <li>
+              <strong>Enhanced Entropy</strong>: BCrypt.Net supports enhanced
+              hashing with SHA-384 pre-hashing for passwords &gt;72 bytes to
+              overcome bcrypt's built-in length limitation
+            </li>
+            <li>
+              <strong>Verification</strong>: Constant-time comparison prevents
+              timing attacks; always use <code>Verify()</code> method instead of
+              string comparison
+            </li>
+            <li>
+              <strong>Hash Revision</strong>: <code>$2a$</code> is standard;
+              <code>$2b$</code> fixes rare edge cases; <code>$2y$</code> is
+              PHP-specific; stick with <code>$2a$</code> or
+              <code>$2b$</code> for interoperability
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p><strong>ASP.NET Core Dependency Injection Setup</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Program.cs or Startup.cs</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IPasswordHasher</span><span class="p">,</span><span class="w"> </span><span class="n">BcryptPasswordHasher</span><span class="o">&gt;</span><span class="p">();</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IPasswordHasher</span>
@@ -112,28 +228,58 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">BCrypt</span><span class="p">.</span><span class="n">Verify</span><span class="p">(</span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">hash</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use work factor 11-12 for web applications; 13-14 for high-security systems
-- Never store plaintext passwords or use reversible encryption
-- Hash passwords on server-side only; never send hashes from client
-- Implement rate limiting on login endpoints to prevent brute-force attacks
-- Use <code>EnhancedEntropy</code> for passwords that may exceed 72 bytes
-- Store hashes in NVARCHAR(60) or VARCHAR(60) database columns
-- Implement password complexity requirements before hashing</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Work Factor Selection</strong>: Balance security and performance; benchmark on production hardware to ensure &lt;250ms hashing time</li>
-<li><strong>Timing Attacks</strong>: Always use <code>BCrypt.Verify()</code> which implements constant-time comparison; never compare hash strings directly</li>
-<li><strong>Password Migration</strong>: When updating work factors, rehash passwords on successful login rather than forcing password resets</li>
-<li><strong>Memory Security</strong>: Clear sensitive data from memory after hashing; use <code>SecureString</code> for password input when possible</li>
-<li><strong>Distributed Systems</strong>: Ensure consistent work factors across all authentication servers to avoid confusion and security gaps</li>
-<li><strong>Audit Logging</strong>: Log failed login attempts with rate limiting; avoid logging successful authentication details</li>
-<li><strong>Hash Storage</strong>: Store in binary format or base64 to avoid encoding issues; never truncate hash values</li>
-</ol>
-<p><strong>Secure User Registration Example</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span>
+          <p>
+            <strong>Best Practices</strong>: - Use work factor 11-12 for web
+            applications; 13-14 for high-security systems - Never store
+            plaintext passwords or use reversible encryption - Hash passwords on
+            server-side only; never send hashes from client - Implement rate
+            limiting on login endpoints to prevent brute-force attacks - Use
+            <code>EnhancedEntropy</code> for passwords that may exceed 72 bytes
+            - Store hashes in NVARCHAR(60) or VARCHAR(60) database columns -
+            Implement password complexity requirements before hashing
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Work Factor Selection</strong>: Balance security and
+              performance; benchmark on production hardware to ensure &lt;250ms
+              hashing time
+            </li>
+            <li>
+              <strong>Timing Attacks</strong>: Always use
+              <code>BCrypt.Verify()</code> which implements constant-time
+              comparison; never compare hash strings directly
+            </li>
+            <li>
+              <strong>Password Migration</strong>: When updating work factors,
+              rehash passwords on successful login rather than forcing password
+              resets
+            </li>
+            <li>
+              <strong>Memory Security</strong>: Clear sensitive data from memory
+              after hashing; use <code>SecureString</code> for password input
+              when possible
+            </li>
+            <li>
+              <strong>Distributed Systems</strong>: Ensure consistent work
+              factors across all authentication servers to avoid confusion and
+              security gaps
+            </li>
+            <li>
+              <strong>Audit Logging</strong>: Log failed login attempts with
+              rate limiting; avoid logging successful authentication details
+            </li>
+            <li>
+              <strong>Hash Storage</strong>: Store in binary format or base64 to
+              avoid encoding issues; never truncate hash values
+            </li>
+          </ol>
+          <p><strong>Secure User Registration Example</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">UserService</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IPasswordHasher</span><span class="w"> </span><span class="n">_passwordHasher</span><span class="p">;</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUserRepository</span><span class="w"> </span><span class="n">_userRepository</span><span class="p">;</span>
@@ -180,12 +326,19 @@
 <span class="w">               </span><span class="n">password</span><span class="p">.</span><span class="n">Any</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="o">!</span><span class="kt">char</span><span class="p">.</span><span class="n">IsLetterOrDigit</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="basic-password-hashing-and-verification">Basic Password Hashing and Verification</h3>
-<p>Hash user passwords during registration and verify them during login with automatic salt generation.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="basic-password-hashing-and-verification">
+            Basic Password Hashing and Verification
+          </h3>
+          <p>
+            Hash user passwords during registration and verify them during login
+            with automatic salt generation.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PasswordExample</span>
 <span class="p">{</span>
@@ -211,11 +364,18 @@
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Both verify: {BCrypt.Net.BCrypt.Verify(password, hash2)}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// True</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="custom-work-factor-and-enhanced-entropy">Custom Work Factor and Enhanced Entropy</h3>
-<p>Configure work factors for different security requirements and handle long passwords with enhanced entropy mode.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+          <h3 id="custom-work-factor-and-enhanced-entropy">
+            Custom Work Factor and Enhanced Entropy
+          </h3>
+          <p>
+            Configure work factors for different security requirements and
+            handle long passwords with enhanced entropy mode.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AdvancedHashingExample</span>
 <span class="p">{</span>
@@ -250,11 +410,18 @@
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Enhanced verify: {verifyEnhanced}&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// True</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="aspnet-core-authentication-implementation">ASP.NET Core Authentication Implementation</h3>
-<p>Implement complete user authentication with registration, login, and password change functionality in ASP.NET Core.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
+          <h3 id="aspnet-core-authentication-implementation">
+            ASP.NET Core Authentication Implementation
+          </h3>
+          <p>
+            Implement complete user authentication with registration, login, and
+            password change functionality in ASP.NET Core.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="na">[ApiController]</span>
@@ -384,11 +551,18 @@
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">RegisterRequest</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="p">);</span>
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">LoginRequest</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="p">);</span>
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">ChangePasswordRequest</span><span class="p">(</span><span class="n">Guid</span><span class="w"> </span><span class="n">UserId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">CurrentPassword</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">NewPassword</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="password-migration-and-rehashing-strategy">Password Migration and Rehashing Strategy</h3>
-<p>Migrate existing password hashes to updated work factors without forcing password resets for active users.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
+          <h3 id="password-migration-and-rehashing-strategy">
+            Password Migration and Rehashing Strategy
+          </h3>
+          <p>
+            Migrate existing password hashes to updated work factors without
+            forcing password resets for active users.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">PasswordMigrationService</span>
 <span class="p">{</span>
@@ -488,28 +662,45 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">token</span><span class="p">;</span><span class="w"> </span><span class="c1">// Send this to user via email</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Hash Verification Fails</strong>:
-- <strong>Error</strong>: <code>Verify()</code> returns false for correct password
-  - <strong>Check encoding</strong>: Ensure consistent UTF-8 encoding for password strings
-  - <strong>Verify hash format</strong>: Hash must start with <code>$2a$</code>, <code>$2b$</code>, or <code>$2y$</code>
-  - <strong>Check truncation</strong>: Verify hash string is not truncated in database (should be 60 characters)
-  - <strong>Test hash generation</strong>: Generate new hash and verify immediately to isolate issue</p>
-<p><strong>Performance Issues</strong>:
-- <strong>Error</strong>: Hashing takes too long (&gt;500ms)
-  - <strong>Reduce work factor</strong>: Lower from 12 to 11 or 10 based on requirements
-  - <strong>Benchmark hardware</strong>: Test on production-equivalent hardware before deployment
-  - <strong>Use async operations</strong>: Implement async hashing for web applications to avoid blocking
-  - <strong>Monitor CPU usage</strong>: High work factors increase CPU load; consider load balancing</p>
-<p><strong>Enhanced Entropy Errors</strong>:
-- <strong>Error</strong>: <code>EnhancedVerify()</code> fails for passwords hashed with <code>EnhancedHashPassword()</code>
-  - <strong>Consistency required</strong>: Must use Enhanced methods for both hashing and verification
-  - <strong>Password length</strong>: Enhanced mode is for passwords &gt;72 bytes; unnecessary for shorter passwords
-  - <strong>Migration</strong>: Cannot mix standard and enhanced hashes without tracking mode per user</p>
-<p><strong>Database Storage Issues</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1">// Common database column configurations</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Hash Verification Fails</strong>: - <strong>Error</strong>:
+            <code>Verify()</code> returns false for correct password -
+            <strong>Check encoding</strong>: Ensure consistent UTF-8 encoding
+            for password strings - <strong>Verify hash format</strong>: Hash
+            must start with <code>$2a$</code>, <code>$2b$</code>, or
+            <code>$2y$</code> - <strong>Check truncation</strong>: Verify hash
+            string is not truncated in database (should be 60 characters) -
+            <strong>Test hash generation</strong>: Generate new hash and verify
+            immediately to isolate issue
+          </p>
+          <p>
+            <strong>Performance Issues</strong>: - <strong>Error</strong>:
+            Hashing takes too long (&gt;500ms) -
+            <strong>Reduce work factor</strong>: Lower from 12 to 11 or 10 based
+            on requirements - <strong>Benchmark hardware</strong>: Test on
+            production-equivalent hardware before deployment -
+            <strong>Use async operations</strong>: Implement async hashing for
+            web applications to avoid blocking -
+            <strong>Monitor CPU usage</strong>: High work factors increase CPU
+            load; consider load balancing
+          </p>
+          <p>
+            <strong>Enhanced Entropy Errors</strong>: - <strong>Error</strong>:
+            <code>EnhancedVerify()</code> fails for passwords hashed with
+            <code>EnhancedHashPassword()</code> -
+            <strong>Consistency required</strong>: Must use Enhanced methods for
+            both hashing and verification - <strong>Password length</strong>:
+            Enhanced mode is for passwords &gt;72 bytes; unnecessary for shorter
+            passwords - <strong>Migration</strong>: Cannot mix standard and
+            enhanced hashes without tracking mode per user
+          </p>
+          <p><strong>Database Storage Issues</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">// Common database column configurations</span>
 <span class="c1">// SQL Server</span>
 <span class="n">CREATE</span><span class="w"> </span><span class="n">TABLE</span><span class="w"> </span><span class="nf">Users</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="n">Id</span><span class="w"> </span><span class="n">UNIQUEIDENTIFIER</span><span class="w"> </span><span class="n">PRIMARY</span><span class="w"> </span><span class="n">KEY</span><span class="p">,</span>
@@ -541,11 +732,13 @@
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">DateTime</span><span class="w"> </span><span class="n">CreatedAt</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Work Factor Benchmarking</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Diagnostics</span><span class="p">;</span>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Work Factor Benchmarking</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Diagnostics</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BcryptBenchmark</span>
@@ -579,10 +772,12 @@
 <span class="c1">// Work Factor 11: 110ms per hash (recommended minimum)</span>
 <span class="c1">// Work Factor 12: 220ms per hash (recommended production)</span>
 <span class="c1">// Work Factor 13: 440ms per hash (high security)</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Async Hashing for Web Applications</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+          <p><strong>Async Hashing for Web Applications</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Threading.Tasks</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">BCrypt.Net</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">AsyncPasswordService</span>
@@ -609,10 +804,12 @@
 <span class="w">    </span><span class="c1">// Save user with hash</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Memory and Resource Optimization</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedPasswordService</span>
+          <p><strong>Memory and Resource Optimization</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">OptimizedPasswordService</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">MaxConcurrentHashOperations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">SemaphoreSlim</span><span class="w"> </span><span class="n">_semaphore</span><span class="p">;</span>
@@ -636,52 +833,82 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Recommended Work Factors by Use Case</strong>:
-- <strong>Development/Testing</strong>: 4-6 (fast feedback)
-- <strong>Low-security applications</strong>: 10 (~60ms)
-- <strong>Standard web applications</strong>: 11-12 (~120-220ms)
-- <strong>High-security systems</strong>: 13-14 (~440-880ms)
-- <strong>Offline/batch processing</strong>: 15+ (multiple seconds)</p>
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://github.com/BcryptNet/bcrypt.net">BCrypt.Net-Next GitHub Repository</a> - Official library source code and documentation</li>
-<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a> - Industry best practices for password hashing</li>
-<li><a href="https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf">Original BCrypt Paper</a> - "A Future-Adaptable Password Scheme" by Niels Provos</li>
-<li><a href="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/">Microsoft Identity Best Practices</a> - ASP.NET Core authentication patterns</li>
-<li><a href="https://bcrypt-generator.com/">Bcrypt Calculator</a> - Online tool to test bcrypt hashing and work factors</li>
-</ul></article>
-        </div>
+          <p>
+            <strong>Recommended Work Factors by Use Case</strong>: -
+            <strong>Development/Testing</strong>: 4-6 (fast feedback) -
+            <strong>Low-security applications</strong>: 10 (~60ms) -
+            <strong>Standard web applications</strong>: 11-12 (~120-220ms) -
+            <strong>High-security systems</strong>: 13-14 (~440-880ms) -
+            <strong>Offline/batch processing</strong>: 15+ (multiple seconds)
+          </p>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://github.com/BcryptNet/bcrypt.net"
+                >BCrypt.Net-Next GitHub Repository</a
+              >
+              - Official library source code and documentation
+            </li>
+            <li>
+              <a
+                href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+                >OWASP Password Storage Cheat Sheet</a
+              >
+              - Industry best practices for password hashing
+            </li>
+            <li>
+              <a
+                href="https://www.usenix.org/legacy/events/usenix99/provos/provos.pdf"
+                >Original BCrypt Paper</a
+              >
+              - "A Future-Adaptable Password Scheme" by Niels Provos
+            </li>
+            <li>
+              <a
+                href="https://learn.microsoft.com/en-us/aspnet/core/security/authentication/"
+                >Microsoft Identity Best Practices</a
+              >
+              - ASP.NET Core authentication patterns
+            </li>
+            <li>
+              <a href="https://bcrypt-generator.com/">Bcrypt Calculator</a> -
+              Online tool to test bcrypt hashing and work factors
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

@@ -14,10 +14,10 @@ Unlike transactional databases—which are optimized for write-heavy operational
 
 A data warehouse is not simply a large database. It is an analytical engine that enables several classes of workloads:
 
-* **OLAP (Online Analytical Processing):** Provides fast, flexible, multidimensional data analysis for business intelligence and decision support applications. Analysts can slice and dice metrics across time, geography, product line, and customer segment simultaneously.
-* **ETL-Accelerated Reporting:** Data transformation during the Extract, Transform, Load process speeds front-end reporting delivery. Critical business metrics reach dashboards faster because the heavy computation has already been done at ingestion time.
-* **AI and Machine Learning:** Data warehouses expose the historical depth and breadth of organizational data to machine learning pipelines—enabling predictive modelling, anomaly detection, and recommendation engines.
-* **Data Mining:** Statistical and pattern-discovery workloads run against the warehouse to surface non-obvious correlations that would be invisible in any single operational system.
+- **OLAP (Online Analytical Processing):** Provides fast, flexible, multidimensional data analysis for business intelligence and decision support applications. Analysts can slice and dice metrics across time, geography, product line, and customer segment simultaneously.
+- **ETL-Accelerated Reporting:** Data transformation during the Extract, Transform, Load process speeds front-end reporting delivery. Critical business metrics reach dashboards faster because the heavy computation has already been done at ingestion time.
+- **AI and Machine Learning:** Data warehouses expose the historical depth and breadth of organizational data to machine learning pipelines—enabling predictive modelling, anomaly detection, and recommendation engines.
+- **Data Mining:** Statistical and pattern-discovery workloads run against the warehouse to surface non-obvious correlations that would be invisible in any single operational system.
 
 ---
 
@@ -43,14 +43,14 @@ The exponential growth of cloud-generated data over the last decade has made **C
 
 Data warehouses are pervasive across virtually every sector of the economy. The common thread is the need to analyze large volumes of historical data to support decisions that would otherwise be based on intuition alone.
 
-| Industry | Primary Analytical Application |
-| --- | --- |
-| **Retail & E-Commerce** | Sales performance analysis; ML-assisted product recommendation engines that drive cross-sell and upsell revenue. |
-| **Healthcare** | AI-driven patient data analysis to enable more accurate diagnosis and treatment decisions at the point of care. |
-| **Transportation & Logistics** | Route optimization, travel time modelling, equipment utilization forecasting, and staffing requirement projections. |
-| **Financial Technology & Banking** | Risk evaluation, real-time fraud detection, and cross-sell analytics applied to transaction histories. |
-| **Social Media** | High-velocity sentiment analysis measuring ever-changing customer opinion and projecting downstream impact on product sales. |
-| **Government** | Business intelligence applied to citizen-facing programs, enabling evidence-based policy evaluation and change decisions. |
+| Industry                           | Primary Analytical Application                                                                                               |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Retail & E-Commerce**            | Sales performance analysis; ML-assisted product recommendation engines that drive cross-sell and upsell revenue.             |
+| **Healthcare**                     | AI-driven patient data analysis to enable more accurate diagnosis and treatment decisions at the point of care.              |
+| **Transportation & Logistics**     | Route optimization, travel time modelling, equipment utilization forecasting, and staffing requirement projections.          |
+| **Financial Technology & Banking** | Risk evaluation, real-time fraud detection, and cross-sell analytics applied to transaction histories.                       |
+| **Social Media**                   | High-velocity sentiment analysis measuring ever-changing customer opinion and projecting downstream impact on product sales. |
+| **Government**                     | Business intelligence applied to citizen-facing programs, enabling evidence-based policy evaluation and change decisions.    |
 
 ---
 

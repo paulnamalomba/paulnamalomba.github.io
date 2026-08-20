@@ -1,6 +1,6 @@
 # Module 4, Lecture 4: Kafka Streaming Process & Stream Topology
 
-While transporting data from Point A to Point B is a foundational engineering task, real-world systems—whether it’s parsing complex finite element data or handling university enrollments—rarely just *move* data. They must transform, aggregate, and enhance it in transit.
+While transporting data from Point A to Point B is a foundational engineering task, real-world systems—whether it’s parsing complex finite element data or handling university enrollments—rarely just _move_ data. They must transform, aggregate, and enhance it in transit.
 
 This lecture shifts the focus from "dumb pipes" to smart, real-time computational pipelines using the **Kafka Streams API**.
 
@@ -12,7 +12,7 @@ Before adopting a dedicated stream processing framework, engineers often default
 
 Suppose you need to read raw weather JSON, filter out normal temperatures, and publish only "extreme weather" events to a dashboard.
 
-* **The Naive Design:** You write a background service with a `while(true)` loop. It spins up a Kafka Consumer to read from `raw_weather_topic`, applies an `if` statement to check the temperature, and uses a Kafka Producer to send the result to `processed_weather_topic`.
+- **The Naive Design:** You write a background service with a `while(true)` loop. It spins up a Kafka Consumer to read from `raw_weather_topic`, applies an `if` statement to check the temperature, and uses a Kafka Producer to send the result to `processed_weather_topic`.
 
 Writing bespoke consumer-producer loops for every data transformation works for a single topic, but it is a fantastic way to introduce unmanageable tech debt when scaling an engineering team. Handling failure states, stateful aggregations (like "average temperature over the last 5 minutes"), and exactly-once processing becomes an algorithmic nightmare.
 
@@ -22,9 +22,9 @@ Writing bespoke consumer-producer loops for every data transformation works for 
 
 The Kafka Streams API is a client library designed specifically to solve the complexities of event-driven data processing.
 
-* **Native Integration:** Both its input and output are strictly Kafka topics.
-* **Record-by-Record:** It processes events individually as they arrive (millisecond latency), rather than waiting for micro-batches.
-* **Exactly-Once Semantics (EOS):** Through a combination of transactional producers and consumer offset management, it guarantees that even if a node crashes mid-computation, a record is processed and reflected in the state store exactly once.
+- **Native Integration:** Both its input and output are strictly Kafka topics.
+- **Record-by-Record:** It processes events individually as they arrive (millisecond latency), rather than waiting for micro-batches.
+- **Exactly-Once Semantics (EOS):** Through a combination of transactional producers and consumer offset management, it guarantees that even if a node crashes mid-computation, a record is processed and reflected in the state store exactly once.
 
 ---
 
@@ -34,8 +34,8 @@ At its core, the Kafka Streams API abstracts your processing logic into a **comp
 
 Mathematically, this topology is a Directed Acyclic Graph (DAG), denoted as $G = (V, E)$, where:
 
-* The vertices $V$ are the **Stream Processors** (the computational logic).
-* The edges $E$ are the **I/O Streams** (the data flowing between nodes).
+- The vertices $V$ are the **Stream Processors** (the computational logic).
+- The edges $E$ are the **I/O Streams** (the data flowing between nodes).
 
 There are three primary types of processors in this DAG:
 
@@ -75,14 +75,14 @@ public class WeatherTopologyManager
 
         // SOURCE NODE: Consume from raw_weather_topic
         builder.Stream<string, string>("raw_weather_topic")
-               
+
                // STREAM PROCESSOR NODE: Filter logic
-               .Filter((key, weatherJson) => 
+               .Filter((key, weatherJson) =>
                {
                    // Assume a hypothetical ParseAndCheck method
-                   return ParseAndCheckHighTemp(weatherJson); 
+                   return ParseAndCheckHighTemp(weatherJson);
                })
-               
+
                // SINK NODE: Publish to processed_weather_topic
                .To("processed_weather_topic");
 
@@ -90,7 +90,7 @@ public class WeatherTopologyManager
 
         // 3. Execute the Stream
         KafkaStream stream = new KafkaStream(topology, config);
-        
+
         Console.CancelKeyPress += (o, e) => { stream.Dispose(); };
         await stream.StartAsync();
     }
@@ -98,7 +98,7 @@ public class WeatherTopologyManager
     private static bool ParseAndCheckHighTemp(string json)
     {
         // Implementation to deserialize JSON and check temp > threshold
-        return true; 
+        return true;
     }
 }
 
@@ -108,6 +108,6 @@ public class WeatherTopologyManager
 
 ### Architectural Synthesis
 
-By utilizing a Stream Builder topology, you offload the heavy lifting of network I/O, threading models, and fault tolerance to the underlying library. You define the *logic* of the pipeline, and the API manages the *execution*.
+By utilizing a Stream Builder topology, you offload the heavy lifting of network I/O, threading models, and fault tolerance to the underlying library. You define the _logic_ of the pipeline, and the API manages the _execution_.
 
 When transitioning from the high-throughput batch runs of your structural engineering software to the real-time needs of web systems, this DAG-based streaming model is what prevents database locks and API timeouts.

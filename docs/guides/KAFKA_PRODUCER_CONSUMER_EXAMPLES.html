@@ -1,85 +1,160 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>Distributed Event Streaming Platform Components - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      Distributed Event Streaming Platform Components - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="distributed-event-streaming-platform-components">Distributed Event Streaming Platform Components</h1>
-<p><br>
-<strong>Last updated</strong>: February 28, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>this document serves to ddescribe the instantiation of prudoducer consumer archetecture for Apache Kafka, which is a distributed message/streaming platform.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#distributed-event-streaming-platform-components">Distributed Event Streaming Platform Components</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a><ul>
-<li><a href="#1-prerequisites">1. Prerequisites</a></li>
-<li><a href="#2-the-producer-fire-and-forget-or-acknowledge">2. The Producer: Fire and Forget (or Acknowledge)</a></li>
-<li><a href="#3-the-consumer-the-infinite-polling-loop">3. The Consumer: The Infinite Polling Loop</a></li>
-<li><a href="#architectural-considerations-for-the-pipeline">Architectural Considerations for the Pipeline</a></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h3 id="1-prerequisites">1. Prerequisites</h3>
-<h2 id="implementing-a-robust-event-streaming-layer-in-c-relies-almost-exclusively-on-the-confluentkafka-library-it-is-a-highly-optimized-net-wrapper-around-the-native-c-librdkafka-library-meaning-it-delivers-the-raw-throughput-required-for-high-volume-backend-systems-while-exposing-a-clean-asynchronous-c-api">Implementing a robust event streaming layer in C# relies almost exclusively on the <code>Confluent.Kafka</code> library. It is a highly optimized .NET wrapper around the native C <code>librdkafka</code> library, meaning it delivers the raw throughput required for high-volume backend systems while exposing a clean, asynchronous C# API.</h2>
-<p>First, you need the NuGet package.</p>
-<div class="codehilite"><pre><span></span><code>dotnet<span class="w"> </span>add<span class="w"> </span>package<span class="w"> </span>Confluent.Kafka
-</code></pre></div>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="distributed-event-streaming-platform-components">
+            Distributed Event Streaming Platform Components
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: February 28, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://learn.microsoft.com/en-us/azure/active-directory/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            this document serves to ddescribe the instantiation of prudoducer
+            consumer archetecture for Apache Kafka, which is a distributed
+            message/streaming platform.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#distributed-event-streaming-platform-components"
+                >Distributed Event Streaming Platform Components</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li>
+              <a href="#contents">Contents</a>
+              <ul>
+                <li><a href="#1-prerequisites">1. Prerequisites</a></li>
+                <li>
+                  <a href="#2-the-producer-fire-and-forget-or-acknowledge"
+                    >2. The Producer: Fire and Forget (or Acknowledge)</a
+                  >
+                </li>
+                <li>
+                  <a href="#3-the-consumer-the-infinite-polling-loop"
+                    >3. The Consumer: The Infinite Polling Loop</a
+                  >
+                </li>
+                <li>
+                  <a href="#architectural-considerations-for-the-pipeline"
+                    >Architectural Considerations for the Pipeline</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h3 id="1-prerequisites">1. Prerequisites</h3>
+          <h2
+            id="implementing-a-robust-event-streaming-layer-in-c-relies-almost-exclusively-on-the-confluentkafka-library-it-is-a-highly-optimized-net-wrapper-around-the-native-c-librdkafka-library-meaning-it-delivers-the-raw-throughput-required-for-high-volume-backend-systems-while-exposing-a-clean-asynchronous-c-api"
+          >
+            Implementing a robust event streaming layer in C# relies almost
+            exclusively on the <code>Confluent.Kafka</code> library. It is a
+            highly optimized .NET wrapper around the native C
+            <code>librdkafka</code> library, meaning it delivers the raw
+            throughput required for high-volume backend systems while exposing a
+            clean, asynchronous C# API.
+          </h2>
+          <p>First, you need the NuGet package.</p>
+          <div class="codehilite">
+            <pre><span></span><code>dotnet<span class="w"> </span>add<span class="w"> </span>package<span class="w"> </span>Confluent.Kafka
+</code></pre>
+          </div>
 
-<p>To keep the data model immutable and thread-safe, we will define our event using a C# <code>record</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
+          <p>
+            To keep the data model immutable and thread-safe, we will define our
+            event using a C# <code>record</code>:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">EnrollmentEvent</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">StudentId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">CourseCode</span><span class="p">,</span><span class="w"> </span><span class="n">DateTimeOffset</span><span class="w"> </span><span class="n">Timestamp</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h3 id="2-the-producer-fire-and-forget-or-acknowledge">2. The Producer: Fire and Forget (or Acknowledge)</h3>
-<p>The Producer's job is to serialize the event and route it to the correct Kafka broker and topic. For critical backend pipelines, we use <code>ProduceAsync</code> to ensure we receive a delivery acknowledgment (an offset) from the broker without blocking the calling thread.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+          <hr />
+          <h3 id="2-the-producer-fire-and-forget-or-acknowledge">
+            2. The Producer: Fire and Forget (or Acknowledge)
+          </h3>
+          <p>
+            The Producer's job is to serialize the event and route it to the
+            correct Kafka broker and topic. For critical backend pipelines, we
+            use <code>ProduceAsync</code> to ensure we receive a delivery
+            acknowledgment (an offset) from the broker without blocking the
+            calling thread.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Text.Json</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Threading.Tasks</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Confluent.Kafka</span><span class="p">;</span>
@@ -125,13 +200,26 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h3 id="3-the-consumer-the-infinite-polling-loop">3. The Consumer: The Infinite Polling Loop</h3>
-<p>Unlike HTTP endpoints that passively wait for requests, Kafka Consumers actively poll the broker for new data. They are designed to run continuously in a background service.</p>
-<p>A critical concept here is the <code>GroupId</code>. Kafka tracks which messages have been read based on this group ID. If a consumer crashes and restarts, it resumes from the last committed offset for its group.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+          <hr />
+          <h3 id="3-the-consumer-the-infinite-polling-loop">
+            3. The Consumer: The Infinite Polling Loop
+          </h3>
+          <p>
+            Unlike HTTP endpoints that passively wait for requests, Kafka
+            Consumers actively poll the broker for new data. They are designed
+            to run continuously in a background service.
+          </p>
+          <p>
+            A critical concept here is the <code>GroupId</code>. Kafka tracks
+            which messages have been read based on this group ID. If a consumer
+            crashes and restarts, it resumes from the last committed offset for
+            its group.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Threading</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Confluent.Kafka</span><span class="p">;</span>
 
@@ -182,44 +270,60 @@
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h3 id="architectural-considerations-for-the-pipeline">Architectural Considerations for the Pipeline</h3>
-<ul>
-<li><strong>Partitioning Keys:</strong> In the producer code, <code>evt.StudentId</code> is explicitly set as the <code>Key</code>. Kafka guarantees order <em>only</em> within a specific partition. By keying on the <code>StudentId</code>, you ensure that all events for a specific student go to the same partition and are processed sequentially.</li>
-<li><strong>Idempotency:</strong> A dry reality of distributed systems is that the network will eventually lie to you. The producer might send a message, the broker might save it, but the acknowledgment fails. The producer will retry, resulting in a duplicate. Your downstream database logic must be idempotent (e.g., using <code>UPSERT</code> statements) to handle this gracefully.</li>
-</ul></article>
-        </div>
+          <hr />
+          <h3 id="architectural-considerations-for-the-pipeline">
+            Architectural Considerations for the Pipeline
+          </h3>
+          <ul>
+            <li>
+              <strong>Partitioning Keys:</strong> In the producer code,
+              <code>evt.StudentId</code> is explicitly set as the
+              <code>Key</code>. Kafka guarantees order <em>only</em> within a
+              specific partition. By keying on the <code>StudentId</code>, you
+              ensure that all events for a specific student go to the same
+              partition and are processed sequentially.
+            </li>
+            <li>
+              <strong>Idempotency:</strong> A dry reality of distributed systems
+              is that the network will eventually lie to you. The producer might
+              send a message, the broker might save it, but the acknowledgment
+              fails. The producer will retry, resulting in a duplicate. Your
+              downstream database logic must be idempotent (e.g., using
+              <code>UPSERT</code> statements) to handle this gracefully.
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

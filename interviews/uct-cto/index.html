@@ -1,76 +1,107 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="googlebot" content="noindex, nofollow">
-  <title>Access Required</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
-</head>
-<body>
-  <div class="login-wrapper">
-    <div class="login-box fade-in">
-      <span class="login-lockicon">🔒</span>
-      <h1>Interview Guide</h1>
-      <p class="subtitle">Enter access code to continue</p>
-      <p class="subtitle" style="margin-top:-0.35rem; color:var(--text-muted); font-size:0.92rem;">CV-grounded thread: Civil/Structural → Computational Mechanics &amp; applied mathematics → Backend engineering + DevOps (SEAT, SESKA, Ecoride, INNTEGRATE; robust APIs, event-driven systems, real-time, geo/GPS)</p>
-      <form id="loginForm" onsubmit="return false;">
-        <div class="login-input-group">
-          <div class="password-wrapper">
-            <input type="password" id="passInput" placeholder="Access code" autocomplete="off" autofocus>
-            <span class="pass-toggle" id="passToggle" title="Toggle visibility">👁️</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <title>Access Required</title>
+    <link rel="stylesheet" href="style.css?v=2.2" />
+  </head>
+  <body>
+    <div class="login-wrapper">
+      <div class="login-box fade-in">
+        <span class="login-lockicon">🔒</span>
+        <h1>Interview Guide</h1>
+        <p class="subtitle">Enter access code to continue</p>
+        <p
+          class="subtitle"
+          style="
+            margin-top: -0.35rem;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+          "
+        >
+          CV-grounded thread: Civil/Structural → Computational Mechanics &amp;
+          applied mathematics → Backend engineering + DevOps (SEAT, SESKA,
+          Ecoride, INNTEGRATE; robust APIs, event-driven systems, real-time,
+          geo/GPS)
+        </p>
+        <form id="loginForm" onsubmit="return false;">
+          <div class="login-input-group">
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="passInput"
+                placeholder="Access code"
+                autocomplete="off"
+                autofocus
+              />
+              <span
+                class="pass-toggle"
+                id="passToggle"
+                title="Toggle visibility"
+                >👁️</span
+              >
+            </div>
           </div>
-        </div>
-        <button type="submit" class="login-btn" id="loginBtn">Unlock</button>
-        <p class="login-error" id="loginError">Incorrect access code. Try again.</p>
-      </form>
+          <button type="submit" class="login-btn" id="loginBtn">Unlock</button>
+          <p class="login-error" id="loginError">
+            Incorrect access code. Try again.
+          </p>
+        </form>
+      </div>
     </div>
-  </div>
-  <script>
-    (function(){
-      // Note: H is lowercased here because sha256 function returns lowercase hex.
-      // The password is 'UCT-CTO@PN'
-      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
-      if(sessionStorage.getItem('_ig_auth')===H){window.location.replace('hub.html');return;}
-      
-      async function sha256(m){
-        const e=new TextEncoder().encode(m);
-        const h=await crypto.subtle.digest('SHA-256',e);
-        return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
-      }
-
-      const passToggle = document.getElementById('passToggle');
-      const passInput = document.getElementById('passInput');
-      const loginBtn = document.getElementById('loginBtn');
-      const loginError = document.getElementById('loginError');
-
-      passToggle.addEventListener('click', function() {
-        const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passInput.setAttribute('type', type);
-        this.textContent = type === 'password' ? '👁️' : '🙈';
-      });
-
-      loginBtn.addEventListener('click', async function(){
-        const p = passInput.value;
-        const h = await sha256(p);
-        if(h === H){
-          sessionStorage.setItem('_ig_auth', H);
-          window.location.replace('hub.html');
-        } else {
-          loginError.style.display = 'block';
-          passInput.value = '';
-          passInput.focus();
+    <script>
+      (function () {
+        // Note: H is lowercased here because sha256 function returns lowercase hex.
+        // The password is 'UCT-CTO@PN'
+        const H =
+          "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
+        if (sessionStorage.getItem("_ig_auth") === H) {
+          window.location.replace("hub.html");
+          return;
         }
-      });
 
-      passInput.addEventListener('keydown', function(e){
-        if(e.key === 'Enter'){
-          loginBtn.click();
+        async function sha256(m) {
+          const e = new TextEncoder().encode(m);
+          const h = await crypto.subtle.digest("SHA-256", e);
+          return Array.from(new Uint8Array(h))
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
         }
-      });
-    })();
-  </script>
-</body>
+
+        const passToggle = document.getElementById("passToggle");
+        const passInput = document.getElementById("passInput");
+        const loginBtn = document.getElementById("loginBtn");
+        const loginError = document.getElementById("loginError");
+
+        passToggle.addEventListener("click", function () {
+          const type =
+            passInput.getAttribute("type") === "password" ? "text" : "password";
+          passInput.setAttribute("type", type);
+          this.textContent = type === "password" ? "👁️" : "🙈";
+        });
+
+        loginBtn.addEventListener("click", async function () {
+          const p = passInput.value;
+          const h = await sha256(p);
+          if (h === H) {
+            sessionStorage.setItem("_ig_auth", H);
+            window.location.replace("hub.html");
+          } else {
+            loginError.style.display = "block";
+            passInput.value = "";
+            passInput.focus();
+          }
+        });
+
+        passInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            loginBtn.click();
+          }
+        });
+      })();
+    </script>
+  </body>
 </html>
-

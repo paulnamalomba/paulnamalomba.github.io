@@ -1,13 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Assessment Scenario 1 — System Design, Development & Architecture</title>
-  <link rel="stylesheet" href="style.css?v=2.2">
-  <style>
-    pre {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>
+      Assessment Scenario 1 — System Design, Development & Architecture
+    </title>
+    <link rel="stylesheet" href="style.css?v=2.2" />
+    <style>
+      pre {
         background: var(--bg-surface);
         padding: 1rem;
         border-radius: var(--radius-sm);
@@ -17,164 +19,429 @@
         font-family: var(--font-mono);
         font-size: 0.85rem;
         margin: 1rem 0;
-    }
-    code {
+      }
+      code {
         font-family: var(--font-mono);
         color: var(--text-primary);
-    }
-  </style>
-</head>
-<body>
-  <div class="page-wrapper protected-content" id="content" style="display:none;">
-    <div class="header-bar">
-      <span class="brand">CTO Interview Prep</span>
-      <nav>
-        <a href="hub.html">Hub</a>
-        <a href="level1-overview.html">Overview</a>
-        <a href="level2-technical.html">Technical</a>
-        <a href="level3-competency.html">Competency</a>
-        <a href="level4-scenarios.html">Scenarios</a>
-        <div class="dropdown-menu">
-          <button class="dropdown-button" style="color:var(--accent);">Assessments ▼</button>
-          <div class="dropdown-content">
-            <a href="assessment-scenario-1.html">Scenario 1 (System Design)</a>
-            <a href="assessment-scenario-2.html">Scenario 2 (Django & SEAT)</a>
-            <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
-            <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
-            <div class="dropdown-nested">
-              <a href="assessment-data-engineering.html" class="has-submenu">Data Engineering</a>
-              <div class="dropdown-nested-content">
-                <a href="assessment-de-docker.html">Docker & Containers</a>
-                <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
-                <a href="assessment-web-servers-python.html">Python Web Servers</a>
-                <a href="assessment-web-servers-dotnet.html">ASP.NET, Nginx & Apache</a>
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="page-wrapper protected-content"
+      id="content"
+      style="display: none"
+    >
+      <div class="header-bar">
+        <span class="brand">CTO Interview Prep</span>
+        <nav>
+          <a href="hub.html">Hub</a>
+          <a href="level1-overview.html">Overview</a>
+          <a href="level2-technical.html">Technical</a>
+          <a href="level3-competency.html">Competency</a>
+          <a href="level4-scenarios.html">Scenarios</a>
+          <div class="dropdown-menu">
+            <button class="dropdown-button" style="color: var(--accent)">
+              Assessments ▼
+            </button>
+            <div class="dropdown-content">
+              <a href="assessment-scenario-1.html"
+                >Scenario 1 (System Design)</a
+              >
+              <a href="assessment-scenario-2.html"
+                >Scenario 2 (Django & SEAT)</a
+              >
+              <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
+              <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
+              <div class="dropdown-nested">
+                <a href="assessment-data-engineering.html" class="has-submenu"
+                  >Data Engineering</a
+                >
+                <div class="dropdown-nested-content">
+                  <a href="assessment-de-docker.html">Docker & Containers</a>
+                  <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
+                  <a href="assessment-web-servers-python.html"
+                    >Python Web Servers</a
+                  >
+                  <a href="assessment-web-servers-dotnet.html"
+                    >ASP.NET, Nginx & Apache</a
+                  >
+                </div>
               </div>
+              <a href="assessment-cto-architecture.html">CTO Architecture</a>
+              <a href="assessment-tips-strategy.html">Tips & Strategy</a>
             </div>
-            <a href="assessment-cto-architecture.html">CTO Architecture</a>
-            <a href="assessment-tips-strategy.html">Tips & Strategy</a>
           </div>
-        </div>
-        <div class="dropdown-menu">
-          <button class="dropdown-button">Targeted Prep ▼</button>
-          <div class="dropdown-content">
-            <a href="targeted-preparation-pages/index.html">Prep Hub</a>
-            <a href="targeted-preparation-pages/mock-interview.html">30-Min Mock Interview</a>
-            <a href="targeted-preparation-pages/answer-templates.html">Answer Templates</a>
-            <a href="targeted-preparation-pages/revision-sheet.html">Revision Sheet</a>
+          <div class="dropdown-menu">
+            <button class="dropdown-button">Targeted Prep ▼</button>
+            <div class="dropdown-content">
+              <a href="targeted-preparation-pages/index.html">Prep Hub</a>
+              <a href="targeted-preparation-pages/mock-interview.html"
+                >30-Min Mock Interview</a
+              >
+              <a href="targeted-preparation-pages/answer-templates.html"
+                >Answer Templates</a
+              >
+              <a href="targeted-preparation-pages/revision-sheet.html"
+                >Revision Sheet</a
+              >
+            </div>
           </div>
+          <a href="guides.html">Guides</a>
+          <a href="level5-panel.html">Panel</a>
+        </nav>
+      </div>
+
+      <div class="breadcrumb">
+        <a href="hub.html">Hub</a> <span>›</span> Assessment Scenario 1: Deep
+        Technical Dive
+      </div>
+
+      <h1 class="fade-in">
+        Assessment Scenario 1: Deep Technical Dive — Architecture & Systems
+      </h1>
+      <p class="fade-in fade-in-d1">
+        A highly technical study guide diving deep into the infrastructure,
+        alternative technologies, and underlying mechanics of the CTO role.
+        <strong>Warning: High conceptual density.</strong>
+      </p>
+
+      <div class="callout info fade-in fade-in-d2">
+        <div class="callout-title">
+          CV Grounding (use as evidence in answers)
         </div>
-        <a href="guides.html">Guides</a>
-        <a href="level5-panel.html">Panel</a>
-      </nav>
-    </div>
+        <ul>
+          <li>
+            <strong>SEAT ops + security:</strong> Django/PostgreSQL/LDAP; uptime
+            and incident discipline during registration; secure-by-default
+            patterns via ORM and access controls.
+          </li>
+          <li>
+            <strong>Event-driven systems:</strong> ComputeMore platforms
+            (Ecoride/INNTEGRATE) use RabbitMQ-style queuing and real-time
+            messaging with SignalR, plus Redis caching and cloud deployments
+            (Azure/Render/Vercel/Cloudflare R2).
+          </li>
+          <li>
+            <strong>HPC mindset:</strong> SESKA on Slurm/OpenMPI/PETSc gives you
+            first-principles understanding of concurrency, performance limits,
+            and reproducibility.
+          </li>
+          <li>
+            <strong>Multidisciplinary bridge:</strong> Civil/Structural
+            engineering training + computational mechanics/applied math means
+            you can justify systems tradeoffs in engineering terms (accuracy vs
+            performance, reproducibility vs speed, safety/security vs
+            convenience).
+          </li>
+          <li>
+            <strong>Explaining deep tech:</strong> Assistant Lecturer experience
+            strengthens your ability to communicate low-level concepts (GIL,
+            event loops, reverse proxies) clearly to mixed-technical audiences.
+          </li>
+        </ul>
+      </div>
 
-    <div class="breadcrumb"><a href="hub.html">Hub</a> <span>›</span> Assessment Scenario 1: Deep Technical Dive</div>
+      <!-- ASSESSMENT STRUCTURE -->
+      <div class="section-card fade-in fade-in-d2">
+        <h2 style="margin-top: 0">
+          ⏱️ Assessment Structure (1h 35m Breakdown)
+        </h2>
+        <p>
+          Given the technical rigor expected of this role, the assessment will
+          likely push beyond surface-level implementation and test your
+          fundamental understanding of <em>why</em> specific technologies are
+          used, their internal mechanics, and how they scale.
+        </p>
+        <ul>
+          <li>
+            <strong
+              >Part 1: Practical Coding & Algorithmic Design (45 mins)</strong
+            >
+            — Expect to write code (Python and potentially JavaScript) that
+            handles large volumes of data efficiently. Focus will be on Time
+            Complexity (Big O), Memory Management, and Database Indexing
+            strategies.
+          </li>
+          <li>
+            <strong
+              >Part 2: Systems Architecture, Admin & Troubleshooting (50
+              mins)</strong
+            >
+            — Deep-dive discussions on Linux kernel resource management, web
+            server architecture (Apache2 vs. Alternatives), networking, and
+            security protocols (LDAP, TLS).
+          </li>
+        </ul>
+      </div>
 
-    <h1 class="fade-in">Assessment Scenario 1: Deep Technical Dive — Architecture & Systems</h1>
-    <p class="fade-in fade-in-d1">A highly technical study guide diving deep into the infrastructure, alternative technologies, and underlying mechanics of the CTO role. <strong>Warning: High conceptual density.</strong></p>
+      <!-- TECHNOLOGY DEEP DIVES -->
+      <div class="section-card fade-in fade-in-d3">
+        <h2 style="margin-top: 0">
+          📚 Foundation: Core Technologies Deep Dive
+        </h2>
 
-    <div class="callout info fade-in fade-in-d2">
-      <div class="callout-title">CV Grounding (use as evidence in answers)</div>
-      <ul>
-        <li><strong>SEAT ops + security:</strong> Django/PostgreSQL/LDAP; uptime and incident discipline during registration; secure-by-default patterns via ORM and access controls.</li>
-        <li><strong>Event-driven systems:</strong> ComputeMore platforms (Ecoride/INNTEGRATE) use RabbitMQ-style queuing and real-time messaging with SignalR, plus Redis caching and cloud deployments (Azure/Render/Vercel/Cloudflare R2).</li>
-        <li><strong>HPC mindset:</strong> SESKA on Slurm/OpenMPI/PETSc gives you first-principles understanding of concurrency, performance limits, and reproducibility.</li>
-        <li><strong>Multidisciplinary bridge:</strong> Civil/Structural engineering training + computational mechanics/applied math means you can justify systems tradeoffs in engineering terms (accuracy vs performance, reproducibility vs speed, safety/security vs convenience).</li>
-        <li><strong>Explaining deep tech:</strong> Assistant Lecturer experience strengthens your ability to communicate low-level concepts (GIL, event loops, reverse proxies) clearly to mixed-technical audiences.</li>
-      </ul>
-    </div>
+        <h3>1. Python: The Language Mechanics</h3>
+        <p>
+          Python is a
+          <strong>high-level, interpreted, dynamically typed language</strong>.
+          It is not compiled down to machine code directly like C++; instead,
+          the CPython implementation (the standard) compiles Python source code
+          to intermediate <strong>bytecode</strong>, which is then executed by
+          the Python Virtual Machine (PVM).
+        </p>
+        <ul>
+          <li>
+            <strong>Dynamic Typing & Memory:</strong> Variables point to objects
+            in memory; they don't have intrinsic types themselves. Memory is
+            managed automatically via <strong>Reference Counting</strong> and a
+            <strong>Generational Garbage Collector</strong> (to detect cyclic
+            references). This abstraction makes Python exceptionally fast to
+            develop in, but it incurs a performance overhead compared to
+            compiled languages.
+          </li>
+          <li>
+            <strong>The GIL (Global Interpreter Lock):</strong> A crucial
+            concept when discussing Python scalability. The GIL is a mutex that
+            protects access to Python objects, preventing multiple native
+            threads from executing Python bytecodes concurrently in a single
+            process. <strong>Implication:</strong> Python multithreading does
+            not give you multi-core execution for CPU-bound tasks. To scale
+            heavy computational tasks (like data mining or HPC), you
+            <em>must</em> use multi-processing (e.g., the
+            <code>multiprocessing</code> module or distributed task queues like
+            Celery), which bypasses the GIL by spawning separate processes, each
+            with its own Python interpreter and memory space.
+          </li>
+        </ul>
 
-    <!-- ASSESSMENT STRUCTURE -->
-    <div class="section-card fade-in fade-in-d2">
-      <h2 style="margin-top:0;">⏱️ Assessment Structure (1h 35m Breakdown)</h2>
-      <p>Given the technical rigor expected of this role, the assessment will likely push beyond surface-level implementation and test your fundamental understanding of <em>why</em> specific technologies are used, their internal mechanics, and how they scale.</p>
-      <ul>
-        <li><strong>Part 1: Practical Coding & Algorithmic Design (45 mins)</strong> — Expect to write code (Python and potentially JavaScript) that handles large volumes of data efficiently. Focus will be on Time Complexity (Big O), Memory Management, and Database Indexing strategies.</li>
-        <li><strong>Part 2: Systems Architecture, Admin & Troubleshooting (50 mins)</strong> — Deep-dive discussions on Linux kernel resource management, web server architecture (Apache2 vs. Alternatives), networking, and security protocols (LDAP, TLS).</li>
-      </ul>
-    </div>
+        <h3>2. Web Servers: Architecture & Alternatives</h3>
+        <p>
+          A web server's primary job is handling HTTP requests. When deploying
+          Django, the web server (like Apache2) sits in front of an application
+          server (like Gunicorn or uWSGI), which communicates with Django via
+          WSGI (Web Server Gateway Interface).
+        </p>
 
-    <!-- TECHNOLOGY DEEP DIVES -->
-    <div class="section-card fade-in fade-in-d3">
-      <h2 style="margin-top:0;">📚 Foundation: Core Technologies Deep Dive</h2>
-      
-      <h3>1. Python: The Language Mechanics</h3>
-      <p>Python is a <strong>high-level, interpreted, dynamically typed language</strong>. It is not compiled down to machine code directly like C++; instead, the CPython implementation (the standard) compiles Python source code to intermediate <strong>bytecode</strong>, which is then executed by the Python Virtual Machine (PVM).</p>
-      <ul>
-        <li><strong>Dynamic Typing & Memory:</strong> Variables point to objects in memory; they don't have intrinsic types themselves. Memory is managed automatically via <strong>Reference Counting</strong> and a <strong>Generational Garbage Collector</strong> (to detect cyclic references). This abstraction makes Python exceptionally fast to develop in, but it incurs a performance overhead compared to compiled languages.</li>
-        <li><strong>The GIL (Global Interpreter Lock):</strong> A crucial concept when discussing Python scalability. The GIL is a mutex that protects access to Python objects, preventing multiple native threads from executing Python bytecodes concurrently in a single process. <strong>Implication:</strong> Python multithreading does not give you multi-core execution for CPU-bound tasks. To scale heavy computational tasks (like data mining or HPC), you <em>must</em> use multi-processing (e.g., the <code>multiprocessing</code> module or distributed task queues like Celery), which bypasses the GIL by spawning separate processes, each with its own Python interpreter and memory space.</li>
-      </ul>
+        <h4>Apache HTTP Server (Apache2)</h4>
+        <p>
+          The traditional, battle-tested heavyweight. It is
+          <strong>process-driven</strong> (or thread-driven, depending on the
+          Multi-Processing Module - MPM). Under the standard 'Prefork' MPM,
+          Apache spawns a new process for every incoming connection.
+          <strong>Setup:</strong> Configured via virtual host files (inside
+          <code>/etc/apache2/sites-available/</code>), often heavily utilizing
+          modules like <code>mod_proxy</code> to pass traffic to Gunicorn, and
+          <code>mod_ssl</code> for HTTPS.
+        </p>
+        <ul>
+          <li>
+            <strong>Pros:</strong> Unmatched flexibility, massive ecosystem of
+            modules, <code>.htaccess</code> support for directory-level
+            configuration without root access.
+          </li>
+          <li>
+            <strong>Cons:</strong> High memory footprint under heavy concurrent
+            load (the C10k problem) because blocking processes consume RAM.
+          </li>
+        </ul>
 
-      <h3>2. Web Servers: Architecture & Alternatives</h3>
-      <p>A web server's primary job is handling HTTP requests. When deploying Django, the web server (like Apache2) sits in front of an application server (like Gunicorn or uWSGI), which communicates with Django via WSGI (Web Server Gateway Interface).</p>
-      
-      <h4>Apache HTTP Server (Apache2)</h4>
-      <p>The traditional, battle-tested heavyweight. It is <strong>process-driven</strong> (or thread-driven, depending on the Multi-Processing Module - MPM). Under the standard 'Prefork' MPM, Apache spawns a new process for every incoming connection. <strong>Setup:</strong> Configured via virtual host files (inside <code>/etc/apache2/sites-available/</code>), often heavily utilizing modules like <code>mod_proxy</code> to pass traffic to Gunicorn, and <code>mod_ssl</code> for HTTPS.</p>
-      <ul>
-        <li><strong>Pros:</strong> Unmatched flexibility, massive ecosystem of modules, <code>.htaccess</code> support for directory-level configuration without root access.</li>
-        <li><strong>Cons:</strong> High memory footprint under heavy concurrent load (the C10k problem) because blocking processes consume RAM.</li>
-      </ul>
+        <h4>Nginx (Alternative 1)</h4>
+        <p>
+          Nginx uses an highly optimized
+          <strong>event-driven, asynchronous, non-blocking</strong>
+          architecture. Instead of a process per connection, a single worker
+          process handles thousands of connections concurrently using an event
+          loop (via <code>epoll</code> in Linux).
+        </p>
+        <ul>
+          <li>
+            <strong>Why to switch:</strong> If SEAT or the IoT sensor networks
+            encounter massive concurrency or need to serve large volumes of
+            static files/media, Nginx uses drastically less memory than Apache2.
+            It is the modern standard for reverse-proxying application servers.
+          </li>
+        </ul>
 
-      <h4>Nginx (Alternative 1)</h4>
-      <p>Nginx uses an highly optimized <strong>event-driven, asynchronous, non-blocking</strong> architecture. Instead of a process per connection, a single worker process handles thousands of connections concurrently using an event loop (via <code>epoll</code> in Linux).</p>
-      <ul>
-        <li><strong>Why to switch:</strong> If SEAT or the IoT sensor networks encounter massive concurrency or need to serve large volumes of static files/media, Nginx uses drastically less memory than Apache2. It is the modern standard for reverse-proxying application servers.</li>
-      </ul>
+        <h4>Caddy (Alternative 2)</h4>
+        <p>
+          A modern web server written in <strong>Go (Golang)</strong>. Its
+          defining feature is <strong>Automatic HTTPS</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Why to switch:</strong> Configuration is remarkably simple
+            compared to Apache/Nginx. Caddy automatically provisions and renews
+            SSL/TLS certificates via Let's Encrypt default out-of-the-box. If
+            the department needs rapid, secure deployment of internal tools with
+            zero SSL maintenance overhead, Caddy is superior.
+          </li>
+        </ul>
 
-      <h4>Caddy (Alternative 2)</h4>
-      <p>A modern web server written in <strong>Go (Golang)</strong>. Its defining feature is <strong>Automatic HTTPS</strong>.</p>
-      <ul>
-        <li><strong>Why to switch:</strong> Configuration is remarkably simple compared to Apache/Nginx. Caddy automatically provisions and renews SSL/TLS certificates via Let's Encrypt default out-of-the-box. If the department needs rapid, secure deployment of internal tools with zero SSL maintenance overhead, Caddy is superior.</li>
-      </ul>
+        <h3>3. The Server Ecosystem: Web, App, and Proxy Servers</h3>
+        <p>
+          A "server" is fundamentally software or hardware providing a service
+          to other programs (clients). The ecosystem revolves around strict
+          specialization:
+        </p>
+        <ul>
+          <li>
+            <strong>Web Server vs. Application Server:</strong> A Web Server
+            (Nginx, Apache) strictly serves static HTTP content (HTML, CSS,
+            images). An Application Server (Gunicorn, Uvicorn, Tomcat) executes
+            dynamic business logic (running Python/Java code) and interacts
+            directly with the database.
+          </li>
+          <li>
+            <strong>Database / File Server:</strong> A dedicated machine
+            optimized purely for disk I/O to run PostgreSQL/TimescaleDB
+            (Database) or NFS (Network File System). They should never touch the
+            outer internet.
+          </li>
+        </ul>
 
-      <h3>3. The Server Ecosystem: Web, App, and Proxy Servers</h3>
-      <p>A "server" is fundamentally software or hardware providing a service to other programs (clients). The ecosystem revolves around strict specialization:</p>
-      <ul>
-        <li><strong>Web Server vs. Application Server:</strong> A Web Server (Nginx, Apache) strictly serves static HTTP content (HTML, CSS, images). An Application Server (Gunicorn, Uvicorn, Tomcat) executes dynamic business logic (running Python/Java code) and interacts directly with the database.</li>
-        <li><strong>Database / File Server:</strong> A dedicated machine optimized purely for disk I/O to run PostgreSQL/TimescaleDB (Database) or NFS (Network File System). They should never touch the outer internet.</li>
-      </ul>
-      
-      <h4>The Forward Proxy vs. Reverse Proxy</h4>
-      <p>A <strong>Proxy Server (Forward Proxy)</strong> sits in front of <em>clients</em> (the users). If students in a UCT lab browse the internet, their requests hit a forward proxy first. It hides the students' IP addresses from the broader internet, enforces content filtering (blocking malicious sites), and caches outbound internet requests to save university bandwidth.</p>
-      
-      <p>A <strong>Reverse Proxy</strong> sits in front of one or more <em>backend servers</em>. It intercepts all incoming requests from the internet before they ever touch your actual application server. Nginx and HAProxy are the industry standards for this. This is the cornerstone of modern scalable architecture:</p>
-      <ul>
-        <li><strong>Deep Technical Benefit 1 (Load Balancing):</strong> A reverse proxy acts as a traffic cop. If you have 5 Gunicorn application servers running SEAT, the reverse proxy distributes incoming traffic evenly across them using algorithms like <em>Round Robin</em> or <em>Least Connections</em>, preventing any single backend from crashing under pressure.</li>
-        <li><strong>Deep Technical Benefit 2 (SSL/TLS Termination):</strong> Encrypting and decrypting HTTPS traffic requires significant CPU overhead due to complex cryptographic handshakes. The reverse proxy handles all SSL decryption at the network edge (the DMZ). It then passes raw, unencrypted HTTP traffic to the backend application servers over a secure private subnet. This frees up the application server's CPU to purely run your Python/Java code.</li>
-        <li><strong>Deep Technical Benefit 3 (Security & Anonymity):</strong> The outside world never knows the IP address of your actual database or application servers. They only see the IP of the reverse proxy, which acts as a fortified shield absorbing DDoS attacks, often paired with a WAF (Web Application Firewall).</li>
-        <li><strong>Deep Technical Benefit 4 (Static File Caching):</strong> When a user requests a logo or CSS file, the reverse proxy serves it directly from its RAM cache in milliseconds without ever waking up the backend Django application or consuming Python threads, drastically reducing system latency.</li>
-      </ul>
+        <h4>The Forward Proxy vs. Reverse Proxy</h4>
+        <p>
+          A <strong>Proxy Server (Forward Proxy)</strong> sits in front of
+          <em>clients</em> (the users). If students in a UCT lab browse the
+          internet, their requests hit a forward proxy first. It hides the
+          students' IP addresses from the broader internet, enforces content
+          filtering (blocking malicious sites), and caches outbound internet
+          requests to save university bandwidth.
+        </p>
 
-      <h3>4. Application Servers & Worker Management</h3>
-      <p>While the Reverse Proxy handles the internet, the <strong>Application Server</strong> (like Gunicorn) is the engine executing your Python code. Because of Python's Global Interpreter Lock (GIL), a single Python process can only utilize one CPU core at a time. Gunicorn solves this through intensive process management.</p>
-      <ul>
-        <li><strong>Gunicorn Pre-fork Worker Model:</strong> Gunicorn operates a single Master daemon that forks multiple Worker processes. If the server has 4 CPU cores, you generally configure Gunicorn to run <code>(2 x $NUM_CORES) + 1</code> workers (i.e., 9 workers). This mathematically guarantees that even if 4 workers are blocked waiting on an external database query, 5 others are instantly ready to handle new incoming HTTP requests, maximizing underlying hardware utilization.</li>
-        <li><strong>Worker Types (Sync vs. Async):</strong>
-          <ul>
-            <li><strong>Sync Workers:</strong> The default behavior. Each worker handles exactly one request at a time from start to finish. Perfect for fast, CPU-bound mathematical operations.</li>
-            <li><strong>Async Workers (Uvicorn / Gevent):</strong> Required for high-concurrency, I/O-bound tasks (like waiting for a slow external API). They use an asynchronous event loop (conceptually identical to Node.js), allowing a single worker to juggle thousands of connections simultaneously without consuming massive RAM via blocking threads.</li>
-          </ul>
-        </li>
-      </ul>
+        <p>
+          A <strong>Reverse Proxy</strong> sits in front of one or more
+          <em>backend servers</em>. It intercepts all incoming requests from the
+          internet before they ever touch your actual application server. Nginx
+          and HAProxy are the industry standards for this. This is the
+          cornerstone of modern scalable architecture:
+        </p>
+        <ul>
+          <li>
+            <strong>Deep Technical Benefit 1 (Load Balancing):</strong> A
+            reverse proxy acts as a traffic cop. If you have 5 Gunicorn
+            application servers running SEAT, the reverse proxy distributes
+            incoming traffic evenly across them using algorithms like
+            <em>Round Robin</em> or <em>Least Connections</em>, preventing any
+            single backend from crashing under pressure.
+          </li>
+          <li>
+            <strong>Deep Technical Benefit 2 (SSL/TLS Termination):</strong>
+            Encrypting and decrypting HTTPS traffic requires significant CPU
+            overhead due to complex cryptographic handshakes. The reverse proxy
+            handles all SSL decryption at the network edge (the DMZ). It then
+            passes raw, unencrypted HTTP traffic to the backend application
+            servers over a secure private subnet. This frees up the application
+            server's CPU to purely run your Python/Java code.
+          </li>
+          <li>
+            <strong>Deep Technical Benefit 3 (Security & Anonymity):</strong>
+            The outside world never knows the IP address of your actual database
+            or application servers. They only see the IP of the reverse proxy,
+            which acts as a fortified shield absorbing DDoS attacks, often
+            paired with a WAF (Web Application Firewall).
+          </li>
+          <li>
+            <strong>Deep Technical Benefit 4 (Static File Caching):</strong>
+            When a user requests a logo or CSS file, the reverse proxy serves it
+            directly from its RAM cache in milliseconds without ever waking up
+            the backend Django application or consuming Python threads,
+            drastically reducing system latency.
+          </li>
+        </ul>
 
-      <h4>Asynchronous Task Queues (Celery)</h4>
-      <p>A web request should generally never take longer than 500 milliseconds. If the CTO dashboard needs to generate a 10GB university demographic report, it must not execute synchronously inside the Gunicorn web worker—the user's browser will simply time out or the reverse proxy will drop the connection.</p>
-      <ul>
-        <li><strong>The Celery Architecture:</strong> Celery is a distributed task queue built for Python. Instead of Gunicorn generating the report, Gunicorn serializes the task intent into a JSON payload and pushes it onto the Message Broker (Redis or RabbitMQ). Gunicorn immediately returns a "202 Accepted" HTTP response to the user's browser.</li>
-        <li><strong>Celery Workers (The Muscle):</strong> Completely separate daemon processes (often running on entirely different physical servers optimized for CPU/RAM) constantly listen to the Message Broker. They pick up the JSON payload, execute the 10-minute heavy calculation natively in the background, and eventually write the result to PostgreSQL or trigger an email. This strictly decouples fast web-facing networking traffic from heavy computational workloads.</li>
-      </ul>
-    </div>
+        <h3>4. Application Servers & Worker Management</h3>
+        <p>
+          While the Reverse Proxy handles the internet, the
+          <strong>Application Server</strong> (like Gunicorn) is the engine
+          executing your Python code. Because of Python's Global Interpreter
+          Lock (GIL), a single Python process can only utilize one CPU core at a
+          time. Gunicorn solves this through intensive process management.
+        </p>
+        <ul>
+          <li>
+            <strong>Gunicorn Pre-fork Worker Model:</strong> Gunicorn operates a
+            single Master daemon that forks multiple Worker processes. If the
+            server has 4 CPU cores, you generally configure Gunicorn to run
+            <code>(2 x $NUM_CORES) + 1</code> workers (i.e., 9 workers). This
+            mathematically guarantees that even if 4 workers are blocked waiting
+            on an external database query, 5 others are instantly ready to
+            handle new incoming HTTP requests, maximizing underlying hardware
+            utilization.
+          </li>
+          <li>
+            <strong>Worker Types (Sync vs. Async):</strong>
+            <ul>
+              <li>
+                <strong>Sync Workers:</strong> The default behavior. Each worker
+                handles exactly one request at a time from start to finish.
+                Perfect for fast, CPU-bound mathematical operations.
+              </li>
+              <li>
+                <strong>Async Workers (Uvicorn / Gevent):</strong> Required for
+                high-concurrency, I/O-bound tasks (like waiting for a slow
+                external API). They use an asynchronous event loop (conceptually
+                identical to Node.js), allowing a single worker to juggle
+                thousands of connections simultaneously without consuming
+                massive RAM via blocking threads.
+              </li>
+            </ul>
+          </li>
+        </ul>
 
-    <!-- PART 1: DJANGO & SEAT -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🛠️ Part 1: Systems Development & Django (SEAT)</h2>
-      
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Task 1: The SEAT dashboard is taking 15 seconds to load during registration. You suspect a slow SQL query related to loading student profiles. Optimize it.</button>
-        <div class="qa-answer">
-          <p><strong>Technical Context:</strong> The "N+1 query problem" happens because Django querysets are <em>lazy</em>. If you fetch a list of students, hit the database once, and then loop through them accessing a foreign key (e.g., their Department), Django hits the DB again <em>inside the loop</em> for every single student.</p>
-          <p><strong>Gold Standard Solution (Python/Django ORM):</strong></p>
-          <pre><code class="language-python"># Inefficient (Causes N+1 DB Hits):
+        <h4>Asynchronous Task Queues (Celery)</h4>
+        <p>
+          A web request should generally never take longer than 500
+          milliseconds. If the CTO dashboard needs to generate a 10GB university
+          demographic report, it must not execute synchronously inside the
+          Gunicorn web worker—the user's browser will simply time out or the
+          reverse proxy will drop the connection.
+        </p>
+        <ul>
+          <li>
+            <strong>The Celery Architecture:</strong> Celery is a distributed
+            task queue built for Python. Instead of Gunicorn generating the
+            report, Gunicorn serializes the task intent into a JSON payload and
+            pushes it onto the Message Broker (Redis or RabbitMQ). Gunicorn
+            immediately returns a "202 Accepted" HTTP response to the user's
+            browser.
+          </li>
+          <li>
+            <strong>Celery Workers (The Muscle):</strong> Completely separate
+            daemon processes (often running on entirely different physical
+            servers optimized for CPU/RAM) constantly listen to the Message
+            Broker. They pick up the JSON payload, execute the 10-minute heavy
+            calculation natively in the background, and eventually write the
+            result to PostgreSQL or trigger an email. This strictly decouples
+            fast web-facing networking traffic from heavy computational
+            workloads.
+          </li>
+        </ul>
+      </div>
+
+      <!-- PART 1: DJANGO & SEAT -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          🛠️ Part 1: Systems Development & Django (SEAT)
+        </h2>
+
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Task 1: The SEAT dashboard is taking 15 seconds to load during
+            registration. You suspect a slow SQL query related to loading
+            student profiles. Optimize it.
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Technical Context:</strong> The "N+1 query problem"
+              happens because Django querysets are <em>lazy</em>. If you fetch a
+              list of students, hit the database once, and then loop through
+              them accessing a foreign key (e.g., their Department), Django hits
+              the DB again <em>inside the loop</em> for every single student.
+            </p>
+            <p><strong>Gold Standard Solution (Python/Django ORM):</strong></p>
+            <pre><code class="language-python"># Inefficient (Causes N+1 DB Hits):
 # Total Queries = 1 (to get students) + N (number of students to get departments)
 students = Student.objects.all()
 for student in students:
@@ -187,16 +454,31 @@ students = Student.objects.select_related('department').all()
 # Optimized for Many-To-Many (2 DB Hits):
 # prefetch_related() does a separate lookup and does the "join" in Python, crucial for M2M.
 students = Student.objects.prefetch_related('courses').all()</code></pre>
+          </div>
         </div>
-      </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Task 2: Write a utility script to automate nightly data synchronization from a legacy CSV structure into the SEAT database.</button>
-        <div class="qa-answer">
-          <p><strong>Technical Context:</strong> Automating system integrations requires handling edge cases (missing data, format changes) and ensuring transactional integrity (if the script fails halfway, the database shouldn't be left in a corrupted state). Memory efficiency is also key—reading a 10GB CSV entirely into memory will crash the server.</p>
-          
-          <p><strong>Gold Standard Solution (Python with Pandas & Django ORM):</strong></p>
-          <pre><code class="language-python">import pandas as pd
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Task 2: Write a utility script to automate nightly data
+            synchronization from a legacy CSV structure into the SEAT database.
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Technical Context:</strong> Automating system integrations
+              requires handling edge cases (missing data, format changes) and
+              ensuring transactional integrity (if the script fails halfway, the
+              database shouldn't be left in a corrupted state). Memory
+              efficiency is also key—reading a 10GB CSV entirely into memory
+              will crash the server.
+            </p>
+
+            <p>
+              <strong
+                >Gold Standard Solution (Python with Pandas & Django
+                ORM):</strong
+              >
+            </p>
+            <pre><code class="language-python">import pandas as pd
 from myapp.models import Student
 from django.db import transaction
 
@@ -223,9 +505,13 @@ def sync_legacy_students(file_path):
         # Insert in batches to avoid exceeding Postgres memory limits per query
         Student.objects.bulk_create(student_objs, batch_size=5000)</code></pre>
 
-          <p><strong>Equivalent Solution (JavaScript / Node.js):</strong></p>
-          <p>If the team shifts towards a Node.js microservice architecture, here is the equivalent integration pattern using streams (for memory efficiency) and an ORM like Prisma or Sequelize.</p>
-          <pre><code class="language-javascript">const fs = require('fs');
+            <p><strong>Equivalent Solution (JavaScript / Node.js):</strong></p>
+            <p>
+              If the team shifts towards a Node.js microservice architecture,
+              here is the equivalent integration pattern using streams (for
+              memory efficiency) and an ORM like Prisma or Sequelize.
+            </p>
+            <pre><code class="language-javascript">const fs = require('fs');
 const { parse } = require('csv-parse'); // stream processing
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -264,51 +550,127 @@ async function syncLegacyStudents() {
       }
     });
 }</code></pre>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- PART 2: LINUX, SYSADMIN & HPC -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">🐧 Part 2: Linux, Server Admin & HPC Operations</h2>
+      <!-- PART 2: LINUX, SYSADMIN & HPC -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          🐧 Part 2: Linux, Server Admin & HPC Operations
+        </h2>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Scenario: An Apache2 server hosting a critical departmental tool goes down under heavy load during a data mining operation. Diagnose and resolve this.</button>
-        <div class="qa-answer">
-          <p><strong>Deep Technical Diagnosis:</strong></p>
-          <ol>
-            <li><strong>Analyze Resource Exhaustion:</strong> Use <code>top</code> or <code>htop</code>. Look at the Load Average (1m, 5m, 15m) relative to CPU cores. Look at swap memory usage. If swap is heavily utilized (thrashing), the system is critically out of RAM.</li>
-            <li><strong>Forensics (The OOM Killer):</strong> Check the kernel ring buffer using <code>dmesg -T | grep -i oom</code>. If Python or Apache consumed too much memory, the Linux Out-Of-Memory (OOM) Killer sacrifices processes to save the kernel.</li>
-            <li><strong>Apache Logs:</strong> Check <code>tail -f /var/log/apache2/error.log</code>. Are there "MaxRequestWorkers reached" errors? This means Apache's worker pool is exhausted by slow requests holding connections open (often caused by slow backend DB queries).</li>
-            <li><strong>Mitigation Strategy:</strong>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Scenario: An Apache2 server hosting a critical departmental tool
+            goes down under heavy load during a data mining operation. Diagnose
+            and resolve this.
+          </button>
+          <div class="qa-answer">
+            <p><strong>Deep Technical Diagnosis:</strong></p>
+            <ol>
+              <li>
+                <strong>Analyze Resource Exhaustion:</strong> Use
+                <code>top</code> or <code>htop</code>. Look at the Load Average
+                (1m, 5m, 15m) relative to CPU cores. Look at swap memory usage.
+                If swap is heavily utilized (thrashing), the system is
+                critically out of RAM.
+              </li>
+              <li>
+                <strong>Forensics (The OOM Killer):</strong> Check the kernel
+                ring buffer using <code>dmesg -T | grep -i oom</code>. If Python
+                or Apache consumed too much memory, the Linux Out-Of-Memory
+                (OOM) Killer sacrifices processes to save the kernel.
+              </li>
+              <li>
+                <strong>Apache Logs:</strong> Check
+                <code>tail -f /var/log/apache2/error.log</code>. Are there
+                "MaxRequestWorkers reached" errors? This means Apache's worker
+                pool is exhausted by slow requests holding connections open
+                (often caused by slow backend DB queries).
+              </li>
+              <li>
+                <strong>Mitigation Strategy:</strong>
                 <ul>
-                    <li>Immediate: <code>systemctl restart apache2</code> and potentially kill runaway Python scripts.</li>
-                    <li>Architecture Fix: Decouple architecture. The web server (Apache/Nginx) must <em>never</em> run contiguous heavy computational workloads. Move data mining to asynchronous background workers (<strong>Celery</strong> + <strong>Redis/RabbitMQ</strong> message broker).</li>
-                    <li>Server Swap: If concurrency is the issue (many users, high traffic), swap Apache2 for <strong>Nginx</strong> to utilize its non-blocking event loop, drastically reducing the RAM footprint per connection.</li>
+                  <li>
+                    Immediate: <code>systemctl restart apache2</code> and
+                    potentially kill runaway Python scripts.
+                  </li>
+                  <li>
+                    Architecture Fix: Decouple architecture. The web server
+                    (Apache/Nginx) must <em>never</em> run contiguous heavy
+                    computational workloads. Move data mining to asynchronous
+                    background workers (<strong>Celery</strong> +
+                    <strong>Redis/RabbitMQ</strong> message broker).
+                  </li>
+                  <li>
+                    Server Swap: If concurrency is the issue (many users, high
+                    traffic), swap Apache2 for <strong>Nginx</strong> to utilize
+                    its non-blocking event loop, drastically reducing the RAM
+                    footprint per connection.
+                  </li>
                 </ul>
-            </li>
-          </ol>
+              </li>
+            </ol>
+          </div>
         </div>
-      </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Scenario: Detail how you would implement LDAP for user authentication across various departmental systems (Windows & Linux).</button>
-        <div class="qa-answer">
-          <p><strong>Deep Technical Context:</strong> LDAP (Lightweight Directory Access Protocol) is an open, vendor-neutral application protocol used over an IP network to manage and access distributed directory information. Data is structured hierarchically (Tree structure) using attributes like DN (Distinguished Name), CN (Common Name), and OU (Organizational Unit).</p>
-          <ul>
-            <li><strong>For Linux Administration (Pam/NSS):</strong> Install <code>sssd</code> (System Security Services Daemon). It bridges the Linux Pluggable Authentication Modules (PAM) and Name Service Switch (NSS) to the central LDAP/Active Directory server. This allows central credential login to Linux shells with offline caching.</li>
-            <li><strong>For Python/Django:</strong> Use <code>django-auth-ldap</code>. It acts as an Authentication Backend in Django.
-                <br><em>Mechanism:</em> When a user logs in, Django attempts an "LDAP Bind" using the provided credentials against the central server. If successful, Django automatically provisions a local <code>User</code> model representation. You configure it to map LDAP 'Groups' directly to Django permission 'Groups' for seamless Role-Based Access Control (RBAC).</li>
-            <li><strong>Security Imperative:</strong> Standard LDAP transmits credentials in plaintext. You must enforce <strong>LDAPS</strong> (LDAP over SSL/TLS) on port 636, requiring certificate configuration on the clients preventing "Man-in-the-Middle" packet sniffing.</li>
-          </ul>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Scenario: Detail how you would implement LDAP for user
+            authentication across various departmental systems (Windows &
+            Linux).
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Deep Technical Context:</strong> LDAP (Lightweight
+              Directory Access Protocol) is an open, vendor-neutral application
+              protocol used over an IP network to manage and access distributed
+              directory information. Data is structured hierarchically (Tree
+              structure) using attributes like DN (Distinguished Name), CN
+              (Common Name), and OU (Organizational Unit).
+            </p>
+            <ul>
+              <li>
+                <strong>For Linux Administration (Pam/NSS):</strong> Install
+                <code>sssd</code> (System Security Services Daemon). It bridges
+                the Linux Pluggable Authentication Modules (PAM) and Name
+                Service Switch (NSS) to the central LDAP/Active Directory
+                server. This allows central credential login to Linux shells
+                with offline caching.
+              </li>
+              <li>
+                <strong>For Python/Django:</strong> Use
+                <code>django-auth-ldap</code>. It acts as an Authentication
+                Backend in Django. <br /><em>Mechanism:</em> When a user logs
+                in, Django attempts an "LDAP Bind" using the provided
+                credentials against the central server. If successful, Django
+                automatically provisions a local <code>User</code> model
+                representation. You configure it to map LDAP 'Groups' directly
+                to Django permission 'Groups' for seamless Role-Based Access
+                Control (RBAC).
+              </li>
+              <li>
+                <strong>Security Imperative:</strong> Standard LDAP transmits
+                credentials in plaintext. You must enforce
+                <strong>LDAPS</strong> (LDAP over SSL/TLS) on port 636,
+                requiring certificate configuration on the clients preventing
+                "Man-in-the-Middle" packet sniffing.
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Scenario: Script automated backups, patch management, and monitoring using Python and Bash.</button>
-        <div class="qa-answer">
-          <p><strong>Gold Standard Solution (Bash for DB Backups):</strong></p>
-          <pre><code class="language-bash">#!/bin/bash
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Scenario: Script automated backups, patch management, and monitoring
+            using Python and Bash.
+          </button>
+          <div class="qa-answer">
+            <p>
+              <strong>Gold Standard Solution (Bash for DB Backups):</strong>
+            </p>
+            <pre><code class="language-bash">#!/bin/bash
 # Backup script utilizing pg_dumpall for complete Postgres cluster backup
 # Employs gzip for compression and find for automated rotation/retention
 BACKUP_DIR="/mnt/secure_nfs_backups/seat"
@@ -328,51 +690,117 @@ fi
 # Retention Policy: Enforce 30-day rolling window
 find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;</code></pre>
 
-          <p><strong>Patch Management & Monitoring (Python equivalent context):</strong></p>
-          <p>For monitoring, rather than shell scripts, implementing a Python watchdog utilizing the <code>psutil</code> module is highly effective for gathering granular OS-level telemetry (CPU %, Disk IOPS, Memory) and pushing alerts via webhooks or feeding metrics into a time-series database like Prometheus.</p>
+            <p>
+              <strong
+                >Patch Management & Monitoring (Python equivalent
+                context):</strong
+              >
+            </p>
+            <p>
+              For monitoring, rather than shell scripts, implementing a Python
+              watchdog utilizing the <code>psutil</code> module is highly
+              effective for gathering granular OS-level telemetry (CPU %, Disk
+              IOPS, Memory) and pushing alerts via webhooks or feeding metrics
+              into a time-series database like Prometheus.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- PART 3: DATA SCIENCE & IOT -->
-    <div class="section-card fade-in">
-      <h2 style="margin-top:0;">📊 Part 3: Data Science, IoT & Visualization</h2>
+      <!-- PART 3: DATA SCIENCE & IOT -->
+      <div class="section-card fade-in">
+        <h2 style="margin-top: 0">
+          📊 Part 3: Data Science, IoT & Visualization
+        </h2>
 
-      <div class="qa-group">
-        <button class="qa-question" onclick="toggleQA(this)">Scenario: You need to collect continuous, high-frequency data from a newly deployed sensor network in a Civil Eng lab. Design the ingestion, storage, and cleaning pipeline.</button>
-        <div class="qa-answer">
-          <p><strong>Deep Pipeline Architecture:</strong></p>
-          <ol>
-            <li><strong>Protocol & Transport:</strong> IoT sensors (e.g., Arduinos/ESPs monitoring strain gauges) should not speak direct HTTP REST—it carries too much header overhead. They should use <strong>MQTT (Message Queuing Telemetry Transport)</strong>. It is lightweight, operates on a publish/subscribe model, and handles intermittent connectivity brilliantly via Quality of Service (QoS) levels.</li>
-            <li><strong>Broker layer (Message Queuing):</strong> Deploy <strong>Apache Kafka</strong> or <strong>Apache ActiveMQ</strong> as the message broker. Instead of tight synchronous coupling, message queuing enables an <strong>event-driven architecture</strong>. Sensors dump data into a Kafka topic instantly, and if the backend database goes offline for maintenance, the broker buffers the data, preventing packet loss. Kafka is superior for massive throughput (appending to logs), while ActiveMQ provides robust routing for varied consumer types.</li>
-            <li><strong>Ingestion Engine (Python/Node):</strong> A dedicated service (daemon) subscribes to the broker topics, deserializes the JSON payloads, normalizes timestamps to strictly UTC (critical for distributed systems), and strips malformed data.</li>
-            <li><strong>Storage Engine (Crucial Choice):</strong> Standard PostgreSQL will choke on millions of rapid time-stamped inserts via index completely bloating. 
-              <ul>
-                 <li><strong>TimescaleDB:</strong> A PostgreSQL extension that automatically partitions data into "chunks" based on time behind the scenes, offering massive insert rates while retaining full standard SQL query capabilities.</li>
-                 <li><strong>InfluxDB:</strong> A dedicated NoSQL Time-Series Database (TSDB) highly optimized for metric aggregation.</li>
-              </ul>
-            </li>
-          </ol>
+        <div class="qa-group">
+          <button class="qa-question" onclick="toggleQA(this)">
+            Scenario: You need to collect continuous, high-frequency data from a
+            newly deployed sensor network in a Civil Eng lab. Design the
+            ingestion, storage, and cleaning pipeline.
+          </button>
+          <div class="qa-answer">
+            <p><strong>Deep Pipeline Architecture:</strong></p>
+            <ol>
+              <li>
+                <strong>Protocol & Transport:</strong> IoT sensors (e.g.,
+                Arduinos/ESPs monitoring strain gauges) should not speak direct
+                HTTP REST—it carries too much header overhead. They should use
+                <strong>MQTT (Message Queuing Telemetry Transport)</strong>. It
+                is lightweight, operates on a publish/subscribe model, and
+                handles intermittent connectivity brilliantly via Quality of
+                Service (QoS) levels.
+              </li>
+              <li>
+                <strong>Broker layer (Message Queuing):</strong> Deploy
+                <strong>Apache Kafka</strong> or
+                <strong>Apache ActiveMQ</strong> as the message broker. Instead
+                of tight synchronous coupling, message queuing enables an
+                <strong>event-driven architecture</strong>. Sensors dump data
+                into a Kafka topic instantly, and if the backend database goes
+                offline for maintenance, the broker buffers the data, preventing
+                packet loss. Kafka is superior for massive throughput (appending
+                to logs), while ActiveMQ provides robust routing for varied
+                consumer types.
+              </li>
+              <li>
+                <strong>Ingestion Engine (Python/Node):</strong> A dedicated
+                service (daemon) subscribes to the broker topics, deserializes
+                the JSON payloads, normalizes timestamps to strictly UTC
+                (critical for distributed systems), and strips malformed data.
+              </li>
+              <li>
+                <strong>Storage Engine (Crucial Choice):</strong> Standard
+                PostgreSQL will choke on millions of rapid time-stamped inserts
+                via index completely bloating.
+                <ul>
+                  <li>
+                    <strong>TimescaleDB:</strong> A PostgreSQL extension that
+                    automatically partitions data into "chunks" based on time
+                    behind the scenes, offering massive insert rates while
+                    retaining full standard SQL query capabilities.
+                  </li>
+                  <li>
+                    <strong>InfluxDB:</strong> A dedicated NoSQL Time-Series
+                    Database (TSDB) highly optimized for metric aggregation.
+                  </li>
+                </ul>
+              </li>
+            </ol>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="page-footer">
-      <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
+      <div class="page-footer">
+        <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
+      </div>
     </div>
-  </div>
-  <button class="back-to-top" id="btt" title="Back to top">↑</button>
-  <script>
-    (function(){
-      const H='58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57';
-      if(sessionStorage.getItem('_ig_auth')!==H){window.location.replace('index.html');return;}
-      document.getElementById('content').style.display='';
-      document.addEventListener('contextmenu',function(e){e.preventDefault();});
-      var btt=document.getElementById('btt');
-      window.addEventListener('scroll',function(){btt.classList.toggle('visible',window.scrollY>300);});
-      btt.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
-    })();
-    function toggleQA(btn){btn.classList.toggle('open');var a=btn.nextElementSibling;a.classList.toggle('visible');}
-  </script>
-</body>
+    <button class="back-to-top" id="btt" title="Back to top">↑</button>
+    <script>
+      (function () {
+        const H =
+          "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
+        if (sessionStorage.getItem("_ig_auth") !== H) {
+          window.location.replace("index.html");
+          return;
+        }
+        document.getElementById("content").style.display = "";
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+        var btt = document.getElementById("btt");
+        window.addEventListener("scroll", function () {
+          btt.classList.toggle("visible", window.scrollY > 300);
+        });
+        btt.addEventListener("click", function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      })();
+      function toggleQA(btn) {
+        btn.classList.toggle("open");
+        var a = btn.nextElementSibling;
+        a.classList.toggle("visible");
+      }
+    </script>
+  </body>
 </html>

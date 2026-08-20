@@ -2,13 +2,15 @@
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
+
 [![Framework](https://img.shields.io/badge/Redis-7.x-red.svg)](https://redis.io/docs/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
@@ -59,6 +61,7 @@ Redis is an in-memory data structure store used as a database, cache, message br
 ## Configuration and Best Practices
 
 **redis.windows.conf** (located in installation directory):
+
 ```ini
 # Network
 bind 127.0.0.1
@@ -90,6 +93,7 @@ requirepass StrongPassword123!
 ```
 
 **Best Practices**:
+
 - Set `maxmemory` to 75% of available RAM
 - Use `allkeys-lru` eviction policy for caching scenarios
 - Enable both RDB and AOF for maximum durability
@@ -108,6 +112,7 @@ requirepass StrongPassword123!
 7. **Regular Updates**: Keep Redis updated to patch security vulnerabilities
 
 **Rename Dangerous Commands**:
+
 ```ini
 rename-command FLUSHDB ""
 rename-command FLUSHALL ""
@@ -384,30 +389,30 @@ while (`$true) {
     Clear-Host
     Write-Host '=== Redis Monitoring ===' -ForegroundColor Cyan
     Write-Host ''
-    
+
     # Memory usage
     `$memInfo = redis-cli -a StrongPassword123! INFO memory | Select-String 'used_memory_human|maxmemory_human'
     Write-Host 'Memory:' -ForegroundColor Yellow
     `$memInfo
     Write-Host ''
-    
+
     # Connected clients
     `$clients = redis-cli -a StrongPassword123! INFO clients | Select-String 'connected_clients'
     Write-Host 'Clients:' -ForegroundColor Yellow
     `$clients
     Write-Host ''
-    
+
     # Keyspace
     `$keyspace = redis-cli -a StrongPassword123! INFO keyspace
     Write-Host 'Keyspace:' -ForegroundColor Yellow
     `$keyspace
     Write-Host ''
-    
+
     # Stats
     `$stats = redis-cli -a StrongPassword123! INFO stats | Select-String 'total_commands_processed|total_connections_received'
     Write-Host 'Stats:' -ForegroundColor Yellow
     `$stats
-    
+
     Start-Sleep -Seconds 2
 }
 "@
@@ -420,6 +425,7 @@ Set-Content -Path "C:\Scripts\redis-monitor.ps1" -Value $script
 ## Troubleshooting
 
 **Connection Refused**:
+
 - **Error**: "Could not connect to Redis"
   - **Check service**: `Get-Service Redis`
   - **Start service**: `Start-Service Redis`
@@ -427,22 +433,26 @@ Set-Content -Path "C:\Scripts\redis-monitor.ps1" -Value $script
   - **Check logs**: `Get-Content "C:\Redis\redis.log" -Tail 50`
 
 **Authentication Errors**:
+
 - **Error**: "NOAUTH Authentication required"
   - **Set password env var**: `$env:REDISCLI_AUTH = "YourPassword"`
   - **Use -a flag**: `redis-cli -a YourPassword PING`
 
 **Out of Memory**:
+
 - **Error**: "OOM command not allowed when used memory > 'maxmemory'"
   - **Check memory**: `redis-cli INFO memory`
   - **Increase maxmemory**: `redis-cli CONFIG SET maxmemory 4gb`
   - **Change eviction policy**: `redis-cli CONFIG SET maxmemory-policy allkeys-lru`
 
 **Slow Commands**:
+
 - **Check slow log**: `redis-cli SLOWLOG GET 10`
 - **Identify O(N) commands**: Avoid KEYS, use SCAN instead
 - **Optimize data structures**: Use appropriate data types for use case
 
 **Common Logs**:
+
 - Redis log file: `C:\Redis\redis.log` (if configured)
 - Windows Event Viewer: Application logs
 - Monitor commands: Use `redis-cli MONITOR` sparingly (impacts performance)
@@ -450,6 +460,7 @@ Set-Content -Path "C:\Scripts\redis-monitor.ps1" -Value $script
 ## Performance and Tuning
 
 **Memory Optimization**:
+
 ```ini
 # redis.windows.conf
 maxmemory 2gb
@@ -466,6 +477,7 @@ zset-max-ziplist-value 64
 ```
 
 **Persistence Tuning**:
+
 ```ini
 # RDB - less frequent saves for better performance
 save 900 1
@@ -485,6 +497,7 @@ Use StackExchange.Redis or similar libraries with connection pooling in applicat
 
 **Pipelining**:
 Batch multiple commands to reduce network round trips:
+
 ```powershell
 # Instead of multiple individual commands
 $commands = 1..1000 | ForEach-Object { "SET key:$_ value$_" }
@@ -492,6 +505,7 @@ $commands -join "`n" | redis-cli --pipe
 ```
 
 **Monitoring Commands**:
+
 ```powershell
 # Get latency statistics
 redis-cli -a StrongPassword123! --latency

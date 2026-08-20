@@ -2,13 +2,15 @@
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
+
 [![Framework](https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg)](https://learn.microsoft.com/en-us/azure/active-directory/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
@@ -83,6 +85,7 @@ Get-MgContext | Select-Object Scopes, Account, TenantId
 ```
 
 **Best Practices**:
+
 - Use managed identities for Azure resources instead of storing credentials
 - Store client secrets in Azure Key Vault; retrieve via PowerShell with `Get-AzKeyVaultSecret`
 - Use certificate-based authentication for service principals in production (more secure than secrets)
@@ -97,6 +100,7 @@ Get-MgContext | Select-Object Scopes, Account, TenantId
 ## Security Considerations
 
 **Certificate-Based Service Principal Authentication**:
+
 ```powershell
 # Generate self-signed certificate for service principal (development only)
 $cert = New-SelfSignedCertificate `
@@ -140,6 +144,7 @@ Connect-MgGraph -ClientId $appId -TenantId $tenantId -Certificate $cert
 ```
 
 **Conditional Access Policy Automation**:
+
 ```powershell
 # Create conditional access policy requiring MFA for admin roles
 $policy = @{
@@ -171,6 +176,7 @@ Get-MgIdentityConditionalAccessPolicy | Select-Object DisplayName, State, Create
 ```
 
 **Security Monitoring and Audit Logs**:
+
 ```powershell
 # Query sign-in logs for failed authentication attempts
 $startDate = (Get-Date).AddDays(-7)
@@ -179,8 +185,8 @@ $endDate = Get-Date
 $failedSignIns = Get-MgAuditLogSignIn `
     -Filter "status/errorCode ne 0 and createdDateTime ge $($startDate.ToString('yyyy-MM-dd'))" `
     -Top 100 |
-    Select-Object CreatedDateTime, UserPrincipalName, AppDisplayName, 
-                  @{N='ErrorCode';E={$_.Status.ErrorCode}}, 
+    Select-Object CreatedDateTime, UserPrincipalName, AppDisplayName,
+                  @{N='ErrorCode';E={$_.Status.ErrorCode}},
                   @{N='FailureReason';E={$_.Status.FailureReason}},
                   IpAddress, Location
 
@@ -193,7 +199,7 @@ $failedSignIns | Export-Csv -Path ".\failed-signins.csv" -NoTypeInformation
 $auditLogs = Get-MgAuditLogDirectoryAudit `
     -Filter "activityDisplayName eq 'Add member to role' and activityDateTime ge $($startDate.ToString('yyyy-MM-dd'))" `
     -Top 50 |
-    Select-Object ActivityDateTime, ActivityDisplayName, 
+    Select-Object ActivityDateTime, ActivityDisplayName,
                   @{N='InitiatedBy';E={$_.InitiatedBy.User.UserPrincipalName}},
                   @{N='TargetUser';E={$_.TargetResources[0].UserPrincipalName}},
                   @{N='Result';E={$_.Result}}
@@ -202,6 +208,7 @@ $auditLogs | Format-Table -AutoSize
 ```
 
 **Key Security Measures**:
+
 - Rotate service principal secrets/certificates every 90 days; automate with Azure Automation
 - Use Azure Key Vault for storing and managing certificates, secrets, and keys
 - Enable Azure AD Identity Protection for risk-based conditional access policies
@@ -223,25 +230,25 @@ function New-BulkUsers {
     param(
         [Parameter(Mandatory=$true)]
         [string]$CsvPath,
-        
+
         [Parameter(Mandatory=$false)]
         [string]$DefaultPassword = "ChangeMe@123!",
-        
+
         [Parameter(Mandatory=$false)]
         [string]$UsageLocation = "US"
     )
-    
+
     # Import users from CSV (columns: FirstName, LastName, Email, Department)
     $users = Import-Csv -Path $CsvPath
     $results = @()
-    
+
     foreach ($user in $users) {
         try {
             $passwordProfile = @{
                 ForceChangePasswordNextSignIn = $true
                 Password = $DefaultPassword
             }
-            
+
             $newUser = @{
                 AccountEnabled = $true
                 DisplayName = "$($user.FirstName) $($user.LastName)"
@@ -253,11 +260,11 @@ function New-BulkUsers {
                 UsageLocation = $UsageLocation
                 Department = $user.Department
             }
-            
+
             $createdUser = New-MgUser -BodyParameter $newUser
-            
+
             Write-Host "✓ Created user: $($createdUser.UserPrincipalName)" -ForegroundColor Green
-            
+
             $results += [PSCustomObject]@{
                 Email = $createdUser.UserPrincipalName
                 DisplayName = $createdUser.DisplayName
@@ -268,7 +275,7 @@ function New-BulkUsers {
         }
         catch {
             Write-Host "✗ Failed to create user: $($user.Email) - $($_.Exception.Message)" -ForegroundColor Red
-            
+
             $results += [PSCustomObject]@{
                 Email = $user.Email
                 DisplayName = "$($user.FirstName) $($user.LastName)"
@@ -278,14 +285,14 @@ function New-BulkUsers {
             }
         }
     }
-    
+
     # Export results
     $results | Export-Csv -Path ".\user-creation-results.csv" -NoTypeInformation
-    
+
     # Summary
     $successCount = ($results | Where-Object { $_.Status -eq "Success" }).Count
     $failCount = ($results | Where-Object { $_.Status -eq "Failed" }).Count
-    
+
     Write-Host "`nSummary: $successCount succeeded, $failCount failed" -ForegroundColor Cyan
     Write-Host "Results exported to: user-creation-results.csv" -ForegroundColor Cyan
 }
@@ -303,28 +310,28 @@ function New-ServicePrincipalWithPermissions {
     param(
         [Parameter(Mandatory=$true)]
         [string]$DisplayName,
-        
+
         [Parameter(Mandatory=$true)]
         [string[]]$Permissions  # e.g., "User.Read.All", "Mail.Send"
     )
-    
+
     # Get Microsoft Graph service principal
     $graphSp = Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'"
-    
+
     # Create app registration
     $app = New-MgApplication -DisplayName $DisplayName
     Write-Host "✓ Created app registration: $($app.DisplayName) (AppId: $($app.AppId))" -ForegroundColor Green
-    
+
     # Create service principal
     $sp = New-MgServicePrincipal -AppId $app.AppId -DisplayName $DisplayName
     Write-Host "✓ Created service principal: $($sp.DisplayName)" -ForegroundColor Green
-    
+
     # Map permission names to IDs
     $requiredResourceAccess = @()
-    
+
     foreach ($permission in $Permissions) {
         $graphPermission = $graphSp.AppRoles | Where-Object { $_.Value -eq $permission }
-        
+
         if ($graphPermission) {
             $requiredResourceAccess += @{
                 Id = $graphPermission.Id
@@ -336,22 +343,22 @@ function New-ServicePrincipalWithPermissions {
             Write-Host "✗ Permission not found: $permission" -ForegroundColor Yellow
         }
     }
-    
+
     # Update app with required permissions
     Update-MgApplication -ApplicationId $app.Id -RequiredResourceAccess @{
         ResourceAppId = $graphSp.AppId
         ResourceAccess = $requiredResourceAccess
     }
-    
+
     # Generate client secret (valid for 1 year)
     $secretName = "Auto-generated-secret"
     $secretEnd = (Get-Date).AddYears(1)
-    
+
     $passwordCred = Add-MgApplicationPassword -ApplicationId $app.Id -PasswordCredential @{
         DisplayName = $secretName
         EndDateTime = $secretEnd
     }
-    
+
     Write-Host "`n========================================" -ForegroundColor Cyan
     Write-Host "Service Principal Details:" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
@@ -365,7 +372,7 @@ function New-ServicePrincipalWithPermissions {
     Write-Host "⚠️  Save the client secret now! It won't be shown again." -ForegroundColor Yellow
     Write-Host "`n⚠️  Admin consent required! Grant permissions in Azure Portal:" -ForegroundColor Yellow
     Write-Host "https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/$($app.AppId)" -ForegroundColor Cyan
-    
+
     return @{
         AppId = $app.AppId
         ObjectId = $app.Id
@@ -394,24 +401,24 @@ function Update-ExpiringCertificates {
     param(
         [Parameter(Mandatory=$false)]
         [int]$DaysBeforeExpiry = 30,
-        
+
         [Parameter(Mandatory=$false)]
         [string]$KeyVaultName,
-        
+
         [Parameter(Mandatory=$false)]
         [switch]$AutoRotate
     )
-    
+
     # Get all app registrations
     $apps = Get-MgApplication -All
     $expiringCerts = @()
-    
+
     foreach ($app in $apps) {
         if ($app.KeyCredentials.Count -eq 0) { continue }
-        
+
         foreach ($cert in $app.KeyCredentials) {
             $daysUntilExpiry = ($cert.EndDateTime - (Get-Date)).Days
-            
+
             if ($daysUntilExpiry -le $DaysBeforeExpiry) {
                 $expiringCerts += [PSCustomObject]@{
                     AppName = $app.DisplayName
@@ -425,54 +432,54 @@ function Update-ExpiringCertificates {
             }
         }
     }
-    
+
     if ($expiringCerts.Count -eq 0) {
         Write-Host "✓ No expiring certificates found" -ForegroundColor Green
         return
     }
-    
+
     # Display expiring certificates
     Write-Host "`nExpiring Certificates:" -ForegroundColor Yellow
     $expiringCerts | Format-Table -AutoSize
-    
+
     # Auto-rotate if enabled
     if ($AutoRotate -and $KeyVaultName) {
         Write-Host "`n🔄 Auto-rotating certificates..." -ForegroundColor Cyan
-        
+
         foreach ($item in $expiringCerts) {
             try {
                 # Generate new certificate in Key Vault
                 $certName = "$($item.AppName -replace '[^a-zA-Z0-9-]','')-$(Get-Date -Format 'yyyyMMdd')"
-                
+
                 $policy = New-AzKeyVaultCertificatePolicy `
                     -SubjectName "CN=$($item.AppName)" `
                     -ValidityInMonths 12 `
                     -ReuseKeyOnRenewal `
                     -KeyType RSA `
                     -KeySize 2048
-                
+
                 $newCert = Add-AzKeyVaultCertificate `
                     -VaultName $KeyVaultName `
                     -Name $certName `
                     -CertificatePolicy $policy
-                
+
                 # Wait for certificate creation
                 do {
                     Start-Sleep -Seconds 5
                     $certStatus = Get-AzKeyVaultCertificateOperation -VaultName $KeyVaultName -Name $certName
                 } while ($certStatus.Status -eq "inProgress")
-                
+
                 # Get certificate and upload to app registration
                 $kvCert = Get-AzKeyVaultCertificate -VaultName $KeyVaultName -Name $certName
                 $certBytes = [System.Convert]::FromBase64String($kvCert.Certificate)
                 $certBase64 = [System.Convert]::ToBase64String($certBytes)
-                
+
                 Update-MgApplication -ApplicationId $item.ApplicationObjectId -KeyCredentials @{
                     Type = "AsymmetricX509Cert"
                     Usage = "Verify"
                     Key = $certBase64
                 }
-                
+
                 Write-Host "✓ Rotated certificate for: $($item.AppName)" -ForegroundColor Green
             }
             catch {
@@ -480,7 +487,7 @@ function Update-ExpiringCertificates {
             }
         }
     }
-    
+
     # Export report
     $expiringCerts | Export-Csv -Path ".\expiring-certificates-$(Get-Date -Format 'yyyyMMdd').csv" -NoTypeInformation
 }
@@ -502,47 +509,47 @@ function Set-GroupBasedLicensing {
     param(
         [Parameter(Mandatory=$true)]
         [string]$GroupId,
-        
+
         [Parameter(Mandatory=$true)]
         [string]$SkuId,  # e.g., "c42b9cae-ea4f-4ab7-9717-81576235ccac" for Office 365 E3
-        
+
         [Parameter(Mandatory=$false)]
         [string[]]$DisabledPlans = @()
     )
-    
+
     # Prepare license configuration
     $disabledPlansArray = @()
     foreach ($plan in $DisabledPlans) {
         $disabledPlansArray += $plan
     }
-    
+
     $licenseOptions = @{
         SkuId = $SkuId
         DisabledPlans = $disabledPlansArray
     }
-    
+
     # Assign license to group
     Update-MgGroup -GroupId $GroupId -AssignedLicenses @{
         AddLicenses = @($licenseOptions)
         RemoveLicenses = @()
     }
-    
+
     Write-Host "✓ License assigned to group: $GroupId" -ForegroundColor Green
-    
+
     # Monitor processing status
     Write-Host "`n🔄 Monitoring license assignment..." -ForegroundColor Cyan
-    
+
     $members = Get-MgGroupMember -GroupId $GroupId -All
     $totalMembers = $members.Count
     $processedCount = 0
-    
+
     foreach ($member in $members) {
         $user = Get-MgUser -UserId $member.Id -Property "DisplayName,UserPrincipalName,AssignedLicenses,LicenseAssignmentStates"
-        
-        $licenseState = $user.LicenseAssignmentStates | Where-Object { 
-            $_.SkuId -eq $SkuId -and $_.AssignedByGroup -eq $GroupId 
+
+        $licenseState = $user.LicenseAssignmentStates | Where-Object {
+            $_.SkuId -eq $SkuId -and $_.AssignedByGroup -eq $GroupId
         }
-        
+
         if ($licenseState) {
             $processedCount++
             $status = switch ($licenseState.State) {
@@ -550,25 +557,25 @@ function Set-GroupBasedLicensing {
                 "ActiveWithError" { "✗ Error" }
                 default { "⏳ Processing" }
             }
-            
+
             Write-Host "$status - $($user.DisplayName) ($($user.UserPrincipalName))"
         }
     }
-    
+
     Write-Host "`nLicense assignment complete: $processedCount / $totalMembers users processed" -ForegroundColor Cyan
 }
 
 # Get available licenses in tenant
 function Get-TenantLicenses {
     $subscribedSkus = Get-MgSubscribedSku
-    
+
     $licenses = $subscribedSkus | Select-Object `
         @{N='LicenseName';E={$_.SkuPartNumber}},
         SkuId,
         @{N='TotalLicenses';E={$_.PrepaidUnits.Enabled}},
         ConsumedUnits,
         @{N='AvailableLicenses';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}}
-    
+
     $licenses | Format-Table -AutoSize
     return $licenses
 }
@@ -593,6 +600,7 @@ Set-GroupBasedLicensing -GroupId $groupId -SkuId $e3SkuId -DisabledPlans $disabl
 ## Troubleshooting
 
 **Authentication and Connection Issues**:
+
 ```powershell
 # Clear cached credentials and reconnect
 Disconnect-MgGraph
@@ -625,6 +633,7 @@ Connect-MgGraph -Scopes "User.Read.All" -ForceRefresh
 ```
 
 **Common Issues**:
+
 - **Insufficient privileges**: Verify required Graph API permissions granted with admin consent
 - **Token expired**: Reconnect with `Connect-MgGraph` to refresh access token
 - **403 Forbidden**: Check conditional access policies blocking automation accounts; add service principal to exclusion list
@@ -634,6 +643,7 @@ Connect-MgGraph -Scopes "User.Read.All" -ForceRefresh
 - **Group not found**: Ensure group type is correct (Security vs Microsoft 365); use `Get-MgGroup -Filter "displayName eq '<name>'"`
 
 **Diagnostic Commands**:
+
 ```powershell
 # Check installed module versions
 Get-Module Microsoft.Graph* -ListAvailable | Select-Object Name, Version
@@ -644,7 +654,7 @@ Update-Module Microsoft.Graph -Force
 # Check API permissions for service principal
 $appId = "your-app-id"
 $sp = Get-MgServicePrincipal -Filter "appId eq '$appId'"
-Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id | 
+Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id |
     Select-Object AppRoleId, PrincipalDisplayName, ResourceDisplayName
 
 # Test certificate authentication
@@ -662,14 +672,15 @@ else {
 # Check Azure AD sign-in logs for errors
 Get-MgAuditLogSignIn -Top 10 -OrderBy "createdDateTime desc" |
     Where-Object { $_.Status.ErrorCode -ne 0 } |
-    Select-Object CreatedDateTime, UserPrincipalName, AppDisplayName, 
-                  @{N='Error';E={$_.Status.ErrorCode}}, 
+    Select-Object CreatedDateTime, UserPrincipalName, AppDisplayName,
+                  @{N='Error';E={$_.Status.ErrorCode}},
                   @{N='Reason';E={$_.Status.FailureReason}}
 ```
 
 ## Performance and Tuning
 
 **Batch Operations and Pagination**:
+
 ```powershell
 # Efficient bulk user retrieval with pagination
 function Get-AllUsersEfficiently {
@@ -677,19 +688,19 @@ function Get-AllUsersEfficiently {
         [Parameter(Mandatory=$false)]
         [int]$PageSize = 999  # Max allowed by Graph API
     )
-    
+
     $allUsers = @()
     $uri = "https://graph.microsoft.com/v1.0/users?`$top=$PageSize&`$select=id,displayName,userPrincipalName,mail"
-    
+
     do {
         $response = Invoke-MgGraphRequest -Method GET -Uri $uri
         $allUsers += $response.Value
-        
+
         Write-Host "Retrieved $($allUsers.Count) users..." -ForegroundColor Cyan
-        
+
         $uri = $response.'@odata.nextLink'
     } while ($uri)
-    
+
     Write-Host "✓ Total users retrieved: $($allUsers.Count)" -ForegroundColor Green
     return $allUsers
 }
@@ -699,32 +710,32 @@ function Invoke-BatchOperation {
     param(
         [Parameter(Mandatory=$true)]
         [array]$Items,
-        
+
         [Parameter(Mandatory=$true)]
         [scriptblock]$ScriptBlock,
-        
+
         [Parameter(Mandatory=$false)]
         [int]$BatchSize = 20,
-        
+
         [Parameter(Mandatory=$false)]
         [int]$ThrottleLimit = 5
     )
-    
+
     $results = @()
     $batches = [Math]::Ceiling($Items.Count / $BatchSize)
-    
+
     for ($i = 0; $i -lt $batches; $i++) {
         $start = $i * $BatchSize
         $end = [Math]::Min($start + $BatchSize - 1, $Items.Count - 1)
         $batch = $Items[$start..$end]
-        
+
         Write-Host "Processing batch $($i + 1) of $batches..." -ForegroundColor Cyan
-        
+
         # Process batch in parallel
         $batchResults = $batch | ForEach-Object -ThrottleLimit $ThrottleLimit -Parallel {
             $item = $_
             $sb = $using:ScriptBlock
-            
+
             try {
                 $result = & $sb $item
                 [PSCustomObject]@{
@@ -743,13 +754,13 @@ function Invoke-BatchOperation {
                 }
             }
         }
-        
+
         $results += $batchResults
-        
+
         # Throttle between batches to respect rate limits
         Start-Sleep -Milliseconds 500
     }
-    
+
     return $results
 }
 
@@ -765,6 +776,7 @@ Write-Host "✓ Updated $successCount users successfully" -ForegroundColor Green
 ```
 
 **Performance Optimizations**:
+
 - Use `-Select` parameter to retrieve only required properties; reduces response size
 - Implement pagination with `-Top` and `-Skip` for large datasets (default page size: 100)
 - Use `-Filter` for server-side filtering instead of client-side `Where-Object`
@@ -777,6 +789,7 @@ Write-Host "✓ Updated $successCount users successfully" -ForegroundColor Green
 - Use delta queries to retrieve only changed entities since last query
 
 **Monitoring and Alerting**:
+
 ```powershell
 # Monitor service principal certificate expiration
 $threshold = 30  # days
@@ -804,7 +817,7 @@ $recentFailures = Get-MgAuditLogSignIn `
     -Filter "status/errorCode ne 0 and createdDateTime ge $((Get-Date).AddHours(-1).ToString('yyyy-MM-ddTHH:mm:ssZ'))" `
     -Top 100
 
-$suspiciousActivity = $recentFailures | Group-Object UserPrincipalName | 
+$suspiciousActivity = $recentFailures | Group-Object UserPrincipalName |
     Where-Object { $_.Count -ge 5 }  # 5+ failures in 1 hour
 
 if ($suspiciousActivity) {
@@ -816,6 +829,7 @@ if ($suspiciousActivity) {
 ## References and Further Reading
 
 **Official Documentation**:
+
 - [Microsoft Graph PowerShell SDK](https://learn.microsoft.com/en-us/powershell/microsoftgraph/)
 - [Azure AD PowerShell Reference](https://learn.microsoft.com/en-us/powershell/module/azuread/)
 - [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview)
@@ -824,17 +838,20 @@ if ($suspiciousActivity) {
 - [Certificate-Based Authentication](https://learn.microsoft.com/en-us/azure/active-directory/authentication/certificate-based-authentication)
 
 **PowerShell Resources**:
+
 - [Microsoft Graph PowerShell Samples](https://github.com/microsoftgraph/msgraph-sdk-powershell/tree/dev/samples)
 - [Azure AD Scripts Gallery](https://github.com/microsoft/AzureAD-Scripts)
 - [PowerShell Gallery - Microsoft.Graph](https://www.powershellgallery.com/packages/Microsoft.Graph)
 
 **Security Best Practices**:
+
 - [Azure AD Security Operations Guide](https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/security-operations-introduction)
 - [Microsoft Identity Platform Best Practices](https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist)
 - [NIST Digital Identity Guidelines](https://pages.nist.gov/800-63-3/)
 - [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
 
 **Community Resources**:
+
 - [Microsoft 365 Community](https://docs.microsoft.com/en-us/microsoft-365/community/)
 - [Azure AD GitHub Discussions](https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/discussions)
 - [PowerShell Community Blog](https://devblogs.microsoft.com/powershell/)

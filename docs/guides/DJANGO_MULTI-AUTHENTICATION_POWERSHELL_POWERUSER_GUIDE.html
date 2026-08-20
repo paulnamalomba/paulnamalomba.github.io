@@ -1,167 +1,323 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>DJANGO Multi-Authentication PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      DJANGO Multi-Authentication PowerUser Guide (PowerShell) - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="django-multi-authentication-poweruser-guide-powershell">DJANGO Multi-Authentication PowerUser Guide (PowerShell)</h1>
-<p><strong>Last updated</strong>: December 09, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://docs.djangoproject.com/en/4.2/"><img alt="Framework" src="https://img.shields.io/badge/Django-4.x-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide targets PowerShell power users who operate and automate Django applications that implement multiple authentication mechanisms (username/password, OAuth2/OIDC, SAML, and MFA). It focuses on Windows-based operational tasks: provisioning environments, managing secrets and certificates, configuring reverse proxies, deploying Django services, and running diagnostics against authentication flows.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#django-multi-authentication-poweruser-guide-powershell">DJANGO Multi-Authentication PowerUser Guide (PowerShell)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a><ul>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#core-automation-workflow">Core Automation Workflow</a></li>
-</ul>
-</li>
-<li><a href="#key-concepts">Key Concepts</a><ul>
-<li><a href="#authentication-layers">Authentication Layers</a></li>
-<li><a href="#identity-providers">Identity Providers</a></li>
-</ul>
-</li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a><ul>
-<li><a href="#environment-and-secrets">Environment and Secrets</a></li>
-<li><a href="#reverse-proxy-and-tls">Reverse Proxy and TLS</a></li>
-</ul>
-</li>
-<li><a href="#security-considerations">Security Considerations</a><ul>
-<li><a href="#secrets-and-certificates">Secrets and Certificates</a></li>
-<li><a href="#audit-and-compliance">Audit and Compliance</a></li>
-</ul>
-</li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#example-1-provision-django-environment">Example 1: Provision Django Environment</a></li>
-<li><a href="#example-2-configure-environment-for-multi-auth">Example 2: Configure Environment for Multi-Auth</a></li>
-<li><a href="#example-3-automate-tls-with-certbot-on-wsl">Example 3: Automate TLS with Certbot on WSL</a></li>
-<li><a href="#example-4-end-to-end-auth-health-check">Example 4: End-to-End Auth Health Check</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a><ul>
-<li><a href="#common-operational-issues">Common Operational Issues</a></li>
-<li><a href="#diagnostic-commands">Diagnostic Commands</a></li>
-</ul>
-</li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a><ul>
-<li><a href="#scaling-and-observability">Scaling and Observability</a></li>
-</ul>
-</li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<h3 id="prerequisites">Prerequisites</h3>
-<ul>
-<li>Windows 10/11 with PowerShell 7 or later</li>
-<li>Python 3.10+ installed and available in <code>PATH</code></li>
-<li>Git installed</li>
-<li>Optional: WSL2 with an Ubuntu distribution for Linux-native tooling (Certbot, Nginx)</li>
-<li>Administrative privileges for service and firewall configuration</li>
-</ul>
-<h3 id="core-automation-workflow">Core Automation Workflow</h3>
-<ol>
-<li><strong>Clone the Django project</strong> (with multi-auth already wired in):</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="nv">$projectRoot</span> <span class="p">=</span> <span class="s2">&quot;C:\Projects\django-multi-auth&quot;</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="django-multi-authentication-poweruser-guide-powershell">
+            DJANGO Multi-Authentication PowerUser Guide (PowerShell)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 09, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://docs.djangoproject.com/en/4.2/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Django-4.x-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide targets PowerShell power users who operate and automate
+            Django applications that implement multiple authentication
+            mechanisms (username/password, OAuth2/OIDC, SAML, and MFA). It
+            focuses on Windows-based operational tasks: provisioning
+            environments, managing secrets and certificates, configuring reverse
+            proxies, deploying Django services, and running diagnostics against
+            authentication flows.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#django-multi-authentication-poweruser-guide-powershell"
+                >DJANGO Multi-Authentication PowerUser Guide (PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#quickstart">Quickstart</a>
+              <ul>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li>
+                  <a href="#core-automation-workflow"
+                    >Core Automation Workflow</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#key-concepts">Key Concepts</a>
+              <ul>
+                <li>
+                  <a href="#authentication-layers">Authentication Layers</a>
+                </li>
+                <li><a href="#identity-providers">Identity Providers</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+              <ul>
+                <li>
+                  <a href="#environment-and-secrets">Environment and Secrets</a>
+                </li>
+                <li>
+                  <a href="#reverse-proxy-and-tls">Reverse Proxy and TLS</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+              <ul>
+                <li>
+                  <a href="#secrets-and-certificates"
+                    >Secrets and Certificates</a
+                  >
+                </li>
+                <li>
+                  <a href="#audit-and-compliance">Audit and Compliance</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#example-1-provision-django-environment"
+                    >Example 1: Provision Django Environment</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-2-configure-environment-for-multi-auth"
+                    >Example 2: Configure Environment for Multi-Auth</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-3-automate-tls-with-certbot-on-wsl"
+                    >Example 3: Automate TLS with Certbot on WSL</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-4-end-to-end-auth-health-check"
+                    >Example 4: End-to-End Auth Health Check</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#troubleshooting">Troubleshooting</a>
+              <ul>
+                <li>
+                  <a href="#common-operational-issues"
+                    >Common Operational Issues</a
+                  >
+                </li>
+                <li><a href="#diagnostic-commands">Diagnostic Commands</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <ul>
+                <li>
+                  <a href="#scaling-and-observability"
+                    >Scaling and Observability</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <h3 id="prerequisites">Prerequisites</h3>
+          <ul>
+            <li>Windows 10/11 with PowerShell 7 or later</li>
+            <li>Python 3.10+ installed and available in <code>PATH</code></li>
+            <li>Git installed</li>
+            <li>
+              Optional: WSL2 with an Ubuntu distribution for Linux-native
+              tooling (Certbot, Nginx)
+            </li>
+            <li>
+              Administrative privileges for service and firewall configuration
+            </li>
+          </ul>
+          <h3 id="core-automation-workflow">Core Automation Workflow</h3>
+          <ol>
+            <li>
+              <strong>Clone the Django project</strong> (with multi-auth already
+              wired in):
+            </li>
+          </ol>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nv">$projectRoot</span> <span class="p">=</span> <span class="s2">&quot;C:\Projects\django-multi-auth&quot;</span>
 <span class="k">if</span> <span class="p">(</span><span class="o">-not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$projectRoot</span><span class="p">))</span> <span class="p">{</span>
     <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">your-org</span><span class="p">/</span><span class="n">django-multi-auth</span><span class="p">.</span><span class="n">git</span> <span class="nv">$projectRoot</span>
 <span class="p">}</span>
 <span class="nb">Set-Location</span> <span class="nv">$projectRoot</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ol>
-<li><strong>Create and activate a virtual environment</strong>:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">venv</span> <span class="p">.</span><span class="n">venv</span>
+          <ol>
+            <li><strong>Create and activate a virtual environment</strong>:</li>
+          </ol>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">python</span> <span class="n">-m</span> <span class="n">venv</span> <span class="p">.</span><span class="n">venv</span>
 <span class="p">.</span> <span class="p">.\.</span><span class="n">venv</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">Activate</span><span class="p">.</span><span class="n">ps1</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ol>
-<li><strong>Install dependencies</strong>:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="n">pip</span> <span class="n">install</span> <span class="n">-U</span> <span class="n">pip</span>
+          <ol>
+            <li><strong>Install dependencies</strong>:</li>
+          </ol>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">pip</span> <span class="n">install</span> <span class="n">-U</span> <span class="n">pip</span>
 <span class="n">pip</span> <span class="n">install</span> <span class="n">-r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ol>
-<li><strong>Apply migrations and create superuser</strong>:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">migrate</span>
+          <ol>
+            <li><strong>Apply migrations and create superuser</strong>:</li>
+          </ol>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">migrate</span>
 <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">createsuperuser</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ol>
-<li><strong>Run development server</strong>:</li>
-</ol>
-<div class="codehilite"><pre><span></span><code><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">:</span><span class="n">8000</span>
-</code></pre></div>
+          <ol>
+            <li><strong>Run development server</strong>:</li>
+          </ol>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">runserver</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">:</span><span class="n">8000</span>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="key-concepts">Key Concepts</h2>
-<h3 id="authentication-layers">Authentication Layers</h3>
-<ul>
-<li><strong>Django Auth Backend</strong>: Core authentication system (<code>AUTHENTICATION_BACKENDS</code>) that supports multiple authenticators (model backend, remote user, social auth, custom backends).</li>
-<li><strong>Session vs Token Auth</strong>: Traditional Django session cookies vs stateless token-based auth (JWT/OAuth2) used by APIs.</li>
-<li><strong>Multi-Provider Auth</strong>: Supporting username/password plus one or more providers (Google, Microsoft, GitHub, corporate IdP) simultaneously.</li>
-<li><strong>MFA/2FA</strong>: Additional factor (TOTP, hardware keys, SMS) enforced at login or sensitive operations.</li>
-</ul>
-<h3 id="identity-providers">Identity Providers</h3>
-<ul>
-<li><strong>OAuth2/OIDC</strong>: Standard protocols used by providers like Azure AD, Auth0, Okta, Google; Django typically integrates via libraries (e.g. <code>django-allauth</code>, <code>python-social-auth</code>).</li>
-<li><strong>SAML</strong>: XML-based protocol commonly used in enterprise SSO; may be integrated via <code>python3-saml</code> or similar libraries.</li>
-<li><strong>Internal Users</strong>: Users stored in Django’s database, often used for fallback or service accounts.</li>
-<li><strong>Service Accounts</strong>: Non-human accounts used for automation/integration; should be tightly scoped and audited.</li>
-</ul>
-<hr />
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<h3 id="environment-and-secrets">Environment and Secrets</h3>
-<p>Store all authentication-related configuration in environment variables or secret stores, not in source code:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Example environment variables for Django multi-auth</span>
+          <hr />
+          <h2 id="key-concepts">Key Concepts</h2>
+          <h3 id="authentication-layers">Authentication Layers</h3>
+          <ul>
+            <li>
+              <strong>Django Auth Backend</strong>: Core authentication system
+              (<code>AUTHENTICATION_BACKENDS</code>) that supports multiple
+              authenticators (model backend, remote user, social auth, custom
+              backends).
+            </li>
+            <li>
+              <strong>Session vs Token Auth</strong>: Traditional Django session
+              cookies vs stateless token-based auth (JWT/OAuth2) used by APIs.
+            </li>
+            <li>
+              <strong>Multi-Provider Auth</strong>: Supporting username/password
+              plus one or more providers (Google, Microsoft, GitHub, corporate
+              IdP) simultaneously.
+            </li>
+            <li>
+              <strong>MFA/2FA</strong>: Additional factor (TOTP, hardware keys,
+              SMS) enforced at login or sensitive operations.
+            </li>
+          </ul>
+          <h3 id="identity-providers">Identity Providers</h3>
+          <ul>
+            <li>
+              <strong>OAuth2/OIDC</strong>: Standard protocols used by providers
+              like Azure AD, Auth0, Okta, Google; Django typically integrates
+              via libraries (e.g. <code>django-allauth</code>,
+              <code>python-social-auth</code>).
+            </li>
+            <li>
+              <strong>SAML</strong>: XML-based protocol commonly used in
+              enterprise SSO; may be integrated via <code>python3-saml</code> or
+              similar libraries.
+            </li>
+            <li>
+              <strong>Internal Users</strong>: Users stored in Django’s
+              database, often used for fallback or service accounts.
+            </li>
+            <li>
+              <strong>Service Accounts</strong>: Non-human accounts used for
+              automation/integration; should be tightly scoped and audited.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <h3 id="environment-and-secrets">Environment and Secrets</h3>
+          <p>
+            Store all authentication-related configuration in environment
+            variables or secret stores, not in source code:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Example environment variables for Django multi-auth</span>
 <span class="nv">$env:DJANGO_SETTINGS_MODULE</span> <span class="p">=</span> <span class="s2">&quot;config.settings.production&quot;</span>
 <span class="nv">$env:DJANGO_SECRET_KEY</span> <span class="p">=</span> <span class="s2">&quot;&lt;strong-secret&gt;&quot;</span>
 <span class="nv">$env:DJANGO_DEBUG</span> <span class="p">=</span> <span class="s2">&quot;False&quot;</span>
@@ -180,18 +336,36 @@
 <span class="nv">$env:JWT_SIGNING_KEY</span>            <span class="p">=</span> <span class="s2">&quot;&lt;long-random-signing-key&gt;&quot;</span>
 <span class="nv">$env:JWT_ACCESS_TOKEN_LIFETIME</span>  <span class="p">=</span> <span class="s2">&quot;900&quot;</span>   <span class="c"># seconds</span>
 <span class="nv">$env:JWT_REFRESH_TOKEN_LIFETIME</span> <span class="p">=</span> <span class="s2">&quot;2592000&quot;</span>  <span class="c"># 30 days</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Best practices:</p>
-<ul>
-<li>Load secrets from Windows Credential Manager, Azure Key Vault, or environment-specific secure stores.</li>
-<li>Use separate settings modules per environment (<code>development</code>, <code>staging</code>, <code>production</code>).</li>
-<li>Keep provider configuration (client IDs, endpoints, scopes) in <code>.env</code> files that are never committed.</li>
-<li>Script environment provisioning for consistency across machines.</li>
-</ul>
-<h3 id="reverse-proxy-and-tls">Reverse Proxy and TLS</h3>
-<p>Even on Windows, production Django deployments commonly run behind a reverse proxy (Nginx, Apache, IIS, or Azure App Service). Use PowerShell to manage configuration and certificates:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Example: enable Windows Firewall rule for reverse proxy port</span>
+          <p>Best practices:</p>
+          <ul>
+            <li>
+              Load secrets from Windows Credential Manager, Azure Key Vault, or
+              environment-specific secure stores.
+            </li>
+            <li>
+              Use separate settings modules per environment
+              (<code>development</code>, <code>staging</code>,
+              <code>production</code>).
+            </li>
+            <li>
+              Keep provider configuration (client IDs, endpoints, scopes) in
+              <code>.env</code> files that are never committed.
+            </li>
+            <li>
+              Script environment provisioning for consistency across machines.
+            </li>
+          </ul>
+          <h3 id="reverse-proxy-and-tls">Reverse Proxy and TLS</h3>
+          <p>
+            Even on Windows, production Django deployments commonly run behind a
+            reverse proxy (Nginx, Apache, IIS, or Azure App Service). Use
+            PowerShell to manage configuration and certificates:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Example: enable Windows Firewall rule for reverse proxy port</span>
 <span class="nv">$port</span> <span class="p">=</span> <span class="n">443</span>
 <span class="nv">$ruleName</span> <span class="p">=</span> <span class="s2">&quot;DjangoReverseProxy-$port&quot;</span>
 
@@ -202,40 +376,74 @@
         <span class="n">-Protocol</span> <span class="n">TCP</span> <span class="p">`</span>
         <span class="n">-LocalPort</span> <span class="nv">$port</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Best practices:</p>
-<ul>
-<li>Terminate TLS at the reverse proxy and forward traffic to Django over HTTP on localhost.</li>
-<li>Enforce <code>SECURE_SSL_REDIRECT</code>, <code>SESSION_COOKIE_SECURE</code>, and <code>CSRF_COOKIE_SECURE</code> in Django settings.</li>
-<li>Use HSTS headers at the proxy level.</li>
-<li>Automate certificate renewal (Let’s Encrypt via WSL/Certbot or a corporate PKI).</li>
-</ul>
-<hr />
-<h2 id="security-considerations">Security Considerations</h2>
-<h3 id="secrets-and-certificates">Secrets and Certificates</h3>
-<ul>
-<li>Use strong, randomly generated <code>SECRET_KEY</code> values per environment.</li>
-<li>Restrict who can read environment configuration files and credentials.</li>
-<li>Rotate client secrets and JWT signing keys regularly.</li>
-<li>Maintain a certificate inventory (CN, SANs, expiry dates) for all domains used by Django.</li>
-</ul>
-<p>PowerShell snippet to list certificates for the current user:</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
+          <p>Best practices:</p>
+          <ul>
+            <li>
+              Terminate TLS at the reverse proxy and forward traffic to Django
+              over HTTP on localhost.
+            </li>
+            <li>
+              Enforce <code>SECURE_SSL_REDIRECT</code>,
+              <code>SESSION_COOKIE_SECURE</code>, and
+              <code>CSRF_COOKIE_SECURE</code> in Django settings.
+            </li>
+            <li>Use HSTS headers at the proxy level.</li>
+            <li>
+              Automate certificate renewal (Let’s Encrypt via WSL/Certbot or a
+              corporate PKI).
+            </li>
+          </ul>
+          <hr />
+          <h2 id="security-considerations">Security Considerations</h2>
+          <h3 id="secrets-and-certificates">Secrets and Certificates</h3>
+          <ul>
+            <li>
+              Use strong, randomly generated <code>SECRET_KEY</code> values per
+              environment.
+            </li>
+            <li>
+              Restrict who can read environment configuration files and
+              credentials.
+            </li>
+            <li>Rotate client secrets and JWT signing keys regularly.</li>
+            <li>
+              Maintain a certificate inventory (CN, SANs, expiry dates) for all
+              domains used by Django.
+            </li>
+          </ul>
+          <p>PowerShell snippet to list certificates for the current user:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nb">Get-ChildItem</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
     <span class="n">Subject</span><span class="p">,</span> <span class="n">Thumbprint</span><span class="p">,</span> <span class="n">NotBefore</span><span class="p">,</span> <span class="n">NotAfter</span> <span class="p">|</span> <span class="p">`</span>
     <span class="nb">Sort-Object</span> <span class="n">NotAfter</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="audit-and-compliance">Audit and Compliance</h3>
-<ul>
-<li>Enable structured logging for authentication events (login success/failure, provider used, IP address).</li>
-<li>Forward logs to a SIEM (Azure Monitor, Splunk, ELK) using agents or log shipping scripts.</li>
-<li>Ensure retention of logs according to your compliance requirements.</li>
-</ul>
-<hr />
-<h2 id="examples">Examples</h2>
-<h3 id="example-1-provision-django-environment">Example 1: Provision Django Environment</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">param</span><span class="p">(</span>
+          <h3 id="audit-and-compliance">Audit and Compliance</h3>
+          <ul>
+            <li>
+              Enable structured logging for authentication events (login
+              success/failure, provider used, IP address).
+            </li>
+            <li>
+              Forward logs to a SIEM (Azure Monitor, Splunk, ELK) using agents
+              or log shipping scripts.
+            </li>
+            <li>
+              Ensure retention of logs according to your compliance
+              requirements.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="examples">Examples</h2>
+          <h3 id="example-1-provision-django-environment">
+            Example 1: Provision Django Environment
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">param</span><span class="p">(</span>
     <span class="no">[string]</span><span class="nv">$ProjectRoot</span> <span class="p">=</span> <span class="s2">&quot;C:\Projects\django-multi-auth&quot;</span><span class="p">,</span>
     <span class="no">[string]</span><span class="nv">$RepoUrl</span> <span class="p">=</span> <span class="s2">&quot;https://github.com/your-org/django-multi-auth.git&quot;</span>
 <span class="p">)</span>
@@ -256,10 +464,14 @@
 
 <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">migrate</span>
 <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">collectstatic</span> <span class="p">-</span><span class="n">-noinput</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-2-configure-environment-for-multi-auth">Example 2: Configure Environment for Multi-Auth</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">function</span> <span class="nb">Set-DjangoMultiAuthEnvironment</span> <span class="p">{</span>
+          <h3 id="example-2-configure-environment-for-multi-auth">
+            Example 2: Configure Environment for Multi-Auth
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">function</span> <span class="nb">Set-DjangoMultiAuthEnvironment</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="no">[string]</span><span class="nv">$Environment</span> <span class="p">=</span> <span class="s2">&quot;development&quot;</span>
     <span class="p">)</span>
@@ -290,10 +502,14 @@
 
 <span class="c"># Usage</span>
 <span class="nb">Set-DjangoMultiAuthEnvironment</span> <span class="n">-Environment</span> <span class="s2">&quot;staging&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-3-automate-tls-with-certbot-on-wsl">Example 3: Automate TLS with Certbot on WSL</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Run Certbot inside WSL to obtain/renew certificates</span>
+          <h3 id="example-3-automate-tls-with-certbot-on-wsl">
+            Example 3: Automate TLS with Certbot on WSL
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Run Certbot inside WSL to obtain/renew certificates</span>
 <span class="nv">$domain</span> <span class="p">=</span> <span class="s2">&quot;django-app.example.com&quot;</span>
 <span class="nv">$wslCommand</span> <span class="p">=</span> <span class="s2">&quot;sudo certbot certonly --nginx -d $domain --non-interactive --agree-tos -m admin@$domain&quot;</span>
 
@@ -307,10 +523,14 @@
 <span class="n">wsl</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&quot;sudo cat $linuxKeyPath&quot;</span>  <span class="p">|</span> <span class="nb">Out-File</span> <span class="s2">&quot;C:\temp\$domain-key.pem&quot;</span>  <span class="n">-Encoding</span> <span class="n">ascii</span>
 
 <span class="c"># Import into Windows store or use with reverse proxy</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-4-end-to-end-auth-health-check">Example 4: End-to-End Auth Health Check</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">function</span> <span class="nb">Test-DjangoAuthHealth</span> <span class="p">{</span>
+          <h3 id="example-4-end-to-end-auth-health-check">
+            Example 4: End-to-End Auth Health Check
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">function</span> <span class="nb">Test-DjangoAuthHealth</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="no">[string]</span><span class="nv">$BaseUrl</span> <span class="p">=</span> <span class="s2">&quot;https://django-app.example.com&quot;</span>
     <span class="p">)</span>
@@ -337,19 +557,33 @@
 
 <span class="c"># Usage</span>
 <span class="nb">Test-DjangoAuthHealth</span> <span class="n">-BaseUrl</span> <span class="s2">&quot;https://django-app.example.com&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="common-operational-issues">Common Operational Issues</h3>
-<ul>
-<li><strong>502/504 from reverse proxy</strong>: Django gunicorn/uvicorn process not running or port mismatch.</li>
-<li><strong>TLS handshake errors</strong>: Certificate not trusted, hostname mismatch, or expired certificate.</li>
-<li><strong>Login loop</strong>: Incorrect redirect URIs configured at the identity provider.</li>
-<li><strong>Provider-specific failures</strong>: Client ID/secret mismatch or missing scopes.</li>
-</ul>
-<h3 id="diagnostic-commands">Diagnostic Commands</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Check listening ports</span>
+          <hr />
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <h3 id="common-operational-issues">Common Operational Issues</h3>
+          <ul>
+            <li>
+              <strong>502/504 from reverse proxy</strong>: Django
+              gunicorn/uvicorn process not running or port mismatch.
+            </li>
+            <li>
+              <strong>TLS handshake errors</strong>: Certificate not trusted,
+              hostname mismatch, or expired certificate.
+            </li>
+            <li>
+              <strong>Login loop</strong>: Incorrect redirect URIs configured at
+              the identity provider.
+            </li>
+            <li>
+              <strong>Provider-specific failures</strong>: Client ID/secret
+              mismatch or missing scopes.
+            </li>
+          </ul>
+          <h3 id="diagnostic-commands">Diagnostic Commands</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Check listening ports</span>
 <span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="n">8000</span><span class="p">,</span><span class="n">443</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">LocalAddress</span><span class="p">,</span> <span class="n">LocalPort</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">OwningProcess</span>
 
 <span class="c"># Check running Python processes</span>
@@ -357,55 +591,75 @@
 
 <span class="c"># Tail Django logs (assuming logs directory)</span>
 <span class="nb">Get-Content</span> <span class="p">.\</span><span class="n">logs</span><span class="p">\</span><span class="n">django-auth</span><span class="p">.</span><span class="n">log</span> <span class="n">-Wait</span> <span class="n">-Tail</span> <span class="n">50</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<h3 id="scaling-and-observability">Scaling and Observability</h3>
-<ul>
-<li>Use a process manager (e.g. <code>supervisord</code>, <code>systemd</code> via WSL, or Windows services) for Django workers.</li>
-<li>Scale horizontally with multiple worker processes behind a reverse proxy.</li>
-<li>Enable application metrics (Prometheus, OpenTelemetry) and expose basic health endpoints.</li>
-<li>Monitor auth error rates and latency per provider.</li>
-</ul>
-<hr />
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li>Django Authentication: https://docs.djangoproject.com/en/4.2/topics/auth/</li>
-<li>Django Deployment Checklist: https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/</li>
-<li>OAuth 2.0 and OpenID Connect: https://auth0.com/docs/protocols</li>
-<li>Certbot Documentation: https://certbot.eff.org/</li>
-</ul></article>
-        </div>
+          <hr />
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <h3 id="scaling-and-observability">Scaling and Observability</h3>
+          <ul>
+            <li>
+              Use a process manager (e.g. <code>supervisord</code>,
+              <code>systemd</code> via WSL, or Windows services) for Django
+              workers.
+            </li>
+            <li>
+              Scale horizontally with multiple worker processes behind a reverse
+              proxy.
+            </li>
+            <li>
+              Enable application metrics (Prometheus, OpenTelemetry) and expose
+              basic health endpoints.
+            </li>
+            <li>Monitor auth error rates and latency per provider.</li>
+          </ul>
+          <hr />
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              Django Authentication:
+              https://docs.djangoproject.com/en/4.2/topics/auth/
+            </li>
+            <li>
+              Django Deployment Checklist:
+              https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+            </li>
+            <li>
+              OAuth 2.0 and OpenID Connect: https://auth0.com/docs/protocols
+            </li>
+            <li>Certbot Documentation: https://certbot.eff.org/</li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

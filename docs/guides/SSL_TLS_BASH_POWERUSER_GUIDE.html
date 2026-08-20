@@ -1,100 +1,237 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>SSL/TLS PowerUser Guide (Bash) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="ssltls-poweruser-guide-bash">SSL/TLS PowerUser Guide (Bash)</h1>
-<p><strong>Last updated</strong>: December 04, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://www.openssl.org/docs/"><img alt="Framework" src="https://img.shields.io/badge/OpenSSL-3.x-red.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>SSL/TLS provides encrypted communication channels for secure data transmission. This guide covers certificate generation, management, and verification using Bash and OpenSSL on Linux systems. Power users need to understand certificate lifecycle management, cipher suite configuration, and security best practices for production deployments.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#ssltls-poweruser-guide-bash">SSL/TLS PowerUser Guide (Bash)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#generate-self-signed-certificate-with-san">Generate Self-Signed Certificate with SAN</a></li>
-<li><a href="#create-certificate-signing-request-csr-for-production">Create Certificate Signing Request (CSR) for Production</a></li>
-<li><a href="#convert-certificate-formats-and-bundle">Convert Certificate Formats and Bundle</a></li>
-<li><a href="#test-tls-connection-and-cipher-suites">Test TLS Connection and Cipher Suites</a></li>
-<li><a href="#verify-certificate-chain-and-revocation">Verify Certificate Chain and Revocation</a></li>
-<li><a href="#automate-certificate-renewal-with-lets-encrypt">Automate Certificate Renewal with Let's Encrypt</a></li>
-<li><a href="#monitor-certificate-expiration">Monitor Certificate Expiration</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install OpenSSL</strong>: <code>sudo apt-get install openssl</code> (Debian/Ubuntu) or <code>sudo yum install openssl</code> (RHEL/CentOS)</li>
-<li><strong>Verify installation</strong>: <code>openssl version -a</code></li>
-<li><strong>Generate self-signed certificate</strong>: <code>openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes</code></li>
-<li><strong>Verify certificate</strong>: <code>openssl x509 -in cert.pem -text -noout</code></li>
-<li><strong>Test TLS connection</strong>: <code>openssl s_client -connect example.com:443 -showcerts</code></li>
-<li><strong>Convert formats</strong>: <code>openssl pkcs12 -export -out certificate.pfx -inkey key.pem -in cert.pem</code></li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Certificate Authority (CA)</strong>: Trusted entity that issues digital certificates; root CAs are pre-installed in <code>/etc/ssl/certs/</code> or <code>/etc/pki/tls/certs/</code></li>
-<li><strong>Private/Public Key Pair</strong>: Asymmetric cryptography foundation; private key signs/decrypts, public key verifies/encrypts</li>
-<li><strong>Certificate Signing Request (CSR)</strong>: File containing public key and identity information submitted to CA for certificate issuance</li>
-<li><strong>Certificate Formats</strong>: PEM (Base64 text), DER (binary), PFX/P12 (bundled cert+key), CRT/CER (certificate only)</li>
-<li><strong>Cipher Suites</strong>: Combination of key exchange, authentication, encryption, and MAC algorithms negotiated during TLS handshake</li>
-<li><strong>TLS Versions</strong>: Use TLS 1.2+ exclusively; TLS 1.0/1.1 and SSL 2.0/3.0 are deprecated and insecure</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>OpenSSL Configuration File</strong> (<code>/etc/ssl/openssl.cnf</code> or <code>~/.openssl.cnf</code>):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[req]</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="ssltls-poweruser-guide-bash">
+            SSL/TLS PowerUser Guide (Bash)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 04, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://www.openssl.org/docs/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/OpenSSL-3.x-red.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            SSL/TLS provides encrypted communication channels for secure data
+            transmission. This guide covers certificate generation, management,
+            and verification using Bash and OpenSSL on Linux systems. Power
+            users need to understand certificate lifecycle management, cipher
+            suite configuration, and security best practices for production
+            deployments.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#ssltls-poweruser-guide-bash"
+                >SSL/TLS PowerUser Guide (Bash)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#generate-self-signed-certificate-with-san"
+                    >Generate Self-Signed Certificate with SAN</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#create-certificate-signing-request-csr-for-production"
+                    >Create Certificate Signing Request (CSR) for Production</a
+                  >
+                </li>
+                <li>
+                  <a href="#convert-certificate-formats-and-bundle"
+                    >Convert Certificate Formats and Bundle</a
+                  >
+                </li>
+                <li>
+                  <a href="#test-tls-connection-and-cipher-suites"
+                    >Test TLS Connection and Cipher Suites</a
+                  >
+                </li>
+                <li>
+                  <a href="#verify-certificate-chain-and-revocation"
+                    >Verify Certificate Chain and Revocation</a
+                  >
+                </li>
+                <li>
+                  <a href="#automate-certificate-renewal-with-lets-encrypt"
+                    >Automate Certificate Renewal with Let's Encrypt</a
+                  >
+                </li>
+                <li>
+                  <a href="#monitor-certificate-expiration"
+                    >Monitor Certificate Expiration</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install OpenSSL</strong>:
+              <code>sudo apt-get install openssl</code> (Debian/Ubuntu) or
+              <code>sudo yum install openssl</code> (RHEL/CentOS)
+            </li>
+            <li>
+              <strong>Verify installation</strong>:
+              <code>openssl version -a</code>
+            </li>
+            <li>
+              <strong>Generate self-signed certificate</strong>:
+              <code
+                >openssl req -x509 -newkey rsa:4096 -keyout key.pem -out
+                cert.pem -days 365 -nodes</code
+              >
+            </li>
+            <li>
+              <strong>Verify certificate</strong>:
+              <code>openssl x509 -in cert.pem -text -noout</code>
+            </li>
+            <li>
+              <strong>Test TLS connection</strong>:
+              <code>openssl s_client -connect example.com:443 -showcerts</code>
+            </li>
+            <li>
+              <strong>Convert formats</strong>:
+              <code
+                >openssl pkcs12 -export -out certificate.pfx -inkey key.pem -in
+                cert.pem</code
+              >
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Certificate Authority (CA)</strong>: Trusted entity that
+              issues digital certificates; root CAs are pre-installed in
+              <code>/etc/ssl/certs/</code> or <code>/etc/pki/tls/certs/</code>
+            </li>
+            <li>
+              <strong>Private/Public Key Pair</strong>: Asymmetric cryptography
+              foundation; private key signs/decrypts, public key
+              verifies/encrypts
+            </li>
+            <li>
+              <strong>Certificate Signing Request (CSR)</strong>: File
+              containing public key and identity information submitted to CA for
+              certificate issuance
+            </li>
+            <li>
+              <strong>Certificate Formats</strong>: PEM (Base64 text), DER
+              (binary), PFX/P12 (bundled cert+key), CRT/CER (certificate only)
+            </li>
+            <li>
+              <strong>Cipher Suites</strong>: Combination of key exchange,
+              authentication, encryption, and MAC algorithms negotiated during
+              TLS handshake
+            </li>
+            <li>
+              <strong>TLS Versions</strong>: Use TLS 1.2+ exclusively; TLS
+              1.0/1.1 and SSL 2.0/3.0 are deprecated and insecure
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p>
+            <strong>OpenSSL Configuration File</strong> (<code
+              >/etc/ssl/openssl.cnf</code
+            >
+            or <code>~/.openssl.cnf</code>):
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">[req]</span>
 <span class="na">default_bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4096</span>
 <span class="na">default_md</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">sha256</span>
 <span class="na">distinguished_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">req_distinguished_name</span>
@@ -116,39 +253,72 @@
 <span class="na">DNS.1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">example.com</span>
 <span class="na">DNS.2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">*.example.com</span>
 <span class="na">IP.1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.168.1.100</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use 4096-bit RSA keys or 256-bit ECDSA keys minimum
-- Set certificate validity to 397 days maximum (browser requirement)
-- Always include Subject Alternative Names (SANs) for hostnames
-- Store private keys with restrictive permissions: <code>chmod 600 private.key</code>
-- Use Hardware Security Modules (HSMs) for production CA keys
-- Implement certificate rotation 30 days before expiration</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Private Key Protection</strong>: Store keys in <code>/etc/ssl/private/</code> with 600 permissions; never commit to version control</li>
-<li><strong>Certificate Pinning</strong>: Pin certificates in applications to prevent MITM attacks with rogue CAs</li>
-<li><strong>OCSP Stapling</strong>: Enable Online Certificate Status Protocol stapling in Nginx/Apache to improve revocation checking</li>
-<li><strong>Perfect Forward Secrecy</strong>: Use ephemeral Diffie-Hellman (DHE/ECDHE) cipher suites exclusively</li>
-<li><strong>Disable Weak Protocols</strong>: Explicitly disable SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1 in server configuration</li>
-<li><strong>Cipher Suite Order</strong>: Prioritize AEAD ciphers (AES-GCM, ChaCha20-Poly1305) over CBC mode</li>
-<li><strong>Certificate Transparency</strong>: Monitor CT logs for unauthorized certificate issuance for your domains</li>
-</ol>
-<p><strong>Nginx TLS Hardening</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">ssl_protocols</span><span class="w"> </span><span class="s">TLSv1.2</span><span class="w"> </span><span class="s">TLSv1.3</span><span class="p">;</span>
+          <p>
+            <strong>Best Practices</strong>: - Use 4096-bit RSA keys or 256-bit
+            ECDSA keys minimum - Set certificate validity to 397 days maximum
+            (browser requirement) - Always include Subject Alternative Names
+            (SANs) for hostnames - Store private keys with restrictive
+            permissions: <code>chmod 600 private.key</code> - Use Hardware
+            Security Modules (HSMs) for production CA keys - Implement
+            certificate rotation 30 days before expiration
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Private Key Protection</strong>: Store keys in
+              <code>/etc/ssl/private/</code> with 600 permissions; never commit
+              to version control
+            </li>
+            <li>
+              <strong>Certificate Pinning</strong>: Pin certificates in
+              applications to prevent MITM attacks with rogue CAs
+            </li>
+            <li>
+              <strong>OCSP Stapling</strong>: Enable Online Certificate Status
+              Protocol stapling in Nginx/Apache to improve revocation checking
+            </li>
+            <li>
+              <strong>Perfect Forward Secrecy</strong>: Use ephemeral
+              Diffie-Hellman (DHE/ECDHE) cipher suites exclusively
+            </li>
+            <li>
+              <strong>Disable Weak Protocols</strong>: Explicitly disable SSL
+              2.0, SSL 3.0, TLS 1.0, TLS 1.1 in server configuration
+            </li>
+            <li>
+              <strong>Cipher Suite Order</strong>: Prioritize AEAD ciphers
+              (AES-GCM, ChaCha20-Poly1305) over CBC mode
+            </li>
+            <li>
+              <strong>Certificate Transparency</strong>: Monitor CT logs for
+              unauthorized certificate issuance for your domains
+            </li>
+          </ol>
+          <p><strong>Nginx TLS Hardening</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">ssl_protocols</span><span class="w"> </span><span class="s">TLSv1.2</span><span class="w"> </span><span class="s">TLSv1.3</span><span class="p">;</span>
 <span class="k">ssl_ciphers</span><span class="w"> </span><span class="s">&#39;ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305&#39;</span><span class="p">;</span>
 <span class="k">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 <span class="k">ssl_session_cache</span><span class="w"> </span><span class="s">shared:SSL:10m</span><span class="p">;</span>
 <span class="k">ssl_session_timeout</span><span class="w"> </span><span class="mi">10m</span><span class="p">;</span>
 <span class="k">ssl_stapling</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 <span class="k">ssl_stapling_verify</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="generate-self-signed-certificate-with-san">Generate Self-Signed Certificate with SAN</h3>
-<p>Generate a self-signed certificate with Subject Alternative Names for local development, valid for one year with 4096-bit RSA key.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="generate-self-signed-certificate-with-san">
+            Generate Self-Signed Certificate with SAN
+          </h3>
+          <p>
+            Generate a self-signed certificate with Subject Alternative Names
+            for local development, valid for one year with 4096-bit RSA key.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Create configuration file</span>
 cat<span class="w"> </span>&gt;<span class="w"> </span>openssl.cnf<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
@@ -189,11 +359,18 @@ chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>c
 
 <span class="c1"># Verify certificate</span>
 openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-text<span class="w"> </span>-noout<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A2<span class="w"> </span><span class="s2">&quot;Subject Alternative Name&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="create-certificate-signing-request-csr-for-production">Create Certificate Signing Request (CSR) for Production</h3>
-<p>Create a CSR for submission to a Certificate Authority with proper organizational details and multiple SANs for production domain.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="create-certificate-signing-request-csr-for-production">
+            Create Certificate Signing Request (CSR) for Production
+          </h3>
+          <p>
+            Create a CSR for submission to a Certificate Authority with proper
+            organizational details and multiple SANs for production domain.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Generate private key</span>
 openssl<span class="w"> </span>genrsa<span class="w"> </span>-out<span class="w"> </span>production.key<span class="w"> </span><span class="m">4096</span>
@@ -233,11 +410,18 @@ openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> <
 openssl<span class="w"> </span>req<span class="w"> </span>-in<span class="w"> </span>production.csr<span class="w"> </span>-noout<span class="w"> </span>-text<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Subject:|DNS:&quot;</span>
 
 <span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CSR generated successfully. Submit production.csr to your CA.&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="convert-certificate-formats-and-bundle">Convert Certificate Formats and Bundle</h3>
-<p>Convert between PEM and PFX formats, create certificate bundles with intermediate CAs, and set password protection for distribution.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="convert-certificate-formats-and-bundle">
+            Convert Certificate Formats and Bundle
+          </h3>
+          <p>
+            Convert between PEM and PFX formats, create certificate bundles with
+            intermediate CAs, and set password protection for distribution.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Convert PEM to PFX with password</span>
 openssl<span class="w"> </span>pkcs12<span class="w"> </span>-export<span class="w"> </span>-out<span class="w"> </span>certificate.pfx<span class="w"> </span><span class="se">\</span>
@@ -263,11 +447,18 @@ cat<span class="w"> </span>certificate.crt<span class="w"> </span>intermediate.c
 <span class="c1"># Verify bundle order (leaf -&gt; intermediate -&gt; root)</span>
 openssl<span class="w"> </span>crl2pkcs7<span class="w"> </span>-nocrl<span class="w"> </span>-certfile<span class="w"> </span>full-chain.pem<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>openssl<span class="w"> </span>pkcs7<span class="w"> </span>-print_certs<span class="w"> </span>-noout
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="test-tls-connection-and-cipher-suites">Test TLS Connection and Cipher Suites</h3>
-<p>Test TLS connectivity, enumerate supported cipher suites, and verify certificate chain for a remote server.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="test-tls-connection-and-cipher-suites">
+            Test TLS Connection and Cipher Suites
+          </h3>
+          <p>
+            Test TLS connectivity, enumerate supported cipher suites, and verify
+            certificate chain for a remote server.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Test TLS connection with full handshake details</span>
 <span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>example.com:443<span class="w"> </span>-showcerts<span class="w"> </span>-servername<span class="w"> </span>example.com
@@ -295,11 +486,18 @@ openssl<span class="w"> </span>ciphers<span class="w"> </span>-v<span class="w">
 <span class="c1"># Test specific cipher suite</span>
 <span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>example.com:443<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-cipher<span class="w"> </span>ECDHE-RSA-AES256-GCM-SHA384<span class="w"> </span>-servername<span class="w"> </span>example.com
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="verify-certificate-chain-and-revocation">Verify Certificate Chain and Revocation</h3>
-<p>Verify certificate chain against CA bundle, check OCSP revocation status, and validate certificate properties.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="verify-certificate-chain-and-revocation">
+            Verify Certificate Chain and Revocation
+          </h3>
+          <p>
+            Verify certificate chain against CA bundle, check OCSP revocation
+            status, and validate certificate properties.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Verify certificate against CA bundle</span>
 openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class="w"> </span>/etc/ssl/certs/ca-certificates.crt<span class="w"> </span>certificate.crt
@@ -324,11 +522,18 @@ openssl<span class="w"> </span>ocsp<span class="w"> </span>-issuer<span class="w
 
 <span class="c1"># Verify certificate chain completeness</span>
 openssl<span class="w"> </span>verify<span class="w"> </span>-show_chain<span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem<span class="w"> </span>certificate.crt
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="automate-certificate-renewal-with-lets-encrypt">Automate Certificate Renewal with Let's Encrypt</h3>
-<p>Automate certificate issuance and renewal using Certbot for Let's Encrypt, with post-renewal hooks for service reloads.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="automate-certificate-renewal-with-lets-encrypt">
+            Automate Certificate Renewal with Let's Encrypt
+          </h3>
+          <p>
+            Automate certificate issuance and renewal using Certbot for Let's
+            Encrypt, with post-renewal hooks for service reloads.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Install Certbot (Debian/Ubuntu)</span>
 sudo<span class="w"> </span>apt-get<span class="w"> </span>update
@@ -358,11 +563,18 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>certificates
 
 <span class="c1"># Revoke certificate</span>
 sudo<span class="w"> </span>certbot<span class="w"> </span>revoke<span class="w"> </span>--cert-path<span class="w"> </span>/etc/letsencrypt/live/example.com/cert.pem
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="monitor-certificate-expiration">Monitor Certificate Expiration</h3>
-<p>Create automated monitoring script to check certificate expiration dates and send alerts for certificates expiring within 30 days.</p>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+          <h3 id="monitor-certificate-expiration">
+            Monitor Certificate Expiration
+          </h3>
+          <p>
+            Create automated monitoring script to check certificate expiration
+            dates and send alerts for certificates expiring within 30 days.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># monitor-certs.sh - Certificate expiration monitoring script</span>
 
@@ -406,59 +618,92 @@ check_remote<span class="o">()</span><span class="w"> </span><span class="o">{</
 
 <span class="c1"># Example: check remote servers</span>
 check_remote<span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="w"> </span><span class="m">443</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Certificate Verification Failures</strong>:
-- <strong>Error</strong>: "unable to get local issuer certificate"
-  - <strong>Cause</strong>: Missing intermediate CA certificates in chain
-  - <strong>Fix</strong>: Download intermediate certificates and create bundle: <code>cat cert.crt intermediate.crt &gt; bundle.crt</code></p>
-<p><strong>Private Key Mismatch</strong>:
-- <strong>Error</strong>: "key values mismatch"
-  - <strong>Cause</strong>: Private key doesn't match certificate public key
-  - <strong>Fix</strong>: Compare modulus: <code>openssl x509 -noout -modulus -in cert.crt | openssl md5</code> vs <code>openssl rsa -noout -modulus -in key.pem | openssl md5</code></p>
-<p><strong>Certificate Expired</strong>:
-- <strong>Error</strong>: "certificate has expired"
-  - <strong>Check</strong>: <code>openssl x509 -in cert.crt -noout -dates</code>
-  - <strong>Fix</strong>: Renew certificate before expiration; automate with Let's Encrypt</p>
-<p><strong>Common Logs to Check</strong>:
-- Nginx: <code>/var/log/nginx/error.log</code> for SSL handshake failures
-- Apache: <code>/var/log/apache2/error.log</code> or <code>/var/log/httpd/error_log</code>
-- System logs: <code>journalctl -u nginx -n 100</code> or <code>/var/log/syslog</code>
-- OpenSSL debug: Add <code>-debug</code> or <code>-msg</code> flags to s_client</p>
-<p><strong>Permission Errors</strong>:
-- <strong>Error</strong>: "Permission denied" when reading private key
-  - <strong>Fix</strong>: <code>sudo chmod 600 /path/to/private.key &amp;&amp; sudo chown root:root /path/to/private.key</code>
-- <strong>Error</strong>: Nginx can't read certificate
-  - <strong>Fix</strong>: Ensure nginx user has read permissions: <code>sudo chmod 644 /path/to/cert.crt</code></p>
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Key Size vs Performance</strong>:
-- RSA 2048-bit: Baseline performance, adequate for most use cases
-- RSA 4096-bit: 7x slower key generation, 2x slower handshakes, recommended for CA and long-lived certificates
-- ECDSA P-256: Faster handshakes than RSA, smaller key sizes, use for high-throughput servers</p>
-<p><strong>Session Resumption</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Nginx configuration for session caching</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Certificate Verification Failures</strong>: -
+            <strong>Error</strong>: "unable to get local issuer certificate" -
+            <strong>Cause</strong>: Missing intermediate CA certificates in
+            chain - <strong>Fix</strong>: Download intermediate certificates and
+            create bundle:
+            <code>cat cert.crt intermediate.crt &gt; bundle.crt</code>
+          </p>
+          <p>
+            <strong>Private Key Mismatch</strong>: - <strong>Error</strong>:
+            "key values mismatch" - <strong>Cause</strong>: Private key doesn't
+            match certificate public key - <strong>Fix</strong>: Compare
+            modulus:
+            <code>openssl x509 -noout -modulus -in cert.crt | openssl md5</code>
+            vs
+            <code>openssl rsa -noout -modulus -in key.pem | openssl md5</code>
+          </p>
+          <p>
+            <strong>Certificate Expired</strong>: - <strong>Error</strong>:
+            "certificate has expired" - <strong>Check</strong>:
+            <code>openssl x509 -in cert.crt -noout -dates</code> -
+            <strong>Fix</strong>: Renew certificate before expiration; automate
+            with Let's Encrypt
+          </p>
+          <p>
+            <strong>Common Logs to Check</strong>: - Nginx:
+            <code>/var/log/nginx/error.log</code> for SSL handshake failures -
+            Apache: <code>/var/log/apache2/error.log</code> or
+            <code>/var/log/httpd/error_log</code> - System logs:
+            <code>journalctl -u nginx -n 100</code> or
+            <code>/var/log/syslog</code> - OpenSSL debug: Add
+            <code>-debug</code> or <code>-msg</code> flags to s_client
+          </p>
+          <p>
+            <strong>Permission Errors</strong>: - <strong>Error</strong>:
+            "Permission denied" when reading private key - <strong>Fix</strong>:
+            <code
+              >sudo chmod 600 /path/to/private.key &amp;&amp; sudo chown
+              root:root /path/to/private.key</code
+            >
+            - <strong>Error</strong>: Nginx can't read certificate -
+            <strong>Fix</strong>: Ensure nginx user has read permissions:
+            <code>sudo chmod 644 /path/to/cert.crt</code>
+          </p>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p>
+            <strong>Key Size vs Performance</strong>: - RSA 2048-bit: Baseline
+            performance, adequate for most use cases - RSA 4096-bit: 7x slower
+            key generation, 2x slower handshakes, recommended for CA and
+            long-lived certificates - ECDSA P-256: Faster handshakes than RSA,
+            smaller key sizes, use for high-throughput servers
+          </p>
+          <p><strong>Session Resumption</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Nginx configuration for session caching</span>
 <span class="k">ssl_session_cache</span><span class="w"> </span><span class="s">shared:SSL:50m</span><span class="p">;</span>
 <span class="k">ssl_session_timeout</span><span class="w"> </span><span class="s">1d</span><span class="p">;</span>
 <span class="k">ssl_session_tickets</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>OCSP Stapling</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Nginx OCSP stapling configuration</span>
+          <p><strong>OCSP Stapling</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Nginx OCSP stapling configuration</span>
 <span class="k">ssl_stapling</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 <span class="k">ssl_stapling_verify</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 <span class="k">ssl_trusted_certificate</span><span class="w"> </span><span class="s">/etc/ssl/certs/ca-bundle.crt</span><span class="p">;</span>
 <span class="k">resolver</span><span class="w"> </span><span class="mi">8</span><span class="s">.8.8.8</span><span class="w"> </span><span class="mi">8</span><span class="s">.8.4.4</span><span class="w"> </span><span class="s">valid=300s</span><span class="p">;</span>
 <span class="k">resolver_timeout</span><span class="w"> </span><span class="s">5s</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Hardware Acceleration</strong>:
-- Use AES-NI CPU instructions for AES-GCM cipher suites (10x faster)
-- Verify support: <code>grep -o aes /proc/cpuinfo | uniq</code>
-- Test performance: <code>openssl speed -evp aes-256-gcm</code>
-- Offload to dedicated crypto hardware for &gt;10Gbps workloads</p>
-<p><strong>Monitoring Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Measure TLS handshake time</span>
+          <p>
+            <strong>Hardware Acceleration</strong>: - Use AES-NI CPU
+            instructions for AES-GCM cipher suites (10x faster) - Verify
+            support: <code>grep -o aes /proc/cpuinfo | uniq</code> - Test
+            performance: <code>openssl speed -evp aes-256-gcm</code> - Offload
+            to dedicated crypto hardware for &gt;10Gbps workloads
+          </p>
+          <p><strong>Monitoring Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Measure TLS handshake time</span>
 <span class="nb">time</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>example.com:443<span class="w"> </span>-servername<span class="w"> </span>example.com<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 
 <span class="c1"># Profile cipher suite performance</span>
@@ -469,46 +714,71 @@ ss<span class="w"> </span>-tan<span class="w"> </span><span class="p">|</span><s
 
 <span class="c1"># Check SSL handshake rate</span>
 watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s1">&#39;ss -tan | grep &quot;:443.*ESTABLISHED&quot; | wc -l&#39;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://www.openssl.org/docs/">OpenSSL Documentation</a> - Official OpenSSL command reference and library documentation</li>
-<li><a href="https://ssl-config.mozilla.org/">Mozilla SSL Configuration Generator</a> - Generate secure TLS configs for web servers and apps</li>
-<li><a href="https://www.ssllabs.com/ssltest/">SSL Labs Server Test</a> - Comprehensive TLS/SSL server configuration analysis</li>
-<li><a href="https://datatracker.ietf.org/doc/html/rfc8446">RFC 8446 - TLS 1.3</a> - Latest TLS protocol specification</li>
-<li><a href="https://letsencrypt.org/docs/">Let's Encrypt Documentation</a> - Free, automated certificate authority documentation</li>
-</ul></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://www.openssl.org/docs/">OpenSSL Documentation</a>
+              - Official OpenSSL command reference and library documentation
+            </li>
+            <li>
+              <a href="https://ssl-config.mozilla.org/"
+                >Mozilla SSL Configuration Generator</a
+              >
+              - Generate secure TLS configs for web servers and apps
+            </li>
+            <li>
+              <a href="https://www.ssllabs.com/ssltest/"
+                >SSL Labs Server Test</a
+              >
+              - Comprehensive TLS/SSL server configuration analysis
+            </li>
+            <li>
+              <a href="https://datatracker.ietf.org/doc/html/rfc8446"
+                >RFC 8446 - TLS 1.3</a
+              >
+              - Latest TLS protocol specification
+            </li>
+            <li>
+              <a href="https://letsencrypt.org/docs/"
+                >Let's Encrypt Documentation</a
+              >
+              - Free, automated certificate authority documentation
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

@@ -1,110 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>DJANGO Multi-Authentication PowerUser Guide (Bash) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      DJANGO Multi-Authentication PowerUser Guide (Bash) - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="django-multi-authentication-poweruser-guide-bash">DJANGO Multi-Authentication PowerUser Guide (Bash)</h1>
-<p><strong>Last updated</strong>: December 09, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://docs.djangoproject.com/en/4.2/"><img alt="Framework" src="https://img.shields.io/badge/Django-4.x-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide focuses on Linux and Bash workflows for deploying and operating Django applications that implement multiple authentication mechanisms. You will automate environment setup, systemd services, reverse proxy configuration (Nginx), TLS via Certbot, and basic diagnostics for multi-provider authentication.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#django-multi-authentication-poweruser-guide-bash">DJANGO Multi-Authentication PowerUser Guide (Bash)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a><ul>
-<li><a href="#system-preparation">System Preparation</a></li>
-<li><a href="#project-bootstrap">Project Bootstrap</a></li>
-</ul>
-</li>
-<li><a href="#key-concepts">Key Concepts</a><ul>
-<li><a href="#process-layout">Process Layout</a></li>
-<li><a href="#separation-of-concerns">Separation of Concerns</a></li>
-</ul>
-</li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a><ul>
-<li><a href="#environment-files">Environment Files</a></li>
-<li><a href="#systemd-and-nginx">systemd and Nginx</a></li>
-</ul>
-</li>
-<li><a href="#security-considerations">Security Considerations</a><ul>
-<li><a href="#permissions-and-ownership">Permissions and Ownership</a></li>
-<li><a href="#tls-and-hsts">TLS and HSTS</a></li>
-</ul>
-</li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#example-1-bootstrap-django-project">Example 1: Bootstrap Django Project</a></li>
-<li><a href="#example-2-configure-systemd-service">Example 2: Configure systemd Service</a></li>
-<li><a href="#example-3-nginx-and-certbot">Example 3: Nginx and Certbot</a></li>
-<li><a href="#example-4-auth-diagnostics-script">Example 4: Auth Diagnostics Script</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a><ul>
-<li><a href="#common-deployment-issues">Common Deployment Issues</a></li>
-<li><a href="#log-inspection">Log Inspection</a></li>
-</ul>
-</li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a><ul>
-<li><a href="#gunicorn-and-nginx-tuning">Gunicorn and Nginx Tuning</a></li>
-</ul>
-</li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<h3 id="system-preparation">System Preparation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Update packages</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="django-multi-authentication-poweruser-guide-bash">
+            DJANGO Multi-Authentication PowerUser Guide (Bash)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 09, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://docs.djangoproject.com/en/4.2/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Django-4.x-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide focuses on Linux and Bash workflows for deploying and
+            operating Django applications that implement multiple authentication
+            mechanisms. You will automate environment setup, systemd services,
+            reverse proxy configuration (Nginx), TLS via Certbot, and basic
+            diagnostics for multi-provider authentication.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#django-multi-authentication-poweruser-guide-bash"
+                >DJANGO Multi-Authentication PowerUser Guide (Bash)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#quickstart">Quickstart</a>
+              <ul>
+                <li><a href="#system-preparation">System Preparation</a></li>
+                <li><a href="#project-bootstrap">Project Bootstrap</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#key-concepts">Key Concepts</a>
+              <ul>
+                <li><a href="#process-layout">Process Layout</a></li>
+                <li>
+                  <a href="#separation-of-concerns">Separation of Concerns</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+              <ul>
+                <li><a href="#environment-files">Environment Files</a></li>
+                <li><a href="#systemd-and-nginx">systemd and Nginx</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+              <ul>
+                <li>
+                  <a href="#permissions-and-ownership"
+                    >Permissions and Ownership</a
+                  >
+                </li>
+                <li><a href="#tls-and-hsts">TLS and HSTS</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#example-1-bootstrap-django-project"
+                    >Example 1: Bootstrap Django Project</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-2-configure-systemd-service"
+                    >Example 2: Configure systemd Service</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-3-nginx-and-certbot"
+                    >Example 3: Nginx and Certbot</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-4-auth-diagnostics-script"
+                    >Example 4: Auth Diagnostics Script</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#troubleshooting">Troubleshooting</a>
+              <ul>
+                <li>
+                  <a href="#common-deployment-issues"
+                    >Common Deployment Issues</a
+                  >
+                </li>
+                <li><a href="#log-inspection">Log Inspection</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <ul>
+                <li>
+                  <a href="#gunicorn-and-nginx-tuning"
+                    >Gunicorn and Nginx Tuning</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <h3 id="system-preparation">System Preparation</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Update packages</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y
 
 <span class="c1"># Install dependencies</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>python3-venv<span class="w"> </span>python3-pip<span class="w"> </span>git<span class="w"> </span>nginx<span class="w"> </span>certbot<span class="w"> </span>python3-certbot-nginx
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="project-bootstrap">Project Bootstrap</h3>
-<div class="codehilite"><pre><span></span><code><span class="nv">PROJECT_ROOT</span><span class="o">=</span>/opt/django-multi-auth
+          <h3 id="project-bootstrap">Project Bootstrap</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nv">PROJECT_ROOT</span><span class="o">=</span>/opt/django-multi-auth
 sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_ROOT</span><span class="s2">&quot;</span>
 sudo<span class="w"> </span>chown<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span>:<span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PROJECT_ROOT</span><span class="s2">&quot;</span>
 
@@ -120,27 +213,49 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 
 python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<span class="w"> </span>--noinput
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="key-concepts">Key Concepts</h2>
-<h3 id="process-layout">Process Layout</h3>
-<ul>
-<li><strong>Gunicorn/Uvicorn</strong>: WSGI/ASGI server hosting Django.</li>
-<li><strong>systemd Service</strong>: Manages Django process, restarts on failure, runs under restricted user.</li>
-<li><strong>Nginx</strong>: Reverse proxy terminating TLS and forwarding HTTP to Gunicorn.</li>
-</ul>
-<h3 id="separation-of-concerns">Separation of Concerns</h3>
-<ul>
-<li>Keep Django settings free of environment-specific paths and secrets.</li>
-<li>Use <code>/etc/django/&lt;project&gt;.env</code> for environment variables.</li>
-<li>Use <code>systemd</code> to source env files before starting services.</li>
-</ul>
-<hr />
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<h3 id="environment-files">Environment Files</h3>
-<p><code>/etc/django/django-multi-auth.env</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>config.settings.production
+          <hr />
+          <h2 id="key-concepts">Key Concepts</h2>
+          <h3 id="process-layout">Process Layout</h3>
+          <ul>
+            <li>
+              <strong>Gunicorn/Uvicorn</strong>: WSGI/ASGI server hosting
+              Django.
+            </li>
+            <li>
+              <strong>systemd Service</strong>: Manages Django process, restarts
+              on failure, runs under restricted user.
+            </li>
+            <li>
+              <strong>Nginx</strong>: Reverse proxy terminating TLS and
+              forwarding HTTP to Gunicorn.
+            </li>
+          </ul>
+          <h3 id="separation-of-concerns">Separation of Concerns</h3>
+          <ul>
+            <li>
+              Keep Django settings free of environment-specific paths and
+              secrets.
+            </li>
+            <li>
+              Use <code>/etc/django/&lt;project&gt;.env</code> for environment
+              variables.
+            </li>
+            <li>
+              Use <code>systemd</code> to source env files before starting
+              services.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <h3 id="environment-files">Environment Files</h3>
+          <p><code>/etc/django/django-multi-auth.env</code>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>config.settings.production
 <span class="nv">DJANGO_SECRET_KEY</span><span class="o">=</span>&lt;strong-secret&gt;
 <span class="nv">DJANGO_DEBUG</span><span class="o">=</span>False
 <span class="nv">DJANGO_ALLOWED_HOSTS</span><span class="o">=</span>django.example.com
@@ -148,17 +263,21 @@ python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<spa
 <span class="nv">OAUTH_GOOGLE_CLIENT_ID</span><span class="o">=</span>&lt;client-id&gt;
 <span class="nv">OAUTH_GOOGLE_CLIENT_SECRET</span><span class="o">=</span>&lt;client-secret&gt;
 <span class="nv">JWT_SIGNING_KEY</span><span class="o">=</span>&lt;jwt-signing-key&gt;
-</code></pre></div>
+</code></pre>
+          </div>
 
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/django
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/django
 sudo<span class="w"> </span>nano<span class="w"> </span>/etc/django/django-multi-auth.env
 sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/django/django-multi-auth.env
 sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/etc/django/django-multi-auth.env
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="systemd-and-nginx">systemd and Nginx</h3>
-<p><code>/etc/systemd/system/django-multi-auth.service</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">[Unit]</span>
+          <h3 id="systemd-and-nginx">systemd and Nginx</h3>
+          <p><code>/etc/systemd/system/django-multi-auth.service</code>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">[Unit]</span>
 <span class="na">Description</span><span class="o">=</span><span class="s">Django multi-auth application</span>
 <span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
 
@@ -175,15 +294,22 @@ sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w
 
 <span class="k">[Install]</span>
 <span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>django-multi-auth
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>django-multi-auth
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Nginx site config <code>/etc/nginx/sites-available/django-multi-auth</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+          <p>
+            Nginx site config
+            <code>/etc/nginx/sites-available/django-multi-auth</code>:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">server</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kn">listen</span><span class="w"> </span><span class="mi">80</span><span class="p">;</span>
 <span class="w">    </span><span class="kn">server_name</span><span class="w"> </span><span class="s">django.example.com</span><span class="p">;</span>
 
@@ -196,34 +322,50 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
 <span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="s">http://unix:/run/django-multi-auth.sock</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/django-multi-auth<span class="w"> </span>/etc/nginx/sites-enabled/
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/django-multi-auth<span class="w"> </span>/etc/nginx/sites-enabled/
 sudo<span class="w"> </span>nginx<span class="w"> </span>-t
 sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="security-considerations">Security Considerations</h2>
-<h3 id="permissions-and-ownership">Permissions and Ownership</h3>
-<ul>
-<li>Run Django under a non-privileged user (e.g. <code>www-data</code>).</li>
-<li>Ensure project files are readable by the app user, writable only where necessary (media, logs).</li>
-<li>Keep env files readable only by root.</li>
-</ul>
-<h3 id="tls-and-hsts">TLS and HSTS</h3>
-<p>Use Certbot to obtain and renew certificates:</p>
-<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w"> </span>-d<span class="w"> </span>django.example.com<span class="w"> </span>--redirect<span class="w"> </span>--agree-tos<span class="w"> </span>-m<span class="w"> </span>admin@django.example.com
-</code></pre></div>
+          <hr />
+          <h2 id="security-considerations">Security Considerations</h2>
+          <h3 id="permissions-and-ownership">Permissions and Ownership</h3>
+          <ul>
+            <li>
+              Run Django under a non-privileged user (e.g.
+              <code>www-data</code>).
+            </li>
+            <li>
+              Ensure project files are readable by the app user, writable only
+              where necessary (media, logs).
+            </li>
+            <li>Keep env files readable only by root.</li>
+          </ul>
+          <h3 id="tls-and-hsts">TLS and HSTS</h3>
+          <p>Use Certbot to obtain and renew certificates:</p>
+          <div class="codehilite">
+            <pre><span></span><code>sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w"> </span>-d<span class="w"> </span>django.example.com<span class="w"> </span>--redirect<span class="w"> </span>--agree-tos<span class="w"> </span>-m<span class="w"> </span>admin@django.example.com
+</code></pre>
+          </div>
 
-<p>Ensure HSTS is enabled in Nginx:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">add_header</span><span class="w"> </span><span class="s">Strict-Transport-Security</span><span class="w"> </span><span class="s">&quot;max-age=31536000</span><span class="p">;</span><span class="w"> </span><span class="k">includeSubDomains&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
-</code></pre></div>
+          <p>Ensure HSTS is enabled in Nginx:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">add_header</span><span class="w"> </span><span class="s">Strict-Transport-Security</span><span class="w"> </span><span class="s">&quot;max-age=31536000</span><span class="p">;</span><span class="w"> </span><span class="k">includeSubDomains&quot;</span><span class="w"> </span><span class="s">always</span><span class="p">;</span>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="examples">Examples</h2>
-<h3 id="example-1-bootstrap-django-project">Example 1: Bootstrap Django Project</h3>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+          <hr />
+          <h2 id="examples">Examples</h2>
+          <h3 id="example-1-bootstrap-django-project">
+            Example 1: Bootstrap Django Project
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
 <span class="nv">PROJECT_ROOT</span><span class="o">=</span>/opt/django-multi-auth
@@ -247,10 +389,14 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 
 python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<span class="w"> </span>--noinput
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-2-configure-systemd-service">Example 2: Configure systemd Service</h3>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+          <h3 id="example-2-configure-systemd-service">
+            Example 2: Configure systemd Service
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
 <span class="nv">SERVICE_FILE</span><span class="o">=</span>/etc/systemd/system/django-multi-auth.service
@@ -278,10 +424,12 @@ sudo<span class="w"> </span>tee<span class="w"> </span><span class="s2">&quot;</
 sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>django-multi-auth
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>django-multi-auth<span class="w"> </span>--no-pager
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-3-nginx-and-certbot">Example 3: Nginx and Certbot</h3>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+          <h3 id="example-3-nginx-and-certbot">Example 3: Nginx and Certbot</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
 <span class="nv">DOMAIN</span><span class="o">=</span>django.example.com
@@ -307,10 +455,14 @@ sudo<span class="w"> </span>nginx<span class="w"> </span>-t
 sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="w"> </span>nginx
 
 sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DOMAIN</span><span class="s2">&quot;</span><span class="w"> </span>--redirect<span class="w"> </span>--agree-tos<span class="w"> </span>-m<span class="w"> </span>admin@<span class="nv">$DOMAIN</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-4-auth-diagnostics-script">Example 4: Auth Diagnostics Script</h3>
-<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+          <h3 id="example-4-auth-diagnostics-script">
+            Example 4: Auth Diagnostics Script
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
 <span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
 
 <span class="nv">BASE_URL</span><span class="o">=</span><span class="s2">&quot;https://django.example.com&quot;</span>
@@ -329,71 +481,94 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w
 <span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$code</span><span class="s2"> </span><span class="nv">$url</span><span class="s2">&quot;</span>
 <span class="w">  </span>sleep<span class="w"> </span><span class="m">1</span>
 <span class="k">done</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="common-deployment-issues">Common Deployment Issues</h3>
-<ul>
-<li><strong>502 Bad Gateway</strong>: Gunicorn not running or socket path mismatch.</li>
-<li><strong>404 on static files</strong>: Nginx <code>alias</code> directive or <code>collectstatic</code> not configured.</li>
-<li><strong>TLS handshake errors</strong>: Incorrect certificate chain or hostname.</li>
-</ul>
-<h3 id="log-inspection">Log Inspection</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Django app logs</span>
+          <hr />
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <h3 id="common-deployment-issues">Common Deployment Issues</h3>
+          <ul>
+            <li>
+              <strong>502 Bad Gateway</strong>: Gunicorn not running or socket
+              path mismatch.
+            </li>
+            <li>
+              <strong>404 on static files</strong>: Nginx
+              <code>alias</code> directive or <code>collectstatic</code> not
+              configured.
+            </li>
+            <li>
+              <strong>TLS handshake errors</strong>: Incorrect certificate chain
+              or hostname.
+            </li>
+          </ul>
+          <h3 id="log-inspection">Log Inspection</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Django app logs</span>
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>django-multi-auth<span class="w"> </span>-f
 
 <span class="c1"># Nginx access and error logs</span>
 sudo<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/nginx/access.log<span class="w"> </span>/var/log/nginx/error.log
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<h3 id="gunicorn-and-nginx-tuning">Gunicorn and Nginx Tuning</h3>
-<ul>
-<li>Set Gunicorn workers to <code>(2 * CPU) + 1</code> as a starting point.</li>
-<li>Use <code>--max-requests</code> and <code>--max-requests-jitter</code> to mitigate memory leaks.</li>
-<li>Enable Gzip compression and HTTP/2 in Nginx.</li>
-<li>Prefer Unix domain sockets over TCP for local proxying.</li>
-</ul>
-<hr />
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li>Django Deployment: https://docs.djangoproject.com/en/4.2/howto/deployment/</li>
-<li>Gunicorn: https://docs.gunicorn.org/en/stable/</li>
-<li>Nginx: https://nginx.org/en/docs/</li>
-<li>Certbot: https://certbot.eff.org/</li>
-</ul></article>
-        </div>
+          <hr />
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <h3 id="gunicorn-and-nginx-tuning">Gunicorn and Nginx Tuning</h3>
+          <ul>
+            <li>
+              Set Gunicorn workers to <code>(2 * CPU) + 1</code> as a starting
+              point.
+            </li>
+            <li>
+              Use <code>--max-requests</code> and
+              <code>--max-requests-jitter</code> to mitigate memory leaks.
+            </li>
+            <li>Enable Gzip compression and HTTP/2 in Nginx.</li>
+            <li>Prefer Unix domain sockets over TCP for local proxying.</li>
+          </ul>
+          <hr />
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              Django Deployment:
+              https://docs.djangoproject.com/en/4.2/howto/deployment/
+            </li>
+            <li>Gunicorn: https://docs.gunicorn.org/en/stable/</li>
+            <li>Nginx: https://nginx.org/en/docs/</li>
+            <li>Certbot: https://certbot.eff.org/</li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

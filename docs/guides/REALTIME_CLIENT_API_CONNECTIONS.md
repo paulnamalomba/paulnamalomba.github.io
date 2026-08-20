@@ -309,18 +309,18 @@ Practical notes:
 
 ## 3. Equivalent Terminology Table
 
-| Concept | ASP.NET Core SignalR | Socket.IO | ws | python-socketio | Django Channels | FastAPI / Starlette |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **SignalR Hub** | `Hub` class | Namespace + per-socket handlers | Custom message router | Namespace / event handlers | `Consumer` class | WebSocket endpoint + manager |
-| **SignalR Groups** | Groups | Rooms | Custom room registry | Rooms | Channel-layer groups | Custom room registry |
-| **Hub Context** | `IHubContext<T>` | Global `io` server object | Shared registry / broadcaster service | `sio` server object | `channel_layer` | Connection manager service |
-| **OnConnected / OnDisconnected** | `OnConnectedAsync` / `OnDisconnectedAsync` | `connection` / `disconnect` | `connection` / `close` | `connect` / `disconnect` | `connect` / `disconnect` | endpoint start / `WebSocketDisconnect` |
-| **Clients.All** | `Clients.All` | `io.emit()` | Iterate all sockets | `sio.emit()` | `group_send` to global group or iterate | Iterate tracked sockets |
-| **Clients.Group** | `Clients.Group(name)` | `io.to(room)` | Iterate room registry | `emit(..., room=...)` | `group_send(group, ...)` | Iterate room membership |
-| **Clients.User** | `Clients.User(userId)` | user-specific room | user socket map | user room or `sid` map | user-specific group | user socket map |
-| **Transport fallback** | WebSockets + SSE + Long Polling | WebSockets + HTTP long polling | None beyond raw WebSocket | Same as Socket.IO protocol | ASGI WebSocket only; fallback is separate app design | WebSocket only |
-| **Backplane** | Redis / Azure SignalR Service | Redis adapter / broker adapters | Custom pub-sub | Redis / message queue managers | Redis channel layer | Custom pub-sub |
-| **Scale-out strategy** | Sticky sessions or managed service + backplane | Sticky sessions + Redis adapter | Shared broker + custom routing | Sticky sessions + message queue / Redis | Redis channel layer + ASGI workers | Shared broker + custom routing |
+| Concept                          | ASP.NET Core SignalR                           | Socket.IO                       | ws                                    | python-socketio                         | Django Channels                                      | FastAPI / Starlette                    |
+| :------------------------------- | :--------------------------------------------- | :------------------------------ | :------------------------------------ | :-------------------------------------- | :--------------------------------------------------- | :------------------------------------- |
+| **SignalR Hub**                  | `Hub` class                                    | Namespace + per-socket handlers | Custom message router                 | Namespace / event handlers              | `Consumer` class                                     | WebSocket endpoint + manager           |
+| **SignalR Groups**               | Groups                                         | Rooms                           | Custom room registry                  | Rooms                                   | Channel-layer groups                                 | Custom room registry                   |
+| **Hub Context**                  | `IHubContext<T>`                               | Global `io` server object       | Shared registry / broadcaster service | `sio` server object                     | `channel_layer`                                      | Connection manager service             |
+| **OnConnected / OnDisconnected** | `OnConnectedAsync` / `OnDisconnectedAsync`     | `connection` / `disconnect`     | `connection` / `close`                | `connect` / `disconnect`                | `connect` / `disconnect`                             | endpoint start / `WebSocketDisconnect` |
+| **Clients.All**                  | `Clients.All`                                  | `io.emit()`                     | Iterate all sockets                   | `sio.emit()`                            | `group_send` to global group or iterate              | Iterate tracked sockets                |
+| **Clients.Group**                | `Clients.Group(name)`                          | `io.to(room)`                   | Iterate room registry                 | `emit(..., room=...)`                   | `group_send(group, ...)`                             | Iterate room membership                |
+| **Clients.User**                 | `Clients.User(userId)`                         | user-specific room              | user socket map                       | user room or `sid` map                  | user-specific group                                  | user socket map                        |
+| **Transport fallback**           | WebSockets + SSE + Long Polling                | WebSockets + HTTP long polling  | None beyond raw WebSocket             | Same as Socket.IO protocol              | ASGI WebSocket only; fallback is separate app design | WebSocket only                         |
+| **Backplane**                    | Redis / Azure SignalR Service                  | Redis adapter / broker adapters | Custom pub-sub                        | Redis / message queue managers          | Redis channel layer                                  | Custom pub-sub                         |
+| **Scale-out strategy**           | Sticky sessions or managed service + backplane | Sticky sessions + Redis adapter | Shared broker + custom routing        | Sticky sessions + message queue / Redis | Redis channel layer + ASGI workers                   | Shared broker + custom routing         |
 
 Key differences that matter:
 
@@ -426,7 +426,7 @@ import * as signalR from "@microsoft/signalr";
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("/hubs/chat", {
-    accessTokenFactory: async () => localStorage.getItem("access_token") ?? ""
+    accessTokenFactory: async () => localStorage.getItem("access_token") ?? "",
   })
   .withAutomaticReconnect([0, 2000, 5000, 10000])
   .build();
@@ -439,9 +439,11 @@ connection.on("ReceivePrivateMessage", (fromUserId: string, text: string) => {
   console.log("private", { fromUserId, text });
 });
 
-connection.onreconnecting(error => console.warn("reconnecting", error));
-connection.onreconnected(connectionId => console.info("reconnected", connectionId));
-connection.onclose(error => console.error("closed", error));
+connection.onreconnecting((error) => console.warn("reconnecting", error));
+connection.onreconnected((connectionId) =>
+  console.info("reconnected", connectionId),
+);
+connection.onclose((error) => console.error("closed", error));
 
 await connection.start();
 await connection.invoke("JoinRoom", "project:alpha");
@@ -460,13 +462,15 @@ import jwt from "jsonwebtoken";
 
 const server = http.createServer();
 const io = new Server(server, {
-  cors: { origin: "https://app.example.com", credentials: true }
+  cors: { origin: "https://app.example.com", credentials: true },
 });
 
 io.use((socket, next) => {
   try {
     const token = socket.handshake.auth.token;
-    const payload = jwt.verify(token, process.env.JWT_SECRET! as string) as { sub: string };
+    const payload = jwt.verify(token, process.env.JWT_SECRET! as string) as {
+      sub: string;
+    };
     socket.data.userId = payload.sub;
     return next();
   } catch {
@@ -474,25 +478,33 @@ io.use((socket, next) => {
   }
 });
 
-io.on("connection", socket => {
+io.on("connection", (socket) => {
   const userRoom = `user:${socket.data.userId}`;
   socket.join(userRoom);
 
-  socket.on("join-room", async (room: string, ack?: (response: { ok: boolean }) => void) => {
-    socket.join(room);
-    io.to(room).emit("system-message", { text: `${socket.data.userId} joined ${room}` });
-    ack?.({ ok: true });
-  });
+  socket.on(
+    "join-room",
+    async (room: string, ack?: (response: { ok: boolean }) => void) => {
+      socket.join(room);
+      io.to(room).emit("system-message", {
+        text: `${socket.data.userId} joined ${room}`,
+      });
+      ack?.({ ok: true });
+    },
+  );
 
   socket.on("room-message", ({ room, text }) => {
     io.to(room).emit("room-message", { from: socket.data.userId, text });
   });
 
   socket.on("private-message", ({ toUserId, text }) => {
-    io.to(`user:${toUserId}`).emit("private-message", { from: socket.data.userId, text });
+    io.to(`user:${toUserId}`).emit("private-message", {
+      from: socket.data.userId,
+      text,
+    });
   });
 
-  socket.on("disconnect", reason => {
+  socket.on("disconnect", (reason) => {
     console.log("disconnect", socket.id, reason);
   });
 });
@@ -507,12 +519,12 @@ import { io } from "socket.io-client";
 
 const socket = io("https://api.example.com", {
   auth: {
-    token: localStorage.getItem("access_token")
+    token: localStorage.getItem("access_token"),
   },
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
-  reconnectionDelayMax: 10000
+  reconnectionDelayMax: 10000,
 });
 
 socket.on("connect", () => {
@@ -521,12 +533,17 @@ socket.on("connect", () => {
   });
 });
 
-socket.on("room-message", message => console.log(message));
-socket.on("private-message", message => console.log(message));
-socket.on("disconnect", reason => console.warn("disconnect", reason));
-socket.on("connect_error", error => console.error("connect_error", error.message));
+socket.on("room-message", (message) => console.log(message));
+socket.on("private-message", (message) => console.log(message));
+socket.on("disconnect", (reason) => console.warn("disconnect", reason));
+socket.on("connect_error", (error) =>
+  console.error("connect_error", error.message),
+);
 
-socket.emit("room-message", { room: "project:alpha", text: "hello from client" });
+socket.emit("room-message", {
+  room: "project:alpha",
+  text: "hello from client",
+});
 socket.emit("private-message", { toUserId: "user-42", text: "private ping" });
 ```
 
@@ -588,11 +605,15 @@ server.on("upgrade", (request, socket, head) => {
   try {
     const url = new URL(request.url ?? "/", "http://localhost");
     const token = url.searchParams.get("token") ?? undefined;
-    const payload = jwt.verify(token ?? "", process.env.JWT_SECRET! as string) as { sub: string };
+    const payload = jwt.verify(
+      token ?? "",
+      process.env.JWT_SECRET! as string,
+    ) as { sub: string };
 
-    wss.handleUpgrade(request, socket, head, ws => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
       userBySocket.set(ws, payload.sub);
-      const userSockets = socketsByUser.get(payload.sub) ?? new Set<WebSocket>();
+      const userSockets =
+        socketsByUser.get(payload.sub) ?? new Set<WebSocket>();
       userSockets.add(ws);
       socketsByUser.set(payload.sub, userSockets);
       wss.emit("connection", ws, request);
@@ -603,29 +624,42 @@ server.on("upgrade", (request, socket, head) => {
   }
 });
 
-wss.on("connection", ws => {
+wss.on("connection", (ws) => {
   allSockets.add(ws);
 
-  ws.on("message", raw => {
+  ws.on("message", (raw) => {
     const message = JSON.parse(raw.toString()) as MessageEnvelope;
     const fromUserId = userBySocket.get(ws);
 
     if (message.type === "join-room" && message.room) {
       addToRoom(message.room, ws);
-      sendJson(ws, { type: "join-room-ack", room: message.room, requestId: message.requestId });
+      sendJson(ws, {
+        type: "join-room-ack",
+        room: message.room,
+        requestId: message.requestId,
+      });
       return;
     }
 
     if (message.type === "room-message" && message.room) {
       for (const member of rooms.get(message.room) ?? []) {
-        sendJson(member, { type: "room-message", room: message.room, fromUserId, text: message.text });
+        sendJson(member, {
+          type: "room-message",
+          room: message.room,
+          fromUserId,
+          text: message.text,
+        });
       }
       return;
     }
 
     if (message.type === "private-message" && message.toUserId) {
       for (const member of socketsByUser.get(message.toUserId) ?? []) {
-        sendJson(member, { type: "private-message", fromUserId, text: message.text });
+        sendJson(member, {
+          type: "private-message",
+          fromUserId,
+          text: message.text,
+        });
       }
     }
   });
@@ -648,14 +682,22 @@ let attempt = 0;
 let socket: WebSocket;
 
 function connect() {
-  socket = new WebSocket(`wss://api.example.com/realtime?token=${encodeURIComponent(token ?? "")}`);
+  socket = new WebSocket(
+    `wss://api.example.com/realtime?token=${encodeURIComponent(token ?? "")}`,
+  );
 
   socket.addEventListener("open", () => {
     attempt = 0;
-    socket.send(JSON.stringify({ type: "join-room", room: "project:alpha", requestId: crypto.randomUUID() }));
+    socket.send(
+      JSON.stringify({
+        type: "join-room",
+        room: "project:alpha",
+        requestId: crypto.randomUUID(),
+      }),
+    );
   });
 
-  socket.addEventListener("message", event => {
+  socket.addEventListener("message", (event) => {
     const message = JSON.parse(event.data);
     console.log(message);
   });
@@ -878,7 +920,7 @@ function connect() {
     socket.send(JSON.stringify({ type: "join-room", room: "project:alpha" }));
   });
 
-  socket.addEventListener("message", event => {
+  socket.addEventListener("message", (event) => {
     console.log(JSON.parse(event.data));
   });
 
@@ -992,11 +1034,23 @@ function connect() {
   socket.onopen = () => {
     attempt = 0;
     socket.send(JSON.stringify({ type: "join-room", room: "project:alpha" }));
-    socket.send(JSON.stringify({ type: "room-message", room: "project:alpha", text: "hello room" }));
-    socket.send(JSON.stringify({ type: "private-message", to_user_id: "user-42", text: "private ping" }));
+    socket.send(
+      JSON.stringify({
+        type: "room-message",
+        room: "project:alpha",
+        text: "hello room",
+      }),
+    );
+    socket.send(
+      JSON.stringify({
+        type: "private-message",
+        to_user_id: "user-42",
+        text: "private ping",
+      }),
+    );
   };
 
-  socket.onmessage = event => console.log(JSON.parse(event.data));
+  socket.onmessage = (event) => console.log(JSON.parse(event.data));
   socket.onclose = () => {
     const delay = Math.min(1000 * 2 ** attempt, 10000);
     attempt += 1;

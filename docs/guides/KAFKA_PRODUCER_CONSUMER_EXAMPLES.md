@@ -73,13 +73,13 @@ public class KafkaEventProducer
             BootstrapServers = bootstrapServers,
             // Acks.All ensures the leader AND all replicas acknowledge the message.
             // Slower, but prevents data loss in a distributed cluster.
-            Acks = Acks.All 
+            Acks = Acks.All
         };
     }
 
     public async Task PublishEnrollmentAsync(EnrollmentEvent evt)
     {
-        // The producer handles unmanaged resources, so 'using' is mandatory 
+        // The producer handles unmanaged resources, so 'using' is mandatory
         // to prevent catastrophic memory leaks in a long-running service.
         using var producer = new ProducerBuilder<string, string>(_config).Build();
 
@@ -92,7 +92,7 @@ public class KafkaEventProducer
             };
 
             var deliveryResult = await producer.ProduceAsync(_topic, message);
-            
+
             Console.WriteLine($"Delivered '{deliveryResult.Value}' to '{deliveryResult.TopicPartitionOffset}'");
         }
         catch (ProduceException<string, string> e)
@@ -130,7 +130,7 @@ public class KafkaEventConsumer
             BootstrapServers = bootstrapServers,
             GroupId = groupId,
             // If there is no previous offset, start reading from the earliest available message
-            AutoOffsetReset = AutoOffsetReset.Earliest, 
+            AutoOffsetReset = AutoOffsetReset.Earliest,
             EnableAutoCommit = true // For absolute control, set to false and commit manually after processing
         };
     }
@@ -146,9 +146,9 @@ public class KafkaEventConsumer
             {
                 // The Consume method blocks until a message is available or the token is canceled.
                 var consumeResult = consumer.Consume(cancellationToken);
-                
+
                 Console.WriteLine($"Processing enrollment for Student: {consumeResult.Message.Key}");
-                
+
                 // Processing logic goes here...
             }
         }
@@ -161,7 +161,7 @@ public class KafkaEventConsumer
         {
             // This ensures the consumer leaves the group cleanly and partition locks are released.
             // Without this, the broker waits for a timeout before reassigning partitions.
-            consumer.Close(); 
+            consumer.Close();
         }
     }
 }
@@ -172,5 +172,5 @@ public class KafkaEventConsumer
 
 ### Architectural Considerations for the Pipeline
 
-* **Partitioning Keys:** In the producer code, `evt.StudentId` is explicitly set as the `Key`. Kafka guarantees order *only* within a specific partition. By keying on the `StudentId`, you ensure that all events for a specific student go to the same partition and are processed sequentially.
-* **Idempotency:** A dry reality of distributed systems is that the network will eventually lie to you. The producer might send a message, the broker might save it, but the acknowledgment fails. The producer will retry, resulting in a duplicate. Your downstream database logic must be idempotent (e.g., using `UPSERT` statements) to handle this gracefully.
+- **Partitioning Keys:** In the producer code, `evt.StudentId` is explicitly set as the `Key`. Kafka guarantees order _only_ within a specific partition. By keying on the `StudentId`, you ensure that all events for a specific student go to the same partition and are processed sequentially.
+- **Idempotency:** A dry reality of distributed systems is that the network will eventually lie to you. The producer might send a message, the broker might save it, but the acknowledgment fails. The producer will retry, resulting in a duplicate. Your downstream database logic must be idempotent (e.g., using `UPSERT` statements) to handle this gracefully.

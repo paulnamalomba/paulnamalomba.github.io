@@ -2,10 +2,11 @@
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -56,6 +57,7 @@ BCrypt.Net-Next is a robust password hashing library for .NET implementing the O
 ## Configuration and Best Practices
 
 **ASP.NET Core Dependency Injection Setup**:
+
 ```csharp
 // Program.cs or Startup.cs
 builder.Services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
@@ -69,12 +71,12 @@ public interface IPasswordHasher
 public class BcryptPasswordHasher : IPasswordHasher
 {
     private const int WorkFactor = 12; // Adjust based on performance requirements
-    
+
     public string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password, WorkFactor);
     }
-    
+
     public bool VerifyPassword(string password, string hash)
     {
         return BCrypt.Net.BCrypt.Verify(password, hash);
@@ -83,6 +85,7 @@ public class BcryptPasswordHasher : IPasswordHasher
 ```
 
 **Best Practices**:
+
 - Use work factor 11-12 for web applications; 13-14 for high-security systems
 - Never store plaintext passwords or use reversible encryption
 - Hash passwords on server-side only; never send hashes from client
@@ -102,46 +105,47 @@ public class BcryptPasswordHasher : IPasswordHasher
 7. **Hash Storage**: Store in binary format or base64 to avoid encoding issues; never truncate hash values
 
 **Secure User Registration Example**:
+
 ```csharp
 public class UserService
 {
     private readonly IPasswordHasher _passwordHasher;
     private readonly IUserRepository _userRepository;
-    
+
     public UserService(IPasswordHasher passwordHasher, IUserRepository userRepository)
     {
         _passwordHasher = passwordHasher;
         _userRepository = userRepository;
     }
-    
+
     public async Task<Result> RegisterUser(string email, string password)
     {
         // Validate password complexity before hashing
         if (password.Length < 12)
             return Result.Fail("Password must be at least 12 characters");
-        
+
         if (!HasComplexity(password))
             return Result.Fail("Password must contain uppercase, lowercase, digit, and symbol");
-        
+
         // Check if user exists
         if (await _userRepository.EmailExists(email))
             return Result.Fail("Email already registered");
-        
+
         // Hash password
         string passwordHash = _passwordHasher.HashPassword(password);
-        
+
         // Store user with hash
-        var user = new User 
-        { 
-            Email = email, 
+        var user = new User
+        {
+            Email = email,
             PasswordHash = passwordHash,
             CreatedAt = DateTime.UtcNow
         };
-        
+
         await _userRepository.CreateUser(user);
         return Result.Success();
     }
-    
+
     private bool HasComplexity(string password)
     {
         return password.Any(char.IsUpper) &&
@@ -170,15 +174,15 @@ public class PasswordExample
         string hash = BCrypt.Net.BCrypt.HashPassword(password);
         Console.WriteLine($"Hash: {hash}");
         // Output: $2a$11$randomsalt...hashvalue
-        
+
         // Verify correct password
         bool isValid = BCrypt.Net.BCrypt.Verify(password, hash);
         Console.WriteLine($"Password valid: {isValid}"); // True
-        
+
         // Verify incorrect password
         bool isInvalid = BCrypt.Net.BCrypt.Verify("WrongPassword", hash);
         Console.WriteLine($"Wrong password: {isInvalid}"); // False
-        
+
         // Each hash is unique due to random salt
         string hash2 = BCrypt.Net.BCrypt.HashPassword(password);
         Console.WriteLine($"Hashes equal: {hash == hash2}"); // False
@@ -199,30 +203,30 @@ public class AdvancedHashingExample
     public void CustomWorkFactorExample()
     {
         string password = "SecurePassword123!";
-        
+
         // Low work factor (faster, less secure) - use for testing only
         string hashFast = BCrypt.Net.BCrypt.HashPassword(password, 4);
         Console.WriteLine($"Fast hash (work factor 4): {hashFast}");
-        
+
         // Standard work factor (recommended for production)
         string hashStandard = BCrypt.Net.BCrypt.HashPassword(password, 11);
         Console.WriteLine($"Standard hash (work factor 11): {hashStandard}");
-        
+
         // High work factor (slower, more secure)
         string hashSecure = BCrypt.Net.BCrypt.HashPassword(password, 13);
         Console.WriteLine($"Secure hash (work factor 13): {hashSecure}");
-        
+
         // Benchmark hashing time
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         BCrypt.Net.BCrypt.HashPassword(password, 12);
         stopwatch.Stop();
         Console.WriteLine($"Hashing time (factor 12): {stopwatch.ElapsedMilliseconds}ms");
-        
+
         // Enhanced entropy for long passwords (>72 bytes)
         string longPassword = new string('x', 100);
         string hashEnhanced = BCrypt.Net.BCrypt.EnhancedHashPassword(longPassword, 11);
         Console.WriteLine($"Enhanced hash: {hashEnhanced}");
-        
+
         bool verifyEnhanced = BCrypt.Net.BCrypt.EnhancedVerify(longPassword, hashEnhanced);
         Console.WriteLine($"Enhanced verify: {verifyEnhanced}"); // True
     }
@@ -244,32 +248,32 @@ public class AuthController : ControllerBase
     private readonly IUserRepository _userRepository;
     private readonly ILogger<AuthController> _logger;
     private const int WorkFactor = 12;
-    
+
     public AuthController(IUserRepository userRepository, ILogger<AuthController> logger)
     {
         _userRepository = userRepository;
         _logger = logger;
     }
-    
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         // Validate input
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             return BadRequest("Email and password are required");
-        
+
         // Check password strength
         if (request.Password.Length < 12)
             return BadRequest("Password must be at least 12 characters");
-        
+
         // Check if email exists
         var existingUser = await _userRepository.GetByEmail(request.Email);
         if (existingUser != null)
             return Conflict("Email already registered");
-        
+
         // Hash password
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password, WorkFactor);
-        
+
         // Create user
         var user = new User
         {
@@ -278,13 +282,13 @@ public class AuthController : ControllerBase
             PasswordHash = passwordHash,
             CreatedAt = DateTime.UtcNow
         };
-        
+
         await _userRepository.Create(user);
         _logger.LogInformation("User registered: {Email}", request.Email);
-        
+
         return Ok(new { message = "Registration successful", userId = user.Id });
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
@@ -295,7 +299,7 @@ public class AuthController : ControllerBase
             _logger.LogWarning("Login attempt for non-existent email: {Email}", request.Email);
             return Unauthorized("Invalid credentials");
         }
-        
+
         // Verify password
         bool isValid = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
         if (!isValid)
@@ -303,7 +307,7 @@ public class AuthController : ControllerBase
             _logger.LogWarning("Failed login attempt for user: {Email}", request.Email);
             return Unauthorized("Invalid credentials");
         }
-        
+
         // Check if work factor needs update (optional migration)
         if (NeedsRehash(user.PasswordHash, WorkFactor))
         {
@@ -311,13 +315,13 @@ public class AuthController : ControllerBase
             await _userRepository.Update(user);
             _logger.LogInformation("Password rehashed for user: {Email}", request.Email);
         }
-        
+
         _logger.LogInformation("User logged in: {Email}", request.Email);
-        
+
         // Generate JWT or session token here
         return Ok(new { message = "Login successful", userId = user.Id });
     }
-    
+
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
     {
@@ -325,38 +329,38 @@ public class AuthController : ControllerBase
         var user = await _userRepository.GetById(request.UserId);
         if (user == null)
             return NotFound("User not found");
-        
+
         // Verify current password
         bool isValid = BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash);
         if (!isValid)
             return Unauthorized("Current password is incorrect");
-        
+
         // Validate new password
         if (request.NewPassword.Length < 12)
             return BadRequest("New password must be at least 12 characters");
-        
+
         // Hash new password
         user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword, WorkFactor);
         user.PasswordChangedAt = DateTime.UtcNow;
-        
+
         await _userRepository.Update(user);
         _logger.LogInformation("Password changed for user: {UserId}", user.Id);
-        
+
         return Ok(new { message = "Password changed successfully" });
     }
-    
+
     private bool NeedsRehash(string hash, int targetWorkFactor)
     {
         // Extract work factor from hash (format: $2a$[workfactor]$...)
         var parts = hash.Split('$');
         if (parts.Length < 3)
             return false;
-        
+
         if (int.TryParse(parts[2], out int currentWorkFactor))
         {
             return currentWorkFactor < targetWorkFactor;
         }
-        
+
         return false;
     }
 }
@@ -379,25 +383,25 @@ public class PasswordMigrationService
     private const int MinimumWorkFactor = 10;
     private readonly IUserRepository _userRepository;
     private readonly ILogger<PasswordMigrationService> _logger;
-    
+
     public PasswordMigrationService(IUserRepository userRepository, ILogger<PasswordMigrationService> logger)
     {
         _userRepository = userRepository;
         _logger = logger;
     }
-    
+
     // Opportunistic rehashing on successful login
     public async Task<bool> AuthenticateAndRehash(string email, string password)
     {
         var user = await _userRepository.GetByEmail(email);
         if (user == null)
             return false;
-        
+
         // Verify password
         bool isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
         if (!isValid)
             return false;
-        
+
         // Check if rehashing is needed
         int currentWorkFactor = ExtractWorkFactor(user.PasswordHash);
         if (currentWorkFactor < TargetWorkFactor)
@@ -405,34 +409,34 @@ public class PasswordMigrationService
             _logger.LogInformation(
                 "Rehashing password for user {Email} (current factor: {Current}, target: {Target})",
                 email, currentWorkFactor, TargetWorkFactor);
-            
+
             // Rehash with target work factor
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password, TargetWorkFactor);
             user.PasswordChangedAt = DateTime.UtcNow;
             await _userRepository.Update(user);
         }
-        
+
         return true;
     }
-    
+
     // Batch migration for inactive users (run as background job)
     public async Task MigrateWeakHashes()
     {
         var usersWithWeakHashes = await _userRepository.GetUsersWithWorkFactorBelow(MinimumWorkFactor);
-        
+
         _logger.LogInformation("Found {Count} users with weak password hashes", usersWithWeakHashes.Count);
-        
+
         foreach (var user in usersWithWeakHashes)
         {
             // For inactive users, force password reset
             user.RequiresPasswordReset = true;
             user.ResetReason = $"Security upgrade required (work factor {ExtractWorkFactor(user.PasswordHash)} < {MinimumWorkFactor})";
             await _userRepository.Update(user);
-            
+
             _logger.LogInformation("Password reset required for user {Email}", user.Email);
         }
     }
-    
+
     // Extract work factor from bcrypt hash
     private int ExtractWorkFactor(string hash)
     {
@@ -449,25 +453,25 @@ public class PasswordMigrationService
         {
             _logger.LogError(ex, "Failed to extract work factor from hash");
         }
-        
+
         return 0;
     }
-    
+
     // Generate password reset token with expiration
     public async Task<string> GeneratePasswordResetToken(string email)
     {
         var user = await _userRepository.GetByEmail(email);
         if (user == null)
             throw new Exception("User not found");
-        
+
         // Generate secure random token
         string token = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
-        
+
         user.PasswordResetToken = BCrypt.Net.BCrypt.HashPassword(token, 10); // Lower work factor for tokens
         user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1);
-        
+
         await _userRepository.Update(user);
-        
+
         return token; // Send this to user via email
     }
 }
@@ -476,6 +480,7 @@ public class PasswordMigrationService
 ## Troubleshooting
 
 **Hash Verification Fails**:
+
 - **Error**: `Verify()` returns false for correct password
   - **Check encoding**: Ensure consistent UTF-8 encoding for password strings
   - **Verify hash format**: Hash must start with `$2a$`, `$2b$`, or `$2y$`
@@ -483,6 +488,7 @@ public class PasswordMigrationService
   - **Test hash generation**: Generate new hash and verify immediately to isolate issue
 
 **Performance Issues**:
+
 - **Error**: Hashing takes too long (>500ms)
   - **Reduce work factor**: Lower from 12 to 11 or 10 based on requirements
   - **Benchmark hardware**: Test on production-equivalent hardware before deployment
@@ -490,12 +496,14 @@ public class PasswordMigrationService
   - **Monitor CPU usage**: High work factors increase CPU load; consider load balancing
 
 **Enhanced Entropy Errors**:
+
 - **Error**: `EnhancedVerify()` fails for passwords hashed with `EnhancedHashPassword()`
   - **Consistency required**: Must use Enhanced methods for both hashing and verification
   - **Password length**: Enhanced mode is for passwords >72 bytes; unnecessary for shorter passwords
   - **Migration**: Cannot mix standard and enhanced hashes without tracking mode per user
 
 **Database Storage Issues**:
+
 ```csharp
 // Common database column configurations
 // SQL Server
@@ -518,15 +526,15 @@ CREATE TABLE users (
 public class User
 {
     public Guid Id { get; set; }
-    
+
     [Required]
     [StringLength(255)]
     public string Email { get; set; }
-    
+
     [Required]
     [StringLength(60)]  // Exactly 60 characters for bcrypt
     public string PasswordHash { get; set; }
-    
+
     public DateTime CreatedAt { get; set; }
 }
 ```
@@ -534,6 +542,7 @@ public class User
 ## Performance and Tuning
 
 **Work Factor Benchmarking**:
+
 ```csharp
 using System.Diagnostics;
 using BCrypt.Net;
@@ -543,20 +552,20 @@ public class BcryptBenchmark
     public void BenchmarkWorkFactors()
     {
         string password = "TestPassword123!";
-        
+
         for (int workFactor = 4; workFactor <= 14; workFactor++)
         {
             var stopwatch = Stopwatch.StartNew();
             int iterations = workFactor <= 10 ? 100 : (workFactor <= 12 ? 10 : 1);
-            
+
             for (int i = 0; i < iterations; i++)
             {
                 BCrypt.Net.BCrypt.HashPassword(password, workFactor);
             }
-            
+
             stopwatch.Stop();
             double avgTime = stopwatch.ElapsedMilliseconds / (double)iterations;
-            
+
             Console.WriteLine($"Work Factor {workFactor}: {avgTime:F2}ms per hash");
             Console.WriteLine($"  Iterations per second: {1000 / avgTime:F0}");
             Console.WriteLine($"  Security: 2^{workFactor} = {Math.Pow(2, workFactor):N0} iterations");
@@ -572,6 +581,7 @@ public class BcryptBenchmark
 ```
 
 **Async Hashing for Web Applications**:
+
 ```csharp
 using System.Threading.Tasks;
 using BCrypt.Net;
@@ -583,7 +593,7 @@ public class AsyncPasswordService
     {
         return await Task.Run(() => BCrypt.Net.BCrypt.HashPassword(password, workFactor));
     }
-    
+
     public async Task<bool> VerifyPasswordAsync(string password, string hash)
     {
         return await Task.Run(() => BCrypt.Net.BCrypt.Verify(password, hash));
@@ -596,24 +606,25 @@ public async Task<IActionResult> Register([FromBody] RegisterRequest request)
 {
     var passwordService = new AsyncPasswordService();
     string hash = await passwordService.HashPasswordAsync(request.Password);
-    
+
     // Save user with hash
     return Ok();
 }
 ```
 
 **Memory and Resource Optimization**:
+
 ```csharp
 public class OptimizedPasswordService
 {
     private const int MaxConcurrentHashOperations = 4;
     private readonly SemaphoreSlim _semaphore;
-    
+
     public OptimizedPasswordService()
     {
         _semaphore = new SemaphoreSlim(MaxConcurrentHashOperations);
     }
-    
+
     // Limit concurrent hashing operations to prevent CPU saturation
     public async Task<string> HashPasswordWithThrottling(string password, int workFactor = 12)
     {
@@ -631,6 +642,7 @@ public class OptimizedPasswordService
 ```
 
 **Recommended Work Factors by Use Case**:
+
 - **Development/Testing**: 4-6 (fast feedback)
 - **Low-security applications**: 10 (~60ms)
 - **Standard web applications**: 11-12 (~120-220ms)

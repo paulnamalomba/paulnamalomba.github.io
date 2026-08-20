@@ -2,10 +2,11 @@
 
 **Last updated**: March 02, 2026<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -135,14 +136,14 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 
 ## Comparison Matrix
 
-| Feature | Vue | Angular | SvelteKit | SolidJS | Qwik |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Primary appeal** | DX + simplicity | Structure + conventions | Performance + compile-time | React-like + speed | Startup performance |
-| **Typing story** | Good (TS optional) | Excellent (TS-first) | Good (TS optional) | Good (TS optional) | Good (TS optional) |
-| **Rendering model fit** | CSR/SSR via Nuxt | CSR/SSR supported | SSR/SSG built-in | CSR (SSR options exist) | SSR + resumability |
-| **Component style** | Template or JSX | Decorator + templates | Svelte syntax | JSX | JSX |
-| **Ecosystem depth** | High | High | Medium | Medium/low | Emerging |
-| **Team-scale consistency** | Medium/high | Very high | Medium | Medium | Medium |
+| Feature                    | Vue                | Angular                 | SvelteKit                  | SolidJS                 | Qwik                |
+| :------------------------- | :----------------- | :---------------------- | :------------------------- | :---------------------- | :------------------ |
+| **Primary appeal**         | DX + simplicity    | Structure + conventions | Performance + compile-time | React-like + speed      | Startup performance |
+| **Typing story**           | Good (TS optional) | Excellent (TS-first)    | Good (TS optional)         | Good (TS optional)      | Good (TS optional)  |
+| **Rendering model fit**    | CSR/SSR via Nuxt   | CSR/SSR supported       | SSR/SSG built-in           | CSR (SSR options exist) | SSR + resumability  |
+| **Component style**        | Template or JSX    | Decorator + templates   | Svelte syntax              | JSX                     | JSX                 |
+| **Ecosystem depth**        | High               | High                    | Medium                     | Medium/low              | Emerging            |
+| **Team-scale consistency** | Medium/high        | Very high               | Medium                     | Medium                  | Medium              |
 
 ### Notes on the matrix
 

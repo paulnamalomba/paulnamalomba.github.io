@@ -1,99 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>POSTGRESQL 16 PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="postgresql-16-poweruser-guide-powershell">POSTGRESQL 16 PowerUser Guide (PowerShell)</h1>
-<p><strong>Last updated</strong>: December 04, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://www.postgresql.org/docs/16/"><img alt="Framework" src="https://img.shields.io/badge/PostgreSQL-16.x-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>PostgreSQL 16 is an advanced open-source relational database with support for ACID transactions, JSON, full-text search, and extensibility. This guide covers installation, configuration, performance tuning, and administration using PowerShell on Windows. Power users need to understand connection pooling, query optimization, backup strategies, and replication for production deployments.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#postgresql-16-poweruser-guide-powershell">POSTGRESQL 16 PowerUser Guide (PowerShell)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#install-and-configure-postgresql-16">Install and Configure PostgreSQL 16</a></li>
-<li><a href="#database-and-user-management">Database and User Management</a></li>
-<li><a href="#backup-and-restore-operations">Backup and Restore Operations</a></li>
-<li><a href="#query-execution-and-analysis">Query Execution and Analysis</a></li>
-<li><a href="#index-management-and-optimization">Index Management and Optimization</a></li>
-<li><a href="#maintenance-operations">Maintenance Operations</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install PostgreSQL 16</strong>: Download from <a href="https://www.postgresql.org/download/windows/">postgresql.org</a> or use Chocolatey: <code>choco install postgresql16</code></li>
-<li><strong>Add to PATH</strong>: Add <code>C:\Program Files\PostgreSQL\16\bin</code> to system PATH</li>
-<li><strong>Initialize cluster</strong> (if not done): <code>initdb -D "C:\PostgreSQL\data" -U postgres -W -E UTF8</code></li>
-<li><strong>Start service</strong>: <code>Start-Service postgresql-x64-16</code></li>
-<li><strong>Connect</strong>: <code>psql -U postgres -d postgres</code></li>
-<li><strong>Create database</strong>: <code>CREATE DATABASE mydb;</code></li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Cluster</strong>: Collection of databases managed by a single PostgreSQL server instance</li>
-<li><strong>MVCC (Multi-Version Concurrency Control)</strong>: Allows concurrent reads/writes without locking; each transaction sees a consistent snapshot</li>
-<li><strong>WAL (Write-Ahead Logging)</strong>: Transaction log used for crash recovery and replication; modifications written to WAL before data files</li>
-<li><strong>Vacuum</strong>: Process that reclaims storage from dead tuples and prevents transaction ID wraparound</li>
-<li><strong>Indexes</strong>: B-tree (default), Hash, GiST, GIN, BRIN for optimizing query performance</li>
-<li><strong>Schemas</strong>: Namespaces within a database for organizing tables and objects; default schema is <code>public</code></li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<p><strong>postgresql.conf</strong> (located in data directory):</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># Connection settings</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="postgresql-16-poweruser-guide-powershell">
+            POSTGRESQL 16 PowerUser Guide (PowerShell)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 04, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://www.postgresql.org/docs/16/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/PostgreSQL-16.x-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            PostgreSQL 16 is an advanced open-source relational database with
+            support for ACID transactions, JSON, full-text search, and
+            extensibility. This guide covers installation, configuration,
+            performance tuning, and administration using PowerShell on Windows.
+            Power users need to understand connection pooling, query
+            optimization, backup strategies, and replication for production
+            deployments.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#postgresql-16-poweruser-guide-powershell"
+                >POSTGRESQL 16 PowerUser Guide (PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a href="#install-and-configure-postgresql-16"
+                    >Install and Configure PostgreSQL 16</a
+                  >
+                </li>
+                <li>
+                  <a href="#database-and-user-management"
+                    >Database and User Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#backup-and-restore-operations"
+                    >Backup and Restore Operations</a
+                  >
+                </li>
+                <li>
+                  <a href="#query-execution-and-analysis"
+                    >Query Execution and Analysis</a
+                  >
+                </li>
+                <li>
+                  <a href="#index-management-and-optimization"
+                    >Index Management and Optimization</a
+                  >
+                </li>
+                <li>
+                  <a href="#maintenance-operations">Maintenance Operations</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install PostgreSQL 16</strong>: Download from
+              <a href="https://www.postgresql.org/download/windows/"
+                >postgresql.org</a
+              >
+              or use Chocolatey: <code>choco install postgresql16</code>
+            </li>
+            <li>
+              <strong>Add to PATH</strong>: Add
+              <code>C:\Program Files\PostgreSQL\16\bin</code> to system PATH
+            </li>
+            <li>
+              <strong>Initialize cluster</strong> (if not done):
+              <code>initdb -D "C:\PostgreSQL\data" -U postgres -W -E UTF8</code>
+            </li>
+            <li>
+              <strong>Start service</strong>:
+              <code>Start-Service postgresql-x64-16</code>
+            </li>
+            <li>
+              <strong>Connect</strong>:
+              <code>psql -U postgres -d postgres</code>
+            </li>
+            <li>
+              <strong>Create database</strong>:
+              <code>CREATE DATABASE mydb;</code>
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Cluster</strong>: Collection of databases managed by a
+              single PostgreSQL server instance
+            </li>
+            <li>
+              <strong>MVCC (Multi-Version Concurrency Control)</strong>: Allows
+              concurrent reads/writes without locking; each transaction sees a
+              consistent snapshot
+            </li>
+            <li>
+              <strong>WAL (Write-Ahead Logging)</strong>: Transaction log used
+              for crash recovery and replication; modifications written to WAL
+              before data files
+            </li>
+            <li>
+              <strong>Vacuum</strong>: Process that reclaims storage from dead
+              tuples and prevents transaction ID wraparound
+            </li>
+            <li>
+              <strong>Indexes</strong>: B-tree (default), Hash, GiST, GIN, BRIN
+              for optimizing query performance
+            </li>
+            <li>
+              <strong>Schemas</strong>: Namespaces within a database for
+              organizing tables and objects; default schema is
+              <code>public</code>
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <p><strong>postgresql.conf</strong> (located in data directory):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># Connection settings</span>
 <span class="na">max_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">100</span>
 <span class="na">shared_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4GB</span><span class="w">                   </span><span class="c1"># 25% of system RAM</span>
 <span class="na">effective_cache_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">12GB</span><span class="w">            </span><span class="c1"># 75% of system RAM</span>
@@ -115,47 +236,86 @@
 <span class="na">log_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;postgresql-%Y-%m-%d_%H%M%S.log&#39;</span>
 <span class="na">log_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;all&#39;</span>
 <span class="na">log_min_duration_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span><span class="w">      </span><span class="c1"># Log queries &gt; 1 second</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>pg_hba.conf</strong> (host-based authentication):</p>
-<div class="codehilite"><pre><span></span><code># TYPE  DATABASE  USER      ADDRESS         METHOD
+          <p><strong>pg_hba.conf</strong> (host-based authentication):</p>
+          <div class="codehilite">
+            <pre><span></span><code># TYPE  DATABASE  USER      ADDRESS         METHOD
 local   all       all                       scram-sha-256
 host    all       all       127.0.0.1/32    scram-sha-256
 host    all       all       ::1/128         scram-sha-256
 host    all       all       0.0.0.0/0       scram-sha-256
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use connection pooling (PgBouncer) for applications with &gt;100 connections
-- Enable query logging for slow queries (&gt;1000ms)
-- Implement regular VACUUM ANALYZE for table statistics
-- Use prepared statements to prevent SQL injection
-- Create indexes on foreign keys and frequently queried columns
-- Set appropriate work_mem per connection (start with 4MB)</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<ol>
-<li><strong>Authentication</strong>: Use <code>scram-sha-256</code> password encryption; avoid <code>trust</code> and <code>md5</code> methods</li>
-<li><strong>SSL/TLS</strong>: Enforce encrypted connections in production; generate certificates and set <code>ssl = on</code></li>
-<li><strong>Least Privilege</strong>: Create role-based access with minimal permissions; avoid using <code>postgres</code> superuser for applications</li>
-<li><strong>Network Security</strong>: Bind to localhost only (<code>listen_addresses = 'localhost'</code>) or specific IPs; use firewall rules</li>
-<li><strong>SQL Injection</strong>: Use parameterized queries exclusively; never concatenate user input into SQL</li>
-<li><strong>Audit Logging</strong>: Enable <code>pgaudit</code> extension for compliance requirements and track DDL/DML operations</li>
-<li><strong>Data Encryption</strong>: Use <code>pgcrypto</code> for column-level encryption; enable transparent data encryption (TDE) for data-at-rest</li>
-</ol>
-<p><strong>Create Secure Application User</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;SecurePassword123!&#39;</span><span class="p">;</span>
+          <p>
+            <strong>Best Practices</strong>: - Use connection pooling
+            (PgBouncer) for applications with &gt;100 connections - Enable query
+            logging for slow queries (&gt;1000ms) - Implement regular VACUUM
+            ANALYZE for table statistics - Use prepared statements to prevent
+            SQL injection - Create indexes on foreign keys and frequently
+            queried columns - Set appropriate work_mem per connection (start
+            with 4MB)
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <ol>
+            <li>
+              <strong>Authentication</strong>: Use
+              <code>scram-sha-256</code> password encryption; avoid
+              <code>trust</code> and <code>md5</code> methods
+            </li>
+            <li>
+              <strong>SSL/TLS</strong>: Enforce encrypted connections in
+              production; generate certificates and set <code>ssl = on</code>
+            </li>
+            <li>
+              <strong>Least Privilege</strong>: Create role-based access with
+              minimal permissions; avoid using <code>postgres</code> superuser
+              for applications
+            </li>
+            <li>
+              <strong>Network Security</strong>: Bind to localhost only (<code
+                >listen_addresses = 'localhost'</code
+              >) or specific IPs; use firewall rules
+            </li>
+            <li>
+              <strong>SQL Injection</strong>: Use parameterized queries
+              exclusively; never concatenate user input into SQL
+            </li>
+            <li>
+              <strong>Audit Logging</strong>: Enable
+              <code>pgaudit</code> extension for compliance requirements and
+              track DDL/DML operations
+            </li>
+            <li>
+              <strong>Data Encryption</strong>: Use <code>pgcrypto</code> for
+              column-level encryption; enable transparent data encryption (TDE)
+              for data-at-rest
+            </li>
+          </ol>
+          <p><strong>Create Secure Application User</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;SecurePassword123!&#39;</span><span class="p">;</span>
 <span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">CONNECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="err">\</span><span class="k">c</span><span class="w"> </span><span class="n">appdb</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">USAGE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">SELECT</span><span class="p">,</span><span class="w"> </span><span class="k">INSERT</span><span class="p">,</span><span class="w"> </span><span class="k">UPDATE</span><span class="p">,</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="n">TABLES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="k">REVOKE</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">PUBLIC</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="examples">Examples</h2>
-<h3 id="install-and-configure-postgresql-16">Install and Configure PostgreSQL 16</h3>
-<p>Download, install, and perform initial configuration of PostgreSQL 16 on Windows with service setup and data directory initialization.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Download PostgreSQL 16 installer</span>
+          <h2 id="examples">Examples</h2>
+          <h3 id="install-and-configure-postgresql-16">
+            Install and Configure PostgreSQL 16
+          </h3>
+          <p>
+            Download, install, and perform initial configuration of PostgreSQL
+            16 on Windows with service setup and data directory initialization.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Download PostgreSQL 16 installer</span>
 <span class="nv">$installerUrl</span> <span class="p">=</span> <span class="s2">&quot;https://get.enterprisedb.com/postgresql/postgresql-16.1-1-windows-x64.exe&quot;</span>
 <span class="nv">$installerPath</span> <span class="p">=</span> <span class="s2">&quot;$env:TEMP\postgresql-16-installer.exe&quot;</span>
 <span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="nv">$installerUrl</span> <span class="n">-OutFile</span> <span class="nv">$installerPath</span>
@@ -182,11 +342,18 @@ host    all       all       0.0.0.0/0       scram-sha-256
 
 <span class="c"># Check service status</span>
 <span class="nb">Get-Service</span> <span class="n">postgresql-x64</span><span class="p">-</span><span class="n">16</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">StartType</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="database-and-user-management">Database and User Management</h3>
-<p>Create databases, users, and schemas with proper permission grants and role management.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Set password environment variable for non-interactive authentication</span>
+          <h3 id="database-and-user-management">
+            Database and User Management
+          </h3>
+          <p>
+            Create databases, users, and schemas with proper permission grants
+            and role management.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Set password environment variable for non-interactive authentication</span>
 <span class="nv">$env:PGPASSWORD</span> <span class="p">=</span> <span class="s2">&quot;StrongPassword123!&quot;</span>
 
 <span class="c"># Connect and create database</span>
@@ -222,11 +389,18 @@ host    all       all       0.0.0.0/0       scram-sha-256
 
 <span class="c"># List users and roles</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;\du&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="backup-and-restore-operations">Backup and Restore Operations</h3>
-<p>Perform full database backups, compressed backups, and point-in-time recovery setup with automated scheduling.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Full database dump (plain SQL)</span>
+          <h3 id="backup-and-restore-operations">
+            Backup and Restore Operations
+          </h3>
+          <p>
+            Perform full database backups, compressed backups, and point-in-time
+            recovery setup with automated scheduling.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Full database dump (plain SQL)</span>
 <span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">p</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\production_db_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.sql&quot;</span>
 
 <span class="c"># Compressed custom format dump (recommended for large databases)</span>
@@ -257,11 +431,18 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">2am</span>
 <span class="nv">$principal</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskPrincipal</span> <span class="n">-UserID</span> <span class="s2">&quot;NT AUTHORITY\SYSTEM&quot;</span> <span class="n">-LogonType</span> <span class="n">ServiceAccount</span> <span class="n">-RunLevel</span> <span class="n">Highest</span>
 <span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Principal</span> <span class="nv">$principal</span> <span class="n">-TaskName</span> <span class="s2">&quot;PostgreSQL Daily Backup&quot;</span> <span class="n">-Description</span> <span class="s2">&quot;Daily PostgreSQL backup&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="query-execution-and-analysis">Query Execution and Analysis</h3>
-<p>Execute queries, analyze query plans, and monitor query performance with explain plans and timing.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Execute simple query</span>
+          <h3 id="query-execution-and-analysis">
+            Query Execution and Analysis
+          </h3>
+          <p>
+            Execute queries, analyze query plans, and monitor query performance
+            with explain plans and timing.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Execute simple query</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;SELECT * FROM users LIMIT 10;&quot;</span>
 
 <span class="c"># Execute query from file</span>
@@ -312,11 +493,18 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">ORDER BY mean_exec_time DESC</span>
 <span class="sh">LIMIT 10;</span>
 <span class="sh">&quot;@</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="index-management-and-optimization">Index Management and Optimization</h3>
-<p>Create, analyze, and maintain indexes for optimal query performance with different index types.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Create B-tree index (default)</span>
+          <h3 id="index-management-and-optimization">
+            Index Management and Optimization
+          </h3>
+          <p>
+            Create, analyze, and maintain indexes for optimal query performance
+            with different index types.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Create B-tree index (default)</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_users_email ON users(email);&quot;</span>
 
 <span class="c"># Create unique index</span>
@@ -354,11 +542,16 @@ host    all       all       0.0.0.0/0       scram-sha-256
 
 <span class="c"># Drop unused indexes</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;DROP INDEX CONCURRENTLY idx_old_unused_index;&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="maintenance-operations">Maintenance Operations</h3>
-<p>Perform routine maintenance tasks including VACUUM, ANALYZE, and statistics updates for optimal database health.</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Manual vacuum (non-blocking)</span>
+          <h3 id="maintenance-operations">Maintenance Operations</h3>
+          <p>
+            Perform routine maintenance tasks including VACUUM, ANALYZE, and
+            statistics updates for optimal database health.
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Manual vacuum (non-blocking)</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;VACUUM;&quot;</span>
 
 <span class="c"># Vacuum specific table</span>
@@ -398,28 +591,50 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">    autovacuum_analyze_scale_factor = 0.05</span>
 <span class="sh">);</span>
 <span class="sh">&quot;@</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Connection Refused</strong>:
-- <strong>Error</strong>: "could not connect to server: Connection refused"
-  - <strong>Check service</strong>: <code>Get-Service postgresql-x64-16</code>
-  - <strong>Start service</strong>: <code>Start-Service postgresql-x64-16</code>
-  - <strong>Check port</strong>: <code>netstat -an | Select-String "5432"</code>
-  - <strong>Check logs</strong>: <code>Get-Content "C:\PostgreSQL\data\log\postgresql-*.log" -Tail 50</code></p>
-<p><strong>Authentication Failed</strong>:
-- <strong>Error</strong>: "FATAL: password authentication failed"
-  - <strong>Check pg_hba.conf</strong>: Ensure correct authentication method
-  - <strong>Reset password</strong>: <code>psql -U postgres -c "ALTER USER postgres PASSWORD 'NewPassword123!';"</code>
-  - <strong>Reload config</strong>: <code>psql -U postgres -c "SELECT pg_reload_conf();"</code></p>
-<p><strong>Out of Memory</strong>:
-- <strong>Error</strong>: "out of memory" or "could not resize shared memory segment"
-  - <strong>Check shared_buffers</strong>: Reduce if &gt;25% of RAM
-  - <strong>Check work_mem</strong>: Reduce per-connection memory
-  - <strong>Increase system RAM</strong> or reduce max_connections</p>
-<p><strong>Lock Timeouts</strong>:
-- <strong>Check blocking queries</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            <strong>Connection Refused</strong>: - <strong>Error</strong>:
+            "could not connect to server: Connection refused" -
+            <strong>Check service</strong>:
+            <code>Get-Service postgresql-x64-16</code> -
+            <strong>Start service</strong>:
+            <code>Start-Service postgresql-x64-16</code> -
+            <strong>Check port</strong>:
+            <code>netstat -an | Select-String "5432"</code> -
+            <strong>Check logs</strong>:
+            <code
+              >Get-Content "C:\PostgreSQL\data\log\postgresql-*.log" -Tail
+              50</code
+            >
+          </p>
+          <p>
+            <strong>Authentication Failed</strong>: - <strong>Error</strong>:
+            "FATAL: password authentication failed" -
+            <strong>Check pg_hba.conf</strong>: Ensure correct authentication
+            method - <strong>Reset password</strong>:
+            <code
+              >psql -U postgres -c "ALTER USER postgres PASSWORD
+              'NewPassword123!';"</code
+            >
+            - <strong>Reload config</strong>:
+            <code>psql -U postgres -c "SELECT pg_reload_conf();"</code>
+          </p>
+          <p>
+            <strong>Out of Memory</strong>: - <strong>Error</strong>: "out of
+            memory" or "could not resize shared memory segment" -
+            <strong>Check shared_buffers</strong>: Reduce if &gt;25% of RAM -
+            <strong>Check work_mem</strong>: Reduce per-connection memory -
+            <strong>Increase system RAM</strong> or reduce max_connections
+          </p>
+          <p>
+            <strong>Lock Timeouts</strong>: -
+            <strong>Check blocking queries</strong>:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
 <span class="sh">SELECT </span>
 <span class="sh">    pid,</span>
 <span class="sh">    usename,</span>
@@ -428,27 +643,40 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">FROM pg_stat_activity</span>
 <span class="sh">WHERE cardinality(pg_blocking_pids(pid)) &gt; 0;</span>
 <span class="sh">&quot;@</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Kill blocking session</strong>: <code>psql -U postgres -c "SELECT pg_terminate_backend(12345);"</code></li>
-</ul>
-<p><strong>Common Logs</strong>:
-- PostgreSQL logs: <code>C:\PostgreSQL\data\log\postgresql-*.log</code>
-- Windows Event Viewer: Application logs for PostgreSQL service
-- Connection logs: Enable <code>log_connections = on</code> in postgresql.conf</p>
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Memory Configuration</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># For 16GB RAM system</span>
+          <ul>
+            <li>
+              <strong>Kill blocking session</strong>:
+              <code
+                >psql -U postgres -c "SELECT pg_terminate_backend(12345);"</code
+              >
+            </li>
+          </ul>
+          <p>
+            <strong>Common Logs</strong>: - PostgreSQL logs:
+            <code>C:\PostgreSQL\data\log\postgresql-*.log</code> - Windows Event
+            Viewer: Application logs for PostgreSQL service - Connection logs:
+            Enable <code>log_connections = on</code> in postgresql.conf
+          </p>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Memory Configuration</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1"># For 16GB RAM system</span>
 <span class="na">shared_buffers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">4GB</span><span class="w">              </span><span class="c1"># 25% of RAM</span>
 <span class="na">effective_cache_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">12GB</span><span class="w">       </span><span class="c1"># 75% of RAM</span>
 <span class="na">maintenance_work_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1GB</span><span class="w">        </span><span class="c1"># For VACUUM, CREATE INDEX</span>
 <span class="na">work_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">16MB</span><span class="w">                   </span><span class="c1"># Per sort/hash operation</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Connection Pooling</strong>:
-Install PgBouncer for connection pooling:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Install PgBouncer</span>
+          <p>
+            <strong>Connection Pooling</strong>: Install PgBouncer for
+            connection pooling:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Install PgBouncer</span>
 <span class="n">choco</span> <span class="n">install</span> <span class="n">pgbouncer</span>
 
 <span class="c"># Configure pgbouncer.ini</span>
@@ -468,10 +696,12 @@ Install PgBouncer for connection pooling:</p>
 
 <span class="c"># Start PgBouncer service</span>
 <span class="n">net</span> <span class="nb">start </span><span class="n">pgbouncer</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Query Optimization</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Enable pg_stat_statements extension</span>
+          <p><strong>Query Optimization</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Enable pg_stat_statements extension</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE EXTENSION IF NOT EXISTS pg_stat_statements;&quot;</span>
 
 <span class="c"># Add to postgresql.conf</span>
@@ -483,10 +713,12 @@ Install PgBouncer for connection pooling:</p>
 
 <span class="c"># Restart service</span>
 <span class="nb">Restart-Service</span> <span class="n">postgresql-x64</span><span class="p">-</span><span class="n">16</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Monitoring Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Active connections</span>
+          <p><strong>Monitoring Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Active connections</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;SELECT count(*) FROM pg_stat_activity;&quot;</span>
 
 <span class="c"># Database size</span>
@@ -503,46 +735,72 @@ Install PgBouncer for connection pooling:</p>
 
 <span class="c"># Transaction rate</span>
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = &#39;production_db&#39;;&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://www.postgresql.org/docs/16/">PostgreSQL 16 Documentation</a> - Official comprehensive documentation</li>
-<li><a href="https://wiki.postgresql.org/wiki/Main_Page">PostgreSQL Wiki</a> - Community wiki with tutorials and best practices</li>
-<li><a href="https://www.pgadmin.org/">pgAdmin 4</a> - Web-based PostgreSQL administration tool</li>
-<li><a href="https://wiki.postgresql.org/wiki/Performance_Optimization">PostgreSQL Performance Tuning</a> - Performance optimization guide</li>
-<li><a href="https://github.com/dhamaniasad/awesome-postgres">Awesome PostgreSQL</a> - Curated list of PostgreSQL resources</li>
-</ul></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://www.postgresql.org/docs/16/"
+                >PostgreSQL 16 Documentation</a
+              >
+              - Official comprehensive documentation
+            </li>
+            <li>
+              <a href="https://wiki.postgresql.org/wiki/Main_Page"
+                >PostgreSQL Wiki</a
+              >
+              - Community wiki with tutorials and best practices
+            </li>
+            <li>
+              <a href="https://www.pgadmin.org/">pgAdmin 4</a> - Web-based
+              PostgreSQL administration tool
+            </li>
+            <li>
+              <a
+                href="https://wiki.postgresql.org/wiki/Performance_Optimization"
+                >PostgreSQL Performance Tuning</a
+              >
+              - Performance optimization guide
+            </li>
+            <li>
+              <a href="https://github.com/dhamaniasad/awesome-postgres"
+                >Awesome PostgreSQL</a
+              >
+              - Curated list of PostgreSQL resources
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

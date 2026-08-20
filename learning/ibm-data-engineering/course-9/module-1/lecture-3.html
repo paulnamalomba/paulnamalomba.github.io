@@ -1,195 +1,363 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 3: Selecting a Data Warehouse System</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 3: Selecting a Data Warehouse System</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Course 9: Data Warehouse Fundamentals ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html" class="active"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/index.html" class="active"
+                >Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 3 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/lecture-1.html">Lecture 1: Data Warehouse Overview</a>
-            <a href="../../course-9/module-1/lecture-2.html">Lecture 2: Popular Data Warehouse Systems</a>
-            <a href="../../course-9/module-1/lecture-3.html" class="active">Lecture 3: Selecting a Data Warehouse System</a>
-            <a href="../../course-9/module-1/lecture-4.html">Lecture 4: Data Marts Overview</a>
-            <a href="../../course-9/module-1/lecture-5.html">Lecture 5: IBM Db2 Warehouse</a>
-            <a href="../../course-9/module-1/lecture-6.html">Lecture 6: Data Lakes Overview</a>
-            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 3 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/lecture-1.html"
+                >Lecture 1: Data Warehouse Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-2.html"
+                >Lecture 2: Popular Data Warehouse Systems</a
+              >
+              <a href="../../course-9/module-1/lecture-3.html" class="active"
+                >Lecture 3: Selecting a Data Warehouse System</a
+              >
+              <a href="../../course-9/module-1/lecture-4.html"
+                >Lecture 4: Data Marts Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-5.html"
+                >Lecture 5: IBM Db2 Warehouse</a
+              >
+              <a href="../../course-9/module-1/lecture-6.html"
+                >Lecture 6: Data Lakes Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-7.html"
+                >Lecture 7: Data Lakes, Data Warehouses, and the Data
+                Lakehouse</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
+
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 9</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 1</a> <span>&rsaquo;</span>
+        Lecture 3
+      </div>
+
+      <h1 class="fade-in">Selecting a Data Warehouse System</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 1, Lecture 3
+      </p>
+
+      <p class="fade-in fade-in-d2">
+        Deploying a data warehouse is not a reversible afternoon decision. The
+        choice ripples through data pipelines, BI tooling, staffing, and budgets
+        for years. Rigorous evaluation against well-defined criteria is the only
+        path to a defensible selection.
+      </p>
+      <hr />
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. Evaluation Criteria Overview</h2>
+        <p>
+          Organizations assess data warehouse systems across five primary
+          dimensions:
+        </p>
+        <ol>
+          <li><strong>Features and Capabilities</strong></li>
+          <li>
+            <strong>Compatibility and Implementation Considerations</strong>
+          </li>
+          <li><strong>Ease of Use and Skills</strong></li>
+          <li><strong>Support Considerations</strong></li>
+          <li><strong>Cost</strong></li>
+        </ol>
+        <p>
+          Each dimension carries trade-offs that must be weighed against the
+          organization's specific operational context and strategic trajectory.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Features and Capabilities</h2>
+        <h3>2.1 Deployment Location</h3>
+        <p>
+          Data warehouses can exist <strong>on-premises</strong>,
+          <strong>on appliances</strong>, and
+          <strong>across one or more cloud locations</strong>. The location
+          decision is driven by a balance of competing demands:
+        </p>
+        <ul>
+          <li>
+            <strong>Security-first organizations</strong> may mandate an
+            on-premises solution to retain full physical control over data.
+          </li>
+          <li>
+            <strong>Multi-location businesses</strong> dealing with data privacy
+            regulations such as <strong>CCPA</strong> or
+            <strong>GDPR</strong> need either on-premises or geo-specific data
+            warehouse placements.
+          </li>
+          <li>
+            Every organization ultimately balances security and privacy
+            requirements against the need for speed in delivering
+            profit-producing business insights.
+          </li>
+        </ul>
+        <h3>2.2 Architecture and Structure</h3>
+        <p>Key architectural questions an organization must resolve:</p>
+        <ul>
+          <li>
+            Is the organization prepared to commit to a
+            <strong>vendor-specific architecture</strong>?
+          </li>
+          <li>
+            Does it require <strong>multi-cloud installation</strong>—multiple
+            data warehouses across multiple locations?
+          </li>
+          <li>
+            Does the solution <strong>scale</strong> to meet anticipated future
+            growth?
+          </li>
+          <li>
+            What <strong>data types</strong> does the organization ingest?
+            Organizations analyzing <strong>dark data</strong> or planning to
+            work with
+            <strong>semi-structured and unstructured data</strong> need a system
+            that supports these formats natively.
+          </li>
+          <li>
+            Does the organization process <strong>big data</strong> requiring
+            both <strong>batch and streaming</strong> ingestion?
+          </li>
+        </ul>
+        <h3>2.3 Implementation Capabilities</h3>
+        <p>Critical implementation-adjacent features include:</p>
+        <ul>
+          <li><strong>Data governance</strong> frameworks</li>
+          <li><strong>Data migration</strong> tooling</li>
+          <li><strong>Data transformation</strong> capabilities</li>
+          <li>
+            The ability to <strong>optimize and re-optimize</strong> system
+            performance as analytical needs evolve
+          </li>
+        </ul>
+        <h3>2.4 Security and User Management</h3>
+        <p>
+          With the increasing adoption of
+          <strong>zero-trust security policies</strong>—driven by expensive data
+          breaches—robust user management and validation programs are mandatory.
+          Additionally, automated <strong>notifications and reports</strong> are
+          essential to catch and mitigate errors before minor issues escalate
+          into major problems.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Ease of Use and Skills</h2>
+        <p>
+          The sophistication of a data warehouse platform is irrelevant if the
+          team cannot operate it effectively. Key considerations:
+        </p>
+        <ul>
+          <li>
+            Does the organization's staff have the skills to implement the
+            vendor's specific technology? If not, how quickly can they acquire
+            them?
+          </li>
+          <li>
+            For complex, large-scale deployments, the
+            <strong>implementation partner's expertise</strong> is equally
+            critical.
+          </li>
+          <li>
+            Do the technology and engineering staff responsible for
+            architecting, deploying, and administering front-end
+            <strong>querying, reporting, and visualization tools</strong> have
+            the proficiency to configure the new system rapidly?
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. Support Considerations</h2>
+        <p>
+          Support planning is frequently underestimated and can become both
+          frustrating and expensive if neglected:
+        </p>
+        <ul>
+          <li>
+            <strong>Single-vendor accountability:</strong> Using one vendor as a
+            single, highly accountable source can save time, money, and
+            frustration.
+          </li>
+          <li>
+            <strong>Service Level Agreements (SLAs):</strong> Verify SLA
+            coverage for uptime, security, scalability, and other
+            system-critical concerns.
+          </li>
+          <li>
+            <strong>Support channels and hours:</strong> Validate availability
+            via phone, email, chat, and text.
+          </li>
+          <li>
+            <strong>Self-service and community:</strong> Does the vendor offer
+            self-service solutions and maintain an active, rich user community?
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>5. Total Cost of Ownership (TCO)</h2>
+        <p>
+          Evaluating only the initial price tag is a common and costly mistake.
+          The <strong>Total Cost of Ownership (TCO)</strong> across the system's
+          operational lifetime includes:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Cost Category</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Infrastructure</strong></td>
+              <td>
+                Compute and storage costs—whether on-premises hardware or cloud
+                resource consumption.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Software Licensing</strong></td>
+              <td>
+                License fees for on-premises deployments, or subscription and
+                usage-based costs for cloud offerings.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Data Migration &amp; Integration</strong></td>
+              <td>
+                Moving data into the warehouse, plus ongoing pruning and purging
+                operations.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Administration</strong></td>
+              <td>
+                Personnel costs for managing the systems and ongoing training.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Recurring Support &amp; Maintenance</strong></td>
+              <td>
+                Fees paid to the warehousing vendor or implementation partner
+                for continued operational support.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>6. On-Premises vs. Public Cloud: The Decision Framework</h2>
+        <p>
+          The decision between on-premises and public cloud deployment reduces
+          to a trade-off between <strong>control</strong> and
+          <strong>economics</strong>:
+        </p>
+        <ul>
+          <li>
+            <strong>On-premises</strong> may be mandatory for organizations with
+            strict data security and privacy requirements that preclude data
+            leaving their physical infrastructure.
+          </li>
+          <li>
+            <strong>Public cloud</strong> offers economies of scale—powerful
+            compute, scalable storage, and flexible price-for-performance
+            options—that are difficult to replicate in-house.
+          </li>
+        </ul>
+        <p>
+          Most organizations will find their optimal solution somewhere on the
+          spectrum between these two poles, potentially leveraging hybrid
+          configurations.
+        </p>
+        <hr />
+        <p>
+          Would you like to build a weighted scoring matrix for evaluating
+          warehouse vendors against these criteria, or should we move into data
+          mart architectures and how they relate to the enterprise data
+          warehouse?
+        </p>
+      </div>
+
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
-      Lecture 3
-    </div>
-
-    <h1 class="fade-in">Selecting a Data Warehouse System</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 1, Lecture 3
-    </p>
-
-
-<p class="fade-in fade-in-d2">Deploying a data warehouse is not a reversible afternoon decision. The choice ripples through data pipelines, BI tooling, staffing, and budgets for years. Rigorous evaluation against well-defined criteria is the only path to a defensible selection.</p>
-<hr/>
-<div class="section-card fade-in fade-in-d2"><h2>1. Evaluation Criteria Overview</h2>
-<p>Organizations assess data warehouse systems across five primary dimensions:</p>
-<ol>
-<li><strong>Features and Capabilities</strong></li>
-<li><strong>Compatibility and Implementation Considerations</strong></li>
-<li><strong>Ease of Use and Skills</strong></li>
-<li><strong>Support Considerations</strong></li>
-<li><strong>Cost</strong></li>
-</ol>
-<p>Each dimension carries trade-offs that must be weighed against the organization's specific operational context and strategic trajectory.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Features and Capabilities</h2>
-<h3>2.1 Deployment Location</h3>
-<p>Data warehouses can exist <strong>on-premises</strong>, <strong>on appliances</strong>, and <strong>across one or more cloud locations</strong>. The location decision is driven by a balance of competing demands:</p>
-<ul>
-<li><strong>Security-first organizations</strong> may mandate an on-premises solution to retain full physical control over data.</li>
-<li><strong>Multi-location businesses</strong> dealing with data privacy regulations such as <strong>CCPA</strong> or <strong>GDPR</strong> need either on-premises or geo-specific data warehouse placements.</li>
-<li>Every organization ultimately balances security and privacy requirements against the need for speed in delivering profit-producing business insights.</li>
-</ul>
-<h3>2.2 Architecture and Structure</h3>
-<p>Key architectural questions an organization must resolve:</p>
-<ul>
-<li>Is the organization prepared to commit to a <strong>vendor-specific architecture</strong>?</li>
-<li>Does it require <strong>multi-cloud installation</strong>—multiple data warehouses across multiple locations?</li>
-<li>Does the solution <strong>scale</strong> to meet anticipated future growth?</li>
-<li>What <strong>data types</strong> does the organization ingest? Organizations analyzing <strong>dark data</strong> or planning to work with <strong>semi-structured and unstructured data</strong> need a system that supports these formats natively.</li>
-<li>Does the organization process <strong>big data</strong> requiring both <strong>batch and streaming</strong> ingestion?</li>
-</ul>
-<h3>2.3 Implementation Capabilities</h3>
-<p>Critical implementation-adjacent features include:</p>
-<ul>
-<li><strong>Data governance</strong> frameworks</li>
-<li><strong>Data migration</strong> tooling</li>
-<li><strong>Data transformation</strong> capabilities</li>
-<li>The ability to <strong>optimize and re-optimize</strong> system performance as analytical needs evolve</li>
-</ul>
-<h3>2.4 Security and User Management</h3>
-<p>With the increasing adoption of <strong>zero-trust security policies</strong>—driven by expensive data breaches—robust user management and validation programs are mandatory. Additionally, automated <strong>notifications and reports</strong> are essential to catch and mitigate errors before minor issues escalate into major problems.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Ease of Use and Skills</h2>
-<p>The sophistication of a data warehouse platform is irrelevant if the team cannot operate it effectively. Key considerations:</p>
-<ul>
-<li>Does the organization's staff have the skills to implement the vendor's specific technology? If not, how quickly can they acquire them?</li>
-<li>For complex, large-scale deployments, the <strong>implementation partner's expertise</strong> is equally critical.</li>
-<li>Do the technology and engineering staff responsible for architecting, deploying, and administering front-end <strong>querying, reporting, and visualization tools</strong> have the proficiency to configure the new system rapidly?</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. Support Considerations</h2>
-<p>Support planning is frequently underestimated and can become both frustrating and expensive if neglected:</p>
-<ul>
-<li><strong>Single-vendor accountability:</strong> Using one vendor as a single, highly accountable source can save time, money, and frustration.</li>
-<li><strong>Service Level Agreements (SLAs):</strong> Verify SLA coverage for uptime, security, scalability, and other system-critical concerns.</li>
-<li><strong>Support channels and hours:</strong> Validate availability via phone, email, chat, and text.</li>
-<li><strong>Self-service and community:</strong> Does the vendor offer self-service solutions and maintain an active, rich user community?</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>5. Total Cost of Ownership (TCO)</h2>
-<p>Evaluating only the initial price tag is a common and costly mistake. The <strong>Total Cost of Ownership (TCO)</strong> across the system's operational lifetime includes:</p>
-<table>
-<thead>
-<tr>
-<th>Cost Category</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Infrastructure</strong></td>
-<td>Compute and storage costs—whether on-premises hardware or cloud resource consumption.</td>
-</tr>
-<tr>
-<td><strong>Software Licensing</strong></td>
-<td>License fees for on-premises deployments, or subscription and usage-based costs for cloud offerings.</td>
-</tr>
-<tr>
-<td><strong>Data Migration &amp; Integration</strong></td>
-<td>Moving data into the warehouse, plus ongoing pruning and purging operations.</td>
-</tr>
-<tr>
-<td><strong>Administration</strong></td>
-<td>Personnel costs for managing the systems and ongoing training.</td>
-</tr>
-<tr>
-<td><strong>Recurring Support &amp; Maintenance</strong></td>
-<td>Fees paid to the warehousing vendor or implementation partner for continued operational support.</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>6. On-Premises vs. Public Cloud: The Decision Framework</h2>
-<p>The decision between on-premises and public cloud deployment reduces to a trade-off between <strong>control</strong> and <strong>economics</strong>:</p>
-<ul>
-<li><strong>On-premises</strong> may be mandatory for organizations with strict data security and privacy requirements that preclude data leaving their physical infrastructure.</li>
-<li><strong>Public cloud</strong> offers economies of scale—powerful compute, scalable storage, and flexible price-for-performance options—that are difficult to replicate in-house.</li>
-</ul>
-<p>Most organizations will find their optimal solution somewhere on the spectrum between these two poles, potentially leveraging hybrid configurations.</p>
-<hr/>
-<p>Would you like to build a weighted scoring matrix for evaluating warehouse vendors against these criteria, or should we move into data mart architectures and how they relate to the enterprise data warehouse?</p></div>
-
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
-    </div>
-  </div>
-</body>
+  </body>
 </html>

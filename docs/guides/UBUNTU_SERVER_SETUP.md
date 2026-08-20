@@ -293,11 +293,11 @@ Recommended installation flow:
 
 Recommended SSD layout for this machine:
 
-| Mount point | Size | Filesystem | Notes |
-| --- | ---: | --- | --- |
-| `/boot/efi` | 512 MB to 1 GB | FAT32 | Must be flagged as EFI System Partition |
-| `/` | Remainder of SSD | ext4 or LVM-backed ext4 | Root filesystem for OS and packages |
-| swap | swapfile preferred | swapfile | With 16 GB RAM, a swap partition is usually unnecessary |
+| Mount point |               Size | Filesystem              | Notes                                                   |
+| ----------- | -----------------: | ----------------------- | ------------------------------------------------------- |
+| `/boot/efi` |     512 MB to 1 GB | FAT32                   | Must be flagged as EFI System Partition                 |
+| `/`         |   Remainder of SSD | ext4 or LVM-backed ext4 | Root filesystem for OS and packages                     |
+| swap        | swapfile preferred | swapfile                | With 16 GB RAM, a swap partition is usually unnecessary |
 
 Practical recommendation:
 

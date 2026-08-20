@@ -1,100 +1,252 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>AUTH_SERVICES PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="auth_services-poweruser-guide-powershell">AUTH_SERVICES PowerUser Guide (PowerShell)</h1>
-<p><strong>Last updated</strong>: December 05, 2025<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br>
-<a href="https://learn.microsoft.com/en-us/azure/active-directory/"><img alt="Framework" src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols for securing distributed systems at scale. This guide covers operational tasks using PowerShell 7+ on Windows for managing Azure AD, Active Directory Federation Services (AD FS), certificate authorities, token lifecycle automation, user provisioning via Microsoft Graph API, and security auditing. Power users need to understand certificate management, service principal automation, conditional access policies, and high-availability monitoring for production authentication infrastructure.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#auth_services-poweruser-guide-powershell">AUTH_SERVICES PowerUser Guide (PowerShell)</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#quickstart">Quickstart</a></li>
-<li><a href="#key-concepts">Key Concepts</a></li>
-<li><a href="#configuration-and-best-practices">Configuration and Best Practices</a></li>
-<li><a href="#security-considerations">Security Considerations</a></li>
-<li><a href="#examples">Examples</a><ul>
-<li><a href="#example-1-automated-user-provisioning-with-microsoft-graph-api">Example 1: Automated User Provisioning with Microsoft Graph API</a></li>
-<li><a href="#example-2-service-principal-creation-and-permission-management">Example 2: Service Principal Creation and Permission Management</a></li>
-<li><a href="#example-3-certificate-management-and-rotation">Example 3: Certificate Management and Rotation</a></li>
-<li><a href="#example-4-group-based-license-assignment-automation">Example 4: Group-Based License Assignment Automation</a></li>
-</ul>
-</li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#performance-and-tuning">Performance and Tuning</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="quickstart">Quickstart</h2>
-<ol>
-<li><strong>Install modules</strong>: <code>Install-Module -Name Microsoft.Graph -Scope CurrentUser -Force</code></li>
-<li><strong>Connect to Azure AD</strong>: <code>Connect-MgGraph -Scopes "User.Read.All","Application.Read.All"</code></li>
-<li><strong>List users</strong>: <code>Get-MgUser -Top 10 | Select-Object DisplayName, UserPrincipalName</code></li>
-<li><strong>Create service principal</strong>: <code>New-MgServicePrincipal -AppId &lt;app-id&gt; -DisplayName "MyApp"</code></li>
-<li><strong>Generate certificate</strong>: <code>New-SelfSignedCertificate -Subject "CN=MyAppCert" -CertStoreLocation Cert:\CurrentUser\My</code></li>
-<li><strong>Export certificate</strong>: <code>Export-Certificate -Cert $cert -FilePath .\cert.cer</code></li>
-</ol>
-<h2 id="key-concepts">Key Concepts</h2>
-<ul>
-<li><strong>Azure Active Directory (Azure AD)</strong>: Cloud-based identity and access management service providing authentication, authorization, and SSO for Microsoft 365 and Azure resources</li>
-<li><strong>Service Principal</strong>: Identity for applications and services in Azure AD; used for authentication and authorization in automated workflows</li>
-<li><strong>Managed Identity</strong>: Azure-managed service principal that eliminates need for credential management; assigned to Azure resources for accessing other resources</li>
-<li><strong>Conditional Access</strong>: Policy-based access control evaluating signals (user, location, device, risk) to enforce MFA, block access, or require compliant devices</li>
-<li><strong>Certificate-Based Authentication</strong>: Uses X.509 certificates instead of passwords for authentication; common for service accounts and federated scenarios</li>
-<li><strong>Microsoft Graph API</strong>: RESTful API for accessing Azure AD, Microsoft 365, and other Microsoft cloud services; supports user/group management, mail, calendar, and more</li>
-<li><strong>App Registration</strong>: Process of registering applications in Azure AD to enable authentication and authorization; generates client ID and allows configuring permissions</li>
-<li><strong>OAuth 2.0 Flows</strong>: Authorization code (web apps), client credentials (daemon apps), on-behalf-of (middle-tier services), device code (input-constrained devices)</li>
-<li><strong>Token Lifetime</strong>: Configurable duration for access tokens (default 1 hour) and refresh tokens (default 90 days); can be customized per application or tenant-wide</li>
-<li><strong>Emergency Access Accounts</strong>: Break-glass accounts with highest privileges, excluded from conditional access policies, used only in emergencies</li>
-</ul>
-<h2 id="configuration-and-best-practices">Configuration and Best Practices</h2>
-<div class="codehilite"><pre><span></span><code><span class="c"># Install and import Microsoft Graph PowerShell SDK</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="auth_services-poweruser-guide-powershell">
+            AUTH_SERVICES PowerUser Guide (PowerShell)
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 05, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+            <a href="https://learn.microsoft.com/en-us/azure/active-directory/"
+              ><img
+                alt="Framework"
+                src="https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            Enterprise authentication services provide centralized identity
+            management, single sign-on (SSO), multi-factor authentication (MFA),
+            and federated identity protocols for securing distributed systems at
+            scale. This guide covers operational tasks using PowerShell 7+ on
+            Windows for managing Azure AD, Active Directory Federation Services
+            (AD FS), certificate authorities, token lifecycle automation, user
+            provisioning via Microsoft Graph API, and security auditing. Power
+            users need to understand certificate management, service principal
+            automation, conditional access policies, and high-availability
+            monitoring for production authentication infrastructure.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#auth_services-poweruser-guide-powershell"
+                >AUTH_SERVICES PowerUser Guide (PowerShell)</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#quickstart">Quickstart</a></li>
+            <li><a href="#key-concepts">Key Concepts</a></li>
+            <li>
+              <a href="#configuration-and-best-practices"
+                >Configuration and Best Practices</a
+              >
+            </li>
+            <li>
+              <a href="#security-considerations">Security Considerations</a>
+            </li>
+            <li>
+              <a href="#examples">Examples</a>
+              <ul>
+                <li>
+                  <a
+                    href="#example-1-automated-user-provisioning-with-microsoft-graph-api"
+                    >Example 1: Automated User Provisioning with Microsoft Graph
+                    API</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#example-2-service-principal-creation-and-permission-management"
+                    >Example 2: Service Principal Creation and Permission
+                    Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-3-certificate-management-and-rotation"
+                    >Example 3: Certificate Management and Rotation</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-4-group-based-license-assignment-automation"
+                    >Example 4: Group-Based License Assignment Automation</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+            <li>
+              <a href="#performance-and-tuning">Performance and Tuning</a>
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="quickstart">Quickstart</h2>
+          <ol>
+            <li>
+              <strong>Install modules</strong>:
+              <code
+                >Install-Module -Name Microsoft.Graph -Scope CurrentUser
+                -Force</code
+              >
+            </li>
+            <li>
+              <strong>Connect to Azure AD</strong>:
+              <code
+                >Connect-MgGraph -Scopes
+                "User.Read.All","Application.Read.All"</code
+              >
+            </li>
+            <li>
+              <strong>List users</strong>:
+              <code
+                >Get-MgUser -Top 10 | Select-Object DisplayName,
+                UserPrincipalName</code
+              >
+            </li>
+            <li>
+              <strong>Create service principal</strong>:
+              <code
+                >New-MgServicePrincipal -AppId &lt;app-id&gt; -DisplayName
+                "MyApp"</code
+              >
+            </li>
+            <li>
+              <strong>Generate certificate</strong>:
+              <code
+                >New-SelfSignedCertificate -Subject "CN=MyAppCert"
+                -CertStoreLocation Cert:\CurrentUser\My</code
+              >
+            </li>
+            <li>
+              <strong>Export certificate</strong>:
+              <code>Export-Certificate -Cert $cert -FilePath .\cert.cer</code>
+            </li>
+          </ol>
+          <h2 id="key-concepts">Key Concepts</h2>
+          <ul>
+            <li>
+              <strong>Azure Active Directory (Azure AD)</strong>: Cloud-based
+              identity and access management service providing authentication,
+              authorization, and SSO for Microsoft 365 and Azure resources
+            </li>
+            <li>
+              <strong>Service Principal</strong>: Identity for applications and
+              services in Azure AD; used for authentication and authorization in
+              automated workflows
+            </li>
+            <li>
+              <strong>Managed Identity</strong>: Azure-managed service principal
+              that eliminates need for credential management; assigned to Azure
+              resources for accessing other resources
+            </li>
+            <li>
+              <strong>Conditional Access</strong>: Policy-based access control
+              evaluating signals (user, location, device, risk) to enforce MFA,
+              block access, or require compliant devices
+            </li>
+            <li>
+              <strong>Certificate-Based Authentication</strong>: Uses X.509
+              certificates instead of passwords for authentication; common for
+              service accounts and federated scenarios
+            </li>
+            <li>
+              <strong>Microsoft Graph API</strong>: RESTful API for accessing
+              Azure AD, Microsoft 365, and other Microsoft cloud services;
+              supports user/group management, mail, calendar, and more
+            </li>
+            <li>
+              <strong>App Registration</strong>: Process of registering
+              applications in Azure AD to enable authentication and
+              authorization; generates client ID and allows configuring
+              permissions
+            </li>
+            <li>
+              <strong>OAuth 2.0 Flows</strong>: Authorization code (web apps),
+              client credentials (daemon apps), on-behalf-of (middle-tier
+              services), device code (input-constrained devices)
+            </li>
+            <li>
+              <strong>Token Lifetime</strong>: Configurable duration for access
+              tokens (default 1 hour) and refresh tokens (default 90 days); can
+              be customized per application or tenant-wide
+            </li>
+            <li>
+              <strong>Emergency Access Accounts</strong>: Break-glass accounts
+              with highest privileges, excluded from conditional access
+              policies, used only in emergencies
+            </li>
+          </ul>
+          <h2 id="configuration-and-best-practices">
+            Configuration and Best Practices
+          </h2>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Install and import Microsoft Graph PowerShell SDK</span>
 <span class="nb">Install-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span> <span class="n">-AllowClobber</span> <span class="n">-Force</span>
 <span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Authentication</span>
 <span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Users</span>
@@ -113,22 +265,32 @@
 
 <span class="c"># Verify connection</span>
 <span class="nb">Get-MgContext</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Scopes</span><span class="p">,</span> <span class="n">Account</span><span class="p">,</span> <span class="n">TenantId</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Best Practices</strong>:
-- Use managed identities for Azure resources instead of storing credentials
-- Store client secrets in Azure Key Vault; retrieve via PowerShell with <code>Get-AzKeyVaultSecret</code>
-- Use certificate-based authentication for service principals in production (more secure than secrets)
-- Implement least privilege principle; grant only required Graph API permissions
-- Enable MFA for all admin accounts; exclude only emergency access accounts
-- Set conditional access policies to require compliant devices for sensitive operations
-- Implement automated certificate rotation before expiration (90 days notice)
-- Use separate service principals per application/environment (dev, staging, production)
-- Enable audit logging for all authentication events; export logs to SIEM/Log Analytics
-- Implement monitoring and alerts for failed sign-ins, suspicious activities, and certificate expiration</p>
-<h2 id="security-considerations">Security Considerations</h2>
-<p><strong>Certificate-Based Service Principal Authentication</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Generate self-signed certificate for service principal (development only)</span>
+          <p>
+            <strong>Best Practices</strong>: - Use managed identities for Azure
+            resources instead of storing credentials - Store client secrets in
+            Azure Key Vault; retrieve via PowerShell with
+            <code>Get-AzKeyVaultSecret</code> - Use certificate-based
+            authentication for service principals in production (more secure
+            than secrets) - Implement least privilege principle; grant only
+            required Graph API permissions - Enable MFA for all admin accounts;
+            exclude only emergency access accounts - Set conditional access
+            policies to require compliant devices for sensitive operations -
+            Implement automated certificate rotation before expiration (90 days
+            notice) - Use separate service principals per
+            application/environment (dev, staging, production) - Enable audit
+            logging for all authentication events; export logs to SIEM/Log
+            Analytics - Implement monitoring and alerts for failed sign-ins,
+            suspicious activities, and certificate expiration
+          </p>
+          <h2 id="security-considerations">Security Considerations</h2>
+          <p>
+            <strong>Certificate-Based Service Principal Authentication</strong>:
+          </p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Generate self-signed certificate for service principal (development only)</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="nb">New-SelfSignedCertificate</span> <span class="p">`</span>
     <span class="n">-Subject</span> <span class="s2">&quot;CN=MyApp-ServicePrincipal&quot;</span> <span class="p">`</span>
     <span class="n">-CertStoreLocation</span> <span class="s2">&quot;Cert:\CurrentUser\My&quot;</span> <span class="p">`</span>
@@ -167,10 +329,12 @@
 <span class="c"># Retrieve certificate from local store (imported from Key Vault)</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Thumbprint</span> <span class="o">-eq</span> <span class="nv">$kvCert</span><span class="p">.</span><span class="n">Thumbprint</span> <span class="p">}</span>
 <span class="nb">Connect-MgGraph</span> <span class="n">-ClientId</span> <span class="nv">$appId</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span> <span class="n">-Certificate</span> <span class="nv">$cert</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Conditional Access Policy Automation</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Create conditional access policy requiring MFA for admin roles</span>
+          <p><strong>Conditional Access Policy Automation</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Create conditional access policy requiring MFA for admin roles</span>
 <span class="nv">$policy</span> <span class="p">=</span> <span class="p">@{</span>
     <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;Require MFA for Admins&quot;</span>
     <span class="n">State</span> <span class="p">=</span> <span class="s2">&quot;enabled&quot;</span>
@@ -197,10 +361,12 @@
 
 <span class="c"># List all conditional access policies</span>
 <span class="nb">Get-MgIdentityConditionalAccessPolicy</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">CreatedDateTime</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Security Monitoring and Audit Logs</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Query sign-in logs for failed authentication attempts</span>
+          <p><strong>Security Monitoring and Audit Logs</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Query sign-in logs for failed authentication attempts</span>
 <span class="nv">$startDate</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(-</span><span class="n">7</span><span class="p">)</span>
 <span class="nv">$endDate</span> <span class="p">=</span> <span class="nb">Get-Date</span>
 
@@ -227,22 +393,33 @@
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Result&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Result</span><span class="p">}}</span>
 
 <span class="nv">$auditLogs</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Key Security Measures</strong>:
-- Rotate service principal secrets/certificates every 90 days; automate with Azure Automation
-- Use Azure Key Vault for storing and managing certificates, secrets, and keys
-- Enable Azure AD Identity Protection for risk-based conditional access policies
-- Implement just-in-time admin access with Privileged Identity Management (PIM)
-- Configure Azure AD Connect Health for monitoring on-premises AD FS infrastructure
-- Enable security defaults for new tenants (enforces MFA, blocks legacy authentication)
-- Implement named locations for trusted IP ranges to reduce MFA prompts
-- Use application consent policies to prevent users from granting excessive permissions
-- Enable continuous access evaluation (CAE) for real-time token revocation
-- Configure token lifetime policies to balance security (shorter) and usability (longer)</p>
-<h2 id="examples">Examples</h2>
-<h3 id="example-1-automated-user-provisioning-with-microsoft-graph-api">Example 1: Automated User Provisioning with Microsoft Graph API</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Function to create bulk users from CSV</span>
+          <p>
+            <strong>Key Security Measures</strong>: - Rotate service principal
+            secrets/certificates every 90 days; automate with Azure Automation -
+            Use Azure Key Vault for storing and managing certificates, secrets,
+            and keys - Enable Azure AD Identity Protection for risk-based
+            conditional access policies - Implement just-in-time admin access
+            with Privileged Identity Management (PIM) - Configure Azure AD
+            Connect Health for monitoring on-premises AD FS infrastructure -
+            Enable security defaults for new tenants (enforces MFA, blocks
+            legacy authentication) - Implement named locations for trusted IP
+            ranges to reduce MFA prompts - Use application consent policies to
+            prevent users from granting excessive permissions - Enable
+            continuous access evaluation (CAE) for real-time token revocation -
+            Configure token lifetime policies to balance security (shorter) and
+            usability (longer)
+          </p>
+          <h2 id="examples">Examples</h2>
+          <h3
+            id="example-1-automated-user-provisioning-with-microsoft-graph-api"
+          >
+            Example 1: Automated User Provisioning with Microsoft Graph API
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Function to create bulk users from CSV</span>
 <span class="k">function</span> <span class="nb">New-BulkUsers</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
@@ -317,10 +494,16 @@
 <span class="c"># Usage</span>
 <span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.ReadWrite.All&quot;</span>
 <span class="nb">New-BulkUsers</span> <span class="n">-CsvPath</span> <span class="s2">&quot;.\users.csv&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-2-service-principal-creation-and-permission-management">Example 2: Service Principal Creation and Permission Management</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Function to create service principal with Graph API permissions</span>
+          <h3
+            id="example-2-service-principal-creation-and-permission-management"
+          >
+            Example 2: Service Principal Creation and Permission Management
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Function to create service principal with Graph API permissions</span>
 <span class="k">function</span> <span class="nb">New-ServicePrincipalWithPermissions</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
@@ -406,10 +589,14 @@
 <span class="c"># Store credentials in environment variables or Key Vault</span>
 <span class="nv">$env:AZURE_CLIENT_ID</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">AppId</span>
 <span class="nv">$env:AZURE_CLIENT_SECRET</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">ClientSecret</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-3-certificate-management-and-rotation">Example 3: Certificate Management and Rotation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Function to monitor and rotate expiring certificates</span>
+          <h3 id="example-3-certificate-management-and-rotation">
+            Example 3: Certificate Management and Rotation
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Function to monitor and rotate expiring certificates</span>
 <span class="k">function</span> <span class="nb">Update-ExpiringCertificates</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
@@ -512,10 +699,14 @@
 
 <span class="c"># Auto-rotate expiring certificates using Key Vault</span>
 <span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">30</span> <span class="n">-KeyVaultName</span> <span class="s2">&quot;my-keyvault&quot;</span> <span class="n">-AutoRotate</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-4-group-based-license-assignment-automation">Example 4: Group-Based License Assignment Automation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Function to assign licenses based on group membership</span>
+          <h3 id="example-4-group-based-license-assignment-automation">
+            Example 4: Group-Based License Assignment Automation
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Function to assign licenses based on group membership</span>
 <span class="k">function</span> <span class="nb">Set-GroupBasedLicensing</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
@@ -606,11 +797,13 @@
 <span class="p">)</span>
 
 <span class="nb">Set-GroupBasedLicensing</span> <span class="n">-GroupId</span> <span class="nv">$groupId</span> <span class="n">-SkuId</span> <span class="nv">$e3SkuId</span> <span class="n">-DisabledPlans</span> <span class="nv">$disabledPlans</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Authentication and Connection Issues</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Clear cached credentials and reconnect</span>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p><strong>Authentication and Connection Issues</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Clear cached credentials and reconnect</span>
 <span class="nb">Disconnect-MgGraph</span>
 <span class="nb">Clear-MgContext</span>
 
@@ -638,18 +831,31 @@
 <span class="c"># Force token refresh</span>
 <span class="nb">Disconnect-MgGraph</span>
 <span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.Read.All&quot;</span> <span class="n">-ForceRefresh</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Common Issues</strong>:
-- <strong>Insufficient privileges</strong>: Verify required Graph API permissions granted with admin consent
-- <strong>Token expired</strong>: Reconnect with <code>Connect-MgGraph</code> to refresh access token
-- <strong>403 Forbidden</strong>: Check conditional access policies blocking automation accounts; add service principal to exclusion list
-- <strong>Certificate not found</strong>: Ensure certificate exists in specified store with <code>Get-ChildItem Cert:\CurrentUser\My</code>
-- <strong>App registration missing</strong>: Verify app exists with <code>Get-MgApplication -Filter "appId eq '&lt;app-id&gt;'"</code>
-- <strong>Quota exceeded</strong>: Check API rate limits; implement exponential backoff and retry logic
-- <strong>Group not found</strong>: Ensure group type is correct (Security vs Microsoft 365); use <code>Get-MgGroup -Filter "displayName eq '&lt;name&gt;'"</code></p>
-<p><strong>Diagnostic Commands</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Check installed module versions</span>
+          <p>
+            <strong>Common Issues</strong>: -
+            <strong>Insufficient privileges</strong>: Verify required Graph API
+            permissions granted with admin consent -
+            <strong>Token expired</strong>: Reconnect with
+            <code>Connect-MgGraph</code> to refresh access token -
+            <strong>403 Forbidden</strong>: Check conditional access policies
+            blocking automation accounts; add service principal to exclusion
+            list - <strong>Certificate not found</strong>: Ensure certificate
+            exists in specified store with
+            <code>Get-ChildItem Cert:\CurrentUser\My</code> -
+            <strong>App registration missing</strong>: Verify app exists with
+            <code>Get-MgApplication -Filter "appId eq '&lt;app-id&gt;'"</code> -
+            <strong>Quota exceeded</strong>: Check API rate limits; implement
+            exponential backoff and retry logic -
+            <strong>Group not found</strong>: Ensure group type is correct
+            (Security vs Microsoft 365); use
+            <code>Get-MgGroup -Filter "displayName eq '&lt;name&gt;'"</code>
+          </p>
+          <p><strong>Diagnostic Commands</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Check installed module versions</span>
 <span class="nb">Get-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">*</span> <span class="n">-ListAvailable</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Version</span>
 
 <span class="c"># Update to latest version</span>
@@ -679,11 +885,13 @@
     <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Error&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
                   <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Reason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="performance-and-tuning">Performance and Tuning</h2>
-<p><strong>Batch Operations and Pagination</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Efficient bulk user retrieval with pagination</span>
+          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <p><strong>Batch Operations and Pagination</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Efficient bulk user retrieval with pagination</span>
 <span class="k">function</span> <span class="nb">Get-AllUsersEfficiently</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
@@ -774,21 +982,29 @@
 
 <span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$updates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Success&quot;</span> <span class="p">}).</span><span class="n">Count</span>
 <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Updated $successCount users successfully&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p><strong>Performance Optimizations</strong>:
-- Use <code>-Select</code> parameter to retrieve only required properties; reduces response size
-- Implement pagination with <code>-Top</code> and <code>-Skip</code> for large datasets (default page size: 100)
-- Use <code>-Filter</code> for server-side filtering instead of client-side <code>Where-Object</code>
-- Cache frequently accessed data (users, groups, apps) in memory or Redis with TTL
-- Use batch requests for multiple operations; reduces HTTP round-trips (Graph API supports batching)
-- Implement exponential backoff with jitter for rate limit (429) errors
-- Run operations in parallel with <code>ForEach-Object -Parallel</code> (PowerShell 7+)
-- Use <code>-ConsistencyLevel eventual</code> for faster queries on large datasets
-- Store credentials in Azure Key Vault; retrieve once at script start
-- Use delta queries to retrieve only changed entities since last query</p>
-<p><strong>Monitoring and Alerting</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Monitor service principal certificate expiration</span>
+          <p>
+            <strong>Performance Optimizations</strong>: - Use
+            <code>-Select</code> parameter to retrieve only required properties;
+            reduces response size - Implement pagination with
+            <code>-Top</code> and <code>-Skip</code> for large datasets (default
+            page size: 100) - Use <code>-Filter</code> for server-side filtering
+            instead of client-side <code>Where-Object</code> - Cache frequently
+            accessed data (users, groups, apps) in memory or Redis with TTL -
+            Use batch requests for multiple operations; reduces HTTP round-trips
+            (Graph API supports batching) - Implement exponential backoff with
+            jitter for rate limit (429) errors - Run operations in parallel with
+            <code>ForEach-Object -Parallel</code> (PowerShell 7+) - Use
+            <code>-ConsistencyLevel eventual</code> for faster queries on large
+            datasets - Store credentials in Azure Key Vault; retrieve once at
+            script start - Use delta queries to retrieve only changed entities
+            since last query
+          </p>
+          <p><strong>Monitoring and Alerting</strong>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Monitor service principal certificate expiration</span>
 <span class="nv">$threshold</span> <span class="p">=</span> <span class="n">30</span>  <span class="c"># days</span>
 <span class="nv">$apps</span> <span class="p">=</span> <span class="nb">Get-MgApplication</span> <span class="n">-All</span>
 
@@ -821,59 +1037,123 @@
     <span class="nb">Write-Host</span> <span class="s2">&quot;🚨 Suspicious activity detected for </span><span class="p">$(</span><span class="nv">$suspiciousActivity</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users!&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
     <span class="c"># Implement automated response (e.g., enable conditional access, revoke tokens)</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<p><strong>Official Documentation</strong>:
-- <a href="https://learn.microsoft.com/en-us/powershell/microsoftgraph/">Microsoft Graph PowerShell SDK</a>
-- <a href="https://learn.microsoft.com/en-us/powershell/module/azuread/">Azure AD PowerShell Reference</a>
-- <a href="https://learn.microsoft.com/en-us/graph/api/overview">Microsoft Graph API Reference</a>
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/">Azure AD Authentication Documentation</a>
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/conditional-access/">Conditional Access Documentation</a>
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/authentication/certificate-based-authentication">Certificate-Based Authentication</a></p>
-<p><strong>PowerShell Resources</strong>:
-- <a href="https://github.com/microsoftgraph/msgraph-sdk-powershell/tree/dev/samples">Microsoft Graph PowerShell Samples</a>
-- <a href="https://github.com/microsoft/AzureAD-Scripts">Azure AD Scripts Gallery</a>
-- <a href="https://www.powershellgallery.com/packages/Microsoft.Graph">PowerShell Gallery - Microsoft.Graph</a></p>
-<p><strong>Security Best Practices</strong>:
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/security-operations-introduction">Azure AD Security Operations Guide</a>
-- <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist">Microsoft Identity Platform Best Practices</a>
-- <a href="https://pages.nist.gov/800-63-3/">NIST Digital Identity Guidelines</a>
-- <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html">OWASP Authentication Cheat Sheet</a></p>
-<p><strong>Community Resources</strong>:
-- <a href="https://docs.microsoft.com/en-us/microsoft-365/community/">Microsoft 365 Community</a>
-- <a href="https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/discussions">Azure AD GitHub Discussions</a>
-- <a href="https://devblogs.microsoft.com/powershell/">PowerShell Community Blog</a></p></article>
-        </div>
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <p>
+            <strong>Official Documentation</strong>: -
+            <a
+              href="https://learn.microsoft.com/en-us/powershell/microsoftgraph/"
+              >Microsoft Graph PowerShell SDK</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/powershell/module/azuread/"
+              >Azure AD PowerShell Reference</a
+            >
+            -
+            <a href="https://learn.microsoft.com/en-us/graph/api/overview"
+              >Microsoft Graph API Reference</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/develop/"
+              >Azure AD Authentication Documentation</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/conditional-access/"
+              >Conditional Access Documentation</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/authentication/certificate-based-authentication"
+              >Certificate-Based Authentication</a
+            >
+          </p>
+          <p>
+            <strong>PowerShell Resources</strong>: -
+            <a
+              href="https://github.com/microsoftgraph/msgraph-sdk-powershell/tree/dev/samples"
+              >Microsoft Graph PowerShell Samples</a
+            >
+            -
+            <a href="https://github.com/microsoft/AzureAD-Scripts"
+              >Azure AD Scripts Gallery</a
+            >
+            -
+            <a href="https://www.powershellgallery.com/packages/Microsoft.Graph"
+              >PowerShell Gallery - Microsoft.Graph</a
+            >
+          </p>
+          <p>
+            <strong>Security Best Practices</strong>: -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/fundamentals/security-operations-introduction"
+              >Azure AD Security Operations Guide</a
+            >
+            -
+            <a
+              href="https://learn.microsoft.com/en-us/azure/active-directory/develop/identity-platform-integration-checklist"
+              >Microsoft Identity Platform Best Practices</a
+            >
+            -
+            <a href="https://pages.nist.gov/800-63-3/"
+              >NIST Digital Identity Guidelines</a
+            >
+            -
+            <a
+              href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html"
+              >OWASP Authentication Cheat Sheet</a
+            >
+          </p>
+          <p>
+            <strong>Community Resources</strong>: -
+            <a href="https://docs.microsoft.com/en-us/microsoft-365/community/"
+              >Microsoft 365 Community</a
+            >
+            -
+            <a
+              href="https://github.com/AzureAD/microsoft-authentication-library-for-dotnet/discussions"
+              >Azure AD GitHub Discussions</a
+            >
+            -
+            <a href="https://devblogs.microsoft.com/powershell/"
+              >PowerShell Community Blog</a
+            >
+          </p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

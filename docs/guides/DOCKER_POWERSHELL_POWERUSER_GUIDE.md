@@ -2,10 +2,11 @@
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -60,6 +61,7 @@ Docker is a containerization platform enabling consistent application deployment
 ## Configuration and Best Practices
 
 **Docker Desktop Settings (Windows)**:
+
 ```powershell
 # Configure Docker Desktop via settings.json
 # Location: %APPDATA%\Docker\settings.json
@@ -76,6 +78,7 @@ Docker is a containerization platform enabling consistent application deployment
 ```
 
 **PowerShell Profile Configuration**:
+
 ```powershell
 # Add to $PROFILE for Docker aliases
 Set-Alias -Name d -Value docker
@@ -89,6 +92,7 @@ function dexec { param($container) docker exec -it $container powershell }
 ```
 
 **Best Practices**:
+
 - Use official base images from verified publishers
 - Implement multi-stage builds to reduce final image size
 - Run containers as non-root users when possible
@@ -109,6 +113,7 @@ function dexec { param($container) docker exec -it $container powershell }
 7. **Registry Security**: Use private registries with authentication; enable Docker Content Trust for image signing
 
 **Secure Container Configuration**:
+
 ```powershell
 # Run container with security constraints
 docker run -d `
@@ -643,6 +648,7 @@ Get-EventLog -LogName Application -Source Docker | Select-Object -First 50
 ## Troubleshooting
 
 **Docker Desktop Not Starting**:
+
 - **Error**: "Docker Desktop starting..." indefinitely
   - **Check WSL 2**: `wsl --status` and `wsl --set-default-version 2`
   - **Reset Docker**: Right-click Docker Desktop tray icon → Troubleshoot → Reset to factory defaults
@@ -650,12 +656,14 @@ Get-EventLog -LogName Application -Source Docker | Select-Object -First 50
   - **View logs**: `Get-Content "$env:LOCALAPPDATA\Docker\log.txt" -Tail 50`
 
 **Port Already in Use**:
+
 - **Error**: "Bind for 0.0.0.0:8080 failed: port is already allocated"
   - **Find process**: `Get-NetTCPConnection -LocalPort 8080 | Select-Object OwningProcess | Get-Process`
   - **Kill process**: `Stop-Process -Id <ProcessId> -Force`
   - **Use different port**: Change port mapping to `-p 8081:80`
 
 **Container Exits Immediately**:
+
 ```powershell
 # Check container logs
 docker logs <container_id>
@@ -671,6 +679,7 @@ docker run -it --entrypoint /bin/bash myimage
 ```
 
 **Network Connectivity Issues**:
+
 ```powershell
 # Test DNS resolution inside container
 docker run --rm alpine nslookup google.com
@@ -686,6 +695,7 @@ Restart-Service docker
 ```
 
 **Volume Permission Issues**:
+
 ```powershell
 # Check volume mount permissions
 docker run --rm -v myvolume:/data alpine ls -la /data
@@ -697,6 +707,7 @@ icacls "C:\path\to\folder" /grant "Everyone:(OI)(CI)F" /T
 ## Performance and Tuning
 
 **Docker Desktop Resource Allocation**:
+
 ```powershell
 # Optimal settings for development (16GB RAM system)
 $settings = @{
@@ -715,6 +726,7 @@ $currentSettings | ConvertTo-Json | Set-Content $settingsPath
 ```
 
 **Container Resource Limits**:
+
 ```powershell
 # Set memory and CPU limits
 docker run -d `
@@ -731,6 +743,7 @@ docker stats limited-app --no-stream
 ```
 
 **Build Performance Optimization**:
+
 ```powershell
 # Use BuildKit for faster builds
 $env:DOCKER_BUILDKIT=1
@@ -753,6 +766,7 @@ docker-compose build --parallel
 ```
 
 **Image Size Optimization**:
+
 ```powershell
 # Use multi-stage builds
 # Use alpine/slim base images
@@ -776,20 +790,21 @@ CMD ["node", "index.js"]
 ```
 
 **Performance Monitoring**:
+
 ```powershell
 # Continuous monitoring script
 while ($true) {
     Clear-Host
     Write-Host "Docker Performance Monitor - $(Get-Date)" -ForegroundColor Cyan
     Write-Host ""
-    
+
     # System stats
     docker system df
     Write-Host ""
-    
+
     # Container stats
     docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
-    
+
     Start-Sleep -Seconds 5
 }
 ```

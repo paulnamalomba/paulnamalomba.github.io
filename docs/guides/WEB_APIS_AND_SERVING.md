@@ -2,10 +2,11 @@
 
 **Last updated**: March 02, 2026<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
+
+- SESKA Computational Engineer<br>
+- SEAT Backend Developer<br>
+- Software Developer<br>
+- PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
 **Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
 **Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
@@ -56,26 +57,26 @@ Selecting a backend framework is largely an exercise in choosing your preferred 
 
 ## Technical Comparison Matrix
 
-| Feature | Flask | Django | Node.js (Express) | ASP.NET Core |
-| :--- | :--- | :--- | :--- | :--- |
-| **Language** | Python | Python | JavaScript / TypeScript | C# / F# |
-| **Design Philosophy** | Microframework (Bring your own plumbing) | Batteries-Included (The kitchen sink is mandatory) | Event-Driven & Unopinionated | Modular Enterprise MVC |
-| **Concurrency Model** | WSGI / ASGI (Synchronous by default) | WSGI / ASGI (Synchronous by default) | Single-threaded Event Loop (Non-blocking I/O) | Multi-threaded (CLR Thread Pool) |
-| **Performance Profile** | Moderate | Moderate (Overhead from built-ins) | High (Excellent for I/O-bound tasks) | Extremely High (Compiled, optimized memory) |
-| **Database ORM** | None out-of-the-box (Usually paired with SQLAlchemy) | Built-in Django ORM (Tightly coupled) | None out-of-the-box (Usually paired with Prisma or Sequelize) | Entity Framework (EF) Core |
-| **Security Handling** | Manual implementation required | Highly secure by default (CSRF, SQLi, XSS protections built-in) | Manual implementation required (Relies on middleware like Helmet) | Highly secure by default (Identity, JWT, Authorization policies) |
-| **Scalability** | Horizontal scaling via WSGI servers (Gunicorn) | Horizontal scaling, but can be monolithic by nature | Excellent for microservices and real-time scaling | Excellent for large-scale distributed enterprise systems |
-| **Best Use Case** | Small microservices, ML model APIs, simple REST backends | Content-heavy applications, rapid MVPs, CRUD-heavy systems | Real-time applications, WebSockets, streaming services | High-performance enterprise APIs, complex domain-driven design |
+| Feature                 | Flask                                                    | Django                                                          | Node.js (Express)                                                 | ASP.NET Core                                                     |
+| :---------------------- | :------------------------------------------------------- | :-------------------------------------------------------------- | :---------------------------------------------------------------- | :--------------------------------------------------------------- |
+| **Language**            | Python                                                   | Python                                                          | JavaScript / TypeScript                                           | C# / F#                                                          |
+| **Design Philosophy**   | Microframework (Bring your own plumbing)                 | Batteries-Included (The kitchen sink is mandatory)              | Event-Driven & Unopinionated                                      | Modular Enterprise MVC                                           |
+| **Concurrency Model**   | WSGI / ASGI (Synchronous by default)                     | WSGI / ASGI (Synchronous by default)                            | Single-threaded Event Loop (Non-blocking I/O)                     | Multi-threaded (CLR Thread Pool)                                 |
+| **Performance Profile** | Moderate                                                 | Moderate (Overhead from built-ins)                              | High (Excellent for I/O-bound tasks)                              | Extremely High (Compiled, optimized memory)                      |
+| **Database ORM**        | None out-of-the-box (Usually paired with SQLAlchemy)     | Built-in Django ORM (Tightly coupled)                           | None out-of-the-box (Usually paired with Prisma or Sequelize)     | Entity Framework (EF) Core                                       |
+| **Security Handling**   | Manual implementation required                           | Highly secure by default (CSRF, SQLi, XSS protections built-in) | Manual implementation required (Relies on middleware like Helmet) | Highly secure by default (Identity, JWT, Authorization policies) |
+| **Scalability**         | Horizontal scaling via WSGI servers (Gunicorn)           | Horizontal scaling, but can be monolithic by nature             | Excellent for microservices and real-time scaling                 | Excellent for large-scale distributed enterprise systems         |
+| **Best Use Case**       | Small microservices, ML model APIs, simple REST backends | Content-heavy applications, rapid MVPs, CRUD-heavy systems      | Real-time applications, WebSockets, streaming services            | High-performance enterprise APIs, complex domain-driven design   |
 
 ### Practical Addendum (What the Matrix Doesn’t Show)
 
-| Concern | Flask | Django | Express | ASP.NET Core |
-| :--- | :--- | :--- | :--- | :--- |
-| **Default project structure** | You design it (easy to drift) | Opinionated & consistent | You design it (easy to drift) | Strong conventions + DI |
-| **Typed boundaries** | Optional (mypy/pydantic) | Optional (mypy/pydantic) | Optional (TypeScript helps a lot) | First-class (compile-time) |
-| **Async I/O story** | Works best via ASGI; many libs are still sync | Async support exists but mixed in practice | Native async; easy to do wrong (unhandled promises) | Native async; strong tooling |
-| **Long-running background jobs** | Celery/RQ/Sidekiq-style patterns, external worker | Celery + Django integrations are mature | BullMQ / queues; needs discipline | Hosted services / Hangfire-like patterns |
-| **“Time-to-production”** | Fast for small APIs | Very fast for CRUD apps | Fast, but easy to create fragile code | Fast once patterns are learned |
+| Concern                          | Flask                                             | Django                                     | Express                                             | ASP.NET Core                             |
+| :------------------------------- | :------------------------------------------------ | :----------------------------------------- | :-------------------------------------------------- | :--------------------------------------- |
+| **Default project structure**    | You design it (easy to drift)                     | Opinionated & consistent                   | You design it (easy to drift)                       | Strong conventions + DI                  |
+| **Typed boundaries**             | Optional (mypy/pydantic)                          | Optional (mypy/pydantic)                   | Optional (TypeScript helps a lot)                   | First-class (compile-time)               |
+| **Async I/O story**              | Works best via ASGI; many libs are still sync     | Async support exists but mixed in practice | Native async; easy to do wrong (unhandled promises) | Native async; strong tooling             |
+| **Long-running background jobs** | Celery/RQ/Sidekiq-style patterns, external worker | Celery + Django integrations are mature    | BullMQ / queues; needs discipline                   | Hosted services / Hangfire-like patterns |
+| **“Time-to-production”**         | Fast for small APIs                               | Very fast for CRUD apps                    | Fast, but easy to create fragile code               | Fast once patterns are learned           |
 
 ---
 

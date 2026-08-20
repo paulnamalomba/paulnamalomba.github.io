@@ -43,11 +43,14 @@ The Lightweight Directory Access Protocol (LDAP) stands as the primary authorita
 Interfacing with an enterprise domain controller—like Windows Active Directory or OpenLDAP on Linux—requires strict local system configuration and network exposure.
 
 ### Ports and Security Posture
-* **Standard over TCP (Insecure):** Port `389`. Credentials traverse the internal network in raw, unencrypted plaintext. Exclusively reserved for heavily segmented internal subnets.
-* **Encrypted LDAPS (Secure):** Port `636`. Traffic is fundamentally forced through an SSL/TLS tunnel prior to any authentication handshakes taking place.
+
+- **Standard over TCP (Insecure):** Port `389`. Credentials traverse the internal network in raw, unencrypted plaintext. Exclusively reserved for heavily segmented internal subnets.
+- **Encrypted LDAPS (Secure):** Port `636`. Traffic is fundamentally forced through an SSL/TLS tunnel prior to any authentication handshakes taking place.
 
 ### Linux Testing Utilities
+
 Ubuntu requires the explicit installation of the LDAP networking toolset.
+
 ```bash
 sudo apt update
 sudo apt install ldap-utils
@@ -61,14 +64,17 @@ cat /etc/ldap/ldap.conf
 
 ## 2. Writing Basic Code/Scripts (Connecting & Binding)
 
-Accessing an LDAP endpoint relies entirely on navigating the hierarchical database structure. 
+Accessing an LDAP endpoint relies entirely on navigating the hierarchical database structure.
 
 ### The Directory Structure
-Entries are localized by navigating downward through a tree containing Domains (DC), Organizational Units (OU), and Common Names (CN). 
-* **Distinguished Name (DN):** The explicit absolute path to an object inside the tree.
-  * *Example:* `CN=Paul Namalomba,OU=Engineering,DC=enterprise,DC=local`
+
+Entries are localized by navigating downward through a tree containing Domains (DC), Organizational Units (OU), and Common Names (CN).
+
+- **Distinguished Name (DN):** The explicit absolute path to an object inside the tree.
+  - _Example:_ `CN=Paul Namalomba,OU=Engineering,DC=enterprise,DC=local`
 
 ### Python Integration (via `ldap3`)
+
 Connecting involves initializing a Server object, establishing the connection matrix, and proving identity via a **Bind**. A Bind attempts to match the provided Distinguish Name against the password string supplied.
 
 ```python
@@ -88,24 +94,24 @@ server = Server(LDAP_SERVER_URL, use_ssl=True, tls=tls_context, get_info=ALL)
 def authenticate_user(username, password):
     # Construct the User Principal Name (UPN) or complete DN
     user_dn = f"{username}@enterprise.local"
-    
+
     # Establish the connection and attempt the Bind via the Authority
     try:
         conn = Connection(server, user=user_dn, password=password, authentication=NTLM)
-        
+
         if conn.bind():
             print("Authentication Successful!")
-            
+
             # Sub-Search: Retrieve account attributes after successful bind
             conn.search(SEARCH_BASE, f"(&(objectClass=person)(sAMAccountName={username}))", attributes=['mail', 'memberOf'])
             print(f"User Details: {conn.entries}")
-            
+
             conn.unbind()
             return True
         else:
             print(f"Bind Failed: {conn.result['description']}")
             return False
-            
+
     except Exception as e:
         print(f"Network / TLS Failure: {str(e)}")
         return False
@@ -115,7 +121,7 @@ def authenticate_user(username, password):
 
 ## 3. Pre-execution Commands (Certificate Verification)
 
-LDAPS failures are fundamentally guaranteed if the physical underlying operating system refuses to mutually verify the enterprise domain certificates. LDAPS demands strict TLS. 
+LDAPS failures are fundamentally guaranteed if the physical underlying operating system refuses to mutually verify the enterprise domain certificates. LDAPS demands strict TLS.
 
 Because nothing says "I love my job" quite like debugging SSL certificate chain failures during an LDAPS bind attempt, validating the cert chain directly using OpenSSL is the absolute prerequisite to writing any real code.
 
@@ -123,9 +129,11 @@ Because nothing says "I love my job" quite like debugging SSL certificate chain 
 # Force OpenSSL to perform an LDAPS handshake manually without any Python middleware
 openssl s_client -connect dc01.enterprise.local:636 -showcerts
 ```
-*If OpenSSL reports `Verify return code: 21 (unable to verify the first certificate)`, the local execution environment (the VM / Container) lacks the organization's Root CA certificate.*
+
+_If OpenSSL reports `Verify return code: 21 (unable to verify the first certificate)`, the local execution environment (the VM / Container) lacks the organization's Root CA certificate._
 
 **Importing the Institutional Root CA (Linux):**
+
 ```bash
 sudo cp enterprise-root-ca.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
@@ -138,6 +146,7 @@ sudo update-ca-certificates
 Operating against LDAP from the terminal permits executing raw search filters quickly, immensely aiding script development.
 
 ### The Standard Bind Test
+
 Executing an `ldapsearch` using the terminal establishes a temporary local connection tunnel, testing the Bind sequence immediately.
 
 ```bash
@@ -150,9 +159,10 @@ ldapsearch -H ldaps://dc01.enterprise.local:636 \
 ```
 
 **Common LDAP Filters:**
-* All employees: `(&(objectClass=user)(objectCategory=person))`
-* Specific email suffix: `(mail=*@enterprise.local)`
-* Active users only (Windows AD specificity): `(!(userAccountControl:1.2.840.113556.1.4.803:=2))`
+
+- All employees: `(&(objectClass=user)(objectCategory=person))`
+- Specific email suffix: `(mail=*@enterprise.local)`
+- Active users only (Windows AD specificity): `(!(userAccountControl:1.2.840.113556.1.4.803:=2))`
 
 ---
 
@@ -162,11 +172,12 @@ LDAP errors are consistently cryptic string payloads returning raw numerical cod
 
 ### Common Pitfalls and Codes
 
-* **LDAP Error 49 (Invalid Credentials):** The server actively reached out, validated the TLS chain, found the user inside the Directory Information Tree, but strictly rejected the raw password hash.
-* **LDAP Error 32 (No Such Object):** The Bind succeeded seamlessly, but the subsequent search function targeted a `SEARCH_BASE` that simply does not exist structurally on the server. Double check for typos in the organizational unit (`OU=Enginering` instead of `OU=Engineering`).
-* **Connection Timeout / Reset by Peer:** The script is attempting to establish basic LDAP protocol handshakes using port `389` over an explicit `ldaps://` prefix, causing the Authority firewall to actively terminate the socket instantly. Ensure the port targets `636`.
+- **LDAP Error 49 (Invalid Credentials):** The server actively reached out, validated the TLS chain, found the user inside the Directory Information Tree, but strictly rejected the raw password hash.
+- **LDAP Error 32 (No Such Object):** The Bind succeeded seamlessly, but the subsequent search function targeted a `SEARCH_BASE` that simply does not exist structurally on the server. Double check for typos in the organizational unit (`OU=Enginering` instead of `OU=Engineering`).
+- **Connection Timeout / Reset by Peer:** The script is attempting to establish basic LDAP protocol handshakes using port `389` over an explicit `ldaps://` prefix, causing the Authority firewall to actively terminate the socket instantly. Ensure the port targets `636`.
 
 ### Wireshark Protocol Sniffing
+
 If you are debugging a standard plaintext LDAP handshake (Not LDAPS, strictly internal subnets via Port 389), capturing raw domain packets reveals exactly exactly which DN the system attempted to authenticate.
 
 ```bash

@@ -1,128 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
     <title>Guide & Scripts - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="/">Portfolio Home</a>
-                <span>|</span>
-                <a href="/docs/guides/">Tech Guides</a>
-                <span>|</span>
-                <a href="/docs/system-scripts/">System Scripts</a>
-            </div>
-            <article class="docs-content"><h1 id="technical-guide-and-systemserver-management-scripts">Technical Guide and System/Server Management Scripts</h1>
-<p><br>
-<strong>Last updated</strong>: March 01, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br></p>
-<!-- [![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-blue.svg)](https://github.com/PowerShell/PowerShell) -->
-<p><a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a>
-<a href="https://paulnamalomba.github.io/docs/guides/"><img alt="Power User Guides" src="https://img.shields.io/badge/Power%20User%20Guides-40-green.svg" /></a>
-<a href="https://paulnamalomba.github.io/docs/system-scripts/"><img alt="PowerShell Scripts" src="https://img.shields.io/badge/PowerShell%20Scripts-11-yellow.svg" /></a>
-<a href="#"><img alt="Technologies Covered" src="https://img.shields.io/badge/Technologies-Git%2C%20GitHub%20CLI%2C%20Docker%2C%20PostgreSQL%2C%20Redis%2C%20RabbitMQ%2C%20Kafka%2C%20Azure%20AD%2C%20SSL%2FTLS%2C%20.NET-blue.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>A collection of system management scripts, automation utilities, and technical power user guides for developers, system administrators, and engineers. This repository provides mostly in-depth guides covering databases, containers, messaging systems, security, and enterprise authentication.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#technical-guide-and-systemserver-management-scripts">Technical Guide and System/Server Management Scripts</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#purpose">Purpose</a><ul>
-<li><a href="#this-repository-serves-two-primary-purposes">This repository serves two primary purposes:</a></li>
-</ul>
-</li>
-<li><a href="#repository-structure">Repository Structure</a></li>
-<li><a href="#power-user-guides">Power User Guides</a><ul>
-<li><a href="#enterprise-authentication--identity">Enterprise Authentication \&amp; Identity</a></li>
-<li><a href="#system-architecture--engineering">System Architecture \&amp; Engineering</a></li>
-<li><a href="#programming-languages-data-structures--identity">Programming LAnguages, Data Structures \&amp; Identity</a></li>
-<li><a href="#django-development">Django Development</a></li>
-<li><a href="#net-development">.NET Development</a></li>
-<li><a href="#containerization--devops">Containerization \&amp; DevOps</a></li>
-<li><a href="#databases">Databases</a></li>
-<li><a href="#security--networking">Security \&amp; Networking</a></li>
-<li><a href="#development-tools">Development Tools</a></li>
-</ul>
-</li>
-<li><a href="#powershell-scripts">PowerShell Scripts</a><ul>
-<li><a href="#directory-navigation">Directory Navigation</a></li>
-<li><a href="#file-operations">File Operations</a></li>
-<li><a href="#github-management">GitHub Management</a></li>
-<li><a href="#document-conversion">Document Conversion</a></li>
-<li><a href="#python-environment">Python Environment</a></li>
-<li><a href="#profile-management">Profile Management</a></li>
-<li><a href="#utility-functions">Utility Functions</a></li>
-<li><a href="#file-system-management">File System Management</a></li>
-<li><a href="#file-size-lister">File Size Lister</a></li>
-<li><a href="#media-download">Media Download</a></li>
-<li><a href="#job-scheduler">Job Scheduler</a></li>
-</ul>
-</li>
-<li><a href="#getting-started">Getting Started</a><ul>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#installation">Installation</a></li>
-</ul>
-</li>
-<li><a href="#usage-examples">Usage Examples</a><ul>
-<li><a href="#example-1-quick-directory-navigation">Example 1: Quick Directory Navigation</a></li>
-<li><a href="#example-2-github-workflow-automation">Example 2: GitHub Workflow Automation</a></li>
-<li><a href="#example-3-file-operations">Example 3: File Operations</a></li>
-<li><a href="#example-4-python-environment-setup">Example 4: Python Environment Setup</a></li>
-<li><a href="#example-5-system-analysis">Example 5: System Analysis</a></li>
-<li><a href="#example-6-using-technical-guides">Example 6: Using Technical Guides</a></li>
-</ul>
-</li>
-<li><a href="#contributing">Contributing</a><ul>
-<li><a href="#contribution-guidelines">Contribution Guidelines</a></li>
-</ul>
-</li>
-<li><a href="#license">License</a></li>
-<li><a href="#acknowledgments">Acknowledgments</a></li>
-<li><a href="#statistics">Statistics</a></li>
-</ul>
-<hr />
-<h2 id="purpose">Purpose</h2>
-<h3 id="this-repository-serves-two-primary-purposes">This repository serves two primary purposes:</h3>
-<ul>
-<li><strong>Technical Documentation</strong>: Comprehensive power user guides for backend engineers, platform engineers, security engineers, and SREs covering enterprise-level technologies</li>
-<li><strong>Automation Scripts</strong>: Production-ready PowerShell scripts for Windows system management, file operations, GitHub workflows, and development automation</li>
-</ul>
-<p>All guides follow a consistent template with quickstart instructions, key concepts, configuration best practices, security considerations, detailed examples, troubleshooting tips, and performance tuning recommendations.</p>
-<h2 id="repository-structure">Repository Structure</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">system</span><span class="o">-</span><span class="n">management_scripts</span><span class="o">/</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="/">Portfolio Home</a>
+          <span>|</span>
+          <a href="/docs/guides/">Tech Guides</a>
+          <span>|</span>
+          <a href="/docs/system-scripts/">System Scripts</a>
+        </div>
+        <article class="docs-content">
+          <h1 id="technical-guide-and-systemserver-management-scripts">
+            Technical Guide and System/Server Management Scripts
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: March 01, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+          </p>
+          <!-- [![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-blue.svg)](https://github.com/PowerShell/PowerShell) -->
+          <p>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+            <a href="https://paulnamalomba.github.io/docs/guides/"
+              ><img
+                alt="Power User Guides"
+                src="https://img.shields.io/badge/Power%20User%20Guides-40-green.svg"
+            /></a>
+            <a href="https://paulnamalomba.github.io/docs/system-scripts/"
+              ><img
+                alt="PowerShell Scripts"
+                src="https://img.shields.io/badge/PowerShell%20Scripts-11-yellow.svg"
+            /></a>
+            <a href="#"
+              ><img
+                alt="Technologies Covered"
+                src="https://img.shields.io/badge/Technologies-Git%2C%20GitHub%20CLI%2C%20Docker%2C%20PostgreSQL%2C%20Redis%2C%20RabbitMQ%2C%20Kafka%2C%20Azure%20AD%2C%20SSL%2FTLS%2C%20.NET-blue.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            A collection of system management scripts, automation utilities, and
+            technical power user guides for developers, system administrators,
+            and engineers. This repository provides mostly in-depth guides
+            covering databases, containers, messaging systems, security, and
+            enterprise authentication.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a href="#technical-guide-and-systemserver-management-scripts"
+                >Technical Guide and System/Server Management Scripts</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#purpose">Purpose</a>
+              <ul>
+                <li>
+                  <a href="#this-repository-serves-two-primary-purposes"
+                    >This repository serves two primary purposes:</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li><a href="#repository-structure">Repository Structure</a></li>
+            <li>
+              <a href="#power-user-guides">Power User Guides</a>
+              <ul>
+                <li>
+                  <a href="#enterprise-authentication--identity"
+                    >Enterprise Authentication \&amp; Identity</a
+                  >
+                </li>
+                <li>
+                  <a href="#system-architecture--engineering"
+                    >System Architecture \&amp; Engineering</a
+                  >
+                </li>
+                <li>
+                  <a href="#programming-languages-data-structures--identity"
+                    >Programming LAnguages, Data Structures \&amp; Identity</a
+                  >
+                </li>
+                <li><a href="#django-development">Django Development</a></li>
+                <li><a href="#net-development">.NET Development</a></li>
+                <li>
+                  <a href="#containerization--devops"
+                    >Containerization \&amp; DevOps</a
+                  >
+                </li>
+                <li><a href="#databases">Databases</a></li>
+                <li>
+                  <a href="#security--networking">Security \&amp; Networking</a>
+                </li>
+                <li><a href="#development-tools">Development Tools</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#powershell-scripts">PowerShell Scripts</a>
+              <ul>
+                <li>
+                  <a href="#directory-navigation">Directory Navigation</a>
+                </li>
+                <li><a href="#file-operations">File Operations</a></li>
+                <li><a href="#github-management">GitHub Management</a></li>
+                <li><a href="#document-conversion">Document Conversion</a></li>
+                <li><a href="#python-environment">Python Environment</a></li>
+                <li><a href="#profile-management">Profile Management</a></li>
+                <li><a href="#utility-functions">Utility Functions</a></li>
+                <li>
+                  <a href="#file-system-management">File System Management</a>
+                </li>
+                <li><a href="#file-size-lister">File Size Lister</a></li>
+                <li><a href="#media-download">Media Download</a></li>
+                <li><a href="#job-scheduler">Job Scheduler</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#getting-started">Getting Started</a>
+              <ul>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#installation">Installation</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#usage-examples">Usage Examples</a>
+              <ul>
+                <li>
+                  <a href="#example-1-quick-directory-navigation"
+                    >Example 1: Quick Directory Navigation</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-2-github-workflow-automation"
+                    >Example 2: GitHub Workflow Automation</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-3-file-operations"
+                    >Example 3: File Operations</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-4-python-environment-setup"
+                    >Example 4: Python Environment Setup</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-5-system-analysis"
+                    >Example 5: System Analysis</a
+                  >
+                </li>
+                <li>
+                  <a href="#example-6-using-technical-guides"
+                    >Example 6: Using Technical Guides</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#contributing">Contributing</a>
+              <ul>
+                <li>
+                  <a href="#contribution-guidelines">Contribution Guidelines</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#license">License</a></li>
+            <li><a href="#acknowledgments">Acknowledgments</a></li>
+            <li><a href="#statistics">Statistics</a></li>
+          </ul>
+          <hr />
+          <h2 id="purpose">Purpose</h2>
+          <h3 id="this-repository-serves-two-primary-purposes">
+            This repository serves two primary purposes:
+          </h3>
+          <ul>
+            <li>
+              <strong>Technical Documentation</strong>: Comprehensive power user
+              guides for backend engineers, platform engineers, security
+              engineers, and SREs covering enterprise-level technologies
+            </li>
+            <li>
+              <strong>Automation Scripts</strong>: Production-ready PowerShell
+              scripts for Windows system management, file operations, GitHub
+              workflows, and development automation
+            </li>
+          </ul>
+          <p>
+            All guides follow a consistent template with quickstart
+            instructions, key concepts, configuration best practices, security
+            considerations, detailed examples, troubleshooting tips, and
+            performance tuning recommendations.
+          </p>
+          <h2 id="repository-structure">Repository Structure</h2>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">system</span><span class="o">-</span><span class="n">management_scripts</span><span class="o">/</span>
 <span class="err">├──</span><span class="w"> </span><span class="n">guides</span><span class="o">/</span><span class="w">                  </span><span class="c1"># Technical power user guides</span>
 <span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">AUTH_SERVICES_</span><span class="o">*.</span><span class="n">md</span><span class="w">   </span><span class="c1"># Enterprise authentication (OAuth2, OIDC, SAML, SCIM)</span>
 <span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">DOCKER_</span><span class="o">*.</span><span class="n">md</span><span class="w">          </span><span class="c1"># Container management and orchestration</span>
@@ -149,359 +275,869 @@
 <span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">utility</span><span class="o">-</span><span class="n">functions</span><span class="o">.</span><span class="n">ps1</span><span class="w">       </span><span class="c1"># General utilities</span>
 <span class="err">│</span>
 <span class="err">└──</span><span class="w"> </span><span class="n">README</span><span class="o">.</span><span class="n">md</span><span class="w">               </span><span class="c1"># This file</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="power-user-guides">Power User Guides</h2>
-<h3 id="enterprise-authentication-identity">Enterprise Authentication &amp; Identity</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.html">AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.md</a></strong><br />
-  OAuth 2.0, OIDC, SAML, JWT implementation in C#; ASP.NET Core authentication; SCIM provisioning; token lifecycle management</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.html">AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  Azure AD management with Microsoft Graph; service principal automation; conditional access policies; certificate-based auth</p>
-</li>
-</ul>
-<h3 id="system-architecture-engineering">System Architecture &amp; Engineering</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/API_TYPES.html">API_TYPES.md</a></strong><br />
-  REST, SOAP, gRPC, GraphQL, WebHooks, WebSockets, and WebRTC; how they work, why they exist, language support, and industry use.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/WEB_SERVERS_PROXIES.html">WEB_SERVERS_PROXIES.md</a></strong><br />
-  Apache2, Nginx, and ngrok. Reverse proxies, generating robust <code>.conf</code> files, daemonization, and exposing internal networks.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/REALTIME_CLIENT_API_CONNECTIONS.html">REALTIME_CLIENT_API_CONNECTIONS.md</a></strong><br />
-  SignalR-style realtime architecture across ASP.NET Core SignalR, Socket.IO, ws, python-socketio, Django Channels, and FastAPI WebSockets; hub abstractions, groups/rooms, auth, fanout, reconnects, and scale-out.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/KAFKA_PRODUCER_CONSUMER_EXAMPLES.html">KAFKA_PRODUCER_CONSUMER_EXAMPLES.md</a></strong><br />
-  Kafka producer/consumer patterns, partitions, consumer groups, delivery semantics, and operational troubleshooting.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/LANGUAGE_RUNTIMES.html">LANGUAGE_RUNTIMES.md</a></strong><br />
-  C++, C#, and Python. Native Memory allocation natively contrasted directly against the CLR GC and Python VM Reference Counting.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/PYTHON_ML.html">PYTHON_ML.md</a></strong><br />
-  Vectorized Operations, PyTorch GUI tensor alignment, resolving memory bottlenecks, and deploying high-performance inference APIs.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/JAVA_JAVASCRIPT.html">JAVA_JAVASCRIPT.md</a></strong><br />
-  A massive teardown comparing the strictly typed JVM against Event-Loop driven Just-In-Time execution in V8.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/LDAP_AUTHENTICATION.html">LDAP_AUTHENTICATION.md</a></strong><br />
-  LDAP vs LDAPS, Directory Information Trees, troubleshooting institutional auth Bind logic, and debugging broken root SSL certificates.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/IOT_SENSORS.html">IOT_SENSORS.md</a></strong><br />
-  Analog-to-Digital conversions, cross-compiling hardware firmware, routing MQTT telemetry, and ETL data ingestion.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/LINUX_BASH_SCRIPTING.html">LINUX_BASH_SCRIPTING.md</a></strong><br />
-  Piping <code>stdout</code>/<code>stderr</code>, daemon management over SSH, writing strict executable definitions, and deploying automation via <code>crond</code>.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.html">SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.md</a></strong><br />
-  Linux service management with <code>systemctl</code> (plus PowerShell parallels); service units, enable/disable, journald logs, and troubleshooting.</p>
-</li>
-</ul>
-<h3 id="programming-languages-data-structures-identity">Programming LAnguages, Data Structures &amp; Identity</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html">BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.md</a></strong><br />
-  Efficiently performing large database operations using batch processing, threading, and MPI; memory management; performance tuning; Python and C++ implementations</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/C_SHARP_PROGRAMMING_DATA_STRUCTURES.html">C_SHARP_PROGRAMMING_DATA_STRUCTURES.md</a></strong><br />
-  C# development with PowerShell integration; compiling and running C# code; automating builds; interop scenarios</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.html">MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.md</a></strong><br />
-  C# memory management on Windows; value vs reference types; stack vs heap storage; copy semantics; nullability features</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.html">MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.md</a></strong><br />
-  C++ memory management on Windows (MSVC); value vs reference semantics; stack vs heap storage; copy semantics; nullability</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.html">MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.md</a></strong><br />
-  Python memory management (CPython on Windows); value vs reference semantics; heap storage; copy semantics; nullability</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/MEMORY_MANAGEMENT_JAVASCRIPT_POWERUSER_GUIDE.html">MEMORY_MANAGEMENT_JAVASCRIPT_POWERUSER_GUIDE.md</a></strong><br />
-  JavaScript memory management (Node.js on Windows); value vs reference types; heap-managed objects; copy semantics; nullability</p>
-</li>
-</ul>
-<h3 id="django-development">Django Development</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.html">DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.html">DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.md</a></strong><br />
-  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.html">DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md</a></strong><br />
-  Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security</p>
-</li>
-</ul>
-<h3 id="net-development">.NET Development</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.html">DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md</a></strong><br />
-  Password hashing with BCrypt.Net-Next; secure authentication patterns; work factor tuning; ASP.NET Core integration</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/DOTNET_RABBITMQ_CSHARP_POWERUSER_GUIDE.html">DOTNET_RABBITMQ_CSHARP_POWERUSER_GUIDE.md</a></strong><br />
-  RabbitMQ message broker integration; exchange patterns; dead-letter queues; connection pooling; async patterns</p>
-</li>
-</ul>
-<h3 id="containerization-devops">Containerization &amp; DevOps</h3>
-<ul>
-<li><strong><a href="/docs/guides/DOCKER_POWERSHELL_POWERUSER_GUIDE.html">DOCKER_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  Docker container management on Windows; multi-stage builds; Docker Compose; volume management; networking</li>
-</ul>
-<h3 id="databases">Databases</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html">BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.md</a></strong><br />
-  Efficiently performing large database operations using batch processing, threading, and MPI; memory management; performance tuning; Python and C++ implementations</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/POSTGRESQL_16_BASH_POWERUSER_GUIDE.html">POSTGRESQL_16_BASH_POWERUSER_GUIDE.md</a></strong><br />
-  PostgreSQL administration on Linux; performance tuning; backup strategies; replication; query optimization</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE.html">POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  PostgreSQL administration on Windows; connection pooling; automated backups; monitoring</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/REDIS_POWERSHELL_POWERUSER_GUIDE.html">REDIS_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  Redis in-memory caching; data structures; persistence; clustering; PowerShell client integration</p>
-</li>
-</ul>
-<h3 id="security-networking">Security &amp; Networking</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/SSH_POWERUSER_GUIDE.html">SSH_POWERUSER_GUIDE.md</a></strong><br />
-  OpenSSH client and server workflows on Windows and Linux; key-based passwordless auth; SSH config files; <code>scp</code>, <code>sftp</code>, jump hosts, and port forwarding</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/UBUNTU_SERVER_SETUP.html">UBUNTU_SERVER_SETUP.md</a></strong><br />
-  Ubuntu Server 24.04 LTS installation on bare metal; SSD-only installation while preserving HDD data; UEFI/GPT boot layout; networking, SSH server/client setup, and post-install hardening</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/SSL_TLS_BASH_POWERUSER_GUIDE.html">SSL_TLS_BASH_POWERUSER_GUIDE.md</a></strong><br />
-  Certificate management on Linux; OpenSSL operations; certificate authorities; TLS configuration</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/SSL_TLS_POWERSHELL_POWERUSER_GUIDE.html">SSL_TLS_POWERSHELL_POWERUSER_GUIDE.md</a></strong><br />
-  Certificate management on Windows; PKI infrastructure; automated certificate rotation; IIS configuration</p>
-</li>
-</ul>
-<h3 id="development-tools">Development Tools</h3>
-<ul>
-<li>
-<p><strong><a href="/docs/guides/GIT_GH_CLI_POWERUSER_GUIDE.html">GIT_GH_CLI_POWERUSER_GUIDE.md</a></strong><br />
-  Git fundamentals and advanced workflows; GitHub CLI (<code>gh</code>) auth, repo/PR/issue management, Actions operations, and CLI-driven deployment patterns.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/RESPONSIVE_WEB_DESIGN_TESTING_POWERUSER_GUIDE.html">RESPONSIVE_WEB_DESIGN_TESTING_POWERUSER_GUIDE.md</a></strong><br />
-  Responsive UI testing, layout breakpoints, browser tooling, and practical QA patterns for modern frontends.</p>
-</li>
-<li>
-<p><strong><a href="/docs/guides/VI_POWERUSER_GUIDE.html">VI_POWERUSER_GUIDE.md</a></strong><br />
-  Vi/Vim text editor mastery; navigation; editing commands; macros; configuration</p>
-</li>
-</ul>
-<hr />
-<h2 id="powershell-scripts">PowerShell Scripts</h2>
-<h3 id="directory-navigation">Directory Navigation</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/directory-navigation.html">directory-navigation.ps1</a></strong></li>
-<li>Quick navigation functions for common directories:<ul>
-<li><code>ChDir-Work</code> - Navigate to work directory</li>
-<li><code>ChDir-Documents</code> - Navigate to Documents folder</li>
-<li><code>ChDir-Downloads</code> - Navigate to Downloads folder</li>
-<li><code>ChDir-Desktop</code> - Navigate to Desktop</li>
-<li><code>ChDir-OneDrive</code> - Navigate to OneDrive directory</li>
-</ul>
-</li>
-</ul>
-<h3 id="file-operations">File Operations</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/file-operations.html">file-operations.ps1</a></strong></li>
-<li>File and folder operations in PowerShell:<ul>
-<li><code>MoveItem-Overwrite</code> - Move with automatic overwrite</li>
-<li><code>CopyItem-Safe</code> - Safe copy with conflict handling</li>
-<li><code>Remove-EmptyDirectories</code> - Clean up empty folders recursively</li>
-<li><code>Get-FileHash-Bulk</code> - Compute hashes for multiple files</li>
-<li><code>Compare-DirectoryContent</code> - Compare two directory structures</li>
-</ul>
-</li>
-</ul>
-<h3 id="github-management">GitHub Management</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/github-management.html">github-management.ps1</a></strong></li>
-<li>Automated GitHub repository workflows:<ul>
-<li><code>Manage-GitHubAppDev</code> - Full repository management workflow</li>
-<li><code>Initialize-GitRepository</code> - Initialize new repositories</li>
-<li><code>Create-GitTag</code> - Create and push tags</li>
-<li><code>Create-GitHubRelease</code> - Automated release creation</li>
-<li><code>Sync-GitHubFork</code> - Keep forks synchronized</li>
-</ul>
-</li>
-</ul>
-<h3 id="document-conversion">Document Conversion</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/document-conversion.html">document-conversion.ps1</a></strong></li>
-<li>Document format conversion utilities:<ul>
-<li><code>Convert-MarkdownToHtml</code> - Markdown to HTML conversion</li>
-<li><code>Convert-MarkdownToPdf</code> - Markdown to PDF conversion</li>
-<li><code>Convert-HtmlToPdf</code> - HTML to PDF conversion</li>
-<li><code>Batch-ConvertDocuments</code> - Bulk document conversion</li>
-</ul>
-</li>
-</ul>
-<h3 id="python-environment">Python Environment</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/python-environment.html">python-environment.ps1</a></strong></li>
-<li>Python environment management:<ul>
-<li><code>New-PythonVenv</code> - Create virtual environments</li>
-<li><code>Activate-PythonVenv</code> - Activate virtual environment</li>
-<li><code>Install-PythonPackages</code> - Bulk package installation</li>
-<li><code>Export-PythonRequirements</code> - Generate requirements.txt</li>
-<li><code>Update-PythonPackages</code> - Update all packages</li>
-</ul>
-</li>
-</ul>
-<h3 id="profile-management">Profile Management</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/profile-management.html">profile-management.ps1</a></strong></li>
-<li>PowerShell profile configuration:<ul>
-<li><code>Install-PowerShellProfile</code> - Set up custom profile</li>
-<li><code>Add-ProfileFunction</code> - Add functions to profile</li>
-<li><code>Backup-PowerShellProfile</code> - Backup profile configuration</li>
-<li><code>Restore-PowerShellProfile</code> - Restore from backup</li>
-</ul>
-</li>
-</ul>
-<h3 id="utility-functions">Utility Functions</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/utility-functions.html">utility-functions.ps1</a></strong></li>
-<li>General-purpose utilities:<ul>
-<li><code>Test-Administrator</code> - Check admin privileges</li>
-<li><code>Get-SystemInfo</code> - Display system information</li>
-<li><code>Test-InternetConnection</code> - Network connectivity check</li>
-<li><code>Get-InstalledSoftware</code> - List installed applications</li>
-<li><code>Measure-CommandTime</code> - Benchmark command execution</li>
-</ul>
-</li>
-</ul>
-<h3 id="file-system-management">File System Management</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/file-system_management.html">file-system_management.ps1</a></strong></li>
-<li>Advanced filesystem utilities:<ul>
-<li><code>Get-LargestFiles</code> - Find largest files in directory tree</li>
-<li><code>Get-DuplicateFiles</code> - Detect duplicate files by hash</li>
-<li><code>Compress-OldFiles</code> - Archive files older than specified date</li>
-<li><code>Export-DirectoryStructure</code> - Generate directory tree report</li>
-</ul>
-</li>
-</ul>
-<h3 id="file-size-lister">File Size Lister</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/filesize-lister.html">filesize-lister.ps1</a></strong></li>
-<li>Directory size analysis:<ul>
-<li><code>Get-DirectorySize</code> - Calculate folder sizes recursively</li>
-<li><code>Export-SizeReport</code> - Generate size report CSV</li>
-<li><code>Find-LargeDirectories</code> - Identify space-consuming folders</li>
-</ul>
-</li>
-</ul>
-<h3 id="media-download">Media Download</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/media-download.html">media-download.ps1</a></strong></li>
-<li>Media download utilities:<ul>
-<li><code>Download-YouTubeVideo</code> - Download YouTube videos</li>
-<li><code>Download-Playlist</code> - Download entire playlists</li>
-<li><code>Convert-MediaFormat</code> - Convert media formats</li>
-<li><code>Extract-AudioFromVideo</code> - Extract audio tracks</li>
-</ul>
-</li>
-</ul>
-<h3 id="job-scheduler">Job Scheduler</h3>
-<ul>
-<li><strong><a href="/docs/system-scripts/job-scheduler_template.html">job-scheduler_template.ps1</a></strong></li>
-<li>Task scheduling framework:<ul>
-<li><code>New-ScheduledTask</code> - Create scheduled tasks</li>
-<li><code>Register-TaskScheduler</code> - Register with Windows Task Scheduler</li>
-<li><code>Remove-ScheduledTask</code> - Remove scheduled tasks</li>
-<li><code>Get-TaskStatus</code> - Check task execution status</li>
-</ul>
-</li>
-</ul>
-<hr />
-<h2 id="getting-started">Getting Started</h2>
-<h3 id="prerequisites">Prerequisites</h3>
-<p><strong>For PowerShell Scripts:</strong></p>
-<ul>
-<li>Windows 10/11 or Windows Server 2016+</li>
-<li>PowerShell 7.0 or later (recommended)</li>
-<li>Administrator privileges (for some operations)</li>
-</ul>
-<p><strong>For Guides:</strong></p>
-<ul>
-<li>Relevant technology installed (Docker, PostgreSQL, Redis, etc.)</li>
-<li>Basic understanding of the technology stack</li>
-<li>Command-line familiarity</li>
-</ul>
-<h3 id="installation">Installation</h3>
-<ul>
-<li><strong>Step 1. Clone the repository:</strong></li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">paulnamalomba</span><span class="p">/</span><span class="n">system-management_scripts</span><span class="p">.</span><span class="n">git</span>
+          <hr />
+          <h2 id="power-user-guides">Power User Guides</h2>
+          <h3 id="enterprise-authentication-identity">
+            Enterprise Authentication &amp; Identity
+          </h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.html"
+                    >AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                OAuth 2.0, OIDC, SAML, JWT implementation in C#; ASP.NET Core
+                authentication; SCIM provisioning; token lifecycle management
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.html"
+                    >AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Azure AD management with Microsoft Graph; service principal
+                automation; conditional access policies; certificate-based auth
+              </p>
+            </li>
+          </ul>
+          <h3 id="system-architecture-engineering">
+            System Architecture &amp; Engineering
+          </h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/API_TYPES.html"
+                    >API_TYPES.md</a
+                  ></strong
+                ><br />
+                REST, SOAP, gRPC, GraphQL, WebHooks, WebSockets, and WebRTC; how
+                they work, why they exist, language support, and industry use.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/WEB_SERVERS_PROXIES.html"
+                    >WEB_SERVERS_PROXIES.md</a
+                  ></strong
+                ><br />
+                Apache2, Nginx, and ngrok. Reverse proxies, generating robust
+                <code>.conf</code> files, daemonization, and exposing internal
+                networks.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/REALTIME_CLIENT_API_CONNECTIONS.html"
+                    >REALTIME_CLIENT_API_CONNECTIONS.md</a
+                  ></strong
+                ><br />
+                SignalR-style realtime architecture across ASP.NET Core SignalR,
+                Socket.IO, ws, python-socketio, Django Channels, and FastAPI
+                WebSockets; hub abstractions, groups/rooms, auth, fanout,
+                reconnects, and scale-out.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/KAFKA_PRODUCER_CONSUMER_EXAMPLES.html"
+                    >KAFKA_PRODUCER_CONSUMER_EXAMPLES.md</a
+                  ></strong
+                ><br />
+                Kafka producer/consumer patterns, partitions, consumer groups,
+                delivery semantics, and operational troubleshooting.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/LANGUAGE_RUNTIMES.html"
+                    >LANGUAGE_RUNTIMES.md</a
+                  ></strong
+                ><br />
+                C++, C#, and Python. Native Memory allocation natively
+                contrasted directly against the CLR GC and Python VM Reference
+                Counting.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/PYTHON_ML.html"
+                    >PYTHON_ML.md</a
+                  ></strong
+                ><br />
+                Vectorized Operations, PyTorch GUI tensor alignment, resolving
+                memory bottlenecks, and deploying high-performance inference
+                APIs.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/JAVA_JAVASCRIPT.html"
+                    >JAVA_JAVASCRIPT.md</a
+                  ></strong
+                ><br />
+                A massive teardown comparing the strictly typed JVM against
+                Event-Loop driven Just-In-Time execution in V8.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/LDAP_AUTHENTICATION.html"
+                    >LDAP_AUTHENTICATION.md</a
+                  ></strong
+                ><br />
+                LDAP vs LDAPS, Directory Information Trees, troubleshooting
+                institutional auth Bind logic, and debugging broken root SSL
+                certificates.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/IOT_SENSORS.html"
+                    >IOT_SENSORS.md</a
+                  ></strong
+                ><br />
+                Analog-to-Digital conversions, cross-compiling hardware
+                firmware, routing MQTT telemetry, and ETL data ingestion.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/LINUX_BASH_SCRIPTING.html"
+                    >LINUX_BASH_SCRIPTING.md</a
+                  ></strong
+                ><br />
+                Piping <code>stdout</code>/<code>stderr</code>, daemon
+                management over SSH, writing strict executable definitions, and
+                deploying automation via <code>crond</code>.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.html"
+                    >SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.md</a
+                  ></strong
+                ><br />
+                Linux service management with <code>systemctl</code> (plus
+                PowerShell parallels); service units, enable/disable, journald
+                logs, and troubleshooting.
+              </p>
+            </li>
+          </ul>
+          <h3 id="programming-languages-data-structures-identity">
+            Programming LAnguages, Data Structures &amp; Identity
+          </h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html"
+                    >BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.md</a
+                  ></strong
+                ><br />
+                Efficiently performing large database operations using batch
+                processing, threading, and MPI; memory management; performance
+                tuning; Python and C++ implementations
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/C_SHARP_PROGRAMMING_DATA_STRUCTURES.html"
+                    >C_SHARP_PROGRAMMING_DATA_STRUCTURES.md</a
+                  ></strong
+                ><br />
+                C# development with PowerShell integration; compiling and
+                running C# code; automating builds; interop scenarios
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.html"
+                    >MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                C# memory management on Windows; value vs reference types; stack
+                vs heap storage; copy semantics; nullability features
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.html"
+                    >MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                C++ memory management on Windows (MSVC); value vs reference
+                semantics; stack vs heap storage; copy semantics; nullability
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.html"
+                    >MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Python memory management (CPython on Windows); value vs
+                reference semantics; heap storage; copy semantics; nullability
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/MEMORY_MANAGEMENT_JAVASCRIPT_POWERUSER_GUIDE.html"
+                    >MEMORY_MANAGEMENT_JAVASCRIPT_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                JavaScript memory management (Node.js on Windows); value vs
+                reference types; heap-managed objects; copy semantics;
+                nullability
+              </p>
+            </li>
+          </ul>
+          <h3 id="django-development">Django Development</h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.html"
+                    >DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Implementing authentication in Django applications; OAuth2 and
+                JWT integration; user management; security best practices;
+                setting up multi-factor authentication in Django; integrating
+                with third-party MFA providers; enhancing application security
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.html"
+                    >DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Implementing authentication in Django applications; OAuth2 and
+                JWT integration; user management; security best practices;
+                setting up multi-factor authentication in Django; integrating
+                with third-party MFA providers; enhancing application security
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.html"
+                    >DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Implementing authentication in Django applications; OAuth2 and
+                JWT integration; user management; security best practices;
+                setting up multi-factor authentication in Django; integrating
+                with third-party MFA providers; enhancing application security
+              </p>
+            </li>
+          </ul>
+          <h3 id="net-development">.NET Development</h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.html"
+                    >DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Password hashing with BCrypt.Net-Next; secure authentication
+                patterns; work factor tuning; ASP.NET Core integration
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/DOTNET_RABBITMQ_CSHARP_POWERUSER_GUIDE.html"
+                    >DOTNET_RABBITMQ_CSHARP_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                RabbitMQ message broker integration; exchange patterns;
+                dead-letter queues; connection pooling; async patterns
+              </p>
+            </li>
+          </ul>
+          <h3 id="containerization-devops">Containerization &amp; DevOps</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/guides/DOCKER_POWERSHELL_POWERUSER_GUIDE.html"
+                  >DOCKER_POWERSHELL_POWERUSER_GUIDE.md</a
+                ></strong
+              ><br />
+              Docker container management on Windows; multi-stage builds; Docker
+              Compose; volume management; networking
+            </li>
+          </ul>
+          <h3 id="databases">Databases</h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html"
+                    >BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.md</a
+                  ></strong
+                ><br />
+                Efficiently performing large database operations using batch
+                processing, threading, and MPI; memory management; performance
+                tuning; Python and C++ implementations
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/POSTGRESQL_16_BASH_POWERUSER_GUIDE.html"
+                    >POSTGRESQL_16_BASH_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                PostgreSQL administration on Linux; performance tuning; backup
+                strategies; replication; query optimization
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE.html"
+                    >POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                PostgreSQL administration on Windows; connection pooling;
+                automated backups; monitoring
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/REDIS_POWERSHELL_POWERUSER_GUIDE.html"
+                    >REDIS_POWERSHELL_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Redis in-memory caching; data structures; persistence;
+                clustering; PowerShell client integration
+              </p>
+            </li>
+          </ul>
+          <h3 id="security-networking">Security &amp; Networking</h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/SSH_POWERUSER_GUIDE.html"
+                    >SSH_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                OpenSSH client and server workflows on Windows and Linux;
+                key-based passwordless auth; SSH config files; <code>scp</code>,
+                <code>sftp</code>, jump hosts, and port forwarding
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/UBUNTU_SERVER_SETUP.html"
+                    >UBUNTU_SERVER_SETUP.md</a
+                  ></strong
+                ><br />
+                Ubuntu Server 24.04 LTS installation on bare metal; SSD-only
+                installation while preserving HDD data; UEFI/GPT boot layout;
+                networking, SSH server/client setup, and post-install hardening
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/SSL_TLS_BASH_POWERUSER_GUIDE.html"
+                    >SSL_TLS_BASH_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Certificate management on Linux; OpenSSL operations; certificate
+                authorities; TLS configuration
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/SSL_TLS_POWERSHELL_POWERUSER_GUIDE.html"
+                    >SSL_TLS_POWERSHELL_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Certificate management on Windows; PKI infrastructure; automated
+                certificate rotation; IIS configuration
+              </p>
+            </li>
+          </ul>
+          <h3 id="development-tools">Development Tools</h3>
+          <ul>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/GIT_GH_CLI_POWERUSER_GUIDE.html"
+                    >GIT_GH_CLI_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Git fundamentals and advanced workflows; GitHub CLI
+                (<code>gh</code>) auth, repo/PR/issue management, Actions
+                operations, and CLI-driven deployment patterns.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a
+                    href="/docs/guides/RESPONSIVE_WEB_DESIGN_TESTING_POWERUSER_GUIDE.html"
+                    >RESPONSIVE_WEB_DESIGN_TESTING_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Responsive UI testing, layout breakpoints, browser tooling, and
+                practical QA patterns for modern frontends.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong
+                  ><a href="/docs/guides/VI_POWERUSER_GUIDE.html"
+                    >VI_POWERUSER_GUIDE.md</a
+                  ></strong
+                ><br />
+                Vi/Vim text editor mastery; navigation; editing commands;
+                macros; configuration
+              </p>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="powershell-scripts">PowerShell Scripts</h2>
+          <h3 id="directory-navigation">Directory Navigation</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/directory-navigation.html"
+                  >directory-navigation.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Quick navigation functions for common directories:
+              <ul>
+                <li><code>ChDir-Work</code> - Navigate to work directory</li>
+                <li>
+                  <code>ChDir-Documents</code> - Navigate to Documents folder
+                </li>
+                <li>
+                  <code>ChDir-Downloads</code> - Navigate to Downloads folder
+                </li>
+                <li><code>ChDir-Desktop</code> - Navigate to Desktop</li>
+                <li>
+                  <code>ChDir-OneDrive</code> - Navigate to OneDrive directory
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="file-operations">File Operations</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/file-operations.html"
+                  >file-operations.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              File and folder operations in PowerShell:
+              <ul>
+                <li>
+                  <code>MoveItem-Overwrite</code> - Move with automatic
+                  overwrite
+                </li>
+                <li>
+                  <code>CopyItem-Safe</code> - Safe copy with conflict handling
+                </li>
+                <li>
+                  <code>Remove-EmptyDirectories</code> - Clean up empty folders
+                  recursively
+                </li>
+                <li>
+                  <code>Get-FileHash-Bulk</code> - Compute hashes for multiple
+                  files
+                </li>
+                <li>
+                  <code>Compare-DirectoryContent</code> - Compare two directory
+                  structures
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="github-management">GitHub Management</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/github-management.html"
+                  >github-management.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Automated GitHub repository workflows:
+              <ul>
+                <li>
+                  <code>Manage-GitHubAppDev</code> - Full repository management
+                  workflow
+                </li>
+                <li>
+                  <code>Initialize-GitRepository</code> - Initialize new
+                  repositories
+                </li>
+                <li><code>Create-GitTag</code> - Create and push tags</li>
+                <li>
+                  <code>Create-GitHubRelease</code> - Automated release creation
+                </li>
+                <li><code>Sync-GitHubFork</code> - Keep forks synchronized</li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="document-conversion">Document Conversion</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/document-conversion.html"
+                  >document-conversion.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Document format conversion utilities:
+              <ul>
+                <li>
+                  <code>Convert-MarkdownToHtml</code> - Markdown to HTML
+                  conversion
+                </li>
+                <li>
+                  <code>Convert-MarkdownToPdf</code> - Markdown to PDF
+                  conversion
+                </li>
+                <li><code>Convert-HtmlToPdf</code> - HTML to PDF conversion</li>
+                <li>
+                  <code>Batch-ConvertDocuments</code> - Bulk document conversion
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="python-environment">Python Environment</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/python-environment.html"
+                  >python-environment.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Python environment management:
+              <ul>
+                <li>
+                  <code>New-PythonVenv</code> - Create virtual environments
+                </li>
+                <li>
+                  <code>Activate-PythonVenv</code> - Activate virtual
+                  environment
+                </li>
+                <li>
+                  <code>Install-PythonPackages</code> - Bulk package
+                  installation
+                </li>
+                <li>
+                  <code>Export-PythonRequirements</code> - Generate
+                  requirements.txt
+                </li>
+                <li>
+                  <code>Update-PythonPackages</code> - Update all packages
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="profile-management">Profile Management</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/profile-management.html"
+                  >profile-management.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              PowerShell profile configuration:
+              <ul>
+                <li>
+                  <code>Install-PowerShellProfile</code> - Set up custom profile
+                </li>
+                <li>
+                  <code>Add-ProfileFunction</code> - Add functions to profile
+                </li>
+                <li>
+                  <code>Backup-PowerShellProfile</code> - Backup profile
+                  configuration
+                </li>
+                <li>
+                  <code>Restore-PowerShellProfile</code> - Restore from backup
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="utility-functions">Utility Functions</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/utility-functions.html"
+                  >utility-functions.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              General-purpose utilities:
+              <ul>
+                <li>
+                  <code>Test-Administrator</code> - Check admin privileges
+                </li>
+                <li>
+                  <code>Get-SystemInfo</code> - Display system information
+                </li>
+                <li>
+                  <code>Test-InternetConnection</code> - Network connectivity
+                  check
+                </li>
+                <li>
+                  <code>Get-InstalledSoftware</code> - List installed
+                  applications
+                </li>
+                <li>
+                  <code>Measure-CommandTime</code> - Benchmark command execution
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="file-system-management">File System Management</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/file-system_management.html"
+                  >file-system_management.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Advanced filesystem utilities:
+              <ul>
+                <li>
+                  <code>Get-LargestFiles</code> - Find largest files in
+                  directory tree
+                </li>
+                <li>
+                  <code>Get-DuplicateFiles</code> - Detect duplicate files by
+                  hash
+                </li>
+                <li>
+                  <code>Compress-OldFiles</code> - Archive files older than
+                  specified date
+                </li>
+                <li>
+                  <code>Export-DirectoryStructure</code> - Generate directory
+                  tree report
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="file-size-lister">File Size Lister</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/filesize-lister.html"
+                  >filesize-lister.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Directory size analysis:
+              <ul>
+                <li>
+                  <code>Get-DirectorySize</code> - Calculate folder sizes
+                  recursively
+                </li>
+                <li>
+                  <code>Export-SizeReport</code> - Generate size report CSV
+                </li>
+                <li>
+                  <code>Find-LargeDirectories</code> - Identify space-consuming
+                  folders
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="media-download">Media Download</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/media-download.html"
+                  >media-download.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Media download utilities:
+              <ul>
+                <li>
+                  <code>Download-YouTubeVideo</code> - Download YouTube videos
+                </li>
+                <li>
+                  <code>Download-Playlist</code> - Download entire playlists
+                </li>
+                <li>
+                  <code>Convert-MediaFormat</code> - Convert media formats
+                </li>
+                <li>
+                  <code>Extract-AudioFromVideo</code> - Extract audio tracks
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <h3 id="job-scheduler">Job Scheduler</h3>
+          <ul>
+            <li>
+              <strong
+                ><a href="/docs/system-scripts/job-scheduler_template.html"
+                  >job-scheduler_template.ps1</a
+                ></strong
+              >
+            </li>
+            <li>
+              Task scheduling framework:
+              <ul>
+                <li><code>New-ScheduledTask</code> - Create scheduled tasks</li>
+                <li>
+                  <code>Register-TaskScheduler</code> - Register with Windows
+                  Task Scheduler
+                </li>
+                <li>
+                  <code>Remove-ScheduledTask</code> - Remove scheduled tasks
+                </li>
+                <li>
+                  <code>Get-TaskStatus</code> - Check task execution status
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <hr />
+          <h2 id="getting-started">Getting Started</h2>
+          <h3 id="prerequisites">Prerequisites</h3>
+          <p><strong>For PowerShell Scripts:</strong></p>
+          <ul>
+            <li>Windows 10/11 or Windows Server 2016+</li>
+            <li>PowerShell 7.0 or later (recommended)</li>
+            <li>Administrator privileges (for some operations)</li>
+          </ul>
+          <p><strong>For Guides:</strong></p>
+          <ul>
+            <li>
+              Relevant technology installed (Docker, PostgreSQL, Redis, etc.)
+            </li>
+            <li>Basic understanding of the technology stack</li>
+            <li>Command-line familiarity</li>
+          </ul>
+          <h3 id="installation">Installation</h3>
+          <ul>
+            <li><strong>Step 1. Clone the repository:</strong></li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">paulnamalomba</span><span class="p">/</span><span class="n">system-management_scripts</span><span class="p">.</span><span class="n">git</span>
 <span class="nb">cd </span><span class="n">system-management_scripts</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Step 2. Set execution policy (if needed):</strong></li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="nb">Set-ExecutionPolicy</span> <span class="n">-ExecutionPolicy</span> <span class="n">RemoteSigned</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
-</code></pre></div>
+          <ul>
+            <li><strong>Step 2. Set execution policy (if needed):</strong></li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nb">Set-ExecutionPolicy</span> <span class="n">-ExecutionPolicy</span> <span class="n">RemoteSigned</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Step 3. Import scripts into your PowerShell session:</strong></li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="c"># Import all functions from a script</span>
+          <ul>
+            <li>
+              <strong
+                >Step 3. Import scripts into your PowerShell session:</strong
+              >
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Import all functions from a script</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">file-operations</span><span class="p">.</span><span class="n">ps1</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">github-management</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Or add to your PowerShell profile for persistent availability</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Step 4. Add to PowerShell Profile (Optional):</strong></li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="c"># Edit your profile</span>
+          <ul>
+            <li>
+              <strong>Step 4. Add to PowerShell Profile (Optional):</strong>
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Edit your profile</span>
 <span class="n">notepad</span> <span class="nv">$PROFILE</span>
 
 <span class="c"># Add this line to source scripts automatically</span>
 <span class="nb">Get-ChildItem</span> <span class="s2">&quot;C:\Path\To\system-management_scripts\windows\*.ps1&quot;</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="p">.</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="usage-examples">Usage Examples</h2>
-<h3 id="example-1-quick-directory-navigation">Example 1: Quick Directory Navigation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Load navigation functions</span>
+          <hr />
+          <h2 id="usage-examples">Usage Examples</h2>
+          <h3 id="example-1-quick-directory-navigation">
+            Example 1: Quick Directory Navigation
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Load navigation functions</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">directory-navigation</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Navigate to work directory</span>
@@ -509,10 +1145,14 @@
 
 <span class="c"># Navigate to OneDrive</span>
 <span class="n">ChDir-OneDrive</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-2-github-workflow-automation">Example 2: GitHub Workflow Automation</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Load GitHub management functions</span>
+          <h3 id="example-2-github-workflow-automation">
+            Example 2: GitHub Workflow Automation
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Load GitHub management functions</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">github-management</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Automated commit, tag, and release</span>
@@ -521,10 +1161,12 @@
     <span class="n">-commitTag</span> <span class="s2">&quot;v1.2.0&quot;</span> <span class="p">`</span>
     <span class="n">-commitMessage</span> <span class="s2">&quot;Added new features and bug fixes&quot;</span> <span class="p">`</span>
     <span class="n">-method</span> <span class="s2">&quot;update&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-3-file-operations">Example 3: File Operations</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Load file operations</span>
+          <h3 id="example-3-file-operations">Example 3: File Operations</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Load file operations</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">file-operations</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Move with overwrite</span>
@@ -532,10 +1174,14 @@
 
 <span class="c"># Find and remove empty directories</span>
 <span class="nb">Remove-EmptyDirectories</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Projects&quot;</span> <span class="n">-Recurse</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-4-python-environment-setup">Example 4: Python Environment Setup</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Load Python environment functions</span>
+          <h3 id="example-4-python-environment-setup">
+            Example 4: Python Environment Setup
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Load Python environment functions</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">python-environment</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Create new virtual environment</span>
@@ -546,10 +1192,12 @@
 
 <span class="c"># Install packages from requirements.txt</span>
 <span class="nb">Install-PythonPackages</span> <span class="n">-RequirementsFile</span> <span class="s2">&quot;.\requirements.txt&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-5-system-analysis">Example 5: System Analysis</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Load utility functions</span>
+          <h3 id="example-5-system-analysis">Example 5: System Analysis</h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Load utility functions</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">utility-functions</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Check if running as administrator</span>
@@ -562,10 +1210,14 @@
 
 <span class="c"># List installed software</span>
 <span class="nb">Get-InstalledSoftware</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="s2">&quot;*Visual Studio*&quot;</span> <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="example-6-using-technical-guides">Example 6: Using Technical Guides</h3>
-<div class="codehilite"><pre><span></span><code><span class="c"># Navigate to guides directory</span>
+          <h3 id="example-6-using-technical-guides">
+            Example 6: Using Technical Guides
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c"># Navigate to guides directory</span>
 <span class="nb">cd </span><span class="n">guides</span>
 
 <span class="c"># View available guides</span>
@@ -576,89 +1228,123 @@
 
 <span class="c"># Or view in terminal with bat (if installed)</span>
 <span class="n">bat</span> <span class="p">.\</span><span class="n">POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE</span><span class="p">.</span><span class="nb">md</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="contributing">Contributing</h2>
-<p>Contributions are welcome! Please follow these guidelines:</p>
-<ul>
-<li><strong>Step 1. Fork the repository</strong></li>
-<li><strong>Step 2. Create a feature branch</strong>: <code>git checkout -b feature/amazing-feature</code></li>
-<li><strong>Step 3. Commit your changes</strong>: <code>git commit -m 'Add amazing feature'</code></li>
-<li><strong>Step 4. Push to the branch</strong>: <code>git push origin feature/amazing-feature</code></li>
-<li><strong>Step 5. Open a Pull Request</strong></li>
-</ul>
-<h3 id="contribution-guidelines">Contribution Guidelines</h3>
-<p><strong>For PowerShell Scripts:</strong></p>
-<ul>
-<li>Follow PowerShell best practices and style guidelines</li>
-<li>Include comment-based help for all functions</li>
-<li>Add parameter validation and error handling</li>
-<li>Test on PowerShell 7+ before submitting</li>
-</ul>
-<p><strong>For Technical Guides:</strong></p>
-<ul>
-<li>Follow the existing template structure</li>
-<li>Include practical, copy-paste ready examples</li>
-<li>Cover security considerations and best practices</li>
-<li>Add troubleshooting section with common issues</li>
-<li>Include references and further reading</li>
-</ul>
-<hr />
-<h2 id="license">License</h2>
-<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
-<hr />
-<h2 id="acknowledgments">Acknowledgments</h2>
-<ul>
-<li>PowerShell community for extensive documentation and examples</li>
-<li>Microsoft Graph PowerShell SDK team</li>
-<li>Open-source contributors to the technologies covered in guides</li>
-<li>DevOps and SRE communities for best practices</li>
-</ul>
-<hr />
-<h2 id="statistics">Statistics</h2>
-<ul>
-<li><strong>Power User Guides</strong>: 40 comprehensive technical guides</li>
-<li><strong>PowerShell Scripts</strong>: 11 automation script collections</li>
-<li><strong>Technologies Covered</strong>: Git, GitHub CLI, Docker, PostgreSQL, Redis, RabbitMQ, Kafka, Azure AD, SSL/TLS, .NET, and more</li>
-<li><strong>Lines of Documentation</strong>: 10,000+ lines of technical documentation</li>
-<li><strong>Code Examples</strong>: 100+ production-ready code snippets</li>
-</ul>
-<hr />
-<p><strong>Last Updated</strong>: March 01, 2026<br />
-<strong>Repository Status</strong>: Active Development<br />
-<strong>PowerShell Version</strong>: 7.0+<br />
-<strong>Windows Compatibility</strong>: Windows 10/11, Server 2016+</p></article>
-        </div>
+          <hr />
+          <h2 id="contributing">Contributing</h2>
+          <p>Contributions are welcome! Please follow these guidelines:</p>
+          <ul>
+            <li><strong>Step 1. Fork the repository</strong></li>
+            <li>
+              <strong>Step 2. Create a feature branch</strong>:
+              <code>git checkout -b feature/amazing-feature</code>
+            </li>
+            <li>
+              <strong>Step 3. Commit your changes</strong>:
+              <code>git commit -m 'Add amazing feature'</code>
+            </li>
+            <li>
+              <strong>Step 4. Push to the branch</strong>:
+              <code>git push origin feature/amazing-feature</code>
+            </li>
+            <li><strong>Step 5. Open a Pull Request</strong></li>
+          </ul>
+          <h3 id="contribution-guidelines">Contribution Guidelines</h3>
+          <p><strong>For PowerShell Scripts:</strong></p>
+          <ul>
+            <li>Follow PowerShell best practices and style guidelines</li>
+            <li>Include comment-based help for all functions</li>
+            <li>Add parameter validation and error handling</li>
+            <li>Test on PowerShell 7+ before submitting</li>
+          </ul>
+          <p><strong>For Technical Guides:</strong></p>
+          <ul>
+            <li>Follow the existing template structure</li>
+            <li>Include practical, copy-paste ready examples</li>
+            <li>Cover security considerations and best practices</li>
+            <li>Add troubleshooting section with common issues</li>
+            <li>Include references and further reading</li>
+          </ul>
+          <hr />
+          <h2 id="license">License</h2>
+          <p>
+            This project is licensed under the MIT License - see the
+            <a href="LICENSE">LICENSE</a> file for details.
+          </p>
+          <hr />
+          <h2 id="acknowledgments">Acknowledgments</h2>
+          <ul>
+            <li>
+              PowerShell community for extensive documentation and examples
+            </li>
+            <li>Microsoft Graph PowerShell SDK team</li>
+            <li>
+              Open-source contributors to the technologies covered in guides
+            </li>
+            <li>DevOps and SRE communities for best practices</li>
+          </ul>
+          <hr />
+          <h2 id="statistics">Statistics</h2>
+          <ul>
+            <li>
+              <strong>Power User Guides</strong>: 40 comprehensive technical
+              guides
+            </li>
+            <li>
+              <strong>PowerShell Scripts</strong>: 11 automation script
+              collections
+            </li>
+            <li>
+              <strong>Technologies Covered</strong>: Git, GitHub CLI, Docker,
+              PostgreSQL, Redis, RabbitMQ, Kafka, Azure AD, SSL/TLS, .NET, and
+              more
+            </li>
+            <li>
+              <strong>Lines of Documentation</strong>: 10,000+ lines of
+              technical documentation
+            </li>
+            <li>
+              <strong>Code Examples</strong>: 100+ production-ready code
+              snippets
+            </li>
+          </ul>
+          <hr />
+          <p>
+            <strong>Last Updated</strong>: March 01, 2026<br />
+            <strong>Repository Status</strong>: Active Development<br />
+            <strong>PowerShell Version</strong>: 7.0+<br />
+            <strong>Windows Compatibility</strong>: Windows 10/11, Server 2016+
+          </p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

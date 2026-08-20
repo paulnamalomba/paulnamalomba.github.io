@@ -1,864 +1,1078 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AfriComp7 — Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      AfriComp7 — Logarithmic Strain-based Glen's Flow Law for Glaciological
+      Applications
+    </title>
 
     <!-- KaTeX for equations -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-        onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+      onload="
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+        })
+      "
+    ></script>
 
     <!-- html2pdf.js for direct PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        /* ============================================================
+      /* ============================================================
            CSS VARIABLES & RESET
            ============================================================ */
-        :root {
-            --uct-blue: #003B5C;
-            --uct-blue-light: #005a8c;
-            --ice-cyan: #89CFF0;
-            --ice-white: #E8F4FD;
-            --glacier-teal: #2E8B8B;
-            --glacier-dark: #1a5252;
-            --snow-white: #F8FBFF;
-            --warm-accent: #E8913A;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --text-light: #7a7a9a;
-            --slide-max-width: 1200px;
-            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+      :root {
+        --uct-blue: #003b5c;
+        --uct-blue-light: #005a8c;
+        --ice-cyan: #89cff0;
+        --ice-white: #e8f4fd;
+        --glacier-teal: #2e8b8b;
+        --glacier-dark: #1a5252;
+        --snow-white: #f8fbff;
+        --warm-accent: #e8913a;
+        --text-primary: #1a1a2e;
+        --text-secondary: #4a4a6a;
+        --text-light: #7a7a9a;
+        --slide-max-width: 1200px;
+        --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 16px; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text-primary);
-            background: var(--snow-white);
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        color: var(--text-primary);
+        background: var(--snow-white);
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
 
-        /* ============================================================
+      /* ============================================================
            NAVIGATION
            ============================================================ */
-        .slide-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(0, 59, 92, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 2px solid var(--ice-cyan);
-            padding: 0.6rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-        }
+      .slide-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(0, 59, 92, 0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 2px solid var(--ice-cyan);
+        padding: 0.6rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
 
-        .nav-brand {
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
+      .nav-brand {
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
 
-        .nav-brand span { color: var(--ice-cyan); }
+      .nav-brand span {
+        color: var(--ice-cyan);
+      }
 
-        .nav-links {
-            display: flex;
-            gap: 0.25rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            list-style: none;
-        }
+      .nav-links {
+        display: flex;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+      }
 
-        .nav-links a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            font-size: 0.72rem;
-            font-weight: 500;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            transition: var(--transition-smooth);
-            white-space: nowrap;
-        }
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        font-size: 0.72rem;
+        font-weight: 500;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        transition: var(--transition-smooth);
+        white-space: nowrap;
+      }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: white;
-            background: rgba(137, 207, 240, 0.2);
-        }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: white;
+        background: rgba(137, 207, 240, 0.2);
+      }
 
-        /* ============================================================
+      /* ============================================================
            SCROLL-SNAP CONTAINER
            ============================================================ */
-        body {
-            scroll-snap-type: y proximity;
-        }
+      body {
+        scroll-snap-type: y proximity;
+      }
 
-        /* ============================================================
+      /* ============================================================
            SLIDE SECTIONS
            ============================================================ */
-        .slide {
-            min-height: 100vh;
-            padding: 5rem 2rem 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            scroll-snap-align: start;
-        }
+      .slide {
+        min-height: 100vh;
+        padding: 5rem 2rem 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        scroll-snap-align: start;
+      }
 
-        .slide-inner {
-            max-width: var(--slide-max-width);
-            width: 100%;
-            margin: 0 auto;
-        }
+      .slide-inner {
+        max-width: var(--slide-max-width);
+        width: 100%;
+        margin: 0 auto;
+      }
 
-        .slide-number {
-            position: absolute;
-            top: 5rem;
-            right: 2rem;
-            font-size: 5rem;
-            font-weight: 900;
-            color: rgba(0, 58, 92, 0.188);
-            line-height: 1;
-        }
+      .slide-number {
+        position: absolute;
+        top: 5rem;
+        right: 2rem;
+        font-size: 5rem;
+        font-weight: 900;
+        color: rgba(0, 58, 92, 0.188);
+        line-height: 1;
+      }
 
-        /* ============================================================
+      /* ============================================================
            TITLE SLIDE — full-bleed white cover
            ============================================================ */
-        .slide-title {
-            background: #ffffff;
-            color: var(--text-primary);
-            text-align: left;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-        }
+      .slide-title {
+        background: #ffffff;
+        color: var(--text-primary);
+        text-align: left;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
 
-        .slide-title .slide-inner {
-            max-width: 1400px;
-            padding: 3rem 4rem;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            flex: 1;
-            gap: 2rem;
-        }
+      .slide-title .slide-inner {
+        max-width: 1400px;
+        padding: 3rem 4rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex: 1;
+        gap: 2rem;
+      }
 
-        .title-left {
-            max-width: 750px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+      .title-left {
+        max-width: 750px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
 
-        .title-right {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
+      .title-right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+      }
 
-        .supervisor-block {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
+      .supervisor-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
 
-        .supervisor-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-            padding-left: 0.5rem;
-        }
+      .supervisor-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-secondary);
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+        padding-left: 0.5rem;
+      }
 
-        .supervisor-profile {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            background: var(--snow-white);
-            padding: 0.6rem 1.5rem 0.6rem 0.6rem;
-            border-radius: 50px;
-            border: 1px solid rgba(0,59,92,0.08);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            min-width: 360px;
-        }
+      .supervisor-profile {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        background: var(--snow-white);
+        padding: 0.6rem 1.5rem 0.6rem 0.6rem;
+        border-radius: 50px;
+        border: 1px solid rgba(0, 59, 92, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        min-width: 360px;
+      }
 
-        .supervisor-profile:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,59,92,0.08);
-            border-color: rgba(137,207,240,0.4);
-        }
+      .supervisor-profile:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 59, 92, 0.08);
+        border-color: rgba(137, 207, 240, 0.4);
+      }
 
-        .supervisor-profile img {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
+      .supervisor-profile img {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
 
-        .supervisor-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            line-height: 1.3;
-        }
+      .supervisor-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.3;
+      }
 
-        .supervisor-name-txt {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--text-primary);
-        }
+      .supervisor-name-txt {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--text-primary);
+      }
 
-        .supervisor-title {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
+      .supervisor-title {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+      }
 
-        .slide-title .slide-number { display: none; }
+      .slide-title .slide-number {
+        display: none;
+      }
 
-        .conference-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--uct-blue);
-            color: white;
-            padding: 0.4rem 1rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 2.5rem;
-            width: fit-content;
-        }
+      .conference-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--uct-blue);
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem;
+        width: fit-content;
+      }
 
-        .slide-title h1 {
-            font-size: clamp(2rem, 5vw, 3.8rem);
-            font-weight: 900;
-            line-height: 1.1;
-            color: #000000;
-            margin: 0 0 2rem;
-            max-width: 850px;
-        }
+      .slide-title h1 {
+        font-size: clamp(2rem, 5vw, 3.8rem);
+        font-weight: 900;
+        line-height: 1.1;
+        color: #000000;
+        margin: 0 0 2rem;
+        max-width: 850px;
+      }
 
-        .author-block {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.25rem;
-            margin-top: 0;
-        }
+      .author-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+        margin-top: 0;
+      }
 
-        .author-name {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
+      .author-name {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
 
-        .author-affiliation {
-            font-size: 0.95rem;
-            color: var(--uct-blue);
-            font-style: italic;
-        }
+      .author-affiliation {
+        font-size: 0.95rem;
+        color: var(--uct-blue);
+        font-style: italic;
+      }
 
-        .author-affiliation a {
-            color: var(--glacier-teal);
-            text-decoration: none;
-        }
+      .author-affiliation a {
+        color: var(--glacier-teal);
+        text-decoration: none;
+      }
 
-        /* Logo strip at the bottom of the title slide */
-        .title-logos {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-            margin-top: auto;
-            padding: 2rem 4rem 3rem;
-            flex-wrap: wrap;
-        }
+      /* Logo strip at the bottom of the title slide */
+      .title-logos {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+        margin-top: auto;
+        padding: 2rem 4rem 3rem;
+        flex-wrap: wrap;
+      }
 
-        /* Logo strip at the bottom of the title slide */
-        .title-logos {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-            margin-top: auto;
-            padding: 2rem 4rem 3rem;
-            flex-wrap: wrap;
-        }
+      /* Logo strip at the bottom of the title slide */
+      .title-logos {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+        margin-top: auto;
+        padding: 2rem 4rem 3rem;
+        flex-wrap: wrap;
+      }
 
-        .title-logos img {
-            height: 48px;
-            width: auto;
-            object-fit: contain;
-            filter: grayscale(0);
-            transition: filter 0.3s ease;
-        }
+      .title-logos img {
+        height: 48px;
+        width: auto;
+        object-fit: contain;
+        filter: grayscale(0);
+        transition: filter 0.3s ease;
+      }
 
-        .title-keywords {
-            display: none;
-        }
+      .title-keywords {
+        display: none;
+      }
 
-        /* Supervisor/Co-author block */
-        .supervisor-block {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.15rem;
-            margin-left: auto;
-            padding-left: 2rem;
-            border-left: 2px solid var(--ice-cyan);
-        }
+      /* Supervisor/Co-author block */
+      .supervisor-block {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.15rem;
+        margin-left: auto;
+        padding-left: 2rem;
+        border-left: 2px solid var(--ice-cyan);
+      }
 
-        .supervisor-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--uct-blue);
-            font-weight: 700;
-            margin-bottom: 0.2rem;
-        }
+      .supervisor-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--uct-blue);
+        font-weight: 700;
+        margin-bottom: 0.2rem;
+      }
 
-        .supervisor-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
+      .supervisor-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
 
-        /* ============================================================
+      /* ============================================================
            SECTION HEADERS
            ============================================================ */
-        .section-header {
-            margin-bottom: 2.5rem;
-        }
+      .section-header {
+        margin-bottom: 2.5rem;
+      }
 
-        .section-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--glacier-teal);
-            margin-bottom: 0.75rem;
-        }
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--glacier-teal);
+        margin-bottom: 0.75rem;
+      }
 
-        .section-header h2 {
-            font-size: clamp(1.6rem, 3vw, 2.4rem);
-            font-weight: 800;
-            color: var(--uct-blue);
-            line-height: 1.2;
-        }
+      .section-header h2 {
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        font-weight: 800;
+        color: var(--uct-blue);
+        line-height: 1.2;
+      }
 
-        .section-header p {
-            margin-top: 1rem;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            max-width: 700px;
-        }
+      .section-header p {
+        margin-top: 1rem;
+        color: var(--text-secondary);
+        font-size: 1rem;
+        max-width: 700px;
+      }
 
-        /* ============================================================
+      /* ============================================================
            CONTENT CARDS
            ============================================================ */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(0, 59, 92, 0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            transition: var(--transition-smooth);
-        }
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid rgba(0, 59, 92, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        transition: var(--transition-smooth);
+      }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-            border-color: var(--ice-cyan);
-        }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        border-color: var(--ice-cyan);
+      }
 
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 1.2rem;
-        }
+      .card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+      }
 
-        .card-icon.blue { background: rgba(0,59,92,0.1); color: var(--uct-blue); }
-        .card-icon.teal { background: rgba(46,139,139,0.1); color: var(--glacier-teal); }
-        .card-icon.orange { background: rgba(232,145,58,0.1); color: var(--warm-accent); }
-        .card-icon.cyan { background: rgba(137,207,240,0.2); color: var(--uct-blue-light); }
+      .card-icon.blue {
+        background: rgba(0, 59, 92, 0.1);
+        color: var(--uct-blue);
+      }
+      .card-icon.teal {
+        background: rgba(46, 139, 139, 0.1);
+        color: var(--glacier-teal);
+      }
+      .card-icon.orange {
+        background: rgba(232, 145, 58, 0.1);
+        color: var(--warm-accent);
+      }
+      .card-icon.cyan {
+        background: rgba(137, 207, 240, 0.2);
+        color: var(--uct-blue-light);
+      }
 
-        .card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--uct-blue);
-            margin-bottom: 0.75rem;
-        }
+      .card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--uct-blue);
+        margin-bottom: 0.75rem;
+      }
 
-        .card p, .card ul {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.65;
-        }
+      .card p,
+      .card ul {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.65;
+      }
 
-        .card ul {
-            padding-left: 1.2rem;
-        }
+      .card ul {
+        padding-left: 1.2rem;
+      }
 
-        .card ul li {
-            margin-bottom: 0.4rem;
-        }
+      .card ul li {
+        margin-bottom: 0.4rem;
+      }
 
-        /* ============================================================
+      /* ============================================================
            EQUATION BLOCKS
            ============================================================ */
-        .equation-block {
-            background: linear-gradient(135deg, var(--ice-white) 0%, white 100%);
-            border-left: 4px solid var(--glacier-teal);
-            border-radius: 0 12px 12px 0;
-            padding: 1.5rem 2rem;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-        }
+      .equation-block {
+        background: linear-gradient(135deg, var(--ice-white) 0%, white 100%);
+        border-left: 4px solid var(--glacier-teal);
+        border-radius: 0 12px 12px 0;
+        padding: 1.5rem 2rem;
+        margin: 1.5rem 0;
+        overflow-x: auto;
+      }
 
-        .equation-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--glacier-teal);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.75rem;
-        }
+      .equation-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--glacier-teal);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.75rem;
+      }
 
-        /* ============================================================
+      /* ============================================================
            FIGURE CONTAINERS
            ============================================================ */
-        .figure-container {
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid rgba(0,59,92,0.08);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            text-align: center;
-            margin: 1.5rem 0;
-        }
+      .figure-container {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(0, 59, 92, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        text-align: center;
+        margin: 1.5rem 0;
+      }
 
-        .figure-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
+      .figure-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
 
-        .figure-caption {
-            font-size: 0.82rem;
-            color: var(--text-light);
-            margin-top: 1rem;
-            font-style: italic;
-        }
+      .figure-caption {
+        font-size: 0.82rem;
+        color: var(--text-light);
+        margin-top: 1rem;
+        font-style: italic;
+      }
 
-        /* ============================================================
+      /* ============================================================
            TWO-COLUMN LAYOUTS
            ============================================================ */
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
 
-        .three-col {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
+      .three-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
 
-        /* ============================================================
+      /* ============================================================
            RESPONSIVE — MOBILE (≤ 480px)
            ============================================================ */
-        @media (max-width: 480px) {
-            html { font-size: 14px; }
-            .slide { padding: 4.5rem 1rem 1.5rem; }
-            .slide-title .slide-inner { padding: 2rem 1.5rem; }
-            .slide-title h1 { font-size: 1.8rem; }
-            .title-logos { padding: 1.5rem 1.5rem 2rem; gap: 1.5rem; }
-            .title-logos img { height: 32px; }
-            .two-col, .three-col { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .card { padding: 1.25rem; }
-            .equation-block { padding: 1rem 1.2rem; }
-            .innovation-highlight { padding: 1.5rem; }
-            .pipeline { flex-direction: column; gap: 0.5rem; }
-            .pipeline-arrow { transform: rotate(90deg); }
-            .pipeline-step { min-width: unset; width: 100%; }
-            .slide-number { font-size: 2.5rem; top: 4rem; right: 1rem; }
-            .styled-table { font-size: 0.78rem; }
-            .styled-table th, .styled-table td { padding: 0.5rem 0.6rem; }
+      @media (max-width: 480px) {
+        html {
+          font-size: 14px;
         }
+        .slide {
+          padding: 4.5rem 1rem 1.5rem;
+        }
+        .slide-title .slide-inner {
+          padding: 2rem 1.5rem;
+        }
+        .slide-title h1 {
+          font-size: 1.8rem;
+        }
+        .title-logos {
+          padding: 1.5rem 1.5rem 2rem;
+          gap: 1.5rem;
+        }
+        .title-logos img {
+          height: 32px;
+        }
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .card {
+          padding: 1.25rem;
+        }
+        .equation-block {
+          padding: 1rem 1.2rem;
+        }
+        .innovation-highlight {
+          padding: 1.5rem;
+        }
+        .pipeline {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .pipeline-arrow {
+          transform: rotate(90deg);
+        }
+        .pipeline-step {
+          min-width: unset;
+          width: 100%;
+        }
+        .slide-number {
+          font-size: 2.5rem;
+          top: 4rem;
+          right: 1rem;
+        }
+        .styled-table {
+          font-size: 0.78rem;
+        }
+        .styled-table th,
+        .styled-table td {
+          padding: 0.5rem 0.6rem;
+        }
+      }
 
-        /* ============================================================
+      /* ============================================================
            RESPONSIVE — SMALL TABLET (481–768px)
            ============================================================ */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .slide { padding: 5rem 1.25rem 2rem; }
-            .slide-title .slide-inner { padding: 2.5rem 2rem; }
-            .slide-title h1 { font-size: 2.2rem; }
-            .title-logos { padding: 1.5rem 2rem 2.5rem; gap: 2rem; }
-            .title-logos img { height: 38px; }
-            .two-col, .three-col { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .pipeline { flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
-            .pipeline-step { min-width: 140px; }
+      @media (min-width: 481px) and (max-width: 768px) {
+        .slide {
+          padding: 5rem 1.25rem 2rem;
         }
+        .slide-title .slide-inner {
+          padding: 2.5rem 2rem;
+        }
+        .slide-title h1 {
+          font-size: 2.2rem;
+        }
+        .title-logos {
+          padding: 1.5rem 2rem 2.5rem;
+          gap: 2rem;
+        }
+        .title-logos img {
+          height: 38px;
+        }
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        .pipeline {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        .pipeline-step {
+          min-width: 140px;
+        }
+      }
 
-        /* ============================================================
+      /* ============================================================
            RESPONSIVE — TABLET (769–1024px)
            ============================================================ */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .slide { padding: 5rem 1.5rem 2rem; }
-            .slide-title .slide-inner { padding: 3rem 3rem; }
-            .two-col { gap: 1.5rem; }
-            .nav-links a { font-size: 0.68rem; padding: 0.25rem 0.4rem; }
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .slide {
+          padding: 5rem 1.5rem 2rem;
         }
+        .slide-title .slide-inner {
+          padding: 3rem 3rem;
+        }
+        .two-col {
+          gap: 1.5rem;
+        }
+        .nav-links a {
+          font-size: 0.68rem;
+          padding: 0.25rem 0.4rem;
+        }
+      }
 
-        /* ============================================================
+      /* ============================================================
            RESPONSIVE — LARGE / PROJECTOR (≥ 1600px)
            ============================================================ */
-        @media (min-width: 1600px) {
-            html { font-size: 18px; }
-            :root { --slide-max-width: 1400px; }
-            .slide-title h1 { font-size: 4.2rem; }
-            .title-logos img { height: 60px; }
-            .slide-number { font-size: 5rem; }
-            .section-header h2 { font-size: 2.8rem; }
-            .card { padding: 2.5rem; }
+      @media (min-width: 1600px) {
+        html {
+          font-size: 18px;
         }
+        :root {
+          --slide-max-width: 1400px;
+        }
+        .slide-title h1 {
+          font-size: 4.2rem;
+        }
+        .title-logos img {
+          height: 60px;
+        }
+        .slide-number {
+          font-size: 5rem;
+        }
+        .section-header h2 {
+          font-size: 2.8rem;
+        }
+        .card {
+          padding: 2.5rem;
+        }
+      }
 
-        /* ============================================================
+      /* ============================================================
            RESPONSIVE — ULTRA-WIDE / PROJECTOR (≥ 2000px)
            ============================================================ */
-        @media (min-width: 2000px) {
-            html { font-size: 20px; }
-            :root { --slide-max-width: 1600px; }
-            .slide-title h1 { font-size: 5rem; }
-            .title-logos img { height: 72px; }
-            .slide-title .slide-inner { padding: 4rem 6rem; }
-            .title-logos { padding: 3rem 6rem 4rem; }
+      @media (min-width: 2000px) {
+        html {
+          font-size: 20px;
         }
+        :root {
+          --slide-max-width: 1600px;
+        }
+        .slide-title h1 {
+          font-size: 5rem;
+        }
+        .title-logos img {
+          height: 72px;
+        }
+        .slide-title .slide-inner {
+          padding: 4rem 6rem;
+        }
+        .title-logos {
+          padding: 3rem 6rem 4rem;
+        }
+      }
 
-        /* ============================================================
+      /* ============================================================
            PIPELINE / FLOW DIAGRAMS
            ============================================================ */
-        .pipeline {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            flex-wrap: wrap;
-            margin: 2rem 0;
-        }
+      .pipeline {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        flex-wrap: wrap;
+        margin: 2rem 0;
+      }
 
-        .pipeline-step {
-            background: white;
-            border: 2px solid var(--ice-cyan);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            text-align: center;
-            min-width: 180px;
-            transition: var(--transition-smooth);
-        }
+      .pipeline-step {
+        background: white;
+        border: 2px solid var(--ice-cyan);
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        text-align: center;
+        min-width: 180px;
+        transition: var(--transition-smooth);
+      }
 
-        .pipeline-step:hover {
-            background: var(--ice-white);
-            transform: scale(1.03);
-        }
+      .pipeline-step:hover {
+        background: var(--ice-white);
+        transform: scale(1.03);
+      }
 
-        .pipeline-step h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--uct-blue);
-            margin-bottom: 0.3rem;
-        }
+      .pipeline-step h4 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--uct-blue);
+        margin-bottom: 0.3rem;
+      }
 
-        .pipeline-step p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
+      .pipeline-step p {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
 
-        .pipeline-arrow {
-            font-size: 1.5rem;
-            color: var(--glacier-teal);
-            padding: 0 0.5rem;
-        }
+      .pipeline-arrow {
+        font-size: 1.5rem;
+        color: var(--glacier-teal);
+        padding: 0 0.5rem;
+      }
 
-        /* ============================================================
+      /* ============================================================
            HIGHLIGHT / INNOVATION BLOCKS
            ============================================================ */
-        .innovation-highlight {
-            background: linear-gradient(135deg, var(--uct-blue) 0%, var(--glacier-dark) 100%);
-            color: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-        }
+      .innovation-highlight {
+        background: linear-gradient(
+          135deg,
+          var(--uct-blue) 0%,
+          var(--glacier-dark) 100%
+        );
+        color: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        margin: 2rem 0;
+      }
 
-        .innovation-highlight h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--ice-cyan);
-        }
+      .innovation-highlight h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--ice-cyan);
+      }
 
-        .innovation-highlight p,
-        .innovation-highlight li {
-            color: rgba(255,255,255,0.9);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
+      .innovation-highlight p,
+      .innovation-highlight li {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
 
-        .innovation-highlight ul {
-            padding-left: 1.2rem;
-            margin-top: 0.5rem;
-        }
+      .innovation-highlight ul {
+        padding-left: 1.2rem;
+        margin-top: 0.5rem;
+      }
 
-        .innovation-highlight li { margin-bottom: 0.5rem; }
+      .innovation-highlight li {
+        margin-bottom: 0.5rem;
+      }
 
-        /* ============================================================
+      /* ============================================================
            TABLE STYLES
            ============================================================ */
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            font-size: 0.88rem;
-            margin: 1.5rem 0;
-        }
+      .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        font-size: 0.88rem;
+        margin: 1.5rem 0;
+      }
 
-        .styled-table thead {
-            background: var(--uct-blue);
-            color: white;
-        }
+      .styled-table thead {
+        background: var(--uct-blue);
+        color: white;
+      }
 
-        .styled-table th {
-            padding: 0.9rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.82rem;
-            letter-spacing: 0.5px;
-        }
+      .styled-table th {
+        padding: 0.9rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 0.5px;
+      }
 
-        .styled-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            color: var(--text-secondary);
-        }
+      .styled-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        color: var(--text-secondary);
+      }
 
-        .styled-table tbody tr:hover {
-            background: var(--ice-white);
-        }
+      .styled-table tbody tr:hover {
+        background: var(--ice-white);
+      }
 
-        /* ============================================================
+      /* ============================================================
            SESKA ARCHITECTURE DIAGRAM
            ============================================================ */
-        .arch-layer {
-            background: white;
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            border-left: 4px solid var(--glacier-teal);
-            margin-bottom: 0.75rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-        }
+      .arch-layer {
+        background: white;
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        border-left: 4px solid var(--glacier-teal);
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      }
 
-        .arch-layer h4 {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: var(--uct-blue);
-            margin-bottom: 0.3rem;
-        }
+      .arch-layer h4 {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--uct-blue);
+        margin-bottom: 0.3rem;
+      }
 
-        .arch-layer p {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-        }
+      .arch-layer p {
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+      }
 
-        .arch-layer .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            margin-top: 0.5rem;
-        }
+      .arch-layer .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+      }
 
-        .tech-tag {
-            background: rgba(46,139,139,0.1);
-            color: var(--glacier-teal);
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            font-family: 'JetBrains Mono', monospace;
-        }
+      .tech-tag {
+        background: rgba(46, 139, 139, 0.1);
+        color: var(--glacier-teal);
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        font-family: "JetBrains Mono", monospace;
+      }
 
-        /* ============================================================
+      /* ============================================================
            ALTERNATING SLIDE BACKGROUNDS
            ============================================================ */
-        .slide:nth-child(even) {
-            background: white;
-        }
+      .slide:nth-child(even) {
+        background: white;
+      }
 
-        .slide:nth-child(odd) {
-            background: var(--snow-white);
-        }
+      .slide:nth-child(odd) {
+        background: var(--snow-white);
+      }
 
-        .slide-title { background: #ffffff; }
-        .slide-closing { background: linear-gradient(135deg, var(--glacier-dark), var(--uct-blue)); color: white; }
-        .slide-closing h2 { color: var(--ice-cyan); }
-        .slide-closing p, .slide-closing li { color: rgba(255,255,255,0.9); }
-        .slide-closing a { color: var(--ice-cyan); }
+      .slide-title {
+        background: #ffffff;
+      }
+      .slide-closing {
+        background: linear-gradient(
+          135deg,
+          var(--glacier-dark),
+          var(--uct-blue)
+        );
+        color: white;
+      }
+      .slide-closing h2 {
+        color: var(--ice-cyan);
+      }
+      .slide-closing p,
+      .slide-closing li {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .slide-closing a {
+        color: var(--ice-cyan);
+      }
 
-        /* ============================================================
+      /* ============================================================
            SCROLL ANIMATIONS
            ============================================================ */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-        /* ============================================================
+      /* ============================================================
            PRINT / UTILITY
            ============================================================ */
-        .text-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
+      .text-mono {
+        font-family: "JetBrains Mono", monospace;
+      }
 
-        .text-center { text-align: center; }
-        .mt-1 { margin-top: 1rem; }
-        .mt-2 { margin-top: 2rem; }
-        .mb-1 { margin-bottom: 1rem; }
-        .full-width { grid-column: 1 / -1; }
+      .text-center {
+        text-align: center;
+      }
+      .mt-1 {
+        margin-top: 1rem;
+      }
+      .mt-2 {
+        margin-top: 2rem;
+      }
+      .mb-1 {
+        margin-bottom: 1rem;
+      }
+      .full-width {
+        grid-column: 1 / -1;
+      }
 
-        /* Code blocks */
-        .code-block {
-            background: #1e1e2e;
-            color: #cdd6f4;
-            border-radius: 12px;
-            padding: 1.5rem;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
-            line-height: 1.6;
-            overflow-x: auto;
-            margin: 1rem 0;
-        }
+      /* Code blocks */
+      .code-block {
+        background: #1e1e2e;
+        color: #cdd6f4;
+        border-radius: 12px;
+        padding: 1.5rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.78rem;
+        line-height: 1.6;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
 
-        .code-block .comment { color: #6c7086; }
-        .code-block .keyword { color: #cba6f7; }
-        .code-block .type { color: #89b4fa; }
-        .code-block .func { color: #a6e3a1; }
-        /* ============================================================
+      .code-block .comment {
+        color: #6c7086;
+      }
+      .code-block .keyword {
+        color: #cba6f7;
+      }
+      .code-block .type {
+        color: #89b4fa;
+      }
+      .code-block .func {
+        color: #a6e3a1;
+      }
+      /* ============================================================
            PDF EXPORT OVERRIDES
            ============================================================ */
-        .pdf-btn {
-            background: rgba(137, 207, 240, 0.25) !important;
-            color: white !important;
-            border: 1px solid var(--ice-cyan);
-            margin-left: 0.5rem;
-        }
-        .pdf-btn:hover {
-            background: var(--uct-blue) !important;
-        }
+      .pdf-btn {
+        background: rgba(137, 207, 240, 0.25) !important;
+        color: white !important;
+        border: 1px solid var(--ice-cyan);
+        margin-left: 0.5rem;
+      }
+      .pdf-btn:hover {
+        background: var(--uct-blue) !important;
+      }
 
-        html.pdf-export-mode,
-        body.pdf-export-mode {
-            scroll-snap-type: none !important;
-            scroll-behavior: auto !important;
-            overflow: visible !important;
-            height: auto !important;
-            width: 1920px !important;
-            font-size: 18px !important;
-        }
-        body.pdf-export-mode .slide-nav {
-            display: none !important;
-        }
-        body.pdf-export-mode .slide {
-            page-break-after: always;
-            page-break-inside: auto;
-            min-height: 1080px !important;
-            height: auto !important;
-            max-height: none !important;
-            padding: 4rem 6rem !important;
-            overflow: visible !important;
-        }
-        body.pdf-export-mode .slide:last-child {
-            page-break-after: auto;
-        }
-        body.pdf-export-mode .slide-inner { max-width: 1400px !important; }
-        body.pdf-export-mode .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
-        body.pdf-export-mode .slide-title h1 { font-size: 4.2rem !important; }
-        body.pdf-export-mode .title-logos img { height: 60px !important; }
-        body.pdf-export-mode .slide-number { font-size: 5rem !important; top: 4rem !important; right: 4rem !important; }
-        body.pdf-export-mode .section-header h2 { font-size: 2.8rem !important; }
-        body.pdf-export-mode .card { padding: 2.5rem !important; }
+      html.pdf-export-mode,
+      body.pdf-export-mode {
+        scroll-snap-type: none !important;
+        scroll-behavior: auto !important;
+        overflow: visible !important;
+        height: auto !important;
+        width: 1920px !important;
+        font-size: 18px !important;
+      }
+      body.pdf-export-mode .slide-nav {
+        display: none !important;
+      }
+      body.pdf-export-mode .slide {
+        page-break-after: always;
+        page-break-inside: auto;
+        min-height: 1080px !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 4rem 6rem !important;
+        overflow: visible !important;
+      }
+      body.pdf-export-mode .slide:last-child {
+        page-break-after: auto;
+      }
+      body.pdf-export-mode .slide-inner {
+        max-width: 1400px !important;
+      }
+      body.pdf-export-mode .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      body.pdf-export-mode .slide-title h1 {
+        font-size: 4.2rem !important;
+      }
+      body.pdf-export-mode .title-logos img {
+        height: 60px !important;
+      }
+      body.pdf-export-mode .slide-number {
+        font-size: 5rem !important;
+        top: 4rem !important;
+        right: 4rem !important;
+      }
+      body.pdf-export-mode .section-header h2 {
+        font-size: 2.8rem !important;
+      }
+      body.pdf-export-mode .card {
+        padding: 2.5rem !important;
+      }
     </style>
-</head>
-<body>
-
-<!-- ================================================================
+  </head>
+  <body>
+    <!-- ================================================================
      NAVIGATION
      ================================================================ -->
-<nav class="slide-nav">
-    <div class="nav-brand"><span>AfriComp7</span> · Cape Town 2026</div>
-    <ul class="nav-links">
+    <nav class="slide-nav">
+      <div class="nav-brand"><span>AfriComp7</span> · Cape Town 2026</div>
+      <ul class="nav-links">
         <li><a href="#title">Title</a></li>
         <li><a href="#motivation">Motivation</a></li>
         <li><a href="#kinematics">Kinematics</a></li>
@@ -869,169 +1083,259 @@
         <li><a href="#seska">SESKA</a></li>
         <li><a href="#results">Results</a></li>
         <li><a href="#conclusions">Conclusions</a></li>
-        <li><a href="#" id="downloadPdfBtn" class="pdf-btn" title="Download Presentation as PDF"><i class="fas fa-file-pdf"></i> Download PDF</a></li>
-    </ul>
-</nav>
+        <li>
+          <a
+            href="#"
+            id="downloadPdfBtn"
+            class="pdf-btn"
+            title="Download Presentation as PDF"
+            ><i class="fas fa-file-pdf"></i> Download PDF</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 1 — TITLE
      ================================================================ -->
-<section id="title" class="slide slide-title">
-    <div class="slide-inner">
+    <section id="title" class="slide slide-title">
+      <div class="slide-inner">
         <div class="title-left">
-            <div class="conference-badge">
-                <i class="fas fa-globe-africa"></i>
-                AfriComp7 · 25–27 February 2026 · Cape Town
-            </div>
+          <div class="conference-badge">
+            <i class="fas fa-globe-africa"></i>
+            AfriComp7 · 25–27 February 2026 · Cape Town
+          </div>
 
-            <h1>Logarithmic Strain-based Glen's Flow Law for Glaciological Applications</h1>
+          <h1>
+            Logarithmic Strain-based Glen's Flow Law for Glaciological
+            Applications
+          </h1>
 
-            <div class="author-block">
-                <div class="author-name">Mr. Paul Namalomba</div>
-                <div class="author-affiliation">BSc(Hons) <em>Civil</em>, MScEng <em>Structures</em></div>
+          <div class="author-block">
+            <div class="author-name">Mr. Paul Namalomba</div>
+            <div class="author-affiliation">
+              BSc(Hons) <em>Civil</em>, MScEng <em>Structures</em>
             </div>
+          </div>
         </div>
 
         <div class="title-right">
-            <div class="supervisor-block">
-                <div class="supervisor-label">Co-Auhtors</div>
+          <div class="supervisor-block">
+            <div class="supervisor-label">Co-Auhtors</div>
 
-                <div class="supervisor-profile">
-                    <img src="assets/skatulla-portrait.png" alt="Prof. Sebastian Skatulla">
-                    <div class="supervisor-info">
-                        <div class="supervisor-name-txt">Prof. Sebastian Skatulla</div>
-                        <div class="supervisor-title">University of Cape Town</div>
-                    </div>
-                </div>
-
-                <div class="supervisor-profile">
-                    <img src="assets/sansour-portrait.png" alt="Prof. Carlo Sansour">
-                    <div class="supervisor-info">
-                        <div class="supervisor-name-txt">Prof. Carlo Sansour</div>
-                        <div class="supervisor-title">Bethlehem University</div>
-                    </div>
-                </div>
-
-                <div class="supervisor-profile">
-                    <img src="assets/kaliske-portrait.png" alt="Prof. Michael Kaliske">
-                    <div class="supervisor-info">
-                        <div class="supervisor-name-txt">Prof. Michael Kaliske</div>
-                        <div class="supervisor-title">TU Dresden</div>
-                    </div>
-                </div>
-
-                <div class="supervisor-profile">
-                    <img src="assets/nutte-portrait.png" alt="Dr. Maxime Nutte">
-                    <div class="supervisor-info">
-                        <div class="supervisor-name-txt">Dr. Maxime Nutte</div>
-                        <div class="supervisor-title">University of Cape Town</div>
-                    </div>
-                </div>
+            <div class="supervisor-profile">
+              <img
+                src="assets/skatulla-portrait.png"
+                alt="Prof. Sebastian Skatulla"
+              />
+              <div class="supervisor-info">
+                <div class="supervisor-name-txt">Prof. Sebastian Skatulla</div>
+                <div class="supervisor-title">University of Cape Town</div>
+              </div>
             </div>
+
+            <div class="supervisor-profile">
+              <img
+                src="assets/sansour-portrait.png"
+                alt="Prof. Carlo Sansour"
+              />
+              <div class="supervisor-info">
+                <div class="supervisor-name-txt">Prof. Carlo Sansour</div>
+                <div class="supervisor-title">Bethlehem University</div>
+              </div>
+            </div>
+
+            <div class="supervisor-profile">
+              <img
+                src="assets/kaliske-portrait.png"
+                alt="Prof. Michael Kaliske"
+              />
+              <div class="supervisor-info">
+                <div class="supervisor-name-txt">Prof. Michael Kaliske</div>
+                <div class="supervisor-title">TU Dresden</div>
+              </div>
+            </div>
+
+            <div class="supervisor-profile">
+              <img src="assets/nutte-portrait.png" alt="Dr. Maxime Nutte" />
+              <div class="supervisor-info">
+                <div class="supervisor-name-txt">Dr. Maxime Nutte</div>
+                <div class="supervisor-title">University of Cape Town</div>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div class="title-logos">
-        <img src="assets/uct.png" alt="University of Cape Town">
-        <img src="assets/dresden.png" alt="Technische Universität Dresden">
-        <img src="assets/seska.png" alt="SESKA Framework">
-        <img src="assets/nrf.png" alt="National Research Foundation">
-    </div>
-</section>
+      <div class="title-logos">
+        <img src="assets/uct.png" alt="University of Cape Town" />
+        <img src="assets/dresden.png" alt="Technische Universität Dresden" />
+        <img src="assets/seska.png" alt="SESKA Framework" />
+        <img src="assets/nrf.png" alt="National Research Foundation" />
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 2 — MOTIVATION
      ================================================================ -->
-<section id="motivation" class="slide">
-    <span class="slide-number">01</span>
-    <div class="slide-inner reveal">
+    <section id="motivation" class="slide">
+      <span class="slide-number">01</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-mountain"></i> Context &amp; Motivation</div>
-            <h2>Why Finite-Strain Viscoelasticity for Ice?</h2>
-            <p>Ice-shelf and near-front dynamics involve transient loading and evolving boundaries that introduce a measurable elastic component alongside long-term creep. This long-term creep effect occurs due to the depth and temperature dependent viscosity of the shelf</p>
+          <div class="section-label">
+            <i class="fas fa-mountain"></i> Context &amp; Motivation
+          </div>
+          <h2>Why Finite-Strain Viscoelasticity for Ice?</h2>
+          <p>
+            Ice-shelf and near-front dynamics involve transient loading and
+            evolving boundaries that introduce a measurable elastic component
+            alongside long-term creep. This long-term creep effect occurs due to
+            the depth and temperature dependent viscosity of the shelf
+          </p>
         </div>
 
-        <div class="figure-container" style="margin: 0.75rem 0; padding: 0.75rem;">
-            <img src="assets/case-study-schematic.png" alt="Ice sheet" style="max-height: 220px; width: auto; object-fit: contain;">
-            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Schematic of the ice sheet at the Fimbulisen, depicted in the image is the sea water which is much denser thatn the shelf ice ($\sim 10\%$ denser).</p>
+        <div
+          class="figure-container"
+          style="margin: 0.75rem 0; padding: 0.75rem"
+        >
+          <img
+            src="assets/case-study-schematic.png"
+            alt="Ice sheet"
+            style="max-height: 220px; width: auto; object-fit: contain"
+          />
+          <p
+            class="figure-caption"
+            style="margin-top: 0.5rem; line-height: 1.4"
+          >
+            Schematic of the ice sheet at the Fimbulisen, depicted in the image
+            is the sea water which is much denser thatn the shelf ice ($\sim
+            10\%$ denser).
+          </p>
         </div>
 
         <div class="card-grid">
-            <div class="card">
-                <div class="card-icon blue"><i class="fas fa-water"></i></div>
-                <h3>The Glaciological Problem</h3>
-                <p>Quantitative projections of ice-sheet evolution depend on numerical models resolving coupled mass &amp; momentum transport. Calving-front stress redistribution differs substantially between purely viscous and viscoelastic descriptions. (Christmann, 2019)</p>
-            </div>
+          <div class="card">
+            <div class="card-icon blue"><i class="fas fa-water"></i></div>
+            <h3>The Glaciological Problem</h3>
+            <p>
+              Quantitative projections of ice-sheet evolution depend on
+              numerical models resolving coupled mass &amp; momentum transport.
+              Calving-front stress redistribution differs substantially between
+              purely viscous and viscoelastic descriptions. (Christmann, 2019)
+            </p>
+          </div>
 
-            <div class="card">
-                <div class="card-icon teal"><i class="fas fa-exclamation-triangle"></i></div>
-                <h3>Review of Existing Approaches</h3>
-                <ul>
-                    <li>Lie/Oldroyd rates of Cauchy-Green tensors correlate to the the 2nd Piola-Kirchhoff stress, which is not a strong descriptor of inelasticity, where a true meterial stress fits better</li>
-                    <li>Additional numerical stiffness and compromised algorithmic robustness</li>
-                    <li>Constraint drift in $\det\mathbf{F}_v = 1$ over long time horizons</li>
-                </ul>
+          <div class="card">
+            <div class="card-icon teal">
+              <i class="fas fa-exclamation-triangle"></i>
             </div>
+            <h3>Review of Existing Approaches</h3>
+            <ul>
+              <li>
+                Lie/Oldroyd rates of Cauchy-Green tensors correlate to the the
+                2nd Piola-Kirchhoff stress, which is not a strong descriptor of
+                inelasticity, where a true meterial stress fits better
+              </li>
+              <li>
+                Additional numerical stiffness and compromised algorithmic
+                robustness
+              </li>
+              <li>
+                Constraint drift in $\det\mathbf{F}_v = 1$ over long time
+                horizons
+              </li>
+            </ul>
+          </div>
 
-            <div class="card">
-                <div class="card-icon orange"><i class="fas fa-lightbulb"></i></div>
-                <h3>Our Contribution</h3>
-                <ul>
-                    <li>Viscous material velocity gradient $\mathbf{L}_v$ as the <strong>flow/evolution rate variable</strong></li>
-                    <li>Logarithmic strain measure for <strong>nonlinear elastic-viscous effects</strong></li>
-                    <li>Exponential deformation map updates preserving $\det(\mathbf{F}_v) = 1$ exactly</li>
-                    <li>Glen's Flow Law integrated directly into the formulation</li>
-                </ul>
-            </div>
+          <div class="card">
+            <div class="card-icon orange"><i class="fas fa-lightbulb"></i></div>
+            <h3>Our Contribution</h3>
+            <ul>
+              <li>
+                Viscous material velocity gradient $\mathbf{L}_v$ as the
+                <strong>flow/evolution rate variable</strong>
+              </li>
+              <li>
+                Logarithmic strain measure for
+                <strong>nonlinear elastic-viscous effects</strong>
+              </li>
+              <li>
+                Exponential deformation map updates preserving
+                $\det(\mathbf{F}_v) = 1$ exactly
+              </li>
+              <li>Glen's Flow Law integrated directly into the formulation</li>
+            </ul>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 3 — KINEMATICS: MULTIPLICATIVE DECOMPOSITION
      ================================================================ -->
-<section id="kinematics" class="slide">
-    <span class="slide-number">02</span>
-    <div class="slide-inner reveal">
+    <section id="kinematics" class="slide">
+      <span class="slide-number">02</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-project-diagram"></i> Mechanical Framework</div>
-            <h2>Multiplicative Decomposition</h2>
+          <div class="section-label">
+            <i class="fas fa-project-diagram"></i> Mechanical Framework
+          </div>
+          <h2>Multiplicative Decomposition</h2>
         </div>
 
         <div class="two-col">
-            <div>
-                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
-                    The total deformation gradient is multiplicatively decomposed into elastic and viscous parts, introducing a stress-free intermediate configuration $\mathcal{B}_{\text{int}}$:
-                </p>
+          <div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem">
+              The total deformation gradient is multiplicatively decomposed into
+              elastic and viscous parts, introducing a stress-free intermediate
+              configuration $\mathcal{B}_{\text{int}}$:
+            </p>
 
-                <div class="equation-block">
-                    <div class="equation-label">Multiplicative Split</div>
-                    $$\mathbf{F} = \mathbf{F}_e \, \mathbf{F}_v$$
-                </div>
+            <div class="equation-block">
+              <div class="equation-label">Multiplicative Split</div>
+              $$\mathbf{F} = \mathbf{F}_e \, \mathbf{F}_v$$
+            </div>
 
-                <div class="equation-block">
-                    <div class="equation-label">Right Cauchy-Green Tensor</div>
-                    $$\mathbf{C} = \mathbf{F}^T \mathbf{F} = \mathbf{F}_v^T \, \mathbf{C}_e \, \mathbf{F}_v$$
-                </div>
+            <div class="equation-block">
+              <div class="equation-label">Right Cauchy-Green Tensor</div>
+              $$\mathbf{C} = \mathbf{F}^T \mathbf{F} = \mathbf{F}_v^T \,
+              \mathbf{C}_e \, \mathbf{F}_v$$
+            </div>
 
-                <div class="equation-block">
-                    <div class="equation-label">Elastic Right Cauchy-Green Tensor</div>
-                    $$\mathbf{C}_e = \mathbf{F}_e^T \, \mathbf{F}_e \quad \in \mathcal{B}_{\text{int}}$$
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.5rem;">
-                    $\mathbf{C}_e$ is naturally associated with the intermediate configuration $\mathcal{B}_{\text{int}}$ and encodes relative elastic deformation in a Lagrangian setting.
-                </p>
+            <div class="equation-block">
+              <div class="equation-label">
+                Elastic Right Cauchy-Green Tensor
+              </div>
+              $$\mathbf{C}_e = \mathbf{F}_e^T \, \mathbf{F}_e \quad \in
+              \mathcal{B}_{\text{int}}$$
+            </div>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.88rem;
+                margin-top: 0.5rem;
+              "
+            >
+              $\mathbf{C}_e$ is naturally associated with the intermediate
+              configuration $\mathcal{B}_{\text{int}}$ and encodes relative
+              elastic deformation in a Lagrangian setting.
+            </p>
 
-                <div class="innovation-highlight" style="margin-top: 1.5rem;">
-                    <h3><i class="fas fa-check-circle"></i> Frame Objectivity</h3>
-                    <p>Under a superposed rigid rotation on the entire solid body $\mathbf{Q}$:</p>
-                    <p style="text-align: center; margin: 0.75rem 0;">$\mathbf{F}^* = \mathbf{Q}\mathbf{F}_e \cdot \mathbf{F}_v$</p>
-                    <p>$\mathbf{Q}$ acts only on the elastic part — the viscous deformation and intermediate configuration are unaffected.</p>
-                </div>
-<!-- 
+            <div class="innovation-highlight" style="margin-top: 1.5rem">
+              <h3><i class="fas fa-check-circle"></i> Frame Objectivity</h3>
+              <p>
+                Under a superposed rigid rotation on the entire solid body
+                $\mathbf{Q}$:
+              </p>
+              <p style="text-align: center; margin: 0.75rem 0">
+                $\mathbf{F}^* = \mathbf{Q}\mathbf{F}_e \cdot \mathbf{F}_v$
+              </p>
+              <p>
+                $\mathbf{Q}$ acts only on the elastic part — the viscous
+                deformation and intermediate configuration are unaffected.
+              </p>
+            </div>
+            <!-- 
                 <div class="card mt-2" style="border-left: 4px solid var(--glacier-teal);">
                     <h3>Total Material Velocity Gradient</h3>
                     <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">The material velocity gradient $\mathbf{L}$ is defined as:</p>
@@ -1043,324 +1347,636 @@
                         $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}$$
                     </div>
                     <p style="color: var(--text-secondary); font-size: 0.85rem;">The spin term $\mathbf{Q}^T \dot{\mathbf{Q}}$ shows $\mathbf{L}$ is <strong>not</strong> objective — motivating the need for $\mathbf{L}_v$ as the constitutive rate variable.</p> -->
-                <!-- </div> -->
+            <!-- </div> -->
+          </div>
+
+          <div>
+            <div class="figure-container">
+              <img
+                src="assets/deformation_mapping_diagram.png"
+                alt="Deformation mapping diagram showing reference, intermediate, and current configurations"
+              />
+              <p class="figure-caption">
+                Three-configuration motion map: material $\mathcal{B}_0
+                \xrightarrow{\mathbf{F}_v} \mathcal{B}_\text{int}
+                \xrightarrow{\mathbf{F}_e} \mathcal{B}_t$.
+              </p>
             </div>
 
-            <div>
-                <div class="figure-container">
-                    <img src="assets/deformation_mapping_diagram.png" alt="Deformation mapping diagram showing reference, intermediate, and current configurations">
-                    <p class="figure-caption">Three-configuration motion map: material $\mathcal{B}_0 \xrightarrow{\mathbf{F}_v} \mathcal{B}_\text{int} \xrightarrow{\mathbf{F}_e} \mathcal{B}_t$.</p>
-                </div>
-
-                <div class="figure-container">
-                    <img src="assets/maxwell-model.png" alt="Maxwell viscoelastic model" style="max-width: 65%;">
-                    <p class="figure-caption">Maxwell viscoelastic solid: elastic spring + viscous dashpot in series.</p>
-                </div>
+            <div class="figure-container">
+              <img
+                src="assets/maxwell-model.png"
+                alt="Maxwell viscoelastic model"
+                style="max-width: 65%"
+              />
+              <p class="figure-caption">
+                Maxwell viscoelastic solid: elastic spring + viscous dashpot in
+                series.
+              </p>
             </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 4 — STRAIN RATES: WHY L_v ?
      ================================================================ -->
-<section id="strain-rates" class="slide">
-    <span class="slide-number">03</span>
-    <div class="slide-inner reveal">
+    <section id="strain-rates" class="slide">
+      <span class="slide-number">03</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-tachometer-alt"></i> Strain-Rate Tensors</div>
-            <h2>Why the Material Velocity Gradient?</h2>
-            <p>A central modelling decision — choosing the right rate variable determines numerical stability and physical fidelity.</p>
+          <div class="section-label">
+            <i class="fas fa-tachometer-alt"></i> Strain-Rate Tensors
+          </div>
+          <h2>Why the Material Velocity Gradient?</h2>
+          <p>
+            A central modelling decision — choosing the right rate variable
+            determines numerical stability and physical fidelity.
+          </p>
         </div>
 
         <div class="one-col">
-            <!-- Left card removed -->
+          <!-- Left card removed -->
 
-            <div>
-                <div class="card" style="border-left: 4px solid var(--glacier-teal);">
-                    <h3 style="color: var(--glacier-teal);"><i class="fas fa-check-circle"></i> Our Choice — $\mathbf{L}_v$</h3>
-                    <div class="equation-block" style="margin: 1rem 0;">
-                        $$\mathbf{L}_v = \mathbf{F}_v^{-1} \dot{\mathbf{F}}_v \in \mathfrak{sl}^+(3)$$
-                    </div>
-                    <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 0.5rem;">The material velocity by demand (given the viscous deformation is purely shearing), we will have inelastic effects render as isochoric</p>
-                    
-                    <ul>
-                        <li><strong>Volume-preserving:</strong> $\text{tr}(\mathbf{L}_v) = 0$ &rArr; purely deviatoric/shearing which corresponds to the fact that $\mathrm{det}(\mathbf{F}_v) = 1$</li>
-                        <li><strong>Lie-algebraic:</strong> element of $\mathfrak{sl}^+(3)$, enabling exponential map integration for $\mathbf{F}_v$</li>
-                    </ul>
-                    <div style="background: rgba(26,163,163,0.08); padding: 0.75rem 1rem; border-radius: 0.5rem; margin-top: 0.75rem; font-size: 0.88rem;">
-                        <strong>Conjugate stress to $\mathbf{L}_v$:</strong> $\mathbf{L}_v$ is power-conjugate to the material stress $\boldsymbol{\Xi} = \mathbf{C}\mathbf{S}$, yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$ — a proper dissipation inequality for inelasticity. *Write $\boldsymbol{\Xi} = \mathbf{F}^{-1} \boldsymbol{\tau} \mathbf{F}^{-T}$ instead $\boldsymbol{\Xi} $, as pullback of $\boldsymbol{\tau}$ and this will be proof enough of physical relevance of $\boldsymbol{\Xi}$. $\mathbf{S}$ is the 2nd Piola-Kirchhoff Stress
-                    </div>
+          <div>
+            <div
+              class="card"
+              style="border-left: 4px solid var(--glacier-teal)"
+            >
+              <h3 style="color: var(--glacier-teal)">
+                <i class="fas fa-check-circle"></i> Our Choice — $\mathbf{L}_v$
+              </h3>
+              <div class="equation-block" style="margin: 1rem 0">
+                $$\mathbf{L}_v = \mathbf{F}_v^{-1} \dot{\mathbf{F}}_v \in
+                \mathfrak{sl}^+(3)$$
+              </div>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.88rem;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                The material velocity by demand (given the viscous deformation
+                is purely shearing), we will have inelastic effects render as
+                isochoric
+              </p>
 
-                    <!-- ── Objectivity Proof of L_v ── -->
-                    <div style="padding: 1rem 0; margin-top: 1.25rem;">
-                        <h4 style="color: var(--uct-blue); margin-bottom: 0.75rem;"><i class="fas fa-shield-alt"></i> Proof — Frame Objectivity of $\mathbf{L}_v$</h4>
+              <ul>
+                <li>
+                  <strong>Volume-preserving:</strong> $\text{tr}(\mathbf{L}_v) =
+                  0$ &rArr; purely deviatoric/shearing which corresponds to the
+                  fact that $\mathrm{det}(\mathbf{F}_v) = 1$
+                </li>
+                <li>
+                  <strong>Lie-algebraic:</strong> element of
+                  $\mathfrak{sl}^+(3)$, enabling exponential map integration for
+                  $\mathbf{F}_v$
+                </li>
+              </ul>
+              <div
+                style="
+                  background: rgba(26, 163, 163, 0.08);
+                  padding: 0.75rem 1rem;
+                  border-radius: 0.5rem;
+                  margin-top: 0.75rem;
+                  font-size: 0.88rem;
+                "
+              >
+                <strong>Conjugate stress to $\mathbf{L}_v$:</strong>
+                $\mathbf{L}_v$ is power-conjugate to the material stress
+                $\boldsymbol{\Xi} = \mathbf{C}\mathbf{S}$, yielding $\mathcal{D}
+                = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$ — a proper dissipation
+                inequality for inelasticity. *Write $\boldsymbol{\Xi} =
+                \mathbf{F}^{-1} \boldsymbol{\tau} \mathbf{F}^{-T}$ instead
+                $\boldsymbol{\Xi} $, as pullback of $\boldsymbol{\tau}$ and this
+                will be proof enough of physical relevance of
+                $\boldsymbol{\Xi}$. $\mathbf{S}$ is the 2nd Piola-Kirchhoff
+                Stress
+              </div>
 
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            The total material velocity gradient $\mathbf{L} = \mathbf{F}^{-1}\dot{\mathbf{F}}$ is <strong>not</strong> objective. Under a superposed rotation $\mathbf{Q}$:
-                        </p>
-                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.92rem;">
-                            $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}$$
-                        </div>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            where $\mathbf{Q}^T\dot{\mathbf{Q}}$ is the skew-symmetric angular velocity (spin) of the frame. However, substitute $\mathbf{F} = \mathbf{F}_e \mathbf{F}_v$ into the spin term:
-                        </p>
-                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem;">
-                            $$\mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F} = \mathbf{F}_v^{-1}\!\left[\mathbf{F}_e^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v$$
-                        </div>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            Simultaneously, from the multiplicative split we derive the additive decomposition of $\mathbf{L}$:
-                        </p>
-                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem;">
-                            $$\mathbf{L} = \mathbf{F}_v^{-1}\mathbf{L}_e\,\mathbf{F}_v + \underbrace{\mathbf{F}_v^{-1}\dot{\mathbf{F}}_v}_{\mathbf{L}_v}$$
-                        </div>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            Combining, the transformed rate $\mathbf{L}^*$ decomposes as:
-                        </p>
-                        <div class="equation-block" style="margin: 0.5rem 0; font-size: 0.88rem; border-left: 3px solid var(--glacier-teal); padding-left: 0.75rem;">
-                            $$\boxed{\;\mathbf{L}^* = \mathbf{F}_v^{-1}\!\left[\mathbf{L}_e + \mathbf{F}_e^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v + \mathbf{L}_v\;}$$
-                        </div>
-                        <p style="color: var(--text-secondary); font-size: 0.85rem;">
-                            <strong>Result:</strong> The rotation-dependent spin terms are entirely absorbed by the elastic component. $\mathbf{L}_v$ is <strong>additively isolated</strong> and therefore <strong>frame-objective</strong> — it is unaffected by superposed rigid body rotations $\mathbf{Q}$.
-                        </p>
-                    </div>
+              <!-- ── Objectivity Proof of L_v ── -->
+              <div style="padding: 1rem 0; margin-top: 1.25rem">
+                <h4 style="color: var(--uct-blue); margin-bottom: 0.75rem">
+                  <i class="fas fa-shield-alt"></i> Proof — Frame Objectivity of
+                  $\mathbf{L}_v$
+                </h4>
+
+                <p
+                  style="
+                    color: var(--text-secondary);
+                    font-size: 0.85rem;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  The total material velocity gradient $\mathbf{L} =
+                  \mathbf{F}^{-1}\dot{\mathbf{F}}$ is
+                  <strong>not</strong> objective. Under a superposed rotation
+                  $\mathbf{Q}$:
+                </p>
+                <div
+                  class="equation-block"
+                  style="margin: 0.5rem 0; font-size: 0.92rem"
+                >
+                  $$\mathbf{L}^* = \mathbf{L} + \mathbf{F}^{-1}(\mathbf{Q}^T
+                  \dot{\mathbf{Q}})\mathbf{F}$$
                 </div>
+                <p
+                  style="
+                    color: var(--text-secondary);
+                    font-size: 0.85rem;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  where $\mathbf{Q}^T\dot{\mathbf{Q}}$ is the skew-symmetric
+                  angular velocity (spin) of the frame. However, substitute
+                  $\mathbf{F} = \mathbf{F}_e \mathbf{F}_v$ into the spin term:
+                </p>
+                <div
+                  class="equation-block"
+                  style="margin: 0.5rem 0; font-size: 0.88rem"
+                >
+                  $$\mathbf{F}^{-1}(\mathbf{Q}^T \dot{\mathbf{Q}})\mathbf{F} =
+                  \mathbf{F}_v^{-1}\!\left[\mathbf{F}_e^{-1}(\mathbf{Q}^T
+                  \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v$$
+                </div>
+                <p
+                  style="
+                    color: var(--text-secondary);
+                    font-size: 0.85rem;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  Simultaneously, from the multiplicative split we derive the
+                  additive decomposition of $\mathbf{L}$:
+                </p>
+                <div
+                  class="equation-block"
+                  style="margin: 0.5rem 0; font-size: 0.88rem"
+                >
+                  $$\mathbf{L} = \mathbf{F}_v^{-1}\mathbf{L}_e\,\mathbf{F}_v +
+                  \underbrace{\mathbf{F}_v^{-1}\dot{\mathbf{F}}_v}_{\mathbf{L}_v}$$
+                </div>
+                <p
+                  style="
+                    color: var(--text-secondary);
+                    font-size: 0.85rem;
+                    margin-bottom: 0.5rem;
+                  "
+                >
+                  Combining, the transformed rate $\mathbf{L}^*$ decomposes as:
+                </p>
+                <div
+                  class="equation-block"
+                  style="
+                    margin: 0.5rem 0;
+                    font-size: 0.88rem;
+                    border-left: 3px solid var(--glacier-teal);
+                    padding-left: 0.75rem;
+                  "
+                >
+                  $$\boxed{\;\mathbf{L}^* =
+                  \mathbf{F}_v^{-1}\!\left[\mathbf{L}_e +
+                  \mathbf{F}_e^{-1}(\mathbf{Q}^T
+                  \dot{\mathbf{Q}})\mathbf{F}_e\right]\!\mathbf{F}_v +
+                  \mathbf{L}_v\;}$$
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.85rem">
+                  <strong>Result:</strong> The rotation-dependent spin terms are
+                  entirely absorbed by the elastic component. $\mathbf{L}_v$ is
+                  <strong>additively isolated</strong> and therefore
+                  <strong>frame-objective</strong> — it is unaffected by
+                  superposed rigid body rotations $\mathbf{Q}$.
+                </p>
+              </div>
             </div>
+          </div>
         </div>
         <!-- Key insight removed -->
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 5 — LOGARITHMIC STRAIN & THERMODYNAMICS
      ================================================================ -->
-<section id="thermodynamics" class="slide">
-    <span class="slide-number">04</span>
-    <div class="slide-inner reveal">
+    <section id="thermodynamics" class="slide">
+      <span class="slide-number">04</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-fire"></i> Constitutive Theory</div>
-            <h2>Logarithmic Strain &amp; Thermodynamic Consistency</h2>
+          <div class="section-label">
+            <i class="fas fa-fire"></i> Constitutive Theory
+          </div>
+          <h2>Logarithmic Strain &amp; Thermodynamic Consistency</h2>
         </div>
 
         <div class="one-col">
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 0.75rem;">Logarithmic Strain Measure</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">Defined in the intermediate configuration $\mathcal{B}_\text{int}$:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Hencky Strain</div>
-                    $$\boldsymbol{\alpha} = \ln(\mathbf{C}_e), \quad \mathbf{C}_e = \exp(\boldsymbol{\alpha})$$
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">$\boldsymbol{\alpha}$ and $\mathbf{C}_e$ share the same eigenvectors $\mathbf{z}_i$, with eigenvalues $\lambda_i = \exp(\epsilon_i)$. For any isotropic energy $\Psi(\boldsymbol{\alpha}) = \Psi(\mathbf{C}_e)$, the key differential identity is:</p>
-                <div class="equation-block" style="font-size: 0.92rem;">
-                    $$\frac{\partial \Psi}{\partial \boldsymbol{\alpha}} = \mathbf{C}_e \frac{\partial \Psi}{\partial \mathbf{C}_e}$$
-                </div>
-
-                <h3 style="color: var(--uct-blue); margin: 1.25rem 0 0.75rem;">Thermodynamic Proof</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 0.5rem;">The Clausius–Duhem inequality requires:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Dissipation Inequality</div>
-                    $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L} - \rho_0 \cdot \dot{\Psi}(\mathbf{C}_e) \geq 0$$
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">Taking the material time derivative and expressing $\dot{\mathbf{C}}_e$ via the elastic-viscous decomposition yields:</p>
-                <div class="equation-block" style="font-size: 0.92rem;">
-                    $$\dot{\Psi} = 2 \mathbf{F}_v^T \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T} : (\mathbf{L} - \mathbf{L}_v)$$
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">Substituting back and applying the Coleman–Noll argument (coefficient of $\mathbf{L}$ vanishes identically):</p>
-                <div class="equation-block" style="border-left: 3px solid var(--glacier-teal); padding-left: 0.75rem;">
-                    <div class="equation-label">Constitutive Relation</div>
-                    $$\boxed{\;\boldsymbol{\Xi} = 2\rho_0 \cdot \mathbf{F}_v^T \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T}\;}$$
-                </div>
-
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.75rem 0 0.5rem;">As a natural consequence of this constitutive relation, a <strong>modified</strong> logarithmic strain $\overline{\boldsymbol{\alpha}}$ emerges in the material configuration $\mathcal{B}_0$:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Modified Logarithmic Strain</div>
-                    $$\overline{\boldsymbol{\alpha}} = \mathbf{F}_v^T \boldsymbol{\alpha} \, \mathbf{F}_v^{-T} = \ln(\mathbf{C}\,\mathbf{C}_v^{-1})$$
-                </div>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0.5rem 0;">$\overline{\boldsymbol{\alpha}}$ characterises elastic strains in $\mathcal{B}_0$ and is power-conjugate to $\boldsymbol{\Xi}$. In the small-strain limit $\boldsymbol{\alpha} \approx 2\mathbf{E}$, so Lamé parameters scale as $\lambda \to \tfrac{\lambda}{2},\; \mu \to \tfrac{\mu}{2}$. The reduced dissipation reads:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Reduced Dissipation</div>
-                    $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$$
-                </div>
-
-                <div class="innovation-highlight" style="margin-top: 1rem;">
-                    <h4><i class="fas fa-star"></i> Hyperelastic Constitutive Law (Maxwell Reformulation)</h4>
-                    <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem;">
-                        $$\boldsymbol{\Xi} = \frac{\kappa}{2}\,\text{tr}(\overline{\boldsymbol{\alpha}})\cdot\mathbf{1} + \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
-                    </p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">with the Maxwell viscoelastic balance:</p>
-                    <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem;">
-                        $$\text{dev}(\boldsymbol{\Xi}) = \eta_\text{Glen}\cdot\mathbf{L}_v^T = \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
-                    </p>
-                    <p style="font-size: 0.82rem; color: rgba(255,255,255,0.85);">Valid provided $\overline{\boldsymbol{\alpha}}$ and $\mathbf{L}_v$ are co-axial, which holds for the isotropic case.</p>
-                </div>
+          <div>
+            <h3 style="color: var(--uct-blue); margin-bottom: 0.75rem">
+              Logarithmic Strain Measure
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem">
+              Defined in the intermediate configuration
+              $\mathcal{B}_\text{int}$:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Hencky Strain</div>
+              $$\boldsymbol{\alpha} = \ln(\mathbf{C}_e), \quad \mathbf{C}_e =
+              \exp(\boldsymbol{\alpha})$$
             </div>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                margin: 0.5rem 0;
+              "
+            >
+              $\boldsymbol{\alpha}$ and $\mathbf{C}_e$ share the same
+              eigenvectors $\mathbf{z}_i$, with eigenvalues $\lambda_i =
+              \exp(\epsilon_i)$. For any isotropic energy
+              $\Psi(\boldsymbol{\alpha}) = \Psi(\mathbf{C}_e)$, the key
+              differential identity is:
+            </p>
+            <div class="equation-block" style="font-size: 0.92rem">
+              $$\frac{\partial \Psi}{\partial \boldsymbol{\alpha}} =
+              \mathbf{C}_e \frac{\partial \Psi}{\partial \mathbf{C}_e}$$
+            </div>
+
+            <h3 style="color: var(--uct-blue); margin: 1.25rem 0 0.75rem">
+              Thermodynamic Proof
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem">
+              The Clausius–Duhem inequality requires:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Dissipation Inequality</div>
+              $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L} - \rho_0 \cdot
+              \dot{\Psi}(\mathbf{C}_e) \geq 0$$
+            </div>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                margin: 0.5rem 0;
+              "
+            >
+              Taking the material time derivative and expressing
+              $\dot{\mathbf{C}}_e$ via the elastic-viscous decomposition yields:
+            </p>
+            <div class="equation-block" style="font-size: 0.92rem">
+              $$\dot{\Psi} = 2 \mathbf{F}_v^T \frac{\partial
+              \Psi(\boldsymbol{\alpha})}{\partial \boldsymbol{\alpha}}
+              \mathbf{F}_v^{-T} : (\mathbf{L} - \mathbf{L}_v)$$
+            </div>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                margin: 0.5rem 0;
+              "
+            >
+              Substituting back and applying the Coleman–Noll argument
+              (coefficient of $\mathbf{L}$ vanishes identically):
+            </p>
+            <div
+              class="equation-block"
+              style="
+                border-left: 3px solid var(--glacier-teal);
+                padding-left: 0.75rem;
+              "
+            >
+              <div class="equation-label">Constitutive Relation</div>
+              $$\boxed{\;\boldsymbol{\Xi} = 2\rho_0 \cdot \mathbf{F}_v^T
+              \frac{\partial \Psi(\boldsymbol{\alpha})}{\partial
+              \boldsymbol{\alpha}} \mathbf{F}_v^{-T}\;}$$
+            </div>
+
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                margin: 0.75rem 0 0.5rem;
+              "
+            >
+              As a natural consequence of this constitutive relation, a
+              <strong>modified</strong> logarithmic strain
+              $\overline{\boldsymbol{\alpha}}$ emerges in the material
+              configuration $\mathcal{B}_0$:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Modified Logarithmic Strain</div>
+              $$\overline{\boldsymbol{\alpha}} = \mathbf{F}_v^T
+              \boldsymbol{\alpha} \, \mathbf{F}_v^{-T} =
+              \ln(\mathbf{C}\,\mathbf{C}_v^{-1})$$
+            </div>
+            <p
+              style="
+                color: var(--text-secondary);
+                font-size: 0.85rem;
+                margin: 0.5rem 0;
+              "
+            >
+              $\overline{\boldsymbol{\alpha}}$ characterises elastic strains in
+              $\mathcal{B}_0$ and is power-conjugate to $\boldsymbol{\Xi}$. In
+              the small-strain limit $\boldsymbol{\alpha} \approx 2\mathbf{E}$,
+              so Lamé parameters scale as $\lambda \to \tfrac{\lambda}{2},\; \mu
+              \to \tfrac{\mu}{2}$. The reduced dissipation reads:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Reduced Dissipation</div>
+              $$\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$$
+            </div>
+
+            <div class="innovation-highlight" style="margin-top: 1rem">
+              <h4>
+                <i class="fas fa-star"></i> Hyperelastic Constitutive Law
+                (Maxwell Reformulation)
+              </h4>
+              <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem">
+                $$\boldsymbol{\Xi} =
+                \frac{\kappa}{2}\,\text{tr}(\overline{\boldsymbol{\alpha}})\cdot\mathbf{1}
+                + \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
+              </p>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem">
+                with the Maxwell viscoelastic balance:
+              </p>
+              <p style="text-align: center; margin: 0.75rem 0; font-size: 1rem">
+                $$\text{dev}(\boldsymbol{\Xi}) =
+                \eta_\text{Glen}\cdot\mathbf{L}_v^T =
+                \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}})$$
+              </p>
+              <p style="font-size: 0.82rem; color: rgba(255, 255, 255, 0.85)">
+                Valid provided $\overline{\boldsymbol{\alpha}}$ and
+                $\mathbf{L}_v$ are co-axial, which holds for the isotropic case.
+              </p>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 6 — GLEN'S FLOW LAW INTEGRATION
      ================================================================ -->
-<section id="glens-law" class="slide">
-    <span class="slide-number">05</span>
-    <div class="slide-inner reveal">
+    <section id="glens-law" class="slide">
+      <span class="slide-number">05</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-snowflake"></i> Ice Rheology</div>
-            <h2>Extended Glen's Flow Law</h2>
-            <p>Embedding Glen's creep law directly into the finite-strain material velocity gradient formulation.</p>
+          <div class="section-label">
+            <i class="fas fa-snowflake"></i> Ice Rheology
+          </div>
+          <h2>Extended Glen's Flow Law</h2>
+          <p>
+            Embedding Glen's creep law directly into the finite-strain material
+            velocity gradient formulation.
+          </p>
         </div>
 
         <div class="two-col">
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Maxwell Reformulation</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">The Maxwell viscoelastic solid relates deviatoric stress to the viscous strain rate:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Maxwell Constitutive Relation</div>
-                    $$\text{dev}(\boldsymbol{\Xi}) = \eta_\text{Glen} \cdot \mathbf{L}_v^T = \mu \cdot \text{dev}(\overline{\boldsymbol{\alpha}})$$
-                </div>
-
-                <p style="color: var(--text-secondary); margin: 1rem 0;">Glen's flow law introduces a <strong>stress-dependent, non-linear viscosity</strong>:</p>
-                <div class="equation-block">
-                    <div class="equation-label">Glen-Type Viscosity</div>
-                    $$\eta_\text{Glen} = \frac{1}{2A\,\tau_e^{m-1}}$$
-                </div>
-
-                <div class="equation-block">
-                    <div class="equation-label">Effective Shear Stress</div>
-                    $$\tau_e = \frac{\|\text{dev}(\boldsymbol{\Xi})\|}{\sqrt{2}} = \sqrt{\frac{\text{dev}(\boldsymbol{\Xi}) : \text{dev}(\boldsymbol{\Xi})}{2}}$$
-                </div>
+          <div>
+            <h3 style="color: var(--uct-blue); margin-bottom: 1rem">
+              Maxwell Reformulation
+            </h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem">
+              The Maxwell viscoelastic solid relates deviatoric stress to the
+              viscous strain rate:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Maxwell Constitutive Relation</div>
+              $$\text{dev}(\boldsymbol{\Xi}) = \eta_\text{Glen} \cdot
+              \mathbf{L}_v^T = \mu \cdot
+              \text{dev}(\overline{\boldsymbol{\alpha}})$$
             </div>
 
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Final Flow Condition</h3>
-                <div class="equation-block">
-                    <div class="equation-label">Viscous Flow Rule</div>
-                    $$\mathbf{L}_v = \sqrt{2}\,A\,\|\text{dev}(\boldsymbol{\Xi})\|^{m-1} \cdot \text{dev}(\boldsymbol{\Xi})$$
-                </div>
-
-                <div class="equation-block">
-                    <div class="equation-label">Arrhenius Temperature Dependence</div>
-                    $$A = A_0 \exp\!\left(\frac{Q(T_0 - T(h))}{R\,T(h)\,T_0}\right)$$
-                </div>
-
-                <div class="card mt-2" style="border-left: 4px solid var(--glacier-teal); font-size: 0.88rem;">
-                    <h4 style="margin-bottom: 0.5rem;">Arrhenius Parameters</h4>
-                    <table style="width:100%; border-collapse: collapse; color: var(--text-secondary);">
-                        <tr><td style="padding:0.25rem 0;">$R = 8.314\,\text{J mol}^{-1}\text{K}^{-1}$</td><td>Universal gas constant</td></tr>
-                        <tr><td style="padding:0.25rem 0;">$A_0$</td><td>Reference rate factor at $T_0$</td></tr>
-                        <tr><td style="padding:0.25rem 0;">$T_0$</td><td>Reference temperature</td></tr>
-                        <tr><td style="padding:0.25rem 0;">$T(h)$</td><td>Temperature at depth $h$ in ice</td></tr>
-                        <tr><td style="padding:0.25rem 0;">$Q$</td><td>Activation energy for ice deformation</td></tr>
-                        <tr><td style="padding:0.25rem 0;">$m \approx 3$</td><td>Glen stress exponent</td></tr>
-                    </table>
-                </div>
+            <p style="color: var(--text-secondary); margin: 1rem 0">
+              Glen's flow law introduces a
+              <strong>stress-dependent, non-linear viscosity</strong>:
+            </p>
+            <div class="equation-block">
+              <div class="equation-label">Glen-Type Viscosity</div>
+              $$\eta_\text{Glen} = \frac{1}{2A\,\tau_e^{m-1}}$$
             </div>
+
+            <div class="equation-block">
+              <div class="equation-label">Effective Shear Stress</div>
+              $$\tau_e = \frac{\|\text{dev}(\boldsymbol{\Xi})\|}{\sqrt{2}} =
+              \sqrt{\frac{\text{dev}(\boldsymbol{\Xi}) :
+              \text{dev}(\boldsymbol{\Xi})}{2}}$$
+            </div>
+          </div>
+
+          <div>
+            <h3 style="color: var(--uct-blue); margin-bottom: 1rem">
+              Final Flow Condition
+            </h3>
+            <div class="equation-block">
+              <div class="equation-label">Viscous Flow Rule</div>
+              $$\mathbf{L}_v =
+              \sqrt{2}\,A\,\|\text{dev}(\boldsymbol{\Xi})\|^{m-1} \cdot
+              \text{dev}(\boldsymbol{\Xi})$$
+            </div>
+
+            <div class="equation-block">
+              <div class="equation-label">Arrhenius Temperature Dependence</div>
+              $$A = A_0 \exp\!\left(\frac{Q(T_0 - T(h))}{R\,T(h)\,T_0}\right)$$
+            </div>
+
+            <div
+              class="card mt-2"
+              style="
+                border-left: 4px solid var(--glacier-teal);
+                font-size: 0.88rem;
+              "
+            >
+              <h4 style="margin-bottom: 0.5rem">Arrhenius Parameters</h4>
+              <table
+                style="
+                  width: 100%;
+                  border-collapse: collapse;
+                  color: var(--text-secondary);
+                "
+              >
+                <tr>
+                  <td style="padding: 0.25rem 0">
+                    $R = 8.314\,\text{J mol}^{-1}\text{K}^{-1}$
+                  </td>
+                  <td>Universal gas constant</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.25rem 0">$A_0$</td>
+                  <td>Reference rate factor at $T_0$</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.25rem 0">$T_0$</td>
+                  <td>Reference temperature</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.25rem 0">$T(h)$</td>
+                  <td>Temperature at depth $h$ in ice</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.25rem 0">$Q$</td>
+                  <td>Activation energy for ice deformation</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.25rem 0">$m \approx 3$</td>
+                  <td>Glen stress exponent</td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 7 — NUMERICAL TREATMENT
      ================================================================ -->
-<section id="numerics" class="slide">
-    <span class="slide-number">06</span>
-    <div class="slide-inner reveal">
+    <section id="numerics" class="slide">
+      <span class="slide-number">06</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-cogs"></i> Numerical Methods</div>
-            <h2>Algorithmic Treatment</h2>
-            <p>Exponential map updates, elastic-viscous predictor-corrector, and consistent linearisation.</p>
+          <div class="section-label">
+            <i class="fas fa-cogs"></i> Numerical Methods
+          </div>
+          <h2>Algorithmic Treatment</h2>
+          <p>
+            Exponential map updates, elastic-viscous predictor-corrector, and
+            consistent linearisation.
+          </p>
         </div>
 
         <!-- Pipeline -->
         <div class="pipeline">
-            <div class="pipeline-step">
-                <h4>1. Trial Strain</h4>
-                <p>Compute $\overline{\boldsymbol{\alpha}}^\text{trial}$</p>
-            </div>
-            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="pipeline-step">
-                <h4>2. Trial Stress</h4>
-                <p>$\boldsymbol{\Xi}^\text{trial}$</p>
-            </div>
-            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="pipeline-step">
-                <h4>3. Viscous Rate</h4>
-                <p>$\mathbf{L}_v^T$ from Glen's law</p>
-            </div>
-            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="pipeline-step">
-                <h4>4. Exp. Update</h4>
-                <p>$(\mathbf{F}_v)_{n+1}$</p>
-            </div>
-            <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
-            <div class="pipeline-step">
-                <h4>5. Stress Correct</h4>
-                <p>$\boldsymbol{\Xi}_{n+1},\ \mathbf{S}_{n+1}$</p>
-            </div>
+          <div class="pipeline-step">
+            <h4>1. Trial Strain</h4>
+            <p>Compute $\overline{\boldsymbol{\alpha}}^\text{trial}$</p>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <h4>2. Trial Stress</h4>
+            <p>$\boldsymbol{\Xi}^\text{trial}$</p>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <h4>3. Viscous Rate</h4>
+            <p>$\mathbf{L}_v^T$ from Glen's law</p>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <h4>4. Exp. Update</h4>
+            <p>$(\mathbf{F}_v)_{n+1}$</p>
+          </div>
+          <div class="pipeline-arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="pipeline-step">
+            <h4>5. Stress Correct</h4>
+            <p>$\boldsymbol{\Xi}_{n+1},\ \mathbf{S}_{n+1}$</p>
+          </div>
         </div>
 
         <div class="two-col mt-2">
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Exponential Map Update</h3>
-                <div class="equation-block">
-                    <div class="equation-label">Viscous Deformation Gradient Update</div>
-                    $$(\mathbf{F}_v)_{n+1} = (\mathbf{F}_v)_n \, \exp(\Delta t \cdot \mathbf{L}_v)$$
-                </div>
-                <div class="innovation-highlight" style="margin-top: 1rem;">
-                    <h4><i class="fas fa-check-circle"></i> Incompressibility Preservation</h4>
-                    <p>Since $\mathbf{L}_v \in \mathfrak{sl}(3)$, i.e. $\text{tr}(\mathbf{L}_v) = 0$, the exponential map <strong>exactly preserves</strong> the viscous incompressibility constraint:</p>
-                    <p style="text-align:center; margin: 0.75rem 0;">$\det(\Delta\mathbf{F}_v) = \det(\exp(\Delta t \cdot \mathbf{L}_v)) = \exp(\Delta t \cdot \text{tr}(\mathbf{L}_v)) = 1$</p>
-                    <p style="font-size: 0.85rem;">This is a <strong>consequence</strong> of the constitutive formulation, the Maxwell-type rheology and the Lie-group structure.</p>
-                </div>
-
-                <h3 style="color: var(--uct-blue); margin: 1.5rem 0 1rem;">Logarithmic Strain Correction</h3>
-                <div class="equation-block">
-                    <div class="equation-label">Elastic-Viscous Corrector</div>
-                    $$\overline{\boldsymbol{\alpha}}_{n+1} = \overline{\boldsymbol{\alpha}}^\text{trial} - 2\Delta t \cdot \mathbf{L}_v^T$$
-                </div>
-                <p style="color: var(--text-secondary);">Additive correction — a key advantage of the logarithmic strain: finite-strain measures decomposed into additive updates.</p>
+          <div>
+            <h3 style="color: var(--uct-blue); margin-bottom: 1rem">
+              Exponential Map Update
+            </h3>
+            <div class="equation-block">
+              <div class="equation-label">
+                Viscous Deformation Gradient Update
+              </div>
+              $$(\mathbf{F}_v)_{n+1} = (\mathbf{F}_v)_n \, \exp(\Delta t \cdot
+              \mathbf{L}_v)$$
+            </div>
+            <div class="innovation-highlight" style="margin-top: 1rem">
+              <h4>
+                <i class="fas fa-check-circle"></i> Incompressibility
+                Preservation
+              </h4>
+              <p>
+                Since $\mathbf{L}_v \in \mathfrak{sl}(3)$, i.e.
+                $\text{tr}(\mathbf{L}_v) = 0$, the exponential map
+                <strong>exactly preserves</strong> the viscous incompressibility
+                constraint:
+              </p>
+              <p style="text-align: center; margin: 0.75rem 0">
+                $\det(\Delta\mathbf{F}_v) = \det(\exp(\Delta t \cdot
+                \mathbf{L}_v)) = \exp(\Delta t \cdot \text{tr}(\mathbf{L}_v)) =
+                1$
+              </p>
+              <p style="font-size: 0.85rem">
+                This is a <strong>consequence</strong> of the constitutive
+                formulation, the Maxwell-type rheology and the Lie-group
+                structure.
+              </p>
             </div>
 
-            <div>
-                <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Stress Predictor-Corrector</h3>
-                <div class="equation-block">
-                    <div class="equation-label">Trial Stress</div>
-                    $$\boldsymbol{\Xi}^\text{trial} = \frac{\kappa}{2}\text{tr}(\overline{\boldsymbol{\alpha}}^\text{trial})\cdot\mathbf{1} + \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}}^\text{trial})$$
-                </div>
-
-                <div class="equation-block">
-                    <div class="equation-label">Viscous-Corrected Stress</div>
-                    $$\text{dev}(\boldsymbol{\Xi}_{n+1}) = \text{dev}(\boldsymbol{\Xi}^\text{trial}) - 2\mu\Delta t \cdot \mathbf{L}_v^T$$
-                </div>
-
-                <div class="equation-block">
-                    <div class="equation-label">Implicit Viscous Rate</div>
-                    $$\mathbf{L}_v^T = \frac{\text{dev}(\boldsymbol{\Xi}^\text{trial})}{\eta_\text{Glen} + 2\mu\Delta t}$$
-                </div>
-                <p style="color: var(--text-secondary);">$\eta_\text{Glen}$ is locally determined from $\|\text{dev}(\boldsymbol{\Xi}^\text{trial})\|$ — no iterative local solve required.</p>
-
-                <div class="innovation-highlight mt-2">
-                    <h4><i class="fas fa-star"></i> Physical Corollaries</h4>
-                    <ul>
-                        <!-- <li>Higher viscosity $\eta_\text{Glen}$ &rArr; lower strain rate for constant stress</li> -->
-                        <li>Higher strain rate &rArr; higher shear stresses for constant material properties</li>
-                        <li>Constant load &rArr; constant strain rate (steady-state creep)</li>
-                    </ul>
-                </div>
+            <h3 style="color: var(--uct-blue); margin: 1.5rem 0 1rem">
+              Logarithmic Strain Correction
+            </h3>
+            <div class="equation-block">
+              <div class="equation-label">Elastic-Viscous Corrector</div>
+              $$\overline{\boldsymbol{\alpha}}_{n+1} =
+              \overline{\boldsymbol{\alpha}}^\text{trial} - 2\Delta t \cdot
+              \mathbf{L}_v^T$$
             </div>
+            <p style="color: var(--text-secondary)">
+              Additive correction — a key advantage of the logarithmic strain:
+              finite-strain measures decomposed into additive updates.
+            </p>
+          </div>
+
+          <div>
+            <h3 style="color: var(--uct-blue); margin-bottom: 1rem">
+              Stress Predictor-Corrector
+            </h3>
+            <div class="equation-block">
+              <div class="equation-label">Trial Stress</div>
+              $$\boldsymbol{\Xi}^\text{trial} =
+              \frac{\kappa}{2}\text{tr}(\overline{\boldsymbol{\alpha}}^\text{trial})\cdot\mathbf{1}
+              +
+              \mu\cdot\text{dev}(\overline{\boldsymbol{\alpha}}^\text{trial})$$
+            </div>
+
+            <div class="equation-block">
+              <div class="equation-label">Viscous-Corrected Stress</div>
+              $$\text{dev}(\boldsymbol{\Xi}_{n+1}) =
+              \text{dev}(\boldsymbol{\Xi}^\text{trial}) - 2\mu\Delta t \cdot
+              \mathbf{L}_v^T$$
+            </div>
+
+            <div class="equation-block">
+              <div class="equation-label">Implicit Viscous Rate</div>
+              $$\mathbf{L}_v^T =
+              \frac{\text{dev}(\boldsymbol{\Xi}^\text{trial})}{\eta_\text{Glen}
+              + 2\mu\Delta t}$$
+            </div>
+            <p style="color: var(--text-secondary)">
+              $\eta_\text{Glen}$ is locally determined from
+              $\|\text{dev}(\boldsymbol{\Xi}^\text{trial})\|$ — no iterative
+              local solve required.
+            </p>
+
+            <div class="innovation-highlight mt-2">
+              <h4><i class="fas fa-star"></i> Physical Corollaries</h4>
+              <ul>
+                <!-- <li>Higher viscosity $\eta_\text{Glen}$ &rArr; lower strain rate for constant stress</li> -->
+                <li>
+                  Higher strain rate &rArr; higher shear stresses for constant
+                  material properties
+                </li>
+                <li>
+                  Constant load &rArr; constant strain rate (steady-state creep)
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 8 — SESKA FRAMEWORK
      ================================================================ -->
-<!-- <section id="seska" class="slide">
+    <!-- <section id="seska" class="slide">
     <span class="slide-number">07</span>
     <div class="slide-inner reveal">
         <div class="section-header">
@@ -1470,308 +2086,665 @@
     </div>
 </section> -->
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 9 — NUMERICAL RESULTS
      ================================================================ -->
-<section id="results" class="slide">
-    <span class="slide-number">07</span>
-    <div class="slide-inner reveal">
+    <section id="results" class="slide">
+      <span class="slide-number">07</span>
+      <div class="slide-inner reveal">
         <div class="section-header">
-            <div class="section-label"><i class="fas fa-chart-bar"></i> Numerical Examples</div>
-            <h2>Benchmark Results</h2>
+          <div class="section-label">
+            <i class="fas fa-chart-bar"></i> Numerical Examples
+          </div>
+          <h2>Benchmark Results</h2>
         </div>
 
         <!-- Example 1: Column test -->
-        <h3 style="color: var(--uct-blue); margin-bottom: 1rem;">Example 1 — Plane-Strain Columnar Ice under Self-Weight</h3>
+        <h3 style="color: var(--uct-blue); margin-bottom: 1rem">
+          Example 1 — Plane-Strain Columnar Ice under Self-Weight
+        </h3>
         <div class="two-col">
-            <div>
-                <div class="figure-container">
-                    <img src="assets/column-body-model.png" alt="Column geometry and BCs" style="max-width: 60%;">
-                    <p class="figure-caption">Geometry: $H = 10\,\text{m}, W = 1\,\text{m}$. Dirichlet fixity at the base with gravity loading.</p>
-                </div>
-
-                <table class="styled-table">
-                    <thead>
-                        <tr><th>Parameter</th><th>Value</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Density $\rho$</td><td>$917\,\text{kg/m}^3$</td></tr>
-                        <tr><td>Bulk modulus $\kappa$</td><td>$7.92\,\text{GPa}$</td></tr>
-                        <tr><td>Shear modulus $\mu$</td><td>$4.15\,\text{GPa}$</td></tr>
-                        <tr><td>Viscosity $\eta_\text{Glen}$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr>
-                        <tr><td>Glen exponent $m$</td><td>$3$</td></tr>
-                        <tr><td>Rate factor $A$</td><td>$10^{-25}\,\text{s}^{-1}\text{Pa}^{-3}$</td></tr>
-                    </tbody>
-                </table>
+          <div>
+            <div class="figure-container">
+              <img
+                src="assets/column-body-model.png"
+                alt="Column geometry and BCs"
+                style="max-width: 60%"
+              />
+              <p class="figure-caption">
+                Geometry: $H = 10\,\text{m}, W = 1\,\text{m}$. Dirichlet fixity
+                at the base with gravity loading.
+              </p>
             </div>
 
-            <div>
-                <div class="figure-container">
-                    <img src="assets/column-body-results_3.png" alt="Viscous Jacobian results">
-                    <p class="figure-caption">$\det(\Delta\mathbf{F}_v)$ remains $\approx 1$ throughout the simulation (deviations $\leq 10^{-6}$), confirming exact volume preservation.</p>
-                </div>
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Density $\rho$</td>
+                  <td>$917\,\text{kg/m}^3$</td>
+                </tr>
+                <tr>
+                  <td>Bulk modulus $\kappa$</td>
+                  <td>$7.92\,\text{GPa}$</td>
+                </tr>
+                <tr>
+                  <td>Shear modulus $\mu$</td>
+                  <td>$4.15\,\text{GPa}$</td>
+                </tr>
+                <tr>
+                  <td>Viscosity $\eta_\text{Glen}$</td>
+                  <td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td>
+                </tr>
+                <tr>
+                  <td>Glen exponent $m$</td>
+                  <td>$3$</td>
+                </tr>
+                <tr>
+                  <td>Rate factor $A$</td>
+                  <td>$10^{-25}\,\text{s}^{-1}\text{Pa}^{-3}$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                <div class="innovation-highlight">
-                    <h3><i class="fas fa-check-double"></i> Verification Result</h3>
-                    <p>The exponential map update preserves $\det(\Delta\mathbf{F}_v) = 1$ to within $\mathcal{O}(10^{-6})$ across all Gauss points and all load steps — including within the buckling localisation zone.</p>
-                </div>
+          <div>
+            <div class="figure-container">
+              <img
+                src="assets/column-body-results_3.png"
+                alt="Viscous Jacobian results"
+              />
+              <p class="figure-caption">
+                $\det(\Delta\mathbf{F}_v)$ remains $\approx 1$ throughout the
+                simulation (deviations $\leq 10^{-6}$), confirming exact volume
+                preservation.
+              </p>
             </div>
+
+            <div class="innovation-highlight">
+              <h3><i class="fas fa-check-double"></i> Verification Result</h3>
+              <p>
+                The exponential map update preserves $\det(\Delta\mathbf{F}_v) =
+                1$ to within $\mathcal{O}(10^{-6})$ across all Gauss points and
+                all load steps — including within the buckling localisation
+                zone.
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- Example 2: Ice Sheet -->
-        <h3 style="color: var(--uct-blue); margin: 2.5rem 0 1rem;">Example 2 — Ice Sheet Internal Moment Model (Fimbulisen)</h3>
+        <h3 style="color: var(--uct-blue); margin: 2.5rem 0 1rem">
+          Example 2 — Ice Sheet Internal Moment Model (Fimbulisen)
+        </h3>
         <div class="two-col">
-            <div>
-                <div class="figure-container">
-                    <img src="assets/case-study-model-2_geometry-and-bcs-schematic.png" alt="Ice sheet model schematic">
-                    <p class="figure-caption">Idealised shelf: $L = 6000\,\text{m}$, $H = 120\,\text{m}$. Self-weight + buoyancy loading with depth-dependent material properties.</p>
-                </div>
-
-                <div class="card mt-1" style="font-size: 0.88rem;">
-                    <h4>Boundary Conditions & Loading</h4>
-                    <ul>
-                        <li><strong>Hydrostatic pressure load:</strong> $p_w = \rho_w \cdot g \cdot h_w$ applied on the submerged right face and bottom boundary, where $h_w \approx 70\,\text{m}$ is the submersion depth</li>
-                        <li><strong>Buttressed left edge:</strong> roller boundary condition (horizontal displacement constrained, vertical free)</li>
-                        <li><strong>Gravitational acceleration:</strong> $g = 9.81\,\text{m/s}^2$; body force $\mathbf{b}_\text{ice} = \rho_\text{ice}(z) \cdot g$</li>
-                        <li><strong>Pressure distribution:</strong> vertical pressure arrows extend uniformly to indicate the same hydrostatic pressure on both the bottom and right-side submerged boundaries</li>
-                    </ul>
-                </div>
-
-                <table class="styled-table">
-                    <thead>
-                        <tr><th>Parameter</th><th>Value</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Density, $\rho_{base} = \rho_{ice}$</td><td>$917\,\text{kg/m}^3$</td></tr>
-                        <tr><td>Bulk modulus, $\kappa_{base} = \kappa_{ice}$</td><td>$7.92\,\text{GPa}$</td></tr>
-                        <tr><td>Shear modulus, $\mu_{base} = \mu_{ice}$</td><td>$4.15\,\text{GPa}$</td></tr>
-                        <!-- <tr><td>Viscosity $\eta_\text{Glen}$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr> -->
-                        <tr><td>Glen exponent, $m$</td><td>$3$</td></tr>
-                        <tr><td>Reference rate factor @ 263.15K, $A_0$</td><td>$3.15 \times 10^{0}\,\text{a}^{-1}\text{MPa}^{-3}$</td></tr>
-                        <tr><td>Activation energy @ $T > T_0$, $Q$</td><td>$120 \times 10^{3}\,\text{J/mol}$</td></tr>
-                        <tr><td>Activation energy @ $T < T_0$, $Q$</td><td>$60 \times 10^{3}\,\text{J/mol}$</td></tr>
-                        <tr><td>Universal gas constant, $R$</td><td>$8.314\,\text{J/mol}\cdot\text{K}$</td></tr>
-                        <tr><td>Reference temperature, $T_0$</td><td>$263.15\,\text{K}$</td></tr>
-                        <tr><td>Time step interval, $\Delta t$</td><td>$1 \times 10^{-3}\,\text{a}$</td></tr>
-                    </tbody>
-                </table>
-
+          <div>
+            <div class="figure-container">
+              <img
+                src="assets/case-study-model-2_geometry-and-bcs-schematic.png"
+                alt="Ice sheet model schematic"
+              />
+              <p class="figure-caption">
+                Idealised shelf: $L = 6000\,\text{m}$, $H = 120\,\text{m}$.
+                Self-weight + buoyancy loading with depth-dependent material
+                properties.
+              </p>
             </div>
 
-            <div>
-                <div class="card">
-                    <h3>Depth &amp; Temperature Dynamics</h3>
-                    <ul>
-                        <li><strong>Density &amp; Body Force:</strong> $\rho_\text{ice} = \rho_\text{ice}(z)$ firn profile; $\mathbf{b}_\text{ice}(z) = \rho_\text{ice}(z)\,\mathbf{g}$</li>
-                        <li><strong>Elastic moduli:</strong> $\kappa_\text{ice}(z),\,\mu_\text{ice}(z)$ — graded with overburden pressure</li>
-                        <li><strong>Viscosity Stratification:</strong> The non-linear Glen's flow law incorporates a strong temperature dependence where the rate factor $A(z, T)$ is affected by temperature field variations $T(z)$:</li>
-                    </ul>
-                    <div class="equation-block" style="margin: 0.75rem 0; padding: 0.85rem 1rem;">
-                        $$\eta_\text{Glen} = \frac{1}{2 A(z, T) \tau_e^{m-1}}, \quad A(z, T) = A_{0} \exp\!\left(\frac{-Q (T_0 - T(z))}{R T(z) T_0}\right)$$
-                    </div>
-                    <div class="figure-container" style="margin: 0.75rem 0; padding: 0.75rem;">
-                        <img src="assets/temperature_distribution_plot.png" alt="Temperature field variations (Humbert, 2011)" style="max-height: 550px; width: auto; object-fit: contain;">
-                        <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Temperature field variations (Humbert, 2011). This thermal profile $T(z)$ critically governs the viscosity variation $\eta_\text{Glen}$ throughout the ice shelf.</p>
-                    </div>
-                </div>
-                <div class="card mt-1">
-                    <h3>Extended Weak Form</h3>
-                    <div class="equation-block" style="margin: 0.5rem 0;">
-                        $$\int_\mathcal{B} \mathbf{F}\mathbf{S} : \delta\mathbf{u}\,dV - \int_\mathcal{B} \mathbf{b}_\text{ice}(z)\cdot\delta\mathbf{u}\,dV - \int_{\partial\mathcal{B}_N} \mathbf{t}^{\mathbf{n}}\cdot\delta\mathbf{u}\,dA = 0$$
-                    </div>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem;">Stress $\mathbf{S}$ now uses depth-dependent ice moduli $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ and temperature-dependent viscosity.</p>
-                </div>
+            <div class="card mt-1" style="font-size: 0.88rem">
+              <h4>Boundary Conditions & Loading</h4>
+              <ul>
+                <li>
+                  <strong>Hydrostatic pressure load:</strong> $p_w = \rho_w
+                  \cdot g \cdot h_w$ applied on the submerged right face and
+                  bottom boundary, where $h_w \approx 70\,\text{m}$ is the
+                  submersion depth
+                </li>
+                <li>
+                  <strong>Buttressed left edge:</strong> roller boundary
+                  condition (horizontal displacement constrained, vertical free)
+                </li>
+                <li>
+                  <strong>Gravitational acceleration:</strong> $g =
+                  9.81\,\text{m/s}^2$; body force $\mathbf{b}_\text{ice} =
+                  \rho_\text{ice}(z) \cdot g$
+                </li>
+                <li>
+                  <strong>Pressure distribution:</strong> vertical pressure
+                  arrows extend uniformly to indicate the same hydrostatic
+                  pressure on both the bottom and right-side submerged
+                  boundaries
+                </li>
+              </ul>
             </div>
+
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Density, $\rho_{base} = \rho_{ice}$</td>
+                  <td>$917\,\text{kg/m}^3$</td>
+                </tr>
+                <tr>
+                  <td>Bulk modulus, $\kappa_{base} = \kappa_{ice}$</td>
+                  <td>$7.92\,\text{GPa}$</td>
+                </tr>
+                <tr>
+                  <td>Shear modulus, $\mu_{base} = \mu_{ice}$</td>
+                  <td>$4.15\,\text{GPa}$</td>
+                </tr>
+                <!-- <tr><td>Viscosity $\eta_\text{Glen}$</td><td>$\sim 10^5\,\text{GPa}\!\cdot\!\text{s}$</td></tr> -->
+                <tr>
+                  <td>Glen exponent, $m$</td>
+                  <td>$3$</td>
+                </tr>
+                <tr>
+                  <td>Reference rate factor @ 263.15K, $A_0$</td>
+                  <td>$3.15 \times 10^{0}\,\text{a}^{-1}\text{MPa}^{-3}$</td>
+                </tr>
+                <tr>
+                  <td>Activation energy @ $T > T_0$, $Q$</td>
+                  <td>$120 \times 10^{3}\,\text{J/mol}$</td>
+                </tr>
+                <tr>
+                  <td>Activation energy @ $T < T_0$, $Q$</td>
+                  <td>$60 \times 10^{3}\,\text{J/mol}$</td>
+                </tr>
+                <tr>
+                  <td>Universal gas constant, $R$</td>
+                  <td>$8.314\,\text{J/mol}\cdot\text{K}$</td>
+                </tr>
+                <tr>
+                  <td>Reference temperature, $T_0$</td>
+                  <td>$263.15\,\text{K}$</td>
+                </tr>
+                <tr>
+                  <td>Time step interval, $\Delta t$</td>
+                  <td>$1 \times 10^{-3}\,\text{a}$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <div class="card">
+              <h3>Depth &amp; Temperature Dynamics</h3>
+              <ul>
+                <li>
+                  <strong>Density &amp; Body Force:</strong> $\rho_\text{ice} =
+                  \rho_\text{ice}(z)$ firn profile; $\mathbf{b}_\text{ice}(z) =
+                  \rho_\text{ice}(z)\,\mathbf{g}$
+                </li>
+                <li>
+                  <strong>Elastic moduli:</strong>
+                  $\kappa_\text{ice}(z),\,\mu_\text{ice}(z)$ — graded with
+                  overburden pressure
+                </li>
+                <li>
+                  <strong>Viscosity Stratification:</strong> The non-linear
+                  Glen's flow law incorporates a strong temperature dependence
+                  where the rate factor $A(z, T)$ is affected by temperature
+                  field variations $T(z)$:
+                </li>
+              </ul>
+              <div
+                class="equation-block"
+                style="margin: 0.75rem 0; padding: 0.85rem 1rem"
+              >
+                $$\eta_\text{Glen} = \frac{1}{2 A(z, T) \tau_e^{m-1}}, \quad
+                A(z, T) = A_{0} \exp\!\left(\frac{-Q (T_0 - T(z))}{R T(z)
+                T_0}\right)$$
+              </div>
+              <div
+                class="figure-container"
+                style="margin: 0.75rem 0; padding: 0.75rem"
+              >
+                <img
+                  src="assets/temperature_distribution_plot.png"
+                  alt="Temperature field variations (Humbert, 2011)"
+                  style="max-height: 550px; width: auto; object-fit: contain"
+                />
+                <p
+                  class="figure-caption"
+                  style="margin-top: 0.5rem; line-height: 1.4"
+                >
+                  Temperature field variations (Humbert, 2011). This thermal
+                  profile $T(z)$ critically governs the viscosity variation
+                  $\eta_\text{Glen}$ throughout the ice shelf.
+                </p>
+              </div>
+            </div>
+            <div class="card mt-1">
+              <h3>Extended Weak Form</h3>
+              <div class="equation-block" style="margin: 0.5rem 0">
+                $$\int_\mathcal{B} \mathbf{F}\mathbf{S} : \delta\mathbf{u}\,dV -
+                \int_\mathcal{B}
+                \mathbf{b}_\text{ice}(z)\cdot\delta\mathbf{u}\,dV -
+                \int_{\partial\mathcal{B}_N}
+                \mathbf{t}^{\mathbf{n}}\cdot\delta\mathbf{u}\,dA = 0$$
+              </div>
+              <p style="color: var(--text-secondary); font-size: 0.85rem">
+                Stress $\mathbf{S}$ now uses depth-dependent ice moduli
+                $\kappa_\text{ice}(z), \mu_\text{ice}(z)$ and
+                temperature-dependent viscosity.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <h4 style="color: var(--glacier-teal); margin-top: 1.5rem;"><i class="fas fa-flask"></i> Uniform Viscosity Example</h4>
-        <div class="figure-container" style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%;">
-            <img src="assets/case-study-model_uniform-viscosity.png" alt="Uniform viscosity numerical results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results under uniform (non-stratified) viscosity — isolating the purely mechanical response as a baseline for the internal bending moment analysis at the calving front.</p>
+        <h4 style="color: var(--glacier-teal); margin-top: 1.5rem">
+          <i class="fas fa-flask"></i> Uniform Viscosity Example
+        </h4>
+        <div
+          class="figure-container"
+          style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%"
+        >
+          <img
+            src="assets/case-study-model_uniform-viscosity.png"
+            alt="Uniform viscosity numerical results"
+            style="
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            "
+          />
+          <p
+            class="figure-caption"
+            style="margin-top: 0.5rem; line-height: 1.4"
+          >
+            Numerical results under uniform (non-stratified) viscosity —
+            isolating the purely mechanical response as a baseline for the
+            internal bending moment analysis at the calving front.
+          </p>
         </div>
 
-        <h4 style="color: var(--warm-accent); margin-top: 1.5rem;"><i class="fas fa-temperature-high"></i> Variable (Temperature-Dependent) Viscosity Example</h4>
-        <div class="figure-container" style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%;">
-            <img src="assets/case-study-model_variable-viscosity.png" alt="Variable viscosity numerical results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);">
-            <p class="figure-caption" style="margin-top: 0.5rem; line-height: 1.4;">Numerical results with depth- and temperature-stratified viscosity via the Arrhenius-type Glen's flow law. The non-uniform $\eta_\text{Glen}(z, T)$ introduces asymmetric stress redistribution near the calving front, consistent with observed shelf dynamics.</p>
+        <h4 style="color: var(--warm-accent); margin-top: 1.5rem">
+          <i class="fas fa-temperature-high"></i> Variable
+          (Temperature-Dependent) Viscosity Example
+        </h4>
+        <div
+          class="figure-container"
+          style="margin: 0.75rem auto; padding: 0.75rem; max-width: 85%"
+        >
+          <img
+            src="assets/case-study-model_variable-viscosity.png"
+            alt="Variable viscosity numerical results"
+            style="
+              width: 100%;
+              height: auto;
+              border-radius: 8px;
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            "
+          />
+          <p
+            class="figure-caption"
+            style="margin-top: 0.5rem; line-height: 1.4"
+          >
+            Numerical results with depth- and temperature-stratified viscosity
+            via the Arrhenius-type Glen's flow law. The non-uniform
+            $\eta_\text{Glen}(z, T)$ introduces asymmetric stress redistribution
+            near the calving front, consistent with observed shelf dynamics.
+          </p>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-
-<!-- ================================================================
+    <!-- ================================================================
      SLIDE 10 — CONCLUSIONS
      ================================================================ -->
-<section id="conclusions" class="slide slide-closing" style="background: linear-gradient(135deg, #0a1628 0%, #132a4a 40%, #1a3a5c 100%); color: #fff;">
-    <span class="slide-number" style="color: rgba(255,255,255,0.06);">08</span>
-    <div class="slide-inner reveal" style="max-width: 1000px;">
+    <section
+      id="conclusions"
+      class="slide slide-closing"
+      style="
+        background: linear-gradient(
+          135deg,
+          #0a1628 0%,
+          #132a4a 40%,
+          #1a3a5c 100%
+        );
+        color: #fff;
+      "
+    >
+      <span class="slide-number" style="color: rgba(255, 255, 255, 0.06)"
+        >08</span
+      >
+      <div class="slide-inner reveal" style="max-width: 1000px">
         <div class="section-header text-center">
-            <div class="section-label" style="color: var(--ice-cyan); justify-content: center;"><i class="fas fa-flag-checkered"></i> Summary</div>
-            <h2>Conclusions &amp; Outlook</h2>
+          <div
+            class="section-label"
+            style="color: var(--ice-cyan); justify-content: center"
+          >
+            <i class="fas fa-flag-checkered"></i> Summary
+          </div>
+          <h2>Conclusions &amp; Outlook</h2>
         </div>
 
-        <div class="card-grid" style="margin-top: 1.5rem;">
-            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-shield-alt"></i></div>
-                <h3 style="color: var(--ice-cyan);">Provably Objective Rate Variable</h3>
-                <p style="color: rgba(255,255,255,0.85);">The viscous material velocity gradient $\mathbf{L}_v = \mathbf{F}_v^{-1}\dot{\mathbf{F}}_v$ is additively isolated from all rotation-dependent spin terms under superposed rigid rotations. Within the Maxwell element formulation, $\mathbf{L}_v$ is an objective, symmetric, and isochoric strain-rate measure — replacing higher-order Lie/Oldroyd rates of $\mathbf{C}_e$ that couple poorly to inelastic constitutive behaviour.</p>
+        <div class="card-grid" style="margin-top: 1.5rem">
+          <div
+            class="card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+            "
+          >
+            <div
+              class="card-icon"
+              style="
+                background: rgba(137, 207, 240, 0.15);
+                color: var(--ice-cyan);
+              "
+            >
+              <i class="fas fa-shield-alt"></i>
             </div>
-
-            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-check-circle"></i></div>
-                <h3 style="color: var(--ice-cyan);">Thermodynamic Consistency</h3>
-                <p style="color: rgba(255,255,255,0.85);">A complete Clausius–Duhem dissipation inequality was derived, yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$. The constitutive relation $\boldsymbol{\Xi} = 2\rho_0 \mathbf{F}_v^T \frac{\partial \Psi}{\partial \boldsymbol{\alpha}} \mathbf{F}_v^{-T}$ emerges naturally from the Coleman–Noll procedure — Glen's flow law is embedded directly without ad hoc overstress potentials or penalty formulations.</p>
-            </div>
-
-            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-chart-area"></i></div>
-                <h3 style="color: var(--ice-cyan);">Near-Front Bending Dynamics</h3>
-                <p style="color: rgba(255,255,255,0.85);">Both the uniform and variable (temperature-stratified) viscosity simulations capture the expected internal bending moment at the calving front of the Fimbulisen ice shelf. The variable viscosity model, driven by the Arrhenius-type Humbert temperature profile $T(z)$, produces an asymmetric stress redistribution through the shelf thickness — consistent with the depth-dependent creep rates observed in Antarctic field measurements.</p>
-            </div>
-
-            <div class="card" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">
-                <div class="card-icon" style="background: rgba(137,207,240,0.15); color: var(--ice-cyan);"><i class="fas fa-road"></i></div>
-                <h3 style="color: var(--ice-cyan);">Future Work</h3>
-                <p style="color: rgba(255,255,255,0.85);">Extension of the formulation to incorporate damage mechanics — coupling viscoelastic creep with phase-field or continuum damage models to capture crevasse propagation, rift initiation, and eventual calving events at ice-shelf fronts. The Lie-group structure of the exponential map update provides a natural framework for this coupling.</p>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15);">
-            <img src="../../assets/paul.jpg" alt="Paul K. Namalomba" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--ice-cyan); margin-bottom: 0.75rem; box-shadow: 0 2px 12px rgba(0,0,0,0.3);">
-            <p style="font-size: 1.2rem; font-weight: 600; color: var(--ice-cyan); margin-bottom: 0.5rem;">Thank You</p>
-            <p style="font-size: 0.9rem;">Paul K. Namalomba, Sebastian Skatulla, Carlo Sansour, Michael Kaliske &amp; Maxime Nutte</p>
-            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
-                <i class="fas fa-envelope" style="margin-right: 0.3rem;"></i> <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a> &nbsp;|&nbsp;
-                <i class="fab fa-github" style="margin-right: 0.3rem;"></i> <a href="https://paulnamalomba.github.io" target="_blank">paulnamalomba.github.io</a>
+            <h3 style="color: var(--ice-cyan)">
+              Provably Objective Rate Variable
+            </h3>
+            <p style="color: rgba(255, 255, 255, 0.85)">
+              The viscous material velocity gradient $\mathbf{L}_v =
+              \mathbf{F}_v^{-1}\dot{\mathbf{F}}_v$ is additively isolated from
+              all rotation-dependent spin terms under superposed rigid
+              rotations. Within the Maxwell element formulation, $\mathbf{L}_v$
+              is an objective, symmetric, and isochoric strain-rate measure —
+              replacing higher-order Lie/Oldroyd rates of $\mathbf{C}_e$ that
+              couple poorly to inelastic constitutive behaviour.
             </p>
-            <p style="font-size: 0.75rem; margin-top: 1rem; opacity: 0.6;">
-                AfriComp7 — 7th African Conference on Computational Mechanics · Cape Town, 25–27 February 2026
+          </div>
+
+          <div
+            class="card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+            "
+          >
+            <div
+              class="card-icon"
+              style="
+                background: rgba(137, 207, 240, 0.15);
+                color: var(--ice-cyan);
+              "
+            >
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 style="color: var(--ice-cyan)">Thermodynamic Consistency</h3>
+            <p style="color: rgba(255, 255, 255, 0.85)">
+              A complete Clausius–Duhem dissipation inequality was derived,
+              yielding $\mathcal{D} = \boldsymbol{\Xi} : \mathbf{L}_v \geq 0$.
+              The constitutive relation $\boldsymbol{\Xi} = 2\rho_0
+              \mathbf{F}_v^T \frac{\partial \Psi}{\partial \boldsymbol{\alpha}}
+              \mathbf{F}_v^{-T}$ emerges naturally from the Coleman–Noll
+              procedure — Glen's flow law is embedded directly without ad hoc
+              overstress potentials or penalty formulations.
             </p>
+          </div>
+
+          <div
+            class="card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+            "
+          >
+            <div
+              class="card-icon"
+              style="
+                background: rgba(137, 207, 240, 0.15);
+                color: var(--ice-cyan);
+              "
+            >
+              <i class="fas fa-chart-area"></i>
+            </div>
+            <h3 style="color: var(--ice-cyan)">Near-Front Bending Dynamics</h3>
+            <p style="color: rgba(255, 255, 255, 0.85)">
+              Both the uniform and variable (temperature-stratified) viscosity
+              simulations capture the expected internal bending moment at the
+              calving front of the Fimbulisen ice shelf. The variable viscosity
+              model, driven by the Arrhenius-type Humbert temperature profile
+              $T(z)$, produces an asymmetric stress redistribution through the
+              shelf thickness — consistent with the depth-dependent creep rates
+              observed in Antarctic field measurements.
+            </p>
+          </div>
+
+          <div
+            class="card"
+            style="
+              background: rgba(255, 255, 255, 0.08);
+              border-color: rgba(255, 255, 255, 0.15);
+            "
+          >
+            <div
+              class="card-icon"
+              style="
+                background: rgba(137, 207, 240, 0.15);
+                color: var(--ice-cyan);
+              "
+            >
+              <i class="fas fa-road"></i>
+            </div>
+            <h3 style="color: var(--ice-cyan)">Future Work</h3>
+            <p style="color: rgba(255, 255, 255, 0.85)">
+              Extension of the formulation to incorporate damage mechanics —
+              coupling viscoelastic creep with phase-field or continuum damage
+              models to capture crevasse propagation, rift initiation, and
+              eventual calving events at ice-shelf fronts. The Lie-group
+              structure of the exponential map update provides a natural
+              framework for this coupling.
+            </p>
+          </div>
         </div>
-    </div>
-</section>
 
+        <div
+          style="
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+          "
+        >
+          <img
+            src="../../assets/paul.jpg"
+            alt="Paul K. Namalomba"
+            style="
+              width: 80px;
+              height: 80px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 3px solid var(--ice-cyan);
+              margin-bottom: 0.75rem;
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            "
+          />
+          <p
+            style="
+              font-size: 1.2rem;
+              font-weight: 600;
+              color: var(--ice-cyan);
+              margin-bottom: 0.5rem;
+            "
+          >
+            Thank You
+          </p>
+          <p style="font-size: 0.9rem">
+            Paul K. Namalomba, Sebastian Skatulla, Carlo Sansour, Michael
+            Kaliske &amp; Maxime Nutte
+          </p>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem">
+            <i class="fas fa-envelope" style="margin-right: 0.3rem"></i>
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            >
+            &nbsp;|&nbsp;
+            <i class="fab fa-github" style="margin-right: 0.3rem"></i>
+            <a href="https://paulnamalomba.github.io" target="_blank"
+              >paulnamalomba.github.io</a
+            >
+          </p>
+          <p style="font-size: 0.75rem; margin-top: 1rem; opacity: 0.6">
+            AfriComp7 — 7th African Conference on Computational Mechanics · Cape
+            Town, 25–27 February 2026
+          </p>
+        </div>
+      </div>
+    </section>
 
-<!-- ================================================================
+    <!-- ================================================================
      SCRIPTS
      ================================================================ -->
-<script>
-    // ---- Scroll reveal animation ----
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    <script>
+      // ---- Scroll reveal animation ----
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+              entry.target.classList.add("visible");
             }
-        });
-    }, { threshold: 0.1 });
+          });
+        },
+        { threshold: 0.1 },
+      );
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
 
-    // ---- Nav auto-hide on title slide ----
-    const nav = document.querySelector('.slide-nav');
-    const titleSection = document.getElementById('title');
-    const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+      // ---- Nav auto-hide on title slide ----
+      const nav = document.querySelector(".slide-nav");
+      const titleSection = document.getElementById("title");
+      const navObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                nav.style.transform = 'translateY(-100%)';
-                nav.style.opacity = '0';
+              nav.style.transform = "translateY(-100%)";
+              nav.style.opacity = "0";
             } else {
-                nav.style.transform = 'translateY(0)';
-                nav.style.opacity = '1';
+              nav.style.transform = "translateY(0)";
+              nav.style.opacity = "1";
             }
-        });
-    }, { threshold: 0.5 });
-    navObserver.observe(titleSection);
+          });
+        },
+        { threshold: 0.5 },
+      );
+      navObserver.observe(titleSection);
 
-    // ---- Active nav link ----
-    const sections = document.querySelectorAll('.slide[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
+      // ---- Active nav link ----
+      const sections = document.querySelectorAll(".slide[id]");
+      const navLinks = document.querySelectorAll(".nav-links a");
 
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            if (window.scrollY >= sectionTop) {
-                current = section.getAttribute('id');
-            }
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop - 100;
+          if (window.scrollY >= sectionTop) {
+            current = section.getAttribute("id");
+          }
         });
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
-            }
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+          }
         });
-    });
+      });
 
-    // ---- Keyboard navigation ----
-    document.addEventListener('keydown', (e) => {
-        const sectionIds = Array.from(sections).map(s => s.id);
+      // ---- Keyboard navigation ----
+      document.addEventListener("keydown", (e) => {
+        const sectionIds = Array.from(sections).map((s) => s.id);
         let currentIdx = 0;
         let scrollY = window.scrollY;
 
         sections.forEach((section, i) => {
-            if (scrollY >= section.offsetTop - 150) currentIdx = i;
+          if (scrollY >= section.offsetTop - 150) currentIdx = i;
         });
 
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            const next = Math.min(currentIdx + 1, sectionIds.length - 1);
-            document.getElementById(sectionIds[next]).scrollIntoView({ behavior: 'smooth' });
-        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-            e.preventDefault();
-            const prev = Math.max(currentIdx - 1, 0);
-            document.getElementById(sectionIds[prev]).scrollIntoView({ behavior: 'smooth' });
+        if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          const next = Math.min(currentIdx + 1, sectionIds.length - 1);
+          document
+            .getElementById(sectionIds[next])
+            .scrollIntoView({ behavior: "smooth" });
+        } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          const prev = Math.max(currentIdx - 1, 0);
+          document
+            .getElementById(sectionIds[prev])
+            .scrollIntoView({ behavior: "smooth" });
         }
-    });
+      });
 
-    // ---- PDF Export via html2pdf.js ----
-    const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-    if (downloadPdfBtn) {
-        downloadPdfBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Add custom button loading state
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
-            this.style.pointerEvents = 'none';
+      // ---- PDF Export via html2pdf.js ----
+      const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+      if (downloadPdfBtn) {
+        downloadPdfBtn.addEventListener("click", function (e) {
+          e.preventDefault();
 
-            // Prepare body for export
-            document.documentElement.classList.add('pdf-export-mode');
-            document.body.classList.add('pdf-export-mode');
-            
-            // Scroll to top immediately without animation
-            window.scrollTo({top: 0, left: 0, behavior: 'instant'});
+          // Add custom button loading state
+          const originalText = this.innerHTML;
+          this.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+          this.style.pointerEvents = "none";
 
-            // Set up config for exact 1920x1080 resolution
-            const element = document.body;
-            const opt = {
-                margin:       0,
-                filename:     'AfriComp7_Paul_Namalomba_Presentation.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, windowWidth: 1920, scrollY: 0, useCORS: true, logging: false },
-                jsPDF:        { unit: 'px', format: [1920, 1080], orientation: 'landscape' },
-                pagebreak:    { mode: ['css', 'legacy'] }
-            };
+          // Prepare body for export
+          document.documentElement.classList.add("pdf-export-mode");
+          document.body.classList.add("pdf-export-mode");
 
-            // Generate and download
-            html2pdf().set(opt).from(element).save().then(() => {
-                // Restore state after download
-                document.documentElement.classList.remove('pdf-export-mode');
-                document.body.classList.remove('pdf-export-mode');
-                this.innerHTML = originalText;
-                this.style.pointerEvents = 'auto';
-            }).catch(err => {
-                console.error("PDF generation error: ", err);
-                document.documentElement.classList.remove('pdf-export-mode');
-                document.body.classList.remove('pdf-export-mode');
-                this.innerHTML = originalText;
-                this.style.pointerEvents = 'auto';
-                alert("An error occurred during PDF generation.");
+          // Scroll to top immediately without animation
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+
+          // Set up config for exact 1920x1080 resolution
+          const element = document.body;
+          const opt = {
+            margin: 0,
+            filename: "AfriComp7_Paul_Namalomba_Presentation.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: {
+              scale: 2,
+              windowWidth: 1920,
+              scrollY: 0,
+              useCORS: true,
+              logging: false,
+            },
+            jsPDF: {
+              unit: "px",
+              format: [1920, 1080],
+              orientation: "landscape",
+            },
+            pagebreak: { mode: ["css", "legacy"] },
+          };
+
+          // Generate and download
+          html2pdf()
+            .set(opt)
+            .from(element)
+            .save()
+            .then(() => {
+              // Restore state after download
+              document.documentElement.classList.remove("pdf-export-mode");
+              document.body.classList.remove("pdf-export-mode");
+              this.innerHTML = originalText;
+              this.style.pointerEvents = "auto";
+            })
+            .catch((err) => {
+              console.error("PDF generation error: ", err);
+              document.documentElement.classList.remove("pdf-export-mode");
+              document.body.classList.remove("pdf-export-mode");
+              this.innerHTML = originalText;
+              this.style.pointerEvents = "auto";
+              alert("An error occurred during PDF generation.");
             });
         });
-    }
-</script>
-
-</body>
+      }
+    </script>
+  </body>
 </html>

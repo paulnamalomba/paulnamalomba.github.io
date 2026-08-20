@@ -1,184 +1,305 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 5: IBM Db2 Warehouse</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 5: IBM Db2 Warehouse</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Course 9: Data Warehouse Fundamentals ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html" class="active"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/index.html" class="active"
+                >Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 5 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/lecture-1.html">Lecture 1: Data Warehouse Overview</a>
-            <a href="../../course-9/module-1/lecture-2.html">Lecture 2: Popular Data Warehouse Systems</a>
-            <a href="../../course-9/module-1/lecture-3.html">Lecture 3: Selecting a Data Warehouse System</a>
-            <a href="../../course-9/module-1/lecture-4.html">Lecture 4: Data Marts Overview</a>
-            <a href="../../course-9/module-1/lecture-5.html" class="active">Lecture 5: IBM Db2 Warehouse</a>
-            <a href="../../course-9/module-1/lecture-6.html">Lecture 6: Data Lakes Overview</a>
-            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 5 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/lecture-1.html"
+                >Lecture 1: Data Warehouse Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-2.html"
+                >Lecture 2: Popular Data Warehouse Systems</a
+              >
+              <a href="../../course-9/module-1/lecture-3.html"
+                >Lecture 3: Selecting a Data Warehouse System</a
+              >
+              <a href="../../course-9/module-1/lecture-4.html"
+                >Lecture 4: Data Marts Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-5.html" class="active"
+                >Lecture 5: IBM Db2 Warehouse</a
+              >
+              <a href="../../course-9/module-1/lecture-6.html"
+                >Lecture 6: Data Lakes Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-7.html"
+                >Lecture 7: Data Lakes, Data Warehouses, and the Data
+                Lakehouse</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
+
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 9</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 1</a> <span>&rsaquo;</span>
+        Lecture 5
+      </div>
+
+      <h1 class="fade-in">IBM Db2 Warehouse</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 1, Lecture 5
+      </p>
+
+      <p class="fade-in fade-in-d2">
+        Moving from warehouse theory to a concrete platform, IBM Db2 Warehouse
+        represents an enterprise-grade, containerized data warehousing solution
+        designed for hybrid deployments. It collapses the gap between data
+        storage and analytical computation by embedding machine learning and
+        in-memory processing directly into the warehouse engine.
+      </p>
+      <hr />
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. Platform Overview</h2>
+        <p>
+          <strong>IBM Db2 Warehouse</strong> is a complete data warehousing
+          solution that provides a high level of control over data and
+          applications while maintaining deployment flexibility. Key
+          characteristics:
+        </p>
+        <ul>
+          <li>
+            <strong>Containerized deployment</strong> — easily deployable within
+            Docker and other container orchestration environments
+          </li>
+          <li>
+            <strong>Hybrid flexibility</strong> — supports client-managed,
+            on-premises, cloud, and hybrid environments
+          </li>
+          <li>
+            <strong>Automatic scaling</strong> via
+            <strong>Massively Parallel Processing (MPP)</strong> across
+            containerized deployments
+          </li>
+          <li>
+            <strong>Built-in machine learning</strong> — comes pre-packaged with
+            access to ML algorithms and utilizes in-database analytics for speed
+          </li>
+          <li>
+            <strong>Automated schema generation</strong> — seamlessly transforms
+            and loads unstructured data sources into structured formats for
+            analysis
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Query Acceleration: BLU Acceleration</h2>
+        <p>
+          Db2 Warehouse achieves query performance through
+          <strong>BLU Acceleration</strong>, a suite of optimization
+          technologies:
+        </p>
+        <ul>
+          <li>
+            <strong>In-memory columnar processing</strong> — SQL queries operate
+            on columnar data stored in memory, dramatically reducing I/O
+          </li>
+          <li>
+            <strong>Data-skipping</strong> — the engine bypasses irrelevant data
+            segments entirely, avoiding unnecessary reads
+          </li>
+          <li>
+            <strong>MPP cluster architecture</strong> — complex queries are
+            distributed and parallelized across nodes for maximum throughput
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Monitoring and Observability</h2>
+        <p>
+          Db2 Warehouse ships with built-in dashboards for performance
+          monitoring and issue reporting. Available widgets include:
+        </p>
+        <ul>
+          <li>Hardware and software issue counts</li>
+          <li>Database alert events with detailed breakdowns</li>
+          <li>
+            Time-state analysis — how much time is spent waiting for locks
+            versus executing SQL queries
+          </li>
+          <li>Allotted storage utilization</li>
+          <li>System and data server CPU utilization history</li>
+        </ul>
+        <p>
+          These dashboards provide operational visibility without requiring
+          external monitoring infrastructure.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. Use Cases</h2>
+        <p>Db2 Warehouse is well-suited for the following scenarios:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Use Case</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Elasticity / High Scalability</strong></td>
+              <td>
+                Workloads requiring dynamic scaling of compute and storage
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Hybrid Hosting</strong></td>
+              <td>
+                Cloud, on-premises, or hybrid environments requiring portability
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Data Consolidation</strong></td>
+              <td>
+                Integration of disparate data sources into a unified analytical
+                layer
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Rapid Data Mart Development</strong></td>
+              <td>Fast development of line-of-business analytics products</td>
+            </tr>
+            <tr>
+              <td><strong>Regulated Data Management</strong></td>
+              <td>
+                Storage and governance of sensitive or compliance-bound data
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Cold Structured Data</strong></td>
+              <td>
+                Long-term archival storage of older, less-frequently-accessed
+                SQL data
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>5. Client Support and Integrations</h2>
+        <h3>5.1 Supported Clients and Plugins</h3>
+        <p>Db2 Warehouse supports a wide range of development clients:</p>
+        <ul>
+          <li><strong>JDBC</strong> (Java Database Connectivity)</li>
+          <li><strong>Node.js</strong></li>
+          <li><strong>Spring</strong></li>
+          <li><strong>Python</strong></li>
+          <li><strong>R</strong></li>
+          <li><strong>Go</strong></li>
+          <li><strong>Apache Spark</strong></li>
+          <li><strong>Microsoft Visual Studio</strong></li>
+        </ul>
+        <h3>5.2 Apache Spark Integration</h3>
+        <p>
+          Db2 Warehouse includes an integrated
+          <strong>Apache Spark cluster</strong> that can be partitioned and
+          deployed across a cluster of machines. Spark jobs are submitted
+          through stored procedures, extending the warehouse's analytical reach
+          into distributed computation workloads.
+        </p>
+        <h3>5.3 RStudio Integration</h3>
+        <p>
+          RStudio can connect directly to Db2 Warehouse for data analysis,
+          wrangling, modelling, and visualization. A common pattern is to create
+          a custom Docker image containing RStudio with all required packages
+          and drivers pre-installed. Applications running R code can also
+          integrate with Db2 through a <strong>REST API</strong>.
+        </p>
+        <h3>5.4 Open-Source Driver Ecosystem</h3>
+        <p>
+          IBM maintains commonly used open-source drivers on GitHub in the
+          <strong>IBM DB</strong> repository. For example, the
+          <code>python-ibmdb</code> package provides a Python interface for
+          connecting to IBM Db2—enabling integration with Python-based data
+          science and ETL workflows.
+        </p>
+        <hr />
+        <p>
+          Would you like to explore how Db2 Warehouse's MPP architecture
+          distributes query execution across nodes, or should we move into
+          understanding data lakes and how they complement the data warehouse in
+          modern data architectures?
+        </p>
+      </div>
+
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
-      Lecture 5
-    </div>
-
-    <h1 class="fade-in">IBM Db2 Warehouse</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 1, Lecture 5
-    </p>
-
-
-<p class="fade-in fade-in-d2">Moving from warehouse theory to a concrete platform, IBM Db2 Warehouse represents an enterprise-grade, containerized data warehousing solution designed for hybrid deployments. It collapses the gap between data storage and analytical computation by embedding machine learning and in-memory processing directly into the warehouse engine.</p>
-<hr/>
-<div class="section-card fade-in fade-in-d2"><h2>1. Platform Overview</h2>
-<p><strong>IBM Db2 Warehouse</strong> is a complete data warehousing solution that provides a high level of control over data and applications while maintaining deployment flexibility. Key characteristics:</p>
-<ul>
-<li><strong>Containerized deployment</strong> — easily deployable within Docker and other container orchestration environments</li>
-<li><strong>Hybrid flexibility</strong> — supports client-managed, on-premises, cloud, and hybrid environments</li>
-<li><strong>Automatic scaling</strong> via <strong>Massively Parallel Processing (MPP)</strong> across containerized deployments</li>
-<li><strong>Built-in machine learning</strong> — comes pre-packaged with access to ML algorithms and utilizes in-database analytics for speed</li>
-<li><strong>Automated schema generation</strong> — seamlessly transforms and loads unstructured data sources into structured formats for analysis</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Query Acceleration: BLU Acceleration</h2>
-<p>Db2 Warehouse achieves query performance through <strong>BLU Acceleration</strong>, a suite of optimization technologies:</p>
-<ul>
-<li><strong>In-memory columnar processing</strong> — SQL queries operate on columnar data stored in memory, dramatically reducing I/O</li>
-<li><strong>Data-skipping</strong> — the engine bypasses irrelevant data segments entirely, avoiding unnecessary reads</li>
-<li><strong>MPP cluster architecture</strong> — complex queries are distributed and parallelized across nodes for maximum throughput</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Monitoring and Observability</h2>
-<p>Db2 Warehouse ships with built-in dashboards for performance monitoring and issue reporting. Available widgets include:</p>
-<ul>
-<li>Hardware and software issue counts</li>
-<li>Database alert events with detailed breakdowns</li>
-<li>Time-state analysis — how much time is spent waiting for locks versus executing SQL queries</li>
-<li>Allotted storage utilization</li>
-<li>System and data server CPU utilization history</li>
-</ul>
-<p>These dashboards provide operational visibility without requiring external monitoring infrastructure.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. Use Cases</h2>
-<p>Db2 Warehouse is well-suited for the following scenarios:</p>
-<table>
-<thead>
-<tr>
-<th>Use Case</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Elasticity / High Scalability</strong></td>
-<td>Workloads requiring dynamic scaling of compute and storage</td>
-</tr>
-<tr>
-<td><strong>Hybrid Hosting</strong></td>
-<td>Cloud, on-premises, or hybrid environments requiring portability</td>
-</tr>
-<tr>
-<td><strong>Data Consolidation</strong></td>
-<td>Integration of disparate data sources into a unified analytical layer</td>
-</tr>
-<tr>
-<td><strong>Rapid Data Mart Development</strong></td>
-<td>Fast development of line-of-business analytics products</td>
-</tr>
-<tr>
-<td><strong>Regulated Data Management</strong></td>
-<td>Storage and governance of sensitive or compliance-bound data</td>
-</tr>
-<tr>
-<td><strong>Cold Structured Data</strong></td>
-<td>Long-term archival storage of older, less-frequently-accessed SQL data</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>5. Client Support and Integrations</h2>
-<h3>5.1 Supported Clients and Plugins</h3>
-<p>Db2 Warehouse supports a wide range of development clients:</p>
-<ul>
-<li><strong>JDBC</strong> (Java Database Connectivity)</li>
-<li><strong>Node.js</strong></li>
-<li><strong>Spring</strong></li>
-<li><strong>Python</strong></li>
-<li><strong>R</strong></li>
-<li><strong>Go</strong></li>
-<li><strong>Apache Spark</strong></li>
-<li><strong>Microsoft Visual Studio</strong></li>
-</ul>
-<h3>5.2 Apache Spark Integration</h3>
-<p>Db2 Warehouse includes an integrated <strong>Apache Spark cluster</strong> that can be partitioned and deployed across a cluster of machines. Spark jobs are submitted through stored procedures, extending the warehouse's analytical reach into distributed computation workloads.</p>
-<h3>5.3 RStudio Integration</h3>
-<p>RStudio can connect directly to Db2 Warehouse for data analysis, wrangling, modelling, and visualization. A common pattern is to create a custom Docker image containing RStudio with all required packages and drivers pre-installed. Applications running R code can also integrate with Db2 through a <strong>REST API</strong>.</p>
-<h3>5.4 Open-Source Driver Ecosystem</h3>
-<p>IBM maintains commonly used open-source drivers on GitHub in the <strong>IBM DB</strong> repository. For example, the <code>python-ibmdb</code> package provides a Python interface for connecting to IBM Db2—enabling integration with Python-based data science and ETL workflows.</p>
-<hr/>
-<p>Would you like to explore how Db2 Warehouse's MPP architecture distributes query execution across nodes, or should we move into understanding data lakes and how they complement the data warehouse in modern data architectures?</p></div>
-
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
-    </div>
-  </div>
-</body>
+  </body>
 </html>

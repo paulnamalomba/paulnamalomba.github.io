@@ -1,180 +1,401 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>C# Programming — Data Structures, Classes, Coding Style & Language Mechanics - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      C# Programming — Data Structures, Classes, Coding Style & Language
+      Mechanics - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="c-programming-data-structures-classes-coding-style-language-mechanics">C# Programming — Data Structures, Classes, Coding Style &amp; Language Mechanics</h1>
-<p><strong>Last updated</strong>: December 13, 2025<br />
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://docs.microsoft.com/dotnet/csharp/"><img alt="Language: C#" src="https://img.shields.io/badge/Language-C%23-239120.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide is a comprehensive reference for C# developers covering language fundamentals, data structures (built-in and advanced), classes/objects/modules, coding style, and practical language mechanics. Designed to match the style of existing guides, it provides clear examples, code snippets, tables for comparison, tips, and pitfalls for each major topic.</p>
-<p>Use this guide as a reference when designing APIs, choosing data structures, writing idiomatic C#, or preparing for production deployment across .NET platforms.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#c-programming-data-structures-classes-coding-style-language-mechanics">C# Programming — Data Structures, Classes, Coding Style \&amp; Language Mechanics</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#c-fundamentals">C# Fundamentals</a><ul>
-<li><a href="#compilation-runtime">Compilation \&amp; Runtime</a></li>
-<li><a href="#clr-jit-memory-management">CLR, JIT \&amp; Memory Management</a></li>
-<li><a href="#type-system-value-vs-reference">Type System (Value vs Reference)</a></li>
-</ul>
-</li>
-<li><a href="#primitive-types-built-in-collections">Primitive Types \&amp; Built-in Collections</a><ul>
-<li><a href="#primitive-types-short-summary">Primitive Types (short summary)</a></li>
-<li><a href="#arrays">Arrays</a></li>
-<li><a href="#list-and-generic-collections">List and Generic Collections</a></li>
-<li><a href="#dictionary-hashset-queue-stack">Dictionary, HashSet, Queue, Stack</a></li>
-<li><a href="#span-and-memory-brief">Span and Memory (brief)</a></li>
-</ul>
-</li>
-<li><a href="#advanced-data-structures">Advanced Data Structures</a><ul>
-<li><a href="#linked-lists">Linked Lists</a></li>
-<li><a href="#trees-and-binary-trees">Trees and Binary Trees</a></li>
-<li><a href="#graphs-adjacency-listsmatrices">Graphs (Adjacency lists/matrices)</a></li>
-<li><a href="#hash-tables-collision-strategies">Hash Tables \&amp; Collision Strategies</a></li>
-</ul>
-</li>
-<li><a href="#classes-objects-oop">Classes, Objects \&amp; OOP</a><ul>
-<li><a href="#classes-structs-records">Classes, Structs, Records</a></li>
-<li><a href="#constructors-properties-auto-properties">Constructors, Properties, Auto-properties</a></li>
-<li><a href="#inheritance-interfaces-polymorphism">Inheritance, Interfaces \&amp; Polymorphism</a></li>
-<li><a href="#encapsulation-access-modifiers">Encapsulation \&amp; Access Modifiers</a></li>
-<li><a href="#design-srp-di-solid-summary">Design: SRP, DI, SOLID Summary</a></li>
-</ul>
-</li>
-<li><a href="#modules-namespaces-assemblies">Modules, Namespaces \&amp; Assemblies</a><ul>
-<li><a href="#namespaces-using">Namespaces \&amp; <code>using</code></a></li>
-<li><a href="#assemblies-csproj">Assemblies \&amp; <code>csproj</code></a></li>
-<li><a href="#nuget-and-versioning">NuGet and Versioning</a></li>
-</ul>
-</li>
-<li><a href="#coding-style-conventions">Coding Style \&amp; Conventions</a><ul>
-<li><a href="#naming-indentation-braces-xml-docs">Naming, Indentation, Braces, XML docs</a></li>
-<li><a href="#best-practices-for-readability-maintainability-performance">Best practices for readability, maintainability \&amp; performance</a></li>
-</ul>
-</li>
-<li><a href="#testing-debugging-tooling">Testing, Debugging \&amp; Tooling</a></li>
-<li><a href="#c-in-the-modern-net-ecosystem">C# in the Modern .NET Ecosystem</a></li>
-<li><a href="#appendices-cheatsheets-common-patterns">Appendices — Cheatsheets \&amp; Common Patterns</a><ul>
-<li><a href="#common-language-idioms">Common language idioms</a></li>
-<li><a href="#common-pitfalls-checklist">Common pitfalls checklist</a></li>
-</ul>
-</li>
-<li><a href="#references-further-reading">References \&amp; Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="c-fundamentals">C# Fundamentals</h2>
-<h3 id="compilation-runtime">Compilation &amp; Runtime</h3>
-<ul>
-<li>C# source (.cs) files are compiled by the C# compiler (<code>csc</code> or Roslyn) into Common Intermediate Language (CIL) contained in assemblies (<code>.dll</code> or <code>.exe</code>).</li>
-<li>Assemblies are metadata-rich and include manifest, type metadata, and IL code.</li>
-<li>At runtime the Common Language Runtime (CLR) loads assemblies, performs Just-In-Time (JIT) compilation of IL to native code, and manages memory via garbage collection.</li>
-<li>.NET versions: .NET Framework (Windows only), .NET Core/.NET (cross-platform modern runtime), Mono (older cross-platform/runtime for mobile).</li>
-</ul>
-<p>Key steps:
-1. Source (.cs) → Roslyn compiler → IL (assembly)
-2. CLR loads assembly, verifies metadata
-3. JIT compiles IL methods on first use to native code
-4. Execution under CLR with GC, security, and interop</p>
-<p>Notes:
-- Roslyn provides compiler-as-a-service APIs used by analyzers and IDE tooling.
-- Ahead-of-Time (AOT) compilation and ReadyToRun options exist for performance-sensitive scenarios.</p>
-<h3 id="clr-jit-memory-management">CLR, JIT &amp; Memory Management</h3>
-<ul>
-<li>CLR responsibilities: type safety, memory management, security, threading, exception handling and interop.</li>
-<li>JIT compiles IL to native machine code per method; Tiered JIT and AOT (PublishTrimmed, Native AOT) are available in modern .NET.</li>
-<li>Garbage Collector (GC): generational (Gen 0, Gen 1, Gen 2, Large Object Heap) with background and server modes.</li>
-<li>Deterministic disposal: implement <code>IDisposable</code> for unmanaged resources and use <code>using</code>/<code>using var</code> for scope-based disposal.</li>
-</ul>
-<p>Memory tips:
-- Avoid large allocations on LOH when possible.
-- Prefer pooling (<code>ArrayPool&lt;T&gt;</code>) for frequently allocated buffers.
-- Use <code>Span&lt;T&gt;</code>, <code>Memory&lt;T&gt;</code> to work with slices without allocations for high-performance workloads.</p>
-<h3 id="type-system-value-vs-reference">Type System (Value vs Reference)</h3>
-<table>
-<thead>
-<tr>
-<th>Aspect</th>
-<th style="text-align: right;">Value Types</th>
-<th>Reference Types</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Examples</td>
-<td style="text-align: right;"><code>int</code>, <code>float</code>, <code>struct</code>, <code>bool</code></td>
-<td><code>class</code>, <code>string</code>, <code>object</code>, arrays, delegates</td>
-</tr>
-<tr>
-<td>Storage</td>
-<td style="text-align: right;">Stack (or inline in object)</td>
-<td>Heap (object referenced by pointer)</td>
-</tr>
-<tr>
-<td>Copy semantics</td>
-<td style="text-align: right;">Copy the value (deep copy of fields)</td>
-<td>Copy the reference (shallow copy)</td>
-</tr>
-<tr>
-<td>Nullability</td>
-<td style="text-align: right;">Non-nullable (unless nullable T?)</td>
-<td>Can be null (nullable reference types in C#8+ enabled)</td>
-</tr>
-<tr>
-<td>Default</td>
-<td style="text-align: right;">Zero-initialized</td>
-<td><code>null</code> reference</td>
-</tr>
-</tbody>
-</table>
-<p>Pitfalls:
-- Boxing/unboxing: avoid unnecessary boxing of value types into <code>object</code> (performance overhead).
-- Structs should be small and immutable; large structs cause copies and performance overhead.</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1
+            id="c-programming-data-structures-classes-coding-style-language-mechanics"
+          >
+            C# Programming — Data Structures, Classes, Coding Style &amp;
+            Language Mechanics
+          </h1>
+          <p>
+            <strong>Last updated</strong>: December 13, 2025<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a href="https://docs.microsoft.com/dotnet/csharp/"
+              ><img
+                alt="Language: C#"
+                src="https://img.shields.io/badge/Language-C%23-239120.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide is a comprehensive reference for C# developers covering
+            language fundamentals, data structures (built-in and advanced),
+            classes/objects/modules, coding style, and practical language
+            mechanics. Designed to match the style of existing guides, it
+            provides clear examples, code snippets, tables for comparison, tips,
+            and pitfalls for each major topic.
+          </p>
+          <p>
+            Use this guide as a reference when designing APIs, choosing data
+            structures, writing idiomatic C#, or preparing for production
+            deployment across .NET platforms.
+          </p>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a
+                href="#c-programming-data-structures-classes-coding-style-language-mechanics"
+                >C# Programming — Data Structures, Classes, Coding Style \&amp;
+                Language Mechanics</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li>
+              <a href="#c-fundamentals">C# Fundamentals</a>
+              <ul>
+                <li>
+                  <a href="#compilation-runtime">Compilation \&amp; Runtime</a>
+                </li>
+                <li>
+                  <a href="#clr-jit-memory-management"
+                    >CLR, JIT \&amp; Memory Management</a
+                  >
+                </li>
+                <li>
+                  <a href="#type-system-value-vs-reference"
+                    >Type System (Value vs Reference)</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#primitive-types-built-in-collections"
+                >Primitive Types \&amp; Built-in Collections</a
+              >
+              <ul>
+                <li>
+                  <a href="#primitive-types-short-summary"
+                    >Primitive Types (short summary)</a
+                  >
+                </li>
+                <li><a href="#arrays">Arrays</a></li>
+                <li>
+                  <a href="#list-and-generic-collections"
+                    >List and Generic Collections</a
+                  >
+                </li>
+                <li>
+                  <a href="#dictionary-hashset-queue-stack"
+                    >Dictionary, HashSet, Queue, Stack</a
+                  >
+                </li>
+                <li>
+                  <a href="#span-and-memory-brief">Span and Memory (brief)</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#advanced-data-structures">Advanced Data Structures</a>
+              <ul>
+                <li><a href="#linked-lists">Linked Lists</a></li>
+                <li>
+                  <a href="#trees-and-binary-trees">Trees and Binary Trees</a>
+                </li>
+                <li>
+                  <a href="#graphs-adjacency-listsmatrices"
+                    >Graphs (Adjacency lists/matrices)</a
+                  >
+                </li>
+                <li>
+                  <a href="#hash-tables-collision-strategies"
+                    >Hash Tables \&amp; Collision Strategies</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#classes-objects-oop">Classes, Objects \&amp; OOP</a>
+              <ul>
+                <li>
+                  <a href="#classes-structs-records"
+                    >Classes, Structs, Records</a
+                  >
+                </li>
+                <li>
+                  <a href="#constructors-properties-auto-properties"
+                    >Constructors, Properties, Auto-properties</a
+                  >
+                </li>
+                <li>
+                  <a href="#inheritance-interfaces-polymorphism"
+                    >Inheritance, Interfaces \&amp; Polymorphism</a
+                  >
+                </li>
+                <li>
+                  <a href="#encapsulation-access-modifiers"
+                    >Encapsulation \&amp; Access Modifiers</a
+                  >
+                </li>
+                <li>
+                  <a href="#design-srp-di-solid-summary"
+                    >Design: SRP, DI, SOLID Summary</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#modules-namespaces-assemblies"
+                >Modules, Namespaces \&amp; Assemblies</a
+              >
+              <ul>
+                <li>
+                  <a href="#namespaces-using"
+                    >Namespaces \&amp; <code>using</code></a
+                  >
+                </li>
+                <li>
+                  <a href="#assemblies-csproj"
+                    >Assemblies \&amp; <code>csproj</code></a
+                  >
+                </li>
+                <li>
+                  <a href="#nuget-and-versioning">NuGet and Versioning</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#coding-style-conventions"
+                >Coding Style \&amp; Conventions</a
+              >
+              <ul>
+                <li>
+                  <a href="#naming-indentation-braces-xml-docs"
+                    >Naming, Indentation, Braces, XML docs</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#best-practices-for-readability-maintainability-performance"
+                    >Best practices for readability, maintainability \&amp;
+                    performance</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#testing-debugging-tooling"
+                >Testing, Debugging \&amp; Tooling</a
+              >
+            </li>
+            <li>
+              <a href="#c-in-the-modern-net-ecosystem"
+                >C# in the Modern .NET Ecosystem</a
+              >
+            </li>
+            <li>
+              <a href="#appendices-cheatsheets-common-patterns"
+                >Appendices — Cheatsheets \&amp; Common Patterns</a
+              >
+              <ul>
+                <li>
+                  <a href="#common-language-idioms">Common language idioms</a>
+                </li>
+                <li>
+                  <a href="#common-pitfalls-checklist"
+                    >Common pitfalls checklist</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#references-further-reading"
+                >References \&amp; Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="c-fundamentals">C# Fundamentals</h2>
+          <h3 id="compilation-runtime">Compilation &amp; Runtime</h3>
+          <ul>
+            <li>
+              C# source (.cs) files are compiled by the C# compiler (<code
+                >csc</code
+              >
+              or Roslyn) into Common Intermediate Language (CIL) contained in
+              assemblies (<code>.dll</code> or <code>.exe</code>).
+            </li>
+            <li>
+              Assemblies are metadata-rich and include manifest, type metadata,
+              and IL code.
+            </li>
+            <li>
+              At runtime the Common Language Runtime (CLR) loads assemblies,
+              performs Just-In-Time (JIT) compilation of IL to native code, and
+              manages memory via garbage collection.
+            </li>
+            <li>
+              .NET versions: .NET Framework (Windows only), .NET Core/.NET
+              (cross-platform modern runtime), Mono (older
+              cross-platform/runtime for mobile).
+            </li>
+          </ul>
+          <p>
+            Key steps: 1. Source (.cs) → Roslyn compiler → IL (assembly) 2. CLR
+            loads assembly, verifies metadata 3. JIT compiles IL methods on
+            first use to native code 4. Execution under CLR with GC, security,
+            and interop
+          </p>
+          <p>
+            Notes: - Roslyn provides compiler-as-a-service APIs used by
+            analyzers and IDE tooling. - Ahead-of-Time (AOT) compilation and
+            ReadyToRun options exist for performance-sensitive scenarios.
+          </p>
+          <h3 id="clr-jit-memory-management">
+            CLR, JIT &amp; Memory Management
+          </h3>
+          <ul>
+            <li>
+              CLR responsibilities: type safety, memory management, security,
+              threading, exception handling and interop.
+            </li>
+            <li>
+              JIT compiles IL to native machine code per method; Tiered JIT and
+              AOT (PublishTrimmed, Native AOT) are available in modern .NET.
+            </li>
+            <li>
+              Garbage Collector (GC): generational (Gen 0, Gen 1, Gen 2, Large
+              Object Heap) with background and server modes.
+            </li>
+            <li>
+              Deterministic disposal: implement <code>IDisposable</code> for
+              unmanaged resources and use <code>using</code>/<code
+                >using var</code
+              >
+              for scope-based disposal.
+            </li>
+          </ul>
+          <p>
+            Memory tips: - Avoid large allocations on LOH when possible. -
+            Prefer pooling (<code>ArrayPool&lt;T&gt;</code>) for frequently
+            allocated buffers. - Use <code>Span&lt;T&gt;</code>,
+            <code>Memory&lt;T&gt;</code> to work with slices without allocations
+            for high-performance workloads.
+          </p>
+          <h3 id="type-system-value-vs-reference">
+            Type System (Value vs Reference)
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Aspect</th>
+                <th style="text-align: right">Value Types</th>
+                <th>Reference Types</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Examples</td>
+                <td style="text-align: right">
+                  <code>int</code>, <code>float</code>, <code>struct</code>,
+                  <code>bool</code>
+                </td>
+                <td>
+                  <code>class</code>, <code>string</code>, <code>object</code>,
+                  arrays, delegates
+                </td>
+              </tr>
+              <tr>
+                <td>Storage</td>
+                <td style="text-align: right">Stack (or inline in object)</td>
+                <td>Heap (object referenced by pointer)</td>
+              </tr>
+              <tr>
+                <td>Copy semantics</td>
+                <td style="text-align: right">
+                  Copy the value (deep copy of fields)
+                </td>
+                <td>Copy the reference (shallow copy)</td>
+              </tr>
+              <tr>
+                <td>Nullability</td>
+                <td style="text-align: right">
+                  Non-nullable (unless nullable T?)
+                </td>
+                <td>Can be null (nullable reference types in C#8+ enabled)</td>
+              </tr>
+              <tr>
+                <td>Default</td>
+                <td style="text-align: right">Zero-initialized</td>
+                <td><code>null</code> reference</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Pitfalls: - Boxing/unboxing: avoid unnecessary boxing of value types
+            into <code>object</code> (performance overhead). - Structs should be
+            small and immutable; large structs cause copies and performance
+            overhead.
+          </p>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="c1">// copy of value</span>
 <span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="c1">// a is still 5</span>
 
@@ -182,25 +403,46 @@
 <span class="kt">var</span><span class="w"> </span><span class="n">n1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">};</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">n2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n1</span><span class="p">;</span><span class="w"> </span><span class="c1">// reference copy</span>
 <span class="n">n2</span><span class="p">.</span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="c1">// n1.Value is now 7</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="primitive-types-built-in-collections">Primitive Types &amp; Built-in Collections</h2>
-<h3 id="primitive-types-short-summary">Primitive Types (short summary)</h3>
-<ul>
-<li>Integral: <code>byte</code>, <code>sbyte</code>, <code>short</code>, <code>ushort</code>, <code>int</code>, <code>uint</code>, <code>long</code>, <code>ulong</code></li>
-<li>Floating point: <code>float</code>, <code>double</code>, <code>decimal</code> (decimal for financial high-precision)</li>
-<li>Other: <code>char</code>, <code>bool</code>, <code>string</code> (reference type), <code>object</code></li>
-<li>Nullable value types: <code>int?</code>, <code>DateTime?</code></li>
-</ul>
-<p>Use <code>decimal</code> for money, <code>double</code> for scientific, <code>float</code> for memory-constrained scenarios.</p>
-<h3 id="arrays">Arrays</h3>
-<ul>
-<li>Fixed-size, zero-based indexed. Type <code>T[]</code>.</li>
-<li>Fast access, contiguous memory for primitive types.</li>
-</ul>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+          <hr />
+          <h2 id="primitive-types-built-in-collections">
+            Primitive Types &amp; Built-in Collections
+          </h2>
+          <h3 id="primitive-types-short-summary">
+            Primitive Types (short summary)
+          </h3>
+          <ul>
+            <li>
+              Integral: <code>byte</code>, <code>sbyte</code>,
+              <code>short</code>, <code>ushort</code>, <code>int</code>,
+              <code>uint</code>, <code>long</code>, <code>ulong</code>
+            </li>
+            <li>
+              Floating point: <code>float</code>, <code>double</code>,
+              <code>decimal</code> (decimal for financial high-precision)
+            </li>
+            <li>
+              Other: <code>char</code>, <code>bool</code>,
+              <code>string</code> (reference type), <code>object</code>
+            </li>
+            <li>
+              Nullable value types: <code>int?</code>, <code>DateTime?</code>
+            </li>
+          </ul>
+          <p>
+            Use <code>decimal</code> for money, <code>double</code> for
+            scientific, <code>float</code> for memory-constrained scenarios.
+          </p>
+          <h3 id="arrays">Arrays</h3>
+          <ul>
+            <li>Fixed-size, zero-based indexed. Type <code>T[]</code>.</li>
+            <li>Fast access, contiguous memory for primitive types.</li>
+          </ul>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
 <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 
 <span class="c1">// Multidimensional</span>
@@ -209,34 +451,64 @@
 <span class="c1">// Jagged array</span>
 <span class="kt">int</span><span class="p">[][]</span><span class="w"> </span><span class="n">jagged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[</span><span class="mi">3</span><span class="p">][];</span>
 <span class="n">jagged</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">};</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Notes/tips:
-- Arrays have <code>Length</code>, not <code>Count</code>.
-- When you need dynamic sizing use <code>List&lt;T&gt;</code>.</p>
-<h3 id="list-and-generic-collections">List<T> and Generic Collections</h3>
-<ul>
-<li><code>List&lt;T&gt;</code> is the go-to dynamic array, it resizes automatically.</li>
-<li><code>IList&lt;T&gt;</code>, <code>IReadOnlyList&lt;T&gt;</code> interfaces provide abstraction.</li>
-</ul>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">();</span>
+          <p>
+            Notes/tips: - Arrays have <code>Length</code>, not
+            <code>Count</code>. - When you need dynamic sizing use
+            <code>List&lt;T&gt;</code>.
+          </p>
+          <h3 id="list-and-generic-collections">
+            List<T> and Generic Collections</T>
+          </h3>
+          <ul>
+            <li>
+              <code>List&lt;T&gt;</code> is the go-to dynamic array, it resizes
+              automatically.
+            </li>
+            <li>
+              <code>IList&lt;T&gt;</code>,
+              <code>IReadOnlyList&lt;T&gt;</code> interfaces provide
+              abstraction.
+            </li>
+          </ul>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">list</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span>
 <span class="n">list</span><span class="p">.</span><span class="n">RemoveAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="k">foreach</span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Performance:
-- <code>List&lt;T&gt;</code> has amortized O(1) append; use <code>Capacity</code> property to pre-allocate when size known.</p>
-<h3 id="dictionary-hashset-queue-stack">Dictionary, HashSet, Queue, Stack</h3>
-<ul>
-<li><code>Dictionary&lt;TKey, TValue&gt;</code>: hash table mapping keys to values; O(1) average lookup.</li>
-<li><code>HashSet&lt;T&gt;</code>: unique collection based on hashing.</li>
-<li><code>Queue&lt;T&gt;</code>: FIFO, use <code>Enqueue</code>/<code>Dequeue</code>.</li>
-<li><code>Stack&lt;T&gt;</code>: LIFO, use <code>Push</code>/<code>Pop</code>.</li>
-</ul>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">dict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+          <p>
+            Performance: - <code>List&lt;T&gt;</code> has amortized O(1) append;
+            use <code>Capacity</code> property to pre-allocate when size known.
+          </p>
+          <h3 id="dictionary-hashset-queue-stack">
+            Dictionary, HashSet, Queue, Stack
+          </h3>
+          <ul>
+            <li>
+              <code>Dictionary&lt;TKey, TValue&gt;</code>: hash table mapping
+              keys to values; O(1) average lookup.
+            </li>
+            <li>
+              <code>HashSet&lt;T&gt;</code>: unique collection based on hashing.
+            </li>
+            <li>
+              <code>Queue&lt;T&gt;</code>: FIFO, use
+              <code>Enqueue</code>/<code>Dequeue</code>.
+            </li>
+            <li>
+              <code>Stack&lt;T&gt;</code>: LIFO, use
+              <code>Push</code>/<code>Pop</code>.
+            </li>
+          </ul>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">dict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">dict</span><span class="p">[</span><span class="s">&quot;apples&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dict</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">&quot;apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">val</span><span class="p">))</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
 
@@ -248,41 +520,67 @@
 
 <span class="kt">var</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">s</span><span class="p">.</span><span class="n">Push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">Pop</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Pitfalls:
-- <code>Dictionary</code> throws if key not present with indexer; use <code>TryGetValue</code>.
-- Choose good <code>Equals</code>/<code>GetHashCode</code> implementations for keys.</p>
-<h3 id="span-and-memory-brief">Span<T> and Memory<T> (brief)</h3>
-<ul>
-<li><code>Span&lt;T&gt;</code> — stack-only, non-allocating type for contiguous memory slices.</li>
-<li><code>Memory&lt;T&gt;</code> — heap-based, can be awaited and used across async boundaries.</li>
-</ul>
-<p>Use in performance-sensitive code to avoid allocations and copying.</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">Span</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">stackalloc</span><span class="w"> </span><span class="kt">byte</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="w"> </span><span class="c1">// stack memory</span>
+          <p>
+            Pitfalls: - <code>Dictionary</code> throws if key not present with
+            indexer; use <code>TryGetValue</code>. - Choose good
+            <code>Equals</code>/<code>GetHashCode</code> implementations for
+            keys.
+          </p>
+          <h3 id="span-and-memory-brief">Span<T> and Memory</T> (brief)</h3>
+          <ul>
+            <li>
+              <code>Span&lt;T&gt;</code> — stack-only, non-allocating type for
+              contiguous memory slices.
+            </li>
+            <li>
+              <code>Memory&lt;T&gt;</code> — heap-based, can be awaited and used
+              across async boundaries.
+            </li>
+          </ul>
+          <p>
+            Use in performance-sensitive code to avoid allocations and copying.
+          </p>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">Span</span><span class="o">&lt;</span><span class="kt">byte</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">stackalloc</span><span class="w"> </span><span class="kt">byte</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="w"> </span><span class="c1">// stack memory</span>
 <span class="c1">// operate on buffer without heap allocation</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="advanced-data-structures">Advanced Data Structures</h2>
-<blockquote>
-<p>This section focuses on building blocks beyond the standard collections: when to implement them and how to use them in C#.</p>
-</blockquote>
-<h3 id="linked-lists">Linked Lists</h3>
-<ul>
-<li><code>LinkedList&lt;T&gt;</code> exists in BCL; implements a doubly-linked list.</li>
-<li>Use when frequent insertions/removals in middle of sequence are required and you have references to nodes.</li>
-</ul>
-<p>Example using <code>LinkedList&lt;T&gt;</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">ll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+          <hr />
+          <h2 id="advanced-data-structures">Advanced Data Structures</h2>
+          <blockquote>
+            <p>
+              This section focuses on building blocks beyond the standard
+              collections: when to implement them and how to use them in C#.
+            </p>
+          </blockquote>
+          <h3 id="linked-lists">Linked Lists</h3>
+          <ul>
+            <li>
+              <code>LinkedList&lt;T&gt;</code> exists in BCL; implements a
+              doubly-linked list.
+            </li>
+            <li>
+              Use when frequent insertions/removals in middle of sequence are
+              required and you have references to nodes.
+            </li>
+          </ul>
+          <p>Example using <code>LinkedList&lt;T&gt;</code>:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">ll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ll</span><span class="p">.</span><span class="n">AddLast</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="n">ll</span><span class="p">.</span><span class="n">AddAfter</span><span class="p">(</span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
 <span class="n">ll</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Singly-linked list implementation (simple):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Value</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;?</span><span class="w"> </span><span class="n">Next</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+          <p>Singly-linked list implementation (simple):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Value</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;?</span><span class="w"> </span><span class="n">Next</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SinglyLinkedList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="p">{</span>
@@ -290,17 +588,27 @@
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">AddFirst</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="k">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">{</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="n">Next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">T</span><span class="o">?</span><span class="w"> </span><span class="n">RemoveFirst</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">.</span><span class="n">Next</span><span class="p">;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Tips:
-- Avoid using linked lists for cache-friendly workloads; arrays/Lists are often faster due to contiguous memory.</p>
-<h3 id="trees-and-binary-trees">Trees and Binary Trees</h3>
-<ul>
-<li>Trees are hierarchical structures. Binary trees have up to two children per node.</li>
-<li>Use trees for sorted data, prefix structures (tries), expression parsing, and hierarchical relationships.</li>
-</ul>
-<p>Binary search tree (BST) basic example:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IComparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+          <p>
+            Tips: - Avoid using linked lists for cache-friendly workloads;
+            arrays/Lists are often faster due to contiguous memory.
+          </p>
+          <h3 id="trees-and-binary-trees">Trees and Binary Trees</h3>
+          <ul>
+            <li>
+              Trees are hierarchical structures. Binary trees have up to two
+              children per node.
+            </li>
+            <li>
+              Use trees for sorted data, prefix structures (tries), expression
+              parsing, and hierarchical relationships.
+            </li>
+          </ul>
+          <p>Binary search tree (BST) basic example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IComparable</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Value</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;?</span><span class="w"> </span><span class="n">Left</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TreeNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;?</span><span class="w"> </span><span class="n">Right</span><span class="p">;</span>
 <span class="p">}</span>
@@ -317,18 +625,30 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Traversal: In-order (sorted), pre-order, post-order.</p>
-<p>Notes:
-- Self-balancing trees (AVL, Red-Black) are used in production for predictable performance.
-- <code>SortedSet&lt;T&gt;</code> and <code>SortedDictionary&lt;TKey,TValue&gt;</code> implement tree-based collections in BCL.</p>
-<h3 id="graphs-adjacency-listsmatrices">Graphs (Adjacency lists/matrices)</h3>
-<ul>
-<li>Graphs represent nodes (vertices) and edges (connections). Use adjacency lists for sparse graphs and adjacency matrix for dense graphs.</li>
-</ul>
-<p>Simple graph representation (adjacency list):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Graph</span>
+          <p>Traversal: In-order (sorted), pre-order, post-order.</p>
+          <p>
+            Notes: - Self-balancing trees (AVL, Red-Black) are used in
+            production for predictable performance. -
+            <code>SortedSet&lt;T&gt;</code> and
+            <code>SortedDictionary&lt;TKey,TValue&gt;</code> implement
+            tree-based collections in BCL.
+          </p>
+          <h3 id="graphs-adjacency-listsmatrices">
+            Graphs (Adjacency lists/matrices)
+          </h3>
+          <ul>
+            <li>
+              Graphs represent nodes (vertices) and edges (connections). Use
+              adjacency lists for sparse graphs and adjacency matrix for dense
+              graphs.
+            </li>
+          </ul>
+          <p>Simple graph representation (adjacency list):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Graph</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">_adj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">AddEdge</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">_adj</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">u</span><span class="p">))</span><span class="w"> </span><span class="n">_adj</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span><span class="w"> </span><span class="n">_adj</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">Add</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
@@ -346,36 +666,63 @@
 <span class="w">        </span><span class="k">foreach</span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Neighbors</span><span class="p">(</span><span class="n">v</span><span class="p">))</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">visited</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">Enqueue</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Pitfalls:
-- For weighted graphs use Dijkstra/A* algorithms; for negative weights use Bellman-Ford.</p>
-<h3 id="hash-tables-collision-strategies">Hash Tables &amp; Collision Strategies</h3>
-<ul>
-<li><code>Dictionary&lt;TKey,TValue&gt;</code> is a hash table using buckets; collisions handled via chaining.</li>
-<li>Key design: implement <code>GetHashCode()</code> and <code>Equals()</code> correctly for custom types.</li>
-</ul>
-<p>Example custom key:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IEquatable</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span>
+          <p>
+            Pitfalls: - For weighted graphs use Dijkstra/A* algorithms; for
+            negative weights use Bellman-Ford.
+          </p>
+          <h3 id="hash-tables-collision-strategies">
+            Hash Tables &amp; Collision Strategies
+          </h3>
+          <ul>
+            <li>
+              <code>Dictionary&lt;TKey,TValue&gt;</code> is a hash table using
+              buckets; collisions handled via chaining.
+            </li>
+            <li>
+              Key design: implement <code>GetHashCode()</code> and
+              <code>Equals()</code> correctly for custom types.
+            </li>
+          </ul>
+          <p>Example custom key:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IEquatable</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">GetHashCode</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">HashCode</span><span class="p">.</span><span class="n">Combine</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="w"> </span><span class="n">Y</span><span class="p">);</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">Equals</span><span class="p">(</span><span class="n">Point</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">X</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">X</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">Y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Note: <code>HashCode.Combine</code> is available to make good composite hashes.</p>
-<hr />
-<h2 id="classes-objects-oop">Classes, Objects &amp; OOP</h2>
-<h3 id="classes-structs-records">Classes, Structs, Records</h3>
-<ul>
-<li><code>class</code> — reference type with identity. Suitable for most domain objects, heavy state, and polymorphism.</li>
-<li><code>struct</code> — value type, stack-allocated (or inlined). Prefer for small immutable types.</li>
-<li><code>record</code> — reference type (in C# 9+) providing value-like equality semantics and concise syntax. Records can also be <code>record struct</code>.</li>
-</ul>
-<p>Examples:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Person</span>
+          <p>
+            Note: <code>HashCode.Combine</code> is available to make good
+            composite hashes.
+          </p>
+          <hr />
+          <h2 id="classes-objects-oop">Classes, Objects &amp; OOP</h2>
+          <h3 id="classes-structs-records">Classes, Structs, Records</h3>
+          <ul>
+            <li>
+              <code>class</code> — reference type with identity. Suitable for
+              most domain objects, heavy state, and polymorphism.
+            </li>
+            <li>
+              <code>struct</code> — value type, stack-allocated (or inlined).
+              Prefer for small immutable types.
+            </li>
+            <li>
+              <code>record</code> — reference type (in C# 9+) providing
+              value-like equality semantics and concise syntax. Records can also
+              be <code>record struct</code>.
+            </li>
+          </ul>
+          <p>Examples:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Person</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">FirstName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">LastName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -384,13 +731,19 @@
 <span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Point</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">X</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Y</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">User</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Username</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>When to use what:
-- Use <code>struct</code> for small (&lt;16 bytes commonly) and immutable types.
-- Use <code>record</code> for DTOs/immutable data carriers where value equality is desired.</p>
-<h3 id="constructors-properties-auto-properties">Constructors, Properties, Auto-properties</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Config</span>
+          <p>
+            When to use what: - Use <code>struct</code> for small (&lt;16 bytes
+            commonly) and immutable types. - Use <code>record</code> for
+            DTOs/immutable data carriers where value equality is desired.
+          </p>
+          <h3 id="constructors-properties-auto-properties">
+            Constructors, Properties, Auto-properties
+          </h3>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Config</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="c1">// Auto-property</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -401,17 +754,30 @@
 <span class="w">    </span><span class="c1">// Constructor</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">Config</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Use <code>private set</code> or <code>init</code> to control mutability.</p>
-<h3 id="inheritance-interfaces-polymorphism">Inheritance, Interfaces &amp; Polymorphism</h3>
-<ul>
-<li><code>:</code> syntax for inheritance and interface implementation.</li>
-<li>Prefer interfaces for abstractions and loose coupling.</li>
-<li>Use <code>virtual</code>/<code>override</code> for runtime polymorphism.</li>
-</ul>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IRepository</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="n">Add</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+          <p>
+            Use <code>private set</code> or <code>init</code> to control
+            mutability.
+          </p>
+          <h3 id="inheritance-interfaces-polymorphism">
+            Inheritance, Interfaces &amp; Polymorphism
+          </h3>
+          <ul>
+            <li>
+              <code>:</code> syntax for inheritance and interface
+              implementation.
+            </li>
+            <li>Prefer interfaces for abstractions and loose coupling.</li>
+            <li>
+              Use <code>virtual</code>/<code>override</code> for runtime
+              polymorphism.
+            </li>
+          </ul>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">interface</span><span class="w"> </span><span class="n">IRepository</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="n">Add</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
 <span class="k">public</span><span class="w"> </span><span class="k">abstract</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RepositoryBase</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">IRepository</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
 <span class="p">{</span>
@@ -423,68 +789,109 @@
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">();</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Add</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_items</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Polymorphism example:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+          <p>Polymorphism example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;woof&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="n">Animal</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dog</span><span class="p">();</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">Speak</span><span class="p">());</span><span class="w"> </span><span class="c1">// &quot;woof&quot;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Pitfalls:
-- Avoid deep inheritance hierarchies; prefer composition and explicit interfaces.
-- Virtual methods in constructors are dangerous (override called before derived constructor runs).</p>
-<h3 id="encapsulation-access-modifiers">Encapsulation &amp; Access Modifiers</h3>
-<p>Modifiers: <code>public</code>, <code>internal</code>, <code>protected</code>, <code>private</code>, <code>protected internal</code>, <code>private protected</code>.</p>
-<p>Rules:
-- Expose behaviour (methods) not internal state (fields).
-- Use properties with validation rather than public fields.</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BankAccount</span>
+          <p>
+            Pitfalls: - Avoid deep inheritance hierarchies; prefer composition
+            and explicit interfaces. - Virtual methods in constructors are
+            dangerous (override called before derived constructor runs).
+          </p>
+          <h3 id="encapsulation-access-modifiers">
+            Encapsulation &amp; Access Modifiers
+          </h3>
+          <p>
+            Modifiers: <code>public</code>, <code>internal</code>,
+            <code>protected</code>, <code>private</code>,
+            <code>protected internal</code>, <code>private protected</code>.
+          </p>
+          <p>
+            Rules: - Expose behaviour (methods) not internal state (fields). -
+            Use properties with validation rather than public fields.
+          </p>
+          <p>Example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BankAccount</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">_balance</span><span class="p">;</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">Balance</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_balance</span><span class="p">;</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Deposit</span><span class="p">(</span><span class="kt">decimal</span><span class="w"> </span><span class="n">amt</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">amt</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArgumentException</span><span class="p">();</span><span class="w"> </span><span class="n">_balance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">amt</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="design-srp-di-solid-summary">Design: SRP, DI, SOLID Summary</h3>
-<ul>
-<li>SRP: single responsibility per class.</li>
-<li>Dependency Injection: prefer constructor injection, use <code>IServiceCollection</code> registration for ASP.NET or <code>HostBuilder</code> for generic hosts.</li>
-<li>SOLID quick tips:</li>
-<li>S: Single Responsibility</li>
-<li>O: Open/Closed (extend via interfaces)</li>
-<li>L: Liskov Substitution (derived types must work where base is used)</li>
-<li>I: Interface Segregation (small focused interfaces)</li>
-<li>D: Dependency Inversion (depend on abstractions)</li>
-</ul>
-<p>Example DI registration (ASP.NET Core):</p>
-<div class="codehilite"><pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IUserService</span><span class="p">,</span><span class="w"> </span><span class="n">UserService</span><span class="o">&gt;</span><span class="p">();</span>
-</code></pre></div>
+          <h3 id="design-srp-di-solid-summary">
+            Design: SRP, DI, SOLID Summary
+          </h3>
+          <ul>
+            <li>SRP: single responsibility per class.</li>
+            <li>
+              Dependency Injection: prefer constructor injection, use
+              <code>IServiceCollection</code> registration for ASP.NET or
+              <code>HostBuilder</code> for generic hosts.
+            </li>
+            <li>SOLID quick tips:</li>
+            <li>S: Single Responsibility</li>
+            <li>O: Open/Closed (extend via interfaces)</li>
+            <li>
+              L: Liskov Substitution (derived types must work where base is
+              used)
+            </li>
+            <li>I: Interface Segregation (small focused interfaces)</li>
+            <li>D: Dependency Inversion (depend on abstractions)</li>
+          </ul>
+          <p>Example DI registration (ASP.NET Core):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IUserService</span><span class="p">,</span><span class="w"> </span><span class="n">UserService</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="modules-namespaces-assemblies">Modules, Namespaces &amp; Assemblies</h2>
-<h3 id="namespaces-using">Namespaces &amp; <code>using</code></h3>
-<ul>
-<li>Namespaces organize types; use hierarchical names: <code>Company.Product.Module</code>.</li>
-<li><code>using</code> imports namespaces; prefer file-scoped <code>using</code> declarations where appropriate (C# 10+):</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="k">namespace</span><span class="w"> </span><span class="nn">MyApp.Features</span><span class="p">;</span>
+          <hr />
+          <h2 id="modules-namespaces-assemblies">
+            Modules, Namespaces &amp; Assemblies
+          </h2>
+          <h3 id="namespaces-using">Namespaces &amp; <code>using</code></h3>
+          <ul>
+            <li>
+              Namespaces organize types; use hierarchical names:
+              <code>Company.Product.Module</code>.
+            </li>
+            <li>
+              <code>using</code> imports namespaces; prefer file-scoped
+              <code>using</code> declarations where appropriate (C# 10+):
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">namespace</span><span class="w"> </span><span class="nn">MyApp.Features</span><span class="p">;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Notes:
-- Avoid wildcard imports; prefer explicit naming to reduce ambiguity in large projects.</p>
-<h3 id="assemblies-csproj">Assemblies &amp; <code>csproj</code></h3>
-<ul>
-<li>Assembly = compiled unit (DLL/EXE) with metadata.</li>
-<li><code>*.csproj</code> is the project descriptor for SDK-style projects in modern .NET.</li>
-</ul>
-<p>Minimal <code>csproj</code> example:</p>
-<div class="codehilite"><pre><span></span><code><span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+          <p>
+            Notes: - Avoid wildcard imports; prefer explicit naming to reduce
+            ambiguity in large projects.
+          </p>
+          <h3 id="assemblies-csproj">Assemblies &amp; <code>csproj</code></h3>
+          <ul>
+            <li>Assembly = compiled unit (DLL/EXE) with metadata.</li>
+            <li>
+              <code>*.csproj</code> is the project descriptor for SDK-style
+              projects in modern .NET.
+            </li>
+          </ul>
+          <p>Minimal <code>csproj</code> example:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">    </span><span class="nt">&lt;ImplicitUsings&gt;</span>enable<span class="nt">&lt;/ImplicitUsings&gt;</span>
@@ -494,78 +901,170 @@
 <span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Newtonsoft.Json&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;13.0.3&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="nuget-and-versioning">NuGet and Versioning</h3>
-<ul>
-<li>Publish libraries to NuGet for reuse. SemVer recommended: <code>Major.Minor.Patch</code>.</li>
-<li>Strong-name assemblies only when required for GAC or strict signing requirements.</li>
-</ul>
-<hr />
-<h2 id="coding-style-conventions">Coding Style &amp; Conventions</h2>
-<p>This section aligns with .NET/C# community and Microsoft conventions and adds practical rules used in production.</p>
-<h3 id="naming-indentation-braces-xml-docs">Naming, Indentation, Braces, XML docs</h3>
-<ul>
-<li><strong>Naming</strong>:</li>
-<li>Types (classes, structs, enums, interfaces): <code>PascalCase</code> (e.g., <code>UserRepository</code>).</li>
-<li>Interfaces: <code>PascalCase</code> with <code>I</code> prefix (e.g., <code>IRepository</code>).</li>
-<li>Methods and Properties: <code>PascalCase</code>.</li>
-<li>Local variables and parameters: <code>camelCase</code>.</li>
-<li>Private fields: <code>_camelCase</code> (leading underscore) or <code>camelCase</code> depending on team style.</li>
-<li>
-<p>Constants: <code>PascalCase</code> (or <code>ALL_CAPS</code> rarely used in .NET).</p>
-</li>
-<li>
-<p><strong>Indentation</strong>: 4 spaces (no tabs).</p>
-</li>
-<li><strong>Brace style</strong>: place opening brace on new line (Allman) for types and members — this is the Microsoft style. Example:</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span>
+          <h3 id="nuget-and-versioning">NuGet and Versioning</h3>
+          <ul>
+            <li>
+              Publish libraries to NuGet for reuse. SemVer recommended:
+              <code>Major.Minor.Patch</code>.
+            </li>
+            <li>
+              Strong-name assemblies only when required for GAC or strict
+              signing requirements.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="coding-style-conventions">Coding Style &amp; Conventions</h2>
+          <p>
+            This section aligns with .NET/C# community and Microsoft conventions
+            and adds practical rules used in production.
+          </p>
+          <h3 id="naming-indentation-braces-xml-docs">
+            Naming, Indentation, Braces, XML docs
+          </h3>
+          <ul>
+            <li><strong>Naming</strong>:</li>
+            <li>
+              Types (classes, structs, enums, interfaces):
+              <code>PascalCase</code> (e.g., <code>UserRepository</code>).
+            </li>
+            <li>
+              Interfaces: <code>PascalCase</code> with <code>I</code> prefix
+              (e.g., <code>IRepository</code>).
+            </li>
+            <li>Methods and Properties: <code>PascalCase</code>.</li>
+            <li>Local variables and parameters: <code>camelCase</code>.</li>
+            <li>
+              Private fields: <code>_camelCase</code> (leading underscore) or
+              <code>camelCase</code> depending on team style.
+            </li>
+            <li>
+              <p>
+                Constants: <code>PascalCase</code> (or
+                <code>ALL_CAPS</code> rarely used in .NET).
+              </p>
+            </li>
+            <li>
+              <p><strong>Indentation</strong>: 4 spaces (no tabs).</p>
+            </li>
+            <li>
+              <strong>Brace style</strong>: place opening brace on new line
+              (Allman) for types and members — this is the Microsoft style.
+              Example:
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Foo</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Bar</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// code</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>XML documentation</strong>: Use <code>/// &lt;summary&gt;</code> for public APIs and include param/returns tags.</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="c1">/// &lt;summary&gt;Gets the user by id.&lt;/summary&gt;</span>
+          <ul>
+            <li>
+              <strong>XML documentation</strong>: Use
+              <code>/// &lt;summary&gt;</code> for public APIs and include
+              param/returns tags.
+            </li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="c1">/// &lt;summary&gt;Gets the user by id.&lt;/summary&gt;</span>
 <span class="c1">/// &lt;param name=&quot;id&quot;&gt;User identifier.&lt;/param&gt;</span>
 <span class="c1">/// &lt;returns&gt;User object or null.&lt;/returns&gt;</span>
 <span class="k">public</span><span class="w"> </span><span class="n">User</span><span class="o">?</span><span class="w"> </span><span class="n">GetUser</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><strong>Comments</strong>: Prefer meaningful code to comments. Use comments for rationale, not for restating code.</li>
-</ul>
-<h3 id="best-practices-for-readability-maintainability-performance">Best practices for readability, maintainability &amp; performance</h3>
-<ul>
-<li>Keep methods short (ideally &lt; 40 lines). Single responsibility per method.</li>
-<li>Prefer <code>async</code>/<code>await</code> for I/O-bound work and avoid <code>Task.Run</code> for CPU-bound operations in server code.</li>
-<li>Use <code>ConfigureAwait(false)</code> in library code (non-UI) where appropriate.</li>
-<li>Use <code>IEnumerable&lt;T&gt;</code>/<code>IReadOnlyCollection&lt;T&gt;</code> for read-only parameters to hide implementation details.</li>
-<li>Prefer <code>foreach</code> over <code>for</code> when readability wins; use indexes when you need them.</li>
-<li>Avoid <code>null</code> where possible; prefer <code>nullable reference types</code> feature (<code>string?</code>) and annotate APIs.</li>
-<li>Use <code>StringBuilder</code> for heavy string concatenation in loops. Use <code>string.Concat</code> or interpolation for light usage.</li>
-<li>Avoid exceptions for control flow — they are expensive.</li>
-</ul>
-<p>Performance-specific:
-- Use <code>Span&lt;T&gt;</code>/<code>Memory&lt;T&gt;</code> for zero-copy slices.
-- Prefer <code>struct</code> for small value types; prefer <code>class</code> for entities and polymorphic behavior.
-- Use <code>ArrayPool&lt;T&gt;</code> to reduce allocations in hot paths.</p>
-<hr />
-<h2 id="testing-debugging-tooling">Testing, Debugging &amp; Tooling</h2>
-<ul>
-<li>Unit testing: <code>xUnit</code>, <code>NUnit</code>, <code>MSTest</code>. Mocking: <code>Moq</code>, <code>NSubstitute</code>.</li>
-<li>Integration testing: use <code>WebApplicationFactory&lt;TEntryPoint&gt;</code> for ASP.NET Core integration tests.</li>
-<li>Code analysis: <code>dotnet format</code>, <code>Roslyn analyzers</code>, <code>FxCop</code>/<code>Microsoft.CodeAnalysis</code> rules.</li>
-<li>Profiling: Visual Studio Profiler, <code>dotnet-counters</code>, <code>dotnet-trace</code>, <code>perfcollect</code>.</li>
-</ul>
-<p>Example test (xUnit):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CalculatorTests</span>
+          <ul>
+            <li>
+              <strong>Comments</strong>: Prefer meaningful code to comments. Use
+              comments for rationale, not for restating code.
+            </li>
+          </ul>
+          <h3 id="best-practices-for-readability-maintainability-performance">
+            Best practices for readability, maintainability &amp; performance
+          </h3>
+          <ul>
+            <li>
+              Keep methods short (ideally &lt; 40 lines). Single responsibility
+              per method.
+            </li>
+            <li>
+              Prefer <code>async</code>/<code>await</code> for I/O-bound work
+              and avoid <code>Task.Run</code> for CPU-bound operations in server
+              code.
+            </li>
+            <li>
+              Use <code>ConfigureAwait(false)</code> in library code (non-UI)
+              where appropriate.
+            </li>
+            <li>
+              Use <code>IEnumerable&lt;T&gt;</code>/<code
+                >IReadOnlyCollection&lt;T&gt;</code
+              >
+              for read-only parameters to hide implementation details.
+            </li>
+            <li>
+              Prefer <code>foreach</code> over <code>for</code> when readability
+              wins; use indexes when you need them.
+            </li>
+            <li>
+              Avoid <code>null</code> where possible; prefer
+              <code>nullable reference types</code> feature
+              (<code>string?</code>) and annotate APIs.
+            </li>
+            <li>
+              Use <code>StringBuilder</code> for heavy string concatenation in
+              loops. Use <code>string.Concat</code> or interpolation for light
+              usage.
+            </li>
+            <li>Avoid exceptions for control flow — they are expensive.</li>
+          </ul>
+          <p>
+            Performance-specific: - Use <code>Span&lt;T&gt;</code>/<code
+              >Memory&lt;T&gt;</code
+            >
+            for zero-copy slices. - Prefer <code>struct</code> for small value
+            types; prefer <code>class</code> for entities and polymorphic
+            behavior. - Use <code>ArrayPool&lt;T&gt;</code> to reduce
+            allocations in hot paths.
+          </p>
+          <hr />
+          <h2 id="testing-debugging-tooling">
+            Testing, Debugging &amp; Tooling
+          </h2>
+          <ul>
+            <li>
+              Unit testing: <code>xUnit</code>, <code>NUnit</code>,
+              <code>MSTest</code>. Mocking: <code>Moq</code>,
+              <code>NSubstitute</code>.
+            </li>
+            <li>
+              Integration testing: use
+              <code>WebApplicationFactory&lt;TEntryPoint&gt;</code> for ASP.NET
+              Core integration tests.
+            </li>
+            <li>
+              Code analysis: <code>dotnet format</code>,
+              <code>Roslyn analyzers</code>, <code>FxCop</code>/<code
+                >Microsoft.CodeAnalysis</code
+              >
+              rules.
+            </li>
+            <li>
+              Profiling: Visual Studio Profiler, <code>dotnet-counters</code>,
+              <code>dotnet-trace</code>, <code>perfcollect</code>.
+            </li>
+          </ul>
+          <p>Example test (xUnit):</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">CalculatorTests</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="na">[Fact]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Add_ReturnsSum</span><span class="p">()</span>
@@ -574,92 +1073,155 @@
 <span class="w">        </span><span class="n">Assert</span><span class="p">.</span><span class="n">Equal</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">calc</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">));</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Debugging tips:
-- Use conditional breakpoints and tracepoints to collect runtime info without stopping.
-- Use <code>dotnet test --filter</code> to run subsets of tests.</p>
-<hr />
-<h2 id="c-in-the-modern-net-ecosystem">C# in the Modern .NET Ecosystem</h2>
-<ul>
-<li>.NET is cross-platform and first-class on Windows, macOS, Linux. Use <code>dotnet</code> CLI for multi-platform builds.</li>
-<li>Use ASP.NET Core for web APIs, Blazor for client/web UIs, MAUI for native cross-platform GUI, and worker services for background processing.</li>
-<li>Modern .NET supports AOT, trimming, single-file publish for small deployment surfaces.</li>
-</ul>
-<p>Interoperability:
-- Use P/Invoke and <code>DllImport</code> to call native libraries.
-- Use <code>System.Text.Json</code> for high-performance JSON; fallback to <code>Newtonsoft.Json</code> for advanced scenarios.</p>
-<p>Deployment patterns:
-- Containerize with <code>mcr.microsoft.com/dotnet/aspnet</code> or SDK images.
-- Use CI/CD to build and publish NuGet artifacts and container images.</p>
-<hr />
-<h2 id="appendices-cheatsheets-common-patterns">Appendices — Cheatsheets &amp; Common Patterns</h2>
-<h3 id="common-language-idioms">Common language idioms</h3>
-<ul>
-<li>Null-safe access:</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="o">?.</span><span class="n">Profile</span><span class="o">?.</span><span class="n">Name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;(unknown)&quot;</span><span class="p">;</span>
-</code></pre></div>
+          <p>
+            Debugging tips: - Use conditional breakpoints and tracepoints to
+            collect runtime info without stopping. - Use
+            <code>dotnet test --filter</code> to run subsets of tests.
+          </p>
+          <hr />
+          <h2 id="c-in-the-modern-net-ecosystem">
+            C# in the Modern .NET Ecosystem
+          </h2>
+          <ul>
+            <li>
+              .NET is cross-platform and first-class on Windows, macOS, Linux.
+              Use <code>dotnet</code> CLI for multi-platform builds.
+            </li>
+            <li>
+              Use ASP.NET Core for web APIs, Blazor for client/web UIs, MAUI for
+              native cross-platform GUI, and worker services for background
+              processing.
+            </li>
+            <li>
+              Modern .NET supports AOT, trimming, single-file publish for small
+              deployment surfaces.
+            </li>
+          </ul>
+          <p>
+            Interoperability: - Use P/Invoke and <code>DllImport</code> to call
+            native libraries. - Use <code>System.Text.Json</code> for
+            high-performance JSON; fallback to <code>Newtonsoft.Json</code> for
+            advanced scenarios.
+          </p>
+          <p>
+            Deployment patterns: - Containerize with
+            <code>mcr.microsoft.com/dotnet/aspnet</code> or SDK images. - Use
+            CI/CD to build and publish NuGet artifacts and container images.
+          </p>
+          <hr />
+          <h2 id="appendices-cheatsheets-common-patterns">
+            Appendices — Cheatsheets &amp; Common Patterns
+          </h2>
+          <h3 id="common-language-idioms">Common language idioms</h3>
+          <ul>
+            <li>Null-safe access:</li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="o">?.</span><span class="n">Profile</span><span class="o">?.</span><span class="n">Name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;(unknown)&quot;</span><span class="p">;</span>
+</code></pre>
+          </div>
 
-<ul>
-<li>Pattern matching:</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+          <ul>
+            <li>Pattern matching:</li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">o</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
 <span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">shape</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="n">Circle</span><span class="w"> </span><span class="n">c</span><span class="p">:</span><span class="w"> </span><span class="p">...;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<ul>
-<li><code>using</code> declaration (C#8+):</li>
-</ul>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqlConnection</span><span class="p">(</span><span class="n">connStr</span><span class="p">);</span>
-</code></pre></div>
+          <ul>
+            <li><code>using</code> declaration (C#8+):</li>
+          </ul>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqlConnection</span><span class="p">(</span><span class="n">connStr</span><span class="p">);</span>
+</code></pre>
+          </div>
 
-<h3 id="common-pitfalls-checklist">Common pitfalls checklist</h3>
-<ul>
-<li>Forgetting <code>ConfigureAwait(false)</code> in library code (can cause deadlocks in certain sync contexts).</li>
-<li>Exposing mutable collections as public APIs; return <code>IReadOnlyCollection&lt;T&gt;</code> instead.</li>
-<li>Not implementing <code>IDisposable</code> correctly (use <code>SafeHandle</code> and <code>Dispose(bool)</code> pattern when necessary).</li>
-</ul>
-<hr />
-<h2 id="references-further-reading">References &amp; Further Reading</h2>
-<ul>
-<li>Microsoft docs: <a href="https://learn.microsoft.com/dotnet/csharp/">C# Guide</a>, <a href="https://learn.microsoft.com/dotnet/standard/clr">CLR overview</a></li>
-<li>.NET performance: <a href="https://learn.microsoft.com/dotnet/standard/performance/">High-performance .NET</a></li>
-<li>Effective C#: ["C# in Depth" by Jon Skeet] and ["Effective C#" by Bill Wagner]</li>
-<li>Roslyn and analyzers: <a href="https://github.com/dotnet/roslyn">Roslyn GitHub</a></li>
-</ul>
-<hr />
-<p><em>This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, pitfalls, and practical recommendations.</em></p></article>
-        </div>
+          <h3 id="common-pitfalls-checklist">Common pitfalls checklist</h3>
+          <ul>
+            <li>
+              Forgetting <code>ConfigureAwait(false)</code> in library code (can
+              cause deadlocks in certain sync contexts).
+            </li>
+            <li>
+              Exposing mutable collections as public APIs; return
+              <code>IReadOnlyCollection&lt;T&gt;</code> instead.
+            </li>
+            <li>
+              Not implementing <code>IDisposable</code> correctly (use
+              <code>SafeHandle</code> and <code>Dispose(bool)</code> pattern
+              when necessary).
+            </li>
+          </ul>
+          <hr />
+          <h2 id="references-further-reading">
+            References &amp; Further Reading
+          </h2>
+          <ul>
+            <li>
+              Microsoft docs:
+              <a href="https://learn.microsoft.com/dotnet/csharp/">C# Guide</a>,
+              <a href="https://learn.microsoft.com/dotnet/standard/clr"
+                >CLR overview</a
+              >
+            </li>
+            <li>
+              .NET performance:
+              <a href="https://learn.microsoft.com/dotnet/standard/performance/"
+                >High-performance .NET</a
+              >
+            </li>
+            <li>
+              Effective C#: ["C# in Depth" by Jon Skeet] and ["Effective C#" by
+              Bill Wagner]
+            </li>
+            <li>
+              Roslyn and analyzers:
+              <a href="https://github.com/dotnet/roslyn">Roslyn GitHub</a>
+            </li>
+          </ul>
+          <hr />
+          <p>
+            <em
+              >This guide follows the tone, structure, and style of other guides
+              in this repository: header metadata, badges, an overview, contents
+              list, thorough sections, code blocks, pitfalls, and practical
+              recommendations.</em
+            >
+          </p>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

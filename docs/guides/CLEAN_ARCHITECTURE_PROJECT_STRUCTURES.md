@@ -59,37 +59,37 @@ Before dissecting folder structures, it is critical to establish precise definit
 
 ### Layer Terms
 
-| Term | Definition |
-| :--- | :--- |
-| **Domain** | The innermost layer. Contains the core business rules and enterprise logic that exist regardless of any framework, UI, or database. This layer defines *what* the system does in pure business terms. It has **zero** external dependencies — no NuGet packages, no npm modules, no Flutter plugins. If your company's business rules would survive the complete replacement of your tech stack, they belong here. |
-| **Application** | Orchestrates the domain. Contains **Use Cases** (also called Interactors or Application Services) that coordinate domain entities and interfaces to fulfill a specific user intent (e.g., "Register a new user," "Process a payment"). This layer defines *how* domain rules are triggered. It references the Domain layer and nothing else. |
-| **Infrastructure** | The implementation layer. This is where all concrete, framework-dependent code lives: database access (Entity Framework, Mongoose, Drift), external API clients (Stripe, Twilio, SendGrid), file system access, caching (Redis), message brokers (RabbitMQ, Kafka). It *implements* the interfaces (contracts) defined in the Domain layer. It references both Domain and Application. |
-| **Presentation** | The delivery mechanism. The outermost layer that adapts user input into something the Application layer understands and formats Application output for the user. For a backend API, this is your HTTP controllers, middleware, and route definitions. For Flutter, this is your Widgets, Pages, and state management (Bloc, Riverpod). This layer calls Application Use Cases but never touches Infrastructure directly. |
-| **Core** | A cross-cutting shared module containing utilities, constants, error/failure classes, and networking primitives (HTTP clients, interceptors) used across all features. In Flutter Clean Architecture, `core/` often holds the `Failure` base class, theme data, and the configured `Dio` client. In backend apps, this might hold shared value objects or extension methods. Not a formal Clean Architecture layer, but a practical necessity. |
+| Term               | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Domain**         | The innermost layer. Contains the core business rules and enterprise logic that exist regardless of any framework, UI, or database. This layer defines _what_ the system does in pure business terms. It has **zero** external dependencies — no NuGet packages, no npm modules, no Flutter plugins. If your company's business rules would survive the complete replacement of your tech stack, they belong here.                             |
+| **Application**    | Orchestrates the domain. Contains **Use Cases** (also called Interactors or Application Services) that coordinate domain entities and interfaces to fulfill a specific user intent (e.g., "Register a new user," "Process a payment"). This layer defines _how_ domain rules are triggered. It references the Domain layer and nothing else.                                                                                                   |
+| **Infrastructure** | The implementation layer. This is where all concrete, framework-dependent code lives: database access (Entity Framework, Mongoose, Drift), external API clients (Stripe, Twilio, SendGrid), file system access, caching (Redis), message brokers (RabbitMQ, Kafka). It _implements_ the interfaces (contracts) defined in the Domain layer. It references both Domain and Application.                                                         |
+| **Presentation**   | The delivery mechanism. The outermost layer that adapts user input into something the Application layer understands and formats Application output for the user. For a backend API, this is your HTTP controllers, middleware, and route definitions. For Flutter, this is your Widgets, Pages, and state management (Bloc, Riverpod). This layer calls Application Use Cases but never touches Infrastructure directly.                       |
+| **Core**           | A cross-cutting shared module containing utilities, constants, error/failure classes, and networking primitives (HTTP clients, interceptors) used across all features. In Flutter Clean Architecture, `core/` often holds the `Failure` base class, theme data, and the configured `Dio` client. In backend apps, this might hold shared value objects or extension methods. Not a formal Clean Architecture layer, but a practical necessity. |
 
 ### Component Terms
 
-| Term | Definition |
-| :--- | :--- |
-| **Entity** | A domain object that is defined by its **identity** (an ID), not by its attributes. A `User` entity with `id: 42` is the same user even if their name changes. Entities encapsulate the most critical business rules. In the Domain layer, entities are plain classes with no framework annotations — no `[Table]`, no `@Entity()`, no `@JsonSerializable()`. |
-| **Model** | A data-transfer representation of an entity, augmented with serialization logic. A `UserModel` in the Infrastructure/Data layer might extend or map to a `User` entity but includes `fromJson()`, `toMap()`, or Entity Framework `[Column]` annotations. Models know about the outside world; entities do not. |
-| **DTO (Data Transfer Object)** | A plain object used to shuttle data across layer boundaries. A `RegisterUserRequest` DTO carries input from the Presentation layer to the Application layer. A `UserResponse` DTO carries output back. DTOs decouple HTTP request/response shapes from internal domain structures. If your API contract changes, only the DTO changes — not the entity. |
-| **Repository** | An abstraction (interface) that defines data access operations without specifying *how* data is stored. `IUserRepository` declares `GetByIdAsync(int id)` — it does not say whether the backing store is PostgreSQL, MongoDB, or an in-memory list. The interface lives in the Domain layer; the concrete implementation (e.g., `UserRepositoryImpl`) lives in Infrastructure. |
-| **Use Case (Interactor)** | A single, named unit of application logic. One Use Case = one user intention. `RegisterUserUseCase` validates input, checks for duplicates, hashes the password, persists the user, and dispatches a welcome email. Use Cases orchestrate but do not implement — they call repository interfaces and service interfaces defined in the Domain layer. |
-| **Service (Domain Service)** | Business logic that does not naturally belong to any single entity. For example, a `PricingService` that calculates a ride fare based on distance, surge multiplier, and vehicle type operates across multiple entities. Domain Services live in the Domain layer and have no external dependencies. |
-| **Service (Infrastructure Service)** | A concrete implementation of an external capability: `EmailService` wrapping SendGrid, `PaymentService` wrapping Stripe, `CacheService` wrapping Redis. These implement interfaces defined in the Domain layer and live in Infrastructure. The distinction from a Domain Service is that Infrastructure Services depend on third-party SDKs. |
-| **Middleware** | A pipeline component that intercepts requests before they reach a controller or responses before they leave the server. Common middleware includes authentication (JWT validation), logging, CORS enforcement, rate limiting, and global error handling. Middleware lives in the Presentation layer. |
-| **Validator** | A component that enforces input correctness rules before a Use Case executes. Validators live in the Application layer and use libraries like FluentValidation (C#), `class-validator` (TypeScript), or `dartz`/`fpdart` (Dart) to reject malformed requests early. |
+| Term                                 | Definition                                                                                                                                                                                                                                                                                                                                                                     |
+| :----------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Entity**                           | A domain object that is defined by its **identity** (an ID), not by its attributes. A `User` entity with `id: 42` is the same user even if their name changes. Entities encapsulate the most critical business rules. In the Domain layer, entities are plain classes with no framework annotations — no `[Table]`, no `@Entity()`, no `@JsonSerializable()`.                  |
+| **Model**                            | A data-transfer representation of an entity, augmented with serialization logic. A `UserModel` in the Infrastructure/Data layer might extend or map to a `User` entity but includes `fromJson()`, `toMap()`, or Entity Framework `[Column]` annotations. Models know about the outside world; entities do not.                                                                 |
+| **DTO (Data Transfer Object)**       | A plain object used to shuttle data across layer boundaries. A `RegisterUserRequest` DTO carries input from the Presentation layer to the Application layer. A `UserResponse` DTO carries output back. DTOs decouple HTTP request/response shapes from internal domain structures. If your API contract changes, only the DTO changes — not the entity.                        |
+| **Repository**                       | An abstraction (interface) that defines data access operations without specifying _how_ data is stored. `IUserRepository` declares `GetByIdAsync(int id)` — it does not say whether the backing store is PostgreSQL, MongoDB, or an in-memory list. The interface lives in the Domain layer; the concrete implementation (e.g., `UserRepositoryImpl`) lives in Infrastructure. |
+| **Use Case (Interactor)**            | A single, named unit of application logic. One Use Case = one user intention. `RegisterUserUseCase` validates input, checks for duplicates, hashes the password, persists the user, and dispatches a welcome email. Use Cases orchestrate but do not implement — they call repository interfaces and service interfaces defined in the Domain layer.                           |
+| **Service (Domain Service)**         | Business logic that does not naturally belong to any single entity. For example, a `PricingService` that calculates a ride fare based on distance, surge multiplier, and vehicle type operates across multiple entities. Domain Services live in the Domain layer and have no external dependencies.                                                                           |
+| **Service (Infrastructure Service)** | A concrete implementation of an external capability: `EmailService` wrapping SendGrid, `PaymentService` wrapping Stripe, `CacheService` wrapping Redis. These implement interfaces defined in the Domain layer and live in Infrastructure. The distinction from a Domain Service is that Infrastructure Services depend on third-party SDKs.                                   |
+| **Middleware**                       | A pipeline component that intercepts requests before they reach a controller or responses before they leave the server. Common middleware includes authentication (JWT validation), logging, CORS enforcement, rate limiting, and global error handling. Middleware lives in the Presentation layer.                                                                           |
+| **Validator**                        | A component that enforces input correctness rules before a Use Case executes. Validators live in the Application layer and use libraries like FluentValidation (C#), `class-validator` (TypeScript), or `dartz`/`fpdart` (Dart) to reject malformed requests early.                                                                                                            |
 
 ### Principle Terms
 
-| Term | Definition |
-| :--- | :--- |
-| **Dependency Rule** | The cardinal rule of Clean Architecture: **source code dependencies must point inward only.** The Domain layer knows nothing about Application, Infrastructure, or Presentation. Application knows about Domain but not Infrastructure or Presentation. This is enforced by project/package references, not by developer discipline alone. |
-| **Dependency Injection (DI)** | A technique where a class receives its dependencies (typically via constructor parameters) rather than creating them internally. This enables the Dependency Rule: a Use Case depends on `IUserRepository` (an abstraction from Domain). At startup, the DI container wires `IUserRepository` to `UserRepositoryImpl` (a concrete from Infrastructure). The Use Case never imports or references Infrastructure code. |
-| **Inversion of Control (IoC)** | The broader principle that DI implements. Traditional code calls libraries; with IoC, the framework calls your code. In Clean Architecture, the inner layers define interfaces (control the contract), and the outer layers provide implementations (invert the typical dependency direction). |
-| **Separation of Concerns (SoC)** | Each layer or module has a single, well-defined responsibility. Controllers do not validate. Validators do not query databases. Repositories do not format HTTP responses. SoC is the philosophical foundation; Clean Architecture is the structural enforcement. |
-| **CQRS (Command Query Responsibility Segregation)** | A pattern often paired with Clean Architecture in C# where write operations (Commands) and read operations (Queries) are handled by separate pipelines. MediatR is the canonical .NET library for implementing CQRS with Clean Architecture. Commands mutate state; Queries return data and are side-effect-free. |
+| Term                                                | Definition                                                                                                                                                                                                                                                                                                                                                                                                            |
+| :-------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Dependency Rule**                                 | The cardinal rule of Clean Architecture: **source code dependencies must point inward only.** The Domain layer knows nothing about Application, Infrastructure, or Presentation. Application knows about Domain but not Infrastructure or Presentation. This is enforced by project/package references, not by developer discipline alone.                                                                            |
+| **Dependency Injection (DI)**                       | A technique where a class receives its dependencies (typically via constructor parameters) rather than creating them internally. This enables the Dependency Rule: a Use Case depends on `IUserRepository` (an abstraction from Domain). At startup, the DI container wires `IUserRepository` to `UserRepositoryImpl` (a concrete from Infrastructure). The Use Case never imports or references Infrastructure code. |
+| **Inversion of Control (IoC)**                      | The broader principle that DI implements. Traditional code calls libraries; with IoC, the framework calls your code. In Clean Architecture, the inner layers define interfaces (control the contract), and the outer layers provide implementations (invert the typical dependency direction).                                                                                                                        |
+| **Separation of Concerns (SoC)**                    | Each layer or module has a single, well-defined responsibility. Controllers do not validate. Validators do not query databases. Repositories do not format HTTP responses. SoC is the philosophical foundation; Clean Architecture is the structural enforcement.                                                                                                                                                     |
+| **CQRS (Command Query Responsibility Segregation)** | A pattern often paired with Clean Architecture in C# where write operations (Commands) and read operations (Queries) are handled by separate pipelines. MediatR is the canonical .NET library for implementing CQRS with Clean Architecture. Commands mutate state; Queries return data and are side-effect-free.                                                                                                     |
 
 ---
 
@@ -508,11 +508,11 @@ TypeScript interfaces are erased at runtime, so DI requires either a container l
 
 ```typescript
 // main.ts — Composition Root
-import { UserController } from './presentation/http/controllers/UserController';
-import { RegisterUserUseCase } from './application/use-cases/RegisterUserUseCase';
-import { UserRepositoryImpl } from './infrastructure/repositories/UserRepositoryImpl';
-import { SendGridEmailService } from './infrastructure/services/SendGridEmailService';
-import { PostgresConnection } from './infrastructure/database/PostgresConnection';
+import { UserController } from "./presentation/http/controllers/UserController";
+import { RegisterUserUseCase } from "./application/use-cases/RegisterUserUseCase";
+import { UserRepositoryImpl } from "./infrastructure/repositories/UserRepositoryImpl";
+import { SendGridEmailService } from "./infrastructure/services/SendGridEmailService";
+import { PostgresConnection } from "./infrastructure/database/PostgresConnection";
 
 const db = new PostgresConnection();
 const userRepository = new UserRepositoryImpl(db);
@@ -521,24 +521,26 @@ const registerUser = new RegisterUserUseCase(userRepository, emailService);
 const userController = new UserController(registerUser);
 
 // Wire into Express
-app.post('/api/users', (req, res) => userController.register(req, res));
+app.post("/api/users", (req, res) => userController.register(req, res));
 ```
 
 **Option B: `tsyringe` (decorator-based DI container)**
 
 ```typescript
-import { container } from 'tsyringe';
-import { IUserRepository } from './domain/interfaces/IUserRepository';
-import { UserRepositoryImpl } from './infrastructure/repositories/UserRepositoryImpl';
+import { container } from "tsyringe";
+import { IUserRepository } from "./domain/interfaces/IUserRepository";
+import { UserRepositoryImpl } from "./infrastructure/repositories/UserRepositoryImpl";
 
-container.register<IUserRepository>('IUserRepository', { useClass: UserRepositoryImpl });
+container.register<IUserRepository>("IUserRepository", {
+  useClass: UserRepositoryImpl,
+});
 
 // In RegisterUserUseCase.ts
 @injectable()
 export class RegisterUserUseCase {
   constructor(
-    @inject('IUserRepository') private userRepo: IUserRepository,
-    @inject('IEmailService') private emailService: IEmailService,
+    @inject("IUserRepository") private userRepo: IUserRepository,
+    @inject("IEmailService") private emailService: IEmailService,
   ) {}
 }
 ```
@@ -549,18 +551,18 @@ Both approaches satisfy the Dependency Rule: `RegisterUserUseCase` depends on `I
 
 ## Comparison Matrix: Typical vs Clean
 
-| Dimension | Typical (Framework Default) | Clean Architecture |
-| :--- | :--- | :--- |
-| **Optimized for** | Speed of initial setup | Long-term maintainability |
-| **Dependency direction** | Ad hoc (anything imports anything) | Strictly inward (enforced by project/package boundaries) |
-| **Business logic location** | Controllers, route handlers, services | Domain layer (entities, domain services) and Application layer (use cases) |
-| **Database coupling** | Models are often ORM entities used everywhere | ORM models isolated in Infrastructure; domain entities are framework-free |
-| **Testability** | Integration tests masquerading as unit tests | True unit tests: domain and application layers have zero framework deps |
-| **Onboarding time** | Low (familiar folder names) | Medium (requires understanding the layer rules) |
-| **Refactoring cost** | High (changes ripple across layers) | Low (changes are contained within layer boundaries) |
-| **Framework migration** | Rewrite | Replace Presentation and/or Infrastructure; Domain and Application untouched |
-| **Ideal team size** | 1–3 developers | 3+ developers, or any team expecting >12 months of active development |
-| **Ideal project lifespan** | Prototypes, hackathons, microservices with single responsibility | Enterprise systems, products with evolving requirements, multi-year codebases |
+| Dimension                   | Typical (Framework Default)                                      | Clean Architecture                                                            |
+| :-------------------------- | :--------------------------------------------------------------- | :---------------------------------------------------------------------------- |
+| **Optimized for**           | Speed of initial setup                                           | Long-term maintainability                                                     |
+| **Dependency direction**    | Ad hoc (anything imports anything)                               | Strictly inward (enforced by project/package boundaries)                      |
+| **Business logic location** | Controllers, route handlers, services                            | Domain layer (entities, domain services) and Application layer (use cases)    |
+| **Database coupling**       | Models are often ORM entities used everywhere                    | ORM models isolated in Infrastructure; domain entities are framework-free     |
+| **Testability**             | Integration tests masquerading as unit tests                     | True unit tests: domain and application layers have zero framework deps       |
+| **Onboarding time**         | Low (familiar folder names)                                      | Medium (requires understanding the layer rules)                               |
+| **Refactoring cost**        | High (changes ripple across layers)                              | Low (changes are contained within layer boundaries)                           |
+| **Framework migration**     | Rewrite                                                          | Replace Presentation and/or Infrastructure; Domain and Application untouched  |
+| **Ideal team size**         | 1–3 developers                                                   | 3+ developers, or any team expecting >12 months of active development         |
+| **Ideal project lifespan**  | Prototypes, hackathons, microservices with single responsibility | Enterprise systems, products with evolving requirements, multi-year codebases |
 
 ---
 
@@ -613,6 +615,7 @@ Client (HTTP POST /api/users)
 ### Concrete Code Example (TypeScript)
 
 **Domain: Entity**
+
 ```typescript
 // domain/entities/User.ts
 export class User {
@@ -626,9 +629,10 @@ export class User {
 ```
 
 **Domain: Interface**
+
 ```typescript
 // domain/interfaces/IUserRepository.ts
-import { User } from '../entities/User';
+import { User } from "../entities/User";
 
 export interface IUserRepository {
   existsByEmail(email: string): Promise<boolean>;
@@ -638,15 +642,16 @@ export interface IUserRepository {
 ```
 
 **Application: Use Case**
+
 ```typescript
 // application/use-cases/RegisterUserUseCase.ts
-import { User } from '../../domain/entities/User';
-import { IUserRepository } from '../../domain/interfaces/IUserRepository';
-import { IEmailService } from '../../domain/interfaces/IEmailService';
-import { IHashService } from '../../domain/interfaces/IHashService';
-import { RegisterUserRequestDto } from '../dtos/RegisterUserRequestDto';
-import { UserResponseDto } from '../dtos/UserResponseDto';
-import { v4 as uuidv4 } from 'uuid';
+import { User } from "../../domain/entities/User";
+import { IUserRepository } from "../../domain/interfaces/IUserRepository";
+import { IEmailService } from "../../domain/interfaces/IEmailService";
+import { IHashService } from "../../domain/interfaces/IHashService";
+import { RegisterUserRequestDto } from "../dtos/RegisterUserRequestDto";
+import { UserResponseDto } from "../dtos/UserResponseDto";
+import { v4 as uuidv4 } from "uuid";
 
 export class RegisterUserUseCase {
   constructor(
@@ -659,7 +664,7 @@ export class RegisterUserUseCase {
     // 1. Check uniqueness
     const exists = await this.userRepo.existsByEmail(dto.email);
     if (exists) {
-      throw new Error('Email already registered');
+      throw new Error("Email already registered");
     }
 
     // 2. Hash password
@@ -675,36 +680,46 @@ export class RegisterUserUseCase {
     await this.emailService.sendWelcome(saved.email);
 
     // 6. Map to response DTO
-    return { id: saved.id, email: saved.email, createdAt: saved.createdAt.toISOString() };
+    return {
+      id: saved.id,
+      email: saved.email,
+      createdAt: saved.createdAt.toISOString(),
+    };
   }
 }
 ```
 
 **Infrastructure: Repository Implementation**
+
 ```typescript
 // infrastructure/repositories/UserRepositoryImpl.ts
-import { IUserRepository } from '../../domain/interfaces/IUserRepository';
-import { User } from '../../domain/entities/User';
-import { Pool } from 'pg';
+import { IUserRepository } from "../../domain/interfaces/IUserRepository";
+import { User } from "../../domain/entities/User";
+import { Pool } from "pg";
 
 export class UserRepositoryImpl implements IUserRepository {
   constructor(private pool: Pool) {}
 
   async existsByEmail(email: string): Promise<boolean> {
-    const result = await this.pool.query('SELECT 1 FROM users WHERE email = $1', [email]);
+    const result = await this.pool.query(
+      "SELECT 1 FROM users WHERE email = $1",
+      [email],
+    );
     return result.rowCount > 0;
   }
 
   async save(user: User): Promise<User> {
     await this.pool.query(
-      'INSERT INTO users (id, email, hashed_password, created_at) VALUES ($1, $2, $3, $4)',
+      "INSERT INTO users (id, email, hashed_password, created_at) VALUES ($1, $2, $3, $4)",
       [user.id, user.email, user.hashedPassword, user.createdAt],
     );
     return user;
   }
 
   async findById(id: string): Promise<User | null> {
-    const result = await this.pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    const result = await this.pool.query("SELECT * FROM users WHERE id = $1", [
+      id,
+    ]);
     if (result.rows.length === 0) return null;
     const row = result.rows[0];
     return new User(row.id, row.email, row.hashed_password, row.created_at);
@@ -713,10 +728,11 @@ export class UserRepositoryImpl implements IUserRepository {
 ```
 
 **Presentation: Controller**
+
 ```typescript
 // presentation/http/controllers/UserController.ts
-import { Request, Response } from 'express';
-import { RegisterUserUseCase } from '../../../application/use-cases/RegisterUserUseCase';
+import { Request, Response } from "express";
+import { RegisterUserUseCase } from "../../../application/use-cases/RegisterUserUseCase";
 
 export class UserController {
   constructor(private registerUser: RegisterUserUseCase) {}
@@ -727,10 +743,10 @@ export class UserController {
       const result = await this.registerUser.execute(dto);
       res.status(201).json(result);
     } catch (error: any) {
-      if (error.message === 'Email already registered') {
+      if (error.message === "Email already registered") {
         res.status(409).json({ error: error.message });
       } else {
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: "Internal server error" });
       }
     }
   }
@@ -784,7 +800,7 @@ Many teams start with the typical structure for speed, then refactor toward Clea
 
 ## References & Further Reading
 
-- Robert C. Martin, *Clean Architecture: A Craftsman's Guide to Software Structure and Design* (2017)
+- Robert C. Martin, _Clean Architecture: A Craftsman's Guide to Software Structure and Design_ (2017)
 - Robert C. Martin, [The Clean Architecture (blog post)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - Jason Taylor, [Clean Architecture Solution Template for .NET](https://github.com/jasontaylordev/CleanArchitecture)
 - Reso Coder, [Flutter TDD Clean Architecture (series)](https://resocoder.com/flutter-clean-architecture-tdd/)
@@ -796,4 +812,4 @@ Many teams start with the typical structure for speed, then refactor toward Clea
 
 ---
 
-*This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, comparison tables, pitfalls, and practical recommendations.*
+_This guide follows the tone, structure, and style of other guides in this repository: header metadata, badges, an overview, contents list, thorough sections, code blocks, comparison tables, pitfalls, and practical recommendations._

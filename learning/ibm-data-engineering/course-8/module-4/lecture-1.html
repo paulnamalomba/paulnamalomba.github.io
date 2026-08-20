@@ -1,113 +1,198 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 1: Apache Kafka Overview & Architecture</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 1: Apache Kafka Overview & Architecture</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html" class="active">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka
+              ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html" class="active"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 4 &mdash; Course 8: Course 8 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/index.html" class="active">Module 4 &mdash; Course 8: Course 8</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Module 4 &mdash; Course 8: Course 8 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/index.html" class="active"
+                >Module 4 &mdash; Course 8: Course 8</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 1 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/module-4/lecture-1.html" class="active">Lecture 1: Apache Kafka Overview & Architecture</a>
-            <a href="../../course-8/module-4/lecture-2.html">Lecture 2: Distributed Event Streaming Platform Components</a>
-            <a href="../../course-8/module-4/lecture-3.html">Lecture 3: Building Event Streaming Pipelines Using Kafka</a>
-            <a href="../../course-8/module-4/lecture-4.html">Lecture 4: Kafka Streaming Process & Stream Topology</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 1 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/module-4/lecture-1.html" class="active"
+                >Lecture 1: Apache Kafka Overview & Architecture</a
+              >
+              <a href="../../course-8/module-4/lecture-2.html"
+                >Lecture 2: Distributed Event Streaming Platform Components</a
+              >
+              <a href="../../course-8/module-4/lecture-3.html"
+                >Lecture 3: Building Event Streaming Pipelines Using Kafka</a
+              >
+              <a href="../../course-8/module-4/lecture-4.html"
+                >Lecture 4: Kafka Streaming Process & Stream Topology</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 8</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 4</a> <span>&rsaquo;</span> 
-      Lecture 1
-    </div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 8</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 4</a> <span>&rsaquo;</span>
+        Lecture 1
+      </div>
 
-    <h1 class="fade-in">Apache Kafka Overview & Architecture</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 4, Lecture 1
-    </p>
+      <h1 class="fade-in">Apache Kafka Overview & Architecture</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 4, Lecture 1
+      </p>
 
-
-<p class="fade-in fade-in-d2">Transitioning from abstract event streaming concepts to a concrete implementation requires a system capable of handling relentless data velocity without dropping state. Apache Kafka is the de facto standard for this tier of infrastructure.</p>
-<hr/>
-<div class="section-card fade-in fade-in-d2"><h2>1. The Operational Scope of Kafka</h2>
-<p>Originally engineered at LinkedIn to handle massive volumes of user activity telemetry (page views, keystrokes), Kafka has evolved into the central nervous system for enterprise data architectures.</p>
-<p>When evaluating infrastructure for a backend system—whether it's tracking thousands of concurrent student session states or aggregating real-time computational metrics from a distributed solver—Kafka is deployed for:</p>
-<ul>
-<li><strong>Metric Streaming:</strong> Ingesting high-frequency sensor readings, hardware utilization, or application logs into a centralized, immutable repository.</li>
-<li><strong>Event Sourcing &amp; Transactions:</strong> Serving as the backbone for fintech applications where every state change (e.g., a payment execution) must be securely ordered, audited, and strictly compliant with governance regulations.</li>
-<li><strong>Real-Time Analytics:</strong> Feeding data into stream-processing engines (like Apache Flink) or machine learning pipelines with sub-millisecond latency.</li>
-</ul>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Core Architectural Paradigms</h2>
-<p>Kafka is a distributed, real-time system built on a strictly decoupled client-server architecture communicating via a custom TCP-based protocol.</p>
-<h3>2.1 The Broker Cluster</h3>
-<p>A Kafka deployment is never a single server; it is a cluster of independent nodes called <strong>Brokers</strong>.</p>
-<ul>
-<li><strong>Ingestion:</strong> Brokers receive payloads from Producers.</li>
-<li><strong>Storage:</strong> They persist these records to disk. Kafka divides this storage into <strong>Partitions</strong> and replicates them across multiple brokers. This ensures that if a server rack in a Cape Town data center goes offline, the data remains highly available and fault-tolerant.</li>
-<li><strong>Distribution:</strong> Brokers serve these persistent records to subscribing Consumers. Because data is stored permanently (based on retention policies), consumers can read and replay events at their own processing speed.</li>
-</ul>
-<h3>2.2 The Consensus Protocol Shift: ZooKeeper to KRaft</h3>
-<p>Historically, managing the metadata, leader election, and health of a distributed Kafka cluster required an entirely separate distributed system running alongside it: <strong>Apache ZooKeeper</strong>.</p>
-<p>Managing two distinct distributed systems simultaneously is a notorious operational headache. Modern Kafka (post-version 2.8) introduced <strong>KRaft (Kafka Raft)</strong>.</p>
-<p>KRaft implements the Raft consensus algorithm directly within Kafka, eliminating the ZooKeeper dependency. This consolidates metadata management into dedicated Kafka Controller nodes, streamlining deployment and drastically increasing the partition scaling limits.</p>
-<div class="mermaid-container"><pre class="mermaid">graph TD
+      <p class="fade-in fade-in-d2">
+        Transitioning from abstract event streaming concepts to a concrete
+        implementation requires a system capable of handling relentless data
+        velocity without dropping state. Apache Kafka is the de facto standard
+        for this tier of infrastructure.
+      </p>
+      <hr />
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. The Operational Scope of Kafka</h2>
+        <p>
+          Originally engineered at LinkedIn to handle massive volumes of user
+          activity telemetry (page views, keystrokes), Kafka has evolved into
+          the central nervous system for enterprise data architectures.
+        </p>
+        <p>
+          When evaluating infrastructure for a backend system—whether it's
+          tracking thousands of concurrent student session states or aggregating
+          real-time computational metrics from a distributed solver—Kafka is
+          deployed for:
+        </p>
+        <ul>
+          <li>
+            <strong>Metric Streaming:</strong> Ingesting high-frequency sensor
+            readings, hardware utilization, or application logs into a
+            centralized, immutable repository.
+          </li>
+          <li>
+            <strong>Event Sourcing &amp; Transactions:</strong> Serving as the
+            backbone for fintech applications where every state change (e.g., a
+            payment execution) must be securely ordered, audited, and strictly
+            compliant with governance regulations.
+          </li>
+          <li>
+            <strong>Real-Time Analytics:</strong> Feeding data into
+            stream-processing engines (like Apache Flink) or machine learning
+            pipelines with sub-millisecond latency.
+          </li>
+        </ul>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Core Architectural Paradigms</h2>
+        <p>
+          Kafka is a distributed, real-time system built on a strictly decoupled
+          client-server architecture communicating via a custom TCP-based
+          protocol.
+        </p>
+        <h3>2.1 The Broker Cluster</h3>
+        <p>
+          A Kafka deployment is never a single server; it is a cluster of
+          independent nodes called <strong>Brokers</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Ingestion:</strong> Brokers receive payloads from Producers.
+          </li>
+          <li>
+            <strong>Storage:</strong> They persist these records to disk. Kafka
+            divides this storage into <strong>Partitions</strong> and replicates
+            them across multiple brokers. This ensures that if a server rack in
+            a Cape Town data center goes offline, the data remains highly
+            available and fault-tolerant.
+          </li>
+          <li>
+            <strong>Distribution:</strong> Brokers serve these persistent
+            records to subscribing Consumers. Because data is stored permanently
+            (based on retention policies), consumers can read and replay events
+            at their own processing speed.
+          </li>
+        </ul>
+        <h3>2.2 The Consensus Protocol Shift: ZooKeeper to KRaft</h3>
+        <p>
+          Historically, managing the metadata, leader election, and health of a
+          distributed Kafka cluster required an entirely separate distributed
+          system running alongside it: <strong>Apache ZooKeeper</strong>.
+        </p>
+        <p>
+          Managing two distinct distributed systems simultaneously is a
+          notorious operational headache. Modern Kafka (post-version 2.8)
+          introduced <strong>KRaft (Kafka Raft)</strong>.
+        </p>
+        <p>
+          KRaft implements the Raft consensus algorithm directly within Kafka,
+          eliminating the ZooKeeper dependency. This consolidates metadata
+          management into dedicated Kafka Controller nodes, streamlining
+          deployment and drastically increasing the partition scaling limits.
+        </p>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph TD
     subgraph "Legacy Architecture (Pre-2.8)"
         Z1[ZooKeeper Node] --- Z2[ZooKeeper Node]
         Z2 --- Z3[ZooKeeper Node]
@@ -122,12 +207,25 @@
         B2_New[Kafka Broker] --&gt; C1
     end
 
-</pre></div>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Infrastructure as Code: C# Admin API</h2>
-<p>Kafka provides a rich ecosystem of clients (Java, C/C++, Python, Go, and REST APIs). For a robust backend environment, you interact with Kafka not just to produce/consume messages, but to dynamically manage the infrastructure itself.</p>
-<p>Using the <code>Confluent.Kafka</code> library, here is how you programmatically define and provision a new topic with specific partition and replication constraints before your deployment pipelines run.</p>
-<pre><code class="language-csharp">using System;
+</pre>
+        </div>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Infrastructure as Code: C# Admin API</h2>
+        <p>
+          Kafka provides a rich ecosystem of clients (Java, C/C++, Python, Go,
+          and REST APIs). For a robust backend environment, you interact with
+          Kafka not just to produce/consume messages, but to dynamically manage
+          the infrastructure itself.
+        </p>
+        <p>
+          Using the <code>Confluent.Kafka</code> library, here is how you
+          programmatically define and provision a new topic with specific
+          partition and replication constraints before your deployment pipelines
+          run.
+        </p>
+        <pre><code class="language-csharp">using System;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Admin;
@@ -178,36 +276,62 @@ public class KafkaInfrastructureManager
 }
 
 </code></pre>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. Managed ESP Providers</h2>
-<p>Running a distributed consensus protocol requires rigorous tuning of JVM heaps, OS page caches, and network I/O. For teams focused on building computational software or web applications rather than managing server infrastructure, managed services are standard:</p>
-<table>
-<thead>
-<tr>
-<th>Provider</th>
-<th>Core Value Proposition</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Confluent Cloud</strong></td>
-<td>Founded by the original creators of Kafka. Offers a fully managed, serverless, cloud-native Kafka experience with extensive pre-built connectors (e.g., syncing directly to PostgreSQL).</td>
-</tr>
-<tr>
-<td><strong>Amazon MSK</strong></td>
-<td>(Managed Streaming for Apache Kafka). Deeply integrated into the AWS ecosystem, offering simplified provisioning while retaining raw access to the underlying cluster configurations.</td>
-</tr>
-<tr>
-<td><strong>IBM Event Streams</strong></td>
-<td>Focuses heavily on enterprise-grade security, auditing, and compliance capabilities built on top of the open-source Kafka core.</td>
-</tr>
-</tbody>
-</table>
-<p>Would you like to explore the specific replication mathematics Kafka uses to guarantee zero data loss across brokers, or should we map out how to integrate the C# <code>AdminClient</code> into an automated CI/CD pipeline?</p></div>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. Managed ESP Providers</h2>
+        <p>
+          Running a distributed consensus protocol requires rigorous tuning of
+          JVM heaps, OS page caches, and network I/O. For teams focused on
+          building computational software or web applications rather than
+          managing server infrastructure, managed services are standard:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Core Value Proposition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Confluent Cloud</strong></td>
+              <td>
+                Founded by the original creators of Kafka. Offers a fully
+                managed, serverless, cloud-native Kafka experience with
+                extensive pre-built connectors (e.g., syncing directly to
+                PostgreSQL).
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Amazon MSK</strong></td>
+              <td>
+                (Managed Streaming for Apache Kafka). Deeply integrated into the
+                AWS ecosystem, offering simplified provisioning while retaining
+                raw access to the underlying cluster configurations.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>IBM Event Streams</strong></td>
+              <td>
+                Focuses heavily on enterprise-grade security, auditing, and
+                compliance capabilities built on top of the open-source Kafka
+                core.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Would you like to explore the specific replication mathematics Kafka
+          uses to guarantee zero data loss across brokers, or should we map out
+          how to integrate the C# <code>AdminClient</code> into an automated
+          CI/CD pipeline?
+        </p>
+      </div>
 
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

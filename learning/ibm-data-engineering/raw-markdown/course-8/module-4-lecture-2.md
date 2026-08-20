@@ -38,8 +38,8 @@ The most robust and common format in streaming. It injects temporal context, all
 // Example: Blood pressure reading with temporal context.
 public record BloodPressureMeasurement(int Systolic, int Diastolic);
 public record PatientVitalsEvent(
-    string PatientId, 
-    BloodPressureMeasurement Vitals, 
+    string PatientId,
+    BloodPressureMeasurement Vitals,
     DateTimeOffset Timestamp
 );
 
@@ -87,11 +87,11 @@ An ESP acts as a highly scalable, fault-tolerant middle layer. It decouples the 
 
 ### 3.1 Core Components of an ESP
 
-| Component | Description | Technical Responsibility |
-| --- | --- | --- |
-| **Event Broker** | The central nervous system of the ESP. | Handles the ingestion, processing, and routing of data streams. |
-| **Event Storage** | The persistence layer. | Buffers events to disk or memory, allowing consumers to process data at their own pace without dropping messages. |
-| **Query/Analytic Engine** | The computation layer. | Allows for real-time aggregations, filtering, and windowing directly on the stream (e.g., ksqlDB). |
+| Component                 | Description                            | Technical Responsibility                                                                                          |
+| ------------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Event Broker**          | The central nervous system of the ESP. | Handles the ingestion, processing, and routing of data streams.                                                   |
+| **Event Storage**         | The persistence layer.                 | Buffers events to disk or memory, allowing consumers to process data at their own pace without dropping messages. |
+| **Query/Analytic Engine** | The computation layer.                 | Allows for real-time aggregations, filtering, and windowing directly on the stream (e.g., ksqlDB).                |
 
 ### 3.2 Deep Dive: The Event Broker
 
@@ -99,10 +99,10 @@ The Event Broker is the engine of the platform and is generally divided into thr
 
 1. **Ingester:** Efficiently accepts high-throughput incoming connections from varied sources.
 2. **Processor:** Executes middleware logic such as:
-* *Serialization/Deserialization* (e.g., converting C# objects to Protobuf or Avro).
-* *Compression/Decompression* (e.g., Snappy, Gzip) to reduce network payload.
-* *Encryption/Decryption* (TLS/SSL).
 
+- _Serialization/Deserialization_ (e.g., converting C# objects to Protobuf or Avro).
+- _Compression/Decompression_ (e.g., Snappy, Gzip) to reduce network payload.
+- _Encryption/Decryption_ (TLS/SSL).
 
 3. **Consumption (Dispatcher):** Manages subscriber offsets and efficiently pushes or allows pulling of events to the destinations.
 
@@ -157,11 +157,11 @@ namespace StreamingPlatform.Core
 
 While the architectural principles remain consistent, various tools have been developed to handle ESP requirements, each with specific strengths:
 
-* **Apache Kafka:** The industry standard. An open-source, distributed commit log known for massive throughput and fault tolerance.
-* **Amazon Kinesis:** AWS's fully managed real-time streaming service.
-* **Apache Flink:** Highly focused on stateful computations and exact real-time stream processing (often paired with Kafka).
-* **Azure Event Hubs:** Microsoft’s fully managed, Kafka-compatible data streaming platform.
-* **IBM Event Streams:** An enterprise-grade event streaming platform built on Apache Kafka.
+- **Apache Kafka:** The industry standard. An open-source, distributed commit log known for massive throughput and fault tolerance.
+- **Amazon Kinesis:** AWS's fully managed real-time streaming service.
+- **Apache Flink:** Highly focused on stateful computations and exact real-time stream processing (often paired with Kafka).
+- **Azure Event Hubs:** Microsoft’s fully managed, Kafka-compatible data streaming platform.
+- **IBM Event Streams:** An enterprise-grade event streaming platform built on Apache Kafka.
 
 Here is a highly technical, expanded breakdown of Module 4, Lecture 1: "Distributed Event Streaming Platform Components." This lecture transitions from traditional batch ETL to the paradigm of continuous, asynchronous data flow.
 

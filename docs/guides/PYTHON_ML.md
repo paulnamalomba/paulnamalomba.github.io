@@ -42,6 +42,7 @@ Python's dominance in Machine Learning stems not from its inherent execution spe
 Machine Learning development requires strict isolation of massive, often conflicting dependency graphs (e.g., CUDA toolkits).
 
 ### Dependency & Environment Management
+
 Never install ML packages globally. Always use `venv` or `conda`.
 
 ```bash
@@ -59,6 +60,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 ```
 
 ### Windows PATH and GPU Drivers
+
 On Windows, ensuring CUDA functionality dictates installing the NVIDIA CUDA Toolkit. The environment variable `PATH` must explicitly contain `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin` or Python will default to crawling on the CPU.
 
 ---
@@ -68,6 +70,7 @@ On Windows, ensuring CUDA functionality dictates installing the NVIDIA CUDA Tool
 Writing efficient ML Python means completely abandoning standard explicit `for`-loops in favor of vectorized operations executed asynchronously in C block memory.
 
 ### Data Manipulation: NumPy & Pandas
+
 Data streams enter as raw text. Pandas organizes this chaos into tabular DataFrames, while NumPy underlying it handles strict contiguous memory arrays.
 
 ```python
@@ -87,6 +90,7 @@ X_normalized = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 ```
 
 ### Classical ML: Scikit-Learn
+
 Scikit-Learn implements the standard transformer-estimator `fit()`, `transform()`, and `predict()` API, rendering algorithm swapping heavily standardized.
 
 ```python
@@ -107,6 +111,7 @@ print(classification_report(y_test, predictions))
 ```
 
 ### Deep Learning: PyTorch
+
 When the feature complexity outstrips classical trees, PyTorch tensors take over, shifting linear algebra calculations natively to the GPU (CUDA).
 
 ```python
@@ -180,6 +185,7 @@ watch -n 1 nvidia-smi
 ```
 
 For serving the model as an API inference node using FastAPI:
+
 ```bash
 # Daemonize the REST endpoint to receive prediction requests
 uvicorn inference_server:app --host 0.0.0.0 --port 8000 --workers 4
@@ -192,10 +198,12 @@ uvicorn inference_server:app --host 0.0.0.0 --port 8000 --workers 4
 Debugging ML pipelines is an exercise in matrix algebra alignment and managing physical VRAM limits. Nothing destroys morale faster than a training loop crashing on epoch 99.
 
 ### Common Pitfalls
-* **Shape Mismatches:** Trying to multiply a `[32, 64]` tensor by a `[128, 64]` tensor dynamically. PyTorch throws `RuntimeError: mat1 and mat2 shapes cannot be multiplied`. Fix this by applying `.view()`, `.unsqueeze()`, or explicitly verifying dimensions with `.shape`.
-* **CUDA Out of Memory (OOM):** Loading too large a batch size into your GPU. PyTorch will panic. You must either reduce `batch_size` or utilize mixed-precision training (`torch.cuda.amp`).
+
+- **Shape Mismatches:** Trying to multiply a `[32, 64]` tensor by a `[128, 64]` tensor dynamically. PyTorch throws `RuntimeError: mat1 and mat2 shapes cannot be multiplied`. Fix this by applying `.view()`, `.unsqueeze()`, or explicitly verifying dimensions with `.shape`.
+- **CUDA Out of Memory (OOM):** Loading too large a batch size into your GPU. PyTorch will panic. You must either reduce `batch_size` or utilize mixed-precision training (`torch.cuda.amp`).
 
 ### Profiling
+
 To figure out exactly which layer of your neural network is bottlenecking the compute:
 
 ```python
@@ -206,4 +214,5 @@ with profiler.profile(use_cuda=True) as prof:
 
 print(prof.key_averages().table(sort_by="cuda_time_total"))
 ```
-* **Tracebacks:** Pay heavy attention to whether a tensor is on CPU or GPU. You cannot perform operations if one tensor acts locally and the other sits in physical GPU memory. PyTorch throws the infamous `Expected all tensors to be on the same device.` Fix with `.to(device)`.
+
+- **Tracebacks:** Pay heavy attention to whether a tensor is on CPU or GPU. You cannot perform operations if one tensor acts locally and the other sits in physical GPU memory. PyTorch throws the infamous `Expected all tensors to be on the same device.` Fix with `.to(device)`.

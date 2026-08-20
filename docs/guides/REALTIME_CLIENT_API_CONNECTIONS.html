@@ -1,445 +1,1048 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
-    <meta name="theme-color" content="#f2f0e9">
-    <title>REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem Engineering Notes - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body class="docs-page">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+    />
+    <meta name="theme-color" content="#f2f0e9" />
+    <title>
+      REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem
+      Engineering Notes - Paul Namalomba
+    </title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
-        <div class="container">
-            <nav>
-                <div class="logo"><a href="/">Paul Namalomba</a></div>
-                <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="/">Portfolio</a></li>
-                    <li><a href="/docs/">Knowledge Base</a></li>
-                    <li><a href="/docs/guides/">All Guides</a></li>
-                    <li><a href="/docs/system-scripts/">System Scripts</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container">
+        <nav>
+          <div class="logo"><a href="/">Paul Namalomba</a></div>
+          <button
+            class="hamburger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+          </button>
+          <ul class="nav-links">
+            <li><a href="/">Portfolio</a></li>
+            <li><a href="/docs/">Knowledge Base</a></li>
+            <li><a href="/docs/guides/">All Guides</a></li>
+            <li><a href="/docs/system-scripts/">System Scripts</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
-
     <main id="main" class="container docs-container">
-        <div class="card docs-card">
-            <div class="docs-breadcrumb">
-                <a href="index.html">← Back to Guides</a>
-                <span>|</span>
-                <a href="/">Portfolio Home</a>
-            </div>
-            <article class="docs-content"><h1 id="realtime-client-api-connections-signalr-style-cross-ecosystem-engineering-notes">REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem Engineering Notes</h1>
-<p><br>
-<strong>Last updated</strong>: March 11, 2026<br>
-<strong>Author</strong>: <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br>
-  - SESKA Computational Engineer<br>
-  - SEAT Backend Developer<br>
-  - Software Developer<br>
-  - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-<strong>Contact</strong>: <a href="mailto:kabwenzenamalomba@gmail.com">kabwenzenamalomba@gmail.com</a><br>
-<strong>Website</strong>: <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a><br>
-<br></p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"><img alt="Topic" src="https://img.shields.io/badge/Realtime-Client_API_Connections-blue.svg" /></a>
-<a href="https://socket.io/docs/v4/"><img alt="Stacks" src="https://img.shields.io/badge/Stacks-SignalR%20%7C%20Socket.IO%20%7C%20ws%20%7C%20python--socketio%20%7C%20Django%20Channels%20%7C%20FastAPI-brightgreen.svg" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-gray.svg" /></a></p>
-<h2 id="overview">Overview</h2>
-<p>This guide compares hub-style realtime communication across C#, JavaScript/TypeScript, and Python with a deliberate SignalR lens. The point is not to repeat framework tutorials. The point is to make the abstraction boundaries explicit: what each stack treats as the equivalent of a hub, how connections are addressed, how groups or rooms are modeled, what scale-out actually requires, and where the term "connection pooling" is technically wrong.</p>
-<p>The stacks covered are:</p>
-<ul>
-<li><strong>C#</strong>: ASP.NET Core SignalR</li>
-<li><strong>JavaScript/TypeScript</strong>: Socket.IO and raw WebSockets with <code>ws</code></li>
-<li><strong>Python</strong>: <code>python-socketio</code>, Django Channels, and FastAPI/Starlette WebSockets</li>
-</ul>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="#realtime-client-api-connections-signalr-style-cross-ecosystem-engineering-notes">REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem Engineering Notes</a></li>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#contents">Contents</a></li>
-<li><a href="#executive-summary">Executive Summary</a></li>
-<li><a href="#1-core-abstraction-model">1. Core Abstraction Model</a><ul>
-<li><a href="#aspnet-core-signalr">ASP.NET Core SignalR</a></li>
-<li><a href="#socketio">Socket.IO</a></li>
-<li><a href="#raw-websockets-with-ws">Raw WebSockets with ws</a></li>
-<li><a href="#python-socketio">python-socketio</a></li>
-<li><a href="#django-channels">Django Channels</a></li>
-<li><a href="#fastapi-and-starlette-websockets">FastAPI and Starlette WebSockets</a></li>
-</ul>
-</li>
-<li><a href="#2-basic-architecture">2. Basic Architecture</a><ul>
-<li><a href="#signalr-server-shape">SignalR Server Shape</a></li>
-<li><a href="#socketio-server-shape">Socket.IO Server Shape</a></li>
-<li><a href="#ws-server-shape">ws Server Shape</a></li>
-<li><a href="#python-socketio-server-shape">python-socketio Server Shape</a></li>
-<li><a href="#django-channels-server-shape">Django Channels Server Shape</a></li>
-<li><a href="#fastapi-and-starlette-server-shape">FastAPI and Starlette Server Shape</a></li>
-</ul>
-</li>
-<li><a href="#3-equivalent-terminology-table">3. Equivalent Terminology Table</a></li>
-<li><a href="#4-code-examples">4. Code Examples</a><ul>
-<li><a href="#c-aspnet-core-signalr">C# - ASP.NET Core SignalR</a></li>
-<li><a href="#typescript-socketio">TypeScript - Socket.IO</a></li>
-<li><a href="#typescript-raw-websockets-with-ws">TypeScript - Raw WebSockets with ws</a></li>
-<li><a href="#python-python-socketio">Python - python-socketio</a></li>
-<li><a href="#python-django-channels">Python - Django Channels</a></li>
-<li><a href="#python-fastapi-websockets">Python - FastAPI WebSockets</a></li>
-</ul>
-</li>
-<li><a href="#5-connection-management-and-the-misuse-of-pooling">5. Connection Management and the Misuse of "Pooling"</a><ul>
-<li><a href="#what-http-connection-pooling-actually-means">What HTTP Connection Pooling Actually Means</a></li>
-<li><a href="#what-realtime-systems-actually-manage">What Realtime Systems Actually Manage</a></li>
-<li><a href="#correct-terms-for-realtime-system-design">Correct Terms for Realtime System Design</a></li>
-<li><a href="#http-connection-pooling">HTTP connection pooling</a></li>
-<li><a href="#tcp-connection-reuse">TCP connection reuse</a></li>
-<li><a href="#long-lived-websocket-connections">Long-lived WebSocket connections</a></li>
-<li><a href="#server-side-connection-registries">Server-side connection registries</a></li>
-<li><a href="#connection-fanout-and-scaling">Connection fanout and scaling</a></li>
-<li><a href="#connection-limits">Connection limits</a></li>
-<li><a href="#heartbeat-keepalive">Heartbeat / keepalive</a></li>
-<li><a href="#idle-timeout">Idle timeout</a></li>
-<li><a href="#reconnect-strategies">Reconnect strategies</a></li>
-<li><a href="#backpressure">Backpressure</a></li>
-<li><a href="#load-balancing">Load balancing</a></li>
-<li><a href="#sticky-sessions">Sticky sessions</a></li>
-<li><a href="#redis-backplane-or-broker-based-fanout">Redis backplane or broker-based fanout</a></li>
-<li><a href="#horizontal-scaling-across-multiple-server-instances">Horizontal scaling across multiple server instances</a></li>
-</ul>
-</li>
-<li><a href="#6-production-concerns">6. Production Concerns</a><ul>
-<li><a href="#authentication-tokens-for-websocket-upgrades">Authentication tokens for WebSocket upgrades</a></li>
-<li><a href="#authorization-for-rooms-and-groups">Authorization for rooms and groups</a></li>
-<li><a href="#presence-tracking">Presence tracking</a></li>
-<li><a href="#memory-leaks-from-stale-connections">Memory leaks from stale connections</a></li>
-<li><a href="#cleanup-on-disconnect">Cleanup on disconnect</a></li>
-<li><a href="#retries-and-exponential-backoff">Retries and exponential backoff</a></li>
-<li><a href="#message-ordering-guarantees">Message ordering guarantees</a></li>
-<li><a href="#delivery-guarantees-and-acknowledgements">Delivery guarantees and acknowledgements</a></li>
-<li><a href="#observability-logging-and-metrics">Observability, logging, and metrics</a></li>
-<li><a href="#rate-limiting-and-abuse-protection">Rate limiting and abuse protection</a></li>
-</ul>
-</li>
-<li><a href="#7-when-to-choose-which-tool">7. When to Choose Which Tool</a></li>
-<li><a href="#8-recommended-mental-model">8. Recommended Mental Model</a></li>
-<li><a href="#references-and-further-reading">References and Further Reading</a></li>
-</ul>
-<hr />
-<h2 id="executive-summary">Executive Summary</h2>
-<p>SignalR, Socket.IO, <code>python-socketio</code>, and Django Channels all give you a higher-level messaging model on top of transport primitives. Raw WebSockets with <code>ws</code> and FastAPI/Starlette WebSockets give you much less abstraction: you own routing semantics, group membership, message contracts, retries, and most lifecycle policy yourself.</p>
-<p>The practical split is simple:</p>
-<ul>
-<li><strong>SignalR / Socket.IO / python-socketio</strong>: choose when you want named events, group membership semantics, reconnection support, and a framework-owned connection registry.</li>
-<li><strong>Django Channels</strong>: choose when your realtime system must live inside Django's auth/session/routing model and you are comfortable with ASGI channel-layer concepts.</li>
-<li><strong>Raw WebSockets (<code>ws</code>) / FastAPI WebSockets</strong>: choose when you need protocol-level control, low abstraction overhead, or a custom wire contract and you are prepared to build your own hub semantics.</li>
-</ul>
-<p>Most engineering failures in realtime systems are not transport failures. They are failures of connection lifecycle management, authorization boundaries, stale membership cleanup, backpressure handling, and scale-out topology.</p>
-<hr />
-<h2 id="1-core-abstraction-model">1. Core Abstraction Model</h2>
-<h3 id="aspnet-core-signalr">ASP.NET Core SignalR</h3>
-<p>SignalR is explicitly hub-centric.</p>
-<ul>
-<li><strong>Hub</strong>: A typed or untyped server-side endpoint class where client invocations land.</li>
-<li><strong>Client connection</strong>: Addressed by <code>Context.ConnectionId</code>.</li>
-<li><strong>Event/message handler</strong>: A hub method such as <code>SendMessage</code> or <code>JoinRoom</code>.</li>
-<li><strong>Room/group</strong>: SignalR <strong>Groups</strong>. Membership is managed via <code>Groups.AddToGroupAsync</code> and <code>Groups.RemoveFromGroupAsync</code>.</li>
-<li><strong>Broadcast/fanout</strong>: <code>Clients.All</code>, <code>Clients.Others</code>, <code>Clients.Group</code>, <code>Clients.Groups</code>.</li>
-<li><strong>Per-user messaging</strong>: <code>Clients.User(userId)</code> where user identity is resolved by the framework's user id provider.</li>
-<li><strong>Server-to-client invocation</strong>: <code>Clients.Caller.SendAsync("ReceiveMessage", ...)</code> or strongly typed client interfaces.</li>
-<li><strong>Client-to-server invocation</strong>: client calls <code>connection.invoke("SendMessage", ...)</code> and the runtime dispatches to a hub method.</li>
-</ul>
-<p>SignalR is closest to RPC-style realtime messaging. It supports event-driven flows, but its API surface encourages thinking in named server methods and named client callbacks.</p>
-<h3 id="socketio">Socket.IO</h3>
-<p>Socket.IO is not just WebSockets. It is a higher-level eventing protocol with namespaces, rooms, acknowledgements, and transport fallback behavior.</p>
-<ul>
-<li><strong>Hub equivalent</strong>: There is no hub class. The equivalent is the <code>io.on("connection", socket =&gt; ...)</code> server namespace plus event handlers attached to each <code>socket</code>.</li>
-<li><strong>Client connection</strong>: <code>socket.id</code>.</li>
-<li><strong>Event/message handler</strong>: <code>socket.on("eventName", handler)</code>.</li>
-<li><strong>Room/group</strong>: Socket.IO <strong>rooms</strong> via <code>socket.join(room)</code>.</li>
-<li><strong>Broadcast/fanout</strong>: <code>io.emit(...)</code>, <code>socket.broadcast.emit(...)</code>, <code>io.to(room).emit(...)</code>.</li>
-<li><strong>Per-user messaging</strong>: Usually implemented by joining every authenticated client to a room named after the user id.</li>
-<li><strong>Server-to-client invocation</strong>: <code>socket.emit(...)</code> or <code>io.to(room).emit(...)</code>.</li>
-<li><strong>Client-to-server invocation</strong>: client emits a named event; server handles it with <code>socket.on(...)</code>.</li>
-</ul>
-<p>Socket.IO is event-centric, not hub-centric. The wire protocol is Socket.IO-specific, so native WebSocket clients are not interchangeable without a compatible client library.</p>
-<h3 id="raw-websockets-with-ws">Raw WebSockets with ws</h3>
-<p><code>ws</code> is close to the protocol surface. There are no rooms, no built-in auth model, no typed invocation semantics, and no backplane.</p>
-<ul>
-<li><strong>Hub equivalent</strong>: None. You define your own router or command dispatcher on top of message frames.</li>
-<li><strong>Client connection</strong>: the <code>WebSocket</code> instance.</li>
-<li><strong>Event/message handler</strong>: <code>socket.on("message", ...)</code> after your own JSON envelope parsing.</li>
-<li><strong>Room/group</strong>: Not provided. You build a room registry manually.</li>
-<li><strong>Broadcast/fanout</strong>: Iterate over tracked connections and send frames.</li>
-<li><strong>Per-user messaging</strong>: Maintain your own <code>userId -&gt; socket(s)</code> index.</li>
-<li><strong>Server-to-client invocation</strong>: Convention only, typically <code>{ type, payload }</code> JSON messages.</li>
-<li><strong>Client-to-server invocation</strong>: Convention only, typically command messages.</li>
-</ul>
-<p><code>ws</code> is the right comparison point when you want to understand what the higher-level frameworks are buying you.</p>
-<h3 id="python-socketio">python-socketio</h3>
-<p><code>python-socketio</code> is the closest Python analogue to Socket.IO rather than SignalR, but in practice it occupies the same architectural slot: a server-managed realtime event bus with room semantics.</p>
-<ul>
-<li><strong>Hub equivalent</strong>: decorators or class-based namespaces containing event handlers.</li>
-<li><strong>Client connection</strong>: session id <code>sid</code>.</li>
-<li><strong>Event/message handler</strong>: <code>@sio.event</code>, <code>@sio.on("event")</code>, or namespace methods.</li>
-<li><strong>Room/group</strong>: rooms via <code>enter_room</code> and <code>leave_room</code>.</li>
-<li><strong>Broadcast/fanout</strong>: <code>sio.emit(..., room=...)</code> or <code>skip_sid=</code>.</li>
-<li><strong>Per-user messaging</strong>: room-per-user or <code>sid</code> targeting.</li>
-<li><strong>Server-to-client invocation</strong>: <code>emit()</code> with event names.</li>
-<li><strong>Client-to-server invocation</strong>: client emits event names handled by decorators.</li>
-</ul>
-<h3 id="django-channels">Django Channels</h3>
-<p>Django Channels is ASGI-first and centers on <strong>consumers</strong> plus an optional distributed <strong>channel layer</strong>.</p>
-<ul>
-<li><strong>Hub equivalent</strong>: a <code>WebsocketConsumer</code> or <code>AsyncWebsocketConsumer</code> class.</li>
-<li><strong>Client connection</strong>: <code>self.channel_name</code> identifies the consumer instance; the WebSocket itself is exposed through the consumer lifecycle.</li>
-<li><strong>Event/message handler</strong>: <code>receive</code>, <code>receive_json</code>, or channel-layer event methods like <code>chat_message</code>.</li>
-<li><strong>Room/group</strong>: channel-layer <strong>groups</strong> via <code>group_add</code> and <code>group_discard</code>.</li>
-<li><strong>Broadcast/fanout</strong>: <code>channel_layer.group_send(...)</code>.</li>
-<li><strong>Per-user messaging</strong>: user-specific groups, usually <code>user_{id}</code>.</li>
-<li><strong>Server-to-client invocation</strong>: send over the WebSocket from consumer methods.</li>
-<li><strong>Client-to-server invocation</strong>: inbound frames hit <code>receive</code> or <code>receive_json</code>.</li>
-</ul>
-<p>Channels is structurally closer to an actor/message-bus model than to SignalR RPC.</p>
-<h3 id="fastapi-and-starlette-websockets">FastAPI and Starlette WebSockets</h3>
-<p>FastAPI and Starlette expose WebSocket endpoints directly. The abstraction level is lower than SignalR, Socket.IO, or Channels.</p>
-<ul>
-<li><strong>Hub equivalent</strong>: none built-in; a <code>@app.websocket</code> endpoint plus your own manager class.</li>
-<li><strong>Client connection</strong>: <code>WebSocket</code> object instance.</li>
-<li><strong>Event/message handler</strong>: your <code>while True: await websocket.receive_json()</code> loop plus a dispatcher.</li>
-<li><strong>Room/group</strong>: not built-in; usually a manager storing <code>room -&gt; set[WebSocket]</code>.</li>
-<li><strong>Broadcast/fanout</strong>: custom iteration over registered sockets.</li>
-<li><strong>Per-user messaging</strong>: custom <code>userId -&gt; set[WebSocket]</code> mapping.</li>
-<li><strong>Server-to-client invocation</strong>: <code>await websocket.send_json(...)</code>.</li>
-<li><strong>Client-to-server invocation</strong>: <code>await websocket.receive_json()</code>.</li>
-</ul>
-<p>FastAPI gives you transport access and DI integration, not a hub abstraction.</p>
-<hr />
-<h2 id="2-basic-architecture">2. Basic Architecture</h2>
-<h3 id="signalr-server-shape">SignalR Server Shape</h3>
-<p>SignalR server structure is usually:</p>
-<ol>
-<li>Register authentication and authorization middleware.</li>
-<li>Register SignalR services.</li>
-<li>Map a hub endpoint such as <code>/hubs/chat</code>.</li>
-<li>Define a <code>Hub</code> class with lifecycle hooks and callable methods.</li>
-<li>Use <code>IHubContext&lt;T&gt;</code> when non-hub services need to push messages.</li>
-</ol>
-<p>Practical notes:</p>
-<ul>
-<li><strong>Connection open/close</strong>: override <code>OnConnectedAsync</code> and <code>OnDisconnectedAsync</code>.</li>
-<li><strong>Authentication</strong>: bearer token or cookie auth runs before hub method authorization.</li>
-<li><strong>Authorization</strong>: <code>[Authorize]</code> on hub or methods.</li>
-<li><strong>Joining/leaving groups</strong>: explicit methods calling the <code>Groups</code> manager.</li>
-<li><strong>One/many/group sends</strong>: <code>Clients.Client</code>, <code>Clients.Users</code>, <code>Clients.Group</code>, <code>Clients.All</code>.</li>
-<li><strong>Request/response style</strong>: <code>InvokeAsync</code> maps well to request/reply semantics.</li>
-<li><strong>Event-driven style</strong>: still fine, but event names are more implicit because methods are first-class.</li>
-</ul>
-<h3 id="socketio-server-shape">Socket.IO Server Shape</h3>
-<p>Socket.IO server structure is usually:</p>
-<ol>
-<li>Create an HTTP server.</li>
-<li>Attach a Socket.IO server instance.</li>
-<li>Authenticate during the Socket.IO handshake.</li>
-<li>Register per-socket event handlers inside the <code>connection</code> handler.</li>
-<li>Use rooms for tenant, user, or document subscriptions.</li>
-</ol>
-<p>Practical notes:</p>
-<ul>
-<li><strong>Connection open/close</strong>: <code>connection</code> and <code>disconnect</code> events.</li>
-<li><strong>Authentication</strong>: handshake auth payload, cookies, or middleware.</li>
-<li><strong>Authorization</strong>: middleware plus per-event checks.</li>
-<li><strong>Joining/leaving rooms</strong>: <code>socket.join(room)</code> and <code>socket.leave(room)</code>.</li>
-<li><strong>One/many/group sends</strong>: <code>socket.emit</code>, <code>io.emit</code>, <code>io.to(room).emit</code>.</li>
-<li><strong>Request/response style</strong>: use acknowledgements or correlation ids.</li>
-<li><strong>Event-driven style</strong>: native fit.</li>
-</ul>
-<h3 id="ws-server-shape">ws Server Shape</h3>
-<p><code>ws</code> server structure is usually:</p>
-<ol>
-<li>Attach a <code>WebSocketServer</code> to an HTTP server.</li>
-<li>Authenticate during HTTP upgrade or immediately after connection.</li>
-<li>Maintain a connection registry and optional room membership maps.</li>
-<li>Parse inbound messages into an explicit envelope format.</li>
-<li>Route commands to handlers.</li>
-</ol>
-<p>Practical notes:</p>
-<ul>
-<li><strong>Connection open/close</strong>: <code>connection</code>, <code>close</code>, <code>error</code>, <code>pong</code> handling.</li>
-<li><strong>Authentication</strong>: verify JWT or session during upgrade request.</li>
-<li><strong>Authorization</strong>: fully custom.</li>
-<li><strong>Groups/rooms</strong>: fully custom.</li>
-<li><strong>Request/response style</strong>: correlation ids in message envelopes.</li>
-<li><strong>Event-driven style</strong>: type-tagged messages such as <code>{ type: "joined" }</code>.</li>
-</ul>
-<h3 id="python-socketio-server-shape">python-socketio Server Shape</h3>
-<p><code>python-socketio</code> server structure is usually:</p>
-<ol>
-<li>Create an async Socket.IO server.</li>
-<li>Mount it on ASGI, AIOHTTP, or another supported runtime.</li>
-<li>Authenticate in <code>connect</code> or middleware-like wrappers.</li>
-<li>Register decorators or namespace classes.</li>
-<li>Use rooms for tenancy and user addressing.</li>
-</ol>
-<p>Practical notes mirror Socket.IO closely because the protocol model is the same.</p>
-<h3 id="django-channels-server-shape">Django Channels Server Shape</h3>
-<p>Channels server structure is usually:</p>
-<ol>
-<li>Define ASGI routing with <code>ProtocolTypeRouter</code> and <code>URLRouter</code>.</li>
-<li>Wrap WebSocket routes in auth middleware.</li>
-<li>Implement a consumer class.</li>
-<li>Configure a channel layer, typically Redis, for groups and cross-process fanout.</li>
-<li>Route domain events into <code>group_send</code> messages.</li>
-</ol>
-<p>Practical notes:</p>
-<ul>
-<li><strong>Connection open/close</strong>: <code>connect</code>, <code>disconnect</code>.</li>
-<li><strong>Authentication</strong>: <code>scope["user"]</code> from auth middleware.</li>
-<li><strong>Authorization</strong>: check in <code>connect</code> and before group membership changes.</li>
-<li><strong>Groups</strong>: first-class via channel layer.</li>
-<li><strong>Request/response style</strong>: possible but not its strongest model.</li>
-<li><strong>Event-driven style</strong>: native fit.</li>
-</ul>
-<h3 id="fastapi-and-starlette-server-shape">FastAPI and Starlette Server Shape</h3>
-<p>FastAPI server structure is usually:</p>
-<ol>
-<li>Define a WebSocket endpoint.</li>
-<li>Perform auth before <code>accept()</code> or immediately after.</li>
-<li>Accept the socket.</li>
-<li>Register it in a manager that tracks all connections, user connections, and room memberships.</li>
-<li>Receive frames in a loop and dispatch by message type.</li>
-</ol>
-<p>Practical notes:</p>
-<ul>
-<li><strong>Connection open/close</strong>: endpoint entry and <code>WebSocketDisconnect</code> exception.</li>
-<li><strong>Authentication</strong>: dependency injection, cookies, query parameters, headers.</li>
-<li><strong>Authorization</strong>: custom.</li>
-<li><strong>Groups</strong>: custom.</li>
-<li><strong>Request/response style</strong>: natural if you add <code>requestId</code> and <code>replyTo</code> semantics.</li>
-<li><strong>Event-driven style</strong>: also natural, but entirely convention-driven.</li>
-</ul>
-<hr />
-<h2 id="3-equivalent-terminology-table">3. Equivalent Terminology Table</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Concept</th>
-<th style="text-align: left;">ASP.NET Core SignalR</th>
-<th style="text-align: left;">Socket.IO</th>
-<th style="text-align: left;">ws</th>
-<th style="text-align: left;">python-socketio</th>
-<th style="text-align: left;">Django Channels</th>
-<th style="text-align: left;">FastAPI / Starlette</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>SignalR Hub</strong></td>
-<td style="text-align: left;"><code>Hub</code> class</td>
-<td style="text-align: left;">Namespace + per-socket handlers</td>
-<td style="text-align: left;">Custom message router</td>
-<td style="text-align: left;">Namespace / event handlers</td>
-<td style="text-align: left;"><code>Consumer</code> class</td>
-<td style="text-align: left;">WebSocket endpoint + manager</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>SignalR Groups</strong></td>
-<td style="text-align: left;">Groups</td>
-<td style="text-align: left;">Rooms</td>
-<td style="text-align: left;">Custom room registry</td>
-<td style="text-align: left;">Rooms</td>
-<td style="text-align: left;">Channel-layer groups</td>
-<td style="text-align: left;">Custom room registry</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Hub Context</strong></td>
-<td style="text-align: left;"><code>IHubContext&lt;T&gt;</code></td>
-<td style="text-align: left;">Global <code>io</code> server object</td>
-<td style="text-align: left;">Shared registry / broadcaster service</td>
-<td style="text-align: left;"><code>sio</code> server object</td>
-<td style="text-align: left;"><code>channel_layer</code></td>
-<td style="text-align: left;">Connection manager service</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>OnConnected / OnDisconnected</strong></td>
-<td style="text-align: left;"><code>OnConnectedAsync</code> / <code>OnDisconnectedAsync</code></td>
-<td style="text-align: left;"><code>connection</code> / <code>disconnect</code></td>
-<td style="text-align: left;"><code>connection</code> / <code>close</code></td>
-<td style="text-align: left;"><code>connect</code> / <code>disconnect</code></td>
-<td style="text-align: left;"><code>connect</code> / <code>disconnect</code></td>
-<td style="text-align: left;">endpoint start / <code>WebSocketDisconnect</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Clients.All</strong></td>
-<td style="text-align: left;"><code>Clients.All</code></td>
-<td style="text-align: left;"><code>io.emit()</code></td>
-<td style="text-align: left;">Iterate all sockets</td>
-<td style="text-align: left;"><code>sio.emit()</code></td>
-<td style="text-align: left;"><code>group_send</code> to global group or iterate</td>
-<td style="text-align: left;">Iterate tracked sockets</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Clients.Group</strong></td>
-<td style="text-align: left;"><code>Clients.Group(name)</code></td>
-<td style="text-align: left;"><code>io.to(room)</code></td>
-<td style="text-align: left;">Iterate room registry</td>
-<td style="text-align: left;"><code>emit(..., room=...)</code></td>
-<td style="text-align: left;"><code>group_send(group, ...)</code></td>
-<td style="text-align: left;">Iterate room membership</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Clients.User</strong></td>
-<td style="text-align: left;"><code>Clients.User(userId)</code></td>
-<td style="text-align: left;">user-specific room</td>
-<td style="text-align: left;">user socket map</td>
-<td style="text-align: left;">user room or <code>sid</code> map</td>
-<td style="text-align: left;">user-specific group</td>
-<td style="text-align: left;">user socket map</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Transport fallback</strong></td>
-<td style="text-align: left;">WebSockets + SSE + Long Polling</td>
-<td style="text-align: left;">WebSockets + HTTP long polling</td>
-<td style="text-align: left;">None beyond raw WebSocket</td>
-<td style="text-align: left;">Same as Socket.IO protocol</td>
-<td style="text-align: left;">ASGI WebSocket only; fallback is separate app design</td>
-<td style="text-align: left;">WebSocket only</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Backplane</strong></td>
-<td style="text-align: left;">Redis / Azure SignalR Service</td>
-<td style="text-align: left;">Redis adapter / broker adapters</td>
-<td style="text-align: left;">Custom pub-sub</td>
-<td style="text-align: left;">Redis / message queue managers</td>
-<td style="text-align: left;">Redis channel layer</td>
-<td style="text-align: left;">Custom pub-sub</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Scale-out strategy</strong></td>
-<td style="text-align: left;">Sticky sessions or managed service + backplane</td>
-<td style="text-align: left;">Sticky sessions + Redis adapter</td>
-<td style="text-align: left;">Shared broker + custom routing</td>
-<td style="text-align: left;">Sticky sessions + message queue / Redis</td>
-<td style="text-align: left;">Redis channel layer + ASGI workers</td>
-<td style="text-align: left;">Shared broker + custom routing</td>
-</tr>
-</tbody>
-</table>
-<p>Key differences that matter:</p>
-<ul>
-<li><code>ws</code> and FastAPI do not have a native equivalent to <strong>Hub Context</strong>. You must design a reusable broadcaster service yourself.</li>
-<li>Socket.IO rooms and SignalR groups are conceptually similar, but Socket.IO is more event-bus oriented while SignalR is more invocation oriented.</li>
-<li>Django Channels depends heavily on the channel layer for anything beyond a single process.</li>
-</ul>
-<hr />
-<h2 id="4-code-examples">4. Code Examples</h2>
-<h3 id="c-aspnet-core-signalr">C# - ASP.NET Core SignalR</h3>
-<p>Server:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Authorization</span><span class="p">;</span>
+      <div class="card docs-card">
+        <div class="docs-breadcrumb">
+          <a href="index.html">← Back to Guides</a>
+          <span>|</span>
+          <a href="/">Portfolio Home</a>
+        </div>
+        <article class="docs-content">
+          <h1
+            id="realtime-client-api-connections-signalr-style-cross-ecosystem-engineering-notes"
+          >
+            REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem
+            Engineering Notes
+          </h1>
+          <p>
+            <br />
+            <strong>Last updated</strong>: March 11, 2026<br />
+            <strong>Author</strong>:
+            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            - SESKA Computational Engineer<br />
+            - SEAT Backend Developer<br />
+            - Software Developer<br />
+            - PhD Candidate (Civil Engineering Spec. Computational and Applied
+            Mechanics)<br />
+            <strong>Contact</strong>:
+            <a href="mailto:kabwenzenamalomba@gmail.com"
+              >kabwenzenamalomba@gmail.com</a
+            ><br />
+            <strong>Website</strong>:
+            <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
+            ><br />
+            <br />
+          </p>
+          <p>
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"
+              ><img
+                alt="Topic"
+                src="https://img.shields.io/badge/Realtime-Client_API_Connections-blue.svg"
+            /></a>
+            <a href="https://socket.io/docs/v4/"
+              ><img
+                alt="Stacks"
+                src="https://img.shields.io/badge/Stacks-SignalR%20%7C%20Socket.IO%20%7C%20ws%20%7C%20python--socketio%20%7C%20Django%20Channels%20%7C%20FastAPI-brightgreen.svg"
+            /></a>
+            <a href="https://opensource.org/licenses/MIT"
+              ><img
+                alt="License: MIT"
+                src="https://img.shields.io/badge/License-MIT-gray.svg"
+            /></a>
+          </p>
+          <h2 id="overview">Overview</h2>
+          <p>
+            This guide compares hub-style realtime communication across C#,
+            JavaScript/TypeScript, and Python with a deliberate SignalR lens.
+            The point is not to repeat framework tutorials. The point is to make
+            the abstraction boundaries explicit: what each stack treats as the
+            equivalent of a hub, how connections are addressed, how groups or
+            rooms are modeled, what scale-out actually requires, and where the
+            term "connection pooling" is technically wrong.
+          </p>
+          <p>The stacks covered are:</p>
+          <ul>
+            <li><strong>C#</strong>: ASP.NET Core SignalR</li>
+            <li>
+              <strong>JavaScript/TypeScript</strong>: Socket.IO and raw
+              WebSockets with <code>ws</code>
+            </li>
+            <li>
+              <strong>Python</strong>: <code>python-socketio</code>, Django
+              Channels, and FastAPI/Starlette WebSockets
+            </li>
+          </ul>
+          <h2 id="contents">Contents</h2>
+          <ul>
+            <li>
+              <a
+                href="#realtime-client-api-connections-signalr-style-cross-ecosystem-engineering-notes"
+                >REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem
+                Engineering Notes</a
+              >
+            </li>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#executive-summary">Executive Summary</a></li>
+            <li>
+              <a href="#1-core-abstraction-model">1. Core Abstraction Model</a>
+              <ul>
+                <li><a href="#aspnet-core-signalr">ASP.NET Core SignalR</a></li>
+                <li><a href="#socketio">Socket.IO</a></li>
+                <li>
+                  <a href="#raw-websockets-with-ws">Raw WebSockets with ws</a>
+                </li>
+                <li><a href="#python-socketio">python-socketio</a></li>
+                <li><a href="#django-channels">Django Channels</a></li>
+                <li>
+                  <a href="#fastapi-and-starlette-websockets"
+                    >FastAPI and Starlette WebSockets</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#2-basic-architecture">2. Basic Architecture</a>
+              <ul>
+                <li>
+                  <a href="#signalr-server-shape">SignalR Server Shape</a>
+                </li>
+                <li>
+                  <a href="#socketio-server-shape">Socket.IO Server Shape</a>
+                </li>
+                <li><a href="#ws-server-shape">ws Server Shape</a></li>
+                <li>
+                  <a href="#python-socketio-server-shape"
+                    >python-socketio Server Shape</a
+                  >
+                </li>
+                <li>
+                  <a href="#django-channels-server-shape"
+                    >Django Channels Server Shape</a
+                  >
+                </li>
+                <li>
+                  <a href="#fastapi-and-starlette-server-shape"
+                    >FastAPI and Starlette Server Shape</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#3-equivalent-terminology-table"
+                >3. Equivalent Terminology Table</a
+              >
+            </li>
+            <li>
+              <a href="#4-code-examples">4. Code Examples</a>
+              <ul>
+                <li>
+                  <a href="#c-aspnet-core-signalr">C# - ASP.NET Core SignalR</a>
+                </li>
+                <li>
+                  <a href="#typescript-socketio">TypeScript - Socket.IO</a>
+                </li>
+                <li>
+                  <a href="#typescript-raw-websockets-with-ws"
+                    >TypeScript - Raw WebSockets with ws</a
+                  >
+                </li>
+                <li>
+                  <a href="#python-python-socketio">Python - python-socketio</a>
+                </li>
+                <li>
+                  <a href="#python-django-channels">Python - Django Channels</a>
+                </li>
+                <li>
+                  <a href="#python-fastapi-websockets"
+                    >Python - FastAPI WebSockets</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#5-connection-management-and-the-misuse-of-pooling"
+                >5. Connection Management and the Misuse of "Pooling"</a
+              >
+              <ul>
+                <li>
+                  <a href="#what-http-connection-pooling-actually-means"
+                    >What HTTP Connection Pooling Actually Means</a
+                  >
+                </li>
+                <li>
+                  <a href="#what-realtime-systems-actually-manage"
+                    >What Realtime Systems Actually Manage</a
+                  >
+                </li>
+                <li>
+                  <a href="#correct-terms-for-realtime-system-design"
+                    >Correct Terms for Realtime System Design</a
+                  >
+                </li>
+                <li>
+                  <a href="#http-connection-pooling">HTTP connection pooling</a>
+                </li>
+                <li>
+                  <a href="#tcp-connection-reuse">TCP connection reuse</a>
+                </li>
+                <li>
+                  <a href="#long-lived-websocket-connections"
+                    >Long-lived WebSocket connections</a
+                  >
+                </li>
+                <li>
+                  <a href="#server-side-connection-registries"
+                    >Server-side connection registries</a
+                  >
+                </li>
+                <li>
+                  <a href="#connection-fanout-and-scaling"
+                    >Connection fanout and scaling</a
+                  >
+                </li>
+                <li><a href="#connection-limits">Connection limits</a></li>
+                <li>
+                  <a href="#heartbeat-keepalive">Heartbeat / keepalive</a>
+                </li>
+                <li><a href="#idle-timeout">Idle timeout</a></li>
+                <li>
+                  <a href="#reconnect-strategies">Reconnect strategies</a>
+                </li>
+                <li><a href="#backpressure">Backpressure</a></li>
+                <li><a href="#load-balancing">Load balancing</a></li>
+                <li><a href="#sticky-sessions">Sticky sessions</a></li>
+                <li>
+                  <a href="#redis-backplane-or-broker-based-fanout"
+                    >Redis backplane or broker-based fanout</a
+                  >
+                </li>
+                <li>
+                  <a href="#horizontal-scaling-across-multiple-server-instances"
+                    >Horizontal scaling across multiple server instances</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#6-production-concerns">6. Production Concerns</a>
+              <ul>
+                <li>
+                  <a href="#authentication-tokens-for-websocket-upgrades"
+                    >Authentication tokens for WebSocket upgrades</a
+                  >
+                </li>
+                <li>
+                  <a href="#authorization-for-rooms-and-groups"
+                    >Authorization for rooms and groups</a
+                  >
+                </li>
+                <li><a href="#presence-tracking">Presence tracking</a></li>
+                <li>
+                  <a href="#memory-leaks-from-stale-connections"
+                    >Memory leaks from stale connections</a
+                  >
+                </li>
+                <li>
+                  <a href="#cleanup-on-disconnect">Cleanup on disconnect</a>
+                </li>
+                <li>
+                  <a href="#retries-and-exponential-backoff"
+                    >Retries and exponential backoff</a
+                  >
+                </li>
+                <li>
+                  <a href="#message-ordering-guarantees"
+                    >Message ordering guarantees</a
+                  >
+                </li>
+                <li>
+                  <a href="#delivery-guarantees-and-acknowledgements"
+                    >Delivery guarantees and acknowledgements</a
+                  >
+                </li>
+                <li>
+                  <a href="#observability-logging-and-metrics"
+                    >Observability, logging, and metrics</a
+                  >
+                </li>
+                <li>
+                  <a href="#rate-limiting-and-abuse-protection"
+                    >Rate limiting and abuse protection</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#7-when-to-choose-which-tool"
+                >7. When to Choose Which Tool</a
+              >
+            </li>
+            <li>
+              <a href="#8-recommended-mental-model"
+                >8. Recommended Mental Model</a
+              >
+            </li>
+            <li>
+              <a href="#references-and-further-reading"
+                >References and Further Reading</a
+              >
+            </li>
+          </ul>
+          <hr />
+          <h2 id="executive-summary">Executive Summary</h2>
+          <p>
+            SignalR, Socket.IO, <code>python-socketio</code>, and Django
+            Channels all give you a higher-level messaging model on top of
+            transport primitives. Raw WebSockets with <code>ws</code> and
+            FastAPI/Starlette WebSockets give you much less abstraction: you own
+            routing semantics, group membership, message contracts, retries, and
+            most lifecycle policy yourself.
+          </p>
+          <p>The practical split is simple:</p>
+          <ul>
+            <li>
+              <strong>SignalR / Socket.IO / python-socketio</strong>: choose
+              when you want named events, group membership semantics,
+              reconnection support, and a framework-owned connection registry.
+            </li>
+            <li>
+              <strong>Django Channels</strong>: choose when your realtime system
+              must live inside Django's auth/session/routing model and you are
+              comfortable with ASGI channel-layer concepts.
+            </li>
+            <li>
+              <strong
+                >Raw WebSockets (<code>ws</code>) / FastAPI WebSockets</strong
+              >: choose when you need protocol-level control, low abstraction
+              overhead, or a custom wire contract and you are prepared to build
+              your own hub semantics.
+            </li>
+          </ul>
+          <p>
+            Most engineering failures in realtime systems are not transport
+            failures. They are failures of connection lifecycle management,
+            authorization boundaries, stale membership cleanup, backpressure
+            handling, and scale-out topology.
+          </p>
+          <hr />
+          <h2 id="1-core-abstraction-model">1. Core Abstraction Model</h2>
+          <h3 id="aspnet-core-signalr">ASP.NET Core SignalR</h3>
+          <p>SignalR is explicitly hub-centric.</p>
+          <ul>
+            <li>
+              <strong>Hub</strong>: A typed or untyped server-side endpoint
+              class where client invocations land.
+            </li>
+            <li>
+              <strong>Client connection</strong>: Addressed by
+              <code>Context.ConnectionId</code>.
+            </li>
+            <li>
+              <strong>Event/message handler</strong>: A hub method such as
+              <code>SendMessage</code> or <code>JoinRoom</code>.
+            </li>
+            <li>
+              <strong>Room/group</strong>: SignalR <strong>Groups</strong>.
+              Membership is managed via <code>Groups.AddToGroupAsync</code> and
+              <code>Groups.RemoveFromGroupAsync</code>.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>: <code>Clients.All</code>,
+              <code>Clients.Others</code>, <code>Clients.Group</code>,
+              <code>Clients.Groups</code>.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>:
+              <code>Clients.User(userId)</code> where user identity is resolved
+              by the framework's user id provider.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>:
+              <code>Clients.Caller.SendAsync("ReceiveMessage", ...)</code> or
+              strongly typed client interfaces.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>: client calls
+              <code>connection.invoke("SendMessage", ...)</code> and the runtime
+              dispatches to a hub method.
+            </li>
+          </ul>
+          <p>
+            SignalR is closest to RPC-style realtime messaging. It supports
+            event-driven flows, but its API surface encourages thinking in named
+            server methods and named client callbacks.
+          </p>
+          <h3 id="socketio">Socket.IO</h3>
+          <p>
+            Socket.IO is not just WebSockets. It is a higher-level eventing
+            protocol with namespaces, rooms, acknowledgements, and transport
+            fallback behavior.
+          </p>
+          <ul>
+            <li>
+              <strong>Hub equivalent</strong>: There is no hub class. The
+              equivalent is the
+              <code>io.on("connection", socket =&gt; ...)</code> server
+              namespace plus event handlers attached to each
+              <code>socket</code>.
+            </li>
+            <li><strong>Client connection</strong>: <code>socket.id</code>.</li>
+            <li>
+              <strong>Event/message handler</strong>:
+              <code>socket.on("eventName", handler)</code>.
+            </li>
+            <li>
+              <strong>Room/group</strong>: Socket.IO <strong>rooms</strong> via
+              <code>socket.join(room)</code>.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>: <code>io.emit(...)</code>,
+              <code>socket.broadcast.emit(...)</code>,
+              <code>io.to(room).emit(...)</code>.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>: Usually implemented by
+              joining every authenticated client to a room named after the user
+              id.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>:
+              <code>socket.emit(...)</code> or
+              <code>io.to(room).emit(...)</code>.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>: client emits a named
+              event; server handles it with <code>socket.on(...)</code>.
+            </li>
+          </ul>
+          <p>
+            Socket.IO is event-centric, not hub-centric. The wire protocol is
+            Socket.IO-specific, so native WebSocket clients are not
+            interchangeable without a compatible client library.
+          </p>
+          <h3 id="raw-websockets-with-ws">Raw WebSockets with ws</h3>
+          <p>
+            <code>ws</code> is close to the protocol surface. There are no
+            rooms, no built-in auth model, no typed invocation semantics, and no
+            backplane.
+          </p>
+          <ul>
+            <li>
+              <strong>Hub equivalent</strong>: None. You define your own router
+              or command dispatcher on top of message frames.
+            </li>
+            <li>
+              <strong>Client connection</strong>: the
+              <code>WebSocket</code> instance.
+            </li>
+            <li>
+              <strong>Event/message handler</strong>:
+              <code>socket.on("message", ...)</code> after your own JSON
+              envelope parsing.
+            </li>
+            <li>
+              <strong>Room/group</strong>: Not provided. You build a room
+              registry manually.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>: Iterate over tracked
+              connections and send frames.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>: Maintain your own
+              <code>userId -&gt; socket(s)</code> index.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>: Convention only,
+              typically <code>{ type, payload }</code> JSON messages.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>: Convention only,
+              typically command messages.
+            </li>
+          </ul>
+          <p>
+            <code>ws</code> is the right comparison point when you want to
+            understand what the higher-level frameworks are buying you.
+          </p>
+          <h3 id="python-socketio">python-socketio</h3>
+          <p>
+            <code>python-socketio</code> is the closest Python analogue to
+            Socket.IO rather than SignalR, but in practice it occupies the same
+            architectural slot: a server-managed realtime event bus with room
+            semantics.
+          </p>
+          <ul>
+            <li>
+              <strong>Hub equivalent</strong>: decorators or class-based
+              namespaces containing event handlers.
+            </li>
+            <li>
+              <strong>Client connection</strong>: session id <code>sid</code>.
+            </li>
+            <li>
+              <strong>Event/message handler</strong>: <code>@sio.event</code>,
+              <code>@sio.on("event")</code>, or namespace methods.
+            </li>
+            <li>
+              <strong>Room/group</strong>: rooms via <code>enter_room</code> and
+              <code>leave_room</code>.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>:
+              <code>sio.emit(..., room=...)</code> or <code>skip_sid=</code>.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>: room-per-user or
+              <code>sid</code> targeting.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>:
+              <code>emit()</code> with event names.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>: client emits event
+              names handled by decorators.
+            </li>
+          </ul>
+          <h3 id="django-channels">Django Channels</h3>
+          <p>
+            Django Channels is ASGI-first and centers on
+            <strong>consumers</strong> plus an optional distributed
+            <strong>channel layer</strong>.
+          </p>
+          <ul>
+            <li>
+              <strong>Hub equivalent</strong>: a
+              <code>WebsocketConsumer</code> or
+              <code>AsyncWebsocketConsumer</code> class.
+            </li>
+            <li>
+              <strong>Client connection</strong>:
+              <code>self.channel_name</code> identifies the consumer instance;
+              the WebSocket itself is exposed through the consumer lifecycle.
+            </li>
+            <li>
+              <strong>Event/message handler</strong>: <code>receive</code>,
+              <code>receive_json</code>, or channel-layer event methods like
+              <code>chat_message</code>.
+            </li>
+            <li>
+              <strong>Room/group</strong>: channel-layer
+              <strong>groups</strong> via <code>group_add</code> and
+              <code>group_discard</code>.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>:
+              <code>channel_layer.group_send(...)</code>.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>: user-specific groups, usually
+              <code>user_{id}</code>.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>: send over the
+              WebSocket from consumer methods.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>: inbound frames hit
+              <code>receive</code> or <code>receive_json</code>.
+            </li>
+          </ul>
+          <p>
+            Channels is structurally closer to an actor/message-bus model than
+            to SignalR RPC.
+          </p>
+          <h3 id="fastapi-and-starlette-websockets">
+            FastAPI and Starlette WebSockets
+          </h3>
+          <p>
+            FastAPI and Starlette expose WebSocket endpoints directly. The
+            abstraction level is lower than SignalR, Socket.IO, or Channels.
+          </p>
+          <ul>
+            <li>
+              <strong>Hub equivalent</strong>: none built-in; a
+              <code>@app.websocket</code> endpoint plus your own manager class.
+            </li>
+            <li>
+              <strong>Client connection</strong>: <code>WebSocket</code> object
+              instance.
+            </li>
+            <li>
+              <strong>Event/message handler</strong>: your
+              <code>while True: await websocket.receive_json()</code> loop plus
+              a dispatcher.
+            </li>
+            <li>
+              <strong>Room/group</strong>: not built-in; usually a manager
+              storing <code>room -&gt; set[WebSocket]</code>.
+            </li>
+            <li>
+              <strong>Broadcast/fanout</strong>: custom iteration over
+              registered sockets.
+            </li>
+            <li>
+              <strong>Per-user messaging</strong>: custom
+              <code>userId -&gt; set[WebSocket]</code> mapping.
+            </li>
+            <li>
+              <strong>Server-to-client invocation</strong>:
+              <code>await websocket.send_json(...)</code>.
+            </li>
+            <li>
+              <strong>Client-to-server invocation</strong>:
+              <code>await websocket.receive_json()</code>.
+            </li>
+          </ul>
+          <p>
+            FastAPI gives you transport access and DI integration, not a hub
+            abstraction.
+          </p>
+          <hr />
+          <h2 id="2-basic-architecture">2. Basic Architecture</h2>
+          <h3 id="signalr-server-shape">SignalR Server Shape</h3>
+          <p>SignalR server structure is usually:</p>
+          <ol>
+            <li>Register authentication and authorization middleware.</li>
+            <li>Register SignalR services.</li>
+            <li>Map a hub endpoint such as <code>/hubs/chat</code>.</li>
+            <li>
+              Define a <code>Hub</code> class with lifecycle hooks and callable
+              methods.
+            </li>
+            <li>
+              Use <code>IHubContext&lt;T&gt;</code> when non-hub services need
+              to push messages.
+            </li>
+          </ol>
+          <p>Practical notes:</p>
+          <ul>
+            <li>
+              <strong>Connection open/close</strong>: override
+              <code>OnConnectedAsync</code> and
+              <code>OnDisconnectedAsync</code>.
+            </li>
+            <li>
+              <strong>Authentication</strong>: bearer token or cookie auth runs
+              before hub method authorization.
+            </li>
+            <li>
+              <strong>Authorization</strong>: <code>[Authorize]</code> on hub or
+              methods.
+            </li>
+            <li>
+              <strong>Joining/leaving groups</strong>: explicit methods calling
+              the <code>Groups</code> manager.
+            </li>
+            <li>
+              <strong>One/many/group sends</strong>:
+              <code>Clients.Client</code>, <code>Clients.Users</code>,
+              <code>Clients.Group</code>, <code>Clients.All</code>.
+            </li>
+            <li>
+              <strong>Request/response style</strong>:
+              <code>InvokeAsync</code> maps well to request/reply semantics.
+            </li>
+            <li>
+              <strong>Event-driven style</strong>: still fine, but event names
+              are more implicit because methods are first-class.
+            </li>
+          </ul>
+          <h3 id="socketio-server-shape">Socket.IO Server Shape</h3>
+          <p>Socket.IO server structure is usually:</p>
+          <ol>
+            <li>Create an HTTP server.</li>
+            <li>Attach a Socket.IO server instance.</li>
+            <li>Authenticate during the Socket.IO handshake.</li>
+            <li>
+              Register per-socket event handlers inside the
+              <code>connection</code> handler.
+            </li>
+            <li>Use rooms for tenant, user, or document subscriptions.</li>
+          </ol>
+          <p>Practical notes:</p>
+          <ul>
+            <li>
+              <strong>Connection open/close</strong>:
+              <code>connection</code> and <code>disconnect</code> events.
+            </li>
+            <li>
+              <strong>Authentication</strong>: handshake auth payload, cookies,
+              or middleware.
+            </li>
+            <li>
+              <strong>Authorization</strong>: middleware plus per-event checks.
+            </li>
+            <li>
+              <strong>Joining/leaving rooms</strong>:
+              <code>socket.join(room)</code> and
+              <code>socket.leave(room)</code>.
+            </li>
+            <li>
+              <strong>One/many/group sends</strong>: <code>socket.emit</code>,
+              <code>io.emit</code>, <code>io.to(room).emit</code>.
+            </li>
+            <li>
+              <strong>Request/response style</strong>: use acknowledgements or
+              correlation ids.
+            </li>
+            <li><strong>Event-driven style</strong>: native fit.</li>
+          </ul>
+          <h3 id="ws-server-shape">ws Server Shape</h3>
+          <p><code>ws</code> server structure is usually:</p>
+          <ol>
+            <li>Attach a <code>WebSocketServer</code> to an HTTP server.</li>
+            <li>
+              Authenticate during HTTP upgrade or immediately after connection.
+            </li>
+            <li>
+              Maintain a connection registry and optional room membership maps.
+            </li>
+            <li>Parse inbound messages into an explicit envelope format.</li>
+            <li>Route commands to handlers.</li>
+          </ol>
+          <p>Practical notes:</p>
+          <ul>
+            <li>
+              <strong>Connection open/close</strong>: <code>connection</code>,
+              <code>close</code>, <code>error</code>,
+              <code>pong</code> handling.
+            </li>
+            <li>
+              <strong>Authentication</strong>: verify JWT or session during
+              upgrade request.
+            </li>
+            <li><strong>Authorization</strong>: fully custom.</li>
+            <li><strong>Groups/rooms</strong>: fully custom.</li>
+            <li>
+              <strong>Request/response style</strong>: correlation ids in
+              message envelopes.
+            </li>
+            <li>
+              <strong>Event-driven style</strong>: type-tagged messages such as
+              <code>{ type: "joined" }</code>.
+            </li>
+          </ul>
+          <h3 id="python-socketio-server-shape">
+            python-socketio Server Shape
+          </h3>
+          <p><code>python-socketio</code> server structure is usually:</p>
+          <ol>
+            <li>Create an async Socket.IO server.</li>
+            <li>Mount it on ASGI, AIOHTTP, or another supported runtime.</li>
+            <li>
+              Authenticate in <code>connect</code> or middleware-like wrappers.
+            </li>
+            <li>Register decorators or namespace classes.</li>
+            <li>Use rooms for tenancy and user addressing.</li>
+          </ol>
+          <p>
+            Practical notes mirror Socket.IO closely because the protocol model
+            is the same.
+          </p>
+          <h3 id="django-channels-server-shape">
+            Django Channels Server Shape
+          </h3>
+          <p>Channels server structure is usually:</p>
+          <ol>
+            <li>
+              Define ASGI routing with <code>ProtocolTypeRouter</code> and
+              <code>URLRouter</code>.
+            </li>
+            <li>Wrap WebSocket routes in auth middleware.</li>
+            <li>Implement a consumer class.</li>
+            <li>
+              Configure a channel layer, typically Redis, for groups and
+              cross-process fanout.
+            </li>
+            <li>Route domain events into <code>group_send</code> messages.</li>
+          </ol>
+          <p>Practical notes:</p>
+          <ul>
+            <li>
+              <strong>Connection open/close</strong>: <code>connect</code>,
+              <code>disconnect</code>.
+            </li>
+            <li>
+              <strong>Authentication</strong>: <code>scope["user"]</code> from
+              auth middleware.
+            </li>
+            <li>
+              <strong>Authorization</strong>: check in <code>connect</code> and
+              before group membership changes.
+            </li>
+            <li><strong>Groups</strong>: first-class via channel layer.</li>
+            <li>
+              <strong>Request/response style</strong>: possible but not its
+              strongest model.
+            </li>
+            <li><strong>Event-driven style</strong>: native fit.</li>
+          </ul>
+          <h3 id="fastapi-and-starlette-server-shape">
+            FastAPI and Starlette Server Shape
+          </h3>
+          <p>FastAPI server structure is usually:</p>
+          <ol>
+            <li>Define a WebSocket endpoint.</li>
+            <li>
+              Perform auth before <code>accept()</code> or immediately after.
+            </li>
+            <li>Accept the socket.</li>
+            <li>
+              Register it in a manager that tracks all connections, user
+              connections, and room memberships.
+            </li>
+            <li>Receive frames in a loop and dispatch by message type.</li>
+          </ol>
+          <p>Practical notes:</p>
+          <ul>
+            <li>
+              <strong>Connection open/close</strong>: endpoint entry and
+              <code>WebSocketDisconnect</code> exception.
+            </li>
+            <li>
+              <strong>Authentication</strong>: dependency injection, cookies,
+              query parameters, headers.
+            </li>
+            <li><strong>Authorization</strong>: custom.</li>
+            <li><strong>Groups</strong>: custom.</li>
+            <li>
+              <strong>Request/response style</strong>: natural if you add
+              <code>requestId</code> and <code>replyTo</code> semantics.
+            </li>
+            <li>
+              <strong>Event-driven style</strong>: also natural, but entirely
+              convention-driven.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="3-equivalent-terminology-table">
+            3. Equivalent Terminology Table
+          </h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="text-align: left">Concept</th>
+                <th style="text-align: left">ASP.NET Core SignalR</th>
+                <th style="text-align: left">Socket.IO</th>
+                <th style="text-align: left">ws</th>
+                <th style="text-align: left">python-socketio</th>
+                <th style="text-align: left">Django Channels</th>
+                <th style="text-align: left">FastAPI / Starlette</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: left"><strong>SignalR Hub</strong></td>
+                <td style="text-align: left"><code>Hub</code> class</td>
+                <td style="text-align: left">
+                  Namespace + per-socket handlers
+                </td>
+                <td style="text-align: left">Custom message router</td>
+                <td style="text-align: left">Namespace / event handlers</td>
+                <td style="text-align: left"><code>Consumer</code> class</td>
+                <td style="text-align: left">WebSocket endpoint + manager</td>
+              </tr>
+              <tr>
+                <td style="text-align: left">
+                  <strong>SignalR Groups</strong>
+                </td>
+                <td style="text-align: left">Groups</td>
+                <td style="text-align: left">Rooms</td>
+                <td style="text-align: left">Custom room registry</td>
+                <td style="text-align: left">Rooms</td>
+                <td style="text-align: left">Channel-layer groups</td>
+                <td style="text-align: left">Custom room registry</td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Hub Context</strong></td>
+                <td style="text-align: left">
+                  <code>IHubContext&lt;T&gt;</code>
+                </td>
+                <td style="text-align: left">
+                  Global <code>io</code> server object
+                </td>
+                <td style="text-align: left">
+                  Shared registry / broadcaster service
+                </td>
+                <td style="text-align: left"><code>sio</code> server object</td>
+                <td style="text-align: left"><code>channel_layer</code></td>
+                <td style="text-align: left">Connection manager service</td>
+              </tr>
+              <tr>
+                <td style="text-align: left">
+                  <strong>OnConnected / OnDisconnected</strong>
+                </td>
+                <td style="text-align: left">
+                  <code>OnConnectedAsync</code> /
+                  <code>OnDisconnectedAsync</code>
+                </td>
+                <td style="text-align: left">
+                  <code>connection</code> / <code>disconnect</code>
+                </td>
+                <td style="text-align: left">
+                  <code>connection</code> / <code>close</code>
+                </td>
+                <td style="text-align: left">
+                  <code>connect</code> / <code>disconnect</code>
+                </td>
+                <td style="text-align: left">
+                  <code>connect</code> / <code>disconnect</code>
+                </td>
+                <td style="text-align: left">
+                  endpoint start / <code>WebSocketDisconnect</code>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Clients.All</strong></td>
+                <td style="text-align: left"><code>Clients.All</code></td>
+                <td style="text-align: left"><code>io.emit()</code></td>
+                <td style="text-align: left">Iterate all sockets</td>
+                <td style="text-align: left"><code>sio.emit()</code></td>
+                <td style="text-align: left">
+                  <code>group_send</code> to global group or iterate
+                </td>
+                <td style="text-align: left">Iterate tracked sockets</td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Clients.Group</strong></td>
+                <td style="text-align: left">
+                  <code>Clients.Group(name)</code>
+                </td>
+                <td style="text-align: left"><code>io.to(room)</code></td>
+                <td style="text-align: left">Iterate room registry</td>
+                <td style="text-align: left">
+                  <code>emit(..., room=...)</code>
+                </td>
+                <td style="text-align: left">
+                  <code>group_send(group, ...)</code>
+                </td>
+                <td style="text-align: left">Iterate room membership</td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Clients.User</strong></td>
+                <td style="text-align: left">
+                  <code>Clients.User(userId)</code>
+                </td>
+                <td style="text-align: left">user-specific room</td>
+                <td style="text-align: left">user socket map</td>
+                <td style="text-align: left">
+                  user room or <code>sid</code> map
+                </td>
+                <td style="text-align: left">user-specific group</td>
+                <td style="text-align: left">user socket map</td>
+              </tr>
+              <tr>
+                <td style="text-align: left">
+                  <strong>Transport fallback</strong>
+                </td>
+                <td style="text-align: left">
+                  WebSockets + SSE + Long Polling
+                </td>
+                <td style="text-align: left">WebSockets + HTTP long polling</td>
+                <td style="text-align: left">None beyond raw WebSocket</td>
+                <td style="text-align: left">Same as Socket.IO protocol</td>
+                <td style="text-align: left">
+                  ASGI WebSocket only; fallback is separate app design
+                </td>
+                <td style="text-align: left">WebSocket only</td>
+              </tr>
+              <tr>
+                <td style="text-align: left"><strong>Backplane</strong></td>
+                <td style="text-align: left">Redis / Azure SignalR Service</td>
+                <td style="text-align: left">
+                  Redis adapter / broker adapters
+                </td>
+                <td style="text-align: left">Custom pub-sub</td>
+                <td style="text-align: left">Redis / message queue managers</td>
+                <td style="text-align: left">Redis channel layer</td>
+                <td style="text-align: left">Custom pub-sub</td>
+              </tr>
+              <tr>
+                <td style="text-align: left">
+                  <strong>Scale-out strategy</strong>
+                </td>
+                <td style="text-align: left">
+                  Sticky sessions or managed service + backplane
+                </td>
+                <td style="text-align: left">
+                  Sticky sessions + Redis adapter
+                </td>
+                <td style="text-align: left">Shared broker + custom routing</td>
+                <td style="text-align: left">
+                  Sticky sessions + message queue / Redis
+                </td>
+                <td style="text-align: left">
+                  Redis channel layer + ASGI workers
+                </td>
+                <td style="text-align: left">Shared broker + custom routing</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Key differences that matter:</p>
+          <ul>
+            <li>
+              <code>ws</code> and FastAPI do not have a native equivalent to
+              <strong>Hub Context</strong>. You must design a reusable
+              broadcaster service yourself.
+            </li>
+            <li>
+              Socket.IO rooms and SignalR groups are conceptually similar, but
+              Socket.IO is more event-bus oriented while SignalR is more
+              invocation oriented.
+            </li>
+            <li>
+              Django Channels depends heavily on the channel layer for anything
+              beyond a single process.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="4-code-examples">4. Code Examples</h2>
+          <h3 id="c-aspnet-core-signalr">C# - ASP.NET Core SignalR</h3>
+          <p>Server:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Authorization</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.SignalR</span><span class="p">;</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">builder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WebApplication</span><span class="p">.</span><span class="n">CreateBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
@@ -519,10 +1122,12 @@
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">Clients</span><span class="p">.</span><span class="n">User</span><span class="p">(</span><span class="n">userId</span><span class="p">).</span><span class="n">SendAsync</span><span class="p">(</span><span class="s">&quot;ReceivePrivateMessage&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Context</span><span class="p">.</span><span class="n">UserIdentifier</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Client:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">signalR</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@microsoft/signalr&quot;</span><span class="p">;</span>
+          <p>Client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">signalR</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;@microsoft/signalr&quot;</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">signalR</span><span class="p">.</span><span class="nx">HubConnectionBuilder</span><span class="p">()</span>
 <span class="w">  </span><span class="p">.</span><span class="nx">withUrl</span><span class="p">(</span><span class="s2">&quot;/hubs/chat&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
@@ -547,11 +1152,13 @@
 <span class="k">await</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="s2">&quot;JoinRoom&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;project:alpha&quot;</span><span class="p">);</span>
 <span class="k">await</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="s2">&quot;SendRoomMessage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;project:alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hello team&quot;</span><span class="p">);</span>
 <span class="k">await</span><span class="w"> </span><span class="nx">connection</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="s2">&quot;SendPrivateMessage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;user-42&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;check your queue&quot;</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="typescript-socketio">TypeScript - Socket.IO</h3>
-<p>Server:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;node:http&quot;</span><span class="p">;</span>
+          <h3 id="typescript-socketio">TypeScript - Socket.IO</h3>
+          <p>Server:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;node:http&quot;</span><span class="p">;</span>
 <span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Server</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;socket.io&quot;</span><span class="p">;</span>
 <span class="k">import</span><span class="w"> </span><span class="nx">jwt</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;jsonwebtoken&quot;</span><span class="p">;</span>
 
@@ -595,10 +1202,12 @@
 <span class="p">});</span>
 
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mf">3000</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Client:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">io</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;socket.io-client&quot;</span><span class="p">;</span>
+          <p>Client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">io</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;socket.io-client&quot;</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">io</span><span class="p">(</span><span class="s2">&quot;https://api.example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">auth</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
@@ -623,11 +1232,15 @@
 
 <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;room-message&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">room</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;project:alpha&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;hello from client&quot;</span><span class="w"> </span><span class="p">});</span>
 <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;private-message&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">toUserId</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;user-42&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;private ping&quot;</span><span class="w"> </span><span class="p">});</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="typescript-raw-websockets-with-ws">TypeScript - Raw WebSockets with ws</h3>
-<p>Server:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;node:http&quot;</span><span class="p">;</span>
+          <h3 id="typescript-raw-websockets-with-ws">
+            TypeScript - Raw WebSockets with ws
+          </h3>
+          <p>Server:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;node:http&quot;</span><span class="p">;</span>
 <span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">WebSocketServer</span><span class="p">,</span><span class="w"> </span><span class="nx">WebSocket</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;ws&quot;</span><span class="p">;</span>
 <span class="k">import</span><span class="w"> </span><span class="nx">jwt</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;jsonwebtoken&quot;</span><span class="p">;</span>
 
@@ -730,10 +1343,12 @@
 <span class="p">});</span>
 
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mf">3001</span><span class="p">);</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Client:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;access_token&quot;</span><span class="p">);</span>
+          <p>Client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">&quot;access_token&quot;</span><span class="p">);</span>
 <span class="kd">let</span><span class="w"> </span><span class="nx">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 <span class="kd">let</span><span class="w"> </span><span class="nx">socket</span><span class="o">:</span><span class="w"> </span><span class="kt">WebSocket</span><span class="p">;</span>
 
@@ -758,12 +1373,20 @@
 <span class="p">}</span>
 
 <span class="nx">connect</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Note: browser-native <code>WebSocket</code> does not let you set arbitrary headers. In browsers you usually pass the token via query string, cookie, or a pre-upgrade session mechanism. For stricter security posture, prefer an HttpOnly session cookie or a short-lived WebSocket ticket rather than a long-lived bearer token in the URL.</p>
-<h3 id="python-python-socketio">Python - python-socketio</h3>
-<p>Server:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socketio</span>
+          <p>
+            Note: browser-native <code>WebSocket</code> does not let you set
+            arbitrary headers. In browsers you usually pass the token via query
+            string, cookie, or a pre-upgrade session mechanism. For stricter
+            security posture, prefer an HttpOnly session cookie or a short-lived
+            WebSocket ticket rather than a long-lived bearer token in the URL.
+          </p>
+          <h3 id="python-python-socketio">Python - python-socketio</h3>
+          <p>Server:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socketio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">jwt</span>
 
 <span class="n">sio</span> <span class="o">=</span> <span class="n">socketio</span><span class="o">.</span><span class="n">AsyncServer</span><span class="p">(</span><span class="n">async_mode</span><span class="o">=</span><span class="s2">&quot;asgi&quot;</span><span class="p">,</span> <span class="n">cors_allowed_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://app.example.com&quot;</span><span class="p">])</span>
@@ -813,10 +1436,12 @@
 <span class="nd">@sio</span><span class="o">.</span><span class="n">event</span>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">disconnect</span><span class="p">(</span><span class="n">sid</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;disconnect&quot;</span><span class="p">,</span> <span class="n">sid</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Client:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+          <p>Client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">socketio</span>
 
 <span class="n">sio</span> <span class="o">=</span> <span class="n">socketio</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">reconnection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reconnection_attempts</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -849,11 +1474,13 @@
 
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="python-django-channels">Python - Django Channels</h3>
-<p>Consumer:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+          <h3 id="python-django-channels">Python - Django Channels</h3>
+          <p>Consumer:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">channels.generic.websocket</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncJsonWebsocketConsumer</span>
 
 
@@ -923,10 +1550,12 @@
             <span class="s2">&quot;from_user_id&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;from_user_id&quot;</span><span class="p">],</span>
             <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">],</span>
         <span class="p">})</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>ASGI routing:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">channels.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthMiddlewareStack</span>
+          <p>ASGI routing:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">channels.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthMiddlewareStack</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">channels.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProtocolTypeRouter</span><span class="p">,</span> <span class="n">URLRouter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
 
@@ -941,10 +1570,12 @@
         <span class="p">)</span>
     <span class="p">}</span>
 <span class="p">)</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Browser client:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+          <p>Browser client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 <span class="kd">let</span><span class="w"> </span><span class="nx">socket</span><span class="o">:</span><span class="w"> </span><span class="kt">WebSocket</span><span class="p">;</span>
 
 <span class="kd">function</span><span class="w"> </span><span class="nx">connect</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -967,11 +1598,13 @@
 <span class="p">}</span>
 
 <span class="nx">connect</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<h3 id="python-fastapi-websockets">Python - FastAPI WebSockets</h3>
-<p>Server:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+          <h3 id="python-fastapi-websockets">Python - FastAPI WebSockets</h3>
+          <p>Server:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">WebSocket</span><span class="p">,</span> <span class="n">WebSocketDisconnect</span><span class="p">,</span> <span class="n">status</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">jwt</span>
 
@@ -1052,10 +1685,12 @@
                 <span class="p">})</span>
     <span class="k">except</span> <span class="n">WebSocketDisconnect</span><span class="p">:</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="n">websocket</span><span class="p">)</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<p>Client:</p>
-<div class="codehilite"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
+          <p>Client:</p>
+          <div class="codehilite">
+            <pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">attempt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 <span class="kd">let</span><span class="w"> </span><span class="nx">socket</span><span class="o">:</span><span class="w"> </span><span class="kt">WebSocket</span><span class="p">;</span>
 
 <span class="kd">function</span><span class="w"> </span><span class="nx">connect</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1077,286 +1712,587 @@
 <span class="p">}</span>
 
 <span class="nx">connect</span><span class="p">();</span>
-</code></pre></div>
+</code></pre>
+          </div>
 
-<hr />
-<h2 id="5-connection-management-and-the-misuse-of-pooling">5. Connection Management and the Misuse of "Pooling"</h2>
-<p>This section matters because teams often import HTTP vocabulary into a system that behaves very differently.</p>
-<h3 id="what-http-connection-pooling-actually-means">What HTTP Connection Pooling Actually Means</h3>
-<p>HTTP connection pooling usually means reusing a finite set of outbound TCP connections for many short-lived requests. Typical examples:</p>
-<ul>
-<li><code>HttpClient</code> in .NET reuses sockets under the hood.</li>
-<li>browser connection pools reuse keep-alive connections.</li>
-<li>database or broker clients reuse transport connections to avoid repeated setup cost.</li>
-</ul>
-<p>Pooling is about <strong>reusing scarce transport setup cost across many independent request lifecycles</strong>.</p>
-<h3 id="what-realtime-systems-actually-manage">What Realtime Systems Actually Manage</h3>
-<p>Realtime hub systems usually do <strong>not</strong> pool client WebSocket connections. Each connected client normally owns a long-lived TCP connection upgraded from HTTP to WebSocket. The system problem is not "how do I reuse a pool of sockets for many clients?" The system problem is:</p>
-<ul>
-<li>how do I track thousands of persistent client connections,</li>
-<li>how do I route messages to the correct subset,</li>
-<li>how do I detect dead or stalled peers,</li>
-<li>how do I survive reconnect storms,</li>
-<li>how do I fan messages out across multiple server instances.</li>
-</ul>
-<p>The correct concepts are:</p>
-<ul>
-<li><strong>persistent connection management</strong></li>
-<li><strong>connection registry</strong></li>
-<li><strong>group membership registry</strong></li>
-<li><strong>heartbeat / keepalive</strong></li>
-<li><strong>idle timeout management</strong></li>
-<li><strong>reconnect policy</strong></li>
-<li><strong>backpressure control</strong></li>
-<li><strong>distributed fanout</strong></li>
-<li><strong>load balancing and affinity</strong></li>
-</ul>
-<h3 id="correct-terms-for-realtime-system-design">Correct Terms for Realtime System Design</h3>
-<h4 id="http-connection-pooling">HTTP connection pooling</h4>
-<ul>
-<li>Relevant for outbound REST calls, database drivers, and broker clients.</li>
-<li>Not the right term for client WebSocket hubs.</li>
-</ul>
-<h4 id="tcp-connection-reuse">TCP connection reuse</h4>
-<ul>
-<li>Applies before upgrade and in non-WebSocket protocols.</li>
-<li>Once upgraded, the connection is usually dedicated to that client until disconnect.</li>
-</ul>
-<h4 id="long-lived-websocket-connections">Long-lived WebSocket connections</h4>
-<ul>
-<li>This is the dominant model in realtime hubs.</li>
-<li>Capacity planning is based on concurrent open sockets, message rate, memory per connection, and slow-consumer behavior.</li>
-</ul>
-<h4 id="server-side-connection-registries">Server-side connection registries</h4>
-<ul>
-<li>SignalR, Socket.IO, <code>python-socketio</code>, and Channels provide framework-level registries.</li>
-<li><code>ws</code> and FastAPI require your own registry data structures.</li>
-</ul>
-<h4 id="connection-fanout-and-scaling">Connection fanout and scaling</h4>
-<ul>
-<li>A single instance can only fan out to its local sockets.</li>
-<li>Once you scale horizontally, you need a distributed fanout path: Redis backplane, managed realtime service, or broker-based pub-sub.</li>
-</ul>
-<h4 id="connection-limits">Connection limits</h4>
-<ul>
-<li>Real limits come from file descriptors, memory per connection, CPU for encoding/dispatch, TLS overhead, and network buffers.</li>
-<li>Measure concurrent open sockets, not only request throughput.</li>
-</ul>
-<h4 id="heartbeat-keepalive">Heartbeat / keepalive</h4>
-<ul>
-<li>Required to detect silent disconnects and dead mobile clients.</li>
-<li>SignalR and Socket.IO expose keepalive behaviors; raw stacks require explicit ping/pong policy.</li>
-</ul>
-<h4 id="idle-timeout">Idle timeout</h4>
-<ul>
-<li>Enforce idle disconnects carefully. Some users are passive listeners and still valid.</li>
-<li>Proxies, load balancers, and managed ingress also impose idle timeouts that must align with keepalive settings.</li>
-</ul>
-<h4 id="reconnect-strategies">Reconnect strategies</h4>
-<ul>
-<li>Use exponential backoff with jitter.</li>
-<li>Rejoin groups after reconnect because membership may be connection-scoped.</li>
-<li>Distinguish transient network failure from auth expiry.</li>
-</ul>
-<h4 id="backpressure">Backpressure</h4>
-<ul>
-<li>Slow consumers can exhaust server memory if outbound queues grow without bound.</li>
-<li>Framework defaults vary; in lower-level stacks you must define per-connection queue limits, drop policy, or disconnect policy.</li>
-</ul>
-<h4 id="load-balancing">Load balancing</h4>
-<ul>
-<li>Stateless HTTP balancing assumptions break down for connection-oriented systems.</li>
-<li>You need to understand whether the framework or backplane tolerates non-sticky routing.</li>
-</ul>
-<h4 id="sticky-sessions">Sticky sessions</h4>
-<ul>
-<li>Often required when connection state lives in server memory and reconnects or polling fallbacks must hit the same instance.</li>
-<li>Managed services or fully externalized state reduce the need for affinity.</li>
-</ul>
-<h4 id="redis-backplane-or-broker-based-fanout">Redis backplane or broker-based fanout</h4>
-<ul>
-<li>Used when a message produced on instance A must reach sockets connected to instances B, C, and D.</li>
-<li>Redis is common for fanout and group membership synchronization, but not always ideal for durable messaging semantics.</li>
-</ul>
-<h4 id="horizontal-scaling-across-multiple-server-instances">Horizontal scaling across multiple server instances</h4>
-<ul>
-<li>Do not confuse scale-out with just adding pods.</li>
-<li>A valid design answers: where does group membership live, how is user presence shared, how are messages replicated, what happens during rolling deploys, and what happens when a node dies mid-broadcast?</li>
-</ul>
-<p>Operationally precise statement: for realtime hubs, the right phrase is usually <strong>persistent connection management</strong>, not <strong>connection pooling</strong>.</p>
-<hr />
-<h2 id="6-production-concerns">6. Production Concerns</h2>
-<h3 id="authentication-tokens-for-websocket-upgrades">Authentication tokens for WebSocket upgrades</h3>
-<ul>
-<li>Browsers do not always let you attach arbitrary headers to native WebSocket connections, so tokens often travel via cookies, query parameters, or framework-specific handshake fields.</li>
-<li>Query-string tokens are common but sensitive; avoid logging them and prefer short TTLs or cookie/session-backed auth when possible.</li>
-<li>Refresh-token logic must account for already-open sockets whose original access token has expired.</li>
-</ul>
-<h3 id="authorization-for-rooms-and-groups">Authorization for rooms and groups</h3>
-<ul>
-<li>Never let room membership be purely client-declared without server-side checks.</li>
-<li>Treat room join as an authorization decision based on tenant, document, project, or role membership.</li>
-<li>Recheck authorization after reconnect if membership is re-established automatically.</li>
-</ul>
-<h3 id="presence-tracking">Presence tracking</h3>
-<ul>
-<li>Presence is not the same as a socket being open.</li>
-<li>A user may have multiple devices and multiple tabs.</li>
-<li>Model presence explicitly: user online, last seen, active room set, and device count.</li>
-</ul>
-<h3 id="memory-leaks-from-stale-connections">Memory leaks from stale connections</h3>
-<ul>
-<li>The most common leak is not the socket itself but stale entries in user maps, room maps, timer lists, or outbound queues.</li>
-<li>Every disconnect path must clean membership registries and any per-connection timers or buffers.</li>
-</ul>
-<h3 id="cleanup-on-disconnect">Cleanup on disconnect</h3>
-<ul>
-<li>Handle normal close, error close, timeout, and process crash semantics.</li>
-<li>Assume cleanup callbacks are best effort, not guaranteed. Periodic sweeping of stale registries is still useful in custom implementations.</li>
-</ul>
-<h3 id="retries-and-exponential-backoff">Retries and exponential backoff</h3>
-<ul>
-<li>Immediate reconnect storms after a node restart can self-inflict outage.</li>
-<li>Use capped exponential backoff with jitter.</li>
-<li>Retries must respect auth failures; do not infinitely retry a guaranteed 401.</li>
-</ul>
-<h3 id="message-ordering-guarantees">Message ordering guarantees</h3>
-<ul>
-<li>WebSocket gives in-order delivery on a single TCP connection.</li>
-<li>Ordering across reconnects, across servers, or across broker-mediated fanout is an application-level concern.</li>
-<li>If global ordering matters, define partitioning keys or sequence numbers.</li>
-</ul>
-<h3 id="delivery-guarantees-and-acknowledgements">Delivery guarantees and acknowledgements</h3>
-<ul>
-<li>Most realtime hubs are fundamentally best-effort unless you build acknowledgements and replay.</li>
-<li>Socket.IO has event acknowledgements; SignalR supports invocation completion semantics; raw stacks require correlation ids and explicit ack messages.</li>
-<li>If a message must never be lost, you usually need a durable broker and replay model, not only WebSockets.</li>
-</ul>
-<h3 id="observability-logging-and-metrics">Observability, logging, and metrics</h3>
-<ul>
-<li>Track concurrent connections, successful upgrades, failed auth, reconnect rate, room membership cardinality, outbound queue depth, message throughput, and disconnect reasons.</li>
-<li>Structured logs should include connection id, user id if allowed, tenant id, room id, and correlation id.</li>
-<li>Trace the HTTP upgrade, auth decision, group join, and downstream domain event that triggered fanout.</li>
-</ul>
-<h3 id="rate-limiting-and-abuse-protection">Rate limiting and abuse protection</h3>
-<ul>
-<li>Limit connection creation rate, per-user concurrent sockets, per-event frequency, and payload size.</li>
-<li>Validate message schemas before routing.</li>
-<li>Reject pathological room joins, oversized frames, and fanout amplification abuse.</li>
-</ul>
-<hr />
-<h2 id="7-when-to-choose-which-tool">7. When to Choose Which Tool</h2>
-<p><strong>Choose SignalR when:</strong></p>
-<ul>
-<li>your backend is already ASP.NET Core,</li>
-<li>you want hub semantics and mature auth integration,</li>
-<li>you need strong integration with claims-based identity and .NET dependency injection,</li>
-<li>you value a clean server-to-client invocation model more than protocol minimalism.</li>
-</ul>
-<p><strong>Choose Socket.IO when:</strong></p>
-<ul>
-<li>you want event-based realtime messaging in Node.js or TypeScript,</li>
-<li>you need rooms, acknowledgements, automatic reconnection, and fallback behavior,</li>
-<li>you control both client and server and are comfortable with the Socket.IO protocol rather than raw WebSocket interoperability.</li>
-</ul>
-<p><strong>Choose raw WebSockets with ws when:</strong></p>
-<ul>
-<li>you need protocol-level control,</li>
-<li>you want no framework-level event abstraction,</li>
-<li>you are building a custom wire contract,</li>
-<li>you accept that rooms, auth policy, retry semantics, and scale-out plumbing are your responsibility.</li>
-</ul>
-<p><strong>Choose python-socketio when:</strong></p>
-<ul>
-<li>Python is your backend language and you want Socket.IO-style event semantics,</li>
-<li>your team wants rooms and a framework-managed connection model without inventing protocol conventions,</li>
-<li>you are comfortable running an async Python stack.</li>
-</ul>
-<p><strong>Choose Django Channels when:</strong></p>
-<ul>
-<li>your realtime features belong inside an existing Django application,</li>
-<li>Django auth, sessions, ORM, and routing are already system anchors,</li>
-<li>you need Redis-backed channel-layer groups and are comfortable with ASGI consumer patterns.</li>
-</ul>
-<p><strong>Choose FastAPI WebSockets when:</strong></p>
-<ul>
-<li>you want lightweight WebSocket endpoints inside an async Python API,</li>
-<li>you need moderate abstraction and full control over the wire model,</li>
-<li>your application does not need Socket.IO protocol compatibility and you are willing to build your own connection manager.</li>
-</ul>
-<p>Short rule: if you need a <strong>hub-like programming model</strong>, prefer SignalR, Socket.IO, <code>python-socketio</code>, or Channels. If you need a <strong>transport primitive</strong>, prefer <code>ws</code> or FastAPI WebSockets.</p>
-<hr />
-<h2 id="8-recommended-mental-model">8. Recommended Mental Model</h2>
-<p>Use this unified model across languages and frameworks:</p>
-<ol>
-<li>
-<p><strong>Connection</strong>
-   A connection is a long-lived transport session, usually one TCP connection per client session. It has a connection id and lifecycle events.</p>
-</li>
-<li>
-<p><strong>Authenticated identity</strong>
-   The connection is associated with a principal, user id, tenant id, device id, or anonymous session. Authentication happens at or before connection establishment.</p>
-</li>
-<li>
-<p><strong>Subscription or group membership</strong>
-   Connections subscribe to routing scopes such as rooms, groups, topics, documents, or user channels. Membership is server-authoritative, not client-authoritative.</p>
-</li>
-<li>
-<p><strong>Message routing</strong>
-   Every inbound message must resolve to a routing rule: to one connection, one user, one room, one tenant, or all subscribers. In raw stacks, this is your dispatcher. In hub stacks, the framework gives you part of that dispatcher.</p>
-</li>
-<li>
-<p><strong>Distributed fanout</strong>
-   A local process can only address its local sockets directly. Multi-instance systems require a backplane, broker, or managed service to replicate routing intent across instances.</p>
-</li>
-<li>
-<p><strong>Scaling strategy</strong>
-   Scaling is a combination of connection capacity planning, backplane topology, reconnect policy, and observability. It is not solved merely by adding pods.</p>
-</li>
-</ol>
-<p>If you keep this mental model stable, switching between SignalR, Socket.IO, Channels, FastAPI, or raw WebSockets becomes an implementation detail rather than a conceptual rewrite.</p>
-<hr />
-<h2 id="references-and-further-reading">References and Further Reading</h2>
-<ul>
-<li><a href="https://learn.microsoft.com/aspnet/core/signalr/">ASP.NET Core SignalR</a></li>
-<li><a href="https://socket.io/docs/v4/">Socket.IO</a></li>
-<li><a href="https://github.com/websockets/ws">ws</a></li>
-<li><a href="https://python-socketio.readthedocs.io/">python-socketio</a></li>
-<li><a href="https://channels.readthedocs.io/">Django Channels</a></li>
-<li><a href="https://fastapi.tiangolo.com/advanced/websockets/">FastAPI WebSockets</a></li>
-<li><a href="https://www.starlette.io/websockets/">Starlette WebSockets</a></li>
-<li><a href="https://www.rfc-editor.org/rfc/rfc6455">WebSocket RFC 6455</a></li>
-</ul></article>
-        </div>
+          <hr />
+          <h2 id="5-connection-management-and-the-misuse-of-pooling">
+            5. Connection Management and the Misuse of "Pooling"
+          </h2>
+          <p>
+            This section matters because teams often import HTTP vocabulary into
+            a system that behaves very differently.
+          </p>
+          <h3 id="what-http-connection-pooling-actually-means">
+            What HTTP Connection Pooling Actually Means
+          </h3>
+          <p>
+            HTTP connection pooling usually means reusing a finite set of
+            outbound TCP connections for many short-lived requests. Typical
+            examples:
+          </p>
+          <ul>
+            <li>
+              <code>HttpClient</code> in .NET reuses sockets under the hood.
+            </li>
+            <li>browser connection pools reuse keep-alive connections.</li>
+            <li>
+              database or broker clients reuse transport connections to avoid
+              repeated setup cost.
+            </li>
+          </ul>
+          <p>
+            Pooling is about
+            <strong
+              >reusing scarce transport setup cost across many independent
+              request lifecycles</strong
+            >.
+          </p>
+          <h3 id="what-realtime-systems-actually-manage">
+            What Realtime Systems Actually Manage
+          </h3>
+          <p>
+            Realtime hub systems usually do <strong>not</strong> pool client
+            WebSocket connections. Each connected client normally owns a
+            long-lived TCP connection upgraded from HTTP to WebSocket. The
+            system problem is not "how do I reuse a pool of sockets for many
+            clients?" The system problem is:
+          </p>
+          <ul>
+            <li>how do I track thousands of persistent client connections,</li>
+            <li>how do I route messages to the correct subset,</li>
+            <li>how do I detect dead or stalled peers,</li>
+            <li>how do I survive reconnect storms,</li>
+            <li>how do I fan messages out across multiple server instances.</li>
+          </ul>
+          <p>The correct concepts are:</p>
+          <ul>
+            <li><strong>persistent connection management</strong></li>
+            <li><strong>connection registry</strong></li>
+            <li><strong>group membership registry</strong></li>
+            <li><strong>heartbeat / keepalive</strong></li>
+            <li><strong>idle timeout management</strong></li>
+            <li><strong>reconnect policy</strong></li>
+            <li><strong>backpressure control</strong></li>
+            <li><strong>distributed fanout</strong></li>
+            <li><strong>load balancing and affinity</strong></li>
+          </ul>
+          <h3 id="correct-terms-for-realtime-system-design">
+            Correct Terms for Realtime System Design
+          </h3>
+          <h4 id="http-connection-pooling">HTTP connection pooling</h4>
+          <ul>
+            <li>
+              Relevant for outbound REST calls, database drivers, and broker
+              clients.
+            </li>
+            <li>Not the right term for client WebSocket hubs.</li>
+          </ul>
+          <h4 id="tcp-connection-reuse">TCP connection reuse</h4>
+          <ul>
+            <li>Applies before upgrade and in non-WebSocket protocols.</li>
+            <li>
+              Once upgraded, the connection is usually dedicated to that client
+              until disconnect.
+            </li>
+          </ul>
+          <h4 id="long-lived-websocket-connections">
+            Long-lived WebSocket connections
+          </h4>
+          <ul>
+            <li>This is the dominant model in realtime hubs.</li>
+            <li>
+              Capacity planning is based on concurrent open sockets, message
+              rate, memory per connection, and slow-consumer behavior.
+            </li>
+          </ul>
+          <h4 id="server-side-connection-registries">
+            Server-side connection registries
+          </h4>
+          <ul>
+            <li>
+              SignalR, Socket.IO, <code>python-socketio</code>, and Channels
+              provide framework-level registries.
+            </li>
+            <li>
+              <code>ws</code> and FastAPI require your own registry data
+              structures.
+            </li>
+          </ul>
+          <h4 id="connection-fanout-and-scaling">
+            Connection fanout and scaling
+          </h4>
+          <ul>
+            <li>A single instance can only fan out to its local sockets.</li>
+            <li>
+              Once you scale horizontally, you need a distributed fanout path:
+              Redis backplane, managed realtime service, or broker-based
+              pub-sub.
+            </li>
+          </ul>
+          <h4 id="connection-limits">Connection limits</h4>
+          <ul>
+            <li>
+              Real limits come from file descriptors, memory per connection, CPU
+              for encoding/dispatch, TLS overhead, and network buffers.
+            </li>
+            <li>
+              Measure concurrent open sockets, not only request throughput.
+            </li>
+          </ul>
+          <h4 id="heartbeat-keepalive">Heartbeat / keepalive</h4>
+          <ul>
+            <li>
+              Required to detect silent disconnects and dead mobile clients.
+            </li>
+            <li>
+              SignalR and Socket.IO expose keepalive behaviors; raw stacks
+              require explicit ping/pong policy.
+            </li>
+          </ul>
+          <h4 id="idle-timeout">Idle timeout</h4>
+          <ul>
+            <li>
+              Enforce idle disconnects carefully. Some users are passive
+              listeners and still valid.
+            </li>
+            <li>
+              Proxies, load balancers, and managed ingress also impose idle
+              timeouts that must align with keepalive settings.
+            </li>
+          </ul>
+          <h4 id="reconnect-strategies">Reconnect strategies</h4>
+          <ul>
+            <li>Use exponential backoff with jitter.</li>
+            <li>
+              Rejoin groups after reconnect because membership may be
+              connection-scoped.
+            </li>
+            <li>Distinguish transient network failure from auth expiry.</li>
+          </ul>
+          <h4 id="backpressure">Backpressure</h4>
+          <ul>
+            <li>
+              Slow consumers can exhaust server memory if outbound queues grow
+              without bound.
+            </li>
+            <li>
+              Framework defaults vary; in lower-level stacks you must define
+              per-connection queue limits, drop policy, or disconnect policy.
+            </li>
+          </ul>
+          <h4 id="load-balancing">Load balancing</h4>
+          <ul>
+            <li>
+              Stateless HTTP balancing assumptions break down for
+              connection-oriented systems.
+            </li>
+            <li>
+              You need to understand whether the framework or backplane
+              tolerates non-sticky routing.
+            </li>
+          </ul>
+          <h4 id="sticky-sessions">Sticky sessions</h4>
+          <ul>
+            <li>
+              Often required when connection state lives in server memory and
+              reconnects or polling fallbacks must hit the same instance.
+            </li>
+            <li>
+              Managed services or fully externalized state reduce the need for
+              affinity.
+            </li>
+          </ul>
+          <h4 id="redis-backplane-or-broker-based-fanout">
+            Redis backplane or broker-based fanout
+          </h4>
+          <ul>
+            <li>
+              Used when a message produced on instance A must reach sockets
+              connected to instances B, C, and D.
+            </li>
+            <li>
+              Redis is common for fanout and group membership synchronization,
+              but not always ideal for durable messaging semantics.
+            </li>
+          </ul>
+          <h4 id="horizontal-scaling-across-multiple-server-instances">
+            Horizontal scaling across multiple server instances
+          </h4>
+          <ul>
+            <li>Do not confuse scale-out with just adding pods.</li>
+            <li>
+              A valid design answers: where does group membership live, how is
+              user presence shared, how are messages replicated, what happens
+              during rolling deploys, and what happens when a node dies
+              mid-broadcast?
+            </li>
+          </ul>
+          <p>
+            Operationally precise statement: for realtime hubs, the right phrase
+            is usually <strong>persistent connection management</strong>, not
+            <strong>connection pooling</strong>.
+          </p>
+          <hr />
+          <h2 id="6-production-concerns">6. Production Concerns</h2>
+          <h3 id="authentication-tokens-for-websocket-upgrades">
+            Authentication tokens for WebSocket upgrades
+          </h3>
+          <ul>
+            <li>
+              Browsers do not always let you attach arbitrary headers to native
+              WebSocket connections, so tokens often travel via cookies, query
+              parameters, or framework-specific handshake fields.
+            </li>
+            <li>
+              Query-string tokens are common but sensitive; avoid logging them
+              and prefer short TTLs or cookie/session-backed auth when possible.
+            </li>
+            <li>
+              Refresh-token logic must account for already-open sockets whose
+              original access token has expired.
+            </li>
+          </ul>
+          <h3 id="authorization-for-rooms-and-groups">
+            Authorization for rooms and groups
+          </h3>
+          <ul>
+            <li>
+              Never let room membership be purely client-declared without
+              server-side checks.
+            </li>
+            <li>
+              Treat room join as an authorization decision based on tenant,
+              document, project, or role membership.
+            </li>
+            <li>
+              Recheck authorization after reconnect if membership is
+              re-established automatically.
+            </li>
+          </ul>
+          <h3 id="presence-tracking">Presence tracking</h3>
+          <ul>
+            <li>Presence is not the same as a socket being open.</li>
+            <li>A user may have multiple devices and multiple tabs.</li>
+            <li>
+              Model presence explicitly: user online, last seen, active room
+              set, and device count.
+            </li>
+          </ul>
+          <h3 id="memory-leaks-from-stale-connections">
+            Memory leaks from stale connections
+          </h3>
+          <ul>
+            <li>
+              The most common leak is not the socket itself but stale entries in
+              user maps, room maps, timer lists, or outbound queues.
+            </li>
+            <li>
+              Every disconnect path must clean membership registries and any
+              per-connection timers or buffers.
+            </li>
+          </ul>
+          <h3 id="cleanup-on-disconnect">Cleanup on disconnect</h3>
+          <ul>
+            <li>
+              Handle normal close, error close, timeout, and process crash
+              semantics.
+            </li>
+            <li>
+              Assume cleanup callbacks are best effort, not guaranteed. Periodic
+              sweeping of stale registries is still useful in custom
+              implementations.
+            </li>
+          </ul>
+          <h3 id="retries-and-exponential-backoff">
+            Retries and exponential backoff
+          </h3>
+          <ul>
+            <li>
+              Immediate reconnect storms after a node restart can self-inflict
+              outage.
+            </li>
+            <li>Use capped exponential backoff with jitter.</li>
+            <li>
+              Retries must respect auth failures; do not infinitely retry a
+              guaranteed 401.
+            </li>
+          </ul>
+          <h3 id="message-ordering-guarantees">Message ordering guarantees</h3>
+          <ul>
+            <li>
+              WebSocket gives in-order delivery on a single TCP connection.
+            </li>
+            <li>
+              Ordering across reconnects, across servers, or across
+              broker-mediated fanout is an application-level concern.
+            </li>
+            <li>
+              If global ordering matters, define partitioning keys or sequence
+              numbers.
+            </li>
+          </ul>
+          <h3 id="delivery-guarantees-and-acknowledgements">
+            Delivery guarantees and acknowledgements
+          </h3>
+          <ul>
+            <li>
+              Most realtime hubs are fundamentally best-effort unless you build
+              acknowledgements and replay.
+            </li>
+            <li>
+              Socket.IO has event acknowledgements; SignalR supports invocation
+              completion semantics; raw stacks require correlation ids and
+              explicit ack messages.
+            </li>
+            <li>
+              If a message must never be lost, you usually need a durable broker
+              and replay model, not only WebSockets.
+            </li>
+          </ul>
+          <h3 id="observability-logging-and-metrics">
+            Observability, logging, and metrics
+          </h3>
+          <ul>
+            <li>
+              Track concurrent connections, successful upgrades, failed auth,
+              reconnect rate, room membership cardinality, outbound queue depth,
+              message throughput, and disconnect reasons.
+            </li>
+            <li>
+              Structured logs should include connection id, user id if allowed,
+              tenant id, room id, and correlation id.
+            </li>
+            <li>
+              Trace the HTTP upgrade, auth decision, group join, and downstream
+              domain event that triggered fanout.
+            </li>
+          </ul>
+          <h3 id="rate-limiting-and-abuse-protection">
+            Rate limiting and abuse protection
+          </h3>
+          <ul>
+            <li>
+              Limit connection creation rate, per-user concurrent sockets,
+              per-event frequency, and payload size.
+            </li>
+            <li>Validate message schemas before routing.</li>
+            <li>
+              Reject pathological room joins, oversized frames, and fanout
+              amplification abuse.
+            </li>
+          </ul>
+          <hr />
+          <h2 id="7-when-to-choose-which-tool">7. When to Choose Which Tool</h2>
+          <p><strong>Choose SignalR when:</strong></p>
+          <ul>
+            <li>your backend is already ASP.NET Core,</li>
+            <li>you want hub semantics and mature auth integration,</li>
+            <li>
+              you need strong integration with claims-based identity and .NET
+              dependency injection,
+            </li>
+            <li>
+              you value a clean server-to-client invocation model more than
+              protocol minimalism.
+            </li>
+          </ul>
+          <p><strong>Choose Socket.IO when:</strong></p>
+          <ul>
+            <li>
+              you want event-based realtime messaging in Node.js or TypeScript,
+            </li>
+            <li>
+              you need rooms, acknowledgements, automatic reconnection, and
+              fallback behavior,
+            </li>
+            <li>
+              you control both client and server and are comfortable with the
+              Socket.IO protocol rather than raw WebSocket interoperability.
+            </li>
+          </ul>
+          <p><strong>Choose raw WebSockets with ws when:</strong></p>
+          <ul>
+            <li>you need protocol-level control,</li>
+            <li>you want no framework-level event abstraction,</li>
+            <li>you are building a custom wire contract,</li>
+            <li>
+              you accept that rooms, auth policy, retry semantics, and scale-out
+              plumbing are your responsibility.
+            </li>
+          </ul>
+          <p><strong>Choose python-socketio when:</strong></p>
+          <ul>
+            <li>
+              Python is your backend language and you want Socket.IO-style event
+              semantics,
+            </li>
+            <li>
+              your team wants rooms and a framework-managed connection model
+              without inventing protocol conventions,
+            </li>
+            <li>you are comfortable running an async Python stack.</li>
+          </ul>
+          <p><strong>Choose Django Channels when:</strong></p>
+          <ul>
+            <li>
+              your realtime features belong inside an existing Django
+              application,
+            </li>
+            <li>
+              Django auth, sessions, ORM, and routing are already system
+              anchors,
+            </li>
+            <li>
+              you need Redis-backed channel-layer groups and are comfortable
+              with ASGI consumer patterns.
+            </li>
+          </ul>
+          <p><strong>Choose FastAPI WebSockets when:</strong></p>
+          <ul>
+            <li>
+              you want lightweight WebSocket endpoints inside an async Python
+              API,
+            </li>
+            <li>
+              you need moderate abstraction and full control over the wire
+              model,
+            </li>
+            <li>
+              your application does not need Socket.IO protocol compatibility
+              and you are willing to build your own connection manager.
+            </li>
+          </ul>
+          <p>
+            Short rule: if you need a
+            <strong>hub-like programming model</strong>, prefer SignalR,
+            Socket.IO, <code>python-socketio</code>, or Channels. If you need a
+            <strong>transport primitive</strong>, prefer <code>ws</code> or
+            FastAPI WebSockets.
+          </p>
+          <hr />
+          <h2 id="8-recommended-mental-model">8. Recommended Mental Model</h2>
+          <p>Use this unified model across languages and frameworks:</p>
+          <ol>
+            <li>
+              <p>
+                <strong>Connection</strong> A connection is a long-lived
+                transport session, usually one TCP connection per client
+                session. It has a connection id and lifecycle events.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Authenticated identity</strong> The connection is
+                associated with a principal, user id, tenant id, device id, or
+                anonymous session. Authentication happens at or before
+                connection establishment.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Subscription or group membership</strong> Connections
+                subscribe to routing scopes such as rooms, groups, topics,
+                documents, or user channels. Membership is server-authoritative,
+                not client-authoritative.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Message routing</strong> Every inbound message must
+                resolve to a routing rule: to one connection, one user, one
+                room, one tenant, or all subscribers. In raw stacks, this is
+                your dispatcher. In hub stacks, the framework gives you part of
+                that dispatcher.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Distributed fanout</strong> A local process can only
+                address its local sockets directly. Multi-instance systems
+                require a backplane, broker, or managed service to replicate
+                routing intent across instances.
+              </p>
+            </li>
+            <li>
+              <p>
+                <strong>Scaling strategy</strong> Scaling is a combination of
+                connection capacity planning, backplane topology, reconnect
+                policy, and observability. It is not solved merely by adding
+                pods.
+              </p>
+            </li>
+          </ol>
+          <p>
+            If you keep this mental model stable, switching between SignalR,
+            Socket.IO, Channels, FastAPI, or raw WebSockets becomes an
+            implementation detail rather than a conceptual rewrite.
+          </p>
+          <hr />
+          <h2 id="references-and-further-reading">
+            References and Further Reading
+          </h2>
+          <ul>
+            <li>
+              <a href="https://learn.microsoft.com/aspnet/core/signalr/"
+                >ASP.NET Core SignalR</a
+              >
+            </li>
+            <li><a href="https://socket.io/docs/v4/">Socket.IO</a></li>
+            <li><a href="https://github.com/websockets/ws">ws</a></li>
+            <li>
+              <a href="https://python-socketio.readthedocs.io/"
+                >python-socketio</a
+              >
+            </li>
+            <li>
+              <a href="https://channels.readthedocs.io/">Django Channels</a>
+            </li>
+            <li>
+              <a href="https://fastapi.tiangolo.com/advanced/websockets/"
+                >FastAPI WebSockets</a
+              >
+            </li>
+            <li>
+              <a href="https://www.starlette.io/websockets/"
+                >Starlette WebSockets</a
+              >
+            </li>
+            <li>
+              <a href="https://www.rfc-editor.org/rfc/rfc6455"
+                >WebSocket RFC 6455</a
+              >
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
 
-
     <footer>
-        <div class="container footer-inner">
-            <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-            <a href="/">Back to portfolio &rarr;</a>
-        </div>
+      <div class="container footer-inner">
+        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio &rarr;</a>
+      </div>
     </footer>
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
+      const hamburger = document.querySelector(".hamburger");
+      const navLinks = document.querySelector(".nav-links");
+      hamburger.addEventListener("click", () => {
+        const expanded = hamburger.getAttribute("aria-expanded") === "true";
+        hamburger.setAttribute("aria-expanded", !expanded);
+        hamburger.classList.toggle("active");
+        navLinks.classList.toggle("open");
+        document.body.classList.toggle("menu-open", !expanded);
+      });
+      // Close menu when a nav link is clicked
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburger.classList.remove("active");
+          navLinks.classList.remove("open");
+          hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("menu-open");
         });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
+      });
     </script>
-
-</body>
+  </body>
 </html>

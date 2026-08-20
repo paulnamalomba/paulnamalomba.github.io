@@ -1,197 +1,305 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lecture 4: Data Marts Overview</title>
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../style.css">
-  
-  <!-- Highlight.js for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-  
-  <!-- Mermaid.js for Diagrams -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      hljs.highlightAll();
-      mermaid.initialize({
-        startOnLoad: true,
-        theme: 'dark',
-        themeVariables: {
-          primaryColor: '#131a2e',
-          primaryTextColor: '#e8edf5',
-          primaryBorderColor: '#2a4080',
-          lineColor: '#f0b429',
-          secondaryColor: '#0d1321',
-          tertiaryColor: '#1a2340',
-          fontSize: '16px',
-          fontFamily: "'Inter', -apple-system, system-ui, sans-serif"
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture 4: Data Marts Overview</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+
+    <!-- Mermaid.js for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        hljs.highlightAll();
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: "dark",
+          themeVariables: {
+            primaryColor: "#131a2e",
+            primaryTextColor: "#e8edf5",
+            primaryBorderColor: "#2a4080",
+            lineColor: "#f0b429",
+            secondaryColor: "#0d1321",
+            tertiaryColor: "#1a2340",
+            fontSize: "16px",
+            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+          },
+        });
       });
-    });
-  </script>
-</head>
-<body>
-  <div class="page-wrapper" id="content">
-    <div class="header-bar">
-      <span class="brand">IBM Data Engineering</span>
-      <nav>
-        <a href="../../index.html">Hub</a>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-8/index.html">Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka</a>
-            <a href="../../course-9/index.html" class="active">Course 9: Data Warehouse Fundamentals</a>
+    </script>
+  </head>
+  <body>
+    <div class="page-wrapper" id="content">
+      <div class="header-bar">
+        <span class="brand">IBM Data Engineering</span>
+        <nav>
+          <a href="../../index.html">Hub</a>
+
+          <div class="nav-dropdown">
+            <a href="#">Course 9: Data Warehouse Fundamentals ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-8/index.html"
+                >Course 8: ETL and Data Pipelines with Shell, Airflow and
+                Kafka</a
+              >
+              <a href="../../course-9/index.html" class="active"
+                >Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#" >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/index.html" class="active">Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a>
+
+          <div class="nav-dropdown">
+            <a href="#"
+              >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a
+            >
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/index.html" class="active"
+                >Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a
+              >
+            </div>
           </div>
-        </div>
-        
-        <div class="nav-dropdown">
-          <a href="#"  class="active">Lecture 4 ▾</a>
-          <div class="dropdown-content">
-            <a href="../../course-9/module-1/lecture-1.html">Lecture 1: Data Warehouse Overview</a>
-            <a href="../../course-9/module-1/lecture-2.html">Lecture 2: Popular Data Warehouse Systems</a>
-            <a href="../../course-9/module-1/lecture-3.html">Lecture 3: Selecting a Data Warehouse System</a>
-            <a href="../../course-9/module-1/lecture-4.html" class="active">Lecture 4: Data Marts Overview</a>
-            <a href="../../course-9/module-1/lecture-5.html">Lecture 5: IBM Db2 Warehouse</a>
-            <a href="../../course-9/module-1/lecture-6.html">Lecture 6: Data Lakes Overview</a>
-            <a href="../../course-9/module-1/lecture-7.html">Lecture 7: Data Lakes, Data Warehouses, and the Data Lakehouse</a>
+
+          <div class="nav-dropdown">
+            <a href="#" class="active">Lecture 4 ▾</a>
+            <div class="dropdown-content">
+              <a href="../../course-9/module-1/lecture-1.html"
+                >Lecture 1: Data Warehouse Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-2.html"
+                >Lecture 2: Popular Data Warehouse Systems</a
+              >
+              <a href="../../course-9/module-1/lecture-3.html"
+                >Lecture 3: Selecting a Data Warehouse System</a
+              >
+              <a href="../../course-9/module-1/lecture-4.html" class="active"
+                >Lecture 4: Data Marts Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-5.html"
+                >Lecture 5: IBM Db2 Warehouse</a
+              >
+              <a href="../../course-9/module-1/lecture-6.html"
+                >Lecture 6: Data Lakes Overview</a
+              >
+              <a href="../../course-9/module-1/lecture-7.html"
+                >Lecture 7: Data Lakes, Data Warehouses, and the Data
+                Lakehouse</a
+              >
+            </div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </nav>
+      </div>
 
-    <div class="breadcrumb">
-      <a href="../../index.html">Hub</a> <span>&rsaquo;</span> 
-      <a href="../index.html">Course 9</a> <span>&rsaquo;</span> 
-      <a href="index.html">Module 1</a> <span>&rsaquo;</span> 
-      Lecture 4
-    </div>
+      <div class="breadcrumb">
+        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
+        <a href="../index.html">Course 9</a> <span>&rsaquo;</span>
+        <a href="index.html">Module 1</a> <span>&rsaquo;</span>
+        Lecture 4
+      </div>
 
-    <h1 class="fade-in">Data Marts Overview</h1>
-    <p class="fade-in fade-in-d1" style="font-size:1.05rem;">
-      Module 1, Lecture 4
-    </p>
+      <h1 class="fade-in">Data Marts Overview</h1>
+      <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
+        Module 1, Lecture 4
+      </p>
 
-
-<p class="fade-in fade-in-d2">An enterprise data warehouse serves the strategic needs of the entire organization. But not every team needs—or should have—access to the full breadth of that data. Data marts solve this by carving off focused, tactical slices of the warehouse, purpose-built for specific business functions. They are the mechanism by which analytical infrastructure becomes operationally useful to individual teams.</p>
-<hr/>
-<div class="section-card fade-in fade-in-d2"><h2>1. Defining the Data Mart</h2>
-<p>A <strong>data mart</strong> is an isolated part of the larger enterprise data warehouse that is specifically built to serve a particular business function, purpose, or community of users.</p>
-<p>Examples of organizational data marts:</p>
-<ul>
-<li><strong>Sales &amp; Finance</strong> — supplying data for quarterly sales reports and projections</li>
-<li><strong>Marketing</strong> — analyzing customer behavior data</li>
-<li><strong>Shipping, Manufacturing &amp; Warranty</strong> — each operating with their own dedicated data marts tailored to their domain</li>
-</ul>
-<p>Data marts are designed to provide specific, timely support for making <strong>tactical decisions</strong>. By focusing only on the most relevant data, they save end users the time and effort that would otherwise be spent searching the broader data warehouse for insights.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d3"><h2>2. Structural Design: Star and Snowflake Schemas</h2>
-<p>The typical structure of a data mart is a <strong>relational database</strong> organized using a <strong>star schema</strong> or, more commonly, a <strong>snowflake schema</strong>:</p>
-<ul>
-<li><strong>Fact Table (Central):</strong> Contains the business metrics relevant to a specific business process (e.g., revenue, units sold, transaction counts).</li>
-<li><strong>Dimension Tables (Surrounding):</strong> Provide contextual hierarchies for the facts—time, geography, product category, customer segment—enabling multidimensional analysis.</li>
-</ul>
-<div class="mermaid-container"><pre class="mermaid">graph TD
+      <p class="fade-in fade-in-d2">
+        An enterprise data warehouse serves the strategic needs of the entire
+        organization. But not every team needs—or should have—access to the full
+        breadth of that data. Data marts solve this by carving off focused,
+        tactical slices of the warehouse, purpose-built for specific business
+        functions. They are the mechanism by which analytical infrastructure
+        becomes operationally useful to individual teams.
+      </p>
+      <hr />
+      <div class="section-card fade-in fade-in-d2">
+        <h2>1. Defining the Data Mart</h2>
+        <p>
+          A <strong>data mart</strong> is an isolated part of the larger
+          enterprise data warehouse that is specifically built to serve a
+          particular business function, purpose, or community of users.
+        </p>
+        <p>Examples of organizational data marts:</p>
+        <ul>
+          <li>
+            <strong>Sales &amp; Finance</strong> — supplying data for quarterly
+            sales reports and projections
+          </li>
+          <li><strong>Marketing</strong> — analyzing customer behavior data</li>
+          <li>
+            <strong>Shipping, Manufacturing &amp; Warranty</strong> — each
+            operating with their own dedicated data marts tailored to their
+            domain
+          </li>
+        </ul>
+        <p>
+          Data marts are designed to provide specific, timely support for making
+          <strong>tactical decisions</strong>. By focusing only on the most
+          relevant data, they save end users the time and effort that would
+          otherwise be spent searching the broader data warehouse for insights.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d3">
+        <h2>2. Structural Design: Star and Snowflake Schemas</h2>
+        <p>
+          The typical structure of a data mart is a
+          <strong>relational database</strong> organized using a
+          <strong>star schema</strong> or, more commonly, a
+          <strong>snowflake schema</strong>:
+        </p>
+        <ul>
+          <li>
+            <strong>Fact Table (Central):</strong> Contains the business metrics
+            relevant to a specific business process (e.g., revenue, units sold,
+            transaction counts).
+          </li>
+          <li>
+            <strong>Dimension Tables (Surrounding):</strong> Provide contextual
+            hierarchies for the facts—time, geography, product category,
+            customer segment—enabling multidimensional analysis.
+          </li>
+        </ul>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph TD
     subgraph "Star Schema"
         F[Fact Table: Sales Metrics] --&gt; D1[Dimension: Time]
         F --&gt; D2[Dimension: Product]
         F --&gt; D3[Dimension: Geography]
         F --&gt; D4[Dimension: Customer]
     end
-</pre></div>
-<p>In a snowflake schema, dimension tables are further normalized into sub-dimension tables, reducing redundancy at the cost of additional joins.</p>
-<hr/>
-</div><div class="section-card fade-in fade-in-d4"><h2>3. Data Marts vs. Transactional Databases vs. Data Warehouses</h2>
-<h3>3.1 Data Marts and Databases Compared</h3>
-<table>
-<thead>
-<tr>
-<th>Characteristic</th>
-<th>Data Mart (OLAP)</th>
-<th>Transactional Database (OLTP)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Optimization</strong></td>
-<td>Read-intensive analytical queries</td>
-<td>Write-intensive transactional operations</td>
-</tr>
-<tr>
-<td><strong>Data Source</strong></td>
-<td>Enterprise data warehouse or operational systems</td>
-<td>Operational applications (e.g., point-of-sale systems)</td>
-</tr>
-<tr>
-<td><strong>Data Quality</strong></td>
-<td>Validated, transformed, and cleaned</td>
-<td>Raw, uncleaned data</td>
-</tr>
-<tr>
-<td><strong>Historical Depth</strong></td>
-<td>Accumulates historical data for trend analysis</td>
-<td>May not retain older data</td>
-</tr>
-</tbody>
-</table>
-<h3>3.2 Data Marts and Data Warehouses Compared</h3>
-<table>
-<thead>
-<tr>
-<th>Characteristic</th>
-<th>Data Mart</th>
-<th>Data Warehouse</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Scope</strong></td>
-<td>Tactical — serves a specific business function</td>
-<td>Strategic — supports enterprise-wide requirements</td>
-</tr>
-<tr>
-<td><strong>Size</strong></td>
-<td>Smaller, leaner</td>
-<td>Very large</td>
-</tr>
-<tr>
-<td><strong>Performance</strong></td>
-<td>Fast — narrow scope enables optimized queries</td>
-<td>Can be slower due to the breadth and volume of data</td>
-</tr>
-</tbody>
-</table>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>4. The Three Types of Data Marts</h2>
-<p>The classification of data marts depends on their relationship with the enterprise data warehouse and their data sources.</p>
-<h3>4.1 Dependent Data Marts</h3>
-<p>Dependent data marts draw their data <strong>exclusively from the enterprise data warehouse</strong>. Because the warehouse has already cleaned and transformed the data, these marts benefit from:</p>
-<ul>
-<li><strong>Simpler ETL pipelines</strong> — no transformation logic required at the mart level</li>
-<li><strong>Inherited security</strong> — the warehouse's governance and access controls cascade down</li>
-</ul>
-<h3>4.2 Independent Data Marts</h3>
-<p>Independent data marts <strong>bypass the data warehouse entirely</strong>, sourcing data directly from internal operational systems or external vendors. This independence comes with additional requirements:</p>
-<ul>
-<li><strong>Custom ETL pipelines</strong> — full extract, transform, and load logic must be built to handle raw source data</li>
-<li><strong>Separate security measures</strong> — the mart cannot rely on the warehouse's security posture</li>
-</ul>
-<h3>4.3 Hybrid Data Marts</h3>
-<p>Hybrid data marts <strong>partially depend</strong> on the enterprise data warehouse, combining warehouse data with inputs from operational systems and external sources. They occupy the middle ground between dependent and independent marts.</p>
-<div class="mermaid-container"><pre class="mermaid">graph LR
+</pre>
+        </div>
+        <p>
+          In a snowflake schema, dimension tables are further normalized into
+          sub-dimension tables, reducing redundancy at the cost of additional
+          joins.
+        </p>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d4">
+        <h2>3. Data Marts vs. Transactional Databases vs. Data Warehouses</h2>
+        <h3>3.1 Data Marts and Databases Compared</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Data Mart (OLAP)</th>
+              <th>Transactional Database (OLTP)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Optimization</strong></td>
+              <td>Read-intensive analytical queries</td>
+              <td>Write-intensive transactional operations</td>
+            </tr>
+            <tr>
+              <td><strong>Data Source</strong></td>
+              <td>Enterprise data warehouse or operational systems</td>
+              <td>Operational applications (e.g., point-of-sale systems)</td>
+            </tr>
+            <tr>
+              <td><strong>Data Quality</strong></td>
+              <td>Validated, transformed, and cleaned</td>
+              <td>Raw, uncleaned data</td>
+            </tr>
+            <tr>
+              <td><strong>Historical Depth</strong></td>
+              <td>Accumulates historical data for trend analysis</td>
+              <td>May not retain older data</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>3.2 Data Marts and Data Warehouses Compared</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Data Mart</th>
+              <th>Data Warehouse</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Scope</strong></td>
+              <td>Tactical — serves a specific business function</td>
+              <td>Strategic — supports enterprise-wide requirements</td>
+            </tr>
+            <tr>
+              <td><strong>Size</strong></td>
+              <td>Smaller, leaner</td>
+              <td>Very large</td>
+            </tr>
+            <tr>
+              <td><strong>Performance</strong></td>
+              <td>Fast — narrow scope enables optimized queries</td>
+              <td>Can be slower due to the breadth and volume of data</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>4. The Three Types of Data Marts</h2>
+        <p>
+          The classification of data marts depends on their relationship with
+          the enterprise data warehouse and their data sources.
+        </p>
+        <h3>4.1 Dependent Data Marts</h3>
+        <p>
+          Dependent data marts draw their data
+          <strong>exclusively from the enterprise data warehouse</strong>.
+          Because the warehouse has already cleaned and transformed the data,
+          these marts benefit from:
+        </p>
+        <ul>
+          <li>
+            <strong>Simpler ETL pipelines</strong> — no transformation logic
+            required at the mart level
+          </li>
+          <li>
+            <strong>Inherited security</strong> — the warehouse's governance and
+            access controls cascade down
+          </li>
+        </ul>
+        <h3>4.2 Independent Data Marts</h3>
+        <p>
+          Independent data marts
+          <strong>bypass the data warehouse entirely</strong>, sourcing data
+          directly from internal operational systems or external vendors. This
+          independence comes with additional requirements:
+        </p>
+        <ul>
+          <li>
+            <strong>Custom ETL pipelines</strong> — full extract, transform, and
+            load logic must be built to handle raw source data
+          </li>
+          <li>
+            <strong>Separate security measures</strong> — the mart cannot rely
+            on the warehouse's security posture
+          </li>
+        </ul>
+        <h3>4.3 Hybrid Data Marts</h3>
+        <p>
+          Hybrid data marts <strong>partially depend</strong> on the enterprise
+          data warehouse, combining warehouse data with inputs from operational
+          systems and external sources. They occupy the middle ground between
+          dependent and independent marts.
+        </p>
+        <div class="mermaid-container">
+          <pre class="mermaid">
+graph LR
     subgraph Sources
         OPS[Operational Systems]
         EXT[External Data]
@@ -203,22 +311,43 @@
     EXT --&gt; IND
     EDW --&gt; HYB[Hybrid Data Mart]
     OPS --&gt; HYB
-</pre></div>
-<hr/>
-</div><div class="section-card fade-in fade-in-d5"><h2>5. The Purpose of a Data Mart</h2>
-<p>Regardless of type, every data mart exists to:</p>
-<ul>
-<li><strong>Deliver relevant data</strong> to end users when they need it</li>
-<li><strong>Accelerate business processes</strong> through efficient query response times</li>
-<li><strong>Enable cost-efficient, data-driven decisions</strong> without requiring access to the full warehouse</li>
-<li><strong>Ensure secure access and control</strong> over domain-specific data</li>
-</ul>
-<hr/>
-<p>Would you like to explore how star and snowflake schemas are physically modelled in SQL, or should we move into examining specific data warehouse platforms like IBM Db2 Warehouse and how they support data mart development?</p></div>
+</pre>
+        </div>
+        <hr />
+      </div>
+      <div class="section-card fade-in fade-in-d5">
+        <h2>5. The Purpose of a Data Mart</h2>
+        <p>Regardless of type, every data mart exists to:</p>
+        <ul>
+          <li>
+            <strong>Deliver relevant data</strong> to end users when they need
+            it
+          </li>
+          <li>
+            <strong>Accelerate business processes</strong> through efficient
+            query response times
+          </li>
+          <li>
+            <strong>Enable cost-efficient, data-driven decisions</strong>
+            without requiring access to the full warehouse
+          </li>
+          <li>
+            <strong>Ensure secure access and control</strong> over
+            domain-specific data
+          </li>
+        </ul>
+        <hr />
+        <p>
+          Would you like to explore how star and snowflake schemas are
+          physically modelled in SQL, or should we move into examining specific
+          data warehouse platforms like IBM Db2 Warehouse and how they support
+          data mart development?
+        </p>
+      </div>
 
-    <div class="page-footer fade-in fade-in-d5">
-      <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      <div class="page-footer fade-in fade-in-d5">
+        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

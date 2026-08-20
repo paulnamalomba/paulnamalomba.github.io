@@ -100,13 +100,13 @@ For a Linux or Windows server that you manage remotely:
 
 Useful file locations:
 
-| Purpose | Windows | Linux |
-| :--- | :--- | :--- |
-| Client config | `%USERPROFILE%\.ssh\config` | `~/.ssh/config` |
-| Known hosts | `%USERPROFILE%\.ssh\known_hosts` | `~/.ssh/known_hosts` |
-| User authorized keys | `%USERPROFILE%\.ssh\authorized_keys` for standard users | `~/.ssh/authorized_keys` |
-| Admin authorized keys on Windows server | `C:\ProgramData\ssh\administrators_authorized_keys` may be used by default | Not applicable |
-| Server config | `C:\ProgramData\ssh\sshd_config` | `/etc/ssh/sshd_config` or `/etc/ssh/sshd_config.d/*.conf` |
+| Purpose                                 | Windows                                                                    | Linux                                                     |
+| :-------------------------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------- |
+| Client config                           | `%USERPROFILE%\.ssh\config`                                                | `~/.ssh/config`                                           |
+| Known hosts                             | `%USERPROFILE%\.ssh\known_hosts`                                           | `~/.ssh/known_hosts`                                      |
+| User authorized keys                    | `%USERPROFILE%\.ssh\authorized_keys` for standard users                    | `~/.ssh/authorized_keys`                                  |
+| Admin authorized keys on Windows server | `C:\ProgramData\ssh\administrators_authorized_keys` may be used by default | Not applicable                                            |
+| Server config                           | `C:\ProgramData\ssh\sshd_config`                                           | `/etc/ssh/sshd_config` or `/etc/ssh/sshd_config.d/*.conf` |
 
 ### 2. Install and Verify SSH on Windows and Linux
 
@@ -198,21 +198,21 @@ Good uses of the config:
 
 Common safe directives:
 
-| Directive | Purpose |
-| :--- | :--- |
-| `Host` | Alias block name |
-| `HostName` | Real DNS name or IP |
-| `User` | Remote account |
-| `Port` | Non-default SSH port |
-| `IdentityFile` | Private key path |
-| `IdentitiesOnly yes` | Forces the client to offer only the chosen key |
-| `AddKeysToAgent yes` | Convenient on clients with `ssh-agent` |
-| `ServerAliveInterval 30` | Keepalive probe interval |
-| `ServerAliveCountMax 3` | Disconnect after repeated failures |
-| `ProxyJump` | Jump through a bastion host |
-| `LocalForward` | Persistent local port forward |
-| `ForwardAgent` | Forward your local agent, only when needed |
-| `StrictHostKeyChecking ask` | Safer first-connection behavior |
+| Directive                   | Purpose                                        |
+| :-------------------------- | :--------------------------------------------- |
+| `Host`                      | Alias block name                               |
+| `HostName`                  | Real DNS name or IP                            |
+| `User`                      | Remote account                                 |
+| `Port`                      | Non-default SSH port                           |
+| `IdentityFile`              | Private key path                               |
+| `IdentitiesOnly yes`        | Forces the client to offer only the chosen key |
+| `AddKeysToAgent yes`        | Convenient on clients with `ssh-agent`         |
+| `ServerAliveInterval 30`    | Keepalive probe interval                       |
+| `ServerAliveCountMax 3`     | Disconnect after repeated failures             |
+| `ProxyJump`                 | Jump through a bastion host                    |
+| `LocalForward`              | Persistent local port forward                  |
+| `ForwardAgent`              | Forward your local agent, only when needed     |
+| `StrictHostKeyChecking ask` | Safer first-connection behavior                |
 
 Bad uses of the config:
 
@@ -567,14 +567,14 @@ That setting can drastically reduce repeated connection startup cost on Linux or
 
 ## Troubleshooting
 
-| Problem | Likely Cause | Practical Checks |
-| :--- | :--- | :--- |
-| `Connection refused` | `sshd` not running or firewall blocked | Check service state and TCP 22 listener |
-| `Permission denied (publickey)` | wrong key, wrong user, bad permissions, admin-key redirect on Windows | Use `ssh -vvv`, inspect `authorized_keys`, inspect Windows `Match Group administrators` block |
-| Host key mismatch warning | server rebuilt, DNS/IP reuse, or security event | inspect `known_hosts` entry before deleting it |
-| Key ignored on Windows | ACLs too broad or wrong authorized keys path | repair ACLs with `icacls`; inspect `C:\ProgramData\ssh\sshd_config` |
-| File transfer fails but shell login works | wrong path syntax, wrong port, permissions on remote target | test with a small file first and explicit destination |
-| First connection hangs | DNS, firewall, or dead route | `Test-NetConnection host -Port 22` in PowerShell, `ssh -vvv host` in Bash |
+| Problem                                   | Likely Cause                                                          | Practical Checks                                                                              |
+| :---------------------------------------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
+| `Connection refused`                      | `sshd` not running or firewall blocked                                | Check service state and TCP 22 listener                                                       |
+| `Permission denied (publickey)`           | wrong key, wrong user, bad permissions, admin-key redirect on Windows | Use `ssh -vvv`, inspect `authorized_keys`, inspect Windows `Match Group administrators` block |
+| Host key mismatch warning                 | server rebuilt, DNS/IP reuse, or security event                       | inspect `known_hosts` entry before deleting it                                                |
+| Key ignored on Windows                    | ACLs too broad or wrong authorized keys path                          | repair ACLs with `icacls`; inspect `C:\ProgramData\ssh\sshd_config`                           |
+| File transfer fails but shell login works | wrong path syntax, wrong port, permissions on remote target           | test with a small file first and explicit destination                                         |
+| First connection hangs                    | DNS, firewall, or dead route                                          | `Test-NetConnection host -Port 22` in PowerShell, `ssh -vvv host` in Bash                     |
 
 Useful PowerShell diagnostics:
 
