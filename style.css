@@ -69,80 +69,48 @@ input {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color-mix(in srgb, var(--paper) 92%, transparent);
-  border-bottom: 1px solid transparent;
+  background: color-mix(in srgb, var(--paper) 93%, transparent);
   backdrop-filter: blur(14px);
-  transition: border-color 0.2s;
-}
-.site-header.scrolled {
-  border-color: var(--line);
 }
 .nav-shell {
-  min-height: 78px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .wordmark {
   display: inline-flex;
-  gap: 0.75rem;
+  gap: 0.7rem;
   align-items: center;
   text-decoration: none;
-  font-weight: 750;
+  font-weight: 780;
+  line-height: 1.65;
   letter-spacing: -0.02em;
 }
 .wordmark-mark {
   display: grid;
   place-items: center;
-  width: 2.1rem;
-  height: 2.1rem;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
   background: var(--ink);
   color: var(--paper);
   border-radius: 50%;
   font-size: 0.875rem;
   letter-spacing: 0.06em;
 }
-.wordmark-mark-nopill {
-  display: grid;
-  place-items: center;
-  width: auto;
-  height: 2.1rem;
-  color: var(--ink);
-  font-size: 1.2rem;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1.5px;
-  text-decoration-color: currentColor;
-}
-.wordmark-mark-pill {
-  display: grid;
-  place-items: center;
-  width: auto;
-  height: 2.1rem;
-  background: var(--ink);
-  color: var(--paper);
-  border-radius: 6px;
-  padding-left: 0.72rem;
-  padding-right: 0.72rem;
-  font-size: 1rem;
-  letter-spacing: 0.06em;
-}
 .site-nav {
   display: flex;
-  gap: 2rem;
+  gap: 1.8rem;
   align-items: center;
 }
 .site-nav a {
   text-decoration: none;
   font-size: 0.88rem;
-  font-weight: 650;
+  font-weight: 700;
 }
-.site-nav a:not(.nav-contact):hover {
+.site-nav a:hover {
   color: var(--action-text);
-}
-.nav-contact {
-  border-bottom: 1px solid var(--ink);
-  padding-bottom: 0.15rem;
 }
 .menu-button {
   display: none;
@@ -154,7 +122,7 @@ input {
 }
 .menu-button > span:not(.sr-only) {
   display: block;
-  width: 24px;
+  width: 23px;
   height: 1.5px;
   background: var(--ink);
   margin: 6px auto;
@@ -1011,7 +979,7 @@ h1 em {
     backdrop-filter: none;
   }
   .nav-shell {
-    min-height: 66px;
+    min-height: 64px;
   }
   .wordmark {
     position: relative;
@@ -1022,10 +990,10 @@ h1 em {
     z-index: 3;
   }
   .menu-button[aria-expanded="true"] > span:nth-of-type(2) {
-    transform: translateY(4px) rotate(45deg);
+    transform: translateY(3.75px) rotate(45deg);
   }
   .menu-button[aria-expanded="true"] > span:nth-of-type(3) {
-    transform: translateY(-4px) rotate(-45deg);
+    transform: translateY(-3.75px) rotate(-45deg);
   }
   .has-navigation .site-nav {
     display: none;
@@ -1176,12 +1144,6 @@ a {
 }
 .wordmark {
   min-width: 0;
-}
-.wordmark-mark-nopill {
-  height: auto;
-  min-height: 2.1rem;
-  text-align: start;
-  line-height: 1.25;
 }
 .site-nav a {
   min-height: 44px;
