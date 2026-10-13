@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Machine Learning, Deep Learning & AI Methods for Data Analysis, Processing
-      & Engineering - Paul Namalomba
+      Machine Learning, Deep Learning &amp; AI Methods for Data Analysis,
+      Processing &amp; Engineering - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -3491,7 +3494,6 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># Mean-pool over features</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="72-tensorflow-keras">7.2 TensorFlow / Keras</h4>
           <p>
@@ -3640,8 +3642,8 @@
 
 <span class="c1"># Pure-functional linear regression with L2 regularization</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-    <span class="n">pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">X</span> <span class="o">@</span> <span class="n">params</span><span class="p">[</span><span class="s1">'w'</span><span class="p">]</span> <span class="o">+</span> <span class="n">params</span><span class="p">[</span><span class="s1">'b'</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">pred</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">'w'</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># JIT-compiled gradient computation</span>
 <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">jit</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">))</span>
@@ -3650,7 +3652,6 @@
 <span class="n">batched_loss</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">loss_fn</span><span class="p">,</span> <span class="n">in_axes</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="74-scikit-learn">7.4 Scikit-Learn</h4>
           <p>
@@ -3755,16 +3756,15 @@
 
 <span class="c1"># Full preprocessing pipeline: impute → scale → detect anomalies</span>
 <span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
-    <span class="p">(</span><span class="s1">&#39;imputer&#39;</span><span class="p">,</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
-    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">()),</span>
-    <span class="p">(</span><span class="s1">&#39;anomaly&#39;</span><span class="p">,</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+    <span class="p">(</span><span class="s1">'imputer'</span><span class="p">,</span> <span class="n">IterativeImputer</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s1">'scaler'</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">'anomaly'</span><span class="p">,</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">contamination</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
 <span class="p">])</span>
 
 <span class="c1"># fit_predict on raw data with missing values and outliers</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X_raw</span><span class="p">)</span>  <span class="c1"># -1 = anomaly, 1 = normal</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="75-xgboost-lightgbm-catboost-native-libraries">
             7.5 XGBoost / LightGBM / CatBoost (Native Libraries)
@@ -3818,15 +3818,14 @@
     <span class="n">iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
     <span class="n">depth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-    <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;device_type&#39;</span><span class="p">,</span> <span class="s1">&#39;os&#39;</span><span class="p">],</span>  <span class="c1"># No encoding needed</span>
-    <span class="n">auto_class_weights</span><span class="o">=</span><span class="s1">&#39;Balanced&#39;</span><span class="p">,</span>
-    <span class="n">task_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="p">,</span>
+    <span class="n">cat_features</span><span class="o">=</span><span class="p">[</span><span class="s1">'city'</span><span class="p">,</span> <span class="s1">'device_type'</span><span class="p">,</span> <span class="s1">'os'</span><span class="p">],</span>  <span class="c1"># No encoding needed</span>
+    <span class="n">auto_class_weights</span><span class="o">=</span><span class="s1">'Balanced'</span><span class="p">,</span>
+    <span class="n">task_type</span><span class="o">=</span><span class="s1">'GPU'</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="mi">100</span>
 <span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">eval_set</span><span class="o">=</span><span class="p">(</span><span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">),</span> <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="76-high-performance-data-backends-polars-cudf">
             7.6 High-Performance Data Backends — Polars &amp; cuDF
@@ -3867,20 +3866,19 @@
           <div class="codehilite">
             <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">polars</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pl</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_parquet</span><span class="p">(</span><span class="s2">&quot;telemetry/*.parquet&quot;</span><span class="p">)</span>  <span class="c1"># Lazy frame — no data loaded yet</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">scan_parquet</span><span class="p">(</span><span class="s2">"telemetry/*.parquet"</span><span class="p">)</span>  <span class="c1"># Lazy frame — no data loaded yet</span>
 <span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">&quot;sensor_id&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"temperature"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s2">"sensor_id"</span><span class="p">)</span>
       <span class="o">.</span><span class="n">agg</span><span class="p">([</span>
-          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;vibration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;mean_vib&quot;</span><span class="p">),</span>
-          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;failure&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;total_failures&quot;</span><span class="p">)</span>
+          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"vibration"</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"mean_vib"</span><span class="p">),</span>
+          <span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">"failure"</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">"total_failures"</span><span class="p">)</span>
       <span class="p">])</span>
-      <span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;total_failures&quot;</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">"total_failures"</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
       <span class="o">.</span><span class="n">collect</span><span class="p">()</span>  <span class="c1"># Execution happens here — one optimized pass</span>
 <span class="p">)</span>
 </code></pre>
           </div>
-
           <p><strong>cuDF (RAPIDS)</strong></p>
           <table>
             <thead>
@@ -4028,7 +4026,6 @@
             <pre><span></span><code>IDataView → Estimator.Fit() → Transformer → IDataView (transformed)
 </code></pre>
           </div>
-
           <p>
             This is Scikit-Learn's <code>Pipeline</code> philosophy, implemented
             with .NET's type safety.
@@ -4103,12 +4100,12 @@
 
 <span class="c1">// Load data via IDataView (lazy — no materialization until needed)</span>
 <span class="n">IDataView</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">LoadFromTextFile</span><span class="o">&lt;</span><span class="n">SensorReading</span><span class="o">&gt;</span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;telemetry.csv&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hasHeader</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">separatorChar</span><span class="p">:</span><span class="w"> </span><span class="sc">&#39;,&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="s">"telemetry.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">hasHeader</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">separatorChar</span><span class="p">:</span><span class="w"> </span><span class="sc">','</span><span class="p">);</span>
 
 <span class="c1">// AutoML: let the framework find the best pipeline</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">experiment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Auto</span><span class="p">()</span>
 <span class="w">    </span><span class="p">.</span><span class="n">CreateBinaryClassificationExperiment</span><span class="p">(</span><span class="n">maxExperimentTimeInSeconds</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">labelColumnName</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;FailureStatus&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">.</span><span class="n">Execute</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">labelColumnName</span><span class="p">:</span><span class="w"> </span><span class="s">"FailureStatus"</span><span class="p">);</span>
 
 <span class="c1">// Best model is immediately usable</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">bestModel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">experiment</span><span class="p">.</span><span class="n">BestRun</span><span class="p">.</span><span class="n">Model</span><span class="p">;</span>
@@ -4116,7 +4113,6 @@
 <span class="kt">var</span><span class="w"> </span><span class="n">prediction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Predict</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">SensorReading</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">87.5</span><span class="p">,</span><span class="w"> </span><span class="n">Vibration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.42</span><span class="w"> </span><span class="p">});</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="82-torchsharp">8.2 TorchSharp</h4>
           <p>
@@ -4152,7 +4148,7 @@
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Module</span><span class="o">&lt;</span><span class="n">Tensor</span><span class="p">,</span><span class="w"> </span><span class="n">Tensor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">_layers</span><span class="p">;</span>
 
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">TabularNet</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">inputDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">outputDim</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="s">&quot;TabularNet&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">TabularNet</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">inputDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">outputDim</span><span class="p">)</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">base</span><span class="p">(</span><span class="s">"TabularNet"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">_layers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Sequential</span><span class="p">(</span>
 <span class="w">            </span><span class="n">Linear</span><span class="p">(</span><span class="n">inputDim</span><span class="p">,</span><span class="w"> </span><span class="n">hiddenDim</span><span class="p">),</span>
@@ -4176,7 +4172,6 @@
 <span class="kt">var</span><span class="w"> </span><span class="n">criterion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrossEntropyLoss</span><span class="p">();</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="83-tensorflownet">8.3 TensorFlow.NET</h4>
           <p>
@@ -4270,7 +4265,6 @@
 <span class="kt">var</span><span class="w"> </span><span class="n">Z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">centered</span><span class="p">.</span><span class="n">Multiply</span><span class="p">(</span><span class="n">svd</span><span class="p">.</span><span class="n">VT</span><span class="p">.</span><span class="n">SubMatrix</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">svd</span><span class="p">.</span><span class="n">VT</span><span class="p">.</span><span class="n">ColumnCount</span><span class="p">).</span><span class="n">Transpose</span><span class="p">());</span>
 </code></pre>
           </div>
-
           <hr />
           <h4 id="85-accordnet-legacy">8.5 Accord.NET (Legacy)</h4>
           <p>
@@ -4326,7 +4320,7 @@
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tensor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DenseTensor</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">features</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">features</span><span class="p">.</span><span class="n">Length</span><span class="w"> </span><span class="p">});</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">NamedOnnxValue</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">NamedOnnxValue</span><span class="p">.</span><span class="n">CreateFromTensor</span><span class="p">(</span><span class="s">&quot;input&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tensor</span><span class="p">)</span>
+<span class="w">            </span><span class="n">NamedOnnxValue</span><span class="p">.</span><span class="n">CreateFromTensor</span><span class="p">(</span><span class="s">"input"</span><span class="p">,</span><span class="w"> </span><span class="n">tensor</span><span class="p">)</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_session</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">inputs</span><span class="p">);</span>
@@ -4335,7 +4329,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Pattern 2: ML.NET PredictionEngine in gRPC Service</strong>
           </p>
@@ -4357,7 +4350,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong
               >Pattern 3: Cross-Language Pipeline (Django/FastAPI → .NET
@@ -4376,7 +4368,6 @@
 └──────────────┘                 └─────────────────────┘
 </code></pre>
           </div>
-
           <p>
             This pattern is common in enterprises where data science teams
             operate in Python but serving infrastructure is .NET. The ONNX
@@ -4458,7 +4449,6 @@
 <span class="w">                  </span><span class="err">──→</span><span class="w"> </span><span class="n">Treelite</span><span class="w"> </span><span class="p">(</span><span class="n">C</span><span class="w"> </span><span class="n">compilation</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">tree</span><span class="w"> </span><span class="n">models</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">ultra</span><span class="o">-</span><span class="n">low</span><span class="o">-</span><span class="n">latency</span><span class="p">)</span>
 </code></pre>
           </div>
-
           <p>
             ONNX is the universal serialization format. If your model cannot be
             exported to ONNX, your architecture has a problem. If your serving
@@ -4613,32 +4603,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

@@ -1,21 +1,30 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>IBM Data Engineering Hub</title>
-    <link rel="stylesheet" href="style.css" />
+    <link href="style.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div class="page-wrapper" id="content">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <main class="page-wrapper" id="content" tabindex="-1">
       <div class="header-bar">
         <span class="brand">IBM Data Engineering</span>
-        <nav>
-          <a href="./index.html" class="active">Hub</a>
-
+        <nav aria-label="Primary navigation">
+          <a class="active" href="./index.html">Hub</a>
           <div class="nav-dropdown">
-            <a href="#">Courses ▾</a>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Courses ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="./course-8/index.html"
                 >Course 8: ETL and Data Pipelines with Shell, Airflow and
                 Kafka</a
@@ -27,7 +36,6 @@
           </div>
         </nav>
       </div>
-
       <h1 class="fade-in">🧠 IBM Data Engineering Courses</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Professional Certificate Learning Pathway<br />
@@ -36,9 +44,7 @@
           engineering mastery.</span
         >
       </p>
-
       <h2 class="fade-in fade-in-d2">📚 Course Path</h2>
-
       <div class="hub-grid">
         <div class="hub-card fade-in fade-in-d3">
           <div class="card-level">Course 8</div>
@@ -49,15 +55,19 @@
             1 module, 4 lectures. ETL and Data Pipelines with Shell, Airflow and
             Kafka.
           </div>
-
-          <button class="expand-btn" onclick="toggleExpand(this)">
+          <button
+            aria-controls="disclosure-panel-1"
+            aria-expanded="false"
+            class="expand-btn"
+            type="button"
+          >
             Expand to see more
           </button>
-          <div class="expand-wrapper">
-            <a href="course-8/index.html" class="module-link"
+          <div class="expand-wrapper" id="disclosure-panel-1">
+            <a class="module-link" href="course-8/index.html"
               >Go to Course Dashboard ›</a
             >
-            <a href="course-8/module-4/index.html" class="module-link"
+            <a class="module-link" href="course-8/module-4/index.html"
               >Module 4 (4 lectures)</a
             >
           </div>
@@ -68,42 +78,27 @@
           <div class="card-desc">
             1 module, 7 lectures. Data Warehouse Fundamentals.
           </div>
-
-          <button class="expand-btn" onclick="toggleExpand(this)">
+          <button
+            aria-controls="disclosure-panel-2"
+            aria-expanded="false"
+            class="expand-btn"
+            type="button"
+          >
             Expand to see more
           </button>
-          <div class="expand-wrapper">
-            <a href="course-9/index.html" class="module-link"
+          <div class="expand-wrapper" id="disclosure-panel-2">
+            <a class="module-link" href="course-9/index.html"
               >Go to Course Dashboard ›</a
             >
-            <a href="course-9/module-1/index.html" class="module-link"
+            <a class="module-link" href="course-9/module-1/index.html"
               >Module 1 (7 lectures)</a
             >
           </div>
         </div>
       </div>
-
       <div class="page-footer fade-in fade-in-d5">
-        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+        <p>Prepared by Paul Namalomba · IBM Data Engineering</p>
       </div>
-    </div>
-
-    <script>
-      function toggleExpand(btn) {
-        {
-          const card = btn.closest(".hub-card");
-          card.classList.toggle("expanded");
-          if (card.classList.contains("expanded")) {
-            {
-              btn.textContent = "Show less";
-            }
-          } else {
-            {
-              btn.textContent = "Expand to see more";
-            }
-          }
-        }
-      }
-    </script>
+    </main>
   </body>
 </html>

@@ -1,15 +1,17 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>30-Min Mock Interview</title>
-    <link rel="stylesheet" href="../style.css?v=2.3" />
+    <link href="../style.css?v=2.3" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -24,8 +26,15 @@
           <a href="../level3-competency.html">Competency</a>
           <a href="../level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Assessments &#9660;</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Assessments ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="../assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -38,11 +47,34 @@
               <a href="../assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
                 <a
-                  href="../assessment-data-engineering.html"
                   class="has-submenu"
+                  href="../assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="../assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -60,10 +92,16 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Targeted Prep &#9660;
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Targeted Prep ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="index.html">Prep Hub</a>
               <a href="mock-interview.html">30-Min Mock Interview</a>
               <a href="answer-templates.html">Answer Templates</a>
@@ -74,21 +112,18 @@
           <a href="../level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="../hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="../hub.html">Hub</a> <span>›</span>
         <a href="index.html">Targeted Preparation</a>
-        <span>&rsaquo;</span> 30-Min Mock Interview
+        <span>›</span> 30-Min Mock Interview
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">30-Min Mock Interview</h1>
         <p class="fade-in fade-in-d1">
           This mock interview is designed around the public themes in Dr.
           Nnene's work. Keep answers to 2-3 minutes. The target is structured
           reasoning with a practical link to your own systems work.
         </p>
-
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">How to run this</div>
           <p style="margin: 0">
@@ -97,7 +132,6 @@
             concrete example from your own work.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d2">
           <h2 style="margin-top: 0">Minute 0-4: Opening and Fit</h2>
           <h3>Question 1</h3>
@@ -118,7 +152,6 @@
             computational roots, then backend/data/system delivery, then why
             that combination is useful in research and operational environments.
           </p>
-
           <h3>Question 2</h3>
           <p>
             <strong
@@ -132,7 +165,6 @@
             reliability, and messy data.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d3">
           <h2 style="margin-top: 0">Minute 4-12: Modelling and Simulation</h2>
           <h3>Question 3</h3>
@@ -148,7 +180,6 @@
             objectives and constraints; they are often combined when exact
             analytical methods are too brittle.
           </p>
-
           <h3>Question 4</h3>
           <p>
             <strong
@@ -162,7 +193,6 @@
             imperfect data, need for realistic evaluation rather than elegant
             but unrealistic exactness.
           </p>
-
           <h3>Question 5</h3>
           <p>
             <strong
@@ -177,7 +207,6 @@
             and computational cost.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d4">
           <h2 style="margin-top: 0">
             Minute 12-19: Data Science and Real Data
@@ -195,7 +224,6 @@
             separating data repair from model logic, and validating downstream
             usefulness.
           </p>
-
           <h3>Question 7</h3>
           <p>
             <strong
@@ -209,7 +237,6 @@
             stakeholder validation, and explicit uncertainty rather than false
             precision.
           </p>
-
           <h3>Question 8</h3>
           <p>
             <strong
@@ -224,7 +251,6 @@
             interpretability and decision logic dominate.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">
             Minute 19-26: Systems and Decision Support
@@ -242,7 +268,6 @@
             monitoring, replayability, data quality checks, low-connectivity
             design, cost awareness.
           </p>
-
           <h3>Question 10</h3>
           <p>
             <strong
@@ -255,7 +280,6 @@
             comparison, Pareto thinking, decision support rather than pretending
             there is one universally correct answer.
           </p>
-
           <h3>Question 11</h3>
           <p>
             <strong
@@ -270,7 +294,6 @@
             stable schemas, environment isolation, and observability.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">Minute 26-30: Closing</h2>
           <h3>Question 12</h3>
@@ -286,7 +309,6 @@
             or infrastructure data, or a clean simulation-support workflow that
             improves both research throughput and reliability.
           </p>
-
           <div class="callout tip" style="margin-top: 1rem">
             <div class="callout-title">Scoring yourself</div>
             <ul>
@@ -303,16 +325,14 @@
             </ul>
           </div>
         </div>
-
         <div class="page-footer" style="margin-top: 2rem">
           <p>
-            Prepared for Paul Namalomba &middot; Targeted Dr. Nnene Prep
-            &middot; 30-Min Mock Interview
+            Prepared for Paul Namalomba · Targeted Dr. Nnene Prep · 30-Min Mock
+            Interview
           </p>
         </div>
       </main>
     </div>
-
     <script>
       (function () {
         const H =

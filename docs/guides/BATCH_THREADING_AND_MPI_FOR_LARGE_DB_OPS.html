@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Memory-Aware Batching, Threading & MPI Chunking for Large Database
+      Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database
       Operations - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -307,7 +310,6 @@
             <pre><span></span><code>RAM_usable = RAM_total − RAM_os − (α × RAM_total)
 </code></pre>
           </div>
-
           <p>This is the ceiling the algorithm must never exceed.</p>
           <hr />
           <h2 id="2-the-three-stage-pipeline">2) The Three-Stage Pipeline</h2>
@@ -343,7 +345,6 @@
                     └───────────────────────┘
 </code></pre>
           </div>
-
           <p>Each stage enforces a different resource constraint:</p>
           <table>
             <thead>
@@ -394,7 +395,6 @@ OUTPUT: batch_size (bytes), rows_per_batch, num_batches
 5.  RETURN batch_size, rows_per_batch, num_batches
 </code></pre>
           </div>
-
           <p>
             The batch size dynamically adapts: on a 24 GB machine you get large
             batches (few iterations), on a 4 GB machine you get small batches
@@ -430,7 +430,6 @@ OUTPUT: thread_buffer_size, rows_per_thread
 5.  RETURN thread_buffer_size, rows_per_thread
 </code></pre>
           </div>
-
           <p>
             T must either be chosen based on your target buffer size
             (<code>thread_buffer_size</code>) of scaled by number of logical
@@ -492,7 +491,6 @@ OUTPUT: thread_buffer_size, rows_per_thread
 <span class="mf">6.</span><span class="w">  </span><span class="n">RETURN</span><span class="w"> </span><span class="n">aggregated</span><span class="w"> </span><span class="n">results</span>
 </code></pre>
           </div>
-
           <p>
             Example — if <code>thread_buffer_size = 50 MB</code> and
             <code>C = 10</code>:
@@ -501,7 +499,6 @@ OUTPUT: thread_buffer_size, rows_per_thread
             <pre><span></span><code>chunk_size = 50 MB / 10 = 5 MB per core
 </code></pre>
           </div>
-
           <p>
             <strong
               >All 10 cores execute concurrently. Wall-clock time for this
@@ -568,7 +565,6 @@ if compute_time &lt; IO_time_estimate:
     sleep(IO_time_estimate − compute_time)   # or use backpressure
 </code></pre>
           </div>
-
           <p>
             In practice, the database engine's write-ahead log (WAL) and
             <code>fsync</code> latency naturally throttle throughput. The
@@ -768,7 +764,6 @@ if compute_time &lt; IO_time_estimate:
   4 GB machine:   5 batches ×  2.1 GB ≈  10 GB hits the disk
 </code></pre>
           </div>
-
           <p>
             The disk writes at ~2 GB/s (random 4K writes on NVMe). Therefore:
           </p>
@@ -778,7 +773,6 @@ if compute_time &lt; IO_time_estimate:
                 ≈  5.0 s          (always)
 </code></pre>
           </div>
-
           <p>
             This holds no matter how you slice the data. Think of it as a
             funnel:
@@ -800,7 +794,6 @@ if compute_time &lt; IO_time_estimate:
 <span class="w">              </span><span class="err">└─────────┘</span>
 </code></pre>
           </div>
-
           <p>
             RAM and cores control how fast you <em>prepare</em> data (compute
             phase: ORM serialisation, row transforms, query construction). But
@@ -897,10 +890,10 @@ if compute_time &lt; IO_time_estimate:
             (substituting for MPI in single-node deployments).
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+            <pre><span></span><code><span class="sd">"""</span>
 <span class="sd">memory_aware_batcher.py</span>
 <span class="sd">Demonstrates the Memory-Aware Batcher algorithm.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -923,25 +916,25 @@ if compute_time &lt; IO_time_estimate:
     <span class="n">ram_os</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1_500_000_000</span><span class="p">,</span>       <span class="c1"># 1.5 GB default</span>
     <span class="n">overhead_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.10</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns (batch_size_bytes, rows_per_batch, num_batches).</span>
 <span class="sd">    Dynamically sizes batches to fit within usable RAM.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">ram_total</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">psutil</span><span class="p">:</span>
             <span class="n">ram_total</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">virtual_memory</span><span class="p">()</span><span class="o">.</span><span class="n">total</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;psutil not available; pass ram_total explicitly&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"psutil not available; pass ram_total explicitly"</span><span class="p">)</span>
 
     <span class="n">ram_usable</span> <span class="o">=</span> <span class="n">ram_total</span> <span class="o">-</span> <span class="n">ram_os</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">overhead_fraction</span> <span class="o">*</span> <span class="n">ram_total</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ram_usable</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Usable RAM is non-positive: </span><span class="si">{</span><span class="n">ram_usable</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Usable RAM is non-positive: </span><span class="si">{</span><span class="n">ram_usable</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Batch size is the smaller of usable RAM and total data</span>
     <span class="n">batch_size</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ram_usable</span><span class="p">,</span> <span class="n">total_data_bytes</span><span class="p">)</span>
     <span class="n">rows_per_batch</span> <span class="o">=</span> <span class="n">batch_size</span> <span class="o">//</span> <span class="n">row_size_bytes</span>
     <span class="k">if</span> <span class="n">rows_per_batch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">&quot;Row size exceeds usable RAM&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">MemoryError</span><span class="p">(</span><span class="s2">"Row size exceeds usable RAM"</span><span class="p">)</span>
 
     <span class="n">total_rows</span> <span class="o">=</span> <span class="n">total_data_bytes</span> <span class="o">//</span> <span class="n">row_size_bytes</span>
     <span class="n">num_batches</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">total_rows</span> <span class="o">/</span> <span class="n">rows_per_batch</span><span class="p">)</span>
@@ -955,10 +948,10 @@ if compute_time &lt; IO_time_estimate:
     <span class="n">rows_per_batch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">num_threads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Splits rows_per_batch into non-overlapping slices.</span>
 <span class="sd">    Returns list of (start_row, end_row) tuples.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">num_threads</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">num_threads</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
 
@@ -975,11 +968,11 @@ if compute_time &lt; IO_time_estimate:
 <span class="c1">#  Stage 3 — Core-Level Chunking (MPI-style)</span>
 <span class="c1"># ──────────────────────────────────────────────</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_process_chunk</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Worker function executed on a single core.</span>
 <span class="sd">    Receives (chunk_start, chunk_end, batch_id).</span>
 <span class="sd">    Returns number of rows processed (placeholder).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">chunk_start</span><span class="p">,</span> <span class="n">chunk_end</span><span class="p">,</span> <span class="n">batch_id</span> <span class="o">=</span> <span class="n">args</span>
     <span class="n">rows_processed</span> <span class="o">=</span> <span class="n">chunk_end</span> <span class="o">-</span> <span class="n">chunk_start</span>
     <span class="c1"># ── replace with actual DB update logic ──</span>
@@ -993,10 +986,10 @@ if compute_time &lt; IO_time_estimate:
     <span class="n">batch_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">num_cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Distributes a thread-buffer&#39;s row range across logical cores</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Distributes a thread-buffer's row range across logical cores</span>
 <span class="sd">    using multiprocessing (single-node MPI equivalent).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">num_cores</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">num_cores</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
 
@@ -1030,14 +1023,14 @@ if compute_time &lt; IO_time_estimate:
     <span class="n">num_threads</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">4</span>
     <span class="n">num_cores</span> <span class="o">=</span> <span class="n">num_threads</span>  <span class="c1"># 1:1 thread-to-core mapping</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  RAM total       : </span><span class="si">{</span><span class="p">(</span><span class="n">ram_total</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Batch size      : </span><span class="si">{</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Rows per batch  : </span><span class="si">{</span><span class="n">rows_per_batch</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Num batches     : </span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Threads         : </span><span class="si">{</span><span class="n">num_threads</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Cores per thread: </span><span class="si">{</span><span class="n">num_cores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'='</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  RAM total       : </span><span class="si">{</span><span class="p">(</span><span class="n">ram_total</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Batch size      : </span><span class="si">{</span><span class="n">batch_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Rows per batch  : </span><span class="si">{</span><span class="n">rows_per_batch</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Num batches     : </span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Threads         : </span><span class="si">{</span><span class="n">num_threads</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Cores per thread: </span><span class="si">{</span><span class="n">num_cores</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'='</span><span class="o">*</span><span class="mi">60</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">processed</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">batch_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
@@ -1056,36 +1049,34 @@ if compute_time &lt; IO_time_estimate:
                 <span class="n">absolute_start</span><span class="p">,</span> <span class="n">absolute_end</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">num_cores</span><span class="p">,</span>
             <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Batch </span><span class="si">{</span><span class="n">batch_id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2"> committed &quot;</span>
-              <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">current_batch_rows</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> rows)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Batch </span><span class="si">{</span><span class="n">batch_id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">num_batches</span><span class="si">}</span><span class="s2"> committed "</span>
+              <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">current_batch_rows</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> rows)"</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">  Total rows processed: </span><span class="si">{</span><span class="n">processed</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  Total rows processed: </span><span class="si">{</span><span class="n">processed</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
 <span class="c1">#  Entry point — run all scenarios</span>
 <span class="c1"># ──────────────────────────────────────────────</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">GB</span> <span class="o">=</span> <span class="mi">1_073_741_824</span>  <span class="c1"># 1 GiB in bytes</span>
     <span class="n">KB</span> <span class="o">=</span> <span class="mi">1_024</span>
 
     <span class="n">scenarios</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="s2">&quot;A: 10 GB / 5 KB rows&quot;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;B: 3 GB / 20 KB rows&quot;</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"A: 10 GB / 5 KB rows"</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"B: 3 GB / 20 KB rows"</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">KB</span><span class="p">),</span>
     <span class="p">]</span>
     <span class="n">ram_profiles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">24</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">GB</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">GB</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">scenarios</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">ram</span> <span class="ow">in</span> <span class="n">ram_profiles</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Scenario </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> | RAM = </span><span class="si">{</span><span class="n">ram</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">GB</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">&gt;&gt;&gt; Scenario </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> | RAM = </span><span class="si">{</span><span class="n">ram</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">GB</span><span class="si">}</span><span class="s2"> GB"</span><span class="p">)</span>
             <span class="n">run_batcher</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">ram_total</span><span class="o">=</span><span class="n">ram</span><span class="p">)</span>
 </code></pre>
           </div>
-
           <p>Run:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="n">python</span> <span class="n">memory_aware_batcher</span><span class="p">.</span><span class="n">py</span>
 </code></pre>
           </div>
-
           <p>
             Notes: - <code>ProcessPoolExecutor</code> sidesteps the GIL for
             CPU-bound chunk processing. - For true MPI across nodes, replace
@@ -1237,7 +1228,6 @@ Notes:
 - `MPI_Reduce` with `MPI_SUM` aggregates per-rank results back to rank 0.
 - For uneven distributions, `MPI_Scatterv` / `MPI_Gatherv` with per-rank displacement arrays is preferred.
 - The `process_chunk` function is the integration point — plug in your database driver calls there. -->
-
           <hr />
           <h2 id="9-performance-notes-pitfalls">
             9) Performance Notes &amp; Pitfalls
@@ -1346,32 +1336,11 @@ Notes:
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

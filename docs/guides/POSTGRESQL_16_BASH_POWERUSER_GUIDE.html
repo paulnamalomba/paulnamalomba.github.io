@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>POSTGRESQL 16 PowerUser Guide (Bash) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -230,15 +233,14 @@
 <span class="na">effective_io_concurrency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">200</span><span class="w">         </span><span class="c1"># For SSD storage</span>
 
 <span class="c1"># Logging</span>
-<span class="na">log_destination</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;stderr&#39;</span>
+<span class="na">log_destination</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'stderr'</span>
 <span class="na">logging_collector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">on</span>
-<span class="na">log_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;log&#39;</span>
-<span class="na">log_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;postgresql-%Y-%m-%d_%H%M%S.log&#39;</span>
-<span class="na">log_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;all&#39;</span>
+<span class="na">log_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'log'</span>
+<span class="na">log_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'postgresql-%Y-%m-%d_%H%M%S.log'</span>
+<span class="na">log_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'all'</span>
 <span class="na">log_min_duration_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span><span class="w">      </span><span class="c1"># Log queries &gt; 1 second</span>
 </code></pre>
           </div>
-
           <p>
             <strong>pg_hba.conf</strong> (same directory as postgresql.conf):
           </p>
@@ -250,7 +252,6 @@ host    all       all       ::1/128         scram-sha-256
 host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use connection pooling
             (PgBouncer) for applications with &gt;100 connections - Enable query
@@ -298,7 +299,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </ol>
           <p><strong>Create Secure Application User</strong>:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;SecurePassword123!&#39;</span><span class="p">;</span>
+            <pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'SecurePassword123!'</span><span class="p">;</span>
 <span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">CONNECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="err">\</span><span class="k">c</span><span class="w"> </span><span class="n">appdb</span>
@@ -307,7 +308,6 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="k">REVOKE</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">PUBLIC</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="install-and-configure-postgresql-16">
             Install and Configure PostgreSQL 16
@@ -322,7 +322,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="c1"># Add PostgreSQL APT repository</span>
 sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wget<span class="w"> </span>ca-certificates
 wget<span class="w"> </span>--quiet<span class="w"> </span>-O<span class="w"> </span>-<span class="w"> </span>https://www.postgresql.org/media/keys/ACCC4CF8.asc<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>apt-key<span class="w"> </span>add<span class="w"> </span>-
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb http://apt.postgresql.org/pub/repos/apt/ </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2">-pgdg main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/pgdg.list
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"deb http://apt.postgresql.org/pub/repos/apt/ </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2">-pgdg main"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/pgdg.list
 
 <span class="c1"># Update and install PostgreSQL 16</span>
 sudo<span class="w"> </span>apt-get<span class="w"> </span>update
@@ -336,10 +336,10 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">en
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>postgresql
 
 <span class="c1"># Verify installation</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT version();&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT version();"</span>
 
 <span class="c1"># Set postgres user password</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER postgres PASSWORD &#39;StrongPassword123!&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER USER postgres PASSWORD 'StrongPassword123!';"</span>
 
 <span class="c1"># Create password file for automation</span>
 cat<span class="w"> </span>&gt;<span class="w"> </span>~/.pgpass<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
@@ -348,7 +348,6 @@ cat<span class="w"> </span>&gt;<span class="w"> </span>~/.pgpass<span class="w">
 chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.pgpass
 </code></pre>
           </div>
-
           <h3 id="database-and-user-management">
             Database and User Management
           </h3>
@@ -360,37 +359,37 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
             <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Create database</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE DATABASE production_db WITH ENCODING &#39;UTF8&#39; LC_COLLATE=&#39;en_US.UTF-8&#39; LC_CTYPE=&#39;en_US.UTF-8&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE DATABASE production_db WITH ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='en_US.UTF-8';"</span>
 
 <span class="c1"># Create roles</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE ROLE admin_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE ROLE readonly_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE ROLE readwrite_role;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE ROLE admin_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE ROLE readonly_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE ROLE readwrite_role;"</span>
 
 <span class="c1"># Create users</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE USER admin_user WITH PASSWORD &#39;AdminPass123!&#39; IN ROLE admin_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE USER app_user WITH PASSWORD &#39;AppPass123!&#39; IN ROLE readwrite_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE USER report_user WITH PASSWORD &#39;ReportPass123!&#39; IN ROLE readonly_role;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE USER admin_user WITH PASSWORD 'AdminPass123!' IN ROLE admin_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE USER app_user WITH PASSWORD 'AppPass123!' IN ROLE readwrite_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE USER report_user WITH PASSWORD 'ReportPass123!' IN ROLE readonly_role;"</span>
 
 <span class="c1"># Grant database access</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT ALL PRIVILEGES ON DATABASE production_db TO admin_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readwrite_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readonly_role;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"GRANT ALL PRIVILEGES ON DATABASE production_db TO admin_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"GRANT CONNECT ON DATABASE production_db TO readwrite_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"GRANT CONNECT ON DATABASE production_db TO readonly_role;"</span>
 
 <span class="c1"># Alter user to set connection limits and expiration</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER app_user CONNECTION LIMIT 50 VALID UNTIL &#39;2025-12-31&#39;;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER report_user CONNECTION LIMIT 20 VALID UNTIL &#39;2025-12-31&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER USER app_user CONNECTION LIMIT 50 VALID UNTIL '2025-12-31';"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER USER report_user CONNECTION LIMIT 20 VALID UNTIL '2025-12-31';"</span>
 
 <span class="c1"># Alter user to certain roles</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER app_user IN ROLE readwrite_role;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER USER report_user IN ROLE readonly_role;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER USER app_user IN ROLE readwrite_role;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER USER report_user IN ROLE readonly_role;"</span>
 
 <span class="c1"># Give user a certain role</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT readwrite_role TO app_user;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;GRANT readonly_role TO report_user;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"GRANT readwrite_role TO app_user;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"GRANT readonly_role TO report_user;"</span>
 
 <span class="c1"># Grant schema permissions</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">GRANT USAGE ON SCHEMA public TO readwrite_role;</span>
 <span class="s">GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite_role;</span>
 <span class="s">GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO readwrite_role;</span>
@@ -403,10 +402,9 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># List users and roles</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;\du&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"\du"</span>
 </code></pre>
           </div>
-
           <h3 id="backup-and-restore-operations">
             Backup and Restore Operations
           </h3>
@@ -417,7 +415,7 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
           <div class="codehilite">
             <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
-<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">&quot;/var/backups/postgresql&quot;</span>
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">"/var/backups/postgresql"</span>
 <span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>
 
 <span class="c1"># Create backup directory</span>
@@ -425,53 +423,52 @@ sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </sp
 sudo<span class="w"> </span>chown<span class="w"> </span>postgres:postgres<span class="w"> </span><span class="nv">$BACKUP_DIR</span>
 
 <span class="c1"># Full database dump (plain SQL)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>p<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_</span><span class="nv">$DATE</span><span class="s2">.sql&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>p<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_</span><span class="nv">$DATE</span><span class="s2">.sql"</span>
 
 <span class="c1"># Compressed custom format dump (recommended for large databases)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_</span><span class="nv">$DATE</span><span class="s2">.dump&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_</span><span class="nv">$DATE</span><span class="s2">.dump"</span>
 
 <span class="c1"># Dump specific schema</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-n<span class="w"> </span>public<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/public_schema_</span><span class="nv">$DATE</span><span class="s2">.dump&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-n<span class="w"> </span>public<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/public_schema_</span><span class="nv">$DATE</span><span class="s2">.dump"</span>
 
 <span class="c1"># Dump specific tables</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-t<span class="w"> </span>users<span class="w"> </span>-t<span class="w"> </span>orders<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/specific_tables_</span><span class="nv">$DATE</span><span class="s2">.dump&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dump<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-t<span class="w"> </span>users<span class="w"> </span>-t<span class="w"> </span>orders<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/specific_tables_</span><span class="nv">$DATE</span><span class="s2">.dump"</span>
 
 <span class="c1"># Dump all databases</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dumpall<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/all_databases_</span><span class="nv">$DATE</span><span class="s2">.sql&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_dumpall<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/all_databases_</span><span class="nv">$DATE</span><span class="s2">.sql"</span>
 
 <span class="c1"># Restore from plain SQL dump</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.sql&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.sql"</span>
 
 <span class="c1"># Restore from custom format dump</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_restore<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-c<span class="w"> </span>--if-exists<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.dump&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_restore<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-c<span class="w"> </span>--if-exists<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.dump"</span>
 
 <span class="c1"># Parallel restore (faster for large databases)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_restore<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.dump&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>pg_restore<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-F<span class="w"> </span>c<span class="w"> </span>-j<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BACKUP_DIR</span><span class="s2">/production_db_20241204_120000.dump"</span>
 
 <span class="c1"># Create automated backup script</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>/usr/local/bin/pg_backup.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>/usr/local/bin/pg_backup.sh<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">#!/bin/bash</span>
-<span class="s">BACKUP_DIR=&quot;/var/backups/postgresql&quot;</span>
+<span class="s">BACKUP_DIR="/var/backups/postgresql"</span>
 <span class="s">DATE=$(date +%Y%m%d)</span>
 <span class="s">RETENTION_DAYS=7</span>
 
 <span class="s"># Create backup</span>
-<span class="s">sudo -u postgres pg_dump -d production_db -F c -f &quot;$BACKUP_DIR/production_db_$DATE.dump&quot;</span>
+<span class="s">sudo -u postgres pg_dump -d production_db -F c -f "$BACKUP_DIR/production_db_$DATE.dump"</span>
 
 <span class="s"># Remove old backups</span>
-<span class="s">find $BACKUP_DIR -name &quot;production_db_*.dump&quot; -mtime +$RETENTION_DAYS -delete</span>
+<span class="s">find $BACKUP_DIR -name "production_db_*.dump" -mtime +$RETENTION_DAYS -delete</span>
 
 <span class="s"># Log result</span>
-<span class="s">echo &quot;$(date): Backup completed - $BACKUP_DIR/production_db_$DATE.dump&quot; &gt;&gt; /var/log/pg_backup.log</span>
+<span class="s">echo "$(date): Backup completed - $BACKUP_DIR/production_db_$DATE.dump" &gt;&gt; /var/log/pg_backup.log</span>
 <span class="s">EOF</span>
 
 sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/local/bin/pg_backup.sh
 
 <span class="c1"># Add to crontab (run daily at 2 AM)</span>
-<span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0 2 * * * /usr/local/bin/pg_backup.sh&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+<span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"0 2 * * * /usr/local/bin/pg_backup.sh"</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
 </code></pre>
           </div>
-
           <h3 id="query-execution-and-analysis">
             Query Execution and Analysis
           </h3>
@@ -483,35 +480,35 @@ sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </sp
             <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Execute simple query</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT * FROM users LIMIT 10;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT * FROM users LIMIT 10;"</span>
 
 <span class="c1"># Execute query from file</span>
 sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-f<span class="w"> </span>/path/to/queries.sql
 
 <span class="c1"># Get query execution time</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">\timing</span>
 <span class="s">SELECT COUNT(*) FROM large_table;</span>
 <span class="s">EOF</span>
 
 <span class="c1"># Analyze query plan</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;EXPLAIN ANALYZE SELECT * FROM users WHERE email = &#39;user@example.com&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'user@example.com';"</span>
 
 <span class="c1"># Get table sizes</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    schemaname,</span>
 <span class="s">    tablename,</span>
-<span class="s">    pg_size_pretty(pg_total_relation_size(schemaname||&#39;.&#39;||tablename)) AS total_size,</span>
-<span class="s">    pg_size_pretty(pg_relation_size(schemaname||&#39;.&#39;||tablename)) AS table_size,</span>
-<span class="s">    pg_size_pretty(pg_indexes_size(schemaname||&#39;.&#39;||tablename)) AS indexes_size</span>
+<span class="s">    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,</span>
+<span class="s">    pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) AS table_size,</span>
+<span class="s">    pg_size_pretty(pg_indexes_size(schemaname||'.'||tablename)) AS indexes_size</span>
 <span class="s">FROM pg_tables</span>
-<span class="s">WHERE schemaname = &#39;public&#39;</span>
-<span class="s">ORDER BY pg_total_relation_size(schemaname||&#39;.&#39;||tablename) DESC;</span>
+<span class="s">WHERE schemaname = 'public'</span>
+<span class="s">ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;</span>
 <span class="s">EOF</span>
 
 <span class="c1"># Get index usage statistics</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    schemaname,</span>
 <span class="s">    tablename,</span>
@@ -525,7 +522,7 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Find slow queries (requires pg_stat_statements extension)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    query,</span>
 <span class="s">    calls,</span>
@@ -538,7 +535,6 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 </code></pre>
           </div>
-
           <h3 id="index-management-and-optimization">
             Index Management and Optimization
           </h3>
@@ -550,31 +546,31 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
             <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Create B-tree index (default)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE INDEX idx_users_email ON users(email);&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_users_email ON users(email);"</span>
 
 <span class="c1"># Create unique index</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE UNIQUE INDEX idx_users_username ON users(username);&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE UNIQUE INDEX idx_users_username ON users(username);"</span>
 
 <span class="c1"># Create composite index</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);"</span>
 
 <span class="c1"># Create partial index (conditional)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE INDEX idx_orders_active ON orders(user_id) WHERE status = &#39;active&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_orders_active ON orders(user_id) WHERE status = 'active';"</span>
 
 <span class="c1"># Create GIN index for JSON columns</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE INDEX idx_products_attributes ON products USING GIN(attributes);&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_products_attributes ON products USING GIN(attributes);"</span>
 
 <span class="c1"># Create GiST index for full-text search</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE INDEX idx_articles_search ON articles USING GiST(to_tsvector(&#39;english&#39;, title || &#39; &#39; || content));&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE INDEX idx_articles_search ON articles USING GiST(to_tsvector('english', title || ' ' || content));"</span>
 
 <span class="c1"># Rebuild index (remove bloat)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;REINDEX INDEX CONCURRENTLY idx_users_email;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"REINDEX INDEX CONCURRENTLY idx_users_email;"</span>
 
 <span class="c1"># Rebuild all indexes on table</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;REINDEX TABLE CONCURRENTLY users;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"REINDEX TABLE CONCURRENTLY users;"</span>
 
 <span class="c1"># Get unused indexes</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    schemaname,</span>
 <span class="s">    tablename,</span>
@@ -586,10 +582,9 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Drop unused indexes</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;DROP INDEX CONCURRENTLY idx_old_unused_index;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"DROP INDEX CONCURRENTLY idx_old_unused_index;"</span>
 </code></pre>
           </div>
-
           <h3 id="maintenance-operations">Maintenance Operations</h3>
           <p>
             Perform routine maintenance tasks including VACUUM, ANALYZE, and
@@ -599,26 +594,26 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
             <pre><span></span><code><span class="ch">#!/bin/bash</span>
 
 <span class="c1"># Manual vacuum (non-blocking)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;VACUUM;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"VACUUM;"</span>
 
 <span class="c1"># Vacuum specific table</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;VACUUM VERBOSE ANALYZE users;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"VACUUM VERBOSE ANALYZE users;"</span>
 
 <span class="c1"># Full vacuum (locks table, reclaims more space)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;VACUUM FULL users;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"VACUUM FULL users;"</span>
 
 <span class="c1"># Analyze statistics for query planner</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ANALYZE;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ANALYZE;"</span>
 
 <span class="c1"># Reindex database</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;REINDEX DATABASE production_db;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"REINDEX DATABASE production_db;"</span>
 
 <span class="c1"># Check for bloat</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    schemaname,</span>
 <span class="s">    tablename,</span>
-<span class="s">    pg_size_pretty(pg_total_relation_size(schemaname||&#39;.&#39;||tablename)) AS size,</span>
+<span class="s">    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size,</span>
 <span class="s">    n_dead_tup,</span>
 <span class="s">    n_live_tup,</span>
 <span class="s">    ROUND(100 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0), 2) AS dead_tuple_percent</span>
@@ -628,11 +623,11 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Enable autovacuum (should be on by default)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;ALTER SYSTEM SET autovacuum = on;&quot;</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT pg_reload_conf();&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"ALTER SYSTEM SET autovacuum = on;"</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT pg_reload_conf();"</span>
 
 <span class="c1"># Configure autovacuum thresholds for specific table</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">ALTER TABLE users SET (</span>
 <span class="s">    autovacuum_vacuum_scale_factor = 0.1,</span>
 <span class="s">    autovacuum_analyze_scale_factor = 0.05</span>
@@ -640,20 +635,19 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Create maintenance script</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>/usr/local/bin/pg_maintenance.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;SCRIPT&#39;</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>/usr/local/bin/pg_maintenance.sh<span class="w"> </span><span class="s">&lt;&lt; 'SCRIPT'</span>
 <span class="s">#!/bin/bash</span>
-<span class="s">echo &quot;$(date): Starting maintenance&quot;</span>
-<span class="s">sudo -u postgres psql -d production_db -c &quot;VACUUM ANALYZE;&quot;</span>
-<span class="s">echo &quot;$(date): Maintenance completed&quot;</span>
+<span class="s">echo "$(date): Starting maintenance"</span>
+<span class="s">sudo -u postgres psql -d production_db -c "VACUUM ANALYZE;"</span>
+<span class="s">echo "$(date): Maintenance completed"</span>
 <span class="s">SCRIPT</span>
 
 sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/usr/local/bin/pg_maintenance.sh
 
 <span class="c1"># Schedule weekly maintenance (Sunday 3 AM)</span>
-<span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;0 3 * * 0 /usr/local/bin/pg_maintenance.sh &gt;&gt; /var/log/pg_maintenance.log 2&gt;&amp;1&quot;</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
+<span class="o">(</span>crontab<span class="w"> </span>-l<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"0 3 * * 0 /usr/local/bin/pg_maintenance.sh &gt;&gt; /var/log/pg_maintenance.log 2&gt;&amp;1"</span><span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>crontab<span class="w"> </span>-
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Connection Refused</strong>: - <strong>Error</strong>:
@@ -694,7 +688,7 @@ sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </sp
           <p><strong>Lock Timeouts</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Check blocking queries</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    pid,</span>
 <span class="s">    usename,</span>
@@ -705,10 +699,9 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Kill blocking session</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT pg_terminate_backend(12345);&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT pg_terminate_backend(12345);"</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Common Logs</strong>: - PostgreSQL logs:
             <code>/var/log/postgresql/postgresql-16-main.log</code> - System
@@ -729,14 +722,13 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="na">work_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">16MB</span><span class="w">                   </span><span class="c1"># Per sort/hash operation</span>
 </code></pre>
           </div>
-
           <p><strong>Connection Pooling with PgBouncer</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Install PgBouncer</span>
 sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>pgbouncer
 
 <span class="c1"># Configure /etc/pgbouncer/pgbouncer.ini</span>
-sudo<span class="w"> </span>tee<span class="w"> </span>/etc/pgbouncer/pgbouncer.ini<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>tee<span class="w"> </span>/etc/pgbouncer/pgbouncer.ini<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">[databases]</span>
 <span class="s">production_db = host=localhost port=5432 dbname=production_db</span>
 
@@ -751,22 +743,21 @@ sudo<span class="w"> </span>tee<span class="w"> </span>/etc/pgbouncer/pgbouncer.
 <span class="s">EOF</span>
 
 <span class="c1"># Create user list</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;&quot;app_user&quot; &quot;AppPass123!&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/pgbouncer/userlist.txt
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'"app_user" "AppPass123!"'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/pgbouncer/userlist.txt
 
 <span class="c1"># Start PgBouncer</span>
 sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>pgbouncer
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pgbouncer
 </code></pre>
           </div>
-
           <p><strong>Query Optimization</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Enable pg_stat_statements extension</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;CREATE EXTENSION IF NOT EXISTS pg_stat_statements;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"</span>
 
 <span class="c1"># Add to postgresql.conf</span>
-sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/postgresql/16/main/postgresql.conf<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">shared_preload_libraries = &#39;pg_stat_statements&#39;</span>
+sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/postgresql/16/main/postgresql.conf<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
+<span class="s">shared_preload_libraries = 'pg_stat_statements'</span>
 <span class="s">pg_stat_statements.max = 10000</span>
 <span class="s">pg_stat_statements.track = all</span>
 <span class="s">EOF</span>
@@ -775,17 +766,16 @@ sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span
 sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>postgresql
 </code></pre>
           </div>
-
           <p><strong>Monitoring Commands</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Active connections</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT count(*) FROM pg_stat_activity;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT count(*) FROM pg_stat_activity;"</span>
 
 <span class="c1"># Database size</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</span>
 
 <span class="c1"># Cache hit ratio (should be &gt;99%)</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
 <span class="s">SELECT </span>
 <span class="s">    sum(heap_blks_read) as heap_read,</span>
 <span class="s">    sum(heap_blks_hit) as heap_hit,</span>
@@ -794,10 +784,9 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
 <span class="s">EOF</span>
 
 <span class="c1"># Transaction rate</span>
-sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = &#39;production_db&#39;;&quot;</span>
+sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> </span>psql<span class="w"> </span>-d<span class="w"> </span>production_db<span class="w"> </span>-c<span class="w"> </span><span class="s2">"SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = 'production_db';"</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -835,32 +824,11 @@ sudo<span class="w"> </span>-u<span class="w"> </span>postgres<span class="w"> <
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

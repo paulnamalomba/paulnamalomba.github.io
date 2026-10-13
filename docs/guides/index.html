@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Technical Guides - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main">
+    <main id="main" tabindex="-1">
       <section class="docs-hero">
         <div class="container docs-hero-grid">
           <div>
@@ -54,27 +57,55 @@
           </div>
         </div>
       </section>
-      <section class="docs-toolbar" aria-label="Guide filters">
+      <section aria-label="Guide filters" class="docs-toolbar">
         <div class="container toolbar-grid">
           <label class="search-wrap"
             ><span class="sr-only">Search guides</span
             ><input
-              type="search"
+              aria-controls="guide-results"
+              data-guide-search=""
               placeholder="Search topics, tools or languages…"
-              data-guide-search
+              type="search"
           /></label>
-          <div class="filter-list">
-            <button class="filter-button active" data-guide-filter="all">
+          <div aria-label="Guide category" class="filter-list" role="group">
+            <button
+              aria-pressed="true"
+              class="filter-button active"
+              data-guide-filter="all"
+              type="button"
+            >
               All
             </button>
-            <button class="filter-button" data-guide-filter="backend">
+            <button
+              aria-pressed="false"
+              class="filter-button"
+              data-guide-filter="backend"
+              type="button"
+            >
               Backend
             </button>
-            <button class="filter-button" data-guide-filter="data">Data</button>
-            <button class="filter-button" data-guide-filter="infrastructure">
+            <button
+              aria-pressed="false"
+              class="filter-button"
+              data-guide-filter="data"
+              type="button"
+            >
+              Data
+            </button>
+            <button
+              aria-pressed="false"
+              class="filter-button"
+              data-guide-filter="infrastructure"
+              type="button"
+            >
               Infrastructure
             </button>
-            <button class="filter-button" data-guide-filter="systems">
+            <button
+              aria-pressed="false"
+              class="filter-button"
+              data-guide-filter="systems"
+              type="button"
+            >
               Systems
             </button>
           </div>
@@ -94,7 +125,7 @@
               class="featured-guide"
               href="BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html"
             >
-              <small>Data & performance</small>
+              <small>Data &amp; performance</small>
               <h3>
                 Memory-Aware Batching, Threading &amp; MPI Chunking for Large
                 Database Operations
@@ -104,12 +135,12 @@
                 backend. That platform is written in Python with the Django
                 framework, and uses PostgreSQL as the database engin…
               </p>
-              <b>Read field note &rarr;</b> </a
+              <b>Read field note →</b> </a
             ><a
               class="featured-guide"
               href="CLEAN_ARCHITECTURE_PROJECT_STRUCTURES.html"
             >
-              <small>Backend & architecture</small>
+              <small>Backend &amp; architecture</small>
               <h3>
                 Clean Architecture &amp; Project Structures — C#, Dart (Flutter)
                 &amp; TypeScript
@@ -117,12 +148,11 @@
               <p>
                 Architecting software is a battle between the convenience of
                 framework defaults and the necessary rigor of enterprise
-                maintainability. The &quot;typical&quot; structures are
-                optimized for…
+                maintainability. The "typical" structures are optimized for…
               </p>
-              <b>Read field note &rarr;</b> </a
+              <b>Read field note →</b> </a
             ><a class="featured-guide" href="WEB_APIS_AND_SERVING.html">
-              <small>Backend & architecture</small>
+              <small>Backend &amp; architecture</small>
               <h3>
                 Web APIs and Serving — Architectural Comparison (Flask vs Django
                 vs Express vs ASP.NET Core)
@@ -132,7 +162,7 @@
                 operating backend web frameworks. It focuses on the
                 architectural trade-offs that matter most in real systems: s…
               </p>
-              <b>Read field note &rarr;</b>
+              <b>Read field note →</b>
             </a>
           </div>
           <div class="library-heading">
@@ -140,12 +170,23 @@
               <p class="eyebrow">Full library</p>
               <h2>Explore every guide</h2>
             </div>
-            <p data-result-count>40 guides</p>
+            <p
+              aria-atomic="true"
+              aria-live="polite"
+              data-result-count=""
+              role="status"
+            >
+              40 guides
+            </p>
           </div>
-          <div class="guide-grid">
-            <article class="guide-card" data-guide-card data-category="backend">
+          <div class="guide-grid" id="guide-results">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 29, 2025</span
+                >Backend &amp; architecture · December 29, 2025</span
               >
               <h3>
                 API TYPES Deep Dive: Modern API Architectures &amp; Protocols
@@ -156,14 +197,16 @@
                 development. It covers REST, SOAP, gRPC, GraphQL, WebH…
               </p>
               <a href="API_TYPES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 05, 2025</span
+                >Backend &amp; architecture · December 05, 2025</span
               >
               <h3>AUTH_SERVICES PowerUser Guide (C#)</h3>
               <p>
@@ -172,14 +215,16 @@
                 (MFA), and federated identity protocols (OAuth2, OI…
               </p>
               <a href="AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 05, 2025</span
+                >Backend &amp; architecture · December 05, 2025</span
               >
               <h3>AUTH_SERVICES PowerUser Guide (PowerShell)</h3>
               <p>
@@ -188,14 +233,12 @@
                 (MFA), and federated identity protocols for securin…
               </p>
               <a href="AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · February 16, 2026</span
+                >Data &amp; performance · February 16, 2026</span
               >
               <h3>
                 Memory-Aware Batching, Threading &amp; MPI Chunking for Large
@@ -207,14 +250,16 @@
                 framework, and uses PostgreSQL as the database engin…
               </p>
               <a href="BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · March 04, 2026</span
+                >Backend &amp; architecture · March 04, 2026</span
               >
               <h3>
                 Clean Architecture &amp; Project Structures — C#, Dart (Flutter)
@@ -223,18 +268,19 @@
               <p>
                 Architecting software is a battle between the convenience of
                 framework defaults and the necessary rigor of enterprise
-                maintainability. The &quot;typical&quot; structures are
-                optimized for…
+                maintainability. The "typical" structures are optimized for…
               </p>
               <a href="CLEAN_ARCHITECTURE_PROJECT_STRUCTURES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 13, 2025</span
+                >Backend &amp; architecture · December 13, 2025</span
               >
               <h3>
                 C# Programming — Data Structures, Classes, Coding Style &amp;
@@ -246,14 +292,16 @@
                 advanced), classes/objects/modules, coding style, and prac…
               </p>
               <a href="C_SHARP_PROGRAMMING_DATA_STRUCTURES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 09, 2025</span
+                >Backend &amp; architecture · December 09, 2025</span
               >
               <h3>DJANGO Multi-Authentication PowerUser Guide (Bash)</h3>
               <p>
@@ -262,14 +310,16 @@
                 authentication mechanisms. You will automate environment s…
               </p>
               <a href="DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 09, 2025</span
+                >Backend &amp; architecture · December 09, 2025</span
               >
               <h3>DJANGO Multi-Authentication PowerUser Guide (PowerShell)</h3>
               <p>
@@ -280,14 +330,16 @@
               </p>
               <a
                 href="DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 09, 2025</span
+                >Backend &amp; architecture · December 09, 2025</span
               >
               <h3>DJANGO Multi-Authentication PowerUser Guide (Python)</h3>
               <p>
@@ -296,18 +348,16 @@
                 (Google, Azure AD, GitHub), JWT for APIs, and opt…
               </p>
               <a href="DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · December 05, 2025</span
+                >Infrastructure &amp; tooling · December 05, 2025</span
               >
               <h3>Docker PowerUser Guide (PowerShell)</h3>
               <p>
@@ -316,14 +366,16 @@
                 portable containers. This guide covers installation, imag…
               </p>
               <a href="DOCKER_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 05, 2025</span
+                >Backend &amp; architecture · December 05, 2025</span
               >
               <h3>DOTNET BCrypt PowerUser Guide (C#)</h3>
               <p>
@@ -332,14 +384,16 @@
                 factors for future-proof security. This guide covers p…
               </p>
               <a href="DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · December 05, 2025</span
+                >Backend &amp; architecture · December 05, 2025</span
               >
               <h3>DOTNET RabbitMQ PowerUser Guide (C#)</h3>
               <p>
@@ -348,18 +402,16 @@
                 systems. This guide covers connection management, queue/e…
               </p>
               <a href="DOTNET_RABBITMQ_CSHARP_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · March 01, 2026</span
+                >Infrastructure &amp; tooling · March 01, 2026</span
               >
               <h3>Git + GitHub CLI (gh) PowerUser Guide</h3>
               <p>
@@ -368,12 +420,14 @@
                 terminal). It covers repository creation/deletion, local and…
               </p>
               <a href="GIT_GH_CLI_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="systems">
+            <article
+              class="guide-card"
+              data-category="systems"
+              data-guide-card=""
+            >
               <span class="guide-category"
                 >Systems engineering · February 26, 2026</span
               >
@@ -387,14 +441,16 @@
                 acquisition to cloud-based ETL pipelines. It covers the cruci…
               </p>
               <a href="IOT_SENSORS.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · February 26, 2026</span
+                >Backend &amp; architecture · February 26, 2026</span
               >
               <h3>Java vs JavaScript: Runtimes, Execution, and Architecture</h3>
               <p>
@@ -403,14 +459,12 @@
                 typed, deeply object-oriented, and compiles down t…
               </p>
               <a href="JAVA_JAVASCRIPT.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · February 28, 2025</span
+                >Data &amp; performance · February 28, 2025</span
               >
               <h3>Distributed Event Streaming Platform Components</h3>
               <p>
@@ -419,28 +473,32 @@
                 distributed message/streaming platform
               </p>
               <a href="KAFKA_PRODUCER_CONSUMER_EXAMPLES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · February 26, 2026</span
+                >Backend &amp; architecture · February 26, 2026</span
               >
               <h3>Language Runtimes: Memory, Architectures, and Execution</h3>
               <p>
-                A language&#x27;s execution environment fundamentally dictates
-                its memory management and deployment constraints. This guide
+                A language's execution environment fundamentally dictates its
+                memory management and deployment constraints. This guide
                 directly contrasts the raw, bare-metal memory control of C…
               </p>
               <a href="LANGUAGE_RUNTIMES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="systems">
+            <article
+              class="guide-card"
+              data-category="systems"
+              data-guide-card=""
+            >
               <span class="guide-category"
                 >Systems engineering · February 26, 2026</span
               >
@@ -451,18 +509,16 @@
                 network identity management and authentication. Th…
               </p>
               <a href="LDAP_AUTHENTICATION.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · February 26, 2026</span
+                >Infrastructure &amp; tooling · February 26, 2026</span
               >
               <h3>Linux Bash Shell: Automation, Execution, and Daemons</h3>
               <p>
@@ -471,14 +527,12 @@
                 architecture guide dissects bash scripting, emphasizing the m…
               </p>
               <a href="LINUX_BASH_SCRIPTING.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 13, 2025</span
+                >Data &amp; performance · December 13, 2025</span
               >
               <h3>Memory Management and Execution on Windows — C++ (MSVC)</h3>
               <p>
@@ -487,14 +541,12 @@
                 heap storage, copy semantics (deep vs shallow), a…
               </p>
               <a href="MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 13, 2025</span
+                >Data &amp; performance · December 13, 2025</span
               >
               <h3>Memory Management and Execution on Windows — C# (.NET)</h3>
               <p>
@@ -503,14 +555,12 @@
                 Covering value vs reference types, stack vs heap sto…
               </p>
               <a href="MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 13, 2025</span
+                >Data &amp; performance · December 13, 2025</span
               >
               <h3>
                 Memory Management and Execution on Windows — JavaScript
@@ -522,14 +572,12 @@
                 covers value vs reference types, memory allocation…
               </p>
               <a href="MEMORY_MANAGEMENT_JAVASCRIPT_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 13, 2025</span
+                >Data &amp; performance · December 13, 2025</span
               >
               <h3>
                 Memory Management and Execution on Windows — Python (CPython)
@@ -540,14 +588,12 @@
                 heap storage, copy semantics (deep vs shallow), and…
               </p>
               <a href="MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · March 2, 2026</span
+                >Data &amp; performance · March 2, 2026</span
               >
               <h3>
                 Machine Learning, Deep Learning &amp; AI Methods for Data
@@ -559,14 +605,12 @@
                 Artificial Intelligence (AI) method currently uti…
               </p>
               <a href="ML_DL_AI_DATA_ENGINEERING_REFERENCE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 04, 2025</span
+                >Data &amp; performance · December 04, 2025</span
               >
               <h3>POSTGRESQL 16 PowerUser Guide (Bash)</h3>
               <p>
@@ -575,14 +619,12 @@
                 extensibility. This guide covers installation, confi…
               </p>
               <a href="POSTGRESQL_16_BASH_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 04, 2025</span
+                >Data &amp; performance · December 04, 2025</span
               >
               <h3>POSTGRESQL 16 PowerUser Guide (PowerShell)</h3>
               <p>
@@ -591,30 +633,30 @@
                 extensibility. This guide covers installation, confi…
               </p>
               <a href="POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · February 26, 2026</span
+                >Data &amp; performance · February 26, 2026</span
               >
               <h3>Python for Machine Learning: Engineering the AI Pipeline</h3>
               <p>
-                Python&#x27;s dominance in Machine Learning stems not from its
+                Python's dominance in Machine Learning stems not from its
                 inherent execution speed, but from its role as an elegant API
                 wrapping highly optimized C/C++ libraries. This guide byp…
               </p>
               <a href="PYTHON_ML.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · March 11, 2026</span
+                >Backend &amp; architecture · March 11, 2026</span
               >
               <h3>
                 REALTIME CLIENT API Connections - SignalR-Style Cross-Ecosystem
@@ -626,14 +668,12 @@
                 lens. The point is not to repeat framework tutorials…
               </p>
               <a href="REALTIME_CLIENT_API_CONNECTIONS.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="data">
+            <article class="guide-card" data-category="data" data-guide-card="">
               <span class="guide-category"
-                >Data & performance · December 04, 2025</span
+                >Data &amp; performance · December 04, 2025</span
               >
               <h3>REDIS PowerUser Guide (PowerShell)</h3>
               <p>
@@ -642,18 +682,16 @@
                 installation, data structures, persistence, cluster…
               </p>
               <a href="REDIS_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · February 19, 2026</span
+                >Infrastructure &amp; tooling · February 19, 2026</span
               >
               <h3>
                 Responsive Web Design Testing PowerUser Guide (PowerShell &amp;
@@ -665,18 +703,16 @@
                 to 2560px desktop monitors. This guide covers se…
               </p>
               <a href="RESPONSIVE_WEB_DESIGN_TESTING_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · April 22, 2026</span
+                >Infrastructure &amp; tooling · April 22, 2026</span
               >
               <h3>SSH PowerUser Guide (PowerShell &amp; Bash)</h3>
               <p>
@@ -685,18 +721,16 @@
                 encrypted file transfer. This guide targets native OpenSSH…
               </p>
               <a href="SSH_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · December 04, 2025</span
+                >Infrastructure &amp; tooling · December 04, 2025</span
               >
               <h3>SSL/TLS PowerUser Guide (Bash)</h3>
               <p>
@@ -705,18 +739,16 @@
                 management, and verification using Bash and OpenSSL on…
               </p>
               <a href="SSL_TLS_BASH_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · December 05, 2025</span
+                >Infrastructure &amp; tooling · December 05, 2025</span
               >
               <h3>SSL/TLS PowerUser Guide (PowerShell)</h3>
               <p>
@@ -725,18 +757,16 @@
                 management, and verification using PowerShell and OpenS…
               </p>
               <a href="SSL_TLS_POWERSHELL_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · December 18, 2025</span
+                >Infrastructure &amp; tooling · December 18, 2025</span
               >
               <h3>Service and Process Management Guide: Bash vs. PowerShell</h3>
               <p>
@@ -746,18 +776,16 @@
                 co…
               </p>
               <a href="SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · April 05, 2026</span
+                >Infrastructure &amp; tooling · April 05, 2026</span
               >
               <h3>
                 Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install,
@@ -769,18 +797,16 @@
                 GB RAM, Intel Core i7 9th Gen CPU, and an NVIDIA RTX…
               </p>
               <a href="UBUNTU_SERVER_SETUP.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · December 12, 2025</span
+                >Infrastructure &amp; tooling · December 12, 2025</span
               >
               <h3>VI/VIM Power User Guide</h3>
               <p>
@@ -789,14 +815,16 @@
                 and customization options. It is designed for power use…
               </p>
               <a href="VI_POWERUSER_GUIDE.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="backend">
+            <article
+              class="guide-card"
+              data-category="backend"
+              data-guide-card=""
+            >
               <span class="guide-category"
-                >Backend & architecture · March 02, 2026</span
+                >Backend &amp; architecture · March 02, 2026</span
               >
               <h3>
                 Web APIs and Serving — Architectural Comparison (Flask vs Django
@@ -808,12 +836,14 @@
                 architectural trade-offs that matter most in real systems: s…
               </p>
               <a href="WEB_APIS_AND_SERVING.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
-            <article class="guide-card" data-guide-card data-category="systems">
+            <article
+              class="guide-card"
+              data-category="systems"
+              data-guide-card=""
+            >
               <span class="guide-category"
                 >Systems engineering · March 02, 2026</span
               >
@@ -823,18 +853,16 @@
                 several strong alternatives depending on what you optimize for
               </p>
               <a href="WEB_RENDERING_FRAMEWORKS.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · February 26, 2026</span
+                >Infrastructure &amp; tooling · February 26, 2026</span
               >
               <h3>Web Servers &amp; Proxies: Apache2, Nginx, and ngrok</h3>
               <p>
@@ -843,18 +871,16 @@
                 guide addresses the foundational configuration syntax ne…
               </p>
               <a href="WEB_SERVERS_PROXIES.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
-
             <article
               class="guide-card"
-              data-guide-card
               data-category="infrastructure"
+              data-guide-card=""
             >
               <span class="guide-category"
-                >Infrastructure & tooling · March 30, 2026</span
+                >Infrastructure &amp; tooling · March 30, 2026</span
               >
               <h3>Windows Application Diagnostics PowerUser Guide</h3>
               <p>
@@ -863,44 +889,22 @@
                 rarely that maliciously organized without an underl…
               </p>
               <a href="WINDOWS_DIAGNOSTICS_APPS.html"
-                ><span>Read guide</span
-                ><span aria-hidden="true">&rarr;</span></a
+                ><span>Read guide</span><span aria-hidden="true">→</span></a
               >
             </article>
           </div>
-          <div class="empty-state" data-empty-state>
+          <div class="empty-state" data-empty-state="" hidden="">
             No guides match that search. Try a broader term or another category.
           </div>
         </div>
       </section>
-      <script src="/scripts/guides.js" defer></script>
+      <script defer="" src="/scripts/guides.js"></script>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

@@ -1,15 +1,16 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>File Operations - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
     <style>
       pre {
         line-height: 125%;
@@ -273,22 +274,25 @@
         color: #666;
       } /* Literal.Number.Integer.Long */
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -297,8 +301,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to System Scripts</a>
@@ -311,7 +314,7 @@
           <h1>File Operations</h1>
           <p>
             <code>file-operations.ps1</code> ·
-            <a href="file-operations.ps1" download>Download Script</a>
+            <a download="" href="file-operations.ps1">Download Script</a>
           </p>
           <div class="codehilite">
             <table class="codehilitetable">
@@ -473,20 +476,20 @@
 <span class="cm">    Destination path</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    MoveItem-Overwrite -Src &quot;C:\Source\File.txt&quot; -Dest &quot;C:\Destination\File.txt&quot;</span>
+<span class="cm">    MoveItem-Overwrite -Src "C:\Source\File.txt" -Dest "C:\Destination\File.txt"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span> <span class="p">(</span>
         <span class="no">[string]</span><span class="nv">$Src</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$Dest</span>
     <span class="p">)</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
     <span class="c"># 1. Remove existing folder (if present)</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$Dest</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">Remove-Item</span> <span class="p">`</span>
             <span class="n">-LiteralPath</span> <span class="nv">$Dest</span> <span class="p">`</span>
             <span class="n">-Recurse</span> <span class="p">`</span>
             <span class="n">-Force</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Removed existing folder/file at &#39;$Dest&#39;.&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Removed existing folder/file at '$Dest'."</span>
     <span class="p">}</span>
 
     <span class="c"># 2. Move the source folder</span>
@@ -495,12 +498,12 @@
         <span class="n">-Destination</span> <span class="nv">$Dest</span> <span class="p">`</span>
         <span class="n">-Force</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$Dest</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Move operation successful.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Moved folder from &#39;$Src&#39; to &#39;$Dest&#39;.&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Move operation successful."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Moved folder from '$Src' to '$Dest'."</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Move operation failed.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Move operation failed."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
     <span class="p">}</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
 <span class="p">}</span>
 
 <span class="k">function</span> <span class="n">RenameFolders-FirstLetterUppercase</span> <span class="p">{</span>
@@ -515,42 +518,42 @@
 <span class="cm">    The path to process (default is current directory)</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    RenameFolders-FirstLetterUppercase -Path &quot;C:\MyFolder&quot;</span>
+<span class="cm">    RenameFolders-FirstLetterUppercase -Path "C:\MyFolder"</span>
 <span class="cm">    #&gt;</span>
-    <span class="p">[</span><span class="k">CmdletBinding</span><span class="p">(</span><span class="n">SupportsShouldProcess</span><span class="p">=</span><span class="nv">$true</span><span class="p">,</span> <span class="n">ConfirmImpact</span><span class="p">=</span><span class="s1">&#39;Medium&#39;</span><span class="p">)]</span>
+    <span class="p">[</span><span class="k">CmdletBinding</span><span class="p">(</span><span class="n">SupportsShouldProcess</span><span class="p">=</span><span class="nv">$true</span><span class="p">,</span> <span class="n">ConfirmImpact</span><span class="p">=</span><span class="s1">'Medium'</span><span class="p">)]</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
-        <span class="no">[string]</span><span class="nv">$Path</span> <span class="p">=</span> <span class="s1">&#39;.&#39;</span>
+        <span class="no">[string]</span><span class="nv">$Path</span> <span class="p">=</span> <span class="s1">'.'</span>
     <span class="p">)</span>
 
     <span class="c"># Enumerate all directories under the specified path</span>
     <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$Path</span> <span class="n">-Directory</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
         <span class="nv">$oldName</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
         <span class="nv">$parentPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">FullName</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Processing folder: $oldName&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Processing folder: $oldName"</span>
         <span class="k">if</span> <span class="p">(</span><span class="nv">$oldName</span><span class="p">.</span><span class="n">Length</span> <span class="o">-ge</span> <span class="n">1</span><span class="p">)</span> <span class="p">{</span>
             <span class="c"># Construct the new folder name</span>
             <span class="nv">$newName</span> <span class="p">=</span> <span class="nv">$oldName</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="n">0</span><span class="p">,</span><span class="n">1</span><span class="p">).</span><span class="n">ToUpper</span><span class="p">()</span> <span class="p">+</span> <span class="nv">$oldName</span><span class="p">.</span><span class="n">Substring</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;New folder name will be: $newName&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"New folder name will be: $newName"</span>
             <span class="k">if</span> <span class="p">(</span><span class="nv">$newName</span> <span class="o">-cne</span> <span class="nv">$oldName</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nv">$oldFullPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
                 <span class="nv">$newFullPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="n">-Path</span> <span class="nv">$parentPath</span> <span class="n">-ChildPath</span> <span class="nv">$newName</span>
-                <span class="nb">Write-Host</span> <span class="s2">&quot;Old full path: $oldFullPath&quot;</span>
-                <span class="nb">Write-Host</span> <span class="s2">&quot;New full path: $newFullPath&quot;</span>
-                <span class="nb">Write-Host</span> <span class="s2">&quot;Considering rename of $oldName to $newName&quot;</span>
+                <span class="nb">Write-Host</span> <span class="s2">"Old full path: $oldFullPath"</span>
+                <span class="nb">Write-Host</span> <span class="s2">"New full path: $newFullPath"</span>
+                <span class="nb">Write-Host</span> <span class="s2">"Considering rename of $oldName to $newName"</span>
                 <span class="c"># Handle case-only on NTFS</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nv">$oldName</span><span class="p">.</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="nv">$newName</span><span class="p">.</span><span class="n">ToLower</span><span class="p">())</span> <span class="p">{</span>
-                    <span class="nv">$tmpName</span>     <span class="p">=</span> <span class="s2">&quot;{0}_tmp_{1}&quot;</span> <span class="o">-f</span> <span class="nv">$newName</span><span class="p">,</span> <span class="p">(</span><span class="no">[guid]</span><span class="p">::</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">))</span>
+                    <span class="nv">$tmpName</span>     <span class="p">=</span> <span class="s2">"{0}_tmp_{1}"</span> <span class="o">-f</span> <span class="nv">$newName</span><span class="p">,</span> <span class="p">(</span><span class="no">[guid]</span><span class="p">::</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s1">'N'</span><span class="p">))</span>
                     <span class="nv">$tmpFullPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$parentPath</span> <span class="nv">$tmpName</span>
 
                     <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$oldFullPath</span> <span class="n">-Destination</span> <span class="nv">$tmpFullPath</span> <span class="n">-Force</span>
                     <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$tmpFullPath</span> <span class="n">-Destination</span> <span class="nv">$newFullPath</span> <span class="n">-Force</span>
 
-                    <span class="nb">Write-Host</span> <span class="s2">&quot;Case-only rename: &#39;$oldName&#39; → &#39;$newName&#39; via temp &#39;$tmpName&#39;&quot;</span>
+                    <span class="nb">Write-Host</span> <span class="s2">"Case-only rename: '$oldName' → '$newName' via temp '$tmpName'"</span>
                 <span class="p">}</span>
                 <span class="k">else</span> <span class="p">{</span>
                     <span class="nb">Move-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$oldFullPath</span> <span class="n">-Destination</span> <span class="nv">$newFullPath</span> <span class="n">-Force</span>
-                    <span class="nb">Write-Host</span> <span class="s2">&quot;Renamed &#39;$oldName&#39; to &#39;$newName&#39;&quot;</span>
+                    <span class="nb">Write-Host</span> <span class="s2">"Renamed '$oldName' to '$newName'"</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -570,19 +573,19 @@
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
 <span class="cm">    ListSize-Directory</span>
-<span class="cm">    ListSize-Directory -Path &quot;C:\MyFolder&quot;</span>
+<span class="cm">    ListSize-Directory -Path "C:\MyFolder"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="no">[string]</span><span class="nv">$Path</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Location</span><span class="p">).</span><span class="n">Path</span>
     <span class="p">)</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Parent-Dir ${Path}&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Parent-Dir ${Path}"</span>
     <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$Path</span> <span class="n">-Directory</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
         <span class="nv">$folderPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
         <span class="nv">$lastElement</span> <span class="p">=</span> <span class="nb">Split-Path</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Leaf</span>
         <span class="nv">$sizeInBytes</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Recurse</span> <span class="o">-File</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Property</span> <span class="n">Length</span> <span class="n">-Sum</span><span class="p">).</span><span class="n">Sum</span>
         <span class="nv">$sizeInGB</span> <span class="p">=</span> <span class="nv">$sizeInBytes</span> <span class="p">/</span> <span class="n">1GB</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Child-Dir ${lastElement}: </span><span class="p">$(</span><span class="s2">&quot;{0:N2}&quot;</span> <span class="o">-f</span> <span class="nv">$sizeInGB</span><span class="p">)</span><span class="s2"> GB&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Child-Dir ${lastElement}: </span><span class="p">$(</span><span class="s2">"{0:N2}"</span> <span class="o">-f</span> <span class="nv">$sizeInGB</span><span class="p">)</span><span class="s2"> GB"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
@@ -597,32 +600,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

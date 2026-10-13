@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Git + GitHub CLI (gh) PowerUser Guide - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -475,22 +478,21 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
 <span class="nb">cd</span><span class="w"> </span>new-repo
 
 <span class="c1"># 3) First commit</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;# new-repo&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>README.md
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"# new-repo"</span><span class="w"> </span>&gt;<span class="w"> </span>README.md
 git<span class="w"> </span>add<span class="w"> </span>-A
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Initial commit"</span>
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
 
 <span class="c1"># 4) Create a feature branch + PR</span>
 git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>feature/demo
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;More content&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>README.md
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"More content"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>README.md
 git<span class="w"> </span>add<span class="w"> </span>-A
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Update README&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Update README"</span>
 git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/demo
 
 gh<span class="w"> </span>pr<span class="w"> </span>create
 </code></pre>
           </div>
-
           <h2 id="1-installation-windows-linux-macos">
             1. Installation (Windows, Linux, macOS)
           </h2>
@@ -507,14 +509,12 @@ gh<span class="w"> </span>pr<span class="w"> </span>create
 <span class="n">git</span> <span class="p">-</span><span class="n">-version</span>
 </code></pre>
           </div>
-
           <p><strong>macOS</strong></p>
           <div class="codehilite">
             <pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>git
 git<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <p><strong>Ubuntu/Debian</strong></p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
@@ -522,7 +522,6 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 git<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <h3 id="github-cli-gh">GitHub CLI (<code>gh</code>)</h3>
           <p><strong>Windows</strong></p>
           <div class="codehilite">
@@ -530,14 +529,12 @@ git<span class="w"> </span>--version
 <span class="n">gh</span> <span class="p">-</span><span class="n">-version</span>
 </code></pre>
           </div>
-
           <p><strong>macOS</strong></p>
           <div class="codehilite">
             <pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>gh
 gh<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <p>
             <strong>Ubuntu/Debian</strong> (many distros package
             <code>gh</code>; use official instructions if you need latest)
@@ -548,18 +545,16 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 gh<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <hr />
           <h2 id="2-identity-config-and-safety-defaults">
             2. Identity, Config, and Safety Defaults
           </h2>
           <h3 id="set-user-identity-global">Set user identity (global)</h3>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Your Name&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;you@example.com&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"Your Name"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"you@example.com"</span>
 </code></pre>
           </div>
-
           <h3 id="useful-global-defaults">Useful global defaults</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Use a modern default branch name (optional)</span>
@@ -581,13 +576,11 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>rerere.enabled<span class="w"> </span><span class="nb">true</span>
 </code></pre>
           </div>
-
           <p>Inspect config sources (useful for debugging surprises):</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--list<span class="w"> </span>--show-origin
 </code></pre>
           </div>
-
           <h3 id="line-endings-windows-vs-linux">
             Line endings (Windows vs Linux)
           </h3>
@@ -601,13 +594,11 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.autocrlf<span class="w"> </span><span class="nb">true</span>
 </code></pre>
           </div>
-
           <p><strong>Linux/macOS typical</strong></p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.autocrlf<span class="w"> </span>input
 </code></pre>
           </div>
-
           <p>
             If the repo already has a <code>.gitattributes</code>, follow the
             repo policy (repo settings should win over personal preference).
@@ -616,13 +607,12 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
             Quality-of-life aliases (optional)
           </h3>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.s<span class="w"> </span><span class="s2">&quot;status -sb&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.l<span class="w"> </span><span class="s2">&quot;log --oneline --decorate --graph --all&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.d<span class="w"> </span><span class="s2">&quot;diff&quot;</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.co<span class="w"> </span><span class="s2">&quot;checkout&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.s<span class="w"> </span><span class="s2">"status -sb"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.l<span class="w"> </span><span class="s2">"log --oneline --decorate --graph --all"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.d<span class="w"> </span><span class="s2">"diff"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>alias.co<span class="w"> </span><span class="s2">"checkout"</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="3-authentication-git-httpspat-ssh-and-gh">
             3. Authentication (Git HTTPS/PAT, SSH, and gh)
@@ -652,7 +642,6 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <span class="c1"># https://github.com/OWNER/REPO.git</span>
 </code></pre>
           </div>
-
           <p>
             Git will prompt for credentials; use: - Username: your GitHub
             username - Password: your PAT
@@ -662,25 +651,22 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
             <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.helper
 </code></pre>
           </div>
-
           <h3 id="32-git-over-ssh-recommended-for-power-users">
             3.2 Git over SSH (recommended for power users)
           </h3>
           <p><strong>Generate an SSH key</strong></p>
           <div class="codehilite">
-            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;you@example.com&quot;</span>
+            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"you@example.com"</span>
 <span class="c1"># Press enter for default path; set a passphrase</span>
 </code></pre>
           </div>
-
           <p><strong>Start ssh-agent and add key</strong></p>
           <p>Linux/macOS:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+            <pre><span></span><code><span class="nb">eval</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">"</span>
 ssh-add<span class="w"> </span>~/.ssh/id_ed25519
 </code></pre>
           </div>
-
           <p>Windows (PowerShell):</p>
           <div class="codehilite">
             <pre><span></span><code><span class="nb">Get-Service</span> <span class="n">ssh-agent</span> <span class="p">|</span> <span class="nb">Set-Service</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
@@ -688,13 +674,11 @@ ssh-add<span class="w"> </span>~/.ssh/id_ed25519
 <span class="n">ssh-add</span> <span class="nv">$env:USERPROFILE</span><span class="p">\.</span><span class="n">ssh</span><span class="p">\</span><span class="n">id_ed25519</span>
 </code></pre>
           </div>
-
           <p><strong>Add public key to GitHub</strong></p>
           <div class="codehilite">
             <pre><span></span><code>cat<span class="w"> </span>~/.ssh/id_ed25519.pub
 </code></pre>
           </div>
-
           <p>Copy into GitHub: Settings → SSH and GPG keys.</p>
           <p><strong>Use SSH remote</strong></p>
           <div class="codehilite">
@@ -702,7 +686,6 @@ ssh-add<span class="w"> </span>~/.ssh/id_ed25519
 ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
 </code></pre>
           </div>
-
           <h3 id="33-github-cli-authentication">
             3.3 GitHub CLI authentication
           </h3>
@@ -711,7 +694,6 @@ ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>login
 </code></pre>
           </div>
-
           <p>Explicit login patterns:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Prefer SSH for Git operations</span>
@@ -721,7 +703,6 @@ gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </sp
 gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </span>--hostname<span class="w"> </span>github.company.com
 </code></pre>
           </div>
-
           <p>
             Configure Git to use your <code>gh</code> auth for HTTPS operations
             (optional):
@@ -730,19 +711,16 @@ gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </sp
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>setup-git
 </code></pre>
           </div>
-
           <p><strong>Status + active account</strong></p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre>
           </div>
-
           <p><strong>Logout</strong></p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span><span class="nb">logout</span>
 </code></pre>
           </div>
-
           <p>
             Refresh scopes/token (useful if Actions/Packages commands fail):
           </p>
@@ -750,13 +728,11 @@ gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </sp
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>refresh
 </code></pre>
           </div>
-
           <p>Print the active token (avoid pasting this into logs):</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>auth<span class="w"> </span>token
 </code></pre>
           </div>
-
           <p><strong>Select default protocol for Git operations</strong></p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>git_protocol<span class="w"> </span>ssh
@@ -764,7 +740,6 @@ gh<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </sp
 gh<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>git_protocol<span class="w"> </span>https
 </code></pre>
           </div>
-
           <hr />
           <h2 id="4-repository-lifecycle-create-clone-delete-archive">
             4. Repository Lifecycle (Create, Clone, Delete, Archive)
@@ -776,7 +751,6 @@ gh<span class="w"> </span>config<span class="w"> </span><span class="nb">set</sp
 git<span class="w"> </span>init
 </code></pre>
           </div>
-
           <h3 id="42-clone-an-existing-repo">4.2 Clone an existing repo</h3>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/OWNER/REPO.git
@@ -784,7 +758,6 @@ git<span class="w"> </span>init
 git<span class="w"> </span>clone<span class="w"> </span>git@github.com:OWNER/REPO.git
 </code></pre>
           </div>
-
           <h3 id="43-create-a-github-repo-from-the-terminal-gh">
             4.3 Create a GitHub repo from the terminal (gh)
           </h3>
@@ -794,31 +767,26 @@ git<span class="w"> </span>clone<span class="w"> </span>git@github.com:OWNER/REP
 gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>OWNER/REPO<span class="w"> </span>--private<span class="w"> </span>--source<span class="o">=</span>.<span class="w"> </span>--remote<span class="o">=</span>origin<span class="w"> </span>--push
 </code></pre>
           </div>
-
           <p>Create a new repo and clone it:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>OWNER/new-repo<span class="w"> </span>--public<span class="w"> </span>--clone
 </code></pre>
           </div>
-
           <h3 id="44-rename-a-github-repo-gh">4.4 Rename a GitHub repo (gh)</h3>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>rename<span class="w"> </span>new-name
 </code></pre>
           </div>
-
           <p>Fork a repo (and clone your fork):</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>fork<span class="w"> </span>OWNER/REPO<span class="w"> </span>--clone
 </code></pre>
           </div>
-
           <p>Create from a template repo:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </span>OWNER/new-from-template<span class="w"> </span>--private<span class="w"> </span>--template<span class="w"> </span>OWNER/TEMPLATE_REPO<span class="w"> </span>--clone
 </code></pre>
           </div>
-
           <h3 id="45-archive-vs-delete-be-deliberate">
             4.5 Archive vs Delete (be deliberate)
           </h3>
@@ -827,7 +795,6 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>archive<span class="w"> </span>OWNER/REPO
 </code></pre>
           </div>
-
           <p><strong>Delete (irreversible)</strong></p>
           <p>Before deletion, consider taking a mirror backup:</p>
           <div class="codehilite">
@@ -835,13 +802,11 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
 <span class="c1"># Produces REPO.git directory with full refs</span>
 </code></pre>
           </div>
-
           <p>Then delete:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>repo<span class="w"> </span>delete<span class="w"> </span>OWNER/REPO<span class="w"> </span>--confirm
 </code></pre>
           </div>
-
           <hr />
           <h2 id="5-daily-git-workflow-addcommitlogdiff">
             5. Daily Git Workflow (Add/Commit/Log/Diff)
@@ -851,7 +816,6 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
             <pre><span></span><code>git<span class="w"> </span>status
 </code></pre>
           </div>
-
           <h3 id="52-stage-changes">5.2 Stage changes</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># stage all tracked edits + new files</span>
@@ -861,19 +825,16 @@ git<span class="w"> </span>add<span class="w"> </span>-A
 git<span class="w"> </span>add<span class="w"> </span>-p
 </code></pre>
           </div>
-
           <h3 id="53-commit">5.3 Commit</h3>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Explain what changed&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Explain what changed"</span>
 </code></pre>
           </div>
-
           <p>Amend the last commit (common for small fixes):</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>--amend
 </code></pre>
           </div>
-
           <p>
             Create a fixup commit (pairs well with
             <code>git rebase -i --autosquash</code>):
@@ -882,13 +843,11 @@ git<span class="w"> </span>add<span class="w"> </span>-p
             <pre><span></span><code>git<span class="w"> </span>commit<span class="w"> </span>--fixup<span class="w"> </span>&lt;commit_sha&gt;
 </code></pre>
           </div>
-
           <p>Commit with editor message:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>commit
 </code></pre>
           </div>
-
           <h3 id="54-view-history">5.4 View history</h3>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>log
@@ -896,7 +855,6 @@ git<span class="w"> </span>add<span class="w"> </span>-p
 git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>--decorate<span class="w"> </span>--graph<span class="w"> </span>--all
 </code></pre>
           </div>
-
           <h3 id="55-compare-changes">5.5 Compare changes</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># unstaged differences</span>
@@ -909,7 +867,6 @@ git<span class="w"> </span>diff<span class="w"> </span>--staged
 git<span class="w"> </span>diff<span class="w"> </span>main..feature-branch
 </code></pre>
           </div>
-
           <h3 id="56-file-operations-tracked-content">
             5.6 File operations (tracked content)
           </h3>
@@ -918,13 +875,11 @@ git<span class="w"> </span>diff<span class="w"> </span>main..feature-branch
             <pre><span></span><code>git<span class="w"> </span>mv<span class="w"> </span>oldname<span class="w"> </span>newname
 </code></pre>
           </div>
-
           <p>Remove a tracked file:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>rm<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <h3 id="57-ignore-rules-gitignore-and-debugging-ignores">
             5.7 Ignore rules (.gitignore) and debugging ignores
           </h3>
@@ -937,7 +892,6 @@ git<span class="w"> </span>diff<span class="w"> </span>main..feature-branch
             <pre><span></span><code>git<span class="w"> </span>check-ignore<span class="w"> </span>-v<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <hr />
           <h2 id="6-branching-and-integration-merge-rebase-cherry-pick">
             6. Branching and Integration (Merge, Rebase, Cherry-pick)
@@ -951,13 +905,11 @@ git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </sp
 <span class="c1"># git checkout -b feature/login</span>
 </code></pre>
           </div>
-
           <p>Push a new branch to origin:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>feature/login
 </code></pre>
           </div>
-
           <p>Delete branches:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># local</span>
@@ -969,7 +921,6 @@ git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </sp
 git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>feature/login
 </code></pre>
           </div>
-
           <h3 id="62-merge-preserves-branch-topology">
             6.2 Merge (preserves branch topology)
           </h3>
@@ -980,7 +931,6 @@ git<span class="w"> </span>pull
 git<span class="w"> </span>merge<span class="w"> </span>feature/login
 </code></pre>
           </div>
-
           <h3 id="63-rebase-rewrites-history-keep-it-disciplined">
             6.3 Rebase (rewrites history; keep it disciplined)
           </h3>
@@ -994,13 +944,11 @@ git<span class="w"> </span>fetch<span class="w"> </span>origin
 git<span class="w"> </span>rebase<span class="w"> </span>origin/main
 </code></pre>
           </div>
-
           <p>Interactive rebase (squash / reorder / edit messages):</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>rebase<span class="w"> </span>-i<span class="w"> </span>origin/main
 </code></pre>
           </div>
-
           <p>
             If you already pushed and you rebase, you will need a force push:
           </p>
@@ -1008,7 +956,6 @@ git<span class="w"> </span>rebase<span class="w"> </span>origin/main
             <pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease
 </code></pre>
           </div>
-
           <p>
             <code>--force-with-lease</code> is safer than
             <code>--force</code> because it refuses to overwrite someone else’s
@@ -1022,7 +969,6 @@ git<span class="w"> </span>rebase<span class="w"> </span>origin/main
 git<span class="w"> </span>cherry-pick<span class="w"> </span>&lt;commit_sha&gt;
 </code></pre>
           </div>
-
           <h3 id="65-resolve-conflicts-efficiently">
             6.5 Resolve conflicts efficiently
           </h3>
@@ -1038,13 +984,11 @@ git<span class="w"> </span>commit
 git<span class="w"> </span>rebase<span class="w"> </span>--continue
 </code></pre>
           </div>
-
           <p>Abort a rebase if needed:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>rebase<span class="w"> </span>--abort
 </code></pre>
           </div>
-
           <hr />
           <h2 id="7-undo-recovery-and-forensics-restore-reset-reflog">
             7. Undo, Recovery, and Forensics (Restore, Reset, Reflog)
@@ -1059,19 +1003,16 @@ git<span class="w"> </span>rebase<span class="w"> </span>--continue
             <pre><span></span><code>git<span class="w"> </span>restore<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <p>Unstage (move from index back to working tree):</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>restore<span class="w"> </span>--staged<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <p>Restore a file from a specific commit:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>restore<span class="w"> </span>--source<span class="w"> </span>&lt;commit_sha&gt;<span class="w"> </span>--<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <h3 id="72-reset-moves-branch-pointer-can-be-destructive">
             7.2 Reset (moves branch pointer; can be destructive)
           </h3>
@@ -1091,7 +1032,6 @@ git<span class="w"> </span>reset<span class="w"> </span>--mixed<span class="w"> 
 git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD~1
 </code></pre>
           </div>
-
           <h3 id="73-revert-safe-for-shared-branches">
             7.3 Revert (safe for shared branches)
           </h3>
@@ -1103,7 +1043,6 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
             <pre><span></span><code>git<span class="w"> </span>revert<span class="w"> </span>&lt;commit_sha&gt;
 </code></pre>
           </div>
-
           <h3 id="74-reflog-time-machine">7.4 Reflog (time machine)</h3>
           <p>
             If you “lost” commits after a reset/rebase, reflog usually saves
@@ -1116,7 +1055,6 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
 git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>HEAD@<span class="o">{</span><span class="m">1</span><span class="o">}</span>
 </code></pre>
           </div>
-
           <h3 id="75-investigate-who-changed-what">
             7.5 Investigate who changed what
           </h3>
@@ -1125,33 +1063,29 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
 git<span class="w"> </span>blame<span class="w"> </span>path/to/file
 
 <span class="c1"># find commit that introduced a string</span>
-git<span class="w"> </span>log<span class="w"> </span>-S<span class="w"> </span><span class="s2">&quot;some text&quot;</span><span class="w"> </span>--<span class="w"> </span>path/to/file
+git<span class="w"> </span>log<span class="w"> </span>-S<span class="w"> </span><span class="s2">"some text"</span><span class="w"> </span>--<span class="w"> </span>path/to/file
 </code></pre>
           </div>
-
           <h3 id="76-stash-parking-local-changes">
             7.6 Stash (parking local changes)
           </h3>
           <p>Stash tracked changes:</p>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;wip&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-m<span class="w"> </span><span class="s2">"wip"</span>
 git<span class="w"> </span>stash<span class="w"> </span>list
 git<span class="w"> </span>stash<span class="w"> </span>pop
 </code></pre>
           </div>
-
           <p>Include untracked files:</p>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;wip + untracked&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>-m<span class="w"> </span><span class="s2">"wip + untracked"</span>
 </code></pre>
           </div>
-
           <p>Apply a specific stash without dropping it:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>stash<span class="w"> </span>apply<span class="w"> </span>stash@<span class="o">{</span><span class="m">1</span><span class="o">}</span>
 </code></pre>
           </div>
-
           <h3 id="77-clean-remove-untracked-filesdirectories">
             7.7 Clean (remove untracked files/directories)
           </h3>
@@ -1160,13 +1094,11 @@ git<span class="w"> </span>stash<span class="w"> </span>pop
             <pre><span></span><code>git<span class="w"> </span>clean<span class="w"> </span>-nd
 </code></pre>
           </div>
-
           <p>Remove untracked files + directories:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>clean<span class="w"> </span>-fd<span class="w"> </span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="8-remotes-and-collaboration-fetchpullpush-forks-upstream">
             8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)
@@ -1175,32 +1107,28 @@ git<span class="w"> </span>stash<span class="w"> </span>pop
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>-v<span class="w"> </span><span class="c1"># list remotes and URLs</span>
 
-git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git<span class="w"> </span><span class="c1"># add a remote named &quot;origin&quot;</span>
+git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git<span class="w"> </span><span class="c1"># add a remote named "origin"</span>
 
 git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>upstream<span class="w"> </span>git@github.com:UPSTREAM_OWNER/REPO.git<span class="w"> </span><span class="c1"># if you forked and want to track the main repo</span>
 
 git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:OWNER/REPO.git<span class="w"> </span><span class="c1"># change URL of origin</span>
 </code></pre>
           </div>
-
           <p>Rename a remote:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>rename<span class="w"> </span>origin<span class="w"> </span>github
 </code></pre>
           </div>
-
           <p>Remove a remote:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>remote<span class="w"> </span>remove<span class="w"> </span>upstream
 </code></pre>
           </div>
-
           <p>Prune deleted remote branches:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>--prune
 </code></pre>
           </div>
-
           <h3 id="82-fetch-vs-pull">8.2 Fetch vs Pull</h3>
           <ul>
             <li>
@@ -1220,7 +1148,6 @@ git<span class="w"> </span>pull<span class="w"> </span><span class="c1"># implic
 git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span><span class="c1"># explicitly</span>
 </code></pre>
           </div>
-
           <h3 id="83-fork-workflow">8.3 Fork workflow</h3>
           <p>When working on a fork:</p>
           <ul>
@@ -1236,10 +1163,9 @@ git<span class="w"> </span>merge<span class="w"> </span>upstream/main<span class
 
 git<span class="w"> </span>rebase<span class="w"> </span>upstream/main<span class="w"> </span><span class="c1"># or keep your commits on top of the latest main</span>
 
-git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span><span class="c1"># update your fork&#39;s main branch</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>main<span class="w"> </span><span class="c1"># update your fork's main branch</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="9-tags-releases-and-versioning">
             9. Tags, Releases, and Versioning
@@ -1250,13 +1176,11 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
             <pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>v1.2.3<span class="w"> </span>
 </code></pre>
           </div>
-
           <p>Annotated tag (recommended):</p>
           <div class="codehilite">
-            <pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.2.3<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release v1.2.3&quot;</span>
+            <pre><span></span><code>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v1.2.3<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Release v1.2.3"</span>
 </code></pre>
           </div>
-
           <p>Push tags:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>push<span class="w"> </span>--tags<span class="w"> </span><span class="c1"># pushes all tags</span>
@@ -1264,38 +1188,32 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v1.2.3<span class="w"> </span><span class="c1"># push a specific tag</span>
 </code></pre>
           </div>
-
           <p>Describe the current commit using the nearest tag:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>describe<span class="w"> </span>--tags<span class="w"> </span>--always
 </code></pre>
           </div>
-
           <h3 id="92-github-releases-gh">9.2 GitHub releases (gh)</h3>
           <p>Create a release (can upload assets too):</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v1.2.3<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;v1.2.3&quot;</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">&quot;Key changes...&quot;</span>
+            <pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v1.2.3<span class="w"> </span>--title<span class="w"> </span><span class="s2">"v1.2.3"</span><span class="w"> </span>--notes<span class="w"> </span><span class="s2">"Key changes..."</span>
 </code></pre>
           </div>
-
           <p>List releases:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>list
 </code></pre>
           </div>
-
           <p>Upload an asset:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>upload<span class="w"> </span>v1.2.3<span class="w"> </span>./dist/app.zip
 </code></pre>
           </div>
-
           <p>Download release assets:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>release<span class="w"> </span>download<span class="w"> </span>v1.2.3
 </code></pre>
           </div>
-
           <hr />
           <h2 id="10-advanced-git-worktrees-submodules-sparse-checkout-bisect">
             10. Advanced Git (Worktrees, Submodules, Sparse Checkout, Bisect)
@@ -1315,7 +1233,6 @@ git<span class="w"> </span>worktree<span class="w"> </span>list<span class="w"> 
 git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"> </span>../my-repo-hotfix<span class="w"> </span><span class="c1"># remove when done</span>
 </code></pre>
           </div>
-
           <h3 id="102-submodules-use-only-if-necessary">
             10.2 Submodules (use only if necessary)
           </h3>
@@ -1324,19 +1241,16 @@ git<span class="w"> </span>worktree<span class="w"> </span>remove<span class="w"
             <pre><span></span><code>git<span class="w"> </span>submodule<span class="w"> </span>add<span class="w"> </span>git@github.com:OWNER/dep-repo.git<span class="w"> </span>deps/dep-repo
 </code></pre>
           </div>
-
           <p>Clone repo with submodules:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>git@github.com:OWNER/REPO.git
 </code></pre>
           </div>
-
           <p>Update submodules:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
 </code></pre>
           </div>
-
           <h3 id="103-sparse-checkout-huge-monorepos">
             10.3 Sparse checkout (huge monorepos)
           </h3>
@@ -1350,7 +1264,6 @@ git<span class="w"> </span>sparse-checkout<span class="w"> </span><span class="n
 git<span class="w"> </span>checkout<span class="w"> </span><span class="c1"># checkout the default branch with only the specified paths</span>
 </code></pre>
           </div>
-
           <h3 id="104-bisect-find-the-commit-that-broke-something">
             10.4 Bisect (find the commit that broke something)
           </h3>
@@ -1363,7 +1276,6 @@ git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </
 git<span class="w"> </span>bisect<span class="w"> </span>reset<span class="w"> </span><span class="c1"># end bisect session and return to original HEAD when finished</span>
 </code></pre>
           </div>
-
           <h3 id="105-rewrite-history-danger-zone">
             10.5 Rewrite history (danger zone)
           </h3>
@@ -1393,7 +1305,6 @@ git<span class="w"> </span>bisect<span class="w"> </span>reset<span class="w"> <
             <pre><span></span><code>git<span class="w"> </span>config<span class="w"> </span>core.hooksPath<span class="w"> </span>.githooks
 </code></pre>
           </div>
-
           <h3 id="107-git-lfs-large-files">10.7 Git LFS (large files)</h3>
           <p>
             If you must version large binaries (datasets, PSDs, large media),
@@ -1403,15 +1314,14 @@ git<span class="w"> </span>bisect<span class="w"> </span>reset<span class="w"> <
             <pre><span></span><code>git<span class="w"> </span>lfs<span class="w"> </span>install<span class="w"> </span><span class="c1"># one-time install per machine (requires git-lfs installed)</span>
 
 <span class="c1"># below: track patterns (writes to .gitattributes)</span>
-git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.psd&quot;</span>
-git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.mp4&quot;</span>
+git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">"*.psd"</span>
+git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">"*.mp4"</span>
 
 <span class="c1"># below: add to gitattributes and commit</span>
 git<span class="w"> </span>add<span class="w"> </span>.gitattributes<span class="w"> </span>
-git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Configure Git LFS&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Configure Git LFS"</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow">
             11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)
@@ -1427,7 +1337,6 @@ gh<span class="w"> </span>repo<span class="w"> </span>list<span class="w"> </spa
 gh<span class="w"> </span>repo<span class="w"> </span>sync<span class="w"> </span>OWNER/FORK_REPO<span class="w"> </span><span class="c1"># sync a fork from upstream (default branch)</span>
 </code></pre>
           </div>
-
           <h3 id="112-pull-requests">11.2 Pull Requests</h3>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span><span class="c1"># create PR from current branch</span>
@@ -1441,22 +1350,19 @@ gh<span class="w"> </span>pr<span class="w"> </span>checkout<span class="w"> </s
 gh<span class="w"> </span>pr<span class="w"> </span>merge<span class="w"> </span><span class="m">123</span><span class="w"> </span><span class="c1"># merge a PR (respects repo settings)</span>
 </code></pre>
           </div>
-
           <p>Review a PR:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>review<span class="w"> </span><span class="m">123</span><span class="w"> </span>--approve
 
 <span class="c1"># or request changes</span>
-<span class="c1"># gh pr review 123 --request-changes -b &quot;Reason...&quot;</span>
+<span class="c1"># gh pr review 123 --request-changes -b "Reason..."</span>
 </code></pre>
           </div>
-
           <p>See PR status for your branches:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>status
 </code></pre>
           </div>
-
           <h3 id="113-issues">11.3 Issues</h3>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>issue<span class="w"> </span>create<span class="w"> </span><span class="c1"># create a new issue interactively</span>
@@ -1466,7 +1372,6 @@ gh<span class="w"> </span>issue<span class="w"> </span>list<span class="w"> </sp
 gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </span><span class="m">42</span><span class="w"> </span><span class="c1"># view issue details</span>
 </code></pre>
           </div>
-
           <h3 id="114-workflows-and-runs-github-actions">
             11.4 Workflows and runs (GitHub Actions)
           </h3>
@@ -1475,19 +1380,16 @@ gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </sp
             <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>list
 </code></pre>
           </div>
-
           <p>View a workflow definition:</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>view<span class="w"> </span><span class="s2">&quot;Deploy&quot;</span><span class="w"> </span>--yaml
+            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>view<span class="w"> </span><span class="s2">"Deploy"</span><span class="w"> </span>--yaml
 </code></pre>
           </div>
-
           <p>Run a workflow manually (workflow_dispatch):</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span><span class="s2">&quot;Deploy&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">environment</span><span class="o">=</span>prod
+            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span><span class="s2">"Deploy"</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">environment</span><span class="o">=</span>prod
 </code></pre>
           </div>
-
           <p>Watch runs:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--limit<span class="w"> </span><span class="m">20</span>
@@ -1498,47 +1400,40 @@ gh<span class="w"> </span>run<span class="w"> </span>watch
 gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span>&lt;run_id&gt;<span class="w"> </span>--log
 </code></pre>
           </div>
-
           <p>Re-run a failed workflow:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>run<span class="w"> </span>rerun<span class="w"> </span>&lt;run_id&gt;
 </code></pre>
           </div>
-
           <p>Cancel a run:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>run<span class="w"> </span>cancel<span class="w"> </span>&lt;run_id&gt;
 </code></pre>
           </div>
-
           <h3 id="115-secrets-and-variables-for-cicd">
             11.5 Secrets and variables (for CI/CD)
           </h3>
           <p>Set a repository secret:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># reads from stdin</span>
-<span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%s&quot;</span><span class="w"> </span><span class="s2">&quot;MY_SECRET_VALUE&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>MY_SECRET
+<span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="s2">"MY_SECRET_VALUE"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>MY_SECRET
 </code></pre>
           </div>
-
           <p>List secrets:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>secret<span class="w"> </span>list
 </code></pre>
           </div>
-
           <p>Set an Actions variable:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%s&quot;</span><span class="w"> </span><span class="s2">&quot;staging&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>variable<span class="w"> </span><span class="nb">set</span><span class="w"> </span>DEPLOY_ENV
+            <pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="s2">"staging"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>variable<span class="w"> </span><span class="nb">set</span><span class="w"> </span>DEPLOY_ENV
 </code></pre>
           </div>
-
           <p>List variables:</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>variable<span class="w"> </span>list
 </code></pre>
           </div>
-
           <h3 id="116-gh-api-advanced-automation">
             11.6 <code>gh api</code> (advanced automation)
           </h3>
@@ -1551,27 +1446,23 @@ gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span
             <pre><span></span><code>gh<span class="w"> </span>api<span class="w"> </span>repos/OWNER/REPO/hooks
 </code></pre>
           </div>
-
           <p>Example: create a label:</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span>api<span class="w"> </span>repos/OWNER/REPO/labels<span class="w"> </span>-f<span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;priority:high&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">color</span><span class="o">=</span><span class="s2">&quot;B60205&quot;</span>
+            <pre><span></span><code>gh<span class="w"> </span>api<span class="w"> </span>repos/OWNER/REPO/labels<span class="w"> </span>-f<span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="s2">"priority:high"</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">color</span><span class="o">=</span><span class="s2">"B60205"</span>
 </code></pre>
           </div>
-
           <h3 id="117-aliases-and-extensions">11.7 Aliases and extensions</h3>
           <p>Aliases:</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span><span class="nb">alias</span><span class="w"> </span><span class="nb">set</span><span class="w"> </span>prs<span class="w"> </span><span class="s2">&quot;pr list --limit 50&quot;</span>
+            <pre><span></span><code>gh<span class="w"> </span><span class="nb">alias</span><span class="w"> </span><span class="nb">set</span><span class="w"> </span>prs<span class="w"> </span><span class="s2">"pr list --limit 50"</span>
 </code></pre>
           </div>
-
           <p>Extensions (install community tooling):</p>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>extension<span class="w"> </span>list
 <span class="c1"># gh extension install OWNER/EXTENSION</span>
 </code></pre>
           </div>
-
           <hr />
           <h2
             id="12-cli-driven-deployment-git-push-remote-hooks-github-actions"
@@ -1612,27 +1503,24 @@ gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span
 gh<span class="w"> </span>run<span class="w"> </span>watch
 </code></pre>
           </div>
-
           <p>Manual deployment trigger:</p>
           <div class="codehilite">
-            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span><span class="s2">&quot;Deploy&quot;</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">environment</span><span class="o">=</span>staging
+            <pre><span></span><code>gh<span class="w"> </span>workflow<span class="w"> </span>run<span class="w"> </span><span class="s2">"Deploy"</span><span class="w"> </span>-f<span class="w"> </span><span class="nv">environment</span><span class="o">=</span>staging
 </code></pre>
           </div>
-
           <h3 id="122-tag-driven-releases-and-deployments">
             12.2 Tag-driven releases and deployments
           </h3>
           <p>Many production systems deploy only from version tags.</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># create + push a tag</span>
-git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v2.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release v2.0.0&quot;</span>
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>v2.0.0<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Release v2.0.0"</span>
 git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>v2.0.0
 
 <span class="c1"># create a GitHub release</span>
-gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v2.0.0<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;v2.0.0&quot;</span><span class="w"> </span>--generate-notes
+gh<span class="w"> </span>release<span class="w"> </span>create<span class="w"> </span>v2.0.0<span class="w"> </span>--title<span class="w"> </span><span class="s2">"v2.0.0"</span><span class="w"> </span>--generate-notes
 </code></pre>
           </div>
-
           <h3 id="123-remote-server-deployment-using-a-bare-repo-hook">
             12.3 Remote server deployment using a bare repo + hook
           </h3>
@@ -1650,30 +1538,27 @@ sudo<span class="w"> </span>chown<span class="w"> </span>deploy:deploy<span clas
 sudo<span class="w"> </span>-u<span class="w"> </span>deploy<span class="w"> </span>git<span class="w"> </span>init<span class="w"> </span>--bare<span class="w"> </span>/srv/git/myapp.git
 </code></pre>
           </div>
-
           <p>Create a working tree path:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/www/myapp
 sudo<span class="w"> </span>chown<span class="w"> </span>deploy:deploy<span class="w"> </span>/var/www/myapp
 </code></pre>
           </div>
-
           <p>Add a <code>post-receive</code> hook to deploy on push:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>-u<span class="w"> </span>deploy<span class="w"> </span>nano<span class="w"> </span>/srv/git/myapp.git/hooks/post-receive
 </code></pre>
           </div>
-
           <p>Hook example (minimal):</p>
           <div class="codehilite">
             <pre><span></span><code><span class="ch">#!/bin/sh</span>
 <span class="nb">set</span><span class="w"> </span>-eu
 
-<span class="nv">BRANCH</span><span class="o">=</span><span class="s2">&quot;refs/heads/main&quot;</span>
+<span class="nv">BRANCH</span><span class="o">=</span><span class="s2">"refs/heads/main"</span>
 
 <span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>oldrev<span class="w"> </span>newrev<span class="w"> </span>refname
 <span class="k">do</span>
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$refname</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BRANCH</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$refname</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BRANCH</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 <span class="w">    </span><span class="nv">GIT_WORK_TREE</span><span class="o">=</span>/var/www/myapp<span class="w"> </span>git<span class="w"> </span>--git-dir<span class="o">=</span>/srv/git/myapp.git<span class="w"> </span>checkout<span class="w"> </span>-f<span class="w"> </span>main
 
 <span class="w">    </span><span class="c1"># Example: restart a service</span>
@@ -1682,13 +1567,11 @@ sudo<span class="w"> </span>chown<span class="w"> </span>deploy:deploy<span clas
 <span class="k">done</span>
 </code></pre>
           </div>
-
           <p>Make it executable:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>-u<span class="w"> </span>deploy<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/srv/git/myapp.git/hooks/post-receive
 </code></pre>
           </div>
-
           <p><strong>On your local machine</strong></p>
           <p>Add a remote and push:</p>
           <div class="codehilite">
@@ -1697,7 +1580,6 @@ sudo<span class="w"> </span>chown<span class="w"> </span>deploy:deploy<span clas
 git<span class="w"> </span>push<span class="w"> </span>production<span class="w"> </span>main
 </code></pre>
           </div>
-
           <p>
             Notes: - This is intentionally minimal. In production, you typically
             add build steps, atomic deploy directories, and rollbacks. - You
@@ -1713,10 +1595,9 @@ git<span class="w"> </span>push<span class="w"> </span>production<span class="w"
           </p>
           <p>Use <code>gh secret set</code> for CI/CD secrets:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;%s&quot;</span><span class="w"> </span><span class="s2">&quot;ssh-private-key-material&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>DEPLOY_SSH_KEY
+            <pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s2">"%s"</span><span class="w"> </span><span class="s2">"ssh-private-key-material"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gh<span class="w"> </span>secret<span class="w"> </span><span class="nb">set</span><span class="w"> </span>DEPLOY_SSH_KEY
 </code></pre>
           </div>
-
           <hr />
           <h2 id="13-security-and-governance">13. Security and Governance</h2>
           <h3 id="avoid-committing-secrets">Avoid committing secrets</h3>
@@ -1728,11 +1609,10 @@ git<span class="w"> </span>push<span class="w"> </span>production<span class="w"
           <p>Quick checks:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># scan tracked files for suspicious strings</span>
-git<span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;BEGIN RSA PRIVATE KEY&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
-git<span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;AKIA&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+git<span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"BEGIN RSA PRIVATE KEY"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+git<span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"AKIA"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 </code></pre>
           </div>
-
           <h3 id="signed-commits-optional">Signed commits (optional)</h3>
           <p>
             Modern Git can sign commits/tags using either GPG or SSH signing,
@@ -1754,10 +1634,9 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>commit.gpgsign<span class="w"> </span><span class="nb">true</span>
 
 <span class="c1"># Make a signed commit</span>
-git<span class="w"> </span>commit<span class="w"> </span>-S<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Signed commit&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-S<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Signed commit"</span>
 </code></pre>
           </div>
-
           <p>
             To get the “Verified” badge on GitHub, add the same public key under
             GitHub Settings → SSH and GPG keys.
@@ -1789,7 +1668,6 @@ git<span class="w"> </span>commit<span class="w"> </span>-S<span class="w"> </sp
 gh<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre>
           </div>
-
           <h3 id="detached-head">Detached HEAD</h3>
           <p>
             You checked out a commit directly. Create a branch to keep work:
@@ -1798,7 +1676,6 @@ gh<span class="w"> </span>auth<span class="w"> </span>status
             <pre><span></span><code>git<span class="w"> </span>switch<span class="w"> </span>-c<span class="w"> </span>fix/detached
 </code></pre>
           </div>
-
           <h3 id="non-fast-forward-push-rejected">
             “non-fast-forward” push rejected
           </h3>
@@ -1812,7 +1689,6 @@ git<span class="w"> </span>rebase<span class="w"> </span>origin/main
 git<span class="w"> </span>push
 </code></pre>
           </div>
-
           <h3 id="accidental-git-reset-hard">
             Accidental <code>git reset --hard</code>
           </h3>
@@ -1823,7 +1699,6 @@ git<span class="w"> </span>push
 git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>&lt;sha&gt;
 </code></pre>
           </div>
-
           <hr />
           <h2 id="references-and-further-reading">
             References and Further Reading
@@ -1837,32 +1712,11 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

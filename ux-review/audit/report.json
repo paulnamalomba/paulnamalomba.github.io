@@ -1,0 +1,252 @@
+{
+  "scope": {
+    "production_pages_checked_at_320px": 96,
+    "representative_pages_with_axe_checks": 13,
+    "prior_desktop_mobile_captures_reused": 196,
+    "enlarged_text_probe": "root font-size 200% at 1440px",
+    "engine": "Chrome / Chromium emulation"
+  },
+  "score": {
+    "accessibility": 2,
+    "performance": 2,
+    "theming": 3,
+    "responsive_design": 2,
+    "implementation_integrity": 3,
+    "total": 12,
+    "rating": "Acceptable \u2014 significant work remains"
+  },
+  "severity_counts": {
+    "P0": 0,
+    "P1": 5,
+    "P2": 1,
+    "P3": 0
+  },
+  "implementation_integrity": "Pass: coherent incumbent identity and shared interaction code; technical defects remain.",
+  "issues": [
+    {
+      "id": "A1",
+      "severity": "P1",
+      "category": "Responsive / Accessibility",
+      "title": "Narrow layouts and enlarged text overflow",
+      "locations": [
+        "styles.css:537",
+        "interviews/uct-cto/style.css:442",
+        "learning/ibm-data-engineering/style.css:393",
+        "style.css:777",
+        "presentations/africomp7/index.html:568"
+      ],
+      "evidence": "24 of 96 production pages exceed the 320px viewport (322\u2013607px). Raw reference URLs extend to 544px in the Django PowerShell guide. Presentation prose and resource tables extend outside their containers. A 200% root-font probe also overflows the homepage, docs landing page and presentation.",
+      "impact": "Readers on narrow screens or using enlarged text can lose content or must pan the whole page.",
+      "standard": "WCAG 1.4.10 Reflow for non-exempt prose; enlarged-text probe is diagnostic, not a complete browser-zoom conformance test.",
+      "recommendation": "Wrap raw URLs; use minmax(0, 1fr) and min-width: 0 for grids; constrain tables and equations to local scroll containers; let grids collapse with content size.",
+      "command": "$impeccable adapt"
+    },
+    {
+      "id": "A2",
+      "severity": "P1",
+      "category": "Accessibility",
+      "title": "Nested checklist links cannot be activated with Enter",
+      "locations": [
+        "interviews/uct-cto/assessment-cto-architecture.html:250",
+        "interviews/uct-cto/assessment-cto-architecture.html:1193"
+      ],
+      "evidence": "Focusing the Excalidraw link and pressing Enter changes its parent checkbox from false to true; no destination opens. The parent keydown handler prevents the link default action.",
+      "impact": "Keyboard users cannot follow this assessment resource link.",
+      "standard": "WCAG 2.1.1 Keyboard; invalid nested interactive control structure.",
+      "recommendation": "Use a native checkbox and separate label; keep links outside the checkbox control; scope keyboard handlers to the intended control.",
+      "command": "$impeccable harden"
+    },
+    {
+      "id": "A3",
+      "severity": "P1",
+      "category": "Accessibility",
+      "title": "Assessment progress bars have no accessible names",
+      "locations": [
+        "interviews/uct-cto/assessment-cto-architecture.html:157",
+        "interviews/uct-cto/assessment-de-docker.html:179",
+        "interviews/uct-cto/assessment-de-wsl.html:178",
+        "interviews/uct-cto/assessment-iot-edge.html:159",
+        "interviews/uct-cto/assessment-web-servers-dotnet.html:176",
+        "interviews/uct-cto/assessment-web-servers-python.html:177",
+        "interviews/uct-cto/assessment-tips-strategy.html:146"
+      ],
+      "evidence": "Seven role=progressbar controls have values but no aria-label or aria-labelledby.",
+      "impact": "Assistive technology receives a progress value without a programmatic description of what it measures.",
+      "standard": "WCAG 4.1.2 Name, Role, Value.",
+      "recommendation": "Connect each progress bar to its visible progress heading with aria-labelledby.",
+      "command": "$impeccable harden"
+    },
+    {
+      "id": "A4",
+      "severity": "P1",
+      "category": "Accessibility",
+      "title": "Inline assessment links rely on color alone",
+      "locations": [
+        "interviews/uct-cto/assessment-cto-architecture.html:262",
+        "interviews/uct-cto/style.css:139"
+      ],
+      "evidence": "Excalidraw and Draw.io links have no persistent underline and only 1.04:1 contrast against surrounding text.",
+      "impact": "Readers may not recognize these words as links.",
+      "standard": "WCAG 1.4.1 Use of Color.",
+      "recommendation": "Underline inline prose links in their resting state.",
+      "command": "$impeccable harden"
+    },
+    {
+      "id": "A5",
+      "severity": "P1",
+      "category": "Performance",
+      "title": "Presentation eagerly loads approximately 31 MB of images",
+      "locations": [
+        "presentations/africomp7/index.html:1304",
+        "presentations/africomp7/index.html:2136"
+      ],
+      "evidence": "18 active local image references total 30,952,859 bytes; all omit lazy loading. The geometry schematic alone is 11,877,001 bytes.",
+      "impact": "Large initial transfer and image decoding penalize mobile connections and devices.",
+      "standard": null,
+      "recommendation": "Create appropriately sized WebP/AVIF variants, preserve scientific detail, supply dimensions, and lazy-load figures below the first slide. Ensure PDF export awaits deferred images.",
+      "command": "$impeccable optimize"
+    },
+    {
+      "id": "A6",
+      "severity": "P2",
+      "category": "Responsive",
+      "title": "Several standalone link targets remain below 44px",
+      "locations": [
+        "styles.css:383",
+        "styles.css:497",
+        "style.css:680"
+      ],
+      "evidence": "Guide-card links measure approximately 34.5px high; the homepage featured-guide link is approximately 23.4px high.",
+      "impact": "Smaller targets make touch selection less forgiving.",
+      "standard": "Impeccable 44px touch-target criterion; not treated as an automatic WCAG AA failure.",
+      "recommendation": "Increase the clickable area of standalone card and action links to at least 44px without changing prose-link layout.",
+      "command": "$impeccable adapt"
+    }
+  ],
+  "overflow_pages": [
+    {
+      "path": "docs/guides/AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.html",
+      "width": 337
+    },
+    {
+      "path": "docs/guides/AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.html",
+      "width": 337
+    },
+    {
+      "path": "docs/guides/CLEAN_ARCHITECTURE_PROJECT_STRUCTURES.html",
+      "width": 330
+    },
+    {
+      "path": "docs/guides/DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.html",
+      "width": 478
+    },
+    {
+      "path": "docs/guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.html",
+      "width": 544
+    },
+    {
+      "path": "docs/guides/DJANGO_MULTI-AUTHENTICATION_PYTHON_POWERUSER_GUIDE.html",
+      "width": 426
+    },
+    {
+      "path": "docs/guides/MEMORY_MANAGEMENT_CPP_POWERUSER_GUIDE.html",
+      "width": 521
+    },
+    {
+      "path": "docs/guides/MEMORY_MANAGEMENT_CSHARP_POWERUSER_GUIDE.html",
+      "width": 445
+    },
+    {
+      "path": "docs/guides/MEMORY_MANAGEMENT_PYTHON_POWERUSER_GUIDE.html",
+      "width": 353
+    },
+    {
+      "path": "docs/guides/SYSTEMCTL_BASH_POWERSHELL_USERGUIDE.html",
+      "width": 322
+    },
+    {
+      "path": "docs/guides/WEB_APIS_AND_SERVING.html",
+      "width": 354
+    },
+    {
+      "path": "interviews/uct-cto/assessment-de-docker.html",
+      "width": 490
+    },
+    {
+      "path": "interviews/uct-cto/assessment-de-wsl.html",
+      "width": 340
+    },
+    {
+      "path": "interviews/uct-cto/assessment-iot-edge.html",
+      "width": 529
+    },
+    {
+      "path": "interviews/uct-cto/assessment-web-servers-dotnet.html",
+      "width": 394
+    },
+    {
+      "path": "interviews/uct-cto/assessment-web-servers-python.html",
+      "width": 348
+    },
+    {
+      "path": "interviews/uct-cto/level1-overview.html",
+      "width": 562
+    },
+    {
+      "path": "interviews/uct-cto/level5-panel.html",
+      "width": 527
+    },
+    {
+      "path": "learning/ibm-data-engineering/course-8/module-4/lecture-2.html",
+      "width": 480
+    },
+    {
+      "path": "learning/ibm-data-engineering/course-9/module-1/lecture-1.html",
+      "width": 327
+    },
+    {
+      "path": "learning/ibm-data-engineering/course-9/module-1/lecture-4.html",
+      "width": 500
+    },
+    {
+      "path": "learning/ibm-data-engineering/course-9/module-1/lecture-6.html",
+      "width": 421
+    },
+    {
+      "path": "learning/ibm-data-engineering/course-9/module-1/lecture-7.html",
+      "width": 550
+    },
+    {
+      "path": "presentations/africomp7/index.html",
+      "width": 607
+    }
+  ],
+  "detector": {
+    "raw_findings": 887,
+    "interpretation": "Repeated aesthetic flags and static cascade/background inference are not counted as distinct defects.",
+    "false_positive_verified": "Axe scrollable-region-focusable warnings: all inspected scroll containers accept native Chromium focus. The SYSTEMCTL pre block is reachable by Tab and ArrowRight scrolls it 40px."
+  },
+  "positive_findings": [
+    "Existing 10 interaction checks passed in the preceding verification; source was unchanged during this audit.",
+    "Sampled rendered pages had no axe text/background contrast violations.",
+    "Homepage image variants total 528,868 bytes versus 3,759,069 bytes of originals, with explicit dimensions and 8 of 9 images lazy-loaded.",
+    "Shared menu focus containment, Escape handling, keyboard disclosures, guide-filter status, reduced-motion behavior and no-JavaScript reading fallbacks are present.",
+    "Prior static checks cover landmarks, heading order, image alt attributes and local links across production pages."
+  ],
+  "limitations": [
+    "Physical iOS/Android devices and screen readers were not exercised.",
+    "No production Core Web Vitals or throttled-network timings were measured.",
+    "Tables and equations can require two-dimensional scrolling; root overflow measurements alone are not a conformance verdict."
+  ],
+  "recommended_order": [
+    "$impeccable adapt",
+    "$impeccable harden",
+    "$impeccable optimize",
+    "$impeccable polish"
+  ],
+  "evidence_pngs": [
+    "guide-320.png",
+    "table-320.png",
+    "text-200.png"
+  ]
+}

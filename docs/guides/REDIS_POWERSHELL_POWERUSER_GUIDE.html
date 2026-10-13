@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>REDIS PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -224,7 +227,7 @@
 
 <span class="c1"># Append-only file (AOF)</span>
 <span class="na">appendonly yes</span>
-<span class="na">appendfilename &quot;appendonly.aof&quot;</span>
+<span class="na">appendfilename "appendonly.aof"</span>
 <span class="na">appendfsync everysec</span>
 
 <span class="c1"># Slow log</span>
@@ -235,7 +238,6 @@
 <span class="na">requirepass StrongPassword123!</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Set <code>maxmemory</code> to 75%
             of available RAM - Use <code>allkeys-lru</code> eviction policy for
@@ -277,13 +279,12 @@
           </ol>
           <p><strong>Rename Dangerous Commands</strong>:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="na">rename-command FLUSHDB &quot;&quot;</span>
-<span class="na">rename-command FLUSHALL &quot;&quot;</span>
-<span class="na">rename-command CONFIG &quot;CONFIG_8d7a9f2b&quot;</span>
-<span class="na">rename-command SHUTDOWN &quot;SHUTDOWN_5c4e1d3f&quot;</span>
+            <pre><span></span><code><span class="na">rename-command FLUSHDB ""</span>
+<span class="na">rename-command FLUSHALL ""</span>
+<span class="na">rename-command CONFIG "CONFIG_8d7a9f2b"</span>
+<span class="na">rename-command SHUTDOWN "SHUTDOWN_5c4e1d3f"</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="install-and-configure-redis-on-windows">
             Install and Configure Redis on Windows
@@ -297,18 +298,18 @@
 <span class="n">choco</span> <span class="n">install</span> <span class="n">redis</span><span class="p">-</span><span class="n">64</span> <span class="n">-y</span>
 
 <span class="c"># Or download manually</span>
-<span class="nv">$redisUrl</span> <span class="p">=</span> <span class="s2">&quot;https://github.com/microsoftarchive/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.zip&quot;</span>
-<span class="nv">$downloadPath</span> <span class="p">=</span> <span class="s2">&quot;$env:TEMP\redis.zip&quot;</span>
-<span class="nv">$installPath</span> <span class="p">=</span> <span class="s2">&quot;C:\Redis&quot;</span>
+<span class="nv">$redisUrl</span> <span class="p">=</span> <span class="s2">"https://github.com/microsoftarchive/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.zip"</span>
+<span class="nv">$downloadPath</span> <span class="p">=</span> <span class="s2">"$env:TEMP\redis.zip"</span>
+<span class="nv">$installPath</span> <span class="p">=</span> <span class="s2">"C:\Redis"</span>
 
 <span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="nv">$redisUrl</span> <span class="n">-OutFile</span> <span class="nv">$downloadPath</span>
 <span class="nb">Expand-Archive</span> <span class="n">-Path</span> <span class="nv">$downloadPath</span> <span class="n">-DestinationPath</span> <span class="nv">$installPath</span>
 
 <span class="c"># Create data directory</span>
-<span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Redis\data&quot;</span> <span class="n">-Force</span>
+<span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Path</span> <span class="s2">"C:\Redis\data"</span> <span class="n">-Force</span>
 
 <span class="c"># Configure redis.windows.conf</span>
-<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">bind 127.0.0.1</span>
 <span class="sh">port 6379</span>
 <span class="sh">timeout 300</span>
@@ -320,8 +321,8 @@
 <span class="sh">dir C:/Redis/data</span>
 <span class="sh">dbfilename dump.rdb</span>
 <span class="sh">requirepass StrongPassword123!</span>
-<span class="sh">&quot;@</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Redis\redis.windows.conf&quot;</span> <span class="n">-Value</span> <span class="nv">$config</span>
+<span class="sh">"@</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"C:\Redis\redis.windows.conf"</span> <span class="n">-Value</span> <span class="nv">$config</span>
 
 <span class="c"># Install as Windows service</span>
 <span class="nb">cd </span><span class="n">C</span><span class="p">:\</span><span class="n">Redis</span>
@@ -337,7 +338,6 @@
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">ping</span>
 </code></pre>
           </div>
-
           <h3 id="basic-data-operations">Basic Data Operations</h3>
           <p>
             Perform CRUD operations with different Redis data structures using
@@ -345,49 +345,48 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Set password for authentication</span>
-<span class="nv">$env:REDISCLI_AUTH</span> <span class="p">=</span> <span class="s2">&quot;StrongPassword123!&quot;</span>
+<span class="nv">$env:REDISCLI_AUTH</span> <span class="p">=</span> <span class="s2">"StrongPassword123!"</span>
 
 <span class="c"># String operations</span>
-<span class="n">redis-cli</span> <span class="nb">SET </span><span class="n">user</span><span class="p">:</span><span class="n">1</span><span class="p">:</span><span class="n">name</span> <span class="s2">&quot;John Doe&quot;</span>
+<span class="n">redis-cli</span> <span class="nb">SET </span><span class="n">user</span><span class="p">:</span><span class="n">1</span><span class="p">:</span><span class="n">name</span> <span class="s2">"John Doe"</span>
 <span class="n">redis-cli</span> <span class="n">GET</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span><span class="p">:</span><span class="n">name</span>
 <span class="n">redis-cli</span> <span class="n">INCR</span> <span class="n">counter</span>
 <span class="n">redis-cli</span> <span class="n">INCRBY</span> <span class="n">counter</span> <span class="n">5</span>
-<span class="n">redis-cli</span> <span class="n">SETEX</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span> <span class="s2">&quot;3600&quot;</span> <span class="s2">&quot;abc123xyz&quot;</span>  <span class="c"># Expire in 1 hour</span>
+<span class="n">redis-cli</span> <span class="n">SETEX</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span> <span class="s2">"3600"</span> <span class="s2">"abc123xyz"</span>  <span class="c"># Expire in 1 hour</span>
 
 <span class="c"># List operations</span>
-<span class="n">redis-cli</span> <span class="n">LPUSH</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span> <span class="s2">&quot;task1&quot;</span>
-<span class="n">redis-cli</span> <span class="n">RPUSH</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span> <span class="s2">&quot;task2&quot;</span> <span class="s2">&quot;task3&quot;</span>
+<span class="n">redis-cli</span> <span class="n">LPUSH</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span> <span class="s2">"task1"</span>
+<span class="n">redis-cli</span> <span class="n">RPUSH</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span> <span class="s2">"task2"</span> <span class="s2">"task3"</span>
 <span class="n">redis-cli</span> <span class="n">LRANGE</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span> <span class="n">0</span> <span class="p">-</span><span class="n">1</span>
 <span class="n">redis-cli</span> <span class="n">LPOP</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span>
 <span class="n">redis-cli</span> <span class="n">LLEN</span> <span class="n">queue</span><span class="p">:</span><span class="n">tasks</span>
 
 <span class="c"># Set operations</span>
-<span class="n">redis-cli</span> <span class="n">SADD</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span> <span class="s2">&quot;redis&quot;</span> <span class="s2">&quot;database&quot;</span> <span class="s2">&quot;nosql&quot;</span>
+<span class="n">redis-cli</span> <span class="n">SADD</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span> <span class="s2">"redis"</span> <span class="s2">"database"</span> <span class="s2">"nosql"</span>
 <span class="n">redis-cli</span> <span class="n">SMEMBERS</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span>
-<span class="n">redis-cli</span> <span class="n">SISMEMBER</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span> <span class="s2">&quot;redis&quot;</span>
+<span class="n">redis-cli</span> <span class="n">SISMEMBER</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span> <span class="s2">"redis"</span>
 <span class="n">redis-cli</span> <span class="n">SINTER</span> <span class="n">tags</span><span class="p">:</span><span class="n">post1</span> <span class="n">tags</span><span class="p">:</span><span class="n">post2</span>
 
 <span class="c"># Hash operations</span>
-<span class="n">redis-cli</span> <span class="n">HSET</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span> <span class="n">name</span> <span class="s2">&quot;John&quot;</span> <span class="n">email</span> <span class="s2">&quot;john@example.com&quot;</span> <span class="n">age</span> <span class="n">30</span>
+<span class="n">redis-cli</span> <span class="n">HSET</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span> <span class="n">name</span> <span class="s2">"John"</span> <span class="n">email</span> <span class="s2">"john@example.com"</span> <span class="n">age</span> <span class="n">30</span>
 <span class="n">redis-cli</span> <span class="n">HGET</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span> <span class="n">name</span>
 <span class="n">redis-cli</span> <span class="n">HGETALL</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span>
 <span class="n">redis-cli</span> <span class="n">HINCRBY</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span> <span class="n">age</span> <span class="n">1</span>
 
 <span class="c"># Sorted Set operations</span>
-<span class="n">redis-cli</span> <span class="n">ZADD</span> <span class="n">leaderboard</span> <span class="n">100</span> <span class="s2">&quot;player1&quot;</span> <span class="n">200</span> <span class="s2">&quot;player2&quot;</span> <span class="n">150</span> <span class="s2">&quot;player3&quot;</span>
+<span class="n">redis-cli</span> <span class="n">ZADD</span> <span class="n">leaderboard</span> <span class="n">100</span> <span class="s2">"player1"</span> <span class="n">200</span> <span class="s2">"player2"</span> <span class="n">150</span> <span class="s2">"player3"</span>
 <span class="n">redis-cli</span> <span class="n">ZRANGE</span> <span class="n">leaderboard</span> <span class="n">0</span> <span class="p">-</span><span class="n">1</span> <span class="n">WITHSCORES</span>
 <span class="n">redis-cli</span> <span class="n">ZREVRANGE</span> <span class="n">leaderboard</span> <span class="n">0</span> <span class="n">2</span> <span class="n">WITHSCORES</span>
-<span class="n">redis-cli</span> <span class="n">ZRANK</span> <span class="n">leaderboard</span> <span class="s2">&quot;player1&quot;</span>
+<span class="n">redis-cli</span> <span class="n">ZRANK</span> <span class="n">leaderboard</span> <span class="s2">"player1"</span>
 
 <span class="c"># Key management</span>
 <span class="n">redis-cli</span> <span class="n">EXISTS</span> <span class="n">user</span><span class="p">:</span><span class="n">1</span><span class="p">:</span><span class="n">name</span>
 <span class="n">redis-cli</span> <span class="nb">DEL </span><span class="n">user</span><span class="p">:</span><span class="n">1</span><span class="p">:</span><span class="n">name</span>
 <span class="n">redis-cli</span> <span class="n">EXPIRE</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span> <span class="n">3600</span>
 <span class="n">redis-cli</span> <span class="n">TTL</span> <span class="n">session</span><span class="p">:</span><span class="n">token</span>
-<span class="n">redis-cli</span> <span class="n">KEYS</span> <span class="s2">&quot;user:*&quot;</span>  <span class="c"># Use SCAN in production</span>
+<span class="n">redis-cli</span> <span class="n">KEYS</span> <span class="s2">"user:*"</span>  <span class="c"># Use SCAN in production</span>
 </code></pre>
           </div>
-
           <h3 id="pubsub-messaging-pattern">Pub/Sub Messaging Pattern</h3>
           <p>
             Implement publish/subscribe messaging for real-time event
@@ -395,39 +394,38 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Publisher script (publisher.ps1)</span>
-<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@&quot;</span>
-<span class="sh">`$env:REDISCLI_AUTH = &#39;StrongPassword123!&#39;</span>
+<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@"</span>
+<span class="sh">`$env:REDISCLI_AUTH = 'StrongPassword123!'</span>
 <span class="sh">while (`$true) {</span>
-<span class="sh">    `$message = Read-Host &#39;Enter message (or quit to exit)&#39;</span>
-<span class="sh">    if (`$message -eq &#39;quit&#39;) { break }</span>
+<span class="sh">    `$message = Read-Host 'Enter message (or quit to exit)'</span>
+<span class="sh">    if (`$message -eq 'quit') { break }</span>
 <span class="sh">    redis-cli PUBLISH news `$message</span>
 <span class="sh">}</span>
-<span class="sh">&quot;@</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;publisher.ps1&quot;</span> <span class="n">-Value</span> <span class="nv">$config</span>
+<span class="sh">"@</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"publisher.ps1"</span> <span class="n">-Value</span> <span class="nv">$config</span>
 
 <span class="c"># Subscriber script (subscriber.ps1)</span>
-<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@&quot;</span>
-<span class="sh">`$env:REDISCLI_AUTH = &#39;StrongPassword123!&#39;</span>
-<span class="sh">Write-Host &#39;Subscribing to news channel...&#39;</span>
+<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@"</span>
+<span class="sh">`$env:REDISCLI_AUTH = 'StrongPassword123!'</span>
+<span class="sh">Write-Host 'Subscribing to news channel...'</span>
 <span class="sh">redis-cli SUBSCRIBE news</span>
-<span class="sh">&quot;@</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;subscriber.ps1&quot;</span> <span class="n">-Value</span> <span class="nv">$config</span>
+<span class="sh">"@</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"subscriber.ps1"</span> <span class="n">-Value</span> <span class="nv">$config</span>
 
 <span class="c"># Run subscriber in separate window</span>
-<span class="nb">Start-Process</span> <span class="n">powershell</span> <span class="n">-ArgumentList</span> <span class="s2">&quot;-NoExit&quot;</span><span class="p">,</span> <span class="s2">&quot;-File&quot;</span><span class="p">,</span> <span class="s2">&quot;subscriber.ps1&quot;</span>
+<span class="nb">Start-Process</span> <span class="n">powershell</span> <span class="n">-ArgumentList</span> <span class="s2">"-NoExit"</span><span class="p">,</span> <span class="s2">"-File"</span><span class="p">,</span> <span class="s2">"subscriber.ps1"</span>
 
 <span class="c"># Run publisher</span>
 <span class="p">.\</span><span class="n">publisher</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Pattern-based subscription</span>
-<span class="n">redis-cli</span> <span class="n">PSUBSCRIBE</span> <span class="s2">&quot;event:*&quot;</span>
+<span class="n">redis-cli</span> <span class="n">PSUBSCRIBE</span> <span class="s2">"event:*"</span>
 
 <span class="c"># Unsubscribe</span>
 <span class="n">redis-cli</span> <span class="n">UNSUBSCRIBE</span> <span class="n">news</span>
-<span class="n">redis-cli</span> <span class="n">PUNSUBSCRIBE</span> <span class="s2">&quot;event:*&quot;</span>
+<span class="n">redis-cli</span> <span class="n">PUNSUBSCRIBE</span> <span class="s2">"event:*"</span>
 </code></pre>
           </div>
-
           <h3 id="pipelining-and-transactions">Pipelining and Transactions</h3>
           <p>
             Use pipelining for batch operations and transactions for atomic
@@ -435,29 +433,29 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Pipelining example - execute multiple commands in batch</span>
-<span class="nv">$commands</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$commands</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">SET key1 value1</span>
 <span class="sh">SET key2 value2</span>
 <span class="sh">GET key1</span>
 <span class="sh">GET key2</span>
 <span class="sh">INCR counter</span>
 <span class="sh">INCR counter</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 <span class="nv">$commands</span> <span class="p">|</span> <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="p">-</span><span class="n">-pipe</span>
 
 <span class="c"># Transaction example with MULTI/EXEC</span>
-<span class="nv">$transaction</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$transaction</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">MULTI</span>
 <span class="sh">SET account:1:balance 1000</span>
 <span class="sh">SET account:2:balance 500</span>
 <span class="sh">DECRBY account:1:balance 100</span>
 <span class="sh">INCRBY account:2:balance 100</span>
 <span class="sh">EXEC</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 <span class="nv">$transaction</span> <span class="p">|</span> <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span>
 
 <span class="c"># Watch for optimistic locking</span>
-<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="p">&lt;&lt;</span> <span class="s1">&#39;EOF&#39;</span>
+<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="p">&lt;&lt;</span> <span class="s1">'EOF'</span>
 <span class="n">WATCH</span> <span class="n">balance</span>
 <span class="n">balance</span><span class="p">=$(</span><span class="n">redis-cli</span> <span class="n">GET</span> <span class="n">balance</span><span class="p">)</span>
 <span class="n">new_balance</span><span class="p">=$((</span><span class="n">balance</span> <span class="p">+</span> <span class="n">100</span><span class="p">))</span>
@@ -467,7 +465,6 @@
 <span class="n">EOF</span>
 </code></pre>
           </div>
-
           <h3 id="backup-and-persistence">Backup and Persistence</h3>
           <p>
             Configure and manage RDB snapshots and AOF files for data
@@ -485,23 +482,23 @@
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">CONFIG</span> <span class="n">GET</span> <span class="n">save</span>
 
 <span class="c"># Modify save intervals</span>
-<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">CONFIG</span> <span class="nb">SET </span><span class="n">save</span> <span class="s2">&quot;900 1 300 10 60 10000&quot;</span>
+<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">CONFIG</span> <span class="nb">SET </span><span class="n">save</span> <span class="s2">"900 1 300 10 60 10000"</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">CONFIG</span> <span class="n">REWRITE</span>
 
 <span class="c"># AOF rewrite (compaction)</span>
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">BGREWRITEAOF</span>
 
 <span class="c"># Backup RDB file</span>
-<span class="nv">$timestamp</span> <span class="p">=</span> <span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s2">&quot;yyyyMMdd_HHmmss&quot;</span>
-<span class="nb">Copy-Item</span> <span class="s2">&quot;C:\Redis\data\dump.rdb&quot;</span> <span class="n">-Destination</span> <span class="s2">&quot;C:\Backups\redis\dump_$timestamp.rdb&quot;</span>
+<span class="nv">$timestamp</span> <span class="p">=</span> <span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s2">"yyyyMMdd_HHmmss"</span>
+<span class="nb">Copy-Item</span> <span class="s2">"C:\Redis\data\dump.rdb"</span> <span class="n">-Destination</span> <span class="s2">"C:\Backups\redis\dump_$timestamp.rdb"</span>
 
 <span class="c"># Backup AOF file</span>
-<span class="nb">Copy-Item</span> <span class="s2">&quot;C:\Redis\data\appendonly.aof&quot;</span> <span class="n">-Destination</span> <span class="s2">&quot;C:\Backups\redis\appendonly_$timestamp.aof&quot;</span>
+<span class="nb">Copy-Item</span> <span class="s2">"C:\Redis\data\appendonly.aof"</span> <span class="n">-Destination</span> <span class="s2">"C:\Backups\redis\appendonly_$timestamp.aof"</span>
 
 <span class="c"># Automated backup script</span>
-<span class="nv">$script</span> <span class="p">=</span> <span class="sh">@&quot;</span>
-<span class="sh">`$timestamp = Get-Date -Format &#39;yyyyMMdd_HHmmss&#39;</span>
-<span class="sh">`$backupDir = &#39;C:\Backups\redis&#39;</span>
+<span class="nv">$script</span> <span class="p">=</span> <span class="sh">@"</span>
+<span class="sh">`$timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'</span>
+<span class="sh">`$backupDir = 'C:\Backups\redis'</span>
 <span class="sh">New-Item -ItemType Directory -Path `$backupDir -Force</span>
 
 <span class="sh"># Trigger background save</span>
@@ -511,23 +508,22 @@
 <span class="sh">Start-Sleep -Seconds 5</span>
 
 <span class="sh"># Copy files</span>
-<span class="sh">Copy-Item &#39;C:\Redis\data\dump.rdb&#39; -Destination &quot;`$backupDir\dump_`$timestamp.rdb&quot;</span>
-<span class="sh">Copy-Item &#39;C:\Redis\data\appendonly.aof&#39; -Destination &quot;`$backupDir\appendonly_`$timestamp.aof&quot;</span>
+<span class="sh">Copy-Item 'C:\Redis\data\dump.rdb' -Destination "`$backupDir\dump_`$timestamp.rdb"</span>
+<span class="sh">Copy-Item 'C:\Redis\data\appendonly.aof' -Destination "`$backupDir\appendonly_`$timestamp.aof"</span>
 
 <span class="sh"># Retention: Delete backups older than 7 days</span>
 <span class="sh">Get-ChildItem `$backupDir -File | Where-Object { `$_.LastWriteTime -lt (Get-Date).AddDays(-7) } | Remove-Item</span>
 
-<span class="sh">Write-Host &#39;Backup completed: `$timestamp&#39;</span>
-<span class="sh">&quot;@</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Scripts\redis-backup.ps1&quot;</span> <span class="n">-Value</span> <span class="nv">$script</span>
+<span class="sh">Write-Host 'Backup completed: `$timestamp'</span>
+<span class="sh">"@</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"C:\Scripts\redis-backup.ps1"</span> <span class="n">-Value</span> <span class="nv">$script</span>
 
 <span class="c"># Schedule backup (daily at 2 AM)</span>
-<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;PowerShell.exe&quot;</span> <span class="n">-Argument</span> <span class="s2">&quot;-File C:\Scripts\redis-backup.ps1&quot;</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">"PowerShell.exe"</span> <span class="n">-Argument</span> <span class="s2">"-File C:\Scripts\redis-backup.ps1"</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">2am</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">&quot;Redis Daily Backup&quot;</span> <span class="n">-Description</span> <span class="s2">&quot;Daily Redis backup&quot;</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">"Redis Daily Backup"</span> <span class="n">-Description</span> <span class="s2">"Daily Redis backup"</span>
 </code></pre>
           </div>
-
           <h3 id="monitoring-and-statistics">Monitoring and Statistics</h3>
           <p>
             Monitor Redis performance, memory usage, and client connections.
@@ -559,45 +555,44 @@
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">INFO</span> <span class="n">keyspace</span>
 
 <span class="c"># Continuous monitoring script</span>
-<span class="nv">$script</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$script</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">while (`$true) {</span>
 <span class="sh">    Clear-Host</span>
-<span class="sh">    Write-Host &#39;=== Redis Monitoring ===&#39; -ForegroundColor Cyan</span>
-<span class="sh">    Write-Host &#39;&#39;</span>
+<span class="sh">    Write-Host '=== Redis Monitoring ===' -ForegroundColor Cyan</span>
+<span class="sh">    Write-Host ''</span>
 
 <span class="sh">    # Memory usage</span>
-<span class="sh">    `$memInfo = redis-cli -a StrongPassword123! INFO memory | Select-String &#39;used_memory_human|maxmemory_human&#39;</span>
-<span class="sh">    Write-Host &#39;Memory:&#39; -ForegroundColor Yellow</span>
+<span class="sh">    `$memInfo = redis-cli -a StrongPassword123! INFO memory | Select-String 'used_memory_human|maxmemory_human'</span>
+<span class="sh">    Write-Host 'Memory:' -ForegroundColor Yellow</span>
 <span class="sh">    `$memInfo</span>
-<span class="sh">    Write-Host &#39;&#39;</span>
+<span class="sh">    Write-Host ''</span>
 
 <span class="sh">    # Connected clients</span>
-<span class="sh">    `$clients = redis-cli -a StrongPassword123! INFO clients | Select-String &#39;connected_clients&#39;</span>
-<span class="sh">    Write-Host &#39;Clients:&#39; -ForegroundColor Yellow</span>
+<span class="sh">    `$clients = redis-cli -a StrongPassword123! INFO clients | Select-String 'connected_clients'</span>
+<span class="sh">    Write-Host 'Clients:' -ForegroundColor Yellow</span>
 <span class="sh">    `$clients</span>
-<span class="sh">    Write-Host &#39;&#39;</span>
+<span class="sh">    Write-Host ''</span>
 
 <span class="sh">    # Keyspace</span>
 <span class="sh">    `$keyspace = redis-cli -a StrongPassword123! INFO keyspace</span>
-<span class="sh">    Write-Host &#39;Keyspace:&#39; -ForegroundColor Yellow</span>
+<span class="sh">    Write-Host 'Keyspace:' -ForegroundColor Yellow</span>
 <span class="sh">    `$keyspace</span>
-<span class="sh">    Write-Host &#39;&#39;</span>
+<span class="sh">    Write-Host ''</span>
 
 <span class="sh">    # Stats</span>
-<span class="sh">    `$stats = redis-cli -a StrongPassword123! INFO stats | Select-String &#39;total_commands_processed|total_connections_received&#39;</span>
-<span class="sh">    Write-Host &#39;Stats:&#39; -ForegroundColor Yellow</span>
+<span class="sh">    `$stats = redis-cli -a StrongPassword123! INFO stats | Select-String 'total_commands_processed|total_connections_received'</span>
+<span class="sh">    Write-Host 'Stats:' -ForegroundColor Yellow</span>
 <span class="sh">    `$stats</span>
 
 <span class="sh">    Start-Sleep -Seconds 2</span>
 <span class="sh">}</span>
-<span class="sh">&quot;@</span>
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Scripts\redis-monitor.ps1&quot;</span> <span class="n">-Value</span> <span class="nv">$script</span>
+<span class="sh">"@</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"C:\Scripts\redis-monitor.ps1"</span> <span class="n">-Value</span> <span class="nv">$script</span>
 
 <span class="c"># Run monitor</span>
 <span class="c"># .\redis-monitor.ps1</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Connection Refused</strong>: - <strong>Error</strong>:
@@ -655,7 +650,6 @@
 <span class="na">zset-max-ziplist-value 64</span>
 </code></pre>
           </div>
-
           <p><strong>Persistence Tuning</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># RDB - less frequent saves for better performance</span>
@@ -671,7 +665,6 @@
 <span class="na">auto-aof-rewrite-min-size 64mb</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Connection Pooling</strong>: Use StackExchange.Redis or
             similar libraries with connection pooling in applications.
@@ -682,11 +675,10 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Instead of multiple individual commands</span>
-<span class="nv">$commands</span> <span class="p">=</span> <span class="n">1</span><span class="p">..</span><span class="n">1000</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="s2">&quot;SET key:$_ value$_&quot;</span> <span class="p">}</span>
-<span class="nv">$commands</span> <span class="n">-join</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">&quot;</span> <span class="p">|</span> <span class="n">redis-cli</span> <span class="p">-</span><span class="n">-pipe</span>
+<span class="nv">$commands</span> <span class="p">=</span> <span class="n">1</span><span class="p">..</span><span class="n">1000</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="s2">"SET key:$_ value$_"</span> <span class="p">}</span>
+<span class="nv">$commands</span> <span class="n">-join</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">"</span> <span class="p">|</span> <span class="n">redis-cli</span> <span class="p">-</span><span class="n">-pipe</span>
 </code></pre>
           </div>
-
           <p><strong>Monitoring Commands</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Get latency statistics</span>
@@ -700,10 +692,9 @@
 <span class="n">redis-benchmark</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">-t</span> <span class="n">set</span><span class="p">,</span><span class="n">get</span> <span class="n">-n</span> <span class="n">100000</span> <span class="n">-q</span>
 
 <span class="c"># Monitor hit rate</span>
-<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">INFO</span> <span class="n">stats</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">&quot;keyspace_hits|keyspace_misses&quot;</span>
+<span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">INFO</span> <span class="n">stats</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">"keyspace_hits|keyspace_misses"</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -738,32 +729,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

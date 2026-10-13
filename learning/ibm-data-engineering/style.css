@@ -22,7 +22,7 @@
   --accent-red: #f87171;
   --text-primary: #e8edf5;
   --text-secondary: #8899bb;
-  --text-muted: #5a6d8e;
+  --text-muted: #93a4bf;
   --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
   --shadow-glow: 0 0 30px rgba(240, 180, 41, 0.08);
@@ -44,7 +44,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 100%;
 }
 
 body {
@@ -165,7 +165,7 @@ em {
 
 .header-bar .brand {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -178,7 +178,7 @@ em {
 
 .header-bar nav > a {
   margin-left: 1.5rem;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
   transition: color var(--transition);
@@ -195,9 +195,9 @@ em {
   margin-left: 1.5rem;
 }
 
-.nav-dropdown > a {
+.nav-dropdown > :is(a, button) {
   margin-left: 0 !important;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
   transition: color var(--transition);
@@ -207,8 +207,8 @@ em {
   text-decoration: none;
 }
 
-.nav-dropdown > a:hover,
-.nav-dropdown > a.active {
+.nav-dropdown > :is(a, button):hover,
+.nav-dropdown > :is(a, button).active {
   color: var(--accent);
 }
 
@@ -227,7 +227,7 @@ em {
   margin-top: 0.5rem;
 }
 
-.nav-dropdown:hover .dropdown-content {
+.nav-dropdown.open > .dropdown-content {
   display: block;
   animation: slideDown 0.2s ease-out;
 }
@@ -235,7 +235,7 @@ em {
 .dropdown-content a {
   display: block;
   padding: 0.6rem 1rem;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
@@ -259,7 +259,7 @@ em {
 
 /* ---- Breadcrumb ---- */
 .breadcrumb {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
 }
@@ -276,7 +276,7 @@ em {
 /* ---- Hub Cards ---- */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 1.25rem;
   margin-top: 1.5rem;
 }
@@ -318,7 +318,7 @@ em {
 }
 
 .hub-card .card-level {
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -334,7 +334,7 @@ em {
 }
 
 .hub-card .card-desc {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.5;
 }
@@ -354,7 +354,7 @@ em {
   border: 1px solid rgba(240, 180, 41, 0.3);
   padding: 0.4rem 0.8rem;
   border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   margin-top: 1rem;
@@ -401,7 +401,7 @@ thead th {
   background: var(--bg-surface);
   color: var(--accent);
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 0.75rem 1rem;
@@ -423,7 +423,7 @@ tbody tr:hover {
 /* ---- Tags / Badges ---- */
 .badge {
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.5px;
   padding: 0.25rem 0.65rem;
@@ -471,7 +471,7 @@ tbody tr:hover {
 
 .callout-title {
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 0.4rem;
@@ -566,7 +566,7 @@ pre code {
 }
 
 .fade-in {
-  animation: fadeInUp 0.5s ease-out both;
+  animation: none;
 }
 .fade-in-d1 {
   animation-delay: 0.1s;
@@ -620,7 +620,7 @@ pre code {
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
 }
 
@@ -636,7 +636,7 @@ pre code {
     font-size: 1.25rem;
   }
   .hub-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .header-bar {
     flex-direction: column;
@@ -651,6 +651,232 @@ pre code {
   }
   .header-bar nav a {
     margin-left: 0;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
   }
+}
+
+/* Shared accessible controls keep the existing navy/gold identity. */
+[hidden] {
+  display: none !important;
+}
+::selection {
+  color: var(--bg-primary);
+  background: var(--accent);
+}
+html {
+  scrollbar-color: var(--text-secondary) var(--bg-primary);
+}
+a {
+  text-underline-offset: 0.18em;
+}
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+input {
+  caret-color: var(--accent);
+}
+.header-bar nav > *,
+.hub-grid > *,
+.section-card > * {
+  min-width: 0;
+}
+.header-bar nav {
+  flex-wrap: wrap;
+}
+.header-bar nav > a,
+.dropdown-button,
+.expand-btn,
+.qa-question {
+  min-height: 44px;
+  font: inherit;
+}
+.dropdown-button {
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 0.5rem 0.7rem;
+  text-align: start;
+  cursor: pointer;
+}
+.dropdown-button[aria-expanded="true"] {
+  color: var(--accent);
+}
+.dropdown-content,
+.dropdown-nested-content,
+.breadcrumb-dropdown-content {
+  max-width: min(90vw, 32rem);
+}
+.dropdown-content a {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-height: 44px;
+}
+.dropdown-nested {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+.dropdown-nested > .has-submenu::after {
+  content: none;
+}
+.submenu-toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+.dropdown-nested.open > .dropdown-nested-content {
+  display: block;
+}
+.has-dropdowns .dropdown-content,
+.has-dropdowns .breadcrumb-dropdown-content {
+  display: none;
+}
+.has-dropdowns .open > .dropdown-content,
+.has-dropdowns .open > .breadcrumb-dropdown-content {
+  display: block;
+}
+html:not(.has-dropdowns) .dropdown-content,
+html:not(.has-dropdowns) .dropdown-nested-content,
+html:not(.has-dropdowns) .breadcrumb-dropdown-content {
+  display: block;
+  position: static;
+}
+html:not(.has-dropdowns) .dropdown-button {
+  display: none;
+}
+html:not(.has-disclosures) .expand-btn,
+html:not(.has-disclosures) .qa-question::after {
+  display: none;
+}
+html:not(.has-disclosures) .expand-wrapper,
+html:not(.has-disclosures) .qa-answer {
+  display: block;
+}
+.page-wrapper {
+  position: relative;
+}
+.skip-link {
+  position: fixed;
+  z-index: 9999;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--bg-primary);
+  background: var(--accent);
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+.card-desc,
+.section-card p {
+  font-size: 1rem;
+}
+@media (max-width: 768px) {
+  .header-bar nav {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .nav-dropdown,
+  .dropdown-menu {
+    position: relative;
+    max-width: 100%;
+  }
+  .dropdown-content,
+  .breadcrumb-dropdown-content {
+    left: 0;
+    min-width: min(240px, 85vw);
+  }
+  .dropdown-nested-content {
+    grid-column: 1 / -1;
+    position: static;
+    min-width: 0;
+    box-shadow: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .fade-in,
+  .login-box,
+  .hub-card.expanded .expand-wrapper,
+  .nav-dropdown.open > .dropdown-content,
+  .qa-answer.visible {
+    animation: none;
+  }
+  .hub-card,
+  .hub-card::before,
+  .back-to-top,
+  .qa-question::after {
+    transform: none;
+    transition: none;
+  }
+  .hub-card:hover,
+  .back-to-top:hover {
+    transform: none;
+  }
+  button,
+  a {
+    transition:
+      color 120ms linear,
+      background-color 120ms linear;
+  }
+}
+
+.nav-dropdown > .dropdown-button {
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.submenu-toggle svg {
+  transition: transform 180ms ease-out;
+}
+.submenu-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .submenu-toggle svg,
+  .progress-fill,
+  .reading-progress-fill {
+    transition: none;
+  }
+}
+
+.dropdown-content,
+.breadcrumb-dropdown-content {
+  max-height: min(70dvh, 36rem);
+  overflow-y: auto;
+}
+.dropdown-nested-content {
+  grid-column: 1 / -1;
+  position: static;
+  min-width: 0;
+  box-shadow: none;
+}
+
+/* Keep technical content inside its reading column. */
+main {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+main :where(section, article, div) {
+  min-width: 0;
+}
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+pre,
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+}
+mjx-container[display="true"] {
+  display: block;
+  overflow-y: hidden;
 }

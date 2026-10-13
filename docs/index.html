@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Technical Knowledge Base - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main">
+    <main id="main" tabindex="-1">
       <section class="docs-hero">
         <div class="container docs-hero-grid">
           <div>
@@ -58,22 +61,22 @@
       <section class="knowledge-paths">
         <div class="container path-grid">
           <a class="path-card" href="/docs/guides/"
-            ><small>Read & understand</small>
+            ><small>Read &amp; understand</small>
             <h2>Technical guides</h2>
             <p>
               Deep, practical notes on architecture, databases, infrastructure,
               performance and scientific software.
             </p>
-            <b>Browse all 40 guides &rarr;</b></a
+            <b>Browse all 40 guides →</b></a
           >
           <a class="path-card" href="/docs/system-scripts/"
-            ><small>Use & adapt</small>
+            ><small>Use &amp; adapt</small>
             <h2>System scripts</h2>
             <p>
               Production-minded PowerShell utilities for navigation, files,
               environments, scheduling and maintenance.
             </p>
-            <b>Explore 11 collections &rarr;</b></a
+            <b>Explore 11 collections →</b></a
           >
         </div>
       </section>
@@ -90,10 +93,10 @@
             <a
               class="featured-guide"
               href="/docs/guides/BATCH_THREADING_AND_MPI_FOR_LARGE_DB_OPS.html"
-              ><small>Data & performance</small>
+              ><small>Data &amp; performance</small>
               <h3>Memory-aware database operations at scale</h3>
               <p>Batching, threading and MPI chunking for large updates.</p>
-              <b>Read field note &rarr;</b></a
+              <b>Read field note →</b></a
             >
             <a
               class="featured-guide"
@@ -101,7 +104,7 @@
               ><small>Architecture</small>
               <h3>Clean structures across three ecosystems</h3>
               <p>C#, Flutter and TypeScript patterns compared.</p>
-              <b>Read field note &rarr;</b></a
+              <b>Read field note →</b></a
             >
             <a
               class="featured-guide"
@@ -109,38 +112,17 @@
               ><small>Backend systems</small>
               <h3>Choosing a web API framework</h3>
               <p>Operational trade-offs across popular stacks.</p>
-              <b>Read field note &rarr;</b></a
+              <b>Read field note →</b></a
             >
           </div>
         </div>
       </section>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

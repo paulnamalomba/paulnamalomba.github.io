@@ -1,15 +1,17 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Concise Answer Templates</title>
-    <link rel="stylesheet" href="../style.css?v=2.3" />
+    <link href="../style.css?v=2.3" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -24,8 +26,15 @@
           <a href="../level3-competency.html">Competency</a>
           <a href="../level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Assessments &#9660;</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Assessments ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="../assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -38,11 +47,34 @@
               <a href="../assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
                 <a
-                  href="../assessment-data-engineering.html"
                   class="has-submenu"
+                  href="../assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="../assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -60,10 +92,16 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Targeted Prep &#9660;
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Targeted Prep ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="index.html">Prep Hub</a>
               <a href="mock-interview.html">30-Min Mock Interview</a>
               <a href="answer-templates.html">Answer Templates</a>
@@ -74,21 +112,18 @@
           <a href="../level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="../hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="../hub.html">Hub</a> <span>›</span>
         <a href="index.html">Targeted Preparation</a>
-        <span>&rsaquo;</span> Answer Templates
+        <span>›</span> Answer Templates
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">Concise Answer Templates</h1>
         <p class="fade-in fade-in-d1">
           These templates are intentionally compact. They are meant to keep your
           answers structured, not scripted. Replace the example anchor with your
           own experience each time.
         </p>
-
         <div class="section-card fade-in fade-in-d2">
           <h2 style="margin-top: 0">1. Simulation vs Optimisation</h2>
           <p>
@@ -102,7 +137,6 @@
             system, but choosing a defensible approach under constraints.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d3">
           <h2 style="margin-top: 0">2. Why Agent-Based Modelling</h2>
           <p>
@@ -115,7 +149,6 @@
             matters to the decision.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d3">
           <h2 style="margin-top: 0">3. Handling Messy Data</h2>
           <p>
@@ -129,7 +162,6 @@
             is cleaner than it is.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d4">
           <h2 style="margin-top: 0">4. When to Use Machine Learning</h2>
           <p>
@@ -142,7 +174,6 @@
             workflow.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d4">
           <h2 style="margin-top: 0">
             5. Validation Without Perfect Ground Truth
@@ -156,7 +187,6 @@
             uncertainty directly instead of hiding it behind a single score.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">6. Explaining Trade-Offs</h2>
           <p>
@@ -168,7 +198,6 @@
             than a pure prediction problem.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">7. Designing a Data Pipeline</h2>
           <p>
@@ -181,7 +210,6 @@
             system remains reproducible.”
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">
             8. Answering Something You Have Not Used Directly
@@ -195,7 +223,6 @@
             quickly with a small proof of concept.”
           </p>
         </div>
-
         <div class="callout tip fade-in fade-in-d5" style="margin-top: 1rem">
           <div class="callout-title">What to avoid</div>
           <ul>
@@ -214,16 +241,14 @@
             </li>
           </ul>
         </div>
-
         <div class="page-footer" style="margin-top: 2rem">
           <p>
-            Prepared for Paul Namalomba &middot; Targeted Dr. Nnene Prep
-            &middot; Answer Templates
+            Prepared for Paul Namalomba · Targeted Dr. Nnene Prep · Answer
+            Templates
           </p>
         </div>
       </main>
     </div>
-
     <script>
       (function () {
         const H =

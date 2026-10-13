@@ -1,33 +1,37 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
       Language Runtimes: Memory, Architectures, and Execution - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -36,8 +40,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -208,7 +211,6 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 <span class="c1"># Windows: Install MSVC via Visual Studio Build Tools, or MinGW</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Variables:</strong> The
@@ -228,7 +230,6 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 dotnet<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <h3 id="python-interpreted-virtual-machine">
             Python (Interpreted Virtual Machine)
           </h3>
@@ -241,7 +242,6 @@ dotnet<span class="w"> </span>--version
 python3<span class="w"> </span>--version
 </code></pre>
           </div>
-
           <hr />
           <h2 id="2-writing-basic-codescripts-memory-operations">
             2. Writing Basic Code/Scripts (Memory Operations)
@@ -271,7 +271,6 @@ python3<span class="w"> </span>--version
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <em
               >Modern architecture favors Smart Pointers
@@ -297,11 +296,10 @@ python3<span class="w"> </span>--version
 <span class="w">    </span><span class="cm">/* System logic utilizing buffer */</span>
 
 <span class="w">    </span><span class="c1">// No explicit delete. The .NET Garbage Collector will free this byte array</span>
-<span class="w">    </span><span class="c1">// when &#39;buffer&#39; falls out of scope and memory pressure rises.</span>
+<span class="w">    </span><span class="c1">// when 'buffer' falls out of scope and memory pressure rises.</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="python-reference-counting-the-gil">
             Python: Reference Counting &amp; The GIL
           </h3>
@@ -323,7 +321,6 @@ python3<span class="w"> </span>--version
     <span class="c1"># Automatically freed via reference decrementing when function exits</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="3-compile-time-commands-compilers-vs-vms">
             3. Compile-time Commands (Compilers vs VMs)
@@ -342,7 +339,6 @@ python3<span class="w"> </span>--version
 g++<span class="w"> </span>-O3<span class="w"> </span>-o<span class="w"> </span>server_binary<span class="w"> </span>main.cpp
 </code></pre>
           </div>
-
           <p>
             <em
               >A binary compiled on Linux will absolutely not run on
@@ -361,7 +357,6 @@ g++<span class="w"> </span>-O3<span class="w"> </span>-o<span class="w"> </span>
 dotnet<span class="w"> </span>build<span class="w"> </span>--configuration<span class="w"> </span>Release
 </code></pre>
           </div>
-
           <p>
             <em
               >At runtime, the .NET CLR detects the host OS and Just-In-Time
@@ -379,7 +374,6 @@ dotnet<span class="w"> </span>build<span class="w"> </span>--configuration<span 
 python3<span class="w"> </span>my_script.py
 </code></pre>
           </div>
-
           <hr />
           <h2 id="4-runtime-commands-execution-contexts">
             4. Runtime Commands (Execution Contexts)
@@ -398,7 +392,6 @@ python3<span class="w"> </span>my_script.py
 ./server_binary<span class="w"> </span><span class="p">&amp;</span>
 </code></pre>
           </div>
-
           <h3 id="net-core-runtime">.NET Core Runtime</h3>
           <p>
             The <code>dotnet</code> executable creates the CLR environment,
@@ -410,7 +403,6 @@ python3<span class="w"> </span>my_script.py
 dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w"> </span>API/API.csproj
 </code></pre>
           </div>
-
           <h3 id="python-vm">Python VM</h3>
           <p>
             The python interpreter boots, reserves a massive RAM block, locks
@@ -423,7 +415,6 @@ dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w
 gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w"> </span><span class="m">4</span><span class="w"> </span>-k<span class="w"> </span>uvicorn.workers.UvicornWorker
 </code></pre>
           </div>
-
           <hr />
           <h2 id="5-debugging-segfaults-vs-overflows">
             5. Debugging (Segfaults vs Overflows)
@@ -445,7 +436,6 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
             <pre><span></span><code>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./server_binary
 </code></pre>
           </div>
-
           <h3 id="c-stackoverflows-gc-pauses">
             C#: StackOverflows &amp; GC Pauses
           </h3>
@@ -480,32 +470,11 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

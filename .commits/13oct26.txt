@@ -1,0 +1,353 @@
+Paul Namalomba Website Commit Notes
+===================================
+
+Release Date: October 13, 2026
+
+## 2026-10-13 — `13oct26`
+
+### Diff Baseline
+
+- **Branch:** `main`.
+- **Previous documented version:** [`20aug26`](20aug26.txt).
+- **Comparison baseline:** tag `20aug26`, commit `67258043247d9140d90beea02fd8530a34b53582`.
+  `HEAD` resolves to the same commit. This note describes the working tree against
+  that baseline, including new files that ordinary Git diffs omit.
+- **Formatting reference:** [`20aug26.txt`](20aug26.txt), compared with
+  [`18jul26.txt`](18jul26.txt). The repository title, dated sections and technical
+  bullets are retained; the setext underline now immediately follows its title.
+- **Version mapping:** `13oct26` is the requested date-based note identifier.
+  [`package.json`](../package.json) has no application version field. Writing this
+  note does not create a commit, tag or published release.
+
+Scope was established with these commands, with release notes excluded from their
+own inventory:
+
+```bash
+git rev-parse --abbrev-ref HEAD
+git rev-parse HEAD '20aug26^{commit}'
+git diff 67258043247d9140d90beea02fd8530a34b53582 -- . ':(exclude).commits/**'
+git diff 67258043247d9140d90beea02fd8530a34b53582 --numstat -- . ':(exclude).commits/**'
+git diff -w 67258043247d9140d90beea02fd8530a34b53582 --numstat -- . ':(exclude).commits/**'
+git status --short
+git ls-files --others --exclude-standard
+```
+
+The attributed scope contains **198 files**: **109 modified text files**, **19 new
+text files**, and **70 new WebP files**. Tracked text changes total
+`+11,392/-11,819`; `git diff -w` reports `+10,281/-10,708`. New text files add
+`5,559` lines, counted separately. The combined raw text accounting is
+`+16,951/-11,819`. HTML serialization and formatting contribute to these counts;
+neither raw nor whitespace-normalized totals represent only semantic changes.
+New binary variants total `2,432,480` bytes across both responsive-image folders.
+
+Eight additional working-tree paths are deliberately excluded from attribution:
+the tracked root `.DS_Store`, six untracked `.DS_Store` files under the presentation
+and review folders, and the pre-existing user edit to
+`presentations/africomp7/assets/multiplicative_deformation_diagram.png`.
+The latter was preserved byte-for-byte during this work. The raw candidate
+inventory is `111` tracked changes plus `95` nonignored untracked files, excluding
+this note. Ignored screenshot PNGs are outside those totals.
+
+### Product context and shared interaction ownership
+
+- Added [`PRODUCT.md`](../PRODUCT.md) for the confirmed audience: clients and
+  engineering collaborators evaluating computational engineering, scientific
+  software, backend/API development and data engineering work. Existing routes,
+  project facts, CV access and static GitHub Pages hosting remain the constraints.
+- Recorded the confirmed code-first workflow in
+  [`.impeccable/config.json`](../.impeccable/config.json), with page targeting and
+  the debug/template exclusions in
+  [`.impeccable/live/config.json`](../.impeccable/live/config.json).
+  Conflicting contact emails and SEAT start dates remain documented factual
+  decisions, not silently rewritten claims.
+- Added [`scripts/interface.js`](../scripts/interface.js) as the shared owner of
+  mobile navigation, dropdown and disclosure state. Mobile menus synchronize
+  `aria-expanded`, visual classes and `inert` regions, contain keyboard focus,
+  close on Escape and restore focus when closed or resized across `680px`.
+- Dropdown controls use native buttons with `aria-controls` and synchronized
+  expanded/hidden states. Destination links retain independent navigation.
+  Keyboard arrows, Escape, outside clicks and focus changes close or traverse
+  menus; fine-pointer hover remains supplementary. Popups stay within the viewport.
+- Answer/course disclosures expose state through native buttons. No-JavaScript
+  styles keep navigation and reading content available. Local fragment navigation
+  transfers focus to its target. The duplicate mobile-menu implementation was
+  removed from [`scripts/site.js`](../scripts/site.js).
+- [`scripts/guides.js`](../scripts/guides.js) now exposes selected filters with
+  `aria-pressed`, updates the live result count when it changes, and provides a
+  visible empty state. The filter toolbar is hidden without JavaScript while the
+  underlying guide library remains readable.
+
+### Semantic markup and documentation generation
+
+- Added [`harden_html(content: str) -> str`](../scripts/html_utils.py), using
+  BeautifulSoup to apply shared landmarks, skip links, heading order, native
+  dropdown/disclosure controls, navigation state, guide-filter semantics and
+  guarded third-party initialization. Reduced-motion preferences replace explicit
+  smooth scrolling where applicable. Broken local fragments and obsolete
+  presentation navigation were repaired without replacing factual article copy.
+- Both [`build-docs.py`](../scripts/build-docs.py) and
+  [`build-learning.py`](../scripts/build-learning.py) apply the shared helper.
+  Documentation output retains the existing CRLF convention; learning navigation
+  replacement handles attributes on the navigation element. The documentation
+  template no longer embeds a competing mobile-menu controller.
+- [`deploy-docs.yml`](../.github/workflows/deploy-docs.yml) replaces its duplicated
+  embedded Python generator with the repository builder and installs
+  [`requirements-docs.txt`](../requirements-docs.txt). The manual Pages workflow,
+  external source checkout and deployment permissions remain in place.
+
+```bash
+python scripts/build-docs.py --system-management-scripts ../system-management_scripts
+```
+
+- The earlier local `--no-sync` build completed for `40` guides, indexes and `11`
+  PowerShell reference pages. All `40` original published guide article bodies
+  were subsequently restored inside the updated shells and checked for equal
+  normalized word content against `HEAD`. This preserves published article text;
+  it does not establish byte-for-byte regeneration parity with Markdown sources.
+- Markup changes cover `97` HTML files: `55` documentation pages, `23` interview
+  pages, `17` learning pages including the course template, the homepage and the
+  presentation. `debug-overflow.html` remains outside the implementation changes.
+
+### Visual refinement, responsive layout and touch actions
+
+- Added [`styles/tokens.css`](../styles/tokens.css), imported by the homepage and
+  documentation stylesheets. Shared color and motion values retain the existing
+  cream/teal portfolio and dark interview/learning identities.
+- Improved action/project contrast, secondary text and syntax highlighting.
+  Representative colors include GitHub green `#137333`, project teal `#08766f`,
+  project secondary text `#e1f4f1`, and dark-surface muted text `#93a4bf`.
+  Display sizes remain capped at `6rem`; secondary type generally uses a `14px`
+  minimum. Keyboard focus, selection and scroll surfaces receive explicit styles.
+- Removed generic hidden-by-default reveal behavior and honored reduced motion.
+  Mobile menus use viewport-height overlays; the project gallery retains native
+  horizontal scrolling, vertical page scrolling and pinch zoom.
+- Addressed audit finding `A1` with shrinkable `minmax(0, ...)` grid tracks,
+  content-sized minimums, `min-width: 0`, long-text wrapping and local scrolling
+  for tables, code and equations. The capability grid adapts to enlarged text;
+  presentation columns collapse with content size. Inline KaTeX expressions now
+  stay within a locally scrollable box instead of widening the page.
+- Addressed `A6` by giving standalone guide-card links, script-card heading links
+  and the homepage featured-guide action at least `44px` height. Inline prose
+  links retain their reading layout.
+- Final Chromium checks found **zero root overflow across all `96` production
+  pages at `320px`**, compared with `24` failures before these fixes. The homepage,
+  documentation landing page and presentation also fit a `1440px` viewport with
+  the root font size set to `200%`. That enlarged-text probe is diagnostic, not a
+  complete browser-zoom or WCAG conformance test.
+
+### Assessment controls and access-form behavior
+
+- Addressed `A2` by replacing `177` synthetic checkbox containers across seven
+  assessment pages with native inputs and associated labels. Resource links sit
+  outside those labels and controls. Enter on Excalidraw opens its destination
+  without toggling progress; Space on the checkbox updates progress normally.
+- Added [`scripts/checklists.js`](../scripts/checklists.js) to own saved state,
+  checked styling, progress values and reset behavior. Existing storage keys and
+  item keys are preserved. Invalid saved JSON or unavailable storage no longer
+  prevents interaction. Reset clears both the controls and the in-memory state.
+- Addressed `A3` by connecting all seven `role="progressbar"` elements to their
+  visible Preparation Progress heading through `aria-labelledby`.
+- Addressed `A4` with persistent underlines for checklist and assessment prose
+  links, including Excalidraw and Draw.io. Recognition no longer depends only on
+  their color difference from surrounding text.
+- The earlier access-form changes in
+  [`interviews/uct-cto/index.html`](../interviews/uct-cto/index.html) add a labelled
+  access-code field, visibility control, submission/busy states and recoverable
+  error feedback. Incorrect input is preserved; crypto/storage failures restore
+  the submit action. Existing routing and `_ig_auth` behavior remain unchanged.
+  Removing a plaintext credential comment does not turn this client-side gate
+  into server-enforced authorization.
+
+### Responsive images and presentation export
+
+- [`scripts/optimize-images.py`](../scripts/optimize-images.py) produces `25`
+  responsive WebP variants for nine homepage assets, without replacing originals.
+  Widths are capped at each source size. The homepage adds `srcset`, `sizes`,
+  explicit dimensions and asynchronous decoding; the hero has high fetch priority
+  and eight later images use lazy loading.
+- The largest selected homepage variants total `528,868` bytes versus `3,759,069`
+  original bytes, an `85.9%` reduction. All homepage variants total `953,166` bytes;
+  the distinction avoids presenting the complete asset folder as a page transfer.
+- Addressed `A5` with
+  [`scripts/optimize-presentation.py`](../scripts/optimize-presentation.py): `45`
+  WebP variants for `18` active presentation images, at quality `90`, with smaller
+  cover-image sizes and figure widths up to `2400px`. All originals, including
+  scientific diagrams, remain intact. Dimensions reserve layout space; eight
+  cover images load eagerly and ten later images load lazily.
+- The largest presentation variants total **`724,320` bytes**, compared with
+  **`30,952,859` bytes** of originals: **`97.7%` smaller**. All `45` variants total
+  `1,479,314` bytes. A local desktop load without scrolling transferred `92,828`
+  encoded image-body bytes; this is a local Chromium observation, not a measured
+  production speed or Core Web Vitals improvement.
+- Each presentation image retains `data-print-src`. PDF export switches to the
+  originals, eagerly loads and decodes them, waits for fonts, and restores the
+  responsive attributes in `finally`. Image loading has a `30,000ms` timeout;
+  failure restores the download control and reports a retryable error.
+- An actual export attempt exposed the cost of rasterizing the entire long deck
+  in one canvas. Export now renders each section sequentially, reuses the PDF,
+  releases intermediate canvas storage and reports section progress. Long
+  sections retain pagination; page-break avoidance protects common cards,
+  figures, equations and tables when they fit. State is restored after either
+  exporter success or failure.
+- A real download completed as a `21`-page, `11,932,865`-byte PDF. All pages were
+  rendered for visual inspection and scientific figures remained present. The
+  existing export remains rasterized and untagged; long sections span pages.
+
+### Browser verification and review artifacts
+
+- [`package.json`](../package.json) adds Playwright `^1.64.0` alongside Prettier
+  `^3.9.6`, with `check:ui` and `render:ux` commands. No production framework or
+  bundler was introduced.
+- [`scripts/review-browser.mjs`](../scripts/review-browser.mjs) provides an isolated
+  local HTTP preview and headless Chrome session. `REVIEW_BROWSER_CHANNEL` can
+  override the default `chrome` channel. The interview fixture is confined to
+  `127.0.0.1` and the isolated context. Bounded font, math and image settling
+  supports repeatable screenshots.
+- [`scripts/render-pages.mjs`](../scripts/render-pages.mjs) discovers all `98` HTML
+  files, including the debug page and learning template for screenshot coverage.
+  Two workers render `1440x1000` desktop and `390x844` mobile views, with reduced
+  motion and `14,000px` tiles for long pages.
+- The final run produced **`196` page/viewport captures and `257` PNG tiles**,
+  with zero capture failures, page errors or measured root overflow. Image
+  settling forces eager loading for screenshots, so these captures are not a
+  loading-performance benchmark.
+- [`ux-review/manifest.json`](../ux-review/manifest.json) lists current captures.
+  [`ux-review/validation.json`](../ux-review/validation.json) records the checks.
+  [`ux-review/audit/report.json`](../ux-review/audit/report.json) retains the
+  historical `12/20` audit with five `P1` groups and one `P2` group;
+  [`ux-review/audit/fixes.json`](../ux-review/audit/fixes.json) records their
+  resolution and the final measurements. The historical score was not recomputed.
+- [`.gitignore`](../.gitignore) excludes `/ux-review/**/*.png`, `/node_modules/`
+  and `/scripts/__pycache__/`. Review PNGs remain local and are not added to Git.
+  Existing tracked dependency files and unrelated OS metadata were not removed.
+
+### Code Files Touched
+
+The modified-file matrix groups related files and links representative sources.
+Counts and lines are baseline-relative; glob-like labels describe groups rather
+than nonexistent link destinations.
+
+| Files / representative source | Status | Count | Raw lines | Responsibility |
+| --- | --- | ---: | ---: | --- |
+| [Homepage](../index.html) | Modified | 1 | `+141/-75` | Portfolio markup and responsive images |
+| [Documentation HTML](../docs/guides/index.html) | Modified | 55 | `+2,869/-4,427` | Generated reading/navigation shells |
+| [Interview HTML](../interviews/uct-cto/assessment-cto-architecture.html) | Modified | 23 | `+4,419/-4,280` | Access form, assessments and disclosures |
+| [Learning HTML](../learning/ibm-data-engineering/index.html) | Modified | 17 | `+1,119/-872` | Learning navigation and semantic structure |
+| [Presentation](../presentations/africomp7/index.html) | Modified | 1 | `+1,773/-1,364` | Reflow, image loading and PDF export |
+| [Four existing stylesheets](../style.css) | Modified | 4 | `+991/-269` | Portfolio/docs and both dark resource themes |
+| [Existing scripts](../scripts/build-docs.py) | Modified | 4 | `+28/-64` | Two builders, guide filters and site behavior |
+| [Package metadata](../package.json) | Modified | 2 | `+34/-1` | Browser tooling and lockfile |
+| [Pages workflow](../.github/workflows/deploy-docs.yml) | Modified | 1 | `+15/-467` | Shared generation in CI |
+| [Ignore rules](../.gitignore) | Modified | 1 | `+3/-0` | Keep review PNGs and local tooling out of Git |
+
+New text files are accounted for separately because `git diff` omits untracked
+content. Their line counts cover each complete file.
+
+| New text file | Lines | Responsibility |
+| --- | ---: | --- |
+| [`.impeccable/config.json`](../.impeccable/config.json) | 3 | Code-first preference |
+| [`.impeccable/live/config.json`](../.impeccable/live/config.json) | 10 | HTML review targeting |
+| [`PRODUCT.md`](../PRODUCT.md) | 107 | Confirmed product context |
+| [`assets/responsive/manifest.json`](../assets/responsive/manifest.json) | 190 | Homepage image dimensions and byte counts |
+| [`presentations/africomp7/assets/responsive/manifest.json`](../presentations/africomp7/assets/responsive/manifest.json) | 353 | Presentation image dimensions and byte counts |
+| [`requirements-docs.txt`](../requirements-docs.txt) | 3 | Shared generator dependencies |
+| [`scripts/checklists.js`](../scripts/checklists.js) | 60 | Native checklist state and persistence |
+| [`scripts/html_utils.py`](../scripts/html_utils.py) | 149 | Shared HTML hardening |
+| [`scripts/interface.js`](../scripts/interface.js) | 276 | Navigation and disclosure state |
+| [`scripts/optimize-images.py`](../scripts/optimize-images.py) | 51 | Homepage image generation |
+| [`scripts/optimize-presentation.py`](../scripts/optimize-presentation.py) | 64 | Presentation image generation |
+| [`scripts/render-pages.mjs`](../scripts/render-pages.mjs) | 184 | All-page screenshot capture |
+| [`scripts/review-browser.mjs`](../scripts/review-browser.mjs) | 95 | Local server and isolated browser helpers |
+| [`styles/tokens.css`](../styles/tokens.css) | 25 | Shared design values |
+| [`tests/ui.test.mjs`](../tests/ui.test.mjs) | 564 | Interaction and reflow regressions |
+| [`ux-review/audit/fixes.json`](../ux-review/audit/fixes.json) | 495 | Final fix evidence |
+| [`ux-review/audit/report.json`](../ux-review/audit/report.json) | 252 | Historical audit findings |
+| [`ux-review/manifest.json`](../ux-review/manifest.json) | 2,616 | Current screenshot inventory |
+| [`ux-review/validation.json`](../ux-review/validation.json) | 62 | Validation summary |
+
+| New binary group | Files | Bytes | Inventory |
+| --- | ---: | ---: | --- |
+| `assets/responsive/*.webp` | 25 | 953,166 | [Homepage manifest](../assets/responsive/manifest.json) |
+| `presentations/africomp7/assets/responsive/*.webp` | 45 | 1,479,314 | [Presentation manifest](../presentations/africomp7/assets/responsive/manifest.json) |
+
+### Compatibility and Deployment Notes
+
+- The site remains static HTML/CSS/JavaScript on existing public paths. Ship the
+  updated HTML with its shared scripts, styles, tokens and responsive assets;
+  copying only HTML would leave missing dependencies. No database migrations,
+  API contracts or application version changes are involved.
+- Local UI checks require Node.js, the installed Playwright development package
+  and a compatible Chrome channel. Static hosting does not require these tools.
+  Python documentation builds require the packages in `requirements-docs.txt`;
+  optional image regeneration additionally requires Pillow and `cwebp`.
+- Assessment persistence keeps the existing storage/item keys. Corrupt or blocked
+  local storage falls back to usable in-memory interaction. Static content remains
+  readable when JavaScript or optional highlighting/math libraries are unavailable.
+- The Pages workflow expects the sibling `system-management_scripts` checkout.
+  That checkout was absent locally, so full source synchronization and deployment
+  were not run. The local `--no-sync` build is not evidence of a successful release.
+- Original image assets remain available for high-resolution export. WebP files
+  add a derived asset set; the measured reduction concerns selected browser
+  sources, not total repository size. Screenshot PNGs are intentionally local.
+
+### Validation Performed
+
+**Passed during implementation and final fix verification:**
+
+- `npm run check:ui`: **15 passed, 0 failed** on isolated Chromium. Coverage includes
+  menu focus/Escape/resize, filter empty states, keyboard dropdowns/disclosures,
+  reduced motion, access-form errors, no-JavaScript reading, unavailable optional
+  scripts, synthesized touch gallery scrolling, native checklist/link separation,
+  persistence/reset, unavailable storage, progress names, touch targets, PDF state
+  restoration and narrow/enlarged-text reflow.
+- `npm run render:ux`: **98 pages**, **196 captures**, **257 PNG tiles**; zero
+  capture failures, page errors and overflow at the two screenshot widths.
+- Separate live reflow scan: **96/96** production pages fit at **320px**. Three
+  enlarged-text probes fit at **1440px**. Local table/equation scrolling preserves
+  technical content rather than hiding it with a page-width clamp.
+- Static follow-up: **7** named progress bars, **177** native checklist inputs,
+  no duplicate IDs, and valid original/derived presentation-image paths and
+  dimension/loading attributes.
+- Python compilation passed for the builders, shared HTML helper and presentation
+  optimizer. JavaScript syntax checking passed for the new checklist controller.
+- Actual browser PDF download succeeded; Poppler inspected its metadata and rendered
+  all **21 pages** for a visual contact sheet. Original figure loading, sequential
+  section export, source restoration and exporter-failure recovery are also tested.
+- Scoped whitespace check passed with the repository's CRLF convention accepted:
+
+```bash
+git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check
+```
+
+**Earlier evidence retained, not rerun merely to draft this note:**
+
+- Local documentation build with `--no-sync`; production-page landmark, heading,
+  image-alt and local-link checks; normalized text preservation for all `40` guide
+  articles. Subsequent fixes did not edit those article bodies.
+- The original audit sampled `13` pages with axe and found no sampled text/background
+  contrast violations. Its `887` raw detector flags included repeated aesthetic
+  patterns and static-cascade false positives; that count is not a clean-audit claim.
+
+**Failures found and resolved:**
+
+- Historical findings `A1`–`A6` are recorded in the original audit and resolved in
+  its follow-up. An intermediate reflow pass retained one `9px` inline-math overflow;
+  the final pass reports none. A touch-target test initially used the wrong heading
+  selector; the final selector covers the actual script-card headings.
+- Whole-deck PDF export failed during live verification. Section-wise rendering
+  completed successfully; the final automated checks also pass after that change.
+
+**Not run / limits:**
+
+- No physical iOS/Android, Safari, Firefox or screen-reader verification. Synthesized
+  Chromium touch is not physical-device evidence. No full accessibility certification
+  or current overall audit-score claim is made.
+- No production Core Web Vitals, throttled-network timings or field measurements.
+  File-byte reductions and local transfer observations are not loading-time results.
+- No full learning regeneration, external-source synchronization, CI deployment,
+  commit, tag or publication. Earlier generation checks do not prove release readiness
+  in the external deployment environment.
+- Note-specific validation parses Markdown into HTML, checks heading/table structure,
+  local links and scope arithmetic, and verifies existing work remains unchanged
+  during note creation. No separate visual preview of the release-note document was
+  performed; the site and PDF visual inspections are separate evidence.

@@ -1,15 +1,16 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Document Conversion - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
     <style>
       pre {
         line-height: 125%;
@@ -273,22 +274,25 @@
         color: #666;
       } /* Literal.Number.Integer.Long */
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -297,8 +301,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to System Scripts</a>
@@ -311,7 +314,7 @@
           <h1>Document Conversion</h1>
           <p>
             <code>document-conversion.ps1</code> ·
-            <a href="document-conversion.ps1" download>Download Script</a>
+            <a download="" href="document-conversion.ps1">Download Script</a>
           </p>
           <div class="codehilite">
             <table class="codehilitetable">
@@ -413,43 +416,43 @@
 <span class="cm">    Path for the output PDF file (default: same name as input with .pdf extension)</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    ConvertMD-ToPDF -inputFile &quot;document.md&quot;</span>
-<span class="cm">    ConvertMD-ToPDF -inputFile &quot;document.md&quot; -fontName &quot;Arial&quot; -fontSize &quot;11pt&quot;</span>
+<span class="cm">    ConvertMD-ToPDF -inputFile "document.md"</span>
+<span class="cm">    ConvertMD-ToPDF -inputFile "document.md" -fontName "Arial" -fontSize "11pt"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span> <span class="p">(</span>
         <span class="no">[string]</span><span class="nv">$inputFile</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$fontName</span><span class="p">=</span><span class="s2">&quot;Computer Modern Serif&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$fontSize</span><span class="p">=</span><span class="s2">&quot;12pt&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$outputFile</span><span class="p">=</span><span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$inputFile</span> <span class="o">-replace</span> <span class="s1">&#39;\.md$&#39;</span><span class="p">,</span> <span class="s1">&#39;.pdf&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
+        <span class="no">[string]</span><span class="nv">$fontName</span><span class="p">=</span><span class="s2">"Computer Modern Serif"</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$fontSize</span><span class="p">=</span><span class="s2">"12pt"</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$outputFile</span><span class="p">=</span><span class="s2">"</span><span class="p">$(</span><span class="nv">$inputFile</span> <span class="o">-replace</span> <span class="s1">'\.md$'</span><span class="p">,</span> <span class="s1">'.pdf'</span><span class="p">)</span><span class="s2">"</span>
     <span class="p">)</span>
 
     <span class="c"># Check if the input file exists</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">-Not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$inputFile</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Input file &#39;$inputFile&#39; does not exist.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Input file '$inputFile' does not exist."</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
         <span class="nv">$currentDir</span> <span class="p">=</span> <span class="nb">Get-Location</span>
-        <span class="nv">$inputFile</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="s2">&quot;$currentDir&quot;</span> <span class="n">-ChildPath</span> <span class="s2">&quot;$inputFile&quot;</span>
+        <span class="nv">$inputFile</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="s2">"$currentDir"</span> <span class="n">-ChildPath</span> <span class="s2">"$inputFile"</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">-Not</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$inputFile</span><span class="p">))</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Input file &#39;$inputFile&#39; still does not exist. Exiting function.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Input file '$inputFile' still does not exist. Exiting function."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
             <span class="k">return</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Found input file at &#39;$inputFile&#39;. Proceeding with conversion.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
-            <span class="nv">$outputFile</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$inputFile</span> <span class="o">-replace</span> <span class="s1">&#39;\.md$&#39;</span><span class="p">,</span> <span class="s1">&#39;.pdf&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Found input file at '$inputFile'. Proceeding with conversion."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+            <span class="nv">$outputFile</span> <span class="p">=</span> <span class="s2">"</span><span class="p">$(</span><span class="nv">$inputFile</span> <span class="o">-replace</span> <span class="s1">'\.md$'</span><span class="p">,</span> <span class="s1">'.pdf'</span><span class="p">)</span><span class="s2">"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="c"># Convert MD to PDF using Pandoc</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$fontName</span> <span class="o">-ne</span> <span class="s2">&quot;Computer Modern Serif&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">pandoc</span> <span class="s2">&quot;$inputFile&quot;</span> <span class="n">-o</span> <span class="s2">&quot;$outputFile&quot;</span> <span class="p">-</span><span class="n">-pdf-engine</span><span class="p">=</span><span class="n">xelatex</span> <span class="n">-V</span> <span class="n">geometry</span><span class="p">:</span><span class="n">margin</span><span class="p">=</span><span class="n">0</span><span class="p">.</span><span class="n">75in</span> <span class="n">-V</span> <span class="n">fontsize</span><span class="p">=</span><span class="nv">$fontSize</span> <span class="n">-V</span> <span class="n">mainfont</span><span class="p">=</span><span class="s2">&quot;$fontName&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$fontName</span> <span class="o">-ne</span> <span class="s2">"Computer Modern Serif"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pandoc</span> <span class="s2">"$inputFile"</span> <span class="n">-o</span> <span class="s2">"$outputFile"</span> <span class="p">-</span><span class="n">-pdf-engine</span><span class="p">=</span><span class="n">xelatex</span> <span class="n">-V</span> <span class="n">geometry</span><span class="p">:</span><span class="n">margin</span><span class="p">=</span><span class="n">0</span><span class="p">.</span><span class="n">75in</span> <span class="n">-V</span> <span class="n">fontsize</span><span class="p">=</span><span class="nv">$fontSize</span> <span class="n">-V</span> <span class="n">mainfont</span><span class="p">=</span><span class="s2">"$fontName"</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="n">pandoc</span> <span class="s2">&quot;$inputFile&quot;</span> <span class="n">-o</span> <span class="s2">&quot;$outputFile&quot;</span> <span class="p">-</span><span class="n">-pdf-engine</span><span class="p">=</span><span class="n">xelatex</span> <span class="n">-V</span> <span class="n">geometry</span><span class="p">:</span><span class="n">margin</span><span class="p">=</span><span class="n">0</span><span class="p">.</span><span class="n">75in</span> <span class="n">-V</span> <span class="n">fontsize</span><span class="p">=</span><span class="nv">$fontSize</span>
+        <span class="n">pandoc</span> <span class="s2">"$inputFile"</span> <span class="n">-o</span> <span class="s2">"$outputFile"</span> <span class="p">-</span><span class="n">-pdf-engine</span><span class="p">=</span><span class="n">xelatex</span> <span class="n">-V</span> <span class="n">geometry</span><span class="p">:</span><span class="n">margin</span><span class="p">=</span><span class="n">0</span><span class="p">.</span><span class="n">75in</span> <span class="n">-V</span> <span class="n">fontsize</span><span class="p">=</span><span class="nv">$fontSize</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$outputFile</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;PDF conversion successful: &#39;$outputFile&#39;.&quot;</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Converted &#39;$inputFile&#39; to &#39;$outputFile&#39;.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="nb">Write-Host</span> <span class="s2">"PDF conversion successful: '$outputFile'."</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Converted '$inputFile' to '$outputFile'."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;PDF conversion failed.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"PDF conversion failed."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -465,32 +468,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

@@ -1,15 +1,17 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Data Engineering &amp; Infrastructure — Module Hub</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -24,10 +26,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -39,10 +47,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -60,8 +91,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -78,20 +116,17 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span> Data Engineering
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span> Data Engineering
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">Data Engineering &amp; Infrastructure</h1>
         <p class="fade-in fade-in-d1">
           The practical assessment will be
           <strong>very heavy on data engineering within WSL</strong>. This
-          section is split into 4 focused modules. Work through each one &mdash;
+          section is split into 4 focused modules. Work through each one —
           Docker first, then WSL CLI, then web servers (Python and .NET/Nginx).
         </p>
-
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">Strategy</div>
           <p style="margin: 0">
@@ -102,9 +137,8 @@
             architecture).
           </p>
         </div>
-
         <div class="hub-grid fade-in fade-in-d3">
-          <a href="assessment-de-docker.html" class="hub-card">
+          <a class="hub-card" href="assessment-de-docker.html">
             <div class="card-level">Module 1</div>
             <div class="card-title">Docker &amp; Containers</div>
             <div class="card-desc">
@@ -112,7 +146,7 @@
               Pandas processing, Kaggle datasets. Timed 60-min exercise.
             </div>
           </a>
-          <a href="assessment-de-wsl.html" class="hub-card">
+          <a class="hub-card" href="assessment-de-wsl.html">
             <div class="card-level">Module 2</div>
             <div class="card-title">WSL &amp; Linux CLI</div>
             <div class="card-desc">
@@ -121,7 +155,7 @@
               debugging. Timed 45-min exercise.
             </div>
           </a>
-          <a href="assessment-web-servers-python.html" class="hub-card">
+          <a class="hub-card" href="assessment-web-servers-python.html">
             <div class="card-level">Module 3</div>
             <div class="card-title">Python Web Servers</div>
             <div class="card-desc">
@@ -130,7 +164,7 @@
               Timed 40-min exercise.
             </div>
           </a>
-          <a href="assessment-web-servers-dotnet.html" class="hub-card">
+          <a class="hub-card" href="assessment-web-servers-dotnet.html">
             <div class="card-level">Module 4</div>
             <div class="card-title">ASP.NET, Nginx &amp; Apache</div>
             <div class="card-desc">
@@ -140,25 +174,22 @@
             </div>
           </a>
         </div>
-
         <div class="page-footer" style="margin-top: 2rem">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -177,7 +208,13 @@
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
         });
       })();
     </script>

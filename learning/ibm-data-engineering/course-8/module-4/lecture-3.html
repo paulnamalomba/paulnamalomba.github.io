@@ -1,58 +1,70 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Lecture 3: Building Event Streaming Pipelines Using Kafka</title>
-
     <!-- CSS -->
-    <link rel="stylesheet" href="../../style.css" />
-
+    <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
     <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+      rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"
+    ></script>
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"
+    ></script>
     <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
+    ></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        hljs.highlightAll();
-        mermaid.initialize({
-          startOnLoad: true,
-          theme: "dark",
-          themeVariables: {
-            primaryColor: "#131a2e",
-            primaryTextColor: "#e8edf5",
-            primaryBorderColor: "#2a4080",
-            lineColor: "#f0b429",
-            secondaryColor: "#0d1321",
-            tertiaryColor: "#1a2340",
-            fontSize: "16px",
-            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
-          },
-        });
+        if (window.hljs) window.hljs.highlightAll();
+        if (window.mermaid)
+          window.mermaid.initialize({
+            startOnLoad: true,
+            theme: "dark",
+            themeVariables: {
+              primaryColor: "#131a2e",
+              primaryTextColor: "#e8edf5",
+              primaryBorderColor: "#2a4080",
+              lineColor: "#f0b429",
+              secondaryColor: "#0d1321",
+              tertiaryColor: "#1a2340",
+              fontSize: "16px",
+              fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+            },
+          });
       });
     </script>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div class="page-wrapper" id="content">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <main class="page-wrapper" id="content" tabindex="-1">
       <div class="header-bar">
         <span class="brand">IBM Data Engineering</span>
-        <nav>
+        <nav aria-label="Primary navigation">
           <a href="../../index.html">Hub</a>
-
           <div class="nav-dropdown">
-            <a href="#"
-              >Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka
-              ▾</a
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
             >
-            <div class="dropdown-content">
-              <a href="../../course-8/index.html" class="active"
+              Course 8: ETL and Data Pipelines with Shell, Airflow and Kafka ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
+              <a class="active" href="../../course-8/index.html"
                 >Course 8: ETL and Data Pipelines with Shell, Airflow and
                 Kafka</a
               >
@@ -61,48 +73,57 @@
               >
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#">Module 4 &mdash; Course 8: Course 8 ▾</a>
-            <div class="dropdown-content">
-              <a href="../../course-8/module-4/index.html" class="active"
-                >Module 4 &mdash; Course 8: Course 8</a
+            <button
+              aria-controls="dropdown-panel-2"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Module 4 — Course 8: Course 8 ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-2">
+              <a class="active" href="../../course-8/module-4/index.html"
+                >Module 4 — Course 8: Course 8</a
               >
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#" class="active">Lecture 3 ▾</a>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="active dropdown-button"
+              type="button"
+            >
+              Lecture 3 ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="../../course-8/module-4/lecture-1.html"
-                >Lecture 1: Apache Kafka Overview & Architecture</a
+                >Lecture 1: Apache Kafka Overview &amp; Architecture</a
               >
               <a href="../../course-8/module-4/lecture-2.html"
                 >Lecture 2: Distributed Event Streaming Platform Components</a
               >
-              <a href="../../course-8/module-4/lecture-3.html" class="active"
+              <a class="active" href="../../course-8/module-4/lecture-3.html"
                 >Lecture 3: Building Event Streaming Pipelines Using Kafka</a
               >
               <a href="../../course-8/module-4/lecture-4.html"
-                >Lecture 4: Kafka Streaming Process & Stream Topology</a
+                >Lecture 4: Kafka Streaming Process &amp; Stream Topology</a
               >
             </div>
           </div>
         </nav>
       </div>
-
       <div class="breadcrumb">
-        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
-        <a href="../index.html">Course 8</a> <span>&rsaquo;</span>
-        <a href="index.html">Module 4</a> <span>&rsaquo;</span>
+        <a href="../../index.html">Hub</a> <span>›</span>
+        <a href="../index.html">Course 8</a> <span>›</span>
+        <a href="index.html">Module 4</a> <span>›</span>
         Lecture 3
       </div>
-
       <h1 class="fade-in">Building Event Streaming Pipelines Using Kafka</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 4, Lecture 3
       </p>
-
       <div class="section-card fade-in fade-in-d2">
         <h2>1. The Core Cluster Topology: Brokers and KRaft</h2>
         <p>
@@ -367,10 +388,9 @@ graph LR
           application code.
         </p>
       </div>
-
       <div class="page-footer fade-in fade-in-d5">
-        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+        <p>Prepared by Paul Namalomba · IBM Data Engineering</p>
       </div>
-    </div>
+    </main>
   </body>
 </html>

@@ -1,103 +1,130 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>
       Lecture X: Data Lakes, Data Warehouses, and the Data Lakehouse
     </title>
-
     <!-- CSS -->
-    <link rel="stylesheet" href="../../style.css" />
-
+    <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
     <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+      rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"
+    ></script>
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"
+    ></script>
     <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
+    ></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        hljs.highlightAll();
-        mermaid.initialize({
-          startOnLoad: true,
-          theme: "dark",
-          themeVariables: {
-            primaryColor: "#131a2e",
-            primaryTextColor: "#e8edf5",
-            primaryBorderColor: "#2a4080",
-            lineColor: "#f0b429",
-            secondaryColor: "#0d1321",
-            tertiaryColor: "#1a2340",
-            fontSize: "16px",
-            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
-          },
-        });
+        if (window.hljs) window.hljs.highlightAll();
+        if (window.mermaid)
+          window.mermaid.initialize({
+            startOnLoad: true,
+            theme: "dark",
+            themeVariables: {
+              primaryColor: "#131a2e",
+              primaryTextColor: "#e8edf5",
+              primaryBorderColor: "#2a4080",
+              lineColor: "#f0b429",
+              secondaryColor: "#0d1321",
+              tertiaryColor: "#1a2340",
+              fontSize: "16px",
+              fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+            },
+          });
       });
     </script>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div class="page-wrapper" id="content">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <main class="page-wrapper" id="content" tabindex="-1">
       <div class="header-bar">
         <span class="brand">IBM Data Engineering</span>
-        <nav>
+        <nav aria-label="Primary navigation">
           <a href="../../index.html">Hub</a>
-
           <div class="nav-dropdown">
-            <a href="#">Course X ▾</a>
-            <div class="dropdown-content">
-              <a href="../../course-X/index.html" class="active">Course X</a>
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Course X ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
+              <a class="active" href="../../course-X/index.html">Course X</a>
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#">Module X ▾</a>
-            <div class="dropdown-content">
-              <a href="../../course-X/module-X/index.html" class="active"
+            <button
+              aria-controls="dropdown-panel-2"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Module X ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-2">
+              <a class="active" href="../../course-X/module-X/index.html"
                 >Module X</a
               >
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#" class="active">Lecture X ▾</a>
-            <div class="dropdown-content">
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
-                >Lecture X: Apache Kafka Overview & Architecture</a
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="active dropdown-button"
+              type="button"
+            >
+              Lecture X ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
+                >Lecture X: Apache Kafka Overview &amp; Architecture</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Distributed Event Streaming Platform Components</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Building Event Streaming Pipelines Using Kafka</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
-                >Lecture X: Kafka Streaming Process & Stream Topology</a
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
+                >Lecture X: Kafka Streaming Process &amp; Stream Topology</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Data Warehouse Overview</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Popular Data Warehouse Systems</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Selecting a Data Warehouse System</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Data Marts Overview</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: IBM Db2 Warehouse</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Data Lakes Overview</a
               >
-              <a href="../../course-X/module-X/lecture-X.html" class="active"
+              <a class="active" href="../../course-X/module-X/lecture-X.html"
                 >Lecture X: Data Lakes, Data Warehouses, and the Data
                 Lakehouse</a
               >
@@ -105,21 +132,18 @@
           </div>
         </nav>
       </div>
-
       <div class="breadcrumb">
-        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
-        <a href="../index.html">Course X</a> <span>&rsaquo;</span>
-        <a href="index.html">Module X</a> <span>&rsaquo;</span>
+        <a href="../../index.html">Hub</a> <span>›</span>
+        <a href="../index.html">Course X</a> <span>›</span>
+        <a href="index.html">Module X</a> <span>›</span>
         Lecture X
       </div>
-
       <h1 class="fade-in">
         Data Lakes, Data Warehouses, and the Data Lakehouse
       </h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module X, Lecture X
       </p>
-
       <p class="fade-in fade-in-d2">
         Understanding data architecture through analogy clarifies why no single
         storage paradigm solves every problem. A commercial kitchen—where raw
@@ -390,10 +414,9 @@ graph TD
           to feed lakehouse architectures?
         </p>
       </div>
-
       <div class="page-footer fade-in fade-in-d5">
-        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+        <p>Prepared by Paul Namalomba · IBM Data Engineering</p>
       </div>
-    </div>
+    </main>
   </body>
 </html>

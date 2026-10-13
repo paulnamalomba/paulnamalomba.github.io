@@ -1,33 +1,37 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      LDAP & LDAPS: The Enterprise Authority Architecture - Paul Namalomba
+      LDAP &amp; LDAPS: The Enterprise Authority Architecture - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -36,8 +40,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -198,7 +201,6 @@ cat<span class="w"> </span>/etc/ldap/ldap.conf
 <span class="c1"># Expected config: TLS_CACERT  /etc/ssl/certs/ca-certificates.crt</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="2-writing-basic-codescripts-connecting-binding">
             2. Writing Basic Code/Scripts (Connecting &amp; Binding)
@@ -229,8 +231,8 @@ cat<span class="w"> </span>/etc/ldap/ldap.conf
 <span class="kn">import</span><span class="w"> </span><span class="nn">ssl</span>
 
 <span class="c1"># Define the Enterprise Authority target</span>
-<span class="n">LDAP_SERVER_URL</span> <span class="o">=</span> <span class="s2">&quot;ldaps://dc01.enterprise.local:636&quot;</span>
-<span class="n">SEARCH_BASE</span> <span class="o">=</span> <span class="s2">&quot;OU=Engineering,DC=enterprise,DC=local&quot;</span>
+<span class="n">LDAP_SERVER_URL</span> <span class="o">=</span> <span class="s2">"ldaps://dc01.enterprise.local:636"</span>
+<span class="n">SEARCH_BASE</span> <span class="o">=</span> <span class="s2">"OU=Engineering,DC=enterprise,DC=local"</span>
 
 <span class="c1"># Secure LDAPS mandates a strictly verifiable TLS context</span>
 <span class="n">tls_context</span> <span class="o">=</span> <span class="n">Tls</span><span class="p">(</span><span class="n">validate</span><span class="o">=</span><span class="n">ssl</span><span class="o">.</span><span class="n">CERT_REQUIRED</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">ssl</span><span class="o">.</span><span class="n">PROTOCOL_TLSv1_2</span><span class="p">)</span>
@@ -240,31 +242,30 @@ cat<span class="w"> </span>/etc/ldap/ldap.conf
 
 <span class="k">def</span><span class="w"> </span><span class="nf">authenticate_user</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
     <span class="c1"># Construct the User Principal Name (UPN) or complete DN</span>
-    <span class="n">user_dn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">@enterprise.local&quot;</span>
+    <span class="n">user_dn</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">@enterprise.local"</span>
 
     <span class="c1"># Establish the connection and attempt the Bind via the Authority</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">conn</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">(</span><span class="n">server</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user_dn</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">authentication</span><span class="o">=</span><span class="n">NTLM</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">conn</span><span class="o">.</span><span class="n">bind</span><span class="p">():</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Authentication Successful!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Authentication Successful!"</span><span class="p">)</span>
 
             <span class="c1"># Sub-Search: Retrieve account attributes after successful bind</span>
-            <span class="n">conn</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">SEARCH_BASE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;(&amp;(objectClass=person)(sAMAccountName=</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">))&quot;</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mail&#39;</span><span class="p">,</span> <span class="s1">&#39;memberOf&#39;</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User Details: </span><span class="si">{</span><span class="n">conn</span><span class="o">.</span><span class="n">entries</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">SEARCH_BASE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"(&amp;(objectClass=person)(sAMAccountName=</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">))"</span><span class="p">,</span> <span class="n">attributes</span><span class="o">=</span><span class="p">[</span><span class="s1">'mail'</span><span class="p">,</span> <span class="s1">'memberOf'</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"User Details: </span><span class="si">{</span><span class="n">conn</span><span class="o">.</span><span class="n">entries</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">conn</span><span class="o">.</span><span class="n">unbind</span><span class="p">()</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bind Failed: </span><span class="si">{</span><span class="n">conn</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Bind Failed: </span><span class="si">{</span><span class="n">conn</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Network / TLS Failure: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Network / TLS Failure: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">False</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="3-pre-execution-commands-certificate-verification">
             3. Pre-execution Commands (Certificate Verification)
@@ -285,7 +286,6 @@ cat<span class="w"> </span>/etc/ldap/ldap.conf
 openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>dc01.enterprise.local:636<span class="w"> </span>-showcerts
 </code></pre>
           </div>
-
           <p>
             <em
               >If OpenSSL reports
@@ -302,7 +302,6 @@ openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span cla
 sudo<span class="w"> </span>update-ca-certificates
 </code></pre>
           </div>
-
           <hr />
           <h2 id="4-runtime-commands-authentication-handshakes">
             4. Runtime Commands (Authentication Handshakes)
@@ -320,13 +319,12 @@ sudo<span class="w"> </span>update-ca-certificates
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Structure: ldapsearch -H [URL] -D [Bind DN] -w [Password] -b [Search Base] [Filter]</span>
 ldapsearch<span class="w"> </span>-H<span class="w"> </span>ldaps://dc01.enterprise.local:636<span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-D<span class="w"> </span><span class="s2">&quot;CN=ldap_service_account,OU=Services,DC=enterprise,DC=local&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-w<span class="w"> </span><span class="s2">&quot;securePassword123!&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">           </span>-b<span class="w"> </span><span class="s2">&quot;DC=enterprise,DC=local&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">           </span><span class="s2">&quot;(sAMAccountName=kabwenze)&quot;</span>
+<span class="w">           </span>-D<span class="w"> </span><span class="s2">"CN=ldap_service_account,OU=Services,DC=enterprise,DC=local"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-w<span class="w"> </span><span class="s2">"securePassword123!"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-b<span class="w"> </span><span class="s2">"DC=enterprise,DC=local"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span><span class="s2">"(sAMAccountName=kabwenze)"</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Common LDAP Filters:</strong> * All employees:
             <code>(&amp;(objectClass=user)(objectCategory=person))</code> *
@@ -382,32 +380,11 @@ ldapsearch<span class="w"> </span>-H<span class="w"> </span>ldaps://dc01.enterpr
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

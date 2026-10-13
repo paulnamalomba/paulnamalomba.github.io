@@ -11,6 +11,7 @@ import os
 import re
 import glob
 from bs4 import BeautifulSoup, Tag
+from html_utils import harden_html
 import markdown
 import argparse
 
@@ -47,8 +48,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   
   <script>
     document.addEventListener("DOMContentLoaded", function() {{
-      hljs.highlightAll();
-      mermaid.initialize({{
+      if (window.hljs) window.hljs.highlightAll();
+      if (window.mermaid) window.mermaid.initialize({{
         startOnLoad: true,
         theme: 'dark',
         themeVariables: {{
@@ -231,9 +232,9 @@ def update_index_nav_regex(filepath, nav_html):
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
     # Replace the <nav> block
-    new_content = re.sub(r'<nav>.*?</nav>', f'<nav>\n{nav_html}\n      </nav>', content, flags=re.DOTALL)
+    new_content = re.sub(r'<nav\b[^>]*>.*?</nav>', f'<nav>\n{nav_html}\n      </nav>', content, flags=re.DOTALL)
     with open(filepath, 'w', encoding='utf-8') as f:
-        f.write(new_content)
+        f.write(harden_html(new_content))
         
 # This function iterates through all the index.html files for the hub, courses, and modules, and updates their navigation bars using the current tree structure. It ensures that all index pages have up-to-date navigation links reflecting any new lectures that were added.
 def update_all_index_navs(tree):
@@ -417,7 +418,7 @@ def process_markdown_file(md_path, tree):
     out_file = os.path.join(module_dir, f"lecture-{cur_l}.html")
     
     with open(out_file, 'w', encoding='utf-8') as f:
-        f.write(final_output)
+        f.write(harden_html(final_output))
         
     print(f" -> Generated: {out_file}")
     update_module_index(metadata, out_file)

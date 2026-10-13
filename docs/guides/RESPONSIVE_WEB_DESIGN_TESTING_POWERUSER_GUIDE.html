@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Responsive Web Design Testing PowerUser Guide (PowerShell & HTML) - Paul
-      Namalomba
+      Responsive Web Design Testing PowerUser Guide (PowerShell &amp; HTML) -
+      Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -265,13 +268,12 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Standard responsive viewport — MUST be present --&gt;</span>
-<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"viewport"</span> <span class="na">content</span><span class="o">=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="p">&gt;</span>
 
 <span class="cm">&lt;!-- Prevent user zoom (accessibility concern — use sparingly) --&gt;</span>
-<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"viewport"</span> <span class="na">content</span><span class="o">=</span><span class="s">"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"</span><span class="p">&gt;</span>
 </code></pre>
           </div>
-
           <p>
             <strong>CSS Defensive Defaults</strong> (prevent overflow globally):
           </p>
@@ -305,7 +307,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Common Breakpoint Strategy</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c">/* Mobile-first approach — base styles target small screens */</span>
@@ -335,7 +336,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Python HTTP Server Configuration</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Basic static server — serves current directory on port 8080</span>
@@ -351,7 +351,6 @@
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">3000</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Always test locally before
             deploying to GitHub Pages, Vercel, or Netlify - Use mobile-first CSS
@@ -419,7 +418,7 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Navigate to project root</span>
-<span class="nb">cd </span><span class="s2">&quot;C:\Users\username\projects\my-website&quot;</span>
+<span class="nb">cd </span><span class="s2">"C:\Users\username\projects\my-website"</span>
 
 <span class="c"># Start Python HTTP server on port 8080</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span>
@@ -428,19 +427,18 @@
 <span class="c"># Serving HTTP on :: port 8080 (http://[::]:8080/) ...</span>
 
 <span class="c"># Open in default browser</span>
-<span class="nb">Start-Process</span> <span class="s2">&quot;http://localhost:8080&quot;</span>
+<span class="nb">Start-Process</span> <span class="s2">"http://localhost:8080"</span>
 
 <span class="c"># To serve on all interfaces (for testing from phone on same WiFi):</span>
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span> <span class="p">-</span><span class="n">-bind</span> <span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
 
 <span class="c"># Find your local IP to access from phone:</span>
-<span class="p">(</span><span class="nb">Get-NetIPAddress</span> <span class="n">-AddressFamily</span> <span class="n">IPv4</span> <span class="n">-InterfaceAlias</span> <span class="s2">&quot;Wi-Fi&quot;</span><span class="p">).</span><span class="n">IPAddress</span>
+<span class="p">(</span><span class="nb">Get-NetIPAddress</span> <span class="n">-AddressFamily</span> <span class="n">IPv4</span> <span class="n">-InterfaceAlias</span> <span class="s2">"Wi-Fi"</span><span class="p">).</span><span class="n">IPAddress</span>
 <span class="c"># Then open http://&lt;your-ip&gt;:8080 on your phone browser</span>
 
 <span class="c"># Stop the server with Ctrl+C when done</span>
 </code></pre>
           </div>
-
           <p>
             <strong>PowerShell Function</strong> (add to
             <code>$PROFILE</code> for reuse):
@@ -449,21 +447,21 @@
             <pre><span></span><code><span class="k">function</span> <span class="nb">Start-WebServer</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span>
         <span class="no">[int]</span><span class="nv">$Port</span> <span class="p">=</span> <span class="n">8080</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$Directory</span> <span class="p">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$Directory</span> <span class="p">=</span> <span class="s2">"."</span><span class="p">,</span>
         <span class="no">[switch]</span><span class="nv">$OpenBrowser</span><span class="p">,</span>
         <span class="no">[switch]</span><span class="nv">$LAN</span>
     <span class="p">)</span>
 
-    <span class="nv">$bind</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$LAN</span><span class="p">)</span> <span class="p">{</span> <span class="s2">&quot;0.0.0.0&quot;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;127.0.0.1&quot;</span> <span class="p">}</span>
+    <span class="nv">$bind</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$LAN</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"0.0.0.0"</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">"127.0.0.1"</span> <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="nv">$OpenBrowser</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Start-Process</span> <span class="s2">&quot;http://localhost:$Port&quot;</span>
+        <span class="nb">Start-Process</span> <span class="s2">"http://localhost:$Port"</span>
     <span class="p">}</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Serving &#39;$Directory&#39; on http://${bind}:${Port} ...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Serving '$Directory' on http://${bind}:${Port} ..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
     <span class="k">if</span> <span class="p">(</span><span class="nv">$LAN</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$ip</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-NetIPAddress</span> <span class="n">-AddressFamily</span> <span class="n">IPv4</span> <span class="n">-InterfaceAlias</span> <span class="s2">&quot;Wi-Fi&quot;</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">IPAddress</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$ip</span><span class="p">)</span> <span class="p">{</span> <span class="nb">Write-Host</span> <span class="s2">&quot;LAN access: http://${ip}:${Port}&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span> <span class="p">}</span>
+        <span class="nv">$ip</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-NetIPAddress</span> <span class="n">-AddressFamily</span> <span class="n">IPv4</span> <span class="n">-InterfaceAlias</span> <span class="s2">"Wi-Fi"</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">IPAddress</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$ip</span><span class="p">)</span> <span class="p">{</span> <span class="nb">Write-Host</span> <span class="s2">"LAN access: http://${ip}:${Port}"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span> <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="nv">$Port</span> <span class="p">-</span><span class="n">-bind</span> <span class="nv">$bind</span> <span class="p">-</span><span class="n">-directory</span> <span class="nv">$Directory</span>
@@ -477,7 +475,6 @@
 <span class="c"># Start-WebServer -LAN -OpenBrowser -Port 5500  → full options</span>
 </code></pre>
           </div>
-
           <h3 id="chromeedge-devtools-device-emulation">
             Chrome/Edge DevTools Device Emulation
           </h3>
@@ -499,11 +496,10 @@
    - Galaxy S20 Ultra (412×915, DPR 3.5)
    - iPad Air (820×1180, DPR 2)
    - iPad Pro (1024×1366, DPR 2)
-5. Use &quot;Responsive&quot; mode to freely drag the viewport to any width
+5. Use "Responsive" mode to freely drag the viewport to any width
 6. Right-click any element → Inspect → check computed styles and layout
 </code></pre>
           </div>
-
           <p><strong>Key DevTools Features for Responsive Testing</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code>DEVICE TOOLBAR OPTIONS:
@@ -518,7 +514,7 @@ USEFUL PANELS:
 - Elements → Computed → look for elements wider than the viewport
 - Elements → Layout → Grid/Flexbox overlay visualisation
 - Console → run JavaScript overflow detection snippets (see below)
-- Network → Throttle to &quot;Slow 3G&quot; to test loading on mobile networks
+- Network → Throttle to "Slow 3G" to test loading on mobile networks
 - Performance → Test rendering performance at mobile CPU speeds
 
 KEYBOARD SHORTCUTS:
@@ -529,26 +525,24 @@ KEYBOARD SHORTCUTS:
 - Ctrl+[          → Previous panel
 </code></pre>
           </div>
-
           <p><strong>Adding Custom Device Profiles</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code>1. Open Device Toolbar (Ctrl+Shift+M)
-2. Click &quot;Edit...&quot; at the bottom of the device dropdown
-3. Click &quot;Add custom device...&quot;
+2. Click "Edit..." at the bottom of the device dropdown
+3. Click "Add custom device..."
 4. Fill in:
-   - Name: &quot;Conference Projector 1920x1080&quot;
+   - Name: "Conference Projector 1920x1080"
    - Width: 1920
    - Height: 1080
    - Device Pixel Ratio: 1
    - User Agent: (leave default)
 5. Useful custom devices to add:
-   - &quot;Galaxy Fold (folded)&quot;: 280×653, DPR 3
-   - &quot;4K Monitor&quot;: 3840×2160, DPR 1
-   - &quot;Conference Projector&quot;: 1920×1080, DPR 1
-   - &quot;Old iPhone SE&quot;: 320×568, DPR 2
+   - "Galaxy Fold (folded)": 280×653, DPR 3
+   - "4K Monitor": 3840×2160, DPR 1
+   - "Conference Projector": 1920×1080, DPR 1
+   - "Old iPhone SE": 320×568, DPR 2
 </code></pre>
           </div>
-
           <h3 id="firefox-responsive-design-mode">
             Firefox Responsive Design Mode
           </h3>
@@ -576,7 +570,6 @@ KEYBOARD SHORTCUTS:
 - Ctrl+Shift+K    → Open Web Console
 </code></pre>
           </div>
-
           <h3 id="build-a-custom-html-overflow-debugger">
             Build a Custom HTML Overflow Debugger
           </h3>
@@ -595,14 +588,14 @@ KEYBOARD SHORTCUTS:
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">"en"</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;viewport&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"viewport"</span> <span class="na">content</span><span class="o">=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Mobile Debug — Overflow Detector<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
 <span class="w">        </span><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Segoe UI&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
+<span class="w">            </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="s1">'Segoe UI'</span><span class="p">,</span><span class="w"> </span><span class="kc">sans-serif</span><span class="p">;</span>
 <span class="w">            </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
 <span class="w">            </span><span class="k">max-width</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
 <span class="w">            </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#f5f5f5</span><span class="p">;</span>
@@ -648,7 +641,7 @@ KEYBOARD SHORTCUTS:
 <span class="w">        </span><span class="p">#</span><span class="nn">overflow-results</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">max-height</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
 <span class="w">            </span><span class="k">overflow-y</span><span class="p">:</span><span class="w"> </span><span class="kc">auto</span><span class="p">;</span>
-<span class="w">            </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Cascadia Code&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Consolas&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">monospace</span><span class="p">;</span>
+<span class="w">            </span><span class="k">font-family</span><span class="p">:</span><span class="w"> </span><span class="s1">'Cascadia Code'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Consolas'</span><span class="p">,</span><span class="w"> </span><span class="kc">monospace</span><span class="p">;</span>
 <span class="w">            </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="kt">px</span><span class="p">;</span>
 <span class="w">            </span><span class="k">white-space</span><span class="p">:</span><span class="w"> </span><span class="kc">pre-wrap</span><span class="p">;</span>
 <span class="w">            </span><span class="k">padding</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="kt">rem</span><span class="p">;</span>
@@ -679,62 +672,62 @@ KEYBOARD SHORTCUTS:
     <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Loads your site in an iframe at mobile widths and detects which
        elements overflow the viewport.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;panel&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"panel"</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Device Presets<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;controls&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(320)&quot;</span><span class="p">&gt;</span>iPhone SE (320px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(375)&quot;</span><span class="p">&gt;</span>iPhone 12 (375px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(390)&quot;</span><span class="p">&gt;</span>iPhone 14 (390px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(412)&quot;</span><span class="p">&gt;</span>Galaxy S21 (412px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(430)&quot;</span><span class="p">&gt;</span>iPhone 14 Pro Max (430px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(768)&quot;</span><span class="p">&gt;</span>iPad Mini (768px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(820)&quot;</span><span class="p">&gt;</span>iPad Air (820px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(1024)&quot;</span><span class="p">&gt;</span>iPad Pro (1024px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"controls"</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(320)"</span><span class="p">&gt;</span>iPhone SE (320px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(375)"</span><span class="p">&gt;</span>iPhone 12 (375px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(390)"</span><span class="p">&gt;</span>iPhone 14 (390px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(412)"</span><span class="p">&gt;</span>Galaxy S21 (412px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(430)"</span><span class="p">&gt;</span>iPhone 14 Pro Max (430px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(768)"</span><span class="p">&gt;</span>iPad Mini (768px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(820)"</span><span class="p">&gt;</span>iPad Air (820px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(1024)"</span><span class="p">&gt;</span>iPad Pro (1024px)<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
         <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;custom-width&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"custom-width"</span><span class="p">&gt;</span>
             <span class="p">&lt;</span><span class="nt">label</span><span class="p">&gt;</span>Custom:<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;number&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;custom-w&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;px&quot;</span> <span class="na">min</span><span class="o">=</span><span class="s">&quot;200&quot;</span> <span class="na">max</span><span class="o">=</span><span class="s">&quot;3840&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;setWidth(+document.getElementById(&#39;custom-w&#39;).value)&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">"number"</span> <span class="na">id</span><span class="o">=</span><span class="s">"custom-w"</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">"px"</span> <span class="na">min</span><span class="o">=</span><span class="s">"200"</span> <span class="na">max</span><span class="o">=</span><span class="s">"3840"</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"setWidth(+document.getElementById('custom-w').value)"</span><span class="p">&gt;</span>
                 Apply
             <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
         <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-top:8px&quot;</span><span class="p">&gt;</span>
-            Current width: <span class="p">&lt;</span><span class="nt">strong</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;current-width&quot;</span><span class="p">&gt;</span>375px<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">"margin-top:8px"</span><span class="p">&gt;</span>
+            Current width: <span class="p">&lt;</span><span class="nt">strong</span> <span class="na">id</span><span class="o">=</span><span class="s">"current-width"</span><span class="p">&gt;</span>375px<span class="p">&lt;/</span><span class="nt">strong</span><span class="p">&gt;</span>
         <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;panel&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"panel"</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>🔍 Overflow Scan<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;scanOverflow()&quot;</span>
-                <span class="na">style</span><span class="o">=</span><span class="s">&quot;background:#0077B5; color:#fff; margin-bottom:0.5rem;&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"scanOverflow()"</span>
+                <span class="na">style</span><span class="o">=</span><span class="s">"background:#0077B5; color:#fff; margin-bottom:0.5rem;"</span><span class="p">&gt;</span>
             Run Overflow Scan
         <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;scanAllWidths()&quot;</span>
-                <span class="na">style</span><span class="o">=</span><span class="s">&quot;background:#2c3e50; color:#fff; margin-bottom:0.5rem;&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"scanAllWidths()"</span>
+                <span class="na">style</span><span class="o">=</span><span class="s">"background:#2c3e50; color:#fff; margin-bottom:0.5rem;"</span><span class="p">&gt;</span>
             Scan ALL Presets
         <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;overflow-results&quot;</span><span class="p">&gt;</span>
-Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">"overflow-results"</span><span class="p">&gt;</span>
+Click "Run Overflow Scan" after selecting a device width…<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;panel&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"panel"</span><span class="p">&gt;</span>
         <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Preview<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;preview&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;index.html&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">id</span><span class="o">=</span><span class="s">"preview"</span> <span class="na">src</span><span class="o">=</span><span class="s">"index.html"</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;</span>
     <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
     <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">iframe</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;preview&#39;</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">label</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;current-width&#39;</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">results</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;overflow-results&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">iframe</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'preview'</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">label</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'current-width'</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">results</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'overflow-results'</span><span class="p">);</span>
 <span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">presets</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">320</span><span class="p">,</span><span class="w"> </span><span class="mf">375</span><span class="p">,</span><span class="w"> </span><span class="mf">390</span><span class="p">,</span><span class="w"> </span><span class="mf">412</span><span class="p">,</span><span class="w"> </span><span class="mf">430</span><span class="p">,</span><span class="w"> </span><span class="mf">768</span><span class="p">,</span><span class="w"> </span><span class="mf">820</span><span class="p">,</span><span class="w"> </span><span class="mf">1024</span><span class="p">];</span>
 
 <span class="w">        </span><span class="cm">/* ---------- viewport helpers ---------- */</span>
 <span class="w">        </span><span class="kd">function</span><span class="w"> </span><span class="nx">setWidth</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">w</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">200</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
-<span class="w">            </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;px&#39;</span><span class="p">;</span>
-<span class="w">            </span><span class="nx">label</span><span class="p">.</span><span class="nx">textContent</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;px&#39;</span><span class="p">;</span>
-<span class="w">            </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;.controls button&#39;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="p">=&gt;</span>
-<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;active&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">textContent</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;px&#39;</span><span class="p">))</span>
+<span class="w">            </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'px'</span><span class="p">;</span>
+<span class="w">            </span><span class="nx">label</span><span class="p">.</span><span class="nx">textContent</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'px'</span><span class="p">;</span>
+<span class="w">            </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'.controls button'</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">                </span><span class="nx">b</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">'active'</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">textContent</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'px'</span><span class="p">))</span>
 <span class="w">            </span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
@@ -744,29 +737,29 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">contentDocument</span>
 <span class="w">                         </span><span class="o">||</span><span class="w"> </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">;</span>
 <span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">vw</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nx">iframe</span><span class="p">.</span><span class="nx">clientWidth</span><span class="p">;</span>
-<span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">);</span>
+<span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'*'</span><span class="p">);</span>
 <span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="nx">hits</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
 
 <span class="w">                </span><span class="nx">all</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">el</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                    </span><span class="kd">const</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">getBoundingClientRect</span><span class="p">();</span>
 <span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nx">vw</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">tagName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">();</span>
-<span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">id</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">cls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="ow">typeof</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;string&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span>
-<span class="w">                            </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="w">                            </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">id</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'#'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
+<span class="w">                        </span><span class="kd">const</span><span class="w"> </span><span class="nx">cls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="ow">typeof</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'string'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span>
+<span class="w">                            </span><span class="o">?</span><span class="w"> </span><span class="s1">'.'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span>
+<span class="w">                            </span><span class="o">:</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
 <span class="w">                        </span><span class="nx">hits</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
 <span class="w">                            </span><span class="nx">sel</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nx">tag</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">cls</span><span class="p">,</span>
 <span class="w">                            </span><span class="nx">over</span><span class="o">:</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">vw</span><span class="p">),</span>
 <span class="w">                            </span><span class="nx">w</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">width</span><span class="p">),</span>
-<span class="w">                            </span><span class="nx">txt</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">substring</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">60</span><span class="p">).</span><span class="nx">trim</span><span class="p">()</span>
+<span class="w">                            </span><span class="nx">txt</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">''</span><span class="p">).</span><span class="nx">substring</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="mf">60</span><span class="p">).</span><span class="nx">trim</span><span class="p">()</span>
 <span class="w">                        </span><span class="p">});</span>
 <span class="w">                    </span><span class="p">}</span>
 <span class="w">                </span><span class="p">});</span>
 
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">hits</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                    </span><span class="nx">results</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
-<span class="w">                        </span><span class="sb">`&lt;span class=&quot;ok&quot;&gt;✅ No overflow at </span><span class="si">${</span><span class="nx">vw</span><span class="si">}</span><span class="sb">px&lt;/span&gt;`</span><span class="p">;</span>
+<span class="w">                        </span><span class="sb">`&lt;span class="ok"&gt;✅ No overflow at </span><span class="si">${</span><span class="nx">vw</span><span class="si">}</span><span class="sb">px&lt;/span&gt;`</span><span class="p">;</span>
 <span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="p">[];</span>
 <span class="w">                </span><span class="p">}</span>
 
@@ -777,41 +770,41 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">seen</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">sel</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">seen</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">sel</span><span class="p">);</span><span class="w"> </span><span class="nx">uniq</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">h</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="w">                </span><span class="p">});</span>
 
-<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`&lt;span class=&quot;offender&quot;&gt;⚠️  </span><span class="si">${</span><span class="nx">uniq</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb"> overflowing `</span>
+<span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`&lt;span class="offender"&gt;⚠️  </span><span class="si">${</span><span class="nx">uniq</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb"> overflowing `</span>
 <span class="w">                          </span><span class="o">+</span><span class="w"> </span><span class="sb">`element(s) at </span><span class="si">${</span><span class="nx">vw</span><span class="si">}</span><span class="sb">px:&lt;/span&gt;\n\n`</span><span class="p">;</span>
 <span class="w">                </span><span class="nx">uniq</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">o</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class=&quot;offender&quot;&gt;</span><span class="si">${</span><span class="nx">i</span><span class="o">+</span><span class="mf">1</span><span class="si">}</span><span class="sb">. </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">sel</span><span class="si">}</span><span class="sb">&lt;/span&gt;\n`</span><span class="p">;</span>
-<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`   &lt;span class=&quot;info&quot;&gt;overflows by </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">over</span><span class="si">}</span><span class="sb">px  `</span>
+<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class="offender"&gt;</span><span class="si">${</span><span class="nx">i</span><span class="o">+</span><span class="mf">1</span><span class="si">}</span><span class="sb">. </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">sel</span><span class="si">}</span><span class="sb">&lt;/span&gt;\n`</span><span class="p">;</span>
+<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`   &lt;span class="info"&gt;overflows by </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">over</span><span class="si">}</span><span class="sb">px  `</span>
 <span class="w">                          </span><span class="o">+</span><span class="w"> </span><span class="sb">`(element width: </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">w</span><span class="si">}</span><span class="sb">px)&lt;/span&gt;\n`</span><span class="p">;</span>
 <span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">o</span><span class="p">.</span><span class="nx">txt</span><span class="p">)</span>
-<span class="w">                        </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`   text: &quot;</span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">txt</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">50</span><span class="p">)</span><span class="si">}</span><span class="sb">…&quot;\n`</span><span class="p">;</span>
-<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="p">;</span>
+<span class="w">                        </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`   text: "</span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">txt</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">50</span><span class="p">)</span><span class="si">}</span><span class="sb">…"\n`</span><span class="p">;</span>
+<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">'\n'</span><span class="p">;</span>
 <span class="w">                </span><span class="p">});</span>
 <span class="w">                </span><span class="nx">results</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">html</span><span class="p">;</span>
 <span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nx">uniq</span><span class="p">;</span>
 <span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="nx">results</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+<span class="w">                </span><span class="nx">results</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Error: '</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
 <span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="p">[];</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="cm">/* ---------- multi-width scan ---------- */</span>
 <span class="w">        </span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">scanAllWidths</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="nx">report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;span class=&quot;info&quot;&gt;━━━ Full Preset Scan ━━━&lt;/span&gt;\n\n&#39;</span><span class="p">;</span>
+<span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="nx">report</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'&lt;span class="info"&gt;━━━ Full Preset Scan ━━━&lt;/span&gt;\n\n'</span><span class="p">;</span>
 <span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">presets</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                </span><span class="nx">setWidth</span><span class="p">(</span><span class="nx">w</span><span class="p">);</span>
 <span class="w">                </span><span class="k">await</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span><span class="w"> </span><span class="mf">300</span><span class="p">));</span><span class="w">   </span><span class="c1">// let reflow</span>
 <span class="w">                </span><span class="kd">const</span><span class="w"> </span><span class="nx">hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">scanOverflow</span><span class="p">();</span>
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">hits</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class=&quot;ok&quot;&gt;✅ </span><span class="si">${</span><span class="nx">w</span><span class="si">}</span><span class="sb">px — clean&lt;/span&gt;\n`</span><span class="p">;</span>
+<span class="w">                    </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class="ok"&gt;✅ </span><span class="si">${</span><span class="nx">w</span><span class="si">}</span><span class="sb">px — clean&lt;/span&gt;\n`</span><span class="p">;</span>
 <span class="w">                </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class=&quot;offender&quot;&gt;⚠️  </span><span class="si">${</span><span class="nx">w</span><span class="si">}</span><span class="sb">px — `</span>
+<span class="w">                    </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`&lt;span class="offender"&gt;⚠️  </span><span class="si">${</span><span class="nx">w</span><span class="si">}</span><span class="sb">px — `</span>
 <span class="w">                            </span><span class="o">+</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nx">hits</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb"> offender(s)&lt;/span&gt;\n`</span><span class="p">;</span>
 <span class="w">                    </span><span class="nx">hits</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">h</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">                        </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sb">`   </span><span class="si">${</span><span class="nx">h</span><span class="p">.</span><span class="nx">sel</span><span class="si">}</span><span class="sb">  (+</span><span class="si">${</span><span class="nx">h</span><span class="p">.</span><span class="nx">over</span><span class="si">}</span><span class="sb">px)\n`</span><span class="p">;</span>
 <span class="w">                    </span><span class="p">});</span>
 <span class="w">                </span><span class="p">}</span>
-<span class="w">                </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">&#39;\n&#39;</span><span class="p">;</span>
+<span class="w">                </span><span class="nx">report</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">'\n'</span><span class="p">;</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="nx">results</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">report</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
@@ -823,7 +816,6 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre>
           </div>
-
           <p><strong>Usage</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># 1. Place debug-overflow.html in the same directory as index.html</span>
@@ -831,10 +823,10 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="n">python</span> <span class="n">-m</span> <span class="n">http</span><span class="p">.</span><span class="n">server</span> <span class="n">8080</span>
 
 <span class="c"># 3. Open the debugger</span>
-<span class="nb">Start-Process</span> <span class="s2">&quot;http://localhost:8080/debug-overflow.html&quot;</span>
+<span class="nb">Start-Process</span> <span class="s2">"http://localhost:8080/debug-overflow.html"</span>
 
-<span class="c"># 4. Click device preset buttons, then &quot;Run Overflow Scan&quot;</span>
-<span class="c">#    — or click &quot;Scan ALL Presets&quot; for a full multi-width report</span>
+<span class="c"># 4. Click device preset buttons, then "Run Overflow Scan"</span>
+<span class="c">#    — or click "Scan ALL Presets" for a full multi-width report</span>
 
 <span class="c"># 5. The scan reports CSS selectors that overflow, e.g.:</span>
 <span class="c">#    ⚠️ 3 overflowing element(s) at 375px:</span>
@@ -848,10 +840,9 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="c"># 7. IMPORTANT: Delete or .gitignore the file before committing</span>
 <span class="nb">Remove-Item</span> <span class="nb">debug-overflow</span><span class="p">.</span><span class="n">html</span>
 <span class="c"># Or add to .gitignore:</span>
-<span class="nb">Add-Content</span> <span class="p">.</span><span class="n">gitignore</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">debug-overflow.html&quot;</span>
+<span class="nb">Add-Content</span> <span class="p">.</span><span class="n">gitignore</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">debug-overflow.html"</span>
 </code></pre>
           </div>
-
           <h3 id="javascript-console-overflow-detection-snippet">
             JavaScript Console Overflow Detection Snippet
           </h3>
@@ -865,7 +856,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="nx">findOverflow</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">vw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">clientWidth</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'*'</span><span class="p">);</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">offenders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
 
 <span class="w">    </span><span class="nx">all</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">el</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
@@ -874,10 +865,10 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">            </span><span class="nx">offenders</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
 <span class="w">                </span><span class="nx">element</span><span class="o">:</span><span class="w"> </span><span class="nx">el</span><span class="p">,</span>
 <span class="w">                </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">tagName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
-<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;#&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;string&#39;</span>
-<span class="w">                        </span><span class="o">?</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-<span class="w">                        </span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">),</span>
+<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s1">'#'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">id</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span>
+<span class="w">                    </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="ow">typeof</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'string'</span>
+<span class="w">                        </span><span class="o">?</span><span class="w"> </span><span class="s1">'.'</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+/</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'.'</span><span class="p">)</span>
+<span class="w">                        </span><span class="o">:</span><span class="w"> </span><span class="s1">''</span><span class="p">),</span>
 <span class="w">                </span><span class="nx">overflowPx</span><span class="o">:</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nx">right</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">vw</span><span class="p">),</span>
 <span class="w">                </span><span class="nx">width</span><span class="o">:</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span>
 <span class="w">            </span><span class="p">});</span>
@@ -885,28 +876,27 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="w">    </span><span class="p">});</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">offenders</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%c✅ No overflow detected at &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">vw</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;px&#39;</span><span class="p">,</span>
-<span class="w">                    </span><span class="s1">&#39;color:green; font-weight:bold&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'%c✅ No overflow detected at '</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">vw</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'px'</span><span class="p">,</span>
+<span class="w">                    </span><span class="s1">'color:green; font-weight:bold'</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">group</span><span class="p">(</span><span class="sb">`%c⚠️ </span><span class="si">${</span><span class="nx">offenders</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb"> overflowing elements at </span><span class="si">${</span><span class="nx">vw</span><span class="si">}</span><span class="sb">px`</span><span class="p">,</span>
-<span class="w">                   </span><span class="s1">&#39;color:red; font-weight:bold&#39;</span><span class="p">);</span>
+<span class="w">                   </span><span class="s1">'color:red; font-weight:bold'</span><span class="p">);</span>
 <span class="w">    </span><span class="nx">offenders</span>
 <span class="w">        </span><span class="p">.</span><span class="nx">sort</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">overflowPx</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">overflowPx</span><span class="p">)</span>
 <span class="w">        </span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">o</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
 <span class="w">                </span><span class="sb">`</span><span class="si">${</span><span class="nx">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="si">}</span><span class="sb">. %c</span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">selector</span><span class="si">}</span><span class="sb">%c  +</span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">overflowPx</span><span class="si">}</span><span class="sb">px (width: </span><span class="si">${</span><span class="nx">o</span><span class="p">.</span><span class="nx">width</span><span class="si">}</span><span class="sb">px)`</span><span class="p">,</span>
-<span class="w">                </span><span class="s1">&#39;color:#d63384; font-weight:bold&#39;</span><span class="p">,</span>
-<span class="w">                </span><span class="s1">&#39;color:inherit&#39;</span>
+<span class="w">                </span><span class="s1">'color:#d63384; font-weight:bold'</span><span class="p">,</span>
+<span class="w">                </span><span class="s1">'color:inherit'</span>
 <span class="w">            </span><span class="p">);</span>
-<span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;   &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">o</span><span class="p">.</span><span class="nx">element</span><span class="p">);</span><span class="w">  </span><span class="c1">// clickable element reference</span>
+<span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'   '</span><span class="p">,</span><span class="w"> </span><span class="nx">o</span><span class="p">.</span><span class="nx">element</span><span class="p">);</span><span class="w">  </span><span class="c1">// clickable element reference</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">groupEnd</span><span class="p">();</span>
 <span class="p">})();</span>
 </code></pre>
           </div>
-
           <p><strong>Usage</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code>1. Open http://localhost:8080 in Chrome/Edge
@@ -917,7 +907,6 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 6. The element is highlighted on the page — inspect its CSS to find the cause
 </code></pre>
           </div>
-
           <h3 id="css-diagnostic-overlay-for-development">
             CSS Diagnostic Overlay for Development
           </h3>
@@ -944,7 +933,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="c">/* Show viewport boundary — red right border */</span>
 <span class="nt">body</span><span class="p">::</span><span class="nd">after</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">content</span><span class="p">:</span><span class="w"> </span><span class="s1">''</span><span class="p">;</span>
 <span class="w">    </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">fixed</span><span class="p">;</span>
 <span class="w">    </span><span class="k">top</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="k">right</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -961,21 +950,18 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Usage</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Add temporarily to &lt;head&gt; for debugging — remove before deploy --&gt;</span>
-<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;debug.css&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">"stylesheet"</span> <span class="na">href</span><span class="o">=</span><span class="s">"debug.css"</span><span class="p">&gt;</span>
 </code></pre>
           </div>
-
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Quick toggle: add debug.css to head</span>
 <span class="c"># When done, remove the &lt;link&gt; tag and delete the file</span>
 <span class="nb">Remove-Item</span> <span class="n">debug</span><span class="p">.</span><span class="n">css</span>
 </code></pre>
           </div>
-
           <h3 id="automated-viewport-screenshot-testing-with-playwright">
             Automated Viewport Screenshot Testing with Playwright
           </h3>
@@ -993,39 +979,38 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="n">python</span> <span class="n">-m</span> <span class="n">playwright</span> <span class="n">install</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Save as <code>test_responsive.py</code></strong
             >:
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="sd">&quot;&quot;&quot;</span>
+            <pre><span></span><code><span class="sd">"""</span>
 <span class="sd">Automated responsive screenshot testing with Playwright.</span>
 <span class="sd">Captures screenshots at multiple viewport sizes and detects overflow.</span>
 <span class="sd">Run: python test_responsive.py</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">async_playwright</span>
 
-<span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://localhost:8080&quot;</span>
-<span class="n">OUTPUT_DIR</span> <span class="o">=</span> <span class="s2">&quot;./screenshots&quot;</span>
+<span class="n">URL</span> <span class="o">=</span> <span class="s2">"http://localhost:8080"</span>
+<span class="n">OUTPUT_DIR</span> <span class="o">=</span> <span class="s2">"./screenshots"</span>
 
 <span class="n">VIEWPORTS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;iPhone_SE&quot;</span><span class="p">,</span>       <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">568</span><span class="p">,</span>  <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;iPhone_12&quot;</span><span class="p">,</span>       <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">375</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">812</span><span class="p">,</span>  <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;iPhone_14&quot;</span><span class="p">,</span>       <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">390</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">844</span><span class="p">,</span>  <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Galaxy_S21&quot;</span><span class="p">,</span>      <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">412</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">915</span><span class="p">,</span>  <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mf">2.625</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;iPad_Mini&quot;</span><span class="p">,</span>       <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">768</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;iPad_Air&quot;</span><span class="p">,</span>        <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">820</span><span class="p">,</span>  <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1180</span><span class="p">,</span> <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Desktop_1080p&quot;</span><span class="p">,</span>   <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">,</span> <span class="s2">&quot;dpr&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"iPhone_SE"</span><span class="p">,</span>       <span class="s2">"width"</span><span class="p">:</span> <span class="mi">320</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">568</span><span class="p">,</span>  <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"iPhone_12"</span><span class="p">,</span>       <span class="s2">"width"</span><span class="p">:</span> <span class="mi">375</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">812</span><span class="p">,</span>  <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"iPhone_14"</span><span class="p">,</span>       <span class="s2">"width"</span><span class="p">:</span> <span class="mi">390</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">844</span><span class="p">,</span>  <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Galaxy_S21"</span><span class="p">,</span>      <span class="s2">"width"</span><span class="p">:</span> <span class="mi">412</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">915</span><span class="p">,</span>  <span class="s2">"dpr"</span><span class="p">:</span> <span class="mf">2.625</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"iPad_Mini"</span><span class="p">,</span>       <span class="s2">"width"</span><span class="p">:</span> <span class="mi">768</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"iPad_Air"</span><span class="p">,</span>        <span class="s2">"width"</span><span class="p">:</span> <span class="mi">820</span><span class="p">,</span>  <span class="s2">"height"</span><span class="p">:</span> <span class="mi">1180</span><span class="p">,</span> <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Desktop_1080p"</span><span class="p">,</span>   <span class="s2">"width"</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">:</span> <span class="mi">1080</span><span class="p">,</span> <span class="s2">"dpr"</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
 <span class="p">]</span>
 
-<span class="n">OVERFLOW_JS</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="n">OVERFLOW_JS</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">() =&gt; {</span>
 <span class="s2">    const vw = document.documentElement.clientWidth;</span>
 <span class="s2">    const offenders = [];</span>
-<span class="s2">    document.querySelectorAll(&#39;*&#39;).forEach(el =&gt; {</span>
+<span class="s2">    document.querySelectorAll('*').forEach(el =&gt; {</span>
 <span class="s2">        const r = el.getBoundingClientRect();</span>
 <span class="s2">        if (r.right &gt; vw + 1) {</span>
 <span class="s2">            offenders.push({</span>
@@ -1039,7 +1024,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="s2">    });</span>
 <span class="s2">    return offenders;</span>
 <span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
 
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
@@ -1048,20 +1033,20 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
     <span class="k">async</span> <span class="k">with</span> <span class="n">async_playwright</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
         <span class="n">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2"> across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">VIEWPORTS</span><span class="p">)</span><span class="si">}</span><span class="s2"> viewports...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Testing </span><span class="si">{</span><span class="n">URL</span><span class="si">}</span><span class="s2"> across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">VIEWPORTS</span><span class="p">)</span><span class="si">}</span><span class="s2"> viewports...</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="n">all_clean</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">for</span> <span class="n">vp</span> <span class="ow">in</span> <span class="n">VIEWPORTS</span><span class="p">:</span>
             <span class="n">ctx</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_context</span><span class="p">(</span>
-                <span class="n">viewport</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">vp</span><span class="p">[</span><span class="s2">&quot;width&quot;</span><span class="p">],</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">vp</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]},</span>
-                <span class="n">device_scale_factor</span><span class="o">=</span><span class="n">vp</span><span class="p">[</span><span class="s2">&quot;dpr&quot;</span><span class="p">],</span>
+                <span class="n">viewport</span><span class="o">=</span><span class="p">{</span><span class="s2">"width"</span><span class="p">:</span> <span class="n">vp</span><span class="p">[</span><span class="s2">"width"</span><span class="p">],</span> <span class="s2">"height"</span><span class="p">:</span> <span class="n">vp</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]},</span>
+                <span class="n">device_scale_factor</span><span class="o">=</span><span class="n">vp</span><span class="p">[</span><span class="s2">"dpr"</span><span class="p">],</span>
             <span class="p">)</span>
             <span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
-            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">wait_until</span><span class="o">=</span><span class="s2">&quot;networkidle&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">wait_until</span><span class="o">=</span><span class="s2">"networkidle"</span><span class="p">)</span>
 
             <span class="c1"># Full-page screenshot</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.png&quot;</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'height'</span><span class="p">]</span><span class="si">}</span><span class="s2">.png"</span>
             <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">full_page</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="c1"># Overflow detection</span>
@@ -1069,31 +1054,30 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
             <span class="k">if</span> <span class="n">offenders</span><span class="p">:</span>
                 <span class="n">all_clean</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  </span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">px): &quot;</span>
-                      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">offenders</span><span class="p">)</span><span class="si">}</span><span class="s2"> overflow(s)&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"⚠️  </span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span><span class="si">}</span><span class="s2">px): "</span>
+                      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">offenders</span><span class="p">)</span><span class="si">}</span><span class="s2"> overflow(s)"</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">offenders</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
-                    <span class="n">sel</span> <span class="o">=</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;tag&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]:</span>
-                        <span class="n">sel</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]:</span>
-                        <span class="n">sel</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="s2">&quot;classes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     </span><span class="si">{</span><span class="n">sel</span><span class="si">}</span><span class="s2">  +</span><span class="si">{</span><span class="n">o</span><span class="p">[</span><span class="s1">&#39;overflowPx&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">)</span>
+                    <span class="n">sel</span> <span class="o">=</span> <span class="n">o</span><span class="p">[</span><span class="s2">"tag"</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]:</span>
+                        <span class="n">sel</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"#</span><span class="si">{</span><span class="n">o</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="k">if</span> <span class="n">o</span><span class="p">[</span><span class="s2">"classes"</span><span class="p">]:</span>
+                        <span class="n">sel</span> <span class="o">+=</span> <span class="s2">"."</span> <span class="o">+</span> <span class="s2">"."</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">o</span><span class="p">[</span><span class="s2">"classes"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"     </span><span class="si">{</span><span class="n">sel</span><span class="si">}</span><span class="s2">  +</span><span class="si">{</span><span class="n">o</span><span class="p">[</span><span class="s1">'overflowPx'</span><span class="p">]</span><span class="si">}</span><span class="s2">px"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ </span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">px): clean&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"✅ </span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vp</span><span class="p">[</span><span class="s1">'width'</span><span class="p">]</span><span class="si">}</span><span class="s2">px): clean"</span><span class="p">)</span>
 
             <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
         <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;✅ ALL VIEWPORTS CLEAN&quot;</span> <span class="k">if</span> <span class="n">all_clean</span>
-                      <span class="k">else</span> <span class="s2">&quot;⚠️  OVERFLOW DETECTED — see above&quot;</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Screenshots saved to </span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="p">(</span><span class="s2">"✅ ALL VIEWPORTS CLEAN"</span> <span class="k">if</span> <span class="n">all_clean</span>
+                      <span class="k">else</span> <span class="s2">"⚠️  OVERFLOW DETECTED — see above"</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Screenshots saved to </span><span class="si">{</span><span class="n">OUTPUT_DIR</span><span class="si">}</span><span class="s2">/"</span><span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre>
           </div>
-
           <p><strong>Usage</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># 1. Start local server in one terminal</span>
@@ -1121,7 +1105,6 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="n">explorer</span><span class="p">.</span><span class="n">exe</span> <span class="p">.\</span><span class="n">screenshots</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <table>
             <thead>
@@ -1253,23 +1236,21 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 
 <span class="c"># Alternative: VS Code Live Server extension</span>
 <span class="c"># Install: ext install ritwickdey.LiveServer</span>
-<span class="c"># Right-click index.html → &quot;Open with Live Server&quot;</span>
+<span class="c"># Right-click index.html → "Open with Live Server"</span>
 
 <span class="c"># Alternative: PHP built-in server</span>
 <span class="n">php</span> <span class="n">-S</span> <span class="n">localhost</span><span class="p">:</span><span class="n">8080</span>
 </code></pre>
           </div>
-
           <p><strong>DevTools Performance Tips</strong>:</p>
           <div class="codehilite">
-            <pre><span></span><code>- Enable &quot;Disable cache&quot; in Network tab during development
-- Use &quot;Capture screenshots&quot; in Performance tab to see rendering at each frame
+            <pre><span></span><code>- Enable "Disable cache" in Network tab during development
+- Use "Capture screenshots" in Performance tab to see rendering at each frame
 - CPU throttling: 4x or 6x slowdown simulates mobile CPU performance
-- Network throttling: &quot;Slow 3G&quot; simulates real mobile network conditions
+- Network throttling: "Slow 3G" simulates real mobile network conditions
 - Lighthouse: Run in DevTools (Lighthouse tab) for a full mobile audit score
 </code></pre>
           </div>
-
           <p><strong>CSS Performance for Responsive Layouts</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c">/* Use will-change sparingly for animated responsive transitions */</span>
@@ -1293,7 +1274,6 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="c">/* ✅ Good: */</span><span class="w"> </span><span class="p">.</span><span class="nc">card-item</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Playwright Performance Tips</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Run tests in parallel across browsers</span>
@@ -1309,7 +1289,7 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
 <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">full_page</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># faster</span>
 
 <span class="c1"># Reuse browser context for same-viewport tests</span>
-<span class="n">ctx</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_context</span><span class="p">(</span><span class="n">viewport</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">375</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">812</span><span class="p">})</span>
+<span class="n">ctx</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_context</span><span class="p">(</span><span class="n">viewport</span><span class="o">=</span><span class="p">{</span><span class="s2">"width"</span><span class="p">:</span> <span class="mi">375</span><span class="p">,</span> <span class="s2">"height"</span><span class="p">:</span> <span class="mi">812</span><span class="p">})</span>
 <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">:</span>
     <span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ctx</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
     <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -1317,7 +1297,6 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
     <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -1387,32 +1366,11 @@ Click &quot;Run Overflow Scan&quot; after selecting a device width…<span class
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

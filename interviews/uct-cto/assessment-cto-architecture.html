@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Assessment — CTO-Level Architecture &amp; Strategy</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -20,9 +21,10 @@
         margin: 1rem 0;
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -37,10 +39,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -52,10 +60,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -73,8 +104,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,47 +129,44 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span> Assessment: CTO
-        Architecture &amp; Strategy
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span> Assessment: CTO Architecture
+        &amp; Strategy
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">CTO-Level Architecture &amp; Strategy</h1>
         <p class="fade-in fade-in-d1">
-          Preparation for Dr.&nbsp;Nnene&rsquo;s practical assessment (Thursday
-          12 March 2026). This module goes beyond coding &mdash; it tests your
-          ability to
+          Preparation for Dr. Nnene’s practical assessment (Thursday 12 March
+          2026). This module goes beyond coding — it tests your ability to
           <strong
             >design end-to-end systems, communicate architecture clearly, and
             align technical decisions with business and research goals</strong
           >.
         </p>
-
         <!-- PROGRESS TRACKER -->
         <div
+          aria-label="Preparation progress"
+          data-checklist-storage="cto-architecture-checklist"
           class="checklist-progress fade-in fade-in-d2"
           role="region"
-          aria-label="Preparation progress"
         >
           <div class="checklist-progress-header">
-            <span>Preparation Progress</span>
+            <span id="preparation-progress-label">Preparation Progress</span>
             <span class="progress-count" id="progressCount">0 / 0</span>
           </div>
           <div class="progress-bar-track">
             <div
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow="0"
               class="progress-bar-fill"
               id="progressBar"
-              style="width: 0%"
               role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-labelledby="preparation-progress-label"
+              style="width: 0%"
             ></div>
           </div>
         </div>
-
         <!-- CV GROUNDING -->
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">
@@ -140,23 +175,22 @@
           <ul>
             <li>
               <strong>Full-stack system architecture:</strong> You designed and
-              built the Ecoride platform end-to-end: Flutter mobile &rarr;
-              ASP.NET Core + EF Core API &rarr; PostgreSQL + Redis + RabbitMQ
-              &rarr; Cloudflare R2 + Render/Azure &rarr; real-time tracking via
-              SignalR. This is a production IoT-adjacent system you can
-              whiteboard on demand.
+              built the Ecoride platform end-to-end: Flutter mobile → ASP.NET
+              Core + EF Core API → PostgreSQL + Redis + RabbitMQ → Cloudflare R2
+              + Render/Azure → real-time tracking via SignalR. This is a
+              production IoT-adjacent system you can whiteboard on demand.
             </li>
             <li>
               <strong>C4 Model proficiency:</strong> Your technical guides
-              (Architecture docs) demonstrate C4-level thinking &mdash; Context,
+              (Architecture docs) demonstrate C4-level thinking — Context,
               Container, Component, Code diagrams. You naturally separate
               concerns.
             </li>
             <li>
               <strong>Cross-domain communication:</strong> Your Assistant
               Lecturer role proves you can explain complex systems to mixed
-              audiences &mdash; a critical CTO skill when bridging research
-              academics and IT operations.
+              audiences — a critical CTO skill when bridging research academics
+              and IT operations.
             </li>
             <li>
               <strong>HPC systems thinking:</strong> SESKA deployment on
@@ -166,38 +200,34 @@
             </li>
           </ul>
         </div>
-
         <!-- END-TO-END PIPELINE DESIGN -->
         <div class="section-card fade-in fade-in-d3">
-          <h2 style="margin-top: 0" id="pipeline">
-            &#128736; End-to-End Pipeline Design
+          <h2 id="pipeline" style="margin-top: 0">
+            🛠 End-to-End Pipeline Design
           </h2>
           <p>
             Be prepared to design and draw a complete system on a whiteboard.
             Practice until you can produce a clean diagram in under 10 minutes.
           </p>
-
           <div class="checklist-category">
             Reference Architecture: Smart Transit Fleet
           </div>
           <ul
+            aria-label="Pipeline design checklist"
             class="checklist"
             role="list"
-            aria-label="Pipeline design checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-pipeline-draw"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-pipeline-draw">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-pipeline-draw"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-pipeline-draw">
                     Practise drawing the full pipeline (3 times minimum)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>The 6-layer stack (memorise this):</strong><br />
                     1. <strong>Edge Layer:</strong> ESP32 + sensors (GPS, IMU,
@@ -217,31 +247,29 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-pipeline-excalidraw"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-pipeline-excalidraw">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-pipeline-excalidraw"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-pipeline-excalidraw">
                     Create a clean diagram on Excalidraw or Draw.io
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Open
                     <a
                       href="https://excalidraw.com/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >excalidraw.com</a
                     >
                     or
                     <a
                       href="https://app.diagrams.net/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >app.diagrams.net</a
                     >. Draw the 6-layer pipeline with consistent icons. Label
                     each component. Add arrows showing data flow direction.
@@ -252,54 +280,49 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-pipeline-narrate"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-pipeline-narrate">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-pipeline-narrate"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-pipeline-narrate">
                     Practise narrating the design aloud (5 min talk)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Stand at your desk, point at your diagram, and walk through
-                    it as if presenting to a panel. Start with: &ldquo;The
-                    system has six layers, each with clear separation of
-                    concerns...&rdquo; Touch each layer: purpose, technology
-                    choice, and <em>why</em> that choice over alternatives. End
-                    with: &ldquo;This architecture scales horizontally at every
-                    layer.&rdquo; Record yourself and review.
+                    it as if presenting to a panel. Start with: “The system has
+                    six layers, each with clear separation of concerns...” Touch
+                    each layer: purpose, technology choice, and
+                    <em>why</em> that choice over alternatives. End with: “This
+                    architecture scales horizontally at every layer.” Record
+                    yourself and review.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">
             Alternative Scenario: University Shuttle Fleet
           </div>
           <ul
+            aria-label="Shuttle fleet scenario checklist"
             class="checklist"
             role="list"
-            aria-label="Shuttle fleet scenario checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-shuttle-design"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-shuttle-design">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-shuttle-design"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Design exercise: &ldquo;Real-time tracking for UCT&rsquo;s
-                    Jammie Shuttle fleet&rdquo;
-                  </div>
+                  <label class="checklist-label" for="arch-shuttle-design">
+                    Design exercise: “Real-time tracking for UCT’s Jammie
+                    Shuttle fleet”
+                  </label>
                   <div class="checklist-detail">
                     <strong>Brief:</strong> 30 buses, 15 routes, want real-time
                     location on a web app + historical route analysis.<br />
@@ -308,94 +331,84 @@
                     UCT-hosted VM → Python ingestion service → TimescaleDB +
                     PostGIS → Next.js web app with Mapbox/Leaflet for live
                     tracking + Grafana for ops dashboard.<br />
-                    <strong>Twist (include this):</strong> &ldquo;Add an ETA
+                    <strong>Twist (include this):</strong> “Add an ETA
                     prediction model: use historical trajectory data to train a
                     simple linear regression on segment travel times by
                     time-of-day. Serve predictions via a lightweight Flask
-                    API.&rdquo;<br />
+                    API.”<br />
                     Draw this. Time yourself: 15 minutes.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-shuttle-ecoride"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-shuttle-ecoride">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-shuttle-ecoride"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-shuttle-ecoride">
                     Map Ecoride architecture to the shuttle system
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Rehearse the parallels: &ldquo;Ecoride uses SignalR
-                    WebSockets for real-time ride tracking &mdash; this shuttle
-                    system uses MQTT for the same purpose but from constrained
-                    hardware. Ecoride uses RabbitMQ for ride-request dispatch
-                    &mdash; this uses Kafka for telemetry streaming. The
-                    architectural pattern is identical: event-driven pub/sub
-                    with persistent state.&rdquo; This shows transferability.
+                    Rehearse the parallels: “Ecoride uses SignalR WebSockets for
+                    real-time ride tracking — this shuttle system uses MQTT for
+                    the same purpose but from constrained hardware. Ecoride uses
+                    RabbitMQ for ride-request dispatch — this uses Kafka for
+                    telemetry streaming. The architectural pattern is identical:
+                    event-driven pub/sub with persistent state.” This shows
+                    transferability.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- C4 MODEL -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="c4">
-            &#128202; C4 Model for Communication
-          </h2>
+          <h2 id="c4" style="margin-top: 0">📊 C4 Model for Communication</h2>
           <p>
             The C4 model (Context, Containers, Components, Code) is the industry
             standard for communicating architecture. Use it to structure all
             your whiteboard explanations.
           </p>
-
           <div class="checklist-category">C4 Levels</div>
-          <ul class="checklist" role="list" aria-label="C4 model checklist">
+          <ul aria-label="C4 model checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-c4-context"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-c4-context">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-c4-context"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Practise: Level 1 &mdash; System Context diagram
-                  </div>
+                  <label class="checklist-label" for="arch-c4-context">
+                    Practise: Level 1 — System Context diagram
+                  </label>
                   <div class="checklist-detail">
                     Show the system as a single box. Draw external actors:
                     Researchers (query data), Fleet Operators (monitor
                     dashboards), Sensor Network (pushes data), External APIs
                     (weather, traffic). Arrows show who sends what to whom. This
-                    is the &ldquo;10,000-foot view&rdquo; you start every
-                    architecture discussion with.
+                    is the “10,000-foot view” you start every architecture
+                    discussion with.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-c4-container"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-c4-container">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-c4-container"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Practise: Level 2 &mdash; Container diagram
-                  </div>
+                  <label class="checklist-label" for="arch-c4-container">
+                    Practise: Level 2 — Container diagram
+                  </label>
                   <div class="checklist-detail">
                     Zoom into the system box. Show the major runtime containers:
                     MQTT Broker, Kafka Cluster, Python Ingestion Service,
@@ -408,19 +421,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-c4-component"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-c4-component">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-c4-component"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Practise: Level 3 &mdash; Component diagram (ingestion
-                    service)
-                  </div>
+                  <label class="checklist-label" for="arch-c4-component">
+                    Practise: Level 3 — Component diagram (ingestion service)
+                  </label>
                   <div class="checklist-detail">
                     Zoom into the Python Ingestion Service. Show components:
                     Kafka Consumer, JSON Validator, Anomaly Filter, Batch Writer
@@ -432,217 +442,193 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-c4-code"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-c4-code">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-c4-code"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-c4-code">
                     Know when Level 4 (Code) is appropriate
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Level 4 = class/function-level diagrams. Generally only
                     useful when discussing specific algorithms (e.g., the
                     anomaly detection logic or the Haversine function). In the
-                    assessment, you&rsquo;ll mostly stay at Level 2&ndash;3.
-                    Mention you <em>can</em> go to Level 4 but only when it adds
-                    clarity. This demonstrates judgment.
+                    assessment, you’ll mostly stay at Level 2–3. Mention you
+                    <em>can</em> go to Level 4 but only when it adds clarity.
+                    This demonstrates judgment.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- DOMAIN MAPPING -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="domain">
-            &#127758; Domain Mapping: Your Experience &rarr; Their Needs
+          <h2 id="domain" style="margin-top: 0">
+            🌎 Domain Mapping: Your Experience → Their Needs
           </h2>
           <p>
             Every answer should naturally connect your existing work to the
             transport/infrastructure domain. Prepare these mappings until they
             feel second nature.
           </p>
-
-          <div class="checklist-category">Experience &rarr; Domain Bridges</div>
+          <div class="checklist-category">Experience → Domain Bridges</div>
           <ul
+            aria-label="Domain mapping checklist"
             class="checklist"
             role="list"
-            aria-label="Domain mapping checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-map-ecoride"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-map-ecoride">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-map-ecoride"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Bridge: Ecoride &rarr; MyCiTi BRT Fleet Tracking
-                  </div>
+                  <label class="checklist-label" for="arch-map-ecoride">
+                    Bridge: Ecoride → MyCiTi BRT Fleet Tracking
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;Ecoride is a ride-sharing platform with real-time GPS
+                    “Ecoride is a ride-sharing platform with real-time GPS
                     tracking, geofencing, and driver/rider matching. If you
-                    replace &lsquo;private car&rsquo; with &lsquo;BRT bus&rsquo;
-                    and &lsquo;ride request&rsquo; with &lsquo;passenger
-                    boarding event&rsquo;, the architecture maps directly. The
-                    challenge scales up (more vehicles, higher data rates), but
-                    the patterns are the same.&rdquo;
+                    replace ‘private car’ with ‘BRT bus’ and ‘ride request’ with
+                    ‘passenger boarding event’, the architecture maps directly.
+                    The challenge scales up (more vehicles, higher data rates),
+                    but the patterns are the same.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-map-seska"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-map-seska">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-map-seska"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Bridge: SESKA &rarr; Infrastructure Health Monitoring
-                  </div>
+                  <label class="checklist-label" for="arch-map-seska">
+                    Bridge: SESKA → Infrastructure Health Monitoring
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;SESKA processes displacement and stress data from
+                    “SESKA processes displacement and stress data from
                     finite-element simulations of structures. Infrastructure
                     health monitoring does the same but with
                     <em>real</em> sensor data instead of simulated data. I
-                    understand the physical quantities being measured &mdash;
-                    natural frequencies, mode shapes, damping ratios &mdash;
-                    because I&rsquo;ve studied structural mechanics at
-                    postgraduate level.&rdquo;
+                    understand the physical quantities being measured — natural
+                    frequencies, mode shapes, damping ratios — because I’ve
+                    studied structural mechanics at postgraduate level.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-map-seat"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-map-seat">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-map-seat"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Bridge: SEAT MPI Pipeline &rarr; IoT Data Ingestion
-                  </div>
+                  <label class="checklist-label" for="arch-map-seat">
+                    Bridge: SEAT MPI Pipeline → IoT Data Ingestion
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;The SEAT MPI pipeline partitions 30M rows across
-                    parallel workers for batch ingestion into PostgreSQL. An IoT
-                    Kafka pipeline partitions millions of sensor events across
+                    “The SEAT MPI pipeline partitions 30M rows across parallel
+                    workers for batch ingestion into PostgreSQL. An IoT Kafka
+                    pipeline partitions millions of sensor events across
                     consumer group members for the same purpose. The abstraction
-                    &mdash; parallel partitioned batch writes &mdash; is
-                    identical. I&rsquo;ve proven I can deliver this at
-                    scale.&rdquo;
+                    — parallel partitioned batch writes — is identical. I’ve
+                    proven I can deliver this at scale.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-map-rabbitmq"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-map-rabbitmq">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-map-rabbitmq"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Bridge: RabbitMQ &rarr; MQTT Broker Architecture
-                  </div>
+                  <label class="checklist-label" for="arch-map-rabbitmq">
+                    Bridge: RabbitMQ → MQTT Broker Architecture
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;RabbitMQ &lsquo;exchanges&rsquo; route messages to
-                    &lsquo;queues&rsquo; via &lsquo;binding keys&rsquo;. MQTT
-                    brokers route &lsquo;publishes&rsquo; to
-                    &lsquo;subscribers&rsquo; via &lsquo;topic filters&rsquo;.
-                    Both are message-oriented middleware implementing the
-                    pub/sub pattern. I&rsquo;ve built production systems on
-                    RabbitMQ (Ecoride/INNTEGRATE); the mental model transfers
-                    seamlessly to MQTT/IoT contexts.&rdquo;
+                    “RabbitMQ ‘exchanges’ route messages to ‘queues’ via
+                    ‘binding keys’. MQTT brokers route ‘publishes’ to
+                    ‘subscribers’ via ‘topic filters’. Both are message-oriented
+                    middleware implementing the pub/sub pattern. I’ve built
+                    production systems on RabbitMQ (Ecoride/INNTEGRATE); the
+                    mental model transfers seamlessly to MQTT/IoT contexts.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-map-teaching"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-map-teaching">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-map-teaching"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Bridge: Assistant Lecturer &rarr; CTO Communication Skills
-                  </div>
+                  <label class="checklist-label" for="arch-map-teaching">
+                    Bridge: Assistant Lecturer → CTO Communication Skills
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;A CTO must translate between research academics who
-                    think in papers and PostGrad students who think in code. As
-                    an Assistant Lecturer, I&rsquo;ve done exactly this: turned
-                    advanced computational mechanics concepts into accessible
-                    lab instructions and trained 5 TAs to deliver them
-                    confidently. The CTO role requires the same skill at a
-                    higher level.&rdquo;
+                    “A CTO must translate between research academics who think
+                    in papers and PostGrad students who think in code. As an
+                    Assistant Lecturer, I’ve done exactly this: turned advanced
+                    computational mechanics concepts into accessible lab
+                    instructions and trained 5 TAs to deliver them confidently.
+                    The CTO role requires the same skill at a higher level.”
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- SCALABILITY & TRADE-OFFS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="tradeoffs">
-            &#9878; Scalability &amp; Trade-off Analysis
+          <h2 id="tradeoffs" style="margin-top: 0">
+            ⚖ Scalability &amp; Trade-off Analysis
           </h2>
           <p>
-            A CTO never proposes a &ldquo;perfect&rdquo; solution. Always
-            articulate trade-offs. Practise verbalising these.
+            A CTO never proposes a “perfect” solution. Always articulate
+            trade-offs. Practise verbalising these.
           </p>
-
           <div class="checklist-category">Trade-off Frameworks</div>
           <ul
+            aria-label="Trade-off analysis checklist"
             class="checklist"
             role="list"
-            aria-label="Trade-off analysis checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-trade-cap"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-trade-cap">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-trade-cap"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-trade-cap">
                     Review: CAP theorem and its implications for IoT
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong
                       >Consistency, Availability, Partition tolerance</strong
                     >
-                    &mdash; pick two. IoT systems <em>must</em> tolerate network
+                    — pick two. IoT systems <em>must</em> tolerate network
                     partitions (sensors go offline). So the choice is between
                     consistency and availability. For telemetry dashboards,
-                    choose <strong>AP</strong> (eventually consistent &mdash; ok
-                    if a reading is 5 seconds late). For safety-critical alerts
+                    choose <strong>AP</strong> (eventually consistent — ok if a
+                    reading is 5 seconds late). For safety-critical alerts
                     (bridge failure), choose <strong>CP</strong> (must be
                     consistent even if availability drops). Be able to
                     articulate both choices.
@@ -651,24 +637,22 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-trade-cost"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-trade-cost">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-trade-cost"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-trade-cost">
                     Practise: Edge vs Cloud processing cost analysis
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    <strong>Cloud-only:</strong> 100 sensors &times; 10 Hz
-                    &times; 200 bytes = 200 KB/s = 17 GB/day. At R1.50/GB
-                    cellular data = R25/day/sensor = R75,000/month for the
-                    fleet. <strong>With edge processing:</strong> Filter out 95%
-                    of redundant/duplicate readings on the MCU. Transmit 850
+                    <strong>Cloud-only:</strong> 100 sensors × 10 Hz × 200 bytes
+                    = 200 KB/s = 17 GB/day. At R1.50/GB cellular data =
+                    R25/day/sensor = R75,000/month for the fleet.
+                    <strong>With edge processing:</strong> Filter out 95% of
+                    redundant/duplicate readings on the MCU. Transmit 850
                     MB/day. Cost: R3,750/month.
                     <strong>Saving: R71,250/month.</strong> These are the
                     numbers that make a CTO credible. Practise this calculation
@@ -678,18 +662,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-trade-mqtt-ws"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-trade-mqtt-ws">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-trade-mqtt-ws"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-trade-mqtt-ws">
                     Articulate: MQTT vs WebSockets vs HTTP for telemetry
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>HTTP REST:</strong> Simple, widely understood, but
                     high overhead per request. Good for infrequent config
@@ -698,26 +680,24 @@
                     for browser→server real-time.
                     <strong>MQTT:</strong> Purpose-built for IoT. Tiny
                     footprint, QoS guarantees, works on unreliable networks.
-                    Best for MCU→broker telemetry. &ldquo;At ComputeMore, we use
+                    Best for MCU→broker telemetry. “At ComputeMore, we use
                     SignalR WebSockets for browser real-time, but for hardware
-                    sensors on cellular, I&rsquo;d use MQTT every time.&rdquo;
+                    sensors on cellular, I’d use MQTT every time.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-trade-sql-nosql"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-trade-sql-nosql">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-trade-sql-nosql"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-trade-sql-nosql">
                     Articulate: SQL (TimescaleDB) vs NoSQL (InfluxDB/Cassandra)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>SQL (TimescaleDB/PostGIS):</strong> Rich queries,
                     joins, CTEs, spatial queries. Stronger for multi-dimensional
@@ -725,118 +705,106 @@
                     existing SQL teams.
                     <strong>NoSQL (InfluxDB):</strong> Higher raw write
                     throughput, simpler operations. But no spatial queries,
-                    limited joins.
-                    <strong>Your recommendation:</strong> &ldquo;For a
+                    limited joins. <strong>Your recommendation:</strong> “For a
                     civil-engineering research context where spatial analysis is
                     paramount, TimescaleDB + PostGIS is the right choice. We get
                     full SQL power with PostGIS spatial functions plus
-                    time-series optimisation.&rdquo;
+                    time-series optimisation.”
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- WHITEBOARD PRACTICE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="whiteboard">
-            &#128221; Whiteboard Practice Sessions
+          <h2 id="whiteboard" style="margin-top: 0">
+            📝 Whiteboard Practice Sessions
           </h2>
-
           <div class="checklist-category">Timed Architecture Exercises</div>
           <ul
+            aria-label="Whiteboard practice checklist"
             class="checklist"
             role="list"
-            aria-label="Whiteboard practice checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-wb-fleet"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-wb-fleet">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-wb-fleet"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-wb-fleet">
                     Exercise 1: Real-time BRT fleet tracker (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Brief: &ldquo;Design a system to track 200 MyCiTi buses in
-                    real time and predict arrival times at stops.&rdquo; Draw on
-                    paper. Include: edge hardware, communication, ingestion,
-                    storage, ML prediction service, passenger-facing web/mobile
-                    app. Narrate out loud as you draw.
+                    Brief: “Design a system to track 200 MyCiTi buses in real
+                    time and predict arrival times at stops.” Draw on paper.
+                    Include: edge hardware, communication, ingestion, storage,
+                    ML prediction service, passenger-facing web/mobile app.
+                    Narrate out loud as you draw.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-wb-bridge"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-wb-bridge">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-wb-bridge"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-wb-bridge">
                     Exercise 2: Bridge structural health monitoring (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Brief: &ldquo;Design a sensor network for 10 highway bridges
-                    to detect structural degradation.&rdquo; Include: sensor
-                    node design, power management (solar), edge anomaly
-                    detection, long-range communication (LoRaWAN for rural, 4G
-                    for urban), data pipeline, engineering dashboard with alert
-                    thresholds based on vibration frequency shifts.
+                    Brief: “Design a sensor network for 10 highway bridges to
+                    detect structural degradation.” Include: sensor node design,
+                    power management (solar), edge anomaly detection, long-range
+                    communication (LoRaWAN for rural, 4G for urban), data
+                    pipeline, engineering dashboard with alert thresholds based
+                    on vibration frequency shifts.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-wb-pavement"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-wb-pavement">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-wb-pavement"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-wb-pavement">
                     Exercise 3: Pavement condition monitoring via ride quality
                     (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Brief: &ldquo;Design a system that uses smartphone
-                    accelerometers in taxis to map road roughness across Cape
-                    Town.&rdquo; This is a crowdsourced IoT problem. Include:
-                    mobile app (read IMU data), upload batches via HTTP when on
-                    Wi-Fi, backend aggregation, IRI (International Roughness
-                    Index) computation, heatmap generation on a map. This
-                    scenario maps directly to Dr.&nbsp;Nnene&rsquo;s
-                    transport-planning research.
+                    Brief: “Design a system that uses smartphone accelerometers
+                    in taxis to map road roughness across Cape Town.” This is a
+                    crowdsourced IoT problem. Include: mobile app (read IMU
+                    data), upload batches via HTTP when on Wi-Fi, backend
+                    aggregation, IRI (International Roughness Index)
+                    computation, heatmap generation on a map. This scenario maps
+                    directly to Dr. Nnene’s transport-planning research.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="arch-wb-review"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="arch-wb-review">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="arch-wb-review"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="arch-wb-review">
                     Review all 3 diagrams and refine
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     After completing all 3 exercises, compare them. You should
                     see the same architectural patterns recurring: edge sensor →
@@ -850,20 +818,19 @@
             </li>
           </ul>
         </div>
-
         <!-- PREPARATION TOOLS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="tools">
-            &#128295; Preparation Tools &amp; Resources
+          <h2 id="tools" style="margin-top: 0">
+            🔧 Preparation Tools &amp; Resources
           </h2>
           <div class="resource-grid">
             <a
-              href="https://excalidraw.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://excalidraw.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128221;</div>
+              <div class="rc-icon">📝</div>
               <div class="rc-title">Excalidraw</div>
               <div class="rc-desc">
                 Free browser-based whiteboard. Produces clean, hand-drawn style
@@ -873,12 +840,12 @@
               <div class="rc-url">excalidraw.com</div>
             </a>
             <a
-              href="https://app.diagrams.net/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://app.diagrams.net/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128202;</div>
+              <div class="rc-icon">📊</div>
               <div class="rc-title">Draw.io (diagrams.net)</div>
               <div class="rc-desc">
                 Full-featured diagramming tool. C4 model templates built in.
@@ -887,12 +854,12 @@
               <div class="rc-url">app.diagrams.net</div>
             </a>
             <a
-              href="https://c4model.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://c4model.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127959;</div>
+              <div class="rc-icon">🏗</div>
               <div class="rc-title">C4 Model (Simon Brown)</div>
               <div class="rc-desc">
                 Official C4 model website. Review the 4 levels, examples, and
@@ -901,27 +868,27 @@
               <div class="rc-url">c4model.com</div>
             </a>
             <a
-              href="https://www.youtube.com/watch?v=jl_le-ILfwE"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.youtube.com/watch?v=jl_le-ILfwE"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127909;</div>
+              <div class="rc-icon">🎥</div>
               <div class="rc-title">System Design Interview (YouTube)</div>
               <div class="rc-desc">
-                Watch 2&ndash;3 system design mock interviews to calibrate your
+                Watch 2–3 system design mock interviews to calibrate your
                 delivery pace, structure, and depth. Focus on IoT/real-time
                 examples.
               </div>
               <div class="rc-url">youtube.com</div>
             </a>
             <a
-              href="https://grafana.com/docs/grafana/latest/getting-started/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://grafana.com/docs/grafana/latest/getting-started/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128200;</div>
+              <div class="rc-icon">📈</div>
               <div class="rc-title">Grafana Getting Started</div>
               <div class="rc-desc">
                 Build beautiful monitoring dashboards. Connects natively to
@@ -931,12 +898,12 @@
               <div class="rc-url">grafana.com</div>
             </a>
             <a
-              href="https://www.mapbox.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.mapbox.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127758;</div>
+              <div class="rc-icon">🌎</div>
               <div class="rc-title">Mapbox</div>
               <div class="rc-desc">
                 Map SDK for web/mobile. Free tier supports 50K map loads/month.
@@ -946,18 +913,22 @@
             </a>
           </div>
         </div>
-
         <!-- TALKING POINTS -->
         <div class="section-card fade-in">
           <h2 style="margin-top: 0">
-            &#128172; Key Talking Points for the Assessment
+            💬 Key Talking Points for the Assessment
           </h2>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-1"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               How would you structure the data science and IT function for a
               Civil Engineering department?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-1">
               <p><span class="star-label star-a">Architecture</span></p>
               <p><strong>Three pillars:</strong></p>
               <ol>
@@ -1000,11 +971,16 @@
             </div>
           </div>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-2"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               How do you decide between building in-house vs. buying/adopting an
               existing platform?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-2">
               <p><span class="star-label star-s">Strategy</span></p>
               <p><strong>Framework I use:</strong></p>
               <ul>
@@ -1027,39 +1003,44 @@
                 </li>
               </ul>
               <p>
-                <strong>Example:</strong> &ldquo;For Ecoride, I composed:
+                <strong>Example:</strong> “For Ecoride, I composed:
                 off-the-shelf (PostgreSQL, Redis, RabbitMQ, Cloudflare R2) +
                 custom (API services in ASP.NET Core, real-time layer in
                 SignalR, Flutter mobile). This let us ship in months, not
-                years.&rdquo;
+                years.”
               </p>
             </div>
           </div>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
-              What&rsquo;s your approach to managing technical debt in a
-              university IT environment?
+            <button
+              aria-controls="disclosure-panel-3"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
+              What’s your approach to managing technical debt in a university IT
+              environment?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-3">
               <p><span class="star-label star-t">Technical</span></p>
               <p>
-                <strong>The reality:</strong> University IT has high tech debt
-                &mdash; legacy systems, ad-hoc scripts, undocumented
-                configurations. You cannot rewrite everything.
+                <strong>The reality:</strong> University IT has high tech debt —
+                legacy systems, ad-hoc scripts, undocumented configurations. You
+                cannot rewrite everything.
               </p>
               <p><strong>My approach:</strong></p>
               <ol>
                 <li>
                   <strong>Catalogue and classify:</strong> Map all existing
                   systems. Classify each as: maintainable (keep), replace
-                  (scheduled), or sunset (retire). This is the first thing
-                  I&rsquo;d do in the role.
+                  (scheduled), or sunset (retire). This is the first thing I’d
+                  do in the role.
                 </li>
                 <li>
-                  <strong>Strangler fig pattern:</strong> Don&rsquo;t rewrite;
-                  wrap. Put a new API layer in front of legacy systems. New
-                  consumers use the API. Gradually replace the internals behind
-                  the API without disrupting users.
+                  <strong>Strangler fig pattern:</strong> Don’t rewrite; wrap.
+                  Put a new API layer in front of legacy systems. New consumers
+                  use the API. Gradually replace the internals behind the API
+                  without disrupting users.
                 </li>
                 <li>
                   <strong>20% rule:</strong> Allocate 20% of each sprint to tech
@@ -1074,43 +1055,39 @@
                 </li>
               </ol>
               <p>
-                <strong>Evidence:</strong> &ldquo;At SEAT, I inherited a legacy
-                Django system with minimal documentation. I didn&rsquo;t rewrite
-                it. I added comprehensive logging, migrated to a tested
-                deployment pipeline, documented every integration, and built the
-                MPI data pipeline as an <em>adjacent</em> service that improved
-                the system without touching its core.&rdquo;
+                <strong>Evidence:</strong> “At SEAT, I inherited a legacy Django
+                system with minimal documentation. I didn’t rewrite it. I added
+                comprehensive logging, migrated to a tested deployment pipeline,
+                documented every integration, and built the MPI data pipeline as
+                an <em>adjacent</em> service that improved the system without
+                touching its core.”
               </p>
             </div>
           </div>
         </div>
-
         <button
+          aria-label="Reset all checklist progress"
           class="checklist-reset-btn"
           id="resetBtn"
-          aria-label="Reset all checklist progress"
         >
           Reset All Progress
         </button>
-
         <div class="page-footer">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -1129,70 +1106,16 @@
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        const STORAGE_KEY = "cto-architecture-checklist";
-        const items = document.querySelectorAll(".checklist-item[data-key]");
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-        function updateProgress() {
-          const total = items.length;
-          const checked = document.querySelectorAll(
-            ".checklist-item.checked",
-          ).length;
-          document.getElementById("progressCount").textContent =
-            checked + " / " + total;
-          const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-          const bar = document.getElementById("progressBar");
-          bar.style.width = pct + "%";
-          bar.setAttribute("aria-valuenow", pct);
-          bar.classList.toggle("complete", pct === 100);
-        }
-
-        items.forEach(function (item) {
-          const key = item.getAttribute("data-key");
-          if (saved[key]) {
-            item.classList.add("checked");
-            item.setAttribute("aria-checked", "true");
-          }
-          item.addEventListener("click", function (e) {
-            if (e.target.tagName === "A") return;
-            item.classList.toggle("checked");
-            const isChecked = item.classList.contains("checked");
-            item.setAttribute("aria-checked", isChecked ? "true" : "false");
-            saved[key] = isChecked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            updateProgress();
-          });
-          item.addEventListener("keydown", function (e) {
-            if (e.key === " " || e.key === "Enter") {
-              e.preventDefault();
-              item.click();
-            }
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
           });
         });
-
-        updateProgress();
-
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", function () {
-            if (!confirm("Reset all checklist progress on this page?")) return;
-            items.forEach(function (item) {
-              item.classList.remove("checked");
-              item.setAttribute("aria-checked", "false");
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-          });
       })();
-
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
+    <script defer src="../../scripts/checklists.js"></script>
   </body>
 </html>

@@ -1,15 +1,16 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>File System Management - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
     <style>
       pre {
         line-height: 125%;
@@ -273,22 +274,25 @@
         color: #666;
       } /* Literal.Number.Integer.Long */
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -297,8 +301,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to System Scripts</a>
@@ -311,7 +314,7 @@
           <h1>File System Management</h1>
           <p>
             <code>file-system_management.ps1</code> ·
-            <a href="file-system_management.ps1" download>Download Script</a>
+            <a download="" href="file-system_management.ps1">Download Script</a>
           </p>
           <div class="codehilite">
             <table class="codehilitetable">
@@ -377,18 +380,18 @@
 <span class="c"># list all directories their sizes in GB, </span>
 <span class="c"># suitable for locating where data storage is centralised</span>
 <span class="k">function</span> <span class="n">dirsize-lister</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Parent-Dir ${currentDir}&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Parent-Dir ${currentDir}"</span>
     <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$currentDir</span> <span class="n">-Directory</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
            <span class="nv">$folderPath</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
         <span class="nv">$lastElement</span> <span class="p">=</span> <span class="nb">Split-Path</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Leaf</span>
         <span class="nv">$sizeInBytes</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="nv">$folderPath</span> <span class="n">-Recurse</span> <span class="o">-File</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Property</span> <span class="n">Length</span> <span class="n">-Sum</span><span class="p">).</span><span class="n">Sum</span>
         <span class="nv">$sizeInGB</span> <span class="p">=</span> <span class="nv">$sizeInBytes</span> <span class="p">/</span> <span class="n">1024MB</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Child-Dir ${lastElement}: </span><span class="p">$(</span><span class="s2">&quot;{0:N2}&quot;</span> <span class="o">-f</span> <span class="nv">$sizeInGB</span><span class="p">)</span><span class="s2"> GB&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Child-Dir ${lastElement}: </span><span class="p">$(</span><span class="s2">"{0:N2}"</span> <span class="o">-f</span> <span class="nv">$sizeInGB</span><span class="p">)</span><span class="s2"> GB"</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="c"># like an advanced grep function</span>
-<span class="c"># usage: findfile &quot;name&quot;,&quot;name&quot;,&quot;name&quot; &quot;ext&quot;,&quot;ext&quot;,&quot;ext&quot;</span>
+<span class="c"># usage: findfile "name","name","name" "ext","ext","ext"</span>
 <span class="k">function</span> <span class="n">findfile-w-string</span> <span class="p">{</span>
     <span class="k">param</span> <span class="p">(</span>
         <span class="no">[string[]]</span><span class="nv">$inclname</span><span class="p">,</span>
@@ -399,13 +402,13 @@
             <span class="nv">$nameMatch</span> <span class="p">=</span> <span class="nv">$false</span>
             <span class="nv">$typeMatch</span> <span class="p">=</span> <span class="nv">$false</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$term</span> <span class="k">in</span> <span class="nv">$inclname</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="s2">&quot;*$term*&quot;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="s2">"*$term*"</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nv">$nameMatch</span> <span class="p">=</span> <span class="nv">$true</span>
                     <span class="k">break</span>
                 <span class="p">}</span>
             <span class="p">}</span>
             <span class="k">foreach</span> <span class="p">(</span><span class="nv">$ext</span> <span class="k">in</span> <span class="nv">$filetypes</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Extension</span> <span class="o">-eq</span> <span class="s2">&quot;.$ext&quot;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Extension</span> <span class="o">-eq</span> <span class="s2">".$ext"</span><span class="p">)</span> <span class="p">{</span>
                     <span class="nv">$typeMatch</span> <span class="p">=</span> <span class="nv">$true</span>
                     <span class="k">break</span>
                 <span class="p">}</span>
@@ -417,7 +420,7 @@
 <span class="c"># more file size listing but with thresh-hold for files </span>
 <span class="c"># in particular for managing storage</span>
 <span class="k">function</span> <span class="n">dissect</span> <span class="p">{</span>
-    <span class="nv">$filesizelister</span> <span class="p">=</span> <span class="s2">&quot;.\filesize-lister.ps1&quot;</span>
+    <span class="nv">$filesizelister</span> <span class="p">=</span> <span class="s2">".\filesize-lister.ps1"</span>
     <span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="o">-File</span> <span class="nv">$filesizelister</span> <span class="n">-RootPath</span> <span class="nv">$PWD</span> <span class="n">-ThresholdGB</span> <span class="n">0</span><span class="p">.</span><span class="n">1</span>
 <span class="p">}</span>
 </pre>
@@ -429,32 +432,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

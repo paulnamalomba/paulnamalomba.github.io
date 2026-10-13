@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Docker PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -220,31 +223,29 @@
 <span class="c"># Location: %APPDATA%\Docker\settings.json</span>
 
 <span class="p">{</span>
-  <span class="s2">&quot;memoryMiB&quot;</span><span class="p">:</span> <span class="n">8192</span><span class="p">,</span>
-  <span class="s2">&quot;cpus&quot;</span><span class="p">:</span> <span class="n">4</span><span class="p">,</span>
-  <span class="s2">&quot;diskSizeMiB&quot;</span><span class="p">:</span> <span class="n">102400</span><span class="p">,</span>
-  <span class="s2">&quot;swapMiB&quot;</span><span class="p">:</span> <span class="n">2048</span><span class="p">,</span>
-  <span class="s2">&quot;enableVirtualizationExtensions&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-  <span class="s2">&quot;useWindowsContainers&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;kernelForUDP&quot;</span><span class="p">:</span> <span class="n">true</span>
+  <span class="s2">"memoryMiB"</span><span class="p">:</span> <span class="n">8192</span><span class="p">,</span>
+  <span class="s2">"cpus"</span><span class="p">:</span> <span class="n">4</span><span class="p">,</span>
+  <span class="s2">"diskSizeMiB"</span><span class="p">:</span> <span class="n">102400</span><span class="p">,</span>
+  <span class="s2">"swapMiB"</span><span class="p">:</span> <span class="n">2048</span><span class="p">,</span>
+  <span class="s2">"enableVirtualizationExtensions"</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">"useWindowsContainers"</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">"kernelForUDP"</span><span class="p">:</span> <span class="n">true</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>PowerShell Profile Configuration</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Add to $PROFILE for Docker aliases</span>
 <span class="nb">Set-Alias</span> <span class="n">-Name</span> <span class="n">d</span> <span class="n">-Value</span> <span class="n">docker</span>
 <span class="nb">Set-Alias</span> <span class="n">-Name</span> <span class="n">dc</span> <span class="n">-Value</span> <span class="n">docker-compose</span>
 
-<span class="k">function</span> <span class="n">dps</span> <span class="p">{</span> <span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-format</span> <span class="s2">&quot;table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}&quot;</span> <span class="p">}</span>
-<span class="k">function</span> <span class="n">dimg</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">images</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">&quot;table {{.Repository}}\t{{.Tag}}\t{{.Size}}&quot;</span> <span class="p">}</span>
+<span class="k">function</span> <span class="n">dps</span> <span class="p">{</span> <span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-format</span> <span class="s2">"table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"</span> <span class="p">}</span>
+<span class="k">function</span> <span class="n">dimg</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">images</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">"table {{.Repository}}\t{{.Tag}}\t{{.Size}}"</span> <span class="p">}</span>
 <span class="k">function</span> <span class="n">dprune</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">system</span> <span class="n">prune</span> <span class="n">-af</span> <span class="p">-</span><span class="n">-volumes</span> <span class="p">}</span>
 <span class="k">function</span> <span class="n">dlogs</span> <span class="p">{</span> <span class="k">param</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span> <span class="n">docker</span> <span class="n">logs</span> <span class="o">-f</span> <span class="nv">$container</span> <span class="p">}</span>
 <span class="k">function</span> <span class="n">dexec</span> <span class="p">{</span> <span class="k">param</span><span class="p">(</span><span class="nv">$container</span><span class="p">)</span> <span class="n">docker</span> <span class="n">exec</span> <span class="n">-it</span> <span class="nv">$container</span> <span class="n">powershell</span> <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use official base images from
             verified publishers - Implement multi-stage builds to reduce final
@@ -294,14 +295,14 @@
             <pre><span></span><code><span class="c"># Run container with security constraints</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-d</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-name</span> <span class="n">secure-app</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-memory-swap</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-cpus</span><span class="p">=</span><span class="s2">&quot;0.5&quot;</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">"512m"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-memory-swap</span><span class="p">=</span><span class="s2">"512m"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-cpus</span><span class="p">=</span><span class="s2">"0.5"</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-read-only</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-cap-drop</span> <span class="n">ALL</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-cap-add</span> <span class="n">NET_BIND_SERVICE</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-security-opt</span><span class="p">=</span><span class="s2">&quot;no-new-privileges:true&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-health-cmd</span><span class="p">=</span><span class="s2">&quot;curl -f http://localhost/ || exit 1&quot;</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-security-opt</span><span class="p">=</span><span class="s2">"no-new-privileges:true"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-health-cmd</span><span class="p">=</span><span class="s2">"curl -f http://localhost/ || exit 1"</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-health-interval</span><span class="p">=</span><span class="n">30s</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-health-timeout</span><span class="p">=</span><span class="n">3s</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-health-retries</span><span class="p">=</span><span class="n">3</span> <span class="p">`</span>
@@ -309,11 +310,10 @@
   <span class="n">nginx</span><span class="p">:</span><span class="n">alpine</span>
 
 <span class="c"># Use secrets for sensitive data</span>
-<span class="nb">echo </span><span class="s2">&quot;mypassword&quot;</span> <span class="p">|</span> <span class="n">docker</span> <span class="n">secret</span> <span class="n">create</span> <span class="n">db_password</span> <span class="p">-</span>
+<span class="nb">echo </span><span class="s2">"mypassword"</span> <span class="p">|</span> <span class="n">docker</span> <span class="n">secret</span> <span class="n">create</span> <span class="n">db_password</span> <span class="p">-</span>
 <span class="n">docker</span> <span class="n">service</span> <span class="n">create</span> <span class="p">-</span><span class="n">-name</span> <span class="n">db</span> <span class="p">-</span><span class="n">-secret</span> <span class="n">db_password</span> <span class="n">postgres</span><span class="p">:</span><span class="n">15</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="container-lifecycle-management">
             Container Lifecycle Management
@@ -390,7 +390,6 @@
 <span class="n">docker</span> <span class="nb">cp </span><span class="p">./</span><span class="n">index</span><span class="p">.</span><span class="n">html</span> <span class="n">webserver</span><span class="p">:/</span><span class="n">usr</span><span class="p">/</span><span class="n">share</span><span class="p">/</span><span class="n">nginx</span><span class="p">/</span><span class="n">html</span><span class="p">/</span>
 </code></pre>
           </div>
-
           <h3 id="building-and-managing-images">
             Building and Managing Images
           </h3>
@@ -400,20 +399,20 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Create Dockerfile for .NET application</span>
-<span class="sh">@&quot;</span>
+<span class="sh">@"</span>
 <span class="sh"># Multi-stage build for .NET 8 app</span>
 <span class="sh">FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build</span>
 <span class="sh">WORKDIR /src</span>
 
 <span class="sh"># Copy csproj and restore dependencies</span>
-<span class="sh">COPY [&quot;MyApp/MyApp.csproj&quot;, &quot;MyApp/&quot;]</span>
-<span class="sh">RUN dotnet restore &quot;MyApp/MyApp.csproj&quot;</span>
+<span class="sh">COPY ["MyApp/MyApp.csproj", "MyApp/"]</span>
+<span class="sh">RUN dotnet restore "MyApp/MyApp.csproj"</span>
 
 <span class="sh"># Copy source and build</span>
 <span class="sh">COPY . .</span>
-<span class="sh">WORKDIR &quot;/src/MyApp&quot;</span>
-<span class="sh">RUN dotnet build &quot;MyApp.csproj&quot; -c Release -o /app/build</span>
-<span class="sh">RUN dotnet publish &quot;MyApp.csproj&quot; -c Release -o /app/publish /p:UseAppHost=false</span>
+<span class="sh">WORKDIR "/src/MyApp"</span>
+<span class="sh">RUN dotnet build "MyApp.csproj" -c Release -o /app/build</span>
+<span class="sh">RUN dotnet publish "MyApp.csproj" -c Release -o /app/publish /p:UseAppHost=false</span>
 
 <span class="sh"># Runtime stage</span>
 <span class="sh">FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime</span>
@@ -426,16 +425,16 @@
 <span class="sh">USER appuser</span>
 
 <span class="sh">COPY --from=build /app/publish .</span>
-<span class="sh">ENTRYPOINT [&quot;dotnet&quot;, &quot;MyApp.dll&quot;]</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">Dockerfile</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
+<span class="sh">ENTRYPOINT ["dotnet", "MyApp.dll"]</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">Dockerfile</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
 
 <span class="c"># Build image with tag</span>
 <span class="n">docker</span> <span class="n">build</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">.</span>
 
 <span class="c"># Build with build arguments</span>
 <span class="n">docker</span> <span class="n">build</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-build-arg</span> <span class="n">BUILD_DATE</span><span class="p">=$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s2">&quot;yyyy-MM-dd&quot;</span><span class="p">)</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-build-arg</span> <span class="n">VERSION</span><span class="p">=</span><span class="s2">&quot;1.0.0&quot;</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-build-arg</span> <span class="n">BUILD_DATE</span><span class="p">=$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s2">"yyyy-MM-dd"</span><span class="p">)</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-build-arg</span> <span class="n">VERSION</span><span class="p">=</span><span class="s2">"1.0.0"</span> <span class="p">`</span>
   <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">.</span>
 
 <span class="c"># Build without cache (force rebuild)</span>
@@ -445,7 +444,7 @@
 <span class="n">docker</span> <span class="n">images</span>
 
 <span class="c"># List images with filter</span>
-<span class="n">docker</span> <span class="n">images</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">&quot;reference=myapp*&quot;</span>
+<span class="n">docker</span> <span class="n">images</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">"reference=myapp*"</span>
 
 <span class="c"># Tag image for registry</span>
 <span class="n">docker</span> <span class="n">tag</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="n">myregistry</span><span class="p">.</span><span class="n">azurecr</span><span class="p">.</span><span class="n">io</span><span class="p">/</span><span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
@@ -485,7 +484,6 @@
 <span class="n">docker</span> <span class="n">buildx</span> <span class="n">build</span> <span class="p">-</span><span class="n">-platform</span> <span class="n">linux</span><span class="p">/</span><span class="n">amd64</span><span class="p">,</span><span class="n">linux</span><span class="p">/</span><span class="n">arm64</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">-</span><span class="n">-push</span> <span class="p">.</span>
 </code></pre>
           </div>
-
           <h3 id="docker-compose-multi-container-applications">
             Docker Compose Multi-Container Applications
           </h3>
@@ -495,8 +493,8 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Create docker-compose.yml for full-stack application</span>
-<span class="sh">@&quot;</span>
-<span class="sh">version: &#39;3.8&#39;</span>
+<span class="sh">@"</span>
+<span class="sh">version: '3.8'</span>
 
 <span class="sh">services:</span>
 <span class="sh">  # PostgreSQL database</span>
@@ -515,7 +513,7 @@
 <span class="sh">    networks:</span>
 <span class="sh">      - backend</span>
 <span class="sh">    healthcheck:</span>
-<span class="sh">      test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U appuser -d appdb&quot;]</span>
+<span class="sh">      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]</span>
 <span class="sh">      interval: 10s</span>
 <span class="sh">      timeout: 5s</span>
 <span class="sh">      retries: 5</span>
@@ -531,7 +529,7 @@
 <span class="sh">    networks:</span>
 <span class="sh">      - backend</span>
 <span class="sh">    healthcheck:</span>
-<span class="sh">      test: [&quot;CMD&quot;, &quot;redis-cli&quot;, &quot;ping&quot;]</span>
+<span class="sh">      test: ["CMD", "redis-cli", "ping"]</span>
 <span class="sh">      interval: 10s</span>
 <span class="sh">      timeout: 3s</span>
 <span class="sh">      retries: 3</span>
@@ -550,7 +548,7 @@
 <span class="sh">    secrets:</span>
 <span class="sh">      - db_password</span>
 <span class="sh">    ports:</span>
-<span class="sh">      - &quot;5000:80&quot;</span>
+<span class="sh">      - "5000:80"</span>
 <span class="sh">    depends_on:</span>
 <span class="sh">      postgres:</span>
 <span class="sh">        condition: service_healthy</span>
@@ -560,7 +558,7 @@
 <span class="sh">      - frontend</span>
 <span class="sh">      - backend</span>
 <span class="sh">    healthcheck:</span>
-<span class="sh">      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost/health&quot;]</span>
+<span class="sh">      test: ["CMD", "curl", "-f", "http://localhost/health"]</span>
 <span class="sh">      interval: 30s</span>
 <span class="sh">      timeout: 10s</span>
 <span class="sh">      retries: 3</span>
@@ -571,8 +569,8 @@
 <span class="sh">    image: nginx:alpine</span>
 <span class="sh">    container_name: app-nginx</span>
 <span class="sh">    ports:</span>
-<span class="sh">      - &quot;80:80&quot;</span>
-<span class="sh">      - &quot;443:443&quot;</span>
+<span class="sh">      - "80:80"</span>
+<span class="sh">      - "443:443"</span>
 <span class="sh">    volumes:</span>
 <span class="sh">      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro</span>
 <span class="sh">      - ./nginx/ssl:/etc/nginx/ssl:ro</span>
@@ -581,7 +579,7 @@
 <span class="sh">    networks:</span>
 <span class="sh">      - frontend</span>
 <span class="sh">    healthcheck:</span>
-<span class="sh">      test: [&quot;CMD&quot;, &quot;wget&quot;, &quot;--quiet&quot;, &quot;--tries=1&quot;, &quot;--spider&quot;, &quot;http://localhost/&quot;]</span>
+<span class="sh">      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]</span>
 <span class="sh">      interval: 30s</span>
 <span class="sh">      timeout: 10s</span>
 <span class="sh">      retries: 3</span>
@@ -603,7 +601,7 @@
 <span class="sh">secrets:</span>
 <span class="sh">  db_password:</span>
 <span class="sh">    file: ./secrets/db_password.txt</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">docker-compose</span><span class="p">.</span><span class="n">yml</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">docker-compose</span><span class="p">.</span><span class="n">yml</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
 
 <span class="c"># Start all services in detached mode</span>
 <span class="n">docker-compose</span> <span class="n">up</span> <span class="n">-d</span>
@@ -648,7 +646,6 @@
 <span class="n">docker-compose</span> <span class="n">pull</span>
 </code></pre>
           </div>
-
           <h3 id="volume-and-network-management">
             Volume and Network Management
           </h3>
@@ -755,7 +752,6 @@
 <span class="n">docker</span> <span class="n">network</span> <span class="nb">rm </span><span class="n">app_network</span>
 </code></pre>
           </div>
-
           <h3 id="system-monitoring-and-cleanup">
             System Monitoring and Cleanup
           </h3>
@@ -774,10 +770,10 @@
 <span class="n">docker</span> <span class="n">events</span>
 
 <span class="c"># Filter events by type</span>
-<span class="n">docker</span> <span class="n">events</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">&quot;type=container&quot;</span>
+<span class="n">docker</span> <span class="n">events</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">"type=container"</span>
 
 <span class="c"># Monitor specific container events</span>
-<span class="n">docker</span> <span class="n">events</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">&quot;container=webserver&quot;</span>
+<span class="n">docker</span> <span class="n">events</span> <span class="p">-</span><span class="n">-filter</span> <span class="s2">"container=webserver"</span>
 
 <span class="c"># View Docker daemon info</span>
 <span class="n">docker</span> <span class="n">info</span>
@@ -795,7 +791,7 @@
 <span class="n">docker</span> <span class="n">stats</span> <span class="n">webserver</span> <span class="n">redis</span> <span class="n">postgres</span>
 
 <span class="c"># Export stats to CSV</span>
-<span class="n">docker</span> <span class="n">stats</span> <span class="p">-</span><span class="n">-no-stream</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">&quot;table {{.Container}},{{.CPUPerc}},{{.MemUsage}}&quot;</span> <span class="p">|</span> <span class="p">`</span>
+<span class="n">docker</span> <span class="n">stats</span> <span class="p">-</span><span class="n">-no-stream</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">"table {{.Container}},{{.CPUPerc}},{{.MemUsage}}"</span> <span class="p">|</span> <span class="p">`</span>
   <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">docker-stats</span><span class="p">.</span><span class="n">csv</span>
 
 <span class="c"># Remove all stopped containers</span>
@@ -814,17 +810,17 @@
 <span class="n">docker</span> <span class="n">system</span> <span class="n">prune</span> <span class="n">-af</span> <span class="p">-</span><span class="n">-volumes</span>
 
 <span class="c"># Scheduled cleanup task (run weekly)</span>
-<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;docker&quot;</span> <span class="n">-Argument</span> <span class="s2">&quot;system prune -af&quot;</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">"docker"</span> <span class="n">-Argument</span> <span class="s2">"system prune -af"</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Weekly</span> <span class="n">-DaysOfWeek</span> <span class="n">Sunday</span> <span class="n">-At</span> <span class="n">2am</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">&quot;DockerCleanup&quot;</span> <span class="p">`</span>
-  <span class="n">-Description</span> <span class="s2">&quot;Weekly Docker system cleanup&quot;</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">"DockerCleanup"</span> <span class="p">`</span>
+  <span class="n">-Description</span> <span class="s2">"Weekly Docker system cleanup"</span>
 
 <span class="c"># Check container health status</span>
-<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-format</span> <span class="s2">&quot;table {{.Names}}\t{{.Status}}\t{{.Ports}}&quot;</span>
+<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-format</span> <span class="s2">"table {{.Names}}\t{{.Status}}\t{{.Ports}}"</span>
 
 <span class="c"># List containers by health status</span>
-<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-filter</span> <span class="s2">&quot;health=healthy&quot;</span>
-<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-filter</span> <span class="s2">&quot;health=unhealthy&quot;</span>
+<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-filter</span> <span class="s2">"health=healthy"</span>
+<span class="n">docker</span> <span class="nb">ps </span><span class="p">-</span><span class="n">-filter</span> <span class="s2">"health=unhealthy"</span>
 
 <span class="c"># Get container top processes</span>
 <span class="n">docker</span> <span class="n">top</span> <span class="n">webserver</span>
@@ -834,13 +830,12 @@
 
 <span class="c"># Export all Docker objects to backup</span>
 <span class="n">docker</span> <span class="n">save</span> <span class="p">$(</span><span class="n">docker</span> <span class="n">images</span> <span class="n">-q</span><span class="p">)</span> <span class="n">-o</span> <span class="n">docker-images-backup</span><span class="p">.</span><span class="n">tar</span>
-<span class="n">docker</span> <span class="nb">ps </span><span class="n">-aq</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">export</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="s2">&quot;container-$_.tar&quot;</span> <span class="n">-Encoding</span> <span class="n">byte</span> <span class="p">}</span>
+<span class="n">docker</span> <span class="nb">ps </span><span class="n">-aq</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="n">docker</span> <span class="n">export</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="s2">"container-$_.tar"</span> <span class="n">-Encoding</span> <span class="n">byte</span> <span class="p">}</span>
 
 <span class="c"># Get Docker daemon logs (Windows)</span>
 <span class="nb">Get-EventLog</span> <span class="n">-LogName</span> <span class="n">Application</span> <span class="n">-Source</span> <span class="n">Docker</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">50</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Docker Desktop Not Starting</strong>: -
@@ -872,7 +867,7 @@
 <span class="n">docker</span> <span class="n">logs</span> <span class="p">&lt;</span><span class="n">container_id</span><span class="p">&gt;</span>
 
 <span class="c"># View exit code</span>
-<span class="n">docker</span> <span class="n">inspect</span> <span class="p">&lt;</span><span class="n">container_id</span><span class="p">&gt;</span> <span class="p">-</span><span class="n">-format</span><span class="p">=</span><span class="s1">&#39;{{.State.ExitCode}}&#39;</span>
+<span class="n">docker</span> <span class="n">inspect</span> <span class="p">&lt;</span><span class="n">container_id</span><span class="p">&gt;</span> <span class="p">-</span><span class="n">-format</span><span class="p">=</span><span class="s1">'{{.State.ExitCode}}'</span>
 
 <span class="c"># Run with interactive terminal for debugging</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-it</span> <span class="p">-</span><span class="n">-entrypoint</span> <span class="n">sh</span> <span class="n">myimage</span>
@@ -881,7 +876,6 @@
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-it</span> <span class="p">-</span><span class="n">-entrypoint</span> <span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">bash</span> <span class="n">myimage</span>
 </code></pre>
           </div>
-
           <p><strong>Network Connectivity Issues</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Test DNS resolution inside container</span>
@@ -897,17 +891,15 @@
 <span class="nb">Restart-Service</span> <span class="n">docker</span>
 </code></pre>
           </div>
-
           <p><strong>Volume Permission Issues</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Check volume mount permissions</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="p">-</span><span class="n">-rm</span> <span class="n">-v</span> <span class="n">myvolume</span><span class="p">:/</span><span class="n">data</span> <span class="n">alpine</span> <span class="nb">ls </span><span class="n">-la</span> <span class="p">/</span><span class="n">data</span>
 
 <span class="c"># Fix Windows file permissions</span>
-<span class="n">icacls</span> <span class="s2">&quot;C:\path\to\folder&quot;</span> <span class="p">/</span><span class="n">grant</span> <span class="s2">&quot;Everyone:(OI)(CI)F&quot;</span> <span class="p">/</span><span class="n">T</span>
+<span class="n">icacls</span> <span class="s2">"C:\path\to\folder"</span> <span class="p">/</span><span class="n">grant</span> <span class="s2">"Everyone:(OI)(CI)F"</span> <span class="p">/</span><span class="n">T</span>
 </code></pre>
           </div>
-
           <h2 id="performance-and-tuning">Performance and Tuning</h2>
           <p><strong>Docker Desktop Resource Allocation</strong>:</p>
           <div class="codehilite">
@@ -920,22 +912,21 @@
 <span class="p">}</span>
 
 <span class="c"># Apply via Docker Desktop settings or edit settings.json</span>
-<span class="nv">$settingsPath</span> <span class="p">=</span> <span class="s2">&quot;$env:APPDATA\Docker\settings.json&quot;</span>
+<span class="nv">$settingsPath</span> <span class="p">=</span> <span class="s2">"$env:APPDATA\Docker\settings.json"</span>
 <span class="nv">$currentSettings</span> <span class="p">=</span> <span class="nb">Get-Content</span> <span class="nv">$settingsPath</span> <span class="p">|</span> <span class="nb">ConvertFrom-Json</span>
 <span class="nv">$currentSettings</span><span class="p">.</span><span class="n">memoryMiB</span> <span class="p">=</span> <span class="nv">$settings</span><span class="p">.</span><span class="n">memoryMiB</span>
 <span class="nv">$currentSettings</span><span class="p">.</span><span class="n">cpus</span> <span class="p">=</span> <span class="nv">$settings</span><span class="p">.</span><span class="n">cpus</span>
 <span class="nv">$currentSettings</span> <span class="p">|</span> <span class="nb">ConvertTo-Json</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="nv">$settingsPath</span>
 </code></pre>
           </div>
-
           <p><strong>Container Resource Limits</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Set memory and CPU limits</span>
 <span class="n">docker</span> <span class="n">run</span> <span class="n">-d</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-name</span> <span class="n">limited-app</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-memory-swap</span><span class="p">=</span><span class="s2">&quot;512m&quot;</span> <span class="p">`</span>
-  <span class="p">-</span><span class="n">-cpus</span><span class="p">=</span><span class="s2">&quot;0.5&quot;</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-memory</span><span class="p">=</span><span class="s2">"512m"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-memory-swap</span><span class="p">=</span><span class="s2">"512m"</span> <span class="p">`</span>
+  <span class="p">-</span><span class="n">-cpus</span><span class="p">=</span><span class="s2">"0.5"</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-cpu-shares</span><span class="p">=</span><span class="n">512</span> <span class="p">`</span>
   <span class="p">-</span><span class="n">-pids-limit</span><span class="p">=</span><span class="n">100</span> <span class="p">`</span>
   <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span>
@@ -944,7 +935,6 @@
 <span class="n">docker</span> <span class="n">stats</span> <span class="n">limited-app</span> <span class="p">-</span><span class="n">-no-stream</span>
 </code></pre>
           </div>
-
           <p><strong>Build Performance Optimization</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Use BuildKit for faster builds</span>
@@ -952,13 +942,13 @@
 <span class="n">docker</span> <span class="n">build</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">.</span>
 
 <span class="c"># Enable BuildKit permanently in daemon.json</span>
-<span class="sh">@&quot;</span>
+<span class="sh">@"</span>
 <span class="sh">{</span>
-<span class="sh">  &quot;features&quot;: {</span>
-<span class="sh">    &quot;buildkit&quot;: true</span>
+<span class="sh">  "features": {</span>
+<span class="sh">    "buildkit": true</span>
 <span class="sh">  }</span>
 <span class="sh">}</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="s2">&quot;$env:APPDATA\Docker\daemon.json&quot;</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="s2">"$env:APPDATA\Docker\daemon.json"</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
 
 <span class="c"># Use build cache mount for dependencies</span>
 <span class="n">docker</span> <span class="n">build</span> <span class="p">-</span><span class="n">-build-arg</span> <span class="n">BUILDKIT_INLINE_CACHE</span><span class="p">=</span><span class="n">1</span> <span class="n">-t</span> <span class="n">myapp</span><span class="p">:</span><span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span> <span class="p">.</span>
@@ -967,7 +957,6 @@
 <span class="n">docker-compose</span> <span class="n">build</span> <span class="p">-</span><span class="n">-parallel</span>
 </code></pre>
           </div>
-
           <p><strong>Image Size Optimization</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Use multi-stage builds</span>
@@ -976,7 +965,7 @@
 <span class="c"># Minimize layers by combining RUN commands</span>
 
 <span class="c"># Example optimized Dockerfile</span>
-<span class="sh">@&quot;</span>
+<span class="sh">@"</span>
 <span class="sh">FROM node:18-alpine AS build</span>
 <span class="sh">WORKDIR /app</span>
 <span class="sh">COPY package*.json ./</span>
@@ -987,31 +976,29 @@
 <span class="sh">COPY --from=build /app/node_modules ./node_modules</span>
 <span class="sh">COPY . .</span>
 <span class="sh">USER node</span>
-<span class="sh">CMD [&quot;node&quot;, &quot;index.js&quot;]</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">Dockerfile</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
+<span class="sh">CMD ["node", "index.js"]</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Out-File</span> <span class="n">-FilePath</span> <span class="n">Dockerfile</span> <span class="n">-Encoding</span> <span class="n">utf8</span>
 </code></pre>
           </div>
-
           <p><strong>Performance Monitoring</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Continuous monitoring script</span>
 <span class="k">while</span> <span class="p">(</span><span class="nv">$true</span><span class="p">)</span> <span class="p">{</span>
     <span class="nb">Clear-Host</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Docker Performance Monitor - </span><span class="p">$(</span><span class="nb">Get-Date</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Docker Performance Monitor - </span><span class="p">$(</span><span class="nb">Get-Date</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">""</span>
 
     <span class="c"># System stats</span>
     <span class="n">docker</span> <span class="n">system</span> <span class="n">df</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">""</span>
 
     <span class="c"># Container stats</span>
-    <span class="n">docker</span> <span class="n">stats</span> <span class="p">-</span><span class="n">-no-stream</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">&quot;table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}&quot;</span>
+    <span class="n">docker</span> <span class="n">stats</span> <span class="p">-</span><span class="n">-no-stream</span> <span class="p">-</span><span class="n">-format</span> <span class="s2">"table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"</span>
 
     <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -1044,32 +1031,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

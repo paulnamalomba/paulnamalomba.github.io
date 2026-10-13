@@ -2,11 +2,11 @@
 """
 build-docs.py — Local build script for paulnamalomba.github.io docs pages.
 
-Replaces the deploy-docs.yml GitHub Action workflow.  Run from the repo root:
+Used by local builds and the deploy-docs.yml GitHub Action workflow. Run from the repo root:
 
     python scripts/build-docs.py
 
-Requires: pip install markdown pygments  (already in requirements.txt)
+Requires: pip install -r requirements-docs.txt
 """
 
 import argparse
@@ -20,6 +20,7 @@ import markdown
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import PowerShellLexer
+from html_utils import harden_html
 
 # ──────────────────────────────────────────────
 # Paths
@@ -74,26 +75,6 @@ FOOTER_HTML = """\
             <a href="/">Back to portfolio &rarr;</a>
         </div>
     </footer>
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-        hamburger.addEventListener('click', () => {
-            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-            hamburger.setAttribute('aria-expanded', !expanded);
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('open');
-            document.body.classList.toggle('menu-open', !expanded);
-        });
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
-            });
-        });
-    </script>
 """
 
 
@@ -215,7 +196,7 @@ def repair_internal_fragments(html_text: str) -> str:
 
 def write_generated_html(path: str, content: str) -> None:
     """Write deterministic repository-native HTML without trailing whitespace."""
-    normalized = "\r\n".join(line.rstrip().replace("\t", "    ") for line in content.splitlines()) + "\r\n"
+    normalized = "\r\n".join(line.rstrip().replace("\t", "    ") for line in harden_html(content).splitlines()) + "\r\n"
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(normalized)
 
@@ -530,7 +511,7 @@ def build_system_scripts(scripts_dir: str) -> None:
 
         cards += f"""\
     <div class="card">
-        <h3><a href="{html_name}">{html.escape(title)}</a></h3>
+        <h2><a href="{html_name}">{html.escape(title)}</a></h2>
         <p>{html.escape(desc)}</p>
         <p><code>{html.escape(script)}</code></p>
     </div>\n

@@ -1,79 +1,104 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Lecture 1: Data Warehouse Overview</title>
-
     <!-- CSS -->
-    <link rel="stylesheet" href="../../style.css" />
-
+    <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
     <link
-      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css"
+      rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"
+    ></script>
+    <script
+      defer=""
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"
+    ></script>
     <!-- Mermaid.js for Diagrams -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-
+    <script
+      defer=""
+      src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"
+    ></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        hljs.highlightAll();
-        mermaid.initialize({
-          startOnLoad: true,
-          theme: "dark",
-          themeVariables: {
-            primaryColor: "#131a2e",
-            primaryTextColor: "#e8edf5",
-            primaryBorderColor: "#2a4080",
-            lineColor: "#f0b429",
-            secondaryColor: "#0d1321",
-            tertiaryColor: "#1a2340",
-            fontSize: "16px",
-            fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
-          },
-        });
+        if (window.hljs) window.hljs.highlightAll();
+        if (window.mermaid)
+          window.mermaid.initialize({
+            startOnLoad: true,
+            theme: "dark",
+            themeVariables: {
+              primaryColor: "#131a2e",
+              primaryTextColor: "#e8edf5",
+              primaryBorderColor: "#2a4080",
+              lineColor: "#f0b429",
+              secondaryColor: "#0d1321",
+              tertiaryColor: "#1a2340",
+              fontSize: "16px",
+              fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
+            },
+          });
       });
     </script>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div class="page-wrapper" id="content">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <main class="page-wrapper" id="content" tabindex="-1">
       <div class="header-bar">
         <span class="brand">IBM Data Engineering</span>
-        <nav>
+        <nav aria-label="Primary navigation">
           <a href="../../index.html">Hub</a>
-
           <div class="nav-dropdown">
-            <a href="#">Course 9: Data Warehouse Fundamentals ▾</a>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Course 9: Data Warehouse Fundamentals ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="../../course-8/index.html"
                 >Course 8: ETL and Data Pipelines with Shell, Airflow and
                 Kafka</a
               >
-              <a href="../../course-9/index.html" class="active"
+              <a class="active" href="../../course-9/index.html"
                 >Course 9: Data Warehouse Fundamentals</a
               >
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#"
-              >Module 1 &mdash; Course 9: Data Warehouse Fundamentals ▾</a
+            <button
+              aria-controls="dropdown-panel-2"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
             >
-            <div class="dropdown-content">
-              <a href="../../course-9/module-1/index.html" class="active"
-                >Module 1 &mdash; Course 9: Data Warehouse Fundamentals</a
+              Module 1 — Course 9: Data Warehouse Fundamentals ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-2">
+              <a class="active" href="../../course-9/module-1/index.html"
+                >Module 1 — Course 9: Data Warehouse Fundamentals</a
               >
             </div>
           </div>
-
           <div class="nav-dropdown">
-            <a href="#" class="active">Lecture 1 ▾</a>
-            <div class="dropdown-content">
-              <a href="../../course-9/module-1/lecture-1.html" class="active"
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="active dropdown-button"
+              type="button"
+            >
+              Lecture 1 ▾
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
+              <a class="active" href="../../course-9/module-1/lecture-1.html"
                 >Lecture 1: Data Warehouse Overview</a
               >
               <a href="../../course-9/module-1/lecture-2.html"
@@ -99,19 +124,16 @@
           </div>
         </nav>
       </div>
-
       <div class="breadcrumb">
-        <a href="../../index.html">Hub</a> <span>&rsaquo;</span>
-        <a href="../index.html">Course 9</a> <span>&rsaquo;</span>
-        <a href="index.html">Module 1</a> <span>&rsaquo;</span>
+        <a href="../../index.html">Hub</a> <span>›</span>
+        <a href="../index.html">Course 9</a> <span>›</span>
+        <a href="index.html">Module 1</a> <span>›</span>
         Lecture 1
       </div>
-
       <h1 class="fade-in">Data Warehouse Overview</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 1, Lecture 1
       </p>
-
       <p class="fade-in fade-in-d2">
         Before an organization can extract signal from its data, it must first
         solve a harder problem: making disparate, inconsistent data from dozens
@@ -315,10 +337,9 @@
           that analysts rely on?
         </p>
       </div>
-
       <div class="page-footer fade-in fade-in-d5">
-        <p>Prepared by Paul Namalomba &middot; IBM Data Engineering</p>
+        <p>Prepared by Paul Namalomba · IBM Data Engineering</p>
       </div>
-    </div>
+    </main>
   </body>
 </html>

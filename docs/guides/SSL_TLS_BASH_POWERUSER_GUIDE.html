@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>SSL/TLS PowerUser Guide (Bash) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -255,7 +258,6 @@
 <span class="na">IP.1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.168.1.100</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use 4096-bit RSA keys or 256-bit
             ECDSA keys minimum - Set certificate validity to 397 days maximum
@@ -300,7 +302,7 @@
           <p><strong>Nginx TLS Hardening</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="k">ssl_protocols</span><span class="w"> </span><span class="s">TLSv1.2</span><span class="w"> </span><span class="s">TLSv1.3</span><span class="p">;</span>
-<span class="k">ssl_ciphers</span><span class="w"> </span><span class="s">&#39;ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305&#39;</span><span class="p">;</span>
+<span class="k">ssl_ciphers</span><span class="w"> </span><span class="s">'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305'</span><span class="p">;</span>
 <span class="k">ssl_prefer_server_ciphers</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 <span class="k">ssl_session_cache</span><span class="w"> </span><span class="s">shared:SSL:10m</span><span class="p">;</span>
 <span class="k">ssl_session_timeout</span><span class="w"> </span><span class="mi">10m</span><span class="p">;</span>
@@ -308,7 +310,6 @@
 <span class="k">ssl_stapling_verify</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="generate-self-signed-certificate-with-san">
             Generate Self-Signed Certificate with SAN
@@ -358,10 +359,9 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>p
 chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>certificate.crt
 
 <span class="c1"># Verify certificate</span>
-openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-text<span class="w"> </span>-noout<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A2<span class="w"> </span><span class="s2">&quot;Subject Alternative Name&quot;</span>
+openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-text<span class="w"> </span>-noout<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A2<span class="w"> </span><span class="s2">"Subject Alternative Name"</span>
 </code></pre>
           </div>
-
           <h3 id="create-certificate-signing-request-csr-for-production">
             Create Certificate Signing Request (CSR) for Production
           </h3>
@@ -407,12 +407,11 @@ cat<span class="w"> </span>&gt;<span class="w"> </span>csr.cnf<span class="w"> <
 openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-key<span class="w"> </span>production.key<span class="w"> </span>-out<span class="w"> </span>production.csr<span class="w"> </span>-config<span class="w"> </span>csr.cnf
 
 <span class="c1"># Verify CSR content</span>
-openssl<span class="w"> </span>req<span class="w"> </span>-in<span class="w"> </span>production.csr<span class="w"> </span>-noout<span class="w"> </span>-text<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;Subject:|DNS:&quot;</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-in<span class="w"> </span>production.csr<span class="w"> </span>-noout<span class="w"> </span>-text<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">"Subject:|DNS:"</span>
 
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CSR generated successfully. Submit production.csr to your CA.&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"CSR generated successfully. Submit production.csr to your CA."</span>
 </code></pre>
           </div>
-
           <h3 id="convert-certificate-formats-and-bundle">
             Convert Certificate Formats and Bundle
           </h3>
@@ -449,7 +448,6 @@ openssl<span class="w"> </span>crl2pkcs7<span class="w"> </span>-nocrl<span clas
 <span class="w">    </span>openssl<span class="w"> </span>pkcs7<span class="w"> </span>-print_certs<span class="w"> </span>-noout
 </code></pre>
           </div>
-
           <h3 id="test-tls-connection-and-cipher-suites">
             Test TLS Connection and Cipher Suites
           </h3>
@@ -472,23 +470,22 @@ openssl<span class="w"> </span>crl2pkcs7<span class="w"> </span>-nocrl<span clas
 
 <span class="c1"># Check certificate expiration</span>
 <span class="nv">expiry</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>server-cert.pem<span class="w"> </span>-noout<span class="w"> </span>-enddate<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="k">)</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Certificate expires: </span><span class="nv">$expiry</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Certificate expires: </span><span class="nv">$expiry</span><span class="s2">"</span>
 
 <span class="c1"># Calculate days until expiration</span>
-<span class="nv">expiry_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$expiry</span><span class="s2">&quot;</span><span class="w"> </span>+%s<span class="k">)</span>
+<span class="nv">expiry_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>-d<span class="w"> </span><span class="s2">"</span><span class="nv">$expiry</span><span class="s2">"</span><span class="w"> </span>+%s<span class="k">)</span>
 <span class="nv">current_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span>
 <span class="nv">days_left</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="o">(</span><span class="nv">$expiry_epoch</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">$current_epoch</span><span class="o">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">86400</span><span class="w"> </span><span class="k">))</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Days until expiration: </span><span class="nv">$days_left</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Days until expiration: </span><span class="nv">$days_left</span><span class="s2">"</span>
 
 <span class="c1"># List supported cipher suites</span>
-openssl<span class="w"> </span>ciphers<span class="w"> </span>-v<span class="w"> </span><span class="s1">&#39;HIGH:!aNULL:!MD5:!3DES&#39;</span>
+openssl<span class="w"> </span>ciphers<span class="w"> </span>-v<span class="w"> </span><span class="s1">'HIGH:!aNULL:!MD5:!3DES'</span>
 
 <span class="c1"># Test specific cipher suite</span>
 <span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span>example.com:443<span class="w"> </span><span class="se">\</span>
 <span class="w">    </span>-cipher<span class="w"> </span>ECDHE-RSA-AES256-GCM-SHA384<span class="w"> </span>-servername<span class="w"> </span>example.com
 </code></pre>
           </div>
-
           <h3 id="verify-certificate-chain-and-revocation">
             Verify Certificate Chain and Revocation
           </h3>
@@ -504,27 +501,26 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 
 <span class="c1"># Extract OCSP responder URL</span>
 <span class="nv">ocsp_url</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-noout<span class="w"> </span>-ocsp_uri<span class="k">)</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;OCSP Responder: </span><span class="nv">$ocsp_url</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"OCSP Responder: </span><span class="nv">$ocsp_url</span><span class="s2">"</span>
 
 <span class="c1"># Check OCSP status</span>
 openssl<span class="w"> </span>ocsp<span class="w"> </span>-issuer<span class="w"> </span>ca-bundle.pem<span class="w"> </span>-cert<span class="w"> </span>certificate.crt<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-url<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ocsp_url</span><span class="s2">&quot;</span><span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem
+<span class="w">    </span>-url<span class="w"> </span><span class="s2">"</span><span class="nv">$ocsp_url</span><span class="s2">"</span><span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem
 
 <span class="c1"># Verify certificate dates</span>
 <span class="nv">not_before</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-noout<span class="w"> </span>-startdate<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="k">)</span>
 <span class="nv">not_after</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-noout<span class="w"> </span>-enddate<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="k">)</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Valid from: </span><span class="nv">$not_before</span><span class="s2">&quot;</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Valid until: </span><span class="nv">$not_after</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Valid from: </span><span class="nv">$not_before</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Valid until: </span><span class="nv">$not_after</span><span class="s2">"</span>
 
 <span class="c1"># Check certificate fingerprint (SHA256)</span>
 <span class="nv">fingerprint</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.crt<span class="w"> </span>-noout<span class="w"> </span>-fingerprint<span class="w"> </span>-sha256<span class="k">)</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;SHA256 Fingerprint: </span><span class="nv">$fingerprint</span><span class="s2">&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"SHA256 Fingerprint: </span><span class="nv">$fingerprint</span><span class="s2">"</span>
 
 <span class="c1"># Verify certificate chain completeness</span>
 openssl<span class="w"> </span>verify<span class="w"> </span>-show_chain<span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem<span class="w"> </span>certificate.crt
 </code></pre>
           </div>
-
           <h3 id="automate-certificate-renewal-with-lets-encrypt">
             Automate Certificate Renewal with Let's Encrypt
           </h3>
@@ -551,8 +547,8 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>certonly<span class="
 sudo<span class="w"> </span>certbot<span class="w"> </span>renew<span class="w"> </span>--dry-run
 
 <span class="c1"># Setup automatic renewal cron job</span>
-cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/cron.d/certbot-renew<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-<span class="s">0 3 * * * root certbot renew --quiet --post-hook &quot;systemctl reload nginx&quot;</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/cron.d/certbot-renew<span class="w"> </span><span class="s">&lt;&lt; 'EOF'</span>
+<span class="s">0 3 * * * root certbot renew --quiet --post-hook "systemctl reload nginx"</span>
 <span class="s">EOF</span>
 
 <span class="c1"># Manual renewal</span>
@@ -565,7 +561,6 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>certificates
 sudo<span class="w"> </span>certbot<span class="w"> </span>revoke<span class="w"> </span>--cert-path<span class="w"> </span>/etc/letsencrypt/live/example.com/cert.pem
 </code></pre>
           </div>
-
           <h3 id="monitor-certificate-expiration">
             Monitor Certificate Expiration
           </h3>
@@ -578,33 +573,33 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>revoke<span class="w"
 
 <span class="c1"># monitor-certs.sh - Certificate expiration monitoring script</span>
 
-<span class="nv">CERT_DIR</span><span class="o">=</span><span class="s2">&quot;/etc/ssl/certs&quot;</span>
+<span class="nv">CERT_DIR</span><span class="o">=</span><span class="s2">"/etc/ssl/certs"</span>
 <span class="nv">WARNING_DAYS</span><span class="o">=</span><span class="m">30</span>
-<span class="nv">LOG_FILE</span><span class="o">=</span><span class="s2">&quot;/var/log/cert-monitor.log&quot;</span>
+<span class="nv">LOG_FILE</span><span class="o">=</span><span class="s2">"/var/log/cert-monitor.log"</span>
 
 <span class="c1"># Function to check certificate expiration</span>
 check_cert<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">cert_file</span><span class="o">=</span><span class="nv">$1</span>
-<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">expiry_date</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$cert_file</span><span class="s2">&quot;</span><span class="w"> </span>-noout<span class="w"> </span>-enddate<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="k">)</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">expiry_date</span><span class="o">=</span><span class="k">$(</span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span><span class="s2">"</span><span class="nv">$cert_file</span><span class="s2">"</span><span class="w"> </span>-noout<span class="w"> </span>-enddate<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="k">)</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$expiry_date</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">"</span><span class="nv">$expiry_date</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="k">return</span>
 <span class="w">    </span><span class="k">fi</span>
 
-<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">expiry_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$expiry_date</span><span class="s2">&quot;</span><span class="w"> </span>+%s<span class="k">)</span>
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">expiry_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>-d<span class="w"> </span><span class="s2">"</span><span class="nv">$expiry_date</span><span class="s2">"</span><span class="w"> </span>+%s<span class="k">)</span>
 <span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">current_epoch</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span>
 <span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">days_left</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="o">(</span><span class="nv">$expiry_epoch</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">$current_epoch</span><span class="o">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">86400</span><span class="w"> </span><span class="k">))</span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$days_left</span><span class="w"> </span>-lt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;EXPIRED: </span><span class="nv">$cert_file</span><span class="s2"> (expired </span><span class="k">$((</span><span class="o">-</span><span class="nv">days_left</span><span class="k">))</span><span class="s2"> days ago)&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOG_FILE</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"EXPIRED: </span><span class="nv">$cert_file</span><span class="s2"> (expired </span><span class="k">$((</span><span class="o">-</span><span class="nv">days_left</span><span class="k">))</span><span class="s2"> days ago)"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">"</span><span class="nv">$LOG_FILE</span><span class="s2">"</span>
 <span class="w">    </span><span class="k">elif</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$days_left</span><span class="w"> </span>-lt<span class="w"> </span><span class="nv">$WARNING_DAYS</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;WARNING: </span><span class="nv">$cert_file</span><span class="s2"> expires in </span><span class="nv">$days_left</span><span class="s2"> days&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LOG_FILE</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"WARNING: </span><span class="nv">$cert_file</span><span class="s2"> expires in </span><span class="nv">$days_left</span><span class="s2"> days"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span><span class="s2">"</span><span class="nv">$LOG_FILE</span><span class="s2">"</span>
 <span class="w">    </span><span class="k">fi</span>
 <span class="o">}</span>
 
 <span class="c1"># Check all certificates</span>
-<span class="k">for</span><span class="w"> </span>cert<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERT_DIR</span><span class="s2">&quot;</span>/*.crt<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$CERT_DIR</span><span class="s2">&quot;</span>/*.pem<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<span class="w">    </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$cert</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>check_cert<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$cert</span><span class="s2">&quot;</span>
+<span class="k">for</span><span class="w"> </span>cert<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CERT_DIR</span><span class="s2">"</span>/*.crt<span class="w"> </span><span class="s2">"</span><span class="nv">$CERT_DIR</span><span class="s2">"</span>/*.pem<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$cert</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>check_cert<span class="w"> </span><span class="s2">"</span><span class="nv">$cert</span><span class="s2">"</span>
 <span class="k">done</span>
 
 <span class="c1"># Check remote server certificate</span>
@@ -612,15 +607,14 @@ check_remote<span class="o">()</span><span class="w"> </span><span class="o">{</
 <span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">host</span><span class="o">=</span><span class="nv">$1</span>
 <span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">port</span><span class="o">=</span><span class="si">${</span><span class="nv">2</span><span class="k">:-</span><span class="nv">443</span><span class="si">}</span>
 
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">:</span><span class="nv">$port</span><span class="s2">&quot;</span><span class="w"> </span>-servername<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$host</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span><span class="s2">"</span><span class="nv">$host</span><span class="s2">:</span><span class="nv">$port</span><span class="s2">"</span><span class="w"> </span>-servername<span class="w"> </span><span class="s2">"</span><span class="nv">$host</span><span class="s2">"</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
 <span class="w">        </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-dates<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 <span class="o">}</span>
 
 <span class="c1"># Example: check remote servers</span>
-check_remote<span class="w"> </span><span class="s2">&quot;example.com&quot;</span><span class="w"> </span><span class="m">443</span>
+check_remote<span class="w"> </span><span class="s2">"example.com"</span><span class="w"> </span><span class="m">443</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Certificate Verification Failures</strong>: -
@@ -682,7 +676,6 @@ check_remote<span class="w"> </span><span class="s2">&quot;example.com&quot;</sp
 <span class="k">ssl_session_tickets</span><span class="w"> </span><span class="no">on</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <p><strong>OCSP Stapling</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Nginx OCSP stapling configuration</span>
@@ -693,7 +686,6 @@ check_remote<span class="w"> </span><span class="s2">&quot;example.com&quot;</sp
 <span class="k">resolver_timeout</span><span class="w"> </span><span class="s">5s</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Hardware Acceleration</strong>: - Use AES-NI CPU
             instructions for AES-GCM cipher suites (10x faster) - Verify
@@ -710,13 +702,12 @@ check_remote<span class="w"> </span><span class="s2">&quot;example.com&quot;</sp
 openssl<span class="w"> </span>speed<span class="w"> </span>rsa2048<span class="w"> </span>rsa4096<span class="w"> </span>ecdsap256
 
 <span class="c1"># Monitor active SSL connections (requires ss or netstat)</span>
-ss<span class="w"> </span>-tan<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:443&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+ss<span class="w"> </span>-tan<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':443'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 
 <span class="c1"># Check SSL handshake rate</span>
-watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s1">&#39;ss -tan | grep &quot;:443.*ESTABLISHED&quot; | wc -l&#39;</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s1">'ss -tan | grep ":443.*ESTABLISHED" | wc -l'</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -753,32 +744,11 @@ watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

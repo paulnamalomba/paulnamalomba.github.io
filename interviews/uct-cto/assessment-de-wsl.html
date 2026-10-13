@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Assessment — Data Engineering: WSL &amp; Linux Command-Line</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -20,9 +21,10 @@
         margin: 1rem 0;
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -37,10 +39,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -52,10 +60,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -73,8 +104,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,18 +129,22 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span>
         <a href="assessment-data-engineering.html">Data Engineering</a>
-        <span>&rsaquo;</span>
+        <span>›</span>
         <div class="breadcrumb-dropdown">
-          <button class="breadcrumb-dropdown-btn">
-            WSL &amp; Linux CLI &#9660;
+          <button
+            aria-controls="dropdown-panel-4"
+            aria-expanded="false"
+            class="breadcrumb-dropdown-btn dropdown-button"
+            type="button"
+          >
+            WSL &amp; Linux CLI ▼
           </button>
-          <div class="breadcrumb-dropdown-content">
+          <div class="breadcrumb-dropdown-content" id="dropdown-panel-4">
             <a href="assessment-de-docker.html">Docker &amp; Containers</a>
-            <a href="assessment-de-wsl.html" class="current"
+            <a class="current" href="assessment-de-wsl.html"
               >WSL &amp; Linux CLI</a
             >
             <a href="assessment-web-servers-python.html">Python Web Servers</a>
@@ -112,52 +154,49 @@
           </div>
         </div>
       </div>
-
-      <main id="main-content">
-        <h1 class="fade-in">
-          Data Engineering &mdash; WSL &amp; Linux Command-Line
-        </h1>
+      <main id="main-content" tabindex="-1">
+        <h1 class="fade-in">Data Engineering — WSL &amp; Linux Command-Line</h1>
         <p class="fade-in fade-in-d1">
           The practical assessment will very likely run inside
           <strong>WSL (Windows Subsystem for Linux)</strong>. This module drills
           <code>awk</code>, <code>sed</code>, <code>grep</code>,
-          <code>cat</code>, pipes, and process management &mdash; everything a
-          CTO must wield fluently when SSH&rsquo;d into a production Ubuntu
-          server or processing data on a headless edge gateway.
+          <code>cat</code>, pipes, and process management — everything a CTO
+          must wield fluently when SSH’d into a production Ubuntu server or
+          processing data on a headless edge gateway.
         </p>
-
         <!-- PROGRESS TRACKER -->
         <div
+          aria-label="Preparation progress"
+          data-checklist-storage="de-wsl-checklist"
           class="checklist-progress fade-in fade-in-d2"
           role="region"
-          aria-label="Preparation progress"
         >
           <div class="checklist-progress-header">
-            <span>Preparation Progress</span>
+            <span id="preparation-progress-label">Preparation Progress</span>
             <span class="progress-count" id="progressCount">0 / 0</span>
           </div>
           <div class="progress-bar-track">
             <div
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow="0"
               class="progress-bar-fill"
               id="progressBar"
-              style="width: 0%"
               role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-labelledby="preparation-progress-label"
+              style="width: 0%"
             ></div>
           </div>
         </div>
-
         <!-- CV GROUNDING -->
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">CV Grounding</div>
           <ul>
             <li>
               <strong>SESKA HPC (Rocky Linux / Slurm):</strong> You work daily
-              in a Linux terminal &mdash; compiling C++/Fortran with GNU
-              toolchain, running OpenMPI jobs, navigating POSIX filesystems.
-              This is not theoretical for you.
+              in a Linux terminal — compiling C++/Fortran with GNU toolchain,
+              running OpenMPI jobs, navigating POSIX filesystems. This is not
+              theoretical for you.
             </li>
             <li>
               <strong>SEAT Django on Ubuntu:</strong> Deployed Django behind
@@ -172,31 +211,27 @@
             </li>
           </ul>
         </div>
-
         <!-- WSL SETUP -->
         <div class="section-card fade-in fade-in-d3">
-          <h2 style="margin-top: 0" id="wsl-setup">
-            &#128187; WSL Setup &amp; Verification
+          <h2 id="wsl-setup" style="margin-top: 0">
+            💻 WSL Setup &amp; Verification
           </h2>
-
           <div class="checklist-category">Environment Preparation</div>
-          <ul class="checklist" role="list" aria-label="WSL setup checklist">
+          <ul aria-label="WSL setup checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-install"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-install">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-install"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-install">
                     Verify WSL2 + Ubuntu is installed and updated
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    In PowerShell: <code>wsl --list --verbose</code> &mdash;
-                    confirm Ubuntu is version 2. Inside WSL:
+                    In PowerShell: <code>wsl --list --verbose</code> — confirm
+                    Ubuntu is version 2. Inside WSL:
                     <code>sudo apt update &amp;&amp; sudo apt upgrade -y</code>.
                     Install essentials:
                     <code
@@ -208,18 +243,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-python"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-python">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-python"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-python">
                     Set up Python virtual environment in WSL
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >python3 -m venv ~/assessment-env &amp;&amp; source
@@ -239,18 +272,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-postgres"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-postgres">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-postgres"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-postgres">
                     Install PostgreSQL natively in WSL
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >sudo apt install -y postgresql postgresql-contrib
@@ -270,38 +301,32 @@
             </li>
           </ul>
         </div>
-
         <!-- CORE UNIX COMMANDS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="core-commands">
-            &#9000; Core Unix Commands (Drill These)
+          <h2 id="core-commands" style="margin-top: 0">
+            ⌨ Core Unix Commands (Drill These)
           </h2>
           <p>
             These are the bread-and-butter commands for data inspection and
             transformation. Practice until they are muscle memory.
           </p>
-
-          <div class="checklist-category">
-            cat, head, tail, wc &mdash; Inspection
-          </div>
+          <div class="checklist-category">cat, head, tail, wc — Inspection</div>
           <ul
+            aria-label="Inspection commands checklist"
             class="checklist"
             role="list"
-            aria-label="Inspection commands checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-cat-head"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-cat-head">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-cat-head"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-cat-head">
                     Practice: Inspect CSV files without opening an editor
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 cat data.csv                    # dump (pipes well)
@@ -314,32 +339,29 @@ file data.csv                   # encoding &amp; type (UTF-8? ASCII?)</pre>
                     <strong>Practice site:</strong>
                     <a
                       href="https://cmdchallenge.com/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >cmdchallenge.com</a
                     >
-                    &mdash; interactive command-line puzzles.
+                    — interactive command-line puzzles.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
-
-          <div class="checklist-category">grep &mdash; Pattern Search</div>
-          <ul class="checklist" role="list" aria-label="grep checklist">
+          <div class="checklist-category">grep — Pattern Search</div>
+          <ul aria-label="grep checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-grep-basic"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-grep-basic">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-grep-basic"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-grep-basic">
                     Drill: grep patterns for data filtering
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Find all lines containing "ERROR" in Django logs
@@ -363,27 +385,25 @@ grep -v "DEBUG" app.log
 # Recursive search in project directory
 grep -rn "DATABASES" ~/myproject/</pre>
                     <strong>Practice site:</strong>
-                    <a href="https://regexr.com/" target="_blank" rel="noopener"
+                    <a href="https://regexr.com/" rel="noopener" target="_blank"
                       >regexr.com</a
                     >
-                    &mdash; build and test regex patterns interactively.
+                    — build and test regex patterns interactively.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-grep-django"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-grep-django">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-grep-django"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-grep-django">
                     Practice: grep through Django project files
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Find all models inheriting from models.Model
@@ -405,22 +425,19 @@ grep -rn "os.environ" myproject/settings/</pre>
               </div>
             </li>
           </ul>
-
-          <div class="checklist-category">awk &mdash; Column Processing</div>
-          <ul class="checklist" role="list" aria-label="awk checklist">
+          <div class="checklist-category">awk — Column Processing</div>
+          <ul aria-label="awk checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-awk-basic"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-awk-basic">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-awk-basic"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-awk-basic">
                     Drill: awk for CSV column extraction and computation
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Print 2nd column (vehicle_id) from CSV
@@ -441,27 +458,25 @@ awk -F',' 'NR&gt;1 {ids[$2]++} END {for(id in ids) print id, ids[id]}' gps_data.
 # Sum total distance (column 6)
 awk -F',' 'NR&gt;1 {sum+=$6} END {printf "Total: %.2f km\n", sum}' trips.csv</pre>
                     <strong>Practice site:</strong>
-                    <a href="https://awk.js.org/" target="_blank" rel="noopener"
+                    <a href="https://awk.js.org/" rel="noopener" target="_blank"
                       >awk.js.org</a
                     >
-                    &mdash; run awk in the browser with sample data.
+                    — run awk in the browser with sample data.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-awk-django-logs"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-awk-django-logs">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-awk-django-logs"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-awk-django-logs">
                     Practice: awk for Django/Gunicorn access log analysis
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Parse Gunicorn access log: count requests per status code
@@ -480,22 +495,19 @@ awk '$9 == 500 {print $1, $7, $9}' access.log</pre>
               </div>
             </li>
           </ul>
-
-          <div class="checklist-category">sed &mdash; Stream Editing</div>
-          <ul class="checklist" role="list" aria-label="sed checklist">
+          <div class="checklist-category">sed — Stream Editing</div>
+          <ul aria-label="sed checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-sed-basic"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-sed-basic">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-sed-basic"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-sed-basic">
                     Drill: sed for in-place text transformation
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Replace all "localhost" with production hostname
@@ -513,33 +525,31 @@ sed -i '1i vehicle_id,lat,lon,speed,timestamp' data.csv
 # Replace only on lines matching a pattern
 sed '/DEBUG/s/True/False/' settings.py
 
-# Remove carriage returns (Windows &rarr; Unix line endings)
+# Remove carriage returns (Windows → Unix line endings)
 sed -i 's/\r$//' data.csv
 
-# Extract lines 100&ndash;200
+# Extract lines 100–200
 sed -n '100,200p' large_file.csv</pre>
                     <strong>Practice site:</strong>
-                    <a href="https://sed.js.org/" target="_blank" rel="noopener"
+                    <a href="https://sed.js.org/" rel="noopener" target="_blank"
                       >sed.js.org</a
                     >
-                    &mdash; interactive sed playground.
+                    — interactive sed playground.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-sed-django"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-sed-django">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-sed-django"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-sed-django">
                     Practice: sed for Django config and deployment scripting
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Toggle DEBUG in Django settings
@@ -558,23 +568,20 @@ sed -i 's/from app.old_module/from app.new_module/g' *.py</pre>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Pipes &amp; Composition</div>
-          <ul class="checklist" role="list" aria-label="Pipes checklist">
+          <ul aria-label="Pipes checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-pipes"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-pipes">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-pipes"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-pipes">
                     Master the pipe philosophy: chain small tools into powerful
                     pipelines
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Complete data pipeline in one line:
@@ -600,33 +607,29 @@ echo "Size: $(du -h data.csv | cut -f1)"</pre>
             </li>
           </ul>
         </div>
-
         <!-- PYTHON + DJANGO IN WSL -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="django-cli">
-            &#128013; Python + Django from the Command Line
+          <h2 id="django-cli" style="margin-top: 0">
+            🐍 Python + Django from the Command Line
           </h2>
           <p>
-            Know how to manage a Django project entirely from the terminal
-            &mdash; no GUI, no IDE.
+            Know how to manage a Django project entirely from the terminal — no
+            GUI, no IDE.
           </p>
-
           <div class="checklist-category">Django CLI Operations</div>
-          <ul class="checklist" role="list" aria-label="Django CLI checklist">
+          <ul aria-label="Django CLI checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-django-start"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-django-start">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-django-start"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-django-start">
                     Practice: Create and run a Django project from scratch (15
                     min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 mkdir ~/assessment &amp;&amp; cd ~/assessment
@@ -643,18 +646,16 @@ python manage.py runserver 0.0.0.0:8000</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-django-model"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-django-model">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-django-model"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-django-model">
                     Practice: Define models, migrate, and load data from CLI
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # In sensors/models.py, define a GPSPing model
@@ -683,22 +684,20 @@ EOF</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-django-management"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-django-management">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-django-management"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-django-management">
                     Practice: Custom management commands
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Create: sensors/management/commands/import_gps.py
-# This is how SEAT data pipelines work &mdash; management commands
+# This is how SEAT data pipelines work — management commands
 # invoked via cron or systemd timers
 
 python manage.py import_gps --file gps_data.csv --batch-size 5000
@@ -710,8 +709,8 @@ python manage.py loaddata fixtures/initial.json</pre>
                     <strong>Practice site:</strong>
                     <a
                       href="https://docs.djangoproject.com/en/5.0/howto/custom-management-commands/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >Django docs: custom management commands</a
                     >.
                   </div>
@@ -719,26 +718,23 @@ python manage.py loaddata fixtures/initial.json</pre>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Process Management</div>
           <ul
+            aria-label="Process management checklist"
             class="checklist"
             role="list"
-            aria-label="Process management checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-process"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-process">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-process"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-process">
                     Know process management commands
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Run Django in background
@@ -764,18 +760,16 @@ tail -f /var/log/nginx/error.log</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-cron"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-cron">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-cron"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-cron">
                     Practice: cron jobs for scheduled data pipelines
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Edit crontab
@@ -792,48 +786,44 @@ crontab -l</pre>
                     <strong>Practice site:</strong>
                     <a
                       href="https://crontab.guru/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >crontab.guru</a
                     >
-                    &mdash; cron expression editor.
+                    — cron expression editor.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- DATA PROCESSING PIPELINES IN BASH -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="pipelines">
-            &#128640; Bash Data Processing Pipelines
+          <h2 id="pipelines" style="margin-top: 0">
+            🚀 Bash Data Processing Pipelines
           </h2>
           <p>
             Sometimes you need to process data <em>before</em> it reaches
-            Python. Bash pipelines are 10&ndash;100&times; faster than Python
-            for simple transformations on large files.
+            Python. Bash pipelines are 10–100× faster than Python for simple
+            transformations on large files.
           </p>
-
           <div class="checklist-category">Real-World Pipeline Exercises</div>
           <ul
+            aria-label="Bash pipeline checklist"
             class="checklist"
             role="list"
-            aria-label="Bash pipeline checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-pipeline-clean"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-pipeline-clean">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-pipeline-clean"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-pipeline-clean">
                     Exercise: Clean a 1M-row CSV using only CLI tools (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Generate test data
@@ -864,18 +854,16 @@ echo "Clean: $(wc -l &lt; clean.csv) rows"</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-pipeline-psql"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-pipeline-psql">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-pipeline-psql"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-pipeline-psql">
                     Exercise: Pipe cleaned CSV directly into PostgreSQL
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Create table
@@ -890,25 +878,23 @@ tail -n +2 clean.csv | psql assessment_db -c "\COPY gps_pings FROM STDIN WITH CS
 
 # Verify
 psql assessment_db -c "SELECT COUNT(*), AVG(speed) FROM gps_pings;"</pre>
-                    This is the fastest way to load data into PostgreSQL &mdash;
-                    10&times; faster than Python row-by-row inserts.
+                    This is the fastest way to load data into PostgreSQL — 10×
+                    faster than Python row-by-row inserts.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-pipeline-transform"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-pipeline-transform">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-pipeline-transform"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Exercise: Transform data between formats (JSON &harr; CSV)
-                  </div>
+                  <label class="checklist-label" for="wsl-pipeline-transform">
+                    Exercise: Transform data between formats (JSON ↔ CSV)
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # CSV to JSON Lines (one JSON object per line)
@@ -920,36 +906,32 @@ cat data.jsonl | jq -r '[.vehicle,.lat,.lon,.speed] | @csv' &gt; back_to_csv.csv
 # Pretty-print JSON
 cat data.jsonl | head -1 | python3 -m json.tool</pre>
                     <strong>Install jq:</strong>
-                    <code>sudo apt install jq</code> &mdash; the
-                    <code>awk</code> of JSON. Essential tool.
+                    <code>sudo apt install jq</code> — the <code>awk</code> of
+                    JSON. Essential tool.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- NETWORKING & DEBUGGING -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="networking">
-            &#128279; Networking &amp; Debugging in WSL
+          <h2 id="networking" style="margin-top: 0">
+            🔗 Networking &amp; Debugging in WSL
           </h2>
-
           <div class="checklist-category">Network Diagnostics</div>
-          <ul class="checklist" role="list" aria-label="Networking checklist">
+          <ul aria-label="Networking checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-net-curl"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-net-curl">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-net-curl"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-net-curl">
                     Drill: curl and wget for API testing
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Test Django REST endpoint
@@ -973,18 +955,16 @@ curl -o /dev/null -s -w "Time: %{time_total}s\n" http://localhost:8000/api/pings
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-net-ports"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-net-ports">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-net-ports"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-net-ports">
                     Know port and connection debugging
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Check what's listening on a port
@@ -1005,20 +985,19 @@ ss -tlnp</pre>
             </li>
           </ul>
         </div>
-
         <!-- PREPARATION TOOLS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="tools">
-            &#128295; Practice Platforms &amp; Resources
+          <h2 id="tools" style="margin-top: 0">
+            🔧 Practice Platforms &amp; Resources
           </h2>
           <div class="resource-grid">
             <a
-              href="https://cmdchallenge.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://cmdchallenge.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127919;</div>
+              <div class="rc-icon">🎯</div>
               <div class="rc-title">CMD Challenge</div>
               <div class="rc-desc">
                 50+ interactive command-line puzzles. Progressively harder.
@@ -1028,12 +1007,12 @@ ss -tlnp</pre>
               <div class="rc-url">cmdchallenge.com</div>
             </a>
             <a
-              href="https://overthewire.org/wargames/bandit/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://overthewire.org/wargames/bandit/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128274;</div>
+              <div class="rc-icon">🔒</div>
               <div class="rc-title">OverTheWire: Bandit</div>
               <div class="rc-desc">
                 SSH-based Linux wargame. 34 levels of increasing difficulty.
@@ -1042,12 +1021,12 @@ ss -tlnp</pre>
               <div class="rc-url">overthewire.org/wargames/bandit</div>
             </a>
             <a
-              href="https://www.learnshell.org/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.learnshell.org/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128187;</div>
+              <div class="rc-icon">💻</div>
               <div class="rc-title">LearnShell.org</div>
               <div class="rc-desc">
                 Interactive bash tutorial. Variables, loops, functions, pipes.
@@ -1056,12 +1035,12 @@ ss -tlnp</pre>
               <div class="rc-url">learnshell.org</div>
             </a>
             <a
-              href="https://regexr.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://regexr.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128270;</div>
+              <div class="rc-icon">🔎</div>
               <div class="rc-title">RegExr</div>
               <div class="rc-desc">
                 Visual regex tester. Build patterns for grep and sed, then
@@ -1070,12 +1049,12 @@ ss -tlnp</pre>
               <div class="rc-url">regexr.com</div>
             </a>
             <a
-              href="https://crontab.guru/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://crontab.guru/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#9200;</div>
+              <div class="rc-icon">⏰</div>
               <div class="rc-title">Crontab Guru</div>
               <div class="rc-desc">
                 Visual cron expression editor. Translates cron syntax to human
@@ -1084,12 +1063,12 @@ ss -tlnp</pre>
               <div class="rc-url">crontab.guru</div>
             </a>
             <a
-              href="https://explainshell.com/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://explainshell.com/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128218;</div>
+              <div class="rc-icon">📚</div>
               <div class="rc-title">ExplainShell</div>
               <div class="rc-desc">
                 Paste any shell command and get a visual breakdown of every flag
@@ -1099,35 +1078,31 @@ ss -tlnp</pre>
             </a>
           </div>
         </div>
-
         <!-- TIMED EXERCISE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="exercise">
-            &#127919; Timed Practice Exercise (45 min)
+          <h2 id="exercise" style="margin-top: 0">
+            🎯 Timed Practice Exercise (45 min)
           </h2>
           <p>Do this entirely in WSL. No VS Code, no GUI. Just the terminal.</p>
-
           <div class="checklist-category">
             Exercise: End-to-End CLI Data Pipeline
           </div>
           <ul
+            aria-label="Practice exercise checklist"
             class="checklist"
             role="list"
-            aria-label="Practice exercise checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-1"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-1">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-1"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-1">
                     Step 1: Generate 500K rows of GPS data with Python (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write a quick Python script to output to
                     <code>raw_gps.csv</code>. Include realistic noise and 3%
@@ -1137,18 +1112,16 @@ ss -tlnp</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-2"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-2">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-2"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-2">
                     Step 2: Clean data using awk + sed + grep (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Remove header, filter out speeds &lt;0 or &gt;150, remove
                     out-of-bounds coordinates, fix line endings, add a clean
@@ -1158,18 +1131,16 @@ ss -tlnp</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-3"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-3">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-3"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-3">
                     Step 3: Load into PostgreSQL with COPY (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Create the table, <code>\COPY</code> from the cleaned CSV,
                     verify row count and basic stats.
@@ -1178,18 +1149,16 @@ ss -tlnp</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-4"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-4">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-4"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-4">
                     Step 4: Create a Django project that reads the data (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Start a Django project, define the model matching the table,
                     point it at the existing database (<code>inspectdb</code> or
@@ -1200,18 +1169,16 @@ ss -tlnp</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-5"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-5">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-5"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-5">
                     Step 5: Test the API with curl (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >curl -s http://localhost:8000/api/fastest/ | python3 -m
@@ -1223,18 +1190,16 @@ ss -tlnp</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="wsl-ex-6"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="wsl-ex-6">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="wsl-ex-6"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="wsl-ex-6">
                     Step 6: Write results summary using CLI tools (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Summary report
@@ -1249,22 +1214,26 @@ echo "Vehicles: $(psql -tAc 'SELECT COUNT(DISTINCT vehicle) FROM gps_pings' asse
             </li>
           </ul>
         </div>
-
         <!-- TALKING POINTS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0">&#128172; Key Talking Points</h2>
+          <h2 style="margin-top: 0">💬 Key Talking Points</h2>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-1"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               Why use Linux CLI tools when Python can do everything?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-1">
               <p><span class="star-label star-t">Technical</span></p>
               <p>
                 <strong>Speed:</strong> <code>awk</code> processes a 1 GB CSV in
                 ~10 seconds. Python Pandas loads the same file in ~45 seconds.
-                For column extraction and simple filtering, CLI tools are
-                5&ndash;10&times; faster because they&rsquo;re compiled C
-                programs with zero startup overhead.
+                For column extraction and simple filtering, CLI tools are 5–10×
+                faster because they’re compiled C programs with zero startup
+                overhead.
               </p>
               <p>
                 <strong>Composability:</strong> Unix pipes let you chain tools
@@ -1281,42 +1250,37 @@ echo "Vehicles: $(psql -tAc 'SELECT COUNT(DISTINCT vehicle) FROM gps_pings' asse
                 <code>awk</code> are always there.
               </p>
               <p>
-                <strong>Your evidence:</strong> &ldquo;On the UCT HPC cluster
-                running SESKA, I use grep/awk/sed daily to parse Slurm job
-                output, monitor MPI process logs, and pre-process input files
-                for the FE solver. It&rsquo;s not optional in HPC &mdash;
-                it&rsquo;s how you operate.&rdquo;
+                <strong>Your evidence:</strong> “On the UCT HPC cluster running
+                SESKA, I use grep/awk/sed daily to parse Slurm job output,
+                monitor MPI process logs, and pre-process input files for the FE
+                solver. It’s not optional in HPC — it’s how you operate.”
               </p>
             </div>
           </div>
         </div>
-
         <button
+          aria-label="Reset all checklist progress"
           class="checklist-reset-btn"
           id="resetBtn"
-          aria-label="Reset all checklist progress"
         >
           Reset All Progress
         </button>
-
         <div class="page-footer">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -1335,70 +1299,16 @@ echo "Vehicles: $(psql -tAc 'SELECT COUNT(DISTINCT vehicle) FROM gps_pings' asse
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        const STORAGE_KEY = "de-wsl-checklist";
-        const items = document.querySelectorAll(".checklist-item[data-key]");
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-        function updateProgress() {
-          const total = items.length;
-          const checked = document.querySelectorAll(
-            ".checklist-item.checked",
-          ).length;
-          document.getElementById("progressCount").textContent =
-            checked + " / " + total;
-          const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-          const bar = document.getElementById("progressBar");
-          bar.style.width = pct + "%";
-          bar.setAttribute("aria-valuenow", pct);
-          bar.classList.toggle("complete", pct === 100);
-        }
-
-        items.forEach(function (item) {
-          const key = item.getAttribute("data-key");
-          if (saved[key]) {
-            item.classList.add("checked");
-            item.setAttribute("aria-checked", "true");
-          }
-          item.addEventListener("click", function (e) {
-            if (e.target.tagName === "A") return;
-            item.classList.toggle("checked");
-            const isChecked = item.classList.contains("checked");
-            item.setAttribute("aria-checked", isChecked ? "true" : "false");
-            saved[key] = isChecked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            updateProgress();
-          });
-          item.addEventListener("keydown", function (e) {
-            if (e.key === " " || e.key === "Enter") {
-              e.preventDefault();
-              item.click();
-            }
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
           });
         });
-
-        updateProgress();
-
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", function () {
-            if (!confirm("Reset all checklist progress on this page?")) return;
-            items.forEach(function (item) {
-              item.classList.remove("checked");
-              item.setAttribute("aria-checked", "false");
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-          });
       })();
-
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
+    <script defer src="../../scripts/checklists.js"></script>
   </body>
 </html>

@@ -1,15 +1,18 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Access Required</title>
-    <link rel="stylesheet" href="style.css?v=2.2" />
+    <link href="style.css?v=2.2" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div class="login-wrapper">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main class="login-wrapper" id="main" tabindex="-1">
       <div class="login-box fade-in">
         <span class="login-lockicon">🔒</span>
         <h1>Interview Guide</h1>
@@ -27,40 +30,70 @@
           Ecoride, INNTEGRATE; robust APIs, event-driven systems, real-time,
           geo/GPS)
         </p>
-        <form id="loginForm" onsubmit="return false;">
+        <form id="loginForm">
           <div class="login-input-group">
+            <label for="passInput">Access code</label>
             <div class="password-wrapper">
               <input
-                type="password"
+                aria-describedby="loginError"
+                autocomplete="off"
+                autofocus=""
                 id="passInput"
                 placeholder="Access code"
-                autocomplete="off"
-                autofocus
+                required=""
+                type="password"
               />
-              <span
+              <button
+                aria-controls="passInput"
+                aria-label="Show access code"
+                aria-pressed="false"
                 class="pass-toggle"
                 id="passToggle"
-                title="Toggle visibility"
-                >👁️</span
+                type="button"
               >
+                <svg
+                  aria-hidden="true"
+                  height="20"
+                  viewbox="0 0 24 24"
+                  width="20"
+                >
+                  <path
+                    d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  ></path>
+                  <circle
+                    cx="12"
+                    cy="12"
+                    fill="none"
+                    r="3"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  ></circle>
+                </svg>
+              </button>
             </div>
           </div>
-          <button type="submit" class="login-btn" id="loginBtn">Unlock</button>
-          <p class="login-error" id="loginError">
+          <button class="login-btn" id="loginBtn" type="submit">Unlock</button>
+          <p class="login-error" hidden="" id="loginError" role="alert">
             Incorrect access code. Try again.
           </p>
         </form>
       </div>
-    </div>
+    </main>
     <script>
       (function () {
         // Note: H is lowercased here because sha256 function returns lowercase hex.
-        // The password is 'UCT-CTO@PN'
         const H =
           "58cff7b0dc92d2bed71e6c2b59b87ace3eaac80d204efaf5cb84d0f8c736ad57";
-        if (sessionStorage.getItem("_ig_auth") === H) {
-          window.location.replace("hub.html");
-          return;
+        try {
+          if (sessionStorage.getItem("_ig_auth") === H) {
+            window.location.replace("hub.html");
+            return;
+          }
+        } catch {
+          // The form reports unavailable session storage when a code is submitted.
         }
 
         async function sha256(m) {
@@ -80,27 +113,42 @@
           const type =
             passInput.getAttribute("type") === "password" ? "text" : "password";
           passInput.setAttribute("type", type);
-          this.textContent = type === "password" ? "👁️" : "🙈";
+          this.setAttribute(
+            "aria-label",
+            type === "password" ? "Show access code" : "Hide access code",
+          );
+          this.setAttribute("aria-pressed", String(type === "text"));
         });
 
-        loginBtn.addEventListener("click", async function () {
-          const p = passInput.value;
-          const h = await sha256(p);
-          if (h === H) {
-            sessionStorage.setItem("_ig_auth", H);
-            window.location.replace("hub.html");
-          } else {
-            loginError.style.display = "block";
-            passInput.value = "";
-            passInput.focus();
-          }
-        });
-
-        passInput.addEventListener("keydown", function (e) {
-          if (e.key === "Enter") {
-            loginBtn.click();
-          }
-        });
+        document
+          .getElementById("loginForm")
+          .addEventListener("submit", async function (event) {
+            event.preventDefault();
+            if (loginBtn.disabled) return;
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Checking…";
+            loginError.hidden = true;
+            passInput.removeAttribute("aria-invalid");
+            try {
+              const h = await sha256(passInput.value);
+              if (h === H) {
+                sessionStorage.setItem("_ig_auth", H);
+                window.location.replace("hub.html");
+              } else {
+                loginError.textContent = "Incorrect access code. Try again.";
+                loginError.hidden = false;
+                passInput.setAttribute("aria-invalid", "true");
+                passInput.focus();
+              }
+            } catch {
+              loginError.textContent =
+                "Could not verify the code. Allow site storage, reload the page, and try again.";
+              loginError.hidden = false;
+            } finally {
+              loginBtn.disabled = false;
+              loginBtn.textContent = "Unlock";
+            }
+          });
       })();
     </script>
   </body>

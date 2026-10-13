@@ -1,13 +1,14 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
     <title>
-      Assessment Scenario 1 — System Design, Development & Architecture
+      Assessment Scenario 1 — System Design, Development &amp; Architecture
     </title>
-    <link rel="stylesheet" href="style.css?v=2.2" />
+    <link href="style.css?v=2.2" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -25,56 +26,99 @@
         color: var(--text-primary);
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <div
+    <a class="skip-link" href="#content">Skip to content</a>
+    <main
       class="page-wrapper protected-content"
       id="content"
       style="display: none"
+      tabindex="-1"
     >
       <div class="header-bar">
         <span class="brand">CTO Interview Prep</span>
-        <nav>
+        <nav aria-label="Primary navigation">
           <a href="hub.html">Hub</a>
           <a href="level1-overview.html">Overview</a>
           <a href="level2-technical.html">Technical</a>
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
               Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
               <a href="assessment-scenario-2.html"
-                >Scenario 2 (Django & SEAT)</a
+                >Scenario 2 (Django &amp; SEAT)</a
               >
-              <a href="assessment-scenario-3.html">Scenario 3 (Data & MLOps)</a>
-              <a href="assessment-iot-edge.html">IoT & Edge Computing</a>
+              <a href="assessment-scenario-3.html"
+                >Scenario 3 (Data &amp; MLOps)</a
+              >
+              <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
-                  <a href="assessment-de-docker.html">Docker & Containers</a>
-                  <a href="assessment-de-wsl.html">WSL & Linux CLI</a>
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
+                  <a href="assessment-de-docker.html"
+                    >Docker &amp; Containers</a
+                  >
+                  <a href="assessment-de-wsl.html">WSL &amp; Linux CLI</a>
                   <a href="assessment-web-servers-python.html"
                     >Python Web Servers</a
                   >
                   <a href="assessment-web-servers-dotnet.html"
-                    >ASP.NET, Nginx & Apache</a
+                    >ASP.NET, Nginx &amp; Apache</a
                   >
                 </div>
               </div>
               <a href="assessment-cto-architecture.html">CTO Architecture</a>
-              <a href="assessment-tips-strategy.html">Tips & Strategy</a>
+              <a href="assessment-tips-strategy.html">Tips &amp; Strategy</a>
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,21 +135,18 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
       <div class="breadcrumb">
         <a href="hub.html">Hub</a> <span>›</span> Assessment Scenario 1: Deep
         Technical Dive
       </div>
-
       <h1 class="fade-in">
-        Assessment Scenario 1: Deep Technical Dive — Architecture & Systems
+        Assessment Scenario 1: Deep Technical Dive — Architecture &amp; Systems
       </h1>
       <p class="fade-in fade-in-d1">
         A highly technical study guide diving deep into the infrastructure,
         alternative technologies, and underlying mechanics of the CTO role.
         <strong>Warning: High conceptual density.</strong>
       </p>
-
       <div class="callout info fade-in fade-in-d2">
         <div class="callout-title">
           CV Grounding (use as evidence in answers)
@@ -141,7 +182,6 @@
           </li>
         </ul>
       </div>
-
       <!-- ASSESSMENT STRUCTURE -->
       <div class="section-card fade-in fade-in-d2">
         <h2 style="margin-top: 0">
@@ -156,7 +196,8 @@
         <ul>
           <li>
             <strong
-              >Part 1: Practical Coding & Algorithmic Design (45 mins)</strong
+              >Part 1: Practical Coding &amp; Algorithmic Design (45
+              mins)</strong
             >
             — Expect to write code (Python and potentially JavaScript) that
             handles large volumes of data efficiently. Focus will be on Time
@@ -165,7 +206,7 @@
           </li>
           <li>
             <strong
-              >Part 2: Systems Architecture, Admin & Troubleshooting (50
+              >Part 2: Systems Architecture, Admin &amp; Troubleshooting (50
               mins)</strong
             >
             — Deep-dive discussions on Linux kernel resource management, web
@@ -174,13 +215,11 @@
           </li>
         </ul>
       </div>
-
       <!-- TECHNOLOGY DEEP DIVES -->
       <div class="section-card fade-in fade-in-d3">
         <h2 style="margin-top: 0">
           📚 Foundation: Core Technologies Deep Dive
         </h2>
-
         <h3>1. Python: The Language Mechanics</h3>
         <p>
           Python is a
@@ -192,9 +231,10 @@
         </p>
         <ul>
           <li>
-            <strong>Dynamic Typing & Memory:</strong> Variables point to objects
-            in memory; they don't have intrinsic types themselves. Memory is
-            managed automatically via <strong>Reference Counting</strong> and a
+            <strong>Dynamic Typing &amp; Memory:</strong> Variables point to
+            objects in memory; they don't have intrinsic types themselves.
+            Memory is managed automatically via
+            <strong>Reference Counting</strong> and a
             <strong>Generational Garbage Collector</strong> (to detect cyclic
             references). This abstraction makes Python exceptionally fast to
             develop in, but it incurs a performance overhead compared to
@@ -214,15 +254,13 @@
             with its own Python interpreter and memory space.
           </li>
         </ul>
-
-        <h3>2. Web Servers: Architecture & Alternatives</h3>
+        <h3>2. Web Servers: Architecture &amp; Alternatives</h3>
         <p>
           A web server's primary job is handling HTTP requests. When deploying
           Django, the web server (like Apache2) sits in front of an application
           server (like Gunicorn or uWSGI), which communicates with Django via
           WSGI (Web Server Gateway Interface).
         </p>
-
         <h4>Apache HTTP Server (Apache2)</h4>
         <p>
           The traditional, battle-tested heavyweight. It is
@@ -245,7 +283,6 @@
             load (the C10k problem) because blocking processes consume RAM.
           </li>
         </ul>
-
         <h4>Nginx (Alternative 1)</h4>
         <p>
           Nginx uses an highly optimized
@@ -262,7 +299,6 @@
             It is the modern standard for reverse-proxying application servers.
           </li>
         </ul>
-
         <h4>Caddy (Alternative 2)</h4>
         <p>
           A modern web server written in <strong>Go (Golang)</strong>. Its
@@ -277,7 +313,6 @@
             zero SSL maintenance overhead, Caddy is superior.
           </li>
         </ul>
-
         <h3>3. The Server Ecosystem: Web, App, and Proxy Servers</h3>
         <p>
           A "server" is fundamentally software or hardware providing a service
@@ -299,7 +334,6 @@
             outer internet.
           </li>
         </ul>
-
         <h4>The Forward Proxy vs. Reverse Proxy</h4>
         <p>
           A <strong>Proxy Server (Forward Proxy)</strong> sits in front of
@@ -309,7 +343,6 @@
           filtering (blocking malicious sites), and caches outbound internet
           requests to save university bandwidth.
         </p>
-
         <p>
           A <strong>Reverse Proxy</strong> sits in front of one or more
           <em>backend servers</em>. It intercepts all incoming requests from the
@@ -336,7 +369,9 @@
             server's CPU to purely run your Python/Java code.
           </li>
           <li>
-            <strong>Deep Technical Benefit 3 (Security & Anonymity):</strong>
+            <strong
+              >Deep Technical Benefit 3 (Security &amp; Anonymity):</strong
+            >
             The outside world never knows the IP address of your actual database
             or application servers. They only see the IP of the reverse proxy,
             which acts as a fortified shield absorbing DDoS attacks, often
@@ -350,8 +385,7 @@
             drastically reducing system latency.
           </li>
         </ul>
-
-        <h3>4. Application Servers & Worker Management</h3>
+        <h3>4. Application Servers &amp; Worker Management</h3>
         <p>
           While the Reverse Proxy handles the internet, the
           <strong>Application Server</strong> (like Gunicorn) is the engine
@@ -389,7 +423,6 @@
             </ul>
           </li>
         </ul>
-
         <h4>Asynchronous Task Queues (Celery)</h4>
         <p>
           A web request should generally never take longer than 500
@@ -419,20 +452,23 @@
           </li>
         </ul>
       </div>
-
       <!-- PART 1: DJANGO & SEAT -->
       <div class="section-card fade-in">
         <h2 style="margin-top: 0">
-          🛠️ Part 1: Systems Development & Django (SEAT)
+          🛠️ Part 1: Systems Development &amp; Django (SEAT)
         </h2>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-1"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Task 1: The SEAT dashboard is taking 15 seconds to load during
             registration. You suspect a slow SQL query related to loading
             student profiles. Optimize it.
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-1">
             <p>
               <strong>Technical Context:</strong> The "N+1 query problem"
               happens because Django querysets are <em>lazy</em>. If you fetch a
@@ -456,13 +492,17 @@ students = Student.objects.select_related('department').all()
 students = Student.objects.prefetch_related('courses').all()</code></pre>
           </div>
         </div>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-2"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Task 2: Write a utility script to automate nightly data
             synchronization from a legacy CSV structure into the SEAT database.
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-2">
             <p>
               <strong>Technical Context:</strong> Automating system integrations
               requires handling edge cases (missing data, format changes) and
@@ -471,10 +511,9 @@ students = Student.objects.prefetch_related('courses').all()</code></pre>
               efficiency is also key—reading a 10GB CSV entirely into memory
               will crash the server.
             </p>
-
             <p>
               <strong
-                >Gold Standard Solution (Python with Pandas & Django
+                >Gold Standard Solution (Python with Pandas &amp; Django
                 ORM):</strong
               >
             </p>
@@ -504,7 +543,6 @@ def sync_legacy_students(file_path):
         Student.objects.all().delete() 
         # Insert in batches to avoid exceeding Postgres memory limits per query
         Student.objects.bulk_create(student_objs, batch_size=5000)</code></pre>
-
             <p><strong>Equivalent Solution (JavaScript / Node.js):</strong></p>
             <p>
               If the team shifts towards a Node.js microservice architecture,
@@ -522,7 +560,7 @@ async function syncLegacyStudents() {
   // Read using streams, highly memory efficient for large files (unlike whole-file reading)
   fs.createReadStream('legacy_data.csv')
     .pipe(parse({ columns: true, skip_empty_lines: true }))
-    .on('data', (row) => {
+    .on('data', (row) =&gt; {
       if(row.student_number) {
         students.push({
           student_number: row.student_number,
@@ -531,10 +569,10 @@ async function syncLegacyStudents() {
         });
       }
     })
-    .on('end', async () => {
+    .on('end', async () =&gt; {
       try {
         // Run in a transaction
-        await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx) =&gt; {
            await tx.student.deleteMany({});
            // Prisma bulk insert
            await tx.student.createMany({
@@ -553,20 +591,23 @@ async function syncLegacyStudents() {
           </div>
         </div>
       </div>
-
       <!-- PART 2: LINUX, SYSADMIN & HPC -->
       <div class="section-card fade-in">
         <h2 style="margin-top: 0">
-          🐧 Part 2: Linux, Server Admin & HPC Operations
+          🐧 Part 2: Linux, Server Admin &amp; HPC Operations
         </h2>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-3"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Scenario: An Apache2 server hosting a critical departmental tool
             goes down under heavy load during a data mining operation. Diagnose
             and resolve this.
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-3">
             <p><strong>Deep Technical Diagnosis:</strong></p>
             <ol>
               <li>
@@ -614,14 +655,18 @@ async function syncLegacyStudents() {
             </ol>
           </div>
         </div>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-4"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Scenario: Detail how you would implement LDAP for user
-            authentication across various departmental systems (Windows &
+            authentication across various departmental systems (Windows &amp;
             Linux).
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-4">
             <p>
               <strong>Deep Technical Context:</strong> LDAP (Lightweight
               Directory Access Protocol) is an open, vendor-neutral application
@@ -660,13 +705,17 @@ async function syncLegacyStudents() {
             </ul>
           </div>
         </div>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-5"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Scenario: Script automated backups, patch management, and monitoring
             using Python and Bash.
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-5">
             <p>
               <strong>Gold Standard Solution (Bash for DB Backups):</strong>
             </p>
@@ -678,7 +727,7 @@ DATE=$(date +%Y%m%d_%H%M%S)
 ARCHIVE="$BACKUP_DIR/seat_cluster_$DATE.sql.gz"
 
 # Dump and compress on the fly (saves disk IO latency)
-sudo -u postgres pg_dumpall | gzip > $ARCHIVE
+sudo -u postgres pg_dumpall | gzip &gt; $ARCHIVE
 
 # Verify backup integrity (exit status of pipeline)
 if [ ${PIPESTATUS[0]} -ne 0 ]; then
@@ -689,10 +738,9 @@ fi
 
 # Retention Policy: Enforce 30-day rolling window
 find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;</code></pre>
-
             <p>
               <strong
-                >Patch Management & Monitoring (Python equivalent
+                >Patch Management &amp; Monitoring (Python equivalent
                 context):</strong
               >
             </p>
@@ -706,24 +754,27 @@ find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;</code></pre>
           </div>
         </div>
       </div>
-
       <!-- PART 3: DATA SCIENCE & IOT -->
       <div class="section-card fade-in">
         <h2 style="margin-top: 0">
-          📊 Part 3: Data Science, IoT & Visualization
+          📊 Part 3: Data Science, IoT &amp; Visualization
         </h2>
-
         <div class="qa-group">
-          <button class="qa-question" onclick="toggleQA(this)">
+          <button
+            aria-controls="disclosure-panel-6"
+            aria-expanded="false"
+            class="qa-question"
+            type="button"
+          >
             Scenario: You need to collect continuous, high-frequency data from a
             newly deployed sensor network in a Civil Eng lab. Design the
             ingestion, storage, and cleaning pipeline.
           </button>
-          <div class="qa-answer">
+          <div class="qa-answer" id="disclosure-panel-6">
             <p><strong>Deep Pipeline Architecture:</strong></p>
             <ol>
               <li>
-                <strong>Protocol & Transport:</strong> IoT sensors (e.g.,
+                <strong>Protocol &amp; Transport:</strong> IoT sensors (e.g.,
                 Arduinos/ESPs monitoring strain gauges) should not speak direct
                 HTTP REST—it carries too much header overhead. They should use
                 <strong>MQTT (Message Queuing Telemetry Transport)</strong>. It
@@ -770,11 +821,10 @@ find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;</code></pre>
           </div>
         </div>
       </div>
-
       <div class="page-footer">
         <p>Prepared for Paul Namalomba · CTO Interview · 2 March 2026</p>
       </div>
-    </div>
+    </main>
     <button class="back-to-top" id="btt" title="Back to top">↑</button>
     <script>
       (function () {
@@ -793,14 +843,15 @@ find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +30 -exec rm {} \;</code></pre>
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
+          });
         });
       })();
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
   </body>
 </html>

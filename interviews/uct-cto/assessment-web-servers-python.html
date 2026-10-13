@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Assessment — Web Servers: Python (Django &amp; Flask)</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -20,9 +21,10 @@
         margin: 1rem 0;
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -37,10 +39,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -52,10 +60,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -73,8 +104,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,19 +129,23 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span>
         <a href="assessment-data-engineering.html">Data Engineering</a>
-        <span>&rsaquo;</span>
+        <span>›</span>
         <div class="breadcrumb-dropdown">
-          <button class="breadcrumb-dropdown-btn">
-            Python Web Servers &#9660;
+          <button
+            aria-controls="dropdown-panel-4"
+            aria-expanded="false"
+            class="breadcrumb-dropdown-btn dropdown-button"
+            type="button"
+          >
+            Python Web Servers ▼
           </button>
-          <div class="breadcrumb-dropdown-content">
+          <div class="breadcrumb-dropdown-content" id="dropdown-panel-4">
             <a href="assessment-de-docker.html">Docker &amp; Containers</a>
             <a href="assessment-de-wsl.html">WSL &amp; Linux CLI</a>
-            <a href="assessment-web-servers-python.html" class="current"
+            <a class="current" href="assessment-web-servers-python.html"
               >Python Web Servers</a
             >
             <a href="assessment-web-servers-dotnet.html"
@@ -112,9 +154,8 @@
           </div>
         </div>
       </div>
-
-      <main id="main-content">
-        <h1 class="fade-in">Web Servers &mdash; Python (Django &amp; Flask)</h1>
+      <main id="main-content" tabindex="-1">
+        <h1 class="fade-in">Web Servers — Python (Django &amp; Flask)</h1>
         <p class="fade-in fade-in-d1">
           Know how to stand up, configure, and deploy Python web servers from
           scratch in a terminal. This module covers
@@ -122,30 +163,30 @@
           <strong>Flask</strong> (lightweight alternative), plus the WSGI/ASGI
           application servers that sit between them and Nginx/Apache.
         </p>
-
         <!-- PROGRESS TRACKER -->
         <div
+          aria-label="Preparation progress"
+          data-checklist-storage="web-servers-python-checklist"
           class="checklist-progress fade-in fade-in-d2"
           role="region"
-          aria-label="Preparation progress"
         >
           <div class="checklist-progress-header">
-            <span>Preparation Progress</span>
+            <span id="preparation-progress-label">Preparation Progress</span>
             <span class="progress-count" id="progressCount">0 / 0</span>
           </div>
           <div class="progress-bar-track">
             <div
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow="0"
               class="progress-bar-fill"
               id="progressBar"
-              style="width: 0%"
               role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-labelledby="preparation-progress-label"
+              style="width: 0%"
             ></div>
           </div>
         </div>
-
         <!-- CV GROUNDING -->
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">CV Grounding</div>
@@ -158,8 +199,8 @@
             </li>
             <li>
               <strong>ComputeMore (Nuxt / Node):</strong> While the frontend is
-              Nuxt.js (Node), deployment patterns are similar &mdash; reverse
-              proxies, process managers, environment variables, health checks.
+              Nuxt.js (Node), deployment patterns are similar — reverse proxies,
+              process managers, environment variables, health checks.
             </li>
             <li>
               <strong>HPC Workflows:</strong> Job scheduling and monitoring on
@@ -168,34 +209,30 @@
             </li>
           </ul>
         </div>
-
         <!-- DJANGO DEEP DIVE -->
         <div class="section-card fade-in fade-in-d3">
-          <h2 style="margin-top: 0" id="django">
-            &#128013; Django &mdash; Full-Stack Setup
+          <h2 id="django" style="margin-top: 0">
+            🐍 Django — Full-Stack Setup
           </h2>
-
           <div class="checklist-category">
             Project Scaffolding (Should Be Muscle Memory)
           </div>
           <ul
+            aria-label="Django scaffolding checklist"
             class="checklist"
             role="list"
-            aria-label="Django scaffolding checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-django-scaffold"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-django-scaffold">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-django-scaffold"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-django-scaffold">
                     Drill: From zero to running Django in 5 minutes
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 mkdir ~/transport_api &amp;&amp; cd ~/transport_api
@@ -218,18 +255,16 @@ python manage.py runserver 0.0.0.0:8000</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-django-settings"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-django-settings">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-django-settings"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-django-settings">
                     Know: settings.py configuration patterns
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Environment-based settings (12-factor)
@@ -261,8 +296,8 @@ CSRF_COOKIE_SECURE = not DEBUG</pre>
                     <strong>Docs:</strong>
                     <a
                       href="https://docs.djangoproject.com/en/5.0/ref/settings/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >Django settings reference</a
                     >.
                   </div>
@@ -270,22 +305,19 @@ CSRF_COOKIE_SECURE = not DEBUG</pre>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Models, Views &amp; REST API</div>
-          <ul class="checklist" role="list" aria-label="Django MVC checklist">
+          <ul aria-label="Django MVC checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-django-model"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-django-model">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-django-model"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-django-model">
                     Practice: Define transport models with PostGIS
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # sensors/models.py
@@ -317,18 +349,16 @@ class GPSPing(models.Model):
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-django-drf"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-django-drf">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-django-drf"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-django-drf">
                     Practice: Django REST Framework serializers and viewsets
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # sensors/serializers.py
@@ -373,8 +403,8 @@ urlpatterns += router.urls</pre>
                     <strong>Docs:</strong>
                     <a
                       href="https://www.django-rest-framework.org/tutorial/quickstart/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >DRF Quickstart Tutorial</a
                     >.
                   </div>
@@ -382,24 +412,21 @@ urlpatterns += router.urls</pre>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">
-            Gunicorn &mdash; Production WSGI Server
+            Gunicorn — Production WSGI Server
           </div>
-          <ul class="checklist" role="list" aria-label="Gunicorn checklist">
+          <ul aria-label="Gunicorn checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-gunicorn"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-gunicorn">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-gunicorn"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-gunicorn">
                     Know: Running Django under Gunicorn
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Basic start (4 workers)
@@ -426,18 +453,16 @@ uvicorn config.asgi:application --host 0.0.0.0 --port 8000 --workers 4</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-gunicorn-systemd"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-gunicorn-systemd">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-gunicorn-systemd"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-gunicorn-systemd">
                     Know: systemd service file for Gunicorn
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # /etc/systemd/system/gunicorn.service
@@ -471,32 +496,28 @@ sudo systemctl status gunicorn</pre>
             </li>
           </ul>
         </div>
-
         <!-- FLASK -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="flask">
-            &#128248; Flask &mdash; Lightweight Alternative
+          <h2 id="flask" style="margin-top: 0">
+            📸 Flask — Lightweight Alternative
           </h2>
           <p>
             Flask is useful for microservices, data APIs, and quick prototyping.
             Know when to choose it over Django.
           </p>
-
           <div class="checklist-category">Flask Fundamentals</div>
-          <ul class="checklist" role="list" aria-label="Flask checklist">
+          <ul aria-label="Flask checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-flask-basic"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-flask-basic">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-flask-basic"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-flask-basic">
                     Drill: Minimal Flask API from scratch (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # app.py
@@ -541,18 +562,16 @@ if __name__ == '__main__':
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-flask-factory"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-flask-factory">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-flask-factory"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-flask-factory">
                     Know: Flask application factory pattern
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # project structure:
@@ -593,8 +612,8 @@ app = create_app()
                     <strong>Docs:</strong>
                     <a
                       href="https://flask.palletsprojects.com/en/3.0.x/patterns/appfactories/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >Flask Application Factories</a
                     >.
                   </div>
@@ -602,18 +621,16 @@ app = create_app()
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-flask-vs-django"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-flask-vs-django">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-flask-vs-django"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-flask-vs-django">
                     Know: When to use Flask vs Django
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <table
                       style="
@@ -670,32 +687,28 @@ app = create_app()
             </li>
           </ul>
         </div>
-
         <!-- WSGI/ASGI CONCEPTS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="wsgi">
-            &#9881;&#65039; WSGI vs ASGI &mdash; Understanding the Stack
+          <h2 id="wsgi" style="margin-top: 0">
+            ⚙️ WSGI vs ASGI — Understanding the Stack
           </h2>
-
           <div class="checklist-category">Application Server Concepts</div>
-          <ul class="checklist" role="list" aria-label="WSGI/ASGI checklist">
+          <ul aria-label="WSGI/ASGI checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-wsgi-asgi"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-wsgi-asgi">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-wsgi-asgi"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Understand the request flow: Browser &rarr; Nginx &rarr;
-                    Gunicorn &rarr; Django
-                  </div>
+                  <label class="checklist-label" for="py-wsgi-asgi">
+                    Understand the request flow: Browser → Nginx → Gunicorn →
+                    Django
+                  </label>
                   <div class="checklist-detail">
                     <pre>
-Browser/curl &rarr; Nginx (port 80/443)
+Browser/curl → Nginx (port 80/443)
                   ↓ (proxy_pass)
                Gunicorn (unix socket or port 8000)
                   ↓ (WSGI callable)
@@ -713,18 +726,16 @@ ASGI: Asynchronous. WebSockets, long-polling, async views. Uvicorn, Daphne, Hype
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-static-files"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-static-files">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-static-files"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-static-files">
                     Know: Static files and media in production
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Django: collect static files
@@ -753,32 +764,28 @@ location / {
             </li>
           </ul>
         </div>
-
         <!-- DATABASE CONNECTIONS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="database">
-            &#128451;&#65039; Database Connections &amp; Pooling
+          <h2 id="database" style="margin-top: 0">
+            🗃️ Database Connections &amp; Pooling
           </h2>
-
           <div class="checklist-category">Connection Management</div>
           <ul
+            aria-label="Database connections checklist"
             class="checklist"
             role="list"
-            aria-label="Database connections checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-db-django"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-db-django">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-db-django"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-db-django">
                     Know: Django database connection settings
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # settings.py - connection pooling (Django 5.1+)
@@ -801,18 +808,16 @@ DATABASES = {
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-db-flask"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-db-flask">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-db-flask"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-db-flask">
                     Know: Flask-SQLAlchemy connection setup
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # config.py
@@ -833,35 +838,31 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
             </li>
           </ul>
         </div>
-
         <!-- TIMED EXERCISE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="exercise">
-            &#127919; Timed Practice Exercise (40 min)
+          <h2 id="exercise" style="margin-top: 0">
+            🎯 Timed Practice Exercise (40 min)
           </h2>
-          <p>Build a complete data API. Terminal only &mdash; no VS Code.</p>
-
+          <p>Build a complete data API. Terminal only — no VS Code.</p>
           <div class="checklist-category">
             Exercise: Django REST API for GPS Data
           </div>
           <ul
+            aria-label="Practice exercise checklist"
             class="checklist"
             role="list"
-            aria-label="Practice exercise checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-ex-1"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-ex-1">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-ex-1"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-ex-1">
                     Step 1: Scaffold Django + DRF + PostgreSQL (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Virtual env, install deps, startproject, startapp, configure
                     settings.py for PostgreSQL.
@@ -870,18 +871,16 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-ex-2"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-ex-2">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-ex-2"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-ex-2">
                     Step 2: Define Vehicle and GPSPing models, migrate (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Models with proper fields, indexes, foreign keys. Run
                     migrations.
@@ -890,19 +889,17 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-ex-3"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-ex-3">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-ex-3"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-ex-3">
                     Step 3: Load test data from CSV using management command (10
                     min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write a custom management command. Load 10K rows. Use
                     <code>bulk_create()</code>.
@@ -911,19 +908,17 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-ex-4"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-ex-4">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-ex-4"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-ex-4">
                     Step 4: Create DRF ViewSets with filtering and pagination
                     (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Vehicles list with ping count, GPSPing list filtered by
                     vehicle and date range, pagination.
@@ -932,18 +927,16 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="py-ex-5"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="py-ex-5">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="py-ex-5"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="py-ex-5">
                     Step 5: Serve with Gunicorn, test with curl (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >gunicorn config.wsgi:application --bind 0.0.0.0:8000
@@ -959,20 +952,17 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
             </li>
           </ul>
         </div>
-
         <!-- RESOURCES -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="resources">
-            &#128295; Practice Resources
-          </h2>
+          <h2 id="resources" style="margin-top: 0">🔧 Practice Resources</h2>
           <div class="resource-grid">
             <a
-              href="https://docs.djangoproject.com/en/5.0/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://docs.djangoproject.com/en/5.0/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128013;</div>
+              <div class="rc-icon">🐍</div>
               <div class="rc-title">Django Docs</div>
               <div class="rc-desc">
                 Official Django documentation. Models, views, URLs, settings,
@@ -981,12 +971,12 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               <div class="rc-url">docs.djangoproject.com</div>
             </a>
             <a
-              href="https://www.django-rest-framework.org/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.django-rest-framework.org/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128260;</div>
+              <div class="rc-icon">🔄</div>
               <div class="rc-title">DRF Docs</div>
               <div class="rc-desc">
                 Django REST Framework. Serializers, viewsets, routers,
@@ -995,12 +985,12 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               <div class="rc-url">django-rest-framework.org</div>
             </a>
             <a
-              href="https://flask.palletsprojects.com/en/3.0.x/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://flask.palletsprojects.com/en/3.0.x/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128248;</div>
+              <div class="rc-icon">📸</div>
               <div class="rc-title">Flask Docs</div>
               <div class="rc-desc">
                 Flask quickstart, blueprints, app factories, configuration,
@@ -1009,12 +999,12 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
               <div class="rc-url">flask.palletsprojects.com</div>
             </a>
             <a
-              href="https://docs.gunicorn.org/en/stable/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://docs.gunicorn.org/en/stable/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#9881;&#65039;</div>
+              <div class="rc-icon">⚙️</div>
               <div class="rc-title">Gunicorn Docs</div>
               <div class="rc-desc">
                 Production WSGI server. Worker types, configuration, logging,
@@ -1024,86 +1014,91 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
             </a>
           </div>
         </div>
-
         <!-- TALKING POINTS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0">&#128172; Key Talking Points</h2>
+          <h2 style="margin-top: 0">💬 Key Talking Points</h2>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-1"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               How do you decide between Django and Flask for a new service?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-1">
               <p><span class="star-label star-t">Technical</span></p>
               <p>
                 <strong>Django</strong> when you need: ORM for complex data
                 models, built-in admin panel for operations teams,
                 authentication/authorization out of the box, GIS support
                 (PostGIS), established patterns for larger teams. SEAT is Django
-                because it&rsquo;s a full platform with 15+ models, role-based
-                auth, and an admin dashboard.
+                because it’s a full platform with 15+ models, role-based auth,
+                and an admin dashboard.
               </p>
               <p>
                 <strong>Flask</strong> when you need: a lightweight data API
-                with 2&ndash;3 endpoints, a microservice in a larger
-                architecture, maximum flexibility on dependencies, rapid
-                prototyping where Django&rsquo;s boilerplate is overkill.
+                with 2–3 endpoints, a microservice in a larger architecture,
+                maximum flexibility on dependencies, rapid prototyping where
+                Django’s boilerplate is overkill.
               </p>
               <p>
-                <strong>Your evidence:</strong> &ldquo;SEAT is Django because we
-                needed the full framework &mdash; ORM, admin, auth, GIS. When I
-                build internal data pipeline APIs or health check endpoints, I
-                use Flask because I need a single file that returns JSON from a
-                PostgreSQL query.&rdquo;
+                <strong>Your evidence:</strong> “SEAT is Django because we
+                needed the full framework — ORM, admin, auth, GIS. When I build
+                internal data pipeline APIs or health check endpoints, I use
+                Flask because I need a single file that returns JSON from a
+                PostgreSQL query.”
               </p>
             </div>
           </div>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
-              Why Gunicorn and not Django&rsquo;s built-in server?
+            <button
+              aria-controls="disclosure-panel-2"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
+              Why Gunicorn and not Django’s built-in server?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-2">
               <p><span class="star-label star-t">Technical</span></p>
               <p>
-                Django&rsquo;s <code>runserver</code> is single-threaded, has no
+                Django’s <code>runserver</code> is single-threaded, has no
                 connection pooling, no worker management, and is explicitly
-                marked &ldquo;not for production&rdquo; in the Django docs.
-                Gunicorn pre-forks multiple worker processes, each handling
-                requests independently. If one worker crashes (e.g., OOM on a
-                large query), the master process respawns it. Combined with
-                Nginx as a reverse proxy for TLS termination, static file
-                serving, and connection buffering, this is the standard
-                production deployment pattern.
+                marked “not for production” in the Django docs. Gunicorn
+                pre-forks multiple worker processes, each handling requests
+                independently. If one worker crashes (e.g., OOM on a large
+                query), the master process respawns it. Combined with Nginx as a
+                reverse proxy for TLS termination, static file serving, and
+                connection buffering, this is the standard production deployment
+                pattern.
               </p>
             </div>
           </div>
         </div>
-
         <button
+          aria-label="Reset all checklist progress"
           class="checklist-reset-btn"
           id="resetBtn"
-          aria-label="Reset all checklist progress"
         >
           Reset All Progress
         </button>
-
         <div class="page-footer">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -1122,70 +1117,16 @@ SQLALCHEMY_DATABASE_URI = os.environ.get(
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        const STORAGE_KEY = "web-servers-python-checklist";
-        const items = document.querySelectorAll(".checklist-item[data-key]");
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-        function updateProgress() {
-          const total = items.length;
-          const checked = document.querySelectorAll(
-            ".checklist-item.checked",
-          ).length;
-          document.getElementById("progressCount").textContent =
-            checked + " / " + total;
-          const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-          const bar = document.getElementById("progressBar");
-          bar.style.width = pct + "%";
-          bar.setAttribute("aria-valuenow", pct);
-          bar.classList.toggle("complete", pct === 100);
-        }
-
-        items.forEach(function (item) {
-          const key = item.getAttribute("data-key");
-          if (saved[key]) {
-            item.classList.add("checked");
-            item.setAttribute("aria-checked", "true");
-          }
-          item.addEventListener("click", function (e) {
-            if (e.target.tagName === "A") return;
-            item.classList.toggle("checked");
-            const isChecked = item.classList.contains("checked");
-            item.setAttribute("aria-checked", isChecked ? "true" : "false");
-            saved[key] = isChecked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            updateProgress();
-          });
-          item.addEventListener("keydown", function (e) {
-            if (e.key === " " || e.key === "Enter") {
-              e.preventDefault();
-              item.click();
-            }
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
           });
         });
-
-        updateProgress();
-
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", function () {
-            if (!confirm("Reset all checklist progress on this page?")) return;
-            items.forEach(function (item) {
-              item.classList.remove("checked");
-              item.setAttribute("aria-checked", "false");
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-          });
       })();
-
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
+    <script defer src="../../scripts/checklists.js"></script>
   </body>
 </html>

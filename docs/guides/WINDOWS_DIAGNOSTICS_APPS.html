@@ -1,33 +1,37 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
       Windows Application Diagnostics PowerUser Guide - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -36,8 +40,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -250,18 +253,16 @@
           </p>
           <p><strong>To find the last 10 Application crash events:</strong></p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">&#39;Application&#39;</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">&#39;Application Error&#39;</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">10</span> <span class="p">|</span>
+            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'Application'</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">'Application Error'</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">10</span> <span class="p">|</span>
 <span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span> <span class="nb">Format-List</span>
 </code></pre>
           </div>
-
           <p><strong>To search for .NET specific crashes:</strong></p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">&#39;Application&#39;</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">&#39;.NET Runtime&#39;</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">5</span> <span class="p">|</span>
+            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'Application'</span><span class="p">;</span> <span class="n">Level</span><span class="p">=</span><span class="n">2</span><span class="p">;</span> <span class="n">ProviderName</span><span class="p">=</span><span class="s1">'.NET Runtime'</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">5</span> <span class="p">|</span>
 <span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span> <span class="nb">Format-List</span>
 </code></pre>
           </div>
-
           <p>
             <strong
               >To check if an AppLocker or Group Policy is silently killing the
@@ -271,10 +272,9 @@
             blocked before it even has a chance to crash.
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s2">&quot;Microsoft-Windows-AppLocker/EXE and DLL&quot;</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">LevelDisplayName</span> <span class="o">-eq</span> <span class="s2">&quot;Error&quot;</span><span class="p">}</span>
+            <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s2">"Microsoft-Windows-AppLocker/EXE and DLL"</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">LevelDisplayName</span> <span class="o">-eq</span> <span class="s2">"Error"</span><span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="2-command-prompt-cmd">2. Command Prompt (CMD)</h3>
           <p>
             If PowerShell is restricted or unavailable,
@@ -287,10 +287,9 @@
             >
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">wevtutil</span><span class="w"> </span><span class="n">qe</span><span class="w"> </span><span class="n">Application</span><span class="w"> </span><span class="o">/</span><span class="nl">c</span><span class="p">:</span><span class="mi">5</span><span class="w"> </span><span class="o">/</span><span class="nl">f</span><span class="p">:</span><span class="nc">text</span><span class="w"> </span><span class="o">/</span><span class="nl">q</span><span class="p">:</span><span class="ss">&quot;*[System[(Level=2)]] and *[System[Provider[@Name=&#39;Application Error&#39;]]]&quot;</span>
+            <pre><span></span><code><span class="n">wevtutil</span><span class="w"> </span><span class="n">qe</span><span class="w"> </span><span class="n">Application</span><span class="w"> </span><span class="o">/</span><span class="nl">c</span><span class="p">:</span><span class="mi">5</span><span class="w"> </span><span class="o">/</span><span class="nl">f</span><span class="p">:</span><span class="nc">text</span><span class="w"> </span><span class="o">/</span><span class="nl">q</span><span class="p">:</span><span class="ss">"*[System[(Level=2)]] and *[System[Provider[@Name='Application Error']]]"</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="phase-3-system-level-diagnostics">
             Phase 3: System-Level Diagnostics
@@ -412,32 +411,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

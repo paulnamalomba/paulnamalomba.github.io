@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
       Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and
       SSH - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -528,7 +531,6 @@
             <pre><span></span><code>/etc/netplan/
 </code></pre>
           </div>
-
           <p>Typical patterns are:</p>
           <ul>
             <li>DHCP for initial install or lab environments</li>
@@ -706,7 +708,6 @@
             <pre><span></span><code><span class="nb">Get-FileHash</span> <span class="p">.\</span><span class="n">ubuntu</span><span class="p">-</span><span class="n">24</span><span class="p">.</span><span class="n">04-live-server-amd64</span><span class="p">.</span><span class="n">iso</span> <span class="n">-Algorithm</span> <span class="n">SHA256</span>
 </code></pre>
           </div>
-
           <p>
             Compare the SHA256 output against the checksum published by
             Canonical.
@@ -726,7 +727,6 @@ sudo<span class="w"> </span>fdisk<span class="w"> </span>-l
 ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
 </code></pre>
           </div>
-
           <p>For NVMe SSDs:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
@@ -734,14 +734,12 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 sudo<span class="w"> </span>nvme<span class="w"> </span>list
 </code></pre>
           </div>
-
           <p>For SATA health and identity checks:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>smartmontools
 sudo<span class="w"> </span>smartctl<span class="w"> </span>-i<span class="w"> </span>/dev/sda
 </code></pre>
           </div>
-
           <p>What you are looking for:</p>
           <ul>
             <li>The 128 GB SSD by model and capacity</li>
@@ -896,7 +894,6 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 <span class="w">    </span>acl
 </code></pre>
           </div>
-
           <p>Set core identity and time settings:</p>
           <div class="codehilite">
             <pre><span></span><code>hostnamectl
@@ -906,21 +903,18 @@ sudo<span class="w"> </span>timedatectl<span class="w"> </span>set-timezone<span
 locale
 </code></pre>
           </div>
-
           <p>Verify time synchronization:</p>
           <div class="codehilite">
             <pre><span></span><code>timedatectl<span class="w"> </span>status
 systemctl<span class="w"> </span>status<span class="w"> </span>systemd-timesyncd
 </code></pre>
           </div>
-
           <p>Enable automatic security updates:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>dpkg-reconfigure<span class="w"> </span>-plow<span class="w"> </span>unattended-upgrades
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>unattended-upgrades
 </code></pre>
           </div>
-
           <p>Useful baseline verification:</p>
           <div class="codehilite">
             <pre><span></span><code>uname<span class="w"> </span>-a
@@ -932,7 +926,6 @@ systemctl<span class="w"> </span>--failed
 journalctl<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span><span class="w"> </span>-xb
 </code></pre>
           </div>
-
           <h3 id="7-networking-setup-with-netplan">
             7. Networking Setup with Netplan
           </h3>
@@ -944,10 +937,9 @@ journalctl<span class="w"> </span>-p<span class="w"> </span><span class="m">3</s
           <div class="codehilite">
             <pre><span></span><code>ip<span class="w"> </span>-br<span class="w"> </span>link
 networkctl<span class="w"> </span>list
-lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;Ethernet|Network&#39;</span>
+lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Ethernet|Network'</span>
 </code></pre>
           </div>
-
           <p>
             On Ubuntu Server 24.04, you will typically find a Netplan file such
             as:
@@ -956,13 +948,11 @@ lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span
             <pre><span></span><code>/etc/netplan/50-cloud-init.yaml
 </code></pre>
           </div>
-
           <p>or</p>
           <div class="codehilite">
             <pre><span></span><code>/etc/netplan/00-installer-config.yaml
 </code></pre>
           </div>
-
           <p>Choose one of the following strategies.</p>
           <h4 id="dhcp-with-router-reservation">
             DHCP with Router Reservation
@@ -1004,7 +994,6 @@ lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lan</span>
 </code></pre>
           </div>
-
           <p>Validation workflow:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>generate
@@ -1017,7 +1006,6 @@ ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><s
 ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>google.com
 </code></pre>
           </div>
-
           <p>Netplan best practices:</p>
           <ul>
             <li>Use spaces, not tabs, in YAML.</li>
@@ -1055,10 +1043,9 @@ ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><s
             <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-server
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>ssh
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
-sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 </code></pre>
           </div>
-
           <p>Allow SSH through the firewall:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>OpenSSH
@@ -1066,22 +1053,19 @@ sudo<span class="w"> </span>ufw<span class="w"> </span><span class="nb">enable</
 sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
 </code></pre>
           </div>
-
           <p>
             Create a modern keypair on the client machine that will connect to
             this server:
           </p>
           <div class="codehilite">
-            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;admin@server01&quot;</span>
+            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-C<span class="w"> </span><span class="s2">"admin@server01"</span>
 </code></pre>
           </div>
-
           <p>Install the public key on the server:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh-copy-id<span class="w"> </span>youruser@server-ip
 </code></pre>
           </div>
-
           <p>If <code>ssh-copy-id</code> is unavailable on the client:</p>
           <div class="codehilite">
             <pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh
@@ -1090,7 +1074,6 @@ cat<span class="w"> </span>~/id_ed25519.pub<span class="w"> </span>&gt;&gt;<span
 chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
 </code></pre>
           </div>
-
           <p>
             Create an SSH hardening drop-in instead of editing the main config
             directly:
@@ -1100,7 +1083,6 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
 sudo<span class="w"> </span>vim<span class="w"> </span>/etc/ssh/sshd_config.d/10-hardening.conf
 </code></pre>
           </div>
-
           <p>Recommended baseline:</p>
           <div class="codehilite">
             <pre><span></span><code>PermitRootLogin no
@@ -1114,7 +1096,6 @@ ClientAliveCountMax 2
 AllowUsers youruser
 </code></pre>
           </div>
-
           <p>Validate before restarting:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>sshd<span class="w"> </span>-t
@@ -1122,7 +1103,6 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
 </code></pre>
           </div>
-
           <p>
             Critical operational rule: do not close your current SSH session
             until you have opened and verified a second session successfully.
@@ -1136,10 +1116,9 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
           </p>
           <p>Generate a keypair on the server:</p>
           <div class="codehilite">
-            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;server01-outbound&quot;</span>
+            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">"server01-outbound"</span>
 </code></pre>
           </div>
-
           <p>Recommended permissions:</p>
           <div class="codehilite">
             <pre><span></span><code>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
@@ -1147,13 +1126,11 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
 chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>~/.ssh/id_ed25519.pub
 </code></pre>
           </div>
-
           <p>Create a client config:</p>
           <div class="codehilite">
             <pre><span></span><code>vim<span class="w"> </span>~/.ssh/config
 </code></pre>
           </div>
-
           <p>Example:</p>
           <div class="codehilite">
             <pre><span></span><code>Host github.com
@@ -1171,14 +1148,12 @@ Host backup-host
     IdentitiesOnly yes
 </code></pre>
           </div>
-
           <p>Initialize trust carefully:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
 ssh-keyscan<span class="w"> </span>-H<span class="w"> </span>github.com<span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.ssh/known_hosts
 </code></pre>
           </div>
-
           <p>
             If outbound policy is tightened via firewall, explicitly allow
             egress TCP 22 to required destinations. By default, UFW permits
@@ -1197,7 +1172,6 @@ ssh-keyscan<span class="w"> </span>-H<span class="w"> </span>github.com<span cla
 sudo<span class="w"> </span>blkid
 </code></pre>
           </div>
-
           <p>Mount the relevant HDD partition read-only first:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/preserved-hdd
@@ -1206,14 +1180,12 @@ findmnt<span class="w"> </span>/mnt/preserved-hdd
 ls<span class="w"> </span>-lah<span class="w"> </span>/mnt/preserved-hdd
 </code></pre>
           </div>
-
           <p>If the HDD partition is NTFS:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>ntfs-3g
 sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>ntfs3<span class="w"> </span>-o<span class="w"> </span>ro<span class="w"> </span>/dev/sdb1<span class="w"> </span>/mnt/preserved-hdd
 </code></pre>
           </div>
-
           <p>
             If the mount fails with an unsafe state or hibernation warning, the
             NTFS volume may still carry a Windows Fast Startup or hibernation
@@ -1229,20 +1201,17 @@ sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </sp
             <pre><span></span><code>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /srv/data ext4 defaults,nofail,x-systemd.automount 0 2
 </code></pre>
           </div>
-
           <p>Example for NTFS data mounted cautiously:</p>
           <div class="codehilite">
             <pre><span></span><code>UUID=XXXX-XXXX /srv/windows-data ntfs3 ro,nofail,uid=1000,gid=1000,x-systemd.automount 0 0
 </code></pre>
           </div>
-
           <p>Test <code>fstab</code> changes safely:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>mount<span class="w"> </span>-a
 findmnt
 </code></pre>
           </div>
-
           <h3 id="11-optional-nvidia-driver-and-cuda-preparation">
             11. Optional NVIDIA Driver and CUDA Preparation
           </h3>
@@ -1253,21 +1222,18 @@ findmnt
 ubuntu-drivers<span class="w"> </span>devices
 </code></pre>
           </div>
-
           <p>Install the recommended driver:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>ubuntu-drivers<span class="w"> </span>autoinstall
 sudo<span class="w"> </span>reboot
 </code></pre>
           </div>
-
           <p>Verify after reboot:</p>
           <div class="codehilite">
             <pre><span></span><code>nvidia-smi
 lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
 </code></pre>
           </div>
-
           <p>
             If Secure Boot is enabled, Ubuntu may require Machine Owner Key
             enrollment for third-party modules. If the driver appears installed
@@ -1342,7 +1308,6 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>--failed
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-p<span class="w"> </span>warning<span class="w"> </span>-b
 </code></pre>
           </div>
-
           <h3 id="network-exposure-strategy">Network Exposure Strategy</h3>
           <p>
             Do not expose the host to the public internet until the following
@@ -1377,7 +1342,6 @@ sudo<span class="w"> </span>fdisk<span class="w"> </span>-l
 ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
 </code></pre>
           </div>
-
           <p>Interpretation pattern:</p>
           <ul>
             <li>confirm which device is the 128 GB SSD</li>
@@ -1409,7 +1373,6 @@ ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.9.9.9</span>
 </code></pre>
           </div>
-
           <p>Validation:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>netplan<span class="w"> </span>generate
@@ -1419,7 +1382,6 @@ ip<span class="w"> </span>route
 resolvectl<span class="w"> </span>status
 </code></pre>
           </div>
-
           <h3 id="example-3-ssh-hardening-drop-in">
             Example 3: SSH Hardening Drop-In
           </h3>
@@ -1436,14 +1398,12 @@ LoginGraceTime 30
 AllowUsers youruser
 </code></pre>
           </div>
-
           <p>Validate and reload:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>sshd<span class="w"> </span>-t
 sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>ssh
 </code></pre>
           </div>
-
           <h3 id="example-4-mount-the-preserved-hdd-read-only-first">
             Example 4: Mount the Preserved HDD Read-Only First
           </h3>
@@ -1454,7 +1414,6 @@ sudo<span class="w"> </span>mount<span class="w"> </span>-o<span class="w"> </sp
 findmnt<span class="w"> </span>/mnt/preserved-hdd
 </code></pre>
           </div>
-
           <p>
             If the data looks correct and healthy, then decide whether a
             persistent <code>fstab</code> entry is appropriate.
@@ -1469,17 +1428,15 @@ sudo<span class="w"> </span>reboot
 nvidia-smi
 </code></pre>
           </div>
-
           <p>
             If <code>nvidia-smi</code> fails after reboot, inspect Secure Boot,
             module loading, and kernel logs:
           </p>
           <div class="codehilite">
             <pre><span></span><code>mokutil<span class="w"> </span>--sb-state
-journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">&#39;nvidia|nouveau|secure&#39;</span>
+journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">'nvidia|nouveau|secure'</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="troubleshooting">Troubleshooting</h2>
           <h3 id="installer-and-boot-problems">Installer and Boot Problems</h3>
@@ -1549,7 +1506,6 @@ ip<span class="w"> </span>route
 resolvectl<span class="w"> </span>status
 </code></pre>
           </div>
-
           <h4 id="problem-the-host-can-ping-ips-but-not-domain-names">
             Problem: The host can ping IPs but not domain names
           </h4>
@@ -1574,7 +1530,6 @@ resolvectl<span class="w"> </span>status
             <pre><span></span><code>sudo<span class="w"> </span>ethtool<span class="w"> </span>enp3s0
 </code></pre>
           </div>
-
           <ul>
             <li>Replace bad cables before blaming Linux.</li>
             <li>Check NIC driver binding with <code>lspci -nnk</code>.</li>
@@ -1590,11 +1545,10 @@ resolvectl<span class="w"> </span>status
           </ul>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh
-sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+sudo<span class="w"> </span>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </span>verbose
 </code></pre>
           </div>
-
           <h4 id="problem-permission-denied-publickey">
             Problem: Permission denied (publickey)
           </h4>
@@ -1608,7 +1562,6 @@ sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </
             <pre><span></span><code>ssh<span class="w"> </span>-vvv<span class="w"> </span>youruser@server-ip
 </code></pre>
           </div>
-
           <ul>
             <li>Confirm on the server:</li>
           </ul>
@@ -1617,7 +1570,6 @@ sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </
 chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
 </code></pre>
           </div>
-
           <h4 id="problem-you-locked-yourself-out-after-hardening-ssh">
             Problem: You locked yourself out after hardening SSH
           </h4>
@@ -1671,7 +1623,6 @@ sudo<span class="w"> </span>du<span class="w"> </span>-xh<span class="w"> </span
 sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
 </code></pre>
           </div>
-
           <h3 id="nvidia-and-secure-boot-problems">
             NVIDIA and Secure Boot Problems
           </h3>
@@ -1686,10 +1637,9 @@ sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
           <div class="codehilite">
             <pre><span></span><code>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
 mokutil<span class="w"> </span>--sb-state
-journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">&#39;nvidia|nouveau|secure&#39;</span>
+journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ei<span class="w"> </span><span class="s1">'nvidia|nouveau|secure'</span>
 </code></pre>
           </div>
-
           <h4
             id="problem-black-screen-or-unstable-console-after-gpu-driver-changes"
           >
@@ -1716,7 +1666,6 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
             <pre><span></span><code>systemctl<span class="w"> </span>status<span class="w"> </span>fstrim.timer
 </code></pre>
           </div>
-
           <ul>
             <li>If it is disabled:</li>
           </ul>
@@ -1724,7 +1673,6 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
             <pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>fstrim.timer
 </code></pre>
           </div>
-
           <ul>
             <li>
               Use SSD space intentionally; 128 GB disappears quickly once logs,
@@ -1751,10 +1699,9 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
             <pre><span></span><code>free<span class="w"> </span>-h
 swapon<span class="w"> </span>--show
 sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
-grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;^SystemMaxUse&quot;</span><span class="w"> </span>/etc/systemd/journald.conf<span class="w"> </span>/etc/systemd/journald.conf.d<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">"^SystemMaxUse"</span><span class="w"> </span>/etc/systemd/journald.conf<span class="w"> </span>/etc/systemd/journald.conf.d<span class="w"> </span><span class="m">2</span>&gt;/dev/null
 </code></pre>
           </div>
-
           <p>
             If local logs are consuming too much SSD space, tune
             <code>journald</code> retention.
@@ -1779,7 +1726,6 @@ grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;^Sy
 iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;target-host&gt;
 </code></pre>
           </div>
-
           <hr />
           <h2 id="references-and-further-reading">
             References and Further Reading
@@ -1827,32 +1773,11 @@ iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;target-host&gt;
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

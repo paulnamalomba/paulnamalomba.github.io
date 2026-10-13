@@ -1,15 +1,17 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Last-Minute Revision Sheet</title>
-    <link rel="stylesheet" href="../style.css?v=2.3" />
+    <link href="../style.css?v=2.3" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -24,8 +26,15 @@
           <a href="../level3-competency.html">Competency</a>
           <a href="../level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Assessments &#9660;</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Assessments ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="../assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -38,11 +47,34 @@
               <a href="../assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
                 <a
-                  href="../assessment-data-engineering.html"
                   class="has-submenu"
+                  href="../assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="../assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -60,10 +92,16 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Targeted Prep &#9660;
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Targeted Prep ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="index.html">Prep Hub</a>
               <a href="mock-interview.html">30-Min Mock Interview</a>
               <a href="answer-templates.html">Answer Templates</a>
@@ -74,21 +112,18 @@
           <a href="../level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="../hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="../hub.html">Hub</a> <span>›</span>
         <a href="index.html">Targeted Preparation</a>
-        <span>&rsaquo;</span> Revision Sheet
+        <span>›</span> Revision Sheet
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">Last-Minute Revision Sheet</h1>
         <p class="fade-in fade-in-d1">
           Use this for the final 10-15 minutes before the assessment. Everything
           here is high-signal and tightly aligned to what Dr. Nnene is most
           likely to probe.
         </p>
-
         <div class="section-card fade-in fade-in-d2">
           <h2 style="margin-top: 0">Key Distinctions</h2>
           <ul>
@@ -123,7 +158,6 @@
             </li>
           </ul>
         </div>
-
         <div class="section-card fade-in fade-in-d3">
           <h2 style="margin-top: 0">What to emphasize</h2>
           <ul>
@@ -138,7 +172,6 @@
             <li>Stakeholder trade-offs are part of the technical problem.</li>
           </ul>
         </div>
-
         <div class="section-card fade-in fade-in-d4">
           <h2 style="margin-top: 0">Likely technical vocabulary</h2>
           <p>
@@ -149,7 +182,6 @@
             equity, validation, uncertainty.
           </p>
         </div>
-
         <div class="section-card fade-in fade-in-d4">
           <h2 style="margin-top: 0">Likely question angles</h2>
           <ul>
@@ -164,7 +196,6 @@
             </li>
           </ul>
         </div>
-
         <div class="section-card fade-in fade-in-d5">
           <h2 style="margin-top: 0">Your fast answer checklist</h2>
           <ul>
@@ -175,7 +206,6 @@
             <li>End with the decision or outcome that matters.</li>
           </ul>
         </div>
-
         <div class="callout tip fade-in fade-in-d5" style="margin-top: 1rem">
           <div class="callout-title">Final mindset</div>
           <p style="margin: 0">
@@ -185,16 +215,14 @@
             trade-offs in a transport-facing environment.
           </p>
         </div>
-
         <div class="page-footer" style="margin-top: 2rem">
           <p>
-            Prepared for Paul Namalomba &middot; Targeted Dr. Nnene Prep
-            &middot; Revision Sheet
+            Prepared for Paul Namalomba · Targeted Dr. Nnene Prep · Revision
+            Sheet
           </p>
         </div>
       </main>
     </div>
-
     <script>
       (function () {
         const H =

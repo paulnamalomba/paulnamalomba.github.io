@@ -4,6 +4,8 @@ const cards = [...document.querySelectorAll("[data-guide-card]")];
 const count = document.querySelector("[data-result-count]");
 const empty = document.querySelector("[data-empty-state]");
 let activeCategory = "all";
+if (search && filters.length)
+  document.documentElement.classList.add("has-guide-filters");
 
 const applyFilters = () => {
   const query = (search?.value || "").trim().toLowerCase();
@@ -16,16 +18,26 @@ const applyFilters = () => {
     card.hidden = !(matchesCategory && matchesQuery);
     if (!card.hidden) visible += 1;
   });
-  if (count) count.textContent = `${visible} guide${visible === 1 ? "" : "s"}`;
+  const resultText = `${visible} guide${visible === 1 ? "" : "s"}`;
+  if (count && count.textContent !== resultText) count.textContent = resultText;
   empty?.classList.toggle("visible", visible === 0);
+  if (empty) empty.hidden = visible !== 0;
 };
 
 search?.addEventListener("input", applyFilters);
-filters.forEach((button) =>
+filters.forEach((button) => {
+  button.type = "button";
+  button.setAttribute(
+    "aria-pressed",
+    String(button.dataset.guideFilter === activeCategory),
+  );
   button.addEventListener("click", () => {
     activeCategory = button.dataset.guideFilter;
-    filters.forEach((item) => item.classList.toggle("active", item === button));
+    filters.forEach((item) => {
+      item.classList.toggle("active", item === button);
+      item.setAttribute("aria-pressed", String(item === button));
+    });
     applyFilters();
-  }),
-);
+  });
+});
 applyFilters();

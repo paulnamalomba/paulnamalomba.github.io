@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
-    <title>SSH PowerUser Guide (PowerShell & Bash) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <meta content="#f2f0e9" name="theme-color" />
+    <title>SSH PowerUser Guide (PowerShell &amp; Bash) - Paul Namalomba</title>
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -808,7 +811,7 @@
           <p>Use PowerShell as Administrator.</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Inspect capability state</span>
-<span class="nb">Get-WindowsCapability</span> <span class="n">-Online</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="n">Name</span> <span class="o">-like</span> <span class="s1">&#39;OpenSSH*&#39;</span>
+<span class="nb">Get-WindowsCapability</span> <span class="n">-Online</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="n">Name</span> <span class="o">-like</span> <span class="s1">'OpenSSH*'</span>
 
 <span class="c"># Install client and server if needed</span>
 <span class="nb">Add-WindowsCapability</span> <span class="n">-Online</span> <span class="n">-Name</span> <span class="n">OpenSSH</span><span class="p">.</span><span class="n">Client</span><span class="p">~~~~</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">0</span>
@@ -827,14 +830,13 @@
 <span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="n">22</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
 </code></pre>
           </div>
-
           <p>
             If the inbound firewall rule does not exist or you want to create it
             explicitly:
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">New-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">&#39;OpenSSH-Server-In-TCP&#39;</span> <span class="p">`</span>
-  <span class="n">-DisplayName</span> <span class="s1">&#39;OpenSSH Server (TCP 22)&#39;</span> <span class="p">`</span>
+            <pre><span></span><code><span class="nb">New-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">'OpenSSH-Server-In-TCP'</span> <span class="p">`</span>
+  <span class="n">-DisplayName</span> <span class="s1">'OpenSSH Server (TCP 22)'</span> <span class="p">`</span>
   <span class="n">-Enabled</span> <span class="n">True</span> <span class="p">`</span>
   <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="p">`</span>
   <span class="n">-Protocol</span> <span class="n">TCP</span> <span class="p">`</span>
@@ -842,7 +844,6 @@
   <span class="n">-LocalPort</span> <span class="n">22</span>
 </code></pre>
           </div>
-
           <h3 id="example-2-install-openssh-on-linux">
             Example 2: Install OpenSSH on Linux
           </h3>
@@ -854,10 +855,9 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>ssh
 ssh<span class="w"> </span>-V
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>ssh<span class="w"> </span>--no-pager
-ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 </code></pre>
           </div>
-
           <p>RHEL, Rocky, AlmaLinux, Fedora style:</p>
           <div class="codehilite">
             <pre><span></span><code>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>openssh-clients<span class="w"> </span>openssh-server
@@ -865,50 +865,46 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
 sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>sshd
 ssh<span class="w"> </span>-V
 sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>sshd<span class="w"> </span>--no-pager
-ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 </code></pre>
           </div>
-
           <h3 id="example-3-generate-a-key-and-load-it-into-ssh-agent">
             Example 3: Generate a Key and Load It into <code>ssh-agent</code>
           </h3>
           <p>PowerShell:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Generate a modern keypair</span>
-<span class="n">ssh-keygen</span> <span class="n">-t</span> <span class="n">ed25519</span> <span class="n">-a</span> <span class="n">100</span> <span class="o">-f</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span> <span class="n">-C</span> <span class="s2">&quot;work-admin&quot;</span>
+<span class="n">ssh-keygen</span> <span class="n">-t</span> <span class="n">ed25519</span> <span class="n">-a</span> <span class="n">100</span> <span class="o">-f</span> <span class="s2">"$HOME\.ssh\id_ed25519_work"</span> <span class="n">-C</span> <span class="s2">"work-admin"</span>
 
 <span class="c"># Ensure the agent is running</span>
 <span class="nb">Set-Service</span> <span class="n">-Name</span> <span class="n">ssh-agent</span> <span class="n">-StartupType</span> <span class="n">Automatic</span>
 <span class="nb">Start-Service</span> <span class="n">ssh-agent</span>
 
 <span class="c"># Add the key for this login session</span>
-<span class="n">ssh-add</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span>
+<span class="n">ssh-add</span> <span class="s2">"$HOME\.ssh\id_ed25519_work"</span>
 
 <span class="c"># List loaded keys</span>
 <span class="n">ssh-add</span> <span class="n">-l</span>
 </code></pre>
           </div>
-
           <p>Bash:</p>
           <div class="codehilite">
-            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_work<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;work-admin&quot;</span>
+            <pre><span></span><code>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-a<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f<span class="w"> </span>~/.ssh/id_ed25519_work<span class="w"> </span>-C<span class="w"> </span><span class="s2">"work-admin"</span>
 
-<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">eval</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-s<span class="k">)</span><span class="s2">"</span>
 ssh-add<span class="w"> </span>~/.ssh/id_ed25519_work
 ssh-add<span class="w"> </span>-l
 </code></pre>
           </div>
-
           <p>
             If Windows key permissions become a problem, repair them with
             <code>icacls</code>:
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">icacls</span> <span class="s2">&quot;$HOME\.ssh&quot;</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;$env:USERNAME:(OI)(CI)F&quot;</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;SYSTEM:(OI)(CI)F&quot;</span>
-<span class="n">icacls</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work&quot;</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;$env:USERNAME:R&quot;</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">&quot;SYSTEM:R&quot;</span>
+            <pre><span></span><code><span class="n">icacls</span> <span class="s2">"$HOME\.ssh"</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">"$env:USERNAME:(OI)(CI)F"</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">"SYSTEM:(OI)(CI)F"</span>
+<span class="n">icacls</span> <span class="s2">"$HOME\.ssh\id_ed25519_work"</span> <span class="p">/</span><span class="n">inheritance</span><span class="p">:</span><span class="nb">r </span><span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">"$env:USERNAME:R"</span> <span class="p">/</span><span class="n">grant</span><span class="p">:</span><span class="nb">r </span><span class="s2">"SYSTEM:R"</span>
 </code></pre>
           </div>
-
           <h3 id="example-4-install-your-public-key-on-a-remote-linux-host">
             Example 4: Install Your Public Key on a Remote Linux Host
           </h3>
@@ -918,37 +914,33 @@ ssh-add<span class="w"> </span>-l
 ssh<span class="w"> </span>admin@192.168.1.50
 </code></pre>
           </div>
-
           <p>
             PowerShell equivalent using <code>scp</code> plus a remote append:
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">scp</span> <span class="s2">&quot;$HOME\.ssh\id_ed25519_work.pub&quot;</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span><span class="p">:/</span><span class="n">tmp</span><span class="p">/</span><span class="n">id_ed25519_work</span><span class="p">.</span><span class="n">pub</span>
+            <pre><span></span><code><span class="n">scp</span> <span class="s2">"$HOME\.ssh\id_ed25519_work.pub"</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span><span class="p">:/</span><span class="n">tmp</span><span class="p">/</span><span class="n">id_ed25519_work</span><span class="p">.</span><span class="n">pub</span>
 
-<span class="n">ssh</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span> <span class="s2">&quot;umask 077; mkdir -p ~/.ssh; cat /tmp/id_ed25519_work.pub &gt;&gt; ~/.ssh/authorized_keys; rm -f /tmp/id_ed25519_work.pub&quot;</span>
+<span class="n">ssh</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span> <span class="s2">"umask 077; mkdir -p ~/.ssh; cat /tmp/id_ed25519_work.pub &gt;&gt; ~/.ssh/authorized_keys; rm -f /tmp/id_ed25519_work.pub"</span>
 
 <span class="n">ssh</span> <span class="n">admin</span><span class="nv">@192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span>
 </code></pre>
           </div>
-
           <p>Manual Linux-side permission repair if login still fails:</p>
           <div class="codehilite">
             <pre><span></span><code>chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~/.ssh
 chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/authorized_keys
-chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span>:<span class="s2">&quot;</span><span class="nv">$USER</span><span class="s2">&quot;</span><span class="w"> </span>~/.ssh
+chown<span class="w"> </span>-R<span class="w"> </span><span class="s2">"</span><span class="nv">$USER</span><span class="s2">"</span>:<span class="s2">"</span><span class="nv">$USER</span><span class="s2">"</span><span class="w"> </span>~/.ssh
 </code></pre>
           </div>
-
           <h3 id="example-5-build-a-clean-ssh-config">
             Example 5: Build a Clean SSH Config
           </h3>
           <p>PowerShell path:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">&quot;$HOME\.ssh&quot;</span> <span class="p">|</span> <span class="nb">Out-Null</span>
-<span class="n">notepad</span> <span class="s2">&quot;$HOME\.ssh\config&quot;</span>
+            <pre><span></span><code><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="s2">"$HOME\.ssh"</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="n">notepad</span> <span class="s2">"$HOME\.ssh\config"</span>
 </code></pre>
           </div>
-
           <p>Bash path:</p>
           <div class="codehilite">
             <pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.ssh
@@ -957,7 +949,6 @@ chmod<span class="w"> </span><span class="m">700</span><span class="w"> </span>~
 chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.ssh/config
 </code></pre>
           </div>
-
           <p>Shared config example:</p>
           <div class="codehilite">
             <pre><span></span><code>Host bastion
@@ -985,7 +976,6 @@ Host git-work
     IdentitiesOnly yes
 </code></pre>
           </div>
-
           <p>Then use it cleanly:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh<span class="w"> </span>app-prod
@@ -994,34 +984,29 @@ sftp<span class="w"> </span>app-prod
 ssh<span class="w"> </span>-T<span class="w"> </span>git-work
 </code></pre>
           </div>
-
           <h3 id="example-6-upload-and-download-files">
             Example 6: Upload and Download Files
           </h3>
           <p>PowerShell upload to Linux host:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">scp</span> <span class="n">-r</span> <span class="s2">&quot;.\publish&quot;</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">srv</span><span class="p">/</span><span class="n">myapp</span><span class="p">/</span>
+            <pre><span></span><code><span class="n">scp</span> <span class="n">-r</span> <span class="s2">".\publish"</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">srv</span><span class="p">/</span><span class="n">myapp</span><span class="p">/</span>
 </code></pre>
           </div>
-
           <p>PowerShell download from Linux host:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">scp</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">var</span><span class="p">/</span><span class="n">log</span><span class="p">/</span><span class="n">nginx</span><span class="p">/</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="s2">&quot;$HOME\Downloads\&quot;</span>
+            <pre><span></span><code><span class="n">scp</span> <span class="n">app-prod</span><span class="p">:/</span><span class="n">var</span><span class="p">/</span><span class="n">log</span><span class="p">/</span><span class="n">nginx</span><span class="p">/</span><span class="n">access</span><span class="p">.</span><span class="n">log</span> <span class="s2">"$HOME\Downloads\"</span>
 </code></pre>
           </div>
-
           <p>Bash upload:</p>
           <div class="codehilite">
             <pre><span></span><code>scp<span class="w"> </span>-r<span class="w"> </span>./publish<span class="w"> </span>app-prod:/srv/myapp/
 </code></pre>
           </div>
-
           <p>Bash download:</p>
           <div class="codehilite">
             <pre><span></span><code>scp<span class="w"> </span>app-prod:/var/log/nginx/access.log<span class="w"> </span>./
 </code></pre>
           </div>
-
           <p>Interactive <code>sftp</code> session:</p>
           <div class="codehilite">
             <pre><span></span><code>sftp<span class="w"> </span>app-prod
@@ -1035,13 +1020,11 @@ sftp&gt;<span class="w"> </span>mput<span class="w"> </span>./*.csv
 sftp&gt;<span class="w"> </span>bye
 </code></pre>
           </div>
-
           <p>Custom SSH port example:</p>
           <div class="codehilite">
             <pre><span></span><code>scp<span class="w"> </span>-P<span class="w"> </span><span class="m">2222</span><span class="w"> </span>./backup.tar.gz<span class="w"> </span>admin@example.com:/srv/backups/
 </code></pre>
           </div>
-
           <h3 id="example-7-use-a-jump-host-and-port-forwarding">
             Example 7: Use a Jump Host and Port Forwarding
           </h3>
@@ -1050,13 +1033,11 @@ sftp&gt;<span class="w"> </span>bye
             <pre><span></span><code>ssh<span class="w"> </span>-J<span class="w"> </span>ops@203.0.113.10<span class="w"> </span>ubuntu@10.10.20.15
 </code></pre>
           </div>
-
           <p>Local forward to a remote PostgreSQL instance:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh<span class="w"> </span>-L<span class="w"> </span><span class="m">15432</span>:127.0.0.1:5432<span class="w"> </span>app-prod
 </code></pre>
           </div>
-
           <p>
             Now your local tools can connect to
             <code>127.0.0.1:15432</code> while the database remains private.
@@ -1066,13 +1047,11 @@ sftp&gt;<span class="w"> </span>bye
             <pre><span></span><code>ssh<span class="w"> </span>-R<span class="w"> </span><span class="m">18080</span>:127.0.0.1:8080<span class="w"> </span>bastion
 </code></pre>
           </div>
-
           <p>Dynamic SOCKS proxy:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh<span class="w"> </span>-D<span class="w"> </span><span class="m">1080</span><span class="w"> </span>bastion
 </code></pre>
           </div>
-
           <p>Unix-like Bash client multiplexing example:</p>
           <div class="codehilite">
             <pre><span></span><code>Host *
@@ -1081,7 +1060,6 @@ sftp&gt;<span class="w"> </span>bye
     ControlPersist 10m
 </code></pre>
           </div>
-
           <p>
             That setting can drastically reduce repeated connection startup cost
             on Linux or WSL clients when you perform many sequential
@@ -1167,20 +1145,18 @@ sftp&gt;<span class="w"> </span>bye
             <pre><span></span><code><span class="nb">Test-NetConnection</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">50</span> <span class="n">-Port</span> <span class="n">22</span>
 <span class="n">ssh</span> <span class="n">-vvv</span> <span class="n">app-prod</span>
 <span class="nb">Get-Service</span> <span class="n">sshd</span><span class="p">,</span> <span class="n">ssh-agent</span>
-<span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s1">&#39;OpenSSH/Operational&#39;</span> <span class="n">-MaxEvents</span> <span class="n">20</span>
+<span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s1">'OpenSSH/Operational'</span> <span class="n">-MaxEvents</span> <span class="n">20</span>
 </code></pre>
           </div>
-
           <p>Useful Linux diagnostics:</p>
           <div class="codehilite">
             <pre><span></span><code>ssh<span class="w"> </span>-vvv<span class="w"> </span>app-prod
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>ssh<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>sshd<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span>--no-pager
 sudo<span class="w"> </span>sshd<span class="w"> </span>-t
-ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;:22&#39;</span>
+ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':22'</span>
 </code></pre>
           </div>
-
           <h2 id="performance-and-tuning">Performance and Tuning</h2>
           <ul>
             <li>
@@ -1219,7 +1195,6 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
     ServerAliveInterval 30
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -1265,32 +1240,11 @@ ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

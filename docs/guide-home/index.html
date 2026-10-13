@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
-    <title>Guide & Scripts - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <meta content="#f2f0e9" name="theme-color" />
+    <title>Guide &amp; Scripts - Paul Namalomba</title>
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="/">Portfolio Home</a>
@@ -121,30 +124,30 @@
               <a href="#power-user-guides">Power User Guides</a>
               <ul>
                 <li>
-                  <a href="#enterprise-authentication--identity"
+                  <a href="#enterprise-authentication-identity"
                     >Enterprise Authentication \&amp; Identity</a
                   >
                 </li>
                 <li>
-                  <a href="#system-architecture--engineering"
+                  <a href="#system-architecture-engineering"
                     >System Architecture \&amp; Engineering</a
                   >
                 </li>
                 <li>
-                  <a href="#programming-languages-data-structures--identity"
+                  <a href="#programming-languages-data-structures-identity"
                     >Programming LAnguages, Data Structures \&amp; Identity</a
                   >
                 </li>
                 <li><a href="#django-development">Django Development</a></li>
                 <li><a href="#net-development">.NET Development</a></li>
                 <li>
-                  <a href="#containerization--devops"
+                  <a href="#containerization-devops"
                     >Containerization \&amp; DevOps</a
                   >
                 </li>
                 <li><a href="#databases">Databases</a></li>
                 <li>
-                  <a href="#security--networking">Security \&amp; Networking</a>
+                  <a href="#security-networking">Security \&amp; Networking</a>
                 </li>
                 <li><a href="#development-tools">Development Tools</a></li>
               </ul>
@@ -277,7 +280,6 @@
 <span class="err">└──</span><span class="w"> </span><span class="n">README</span><span class="o">.</span><span class="n">md</span><span class="w">               </span><span class="c1"># This file</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="power-user-guides">Power User Guides</h2>
           <h3 id="enterprise-authentication-identity">
@@ -1092,7 +1094,6 @@
 <span class="nb">cd </span><span class="n">system-management_scripts</span>
 </code></pre>
           </div>
-
           <ul>
             <li><strong>Step 2. Set execution policy (if needed):</strong></li>
           </ul>
@@ -1100,7 +1101,6 @@
             <pre><span></span><code><span class="nb">Set-ExecutionPolicy</span> <span class="n">-ExecutionPolicy</span> <span class="n">RemoteSigned</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong
@@ -1116,7 +1116,6 @@
 <span class="c"># Or add to your PowerShell profile for persistent availability</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Step 4. Add to PowerShell Profile (Optional):</strong>
@@ -1127,10 +1126,9 @@
 <span class="n">notepad</span> <span class="nv">$PROFILE</span>
 
 <span class="c"># Add this line to source scripts automatically</span>
-<span class="nb">Get-ChildItem</span> <span class="s2">&quot;C:\Path\To\system-management_scripts\windows\*.ps1&quot;</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="p">.</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="p">}</span>
+<span class="nb">Get-ChildItem</span> <span class="s2">"C:\Path\To\system-management_scripts\windows\*.ps1"</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="p">.</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span> <span class="p">}</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="usage-examples">Usage Examples</h2>
           <h3 id="example-1-quick-directory-navigation">
@@ -1141,13 +1139,12 @@
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">directory-navigation</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Navigate to work directory</span>
-<span class="n">ChDir-Work</span> <span class="n">-workPath</span> <span class="s2">&quot;C:\Projects&quot;</span>
+<span class="n">ChDir-Work</span> <span class="n">-workPath</span> <span class="s2">"C:\Projects"</span>
 
 <span class="c"># Navigate to OneDrive</span>
 <span class="n">ChDir-OneDrive</span>
 </code></pre>
           </div>
-
           <h3 id="example-2-github-workflow-automation">
             Example 2: GitHub Workflow Automation
           </h3>
@@ -1157,26 +1154,24 @@
 
 <span class="c"># Automated commit, tag, and release</span>
 <span class="n">Manage-GitHubAppDev</span> <span class="p">`</span>
-    <span class="n">-appName</span> <span class="s2">&quot;my-project&quot;</span> <span class="p">`</span>
-    <span class="n">-commitTag</span> <span class="s2">&quot;v1.2.0&quot;</span> <span class="p">`</span>
-    <span class="n">-commitMessage</span> <span class="s2">&quot;Added new features and bug fixes&quot;</span> <span class="p">`</span>
-    <span class="n">-method</span> <span class="s2">&quot;update&quot;</span>
+    <span class="n">-appName</span> <span class="s2">"my-project"</span> <span class="p">`</span>
+    <span class="n">-commitTag</span> <span class="s2">"v1.2.0"</span> <span class="p">`</span>
+    <span class="n">-commitMessage</span> <span class="s2">"Added new features and bug fixes"</span> <span class="p">`</span>
+    <span class="n">-method</span> <span class="s2">"update"</span>
 </code></pre>
           </div>
-
           <h3 id="example-3-file-operations">Example 3: File Operations</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Load file operations</span>
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">file-operations</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Move with overwrite</span>
-<span class="n">MoveItem-Overwrite</span> <span class="n">-Src</span> <span class="s2">&quot;C:\Source\File.txt&quot;</span> <span class="n">-Dest</span> <span class="s2">&quot;C:\Destination\File.txt&quot;</span>
+<span class="n">MoveItem-Overwrite</span> <span class="n">-Src</span> <span class="s2">"C:\Source\File.txt"</span> <span class="n">-Dest</span> <span class="s2">"C:\Destination\File.txt"</span>
 
 <span class="c"># Find and remove empty directories</span>
-<span class="nb">Remove-EmptyDirectories</span> <span class="n">-Path</span> <span class="s2">&quot;C:\Projects&quot;</span> <span class="n">-Recurse</span>
+<span class="nb">Remove-EmptyDirectories</span> <span class="n">-Path</span> <span class="s2">"C:\Projects"</span> <span class="n">-Recurse</span>
 </code></pre>
           </div>
-
           <h3 id="example-4-python-environment-setup">
             Example 4: Python Environment Setup
           </h3>
@@ -1185,16 +1180,15 @@
 <span class="p">.</span> <span class="p">.\</span><span class="n">windows</span><span class="p">\</span><span class="n">python-environment</span><span class="p">.</span><span class="n">ps1</span>
 
 <span class="c"># Create new virtual environment</span>
-<span class="nb">New-PythonVenv</span> <span class="n">-Path</span> <span class="s2">&quot;.\venv&quot;</span> <span class="n">-PythonVersion</span> <span class="s2">&quot;3.11&quot;</span>
+<span class="nb">New-PythonVenv</span> <span class="n">-Path</span> <span class="s2">".\venv"</span> <span class="n">-PythonVersion</span> <span class="s2">"3.11"</span>
 
 <span class="c"># Activate environment</span>
-<span class="n">Activate-PythonVenv</span> <span class="n">-Path</span> <span class="s2">&quot;.\venv&quot;</span>
+<span class="n">Activate-PythonVenv</span> <span class="n">-Path</span> <span class="s2">".\venv"</span>
 
 <span class="c"># Install packages from requirements.txt</span>
-<span class="nb">Install-PythonPackages</span> <span class="n">-RequirementsFile</span> <span class="s2">&quot;.\requirements.txt&quot;</span>
+<span class="nb">Install-PythonPackages</span> <span class="n">-RequirementsFile</span> <span class="s2">".\requirements.txt"</span>
 </code></pre>
           </div>
-
           <h3 id="example-5-system-analysis">Example 5: System Analysis</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Load utility functions</span>
@@ -1202,17 +1196,16 @@
 
 <span class="c"># Check if running as administrator</span>
 <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Administrator</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Running with admin privileges&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Running with admin privileges"</span>
 <span class="p">}</span>
 
 <span class="c"># Get system information</span>
 <span class="nb">Get-SystemInfo</span>
 
 <span class="c"># List installed software</span>
-<span class="nb">Get-InstalledSoftware</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="s2">&quot;*Visual Studio*&quot;</span> <span class="p">}</span>
+<span class="nb">Get-InstalledSoftware</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span> <span class="o">-like</span> <span class="s2">"*Visual Studio*"</span> <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="example-6-using-technical-guides">
             Example 6: Using Technical Guides
           </h3>
@@ -1230,7 +1223,6 @@
 <span class="n">bat</span> <span class="p">.\</span><span class="n">POSTGRESQL_16_POWERSHELL_POWERUSER_GUIDE</span><span class="p">.</span><span class="nb">md</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="contributing">Contributing</h2>
           <p>Contributions are welcome! Please follow these guidelines:</p>
@@ -1270,7 +1262,11 @@
           <h2 id="license">License</h2>
           <p>
             This project is licensed under the MIT License - see the
-            <a href="LICENSE">LICENSE</a> file for details.
+            <a
+              href="https://github.com/paulnamalomba/system-management_scripts#license"
+              >LICENSE</a
+            >
+            file for details.
           </p>
           <hr />
           <h2 id="acknowledgments">Acknowledgments</h2>
@@ -1319,11 +1315,10 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
     <script>

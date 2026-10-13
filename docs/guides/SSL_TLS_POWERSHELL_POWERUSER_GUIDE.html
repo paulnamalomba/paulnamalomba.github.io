@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>SSL/TLS PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -248,7 +251,6 @@
 <span class="na">IP.1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">192.168.1.100</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use 4096-bit RSA keys or 256-bit
             ECDSA keys minimum - Set certificate validity to 397 days maximum
@@ -292,13 +294,12 @@
           <p><strong>Windows Registry Hardening</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Disable TLS 1.0 and 1.1</span>
-<span class="nb">New-Item</span> <span class="s1">&#39;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&#39;</span> <span class="n">-Force</span>
-<span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s1">&#39;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server&#39;</span> <span class="n">-Name</span> <span class="s1">&#39;Enabled&#39;</span> <span class="n">-Value</span> <span class="n">0</span> <span class="n">-PropertyType</span> <span class="s1">&#39;DWord&#39;</span>
-<span class="nb">New-Item</span> <span class="s1">&#39;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server&#39;</span> <span class="n">-Force</span>
-<span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s1">&#39;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server&#39;</span> <span class="n">-Name</span> <span class="s1">&#39;Enabled&#39;</span> <span class="n">-Value</span> <span class="n">0</span> <span class="n">-PropertyType</span> <span class="s1">&#39;DWord&#39;</span>
+<span class="nb">New-Item</span> <span class="s1">'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server'</span> <span class="n">-Force</span>
+<span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s1">'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server'</span> <span class="n">-Name</span> <span class="s1">'Enabled'</span> <span class="n">-Value</span> <span class="n">0</span> <span class="n">-PropertyType</span> <span class="s1">'DWord'</span>
+<span class="nb">New-Item</span> <span class="s1">'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server'</span> <span class="n">-Force</span>
+<span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="s1">'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server'</span> <span class="n">-Name</span> <span class="s1">'Enabled'</span> <span class="n">-Value</span> <span class="n">0</span> <span class="n">-PropertyType</span> <span class="s1">'DWord'</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="generate-self-signed-certificate-with-san">
             Generate Self-Signed Certificate with SAN
@@ -309,7 +310,7 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Create configuration file</span>
-<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$config</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">[req]</span>
 <span class="sh">default_bits = 4096</span>
 <span class="sh">prompt = no</span>
@@ -335,18 +336,17 @@
 <span class="sh">DNS.2 = *.localhost</span>
 <span class="sh">IP.1 = 127.0.0.1</span>
 <span class="sh">IP.2 = ::1</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;openssl.cnf&quot;</span> <span class="n">-Value</span> <span class="nv">$config</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"openssl.cnf"</span> <span class="n">-Value</span> <span class="nv">$config</span>
 
 <span class="c"># Generate certificate</span>
 <span class="n">openssl</span> <span class="n">req</span> <span class="n">-x509</span> <span class="n">-newkey</span> <span class="n">rsa</span><span class="p">:</span><span class="n">4096</span> <span class="n">-keyout</span> <span class="n">private</span><span class="p">.</span><span class="n">key</span> <span class="n">-out</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-days</span> <span class="n">365</span> <span class="n">-nodes</span> <span class="n">-config</span> <span class="n">openssl</span><span class="p">.</span><span class="n">cnf</span>
 
 <span class="c"># Verify certificate</span>
-<span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-text</span> <span class="n">-noout</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">&quot;Subject Alternative Name&quot;</span> <span class="n">-Context</span> <span class="n">0</span><span class="p">,</span><span class="n">3</span>
+<span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-text</span> <span class="n">-noout</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">"Subject Alternative Name"</span> <span class="n">-Context</span> <span class="n">0</span><span class="p">,</span><span class="n">3</span>
 </code></pre>
           </div>
-
           <h3 id="create-certificate-signing-request-csr-for-production">
             Create Certificate Signing Request (CSR) for Production
           </h3>
@@ -359,7 +359,7 @@
 <span class="n">openssl</span> <span class="n">genrsa</span> <span class="n">-out</span> <span class="n">production</span><span class="p">.</span><span class="n">key</span> <span class="n">4096</span>
 
 <span class="c"># Create CSR config</span>
-<span class="nv">$csrConfig</span> <span class="p">=</span> <span class="sh">@&quot;</span>
+<span class="nv">$csrConfig</span> <span class="p">=</span> <span class="sh">@"</span>
 <span class="sh">[req]</span>
 <span class="sh">default_bits = 4096</span>
 <span class="sh">prompt = no</span>
@@ -383,18 +383,17 @@
 <span class="sh">DNS.2 = www.example.com</span>
 <span class="sh">DNS.3 = api.example.com</span>
 <span class="sh">DNS.4 = *.example.com</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
-<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;csr.cnf&quot;</span> <span class="n">-Value</span> <span class="nv">$csrConfig</span>
+<span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"csr.cnf"</span> <span class="n">-Value</span> <span class="nv">$csrConfig</span>
 
 <span class="c"># Generate CSR</span>
 <span class="n">openssl</span> <span class="n">req</span> <span class="n">-new</span> <span class="n">-key</span> <span class="n">production</span><span class="p">.</span><span class="n">key</span> <span class="n">-out</span> <span class="n">production</span><span class="p">.</span><span class="n">csr</span> <span class="n">-config</span> <span class="n">csr</span><span class="p">.</span><span class="n">cnf</span>
 
 <span class="c"># Verify CSR content</span>
-<span class="n">openssl</span> <span class="n">req</span> <span class="n">-in</span> <span class="n">production</span><span class="p">.</span><span class="n">csr</span> <span class="n">-noout</span> <span class="n">-text</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">&quot;Subject:|DNS:&quot;</span>
+<span class="n">openssl</span> <span class="n">req</span> <span class="n">-in</span> <span class="n">production</span><span class="p">.</span><span class="n">csr</span> <span class="n">-noout</span> <span class="n">-text</span> <span class="p">|</span> <span class="nb">Select-String</span> <span class="s2">"Subject:|DNS:"</span>
 </code></pre>
           </div>
-
           <h3 id="convert-certificate-formats-and-bundle">
             Convert Certificate Formats and Bundle
           </h3>
@@ -404,7 +403,7 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Convert PEM to PFX with password</span>
-<span class="nv">$password</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">&quot;StrongPassword123!&quot;</span> <span class="n">-Force</span> <span class="n">-AsPlainText</span>
+<span class="nv">$password</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">"StrongPassword123!"</span> <span class="n">-Force</span> <span class="n">-AsPlainText</span>
 <span class="n">openssl</span> <span class="n">pkcs12</span> <span class="n">-export</span> <span class="n">-out</span> <span class="n">certificate</span><span class="p">.</span><span class="n">pfx</span> <span class="n">-inkey</span> <span class="n">private</span><span class="p">.</span><span class="n">key</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-certfile</span> <span class="n">ca-bundle</span><span class="p">.</span><span class="n">crt</span> <span class="n">-password</span> <span class="n">pass</span><span class="p">:</span><span class="n">StrongPassword123</span><span class="p">!</span>
 
 <span class="c"># Convert PFX to PEM</span>
@@ -420,7 +419,6 @@
 <span class="nb">Get-Content</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span><span class="p">,</span> <span class="n">intermediate</span><span class="p">.</span><span class="n">crt</span><span class="p">,</span> <span class="n">root</span><span class="p">.</span><span class="n">crt</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="n">full-chain</span><span class="p">.</span><span class="n">pem</span>
 </code></pre>
           </div>
-
           <h3 id="test-tls-connection-and-cipher-suites">
             Test TLS Connection and Cipher Suites
           </h3>
@@ -437,20 +435,19 @@
 
 <span class="c"># Extract server certificate</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">s_client</span> <span class="n">-connect</span> <span class="n">example</span><span class="p">.</span><span class="n">com</span><span class="p">:</span><span class="n">443</span> <span class="n">-servername</span> <span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">2</span><span class="p">&gt;</span><span class="nv">$null</span> <span class="p">|</span> <span class="n">openssl</span> <span class="n">x509</span>
-<span class="nv">$cert</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">&quot;server-cert.pem&quot;</span>
+<span class="nv">$cert</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="n">-Path</span> <span class="s2">"server-cert.pem"</span>
 
 <span class="c"># Check certificate expiration</span>
 <span class="nv">$expiryDate</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">server-cert</span><span class="p">.</span><span class="n">pem</span> <span class="n">-noout</span> <span class="n">-enddate</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;Certificate expires: $expiryDate&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"Certificate expires: $expiryDate"</span>
 
 <span class="c"># List supported cipher suites</span>
-<span class="n">openssl</span> <span class="n">ciphers</span> <span class="n">-v</span> <span class="s1">&#39;HIGH:!aNULL:!MD5:!3DES&#39;</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="nv">$_</span> <span class="p">}</span>
+<span class="n">openssl</span> <span class="n">ciphers</span> <span class="n">-v</span> <span class="s1">'HIGH:!aNULL:!MD5:!3DES'</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="nv">$_</span> <span class="p">}</span>
 
 <span class="c"># Test specific cipher suite</span>
 <span class="n">openssl</span> <span class="n">s_client</span> <span class="n">-connect</span> <span class="n">example</span><span class="p">.</span><span class="n">com</span><span class="p">:</span><span class="n">443</span> <span class="n">-cipher</span> <span class="n">ECDHE-RSA-AES256-GCM-SHA384</span> <span class="n">-servername</span> <span class="n">example</span><span class="p">.</span><span class="n">com</span>
 </code></pre>
           </div>
-
           <h3 id="verify-certificate-chain-and-revocation">
             Verify Certificate Chain and Revocation
           </h3>
@@ -464,7 +461,7 @@
 
 <span class="c"># Extract OCSP responder URL</span>
 <span class="nv">$ocspUrl</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-noout</span> <span class="n">-ocsp_uri</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;OCSP Responder: $ocspUrl&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"OCSP Responder: $ocspUrl"</span>
 
 <span class="c"># Check OCSP status</span>
 <span class="n">openssl</span> <span class="n">ocsp</span> <span class="n">-issuer</span> <span class="n">ca-bundle</span><span class="p">.</span><span class="n">pem</span> <span class="n">-cert</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-url</span> <span class="nv">$ocspUrl</span> <span class="n">-CAfile</span> <span class="n">ca-bundle</span><span class="p">.</span><span class="n">pem</span>
@@ -472,15 +469,14 @@
 <span class="c"># Verify certificate dates</span>
 <span class="nv">$notBefore</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-noout</span> <span class="n">-startdate</span>
 <span class="nv">$notAfter</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-noout</span> <span class="n">-enddate</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;Valid from: $notBefore&quot;</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;Valid until: $notAfter&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"Valid from: $notBefore"</span>
+<span class="nb">Write-Host</span> <span class="s2">"Valid until: $notAfter"</span>
 
 <span class="c"># Check certificate fingerprint (SHA256)</span>
 <span class="nv">$fingerprint</span> <span class="p">=</span> <span class="n">openssl</span> <span class="n">x509</span> <span class="n">-in</span> <span class="n">certificate</span><span class="p">.</span><span class="n">crt</span> <span class="n">-noout</span> <span class="n">-fingerprint</span> <span class="n">-sha256</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;SHA256 Fingerprint: $fingerprint&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"SHA256 Fingerprint: $fingerprint"</span>
 </code></pre>
           </div>
-
           <h3 id="import-certificate-to-windows-certificate-store">
             Import Certificate to Windows Certificate Store
           </h3>
@@ -490,24 +486,23 @@
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Import PFX to Personal store for Current User</span>
-<span class="nv">$pfxPassword</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">&quot;StrongPassword123!&quot;</span> <span class="n">-Force</span> <span class="n">-AsPlainText</span>
-<span class="nb">Import-PfxCertificate</span> <span class="n">-FilePath</span> <span class="s2">&quot;certificate.pfx&quot;</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="n">-Password</span> <span class="nv">$pfxPassword</span>
+<span class="nv">$pfxPassword</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">"StrongPassword123!"</span> <span class="n">-Force</span> <span class="n">-AsPlainText</span>
+<span class="nb">Import-PfxCertificate</span> <span class="n">-FilePath</span> <span class="s2">"certificate.pfx"</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="n">-Password</span> <span class="nv">$pfxPassword</span>
 
 <span class="c"># Import PFX to Local Machine store (requires admin)</span>
-<span class="nb">Import-PfxCertificate</span> <span class="n">-FilePath</span> <span class="s2">&quot;certificate.pfx&quot;</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">My</span> <span class="n">-Password</span> <span class="nv">$pfxPassword</span> <span class="n">-Exportable</span>
+<span class="nb">Import-PfxCertificate</span> <span class="n">-FilePath</span> <span class="s2">"certificate.pfx"</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">My</span> <span class="n">-Password</span> <span class="nv">$pfxPassword</span> <span class="n">-Exportable</span>
 
 <span class="c"># Import CA certificate to Trusted Root</span>
-<span class="nb">Import-Certificate</span> <span class="n">-FilePath</span> <span class="s2">&quot;ca-root.crt&quot;</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">Root</span>
+<span class="nb">Import-Certificate</span> <span class="n">-FilePath</span> <span class="s2">"ca-root.crt"</span> <span class="n">-CertStoreLocation</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">Root</span>
 
 <span class="c"># List certificates in Personal store</span>
 <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Subject</span><span class="p">,</span> <span class="n">Thumbprint</span><span class="p">,</span> <span class="n">NotAfter</span>
 
 <span class="c"># Export certificate from store</span>
-<span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Subject</span> <span class="o">-like</span> <span class="s2">&quot;*example.com*&quot;</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">1</span>
-<span class="nb">Export-Certificate</span> <span class="n">-Cert</span> <span class="nv">$cert</span> <span class="n">-FilePath</span> <span class="s2">&quot;exported-cert.cer&quot;</span>
+<span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Subject</span> <span class="o">-like</span> <span class="s2">"*example.com*"</span> <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">1</span>
+<span class="nb">Export-Certificate</span> <span class="n">-Cert</span> <span class="nv">$cert</span> <span class="n">-FilePath</span> <span class="s2">"exported-cert.cer"</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Certificate Verification Failures</strong>: -
@@ -560,13 +555,12 @@
           <p><strong>Session Resumption</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Enable TLS session tickets in IIS (reduces handshake overhead)</span>
-<span class="nb">Set-ItemProperty</span> <span class="n">-Path</span> <span class="s2">&quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL&quot;</span> <span class="n">-Name</span> <span class="s2">&quot;EnableSessionTicket&quot;</span> <span class="n">-Value</span> <span class="n">1</span>
+<span class="nb">Set-ItemProperty</span> <span class="n">-Path</span> <span class="s2">"HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"</span> <span class="n">-Name</span> <span class="s2">"EnableSessionTicket"</span> <span class="n">-Value</span> <span class="n">1</span>
 
 <span class="c"># Configure session cache timeout (seconds)</span>
-<span class="nb">Set-ItemProperty</span> <span class="n">-Path</span> <span class="s2">&quot;HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL&quot;</span> <span class="n">-Name</span> <span class="s2">&quot;ServerCacheTime&quot;</span> <span class="n">-Value</span> <span class="n">3600</span>
+<span class="nb">Set-ItemProperty</span> <span class="n">-Path</span> <span class="s2">"HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL"</span> <span class="n">-Name</span> <span class="s2">"ServerCacheTime"</span> <span class="n">-Value</span> <span class="n">3600</span>
 </code></pre>
           </div>
-
           <p>
             <strong>OCSP Stapling</strong>: - Reduces client-side latency by
             200-300ms per handshake - Enable in IIS 8.0+: Enabled by default -
@@ -594,7 +588,6 @@
 <span class="nb">Get-ChildItem</span> <span class="n">-Path</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">LocalMachine</span><span class="p">\</span><span class="n">My</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">NotAfter</span> <span class="o">-lt</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(</span><span class="n">30</span><span class="p">)</span> <span class="p">}</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -632,32 +625,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

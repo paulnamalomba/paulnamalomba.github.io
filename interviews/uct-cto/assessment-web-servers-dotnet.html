@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Assessment — Web Servers: ASP.NET, Nginx &amp; Apache</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -20,9 +21,10 @@
         margin: 1rem 0;
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -37,10 +39,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -52,10 +60,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -73,8 +104,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,62 +129,63 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span>
         <a href="assessment-data-engineering.html">Data Engineering</a>
-        <span>&rsaquo;</span>
+        <span>›</span>
         <div class="breadcrumb-dropdown">
-          <button class="breadcrumb-dropdown-btn">
-            ASP.NET, Nginx &amp; Apache &#9660;
+          <button
+            aria-controls="dropdown-panel-4"
+            aria-expanded="false"
+            class="breadcrumb-dropdown-btn dropdown-button"
+            type="button"
+          >
+            ASP.NET, Nginx &amp; Apache ▼
           </button>
-          <div class="breadcrumb-dropdown-content">
+          <div class="breadcrumb-dropdown-content" id="dropdown-panel-4">
             <a href="assessment-de-docker.html">Docker &amp; Containers</a>
             <a href="assessment-de-wsl.html">WSL &amp; Linux CLI</a>
             <a href="assessment-web-servers-python.html">Python Web Servers</a>
-            <a href="assessment-web-servers-dotnet.html" class="current"
+            <a class="current" href="assessment-web-servers-dotnet.html"
               >ASP.NET, Nginx &amp; Apache</a
             >
           </div>
         </div>
       </div>
-
-      <main id="main-content">
-        <h1 class="fade-in">
-          Web Servers &mdash; ASP.NET Core, Nginx &amp; Apache
-        </h1>
+      <main id="main-content" tabindex="-1">
+        <h1 class="fade-in">Web Servers — ASP.NET Core, Nginx &amp; Apache</h1>
         <p class="fade-in fade-in-d1">
           A CTO must be comfortable deploying and configuring web servers beyond
           the Python ecosystem. This module covers
           <strong>ASP.NET Core</strong> (C# web framework),
           <strong>Nginx</strong> (reverse proxy and static server), and
-          <strong>Apache</strong> (traditional web server) &mdash; the trio that
+          <strong>Apache</strong> (traditional web server) — the trio that
           powers most enterprise Linux deployments.
         </p>
-
         <!-- PROGRESS TRACKER -->
         <div
+          aria-label="Preparation progress"
+          data-checklist-storage="web-servers-dotnet-checklist"
           class="checklist-progress fade-in fade-in-d2"
           role="region"
-          aria-label="Preparation progress"
         >
           <div class="checklist-progress-header">
-            <span>Preparation Progress</span>
+            <span id="preparation-progress-label">Preparation Progress</span>
             <span class="progress-count" id="progressCount">0 / 0</span>
           </div>
           <div class="progress-bar-track">
             <div
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow="0"
               class="progress-bar-fill"
               id="progressBar"
-              style="width: 0%"
               role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-labelledby="preparation-progress-label"
+              style="width: 0%"
             ></div>
           </div>
         </div>
-
         <!-- CV GROUNDING -->
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">CV Grounding</div>
@@ -164,39 +203,34 @@
             </li>
             <li>
               <strong>UCT Infrastructure:</strong> University systems often run
-              on Apache (legacy) and Nginx (modern). As CTO, you&rsquo;ll manage
-              both.
+              on Apache (legacy) and Nginx (modern). As CTO, you’ll manage both.
             </li>
           </ul>
         </div>
-
         <!-- NGINX -->
         <div class="section-card fade-in fade-in-d3">
-          <h2 style="margin-top: 0" id="nginx">
-            &#128737;&#65039; Nginx &mdash; Reverse Proxy &amp; Web Server
+          <h2 id="nginx" style="margin-top: 0">
+            🛡️ Nginx — Reverse Proxy &amp; Web Server
           </h2>
           <p>
             Nginx is the most common reverse proxy for Python and .NET
             applications. Know it cold.
           </p>
-
           <div class="checklist-category">
             Installation &amp; Core Configuration
           </div>
-          <ul class="checklist" role="list" aria-label="Nginx setup checklist">
+          <ul aria-label="Nginx setup checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-nginx-install"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-nginx-install">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-nginx-install"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-nginx-install">
                     Drill: Install and configure Nginx in WSL
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Install
@@ -221,18 +255,16 @@ curl -s http://localhost | head -5
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-nginx-reverse"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-nginx-reverse">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-nginx-reverse"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-nginx-reverse">
                     Know: Nginx reverse proxy for Django (Gunicorn)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # /etc/nginx/sites-available/transport_api
@@ -284,27 +316,25 @@ sudo systemctl reload nginx</pre>
                     <strong>Docs:</strong>
                     <a
                       href="https://nginx.org/en/docs/beginners_guide.html"
-                      target="_blank"
                       rel="noopener"
-                      >Nginx Beginner&rsquo;s Guide</a
+                      target="_blank"
+                      >Nginx Beginner’s Guide</a
                     >.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-nginx-aspnet"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-nginx-aspnet">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-nginx-aspnet"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-nginx-aspnet">
                     Know: Nginx reverse proxy for ASP.NET Core (Kestrel)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # /etc/nginx/sites-available/dotnet_api
@@ -334,18 +364,16 @@ server {
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-nginx-ssl"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-nginx-ssl">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-nginx-ssl"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Know: TLS/SSL with Let&rsquo;s Encrypt (Certbot)
-                  </div>
+                  <label class="checklist-label" for="dotnet-nginx-ssl">
+                    Know: TLS/SSL with Let’s Encrypt (Certbot)
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Install Certbot
@@ -370,28 +398,25 @@ sudo certbot renew --dry-run
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">
             Load Balancing &amp; Rate Limiting
           </div>
           <ul
+            aria-label="Nginx advanced checklist"
             class="checklist"
             role="list"
-            aria-label="Nginx advanced checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-nginx-lb"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-nginx-lb">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-nginx-lb"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-nginx-lb">
                     Know: Nginx as a load balancer
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Load balance across multiple Gunicorn/Kestrel instances
@@ -434,32 +459,28 @@ server {
             </li>
           </ul>
         </div>
-
         <!-- APACHE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="apache">
-            &#128295; Apache &mdash; Traditional Web Server
+          <h2 id="apache" style="margin-top: 0">
+            🔧 Apache — Traditional Web Server
           </h2>
           <p>
             Apache is still common at universities and government servers. Know
             the basics even if you prefer Nginx.
           </p>
-
           <div class="checklist-category">Apache Configuration</div>
-          <ul class="checklist" role="list" aria-label="Apache checklist">
+          <ul aria-label="Apache checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-apache-install"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-apache-install">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-apache-install"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-apache-install">
                     Drill: Install and configure Apache in WSL
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Install
@@ -483,18 +504,16 @@ sudo systemctl start apache2
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-apache-reverse"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-apache-reverse">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-apache-reverse"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-apache-reverse">
                     Know: Apache reverse proxy for Django/Gunicorn
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # /etc/apache2/sites-available/transport_api.conf
@@ -532,18 +551,16 @@ sudo systemctl reload apache2</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-apache-aspnet"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-apache-aspnet">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-apache-aspnet"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-apache-aspnet">
                     Know: Apache reverse proxy for ASP.NET Core (Kestrel)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # /etc/apache2/sites-available/dotnet_api.conf
@@ -568,18 +585,16 @@ sudo systemctl reload apache2</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-apache-vs-nginx"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-apache-vs-nginx">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-apache-vs-nginx"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Know: Apache vs Nginx &mdash; when to use each
-                  </div>
+                  <label class="checklist-label" for="dotnet-apache-vs-nginx">
+                    Know: Apache vs Nginx — when to use each
+                  </label>
                   <div class="checklist-detail">
                     <table
                       style="
@@ -607,7 +622,7 @@ sudo systemctl reload apache2</pre>
                       <tr style="border-bottom: 1px solid var(--border)">
                         <td style="padding: 0.3rem">Concurrent connections</td>
                         <td style="padding: 0.3rem">Excellent (10K+)</td>
-                        <td style="padding: 0.3rem">Good (1K&ndash;5K)</td>
+                        <td style="padding: 0.3rem">Good (1K–5K)</td>
                       </tr>
                       <tr style="border-bottom: 1px solid var(--border)">
                         <td style="padding: 0.3rem">Static files</td>
@@ -640,36 +655,32 @@ sudo systemctl reload apache2</pre>
             </li>
           </ul>
         </div>
-
         <!-- ASP.NET CORE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="aspnet">
-            &#128142; ASP.NET Core &mdash; C# Web Framework
+          <h2 id="aspnet" style="margin-top: 0">
+            💎 ASP.NET Core — C# Web Framework
           </h2>
           <p>
-            ASP.NET Core runs on Linux via .NET SDK. It&rsquo;s cross-platform,
+            ASP.NET Core runs on Linux via .NET SDK. It’s cross-platform,
             high-performance, and uses Kestrel as its built-in web server.
           </p>
-
           <div class="checklist-category">Setup &amp; Scaffolding</div>
           <ul
+            aria-label="ASP.NET setup checklist"
             class="checklist"
             role="list"
-            aria-label="ASP.NET setup checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-install"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-install">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-install"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-install">
                     Drill: Install .NET SDK in WSL and scaffold a project
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Install .NET SDK 8
@@ -694,18 +705,16 @@ dotnet run
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-project"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-project">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-project"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-project">
                     Know: ASP.NET Core project structure
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 TransportApi/
@@ -733,26 +742,23 @@ TransportApi/
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Minimal API (Fast Prototyping)</div>
           <ul
+            aria-label="ASP.NET minimal API checklist"
             class="checklist"
             role="list"
-            aria-label="ASP.NET minimal API checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-minimal"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-minimal">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-minimal"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-minimal">
                     Practice: Minimal API for data endpoints
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 // Program.cs - ASP.NET Core Minimal API
@@ -813,26 +819,23 @@ public class TransportDb : DbContext {
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Deployment as a Linux Service</div>
           <ul
+            aria-label="ASP.NET deployment checklist"
             class="checklist"
             role="list"
-            aria-label="ASP.NET deployment checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-deploy"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-deploy">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-deploy"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-deploy">
                     Know: Deploy ASP.NET Core as a systemd service on Linux
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Build for production
@@ -871,18 +874,16 @@ journalctl -u kestrel-transport --since "5 min ago"</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-kestrel-config"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-kestrel-config">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-kestrel-config"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-kestrel-config">
                     Know: Kestrel configuration and limits
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 // appsettings.json
@@ -915,32 +916,28 @@ journalctl -u kestrel-transport --since "5 min ago"</pre>
             </li>
           </ul>
         </div>
-
         <!-- FULL DEPLOYMENT STACK -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="full-stack">
-            &#127959;&#65039; Full Deployment Stack (Putting It All Together)
+          <h2 id="full-stack" style="margin-top: 0">
+            🏗️ Full Deployment Stack (Putting It All Together)
           </h2>
-
           <div class="checklist-category">Architecture Diagram</div>
           <ul
+            aria-label="Full stack deployment checklist"
             class="checklist"
             role="list"
-            aria-label="Full stack deployment checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-arch"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-arch">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-arch"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-arch">
                     Understand: Complete request flow for both stacks
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 === Django Stack ===
@@ -966,18 +963,16 @@ Let's Encrypt: TLS certificates for both
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-troubleshoot"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-troubleshoot">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-troubleshoot"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-troubleshoot">
                     Know: Common troubleshooting commands
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 # Check what's listening on ports
@@ -1012,34 +1007,30 @@ curl -v http://localhost:5000      # Hits Kestrel directly</pre>
             </li>
           </ul>
         </div>
-
         <!-- TIMED EXERCISE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="exercise">
-            &#127919; Timed Practice Exercise (45 min)
+          <h2 id="exercise" style="margin-top: 0">
+            🎯 Timed Practice Exercise (45 min)
           </h2>
-
           <div class="checklist-category">
             Exercise: Deploy Both Stacks Behind Nginx
           </div>
           <ul
+            aria-label="Practice exercise checklist"
             class="checklist"
             role="list"
-            aria-label="Practice exercise checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-1"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-1">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-1"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-1">
                     Step 1: Start PostgreSQL &amp; create a database (3 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >sudo service postgresql start; createdb
@@ -1050,19 +1041,17 @@ curl -v http://localhost:5000      # Hits Kestrel directly</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-2"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-2">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-2"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-2">
                     Step 2: Scaffold &amp; run Django + Gunicorn on port 8000
                     (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     startproject, models, migrate, gunicorn bind. Test with
                     curl.
@@ -1071,19 +1060,17 @@ curl -v http://localhost:5000      # Hits Kestrel directly</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-3"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-3">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-3"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-3">
                     Step 3: Scaffold &amp; run ASP.NET Core on port 5000 (10
                     min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     dotnet new webapi, add models, EF migrations, dotnet run.
                     Test with curl.
@@ -1092,39 +1079,35 @@ curl -v http://localhost:5000      # Hits Kestrel directly</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-4"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-4">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-4"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-4">
                     Step 4: Configure Nginx to proxy both (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    <code>/api/django/*</code> &rarr; Gunicorn,
-                    <code>/api/dotnet/*</code> &rarr; Kestrel. Single Nginx
-                    server block, two location blocks.
+                    <code>/api/django/*</code> → Gunicorn,
+                    <code>/api/dotnet/*</code> → Kestrel. Single Nginx server
+                    block, two location blocks.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-5"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-5">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-5"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-5">
                     Step 5: Create systemd service files for both (7 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write <code>gunicorn.service</code> and
                     <code>kestrel-transport.service</code>. Enable and start
@@ -1134,18 +1117,16 @@ curl -v http://localhost:5000      # Hits Kestrel directly</pre>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="dotnet-ex-6"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="dotnet-ex-6">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="dotnet-ex-6"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="dotnet-ex-6">
                     Step 6: Verify end-to-end through Nginx (5 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <pre>
 curl http://localhost/api/django/vehicles/
@@ -1157,20 +1138,17 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
             </li>
           </ul>
         </div>
-
         <!-- RESOURCES -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="resources">
-            &#128295; Practice Resources
-          </h2>
+          <h2 id="resources" style="margin-top: 0">🔧 Practice Resources</h2>
           <div class="resource-grid">
             <a
-              href="https://nginx.org/en/docs/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://nginx.org/en/docs/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128737;&#65039;</div>
+              <div class="rc-icon">🛡️</div>
               <div class="rc-title">Nginx Docs</div>
               <div class="rc-desc">
                 Official documentation. Directives reference, reverse proxy,
@@ -1179,26 +1157,26 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
               <div class="rc-url">nginx.org/en/docs</div>
             </a>
             <a
-              href="https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128142;</div>
+              <div class="rc-icon">💎</div>
               <div class="rc-title">ASP.NET on Linux</div>
               <div class="rc-desc">
-                Microsoft&rsquo;s official guide for hosting ASP.NET Core on
-                Linux with Nginx. Step-by-step with systemd service files.
+                Microsoft’s official guide for hosting ASP.NET Core on Linux
+                with Nginx. Step-by-step with systemd service files.
               </div>
               <div class="rc-url">learn.microsoft.com</div>
             </a>
             <a
-              href="https://httpd.apache.org/docs/2.4/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://httpd.apache.org/docs/2.4/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128295;</div>
+              <div class="rc-icon">🔧</div>
               <div class="rc-title">Apache Docs</div>
               <div class="rc-desc">
                 Apache HTTP Server documentation. Virtual hosts, mod_proxy,
@@ -1207,12 +1185,12 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
               <div class="rc-url">httpd.apache.org</div>
             </a>
             <a
-              href="https://www.digitalocean.com/community/tutorials"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.digitalocean.com/community/tutorials"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127754;</div>
+              <div class="rc-icon">🌊</div>
               <div class="rc-title">DigitalOcean Tutorials</div>
               <div class="rc-desc">
                 Excellent step-by-step guides for Nginx, Apache, Django
@@ -1222,15 +1200,19 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
             </a>
           </div>
         </div>
-
         <!-- TALKING POINTS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0">&#128172; Key Talking Points</h2>
+          <h2 style="margin-top: 0">💬 Key Talking Points</h2>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-1"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               Why use Nginx in front of Kestrel? Kestrel can serve HTTP.
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-1">
               <p><span class="star-label star-t">Technical</span></p>
               <p>
                 <strong>Defense in depth.</strong> Kestrel is an application
@@ -1244,21 +1226,26 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
                 Without Nginx, a slow client uploading a 100 MB file would tie
                 up a Kestrel thread for minutes. Nginx buffers the entire
                 request before forwarding it to Kestrel in one fast internal
-                transfer. Microsoft&rsquo;s own documentation recommends this
+                transfer. Microsoft’s own documentation recommends this
                 architecture for production deployments.
               </p>
               <p>
                 <strong>Analogy:</strong> Nginx is the bouncer at the door.
-                Kestrel is the bartender. You don&rsquo;t make the bartender
-                check IDs.
+                Kestrel is the bartender. You don’t make the bartender check
+                IDs.
               </p>
             </div>
           </div>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
-              How does UCT&rsquo;s infrastructure currently handle web serving?
+            <button
+              aria-controls="disclosure-panel-2"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
+              How does UCT’s infrastructure currently handle web serving?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-2">
               <p><span class="star-label star-l">Leadership</span></p>
               <p>
                 UCT runs a mix. Legacy systems (student portals, HR) are often
@@ -1268,15 +1255,15 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
               </p>
               <ul>
                 <li>
-                  <strong>Standardise on Nginx</strong> for new deployments
-                  &mdash; better concurrency model, simpler config syntax
+                  <strong>Standardise on Nginx</strong> for new deployments —
+                  better concurrency model, simpler config syntax
                 </li>
                 <li>
                   <strong>Maintain Apache</strong> where migration cost &gt;
                   benefit (legacy .htaccess-dependent apps)
                 </li>
                 <li>
-                  <strong>Containerise</strong> where possible &mdash; Nginx as
+                  <strong>Containerise</strong> where possible — Nginx as
                   ingress controller in Kubernetes
                 </li>
                 <li>
@@ -1287,33 +1274,29 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
             </div>
           </div>
         </div>
-
         <button
+          aria-label="Reset all checklist progress"
           class="checklist-reset-btn"
           id="resetBtn"
-          aria-label="Reset all checklist progress"
         >
           Reset All Progress
         </button>
-
         <div class="page-footer">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -1332,70 +1315,16 @@ ss -tlnp | grep -E '80|5000|8000'</pre>
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        const STORAGE_KEY = "web-servers-dotnet-checklist";
-        const items = document.querySelectorAll(".checklist-item[data-key]");
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-        function updateProgress() {
-          const total = items.length;
-          const checked = document.querySelectorAll(
-            ".checklist-item.checked",
-          ).length;
-          document.getElementById("progressCount").textContent =
-            checked + " / " + total;
-          const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-          const bar = document.getElementById("progressBar");
-          bar.style.width = pct + "%";
-          bar.setAttribute("aria-valuenow", pct);
-          bar.classList.toggle("complete", pct === 100);
-        }
-
-        items.forEach(function (item) {
-          const key = item.getAttribute("data-key");
-          if (saved[key]) {
-            item.classList.add("checked");
-            item.setAttribute("aria-checked", "true");
-          }
-          item.addEventListener("click", function (e) {
-            if (e.target.tagName === "A") return;
-            item.classList.toggle("checked");
-            const isChecked = item.classList.contains("checked");
-            item.setAttribute("aria-checked", isChecked ? "true" : "false");
-            saved[key] = isChecked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            updateProgress();
-          });
-          item.addEventListener("keydown", function (e) {
-            if (e.key === " " || e.key === "Enter") {
-              e.preventDefault();
-              item.click();
-            }
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
           });
         });
-
-        updateProgress();
-
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", function () {
-            if (!confirm("Reset all checklist progress on this page?")) return;
-            items.forEach(function (item) {
-              item.classList.remove("checked");
-              item.setAttribute("aria-checked", "false");
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-          });
       })();
-
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
+    <script defer src="../../scripts/checklists.js"></script>
   </body>
 </html>

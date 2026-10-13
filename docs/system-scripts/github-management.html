@@ -1,15 +1,16 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>Github Management - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
     <style>
       pre {
         line-height: 125%;
@@ -273,22 +274,25 @@
         color: #666;
       } /* Literal.Number.Integer.Long */
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -297,8 +301,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to System Scripts</a>
@@ -311,7 +314,7 @@
           <h1>Github Management</h1>
           <p>
             <code>github-management.ps1</code> ·
-            <a href="github-management.ps1" download>Download Script</a>
+            <a download="" href="github-management.ps1">Download Script</a>
           </p>
           <div class="codehilite">
             <table class="codehilitetable">
@@ -567,71 +570,71 @@
 <span class="cm">    Commit message describing changes</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> method</span>
-<span class="cm">    Method to use: &#39;update&#39;, &#39;init&#39;, or &#39;download&#39;</span>
+<span class="cm">    Method to use: 'update', 'init', or 'download'</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    Manage-GitHubAppDev -appName &quot;my-app&quot; -commitTag &quot;v0.3.1&quot; -commitMessage &quot;Updated features&quot; -method &quot;update&quot;</span>
+<span class="cm">    Manage-GitHubAppDev -appName "my-app" -commitTag "v0.3.1" -commitMessage "Updated features" -method "update"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span> <span class="p">(</span>
-        <span class="no">[string]</span><span class="nv">$managerPath</span> <span class="p">=</span> <span class="s2">&quot;&lt;path/to/github-management-folder&gt;&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$managerPath</span> <span class="p">=</span> <span class="s2">"&lt;path/to/github-management-folder&gt;"</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$appName</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$commitTag</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$commitMessage</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;update&quot;</span>
+        <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">"update"</span>
     <span class="p">)</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;u&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;update&quot;</span>
-    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;i&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;init&quot;</span>
-    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;d&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;download&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"u"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">"update"</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"i"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">"init"</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"d"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">"download"</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Error: Invalid method parameter. Use &#39;update&#39;, &#39;init&#39;, or &#39;download&#39;.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Error: Invalid method parameter. Use 'update', 'init', or 'download'."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------*GITHUB APP MANAGER*---------------------&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Managing GitHub repository: $appName&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nv">$confirmation</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">&quot;You are about to make hard to revert changes to &#39;$appName&#39; on your GitHub repository. Type &#39;y&#39; to continue, any other key to cancel&quot;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$confirmation</span> <span class="o">-ne</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;CANCELLED! Exiting without making changes&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------*GITHUB APP MANAGER*---------------------"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Managing GitHub repository: $appName"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nv">$confirmation</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">"You are about to make hard to revert changes to '$appName' on your GitHub repository. Type 'y' to continue, any other key to cancel"</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$confirmation</span> <span class="o">-ne</span> <span class="s2">"y"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Write-Host</span> <span class="s2">"CANCELLED! Exiting without making changes"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
     <span class="nv">$originalDir</span> <span class="p">=</span> <span class="nb">Get-Location</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$managerPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$managerPath</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Changed directory to &#39;$managerPath&#39;.&quot;</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Changed directory to '$managerPath'."</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Directory &#39;$managerPath&#39; does not exist.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Directory '$managerPath' does not exist."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">&quot;update&quot;</span> <span class="o">-or</span> <span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">&quot;init&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">&quot;app-manager.ps1&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">"update"</span> <span class="o">-or</span> <span class="nv">$method</span> <span class="o">-eq</span> <span class="s2">"init"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">"app-manager.ps1"</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$appName</span> <span class="o">-or</span> <span class="nv">$appName</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span> <span class="o">-or</span>
-            <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitTag</span> <span class="o">-or</span> <span class="nv">$commitTag</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span> <span class="o">-or</span>
-            <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitMessage</span> <span class="o">-or</span> <span class="nv">$commitMessage</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Error: appName, commitTag, and commitMessage parameters are required.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$appName</span> <span class="o">-or</span> <span class="nv">$appName</span> <span class="o">-eq</span> <span class="s2">""</span> <span class="o">-or</span>
+            <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitTag</span> <span class="o">-or</span> <span class="nv">$commitTag</span> <span class="o">-eq</span> <span class="s2">""</span> <span class="o">-or</span>
+            <span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$commitMessage</span> <span class="o">-or</span> <span class="nv">$commitMessage</span> <span class="o">-eq</span> <span class="s2">""</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Error: appName, commitTag, and commitMessage parameters are required."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
             <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
             <span class="k">return</span>
         <span class="p">}</span>
 
-        <span class="nv">$scriptPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$managerPath</span> <span class="n">-ChildPath</span> <span class="s2">&quot;$managerApp&quot;</span>
+        <span class="nv">$scriptPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$managerPath</span> <span class="n">-ChildPath</span> <span class="s2">"$managerApp"</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$scriptPath</span><span class="p">)</span> <span class="p">{</span>
             <span class="p">.</span> <span class="nv">$scriptPath</span> <span class="n">-appName</span> <span class="nv">$appName</span> <span class="n">-commitTag</span> <span class="nv">$commitTag</span> <span class="n">-commitMessage</span> <span class="nv">$commitMessage</span> <span class="n">-method</span> <span class="nv">$method</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; executed.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Script '$managerApp' executed."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; not found in &#39;$managerPath&#39;.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+            <span class="nb">Write-Host</span> <span class="s2">"Script '$managerApp' not found in '$managerPath'."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
 <span class="p">}</span>
 
 <span class="c"># --- This function manages Git tags for a repository, allowing listing, creation, or deletion of tags. ---</span>
@@ -650,30 +653,30 @@
 <span class="cm">    Tag name to manage</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> method</span>
-<span class="cm">    Method to use: &#39;update&#39;, &#39;list&#39;, or &#39;delete&#39;</span>
+<span class="cm">    Method to use: 'update', 'list', or 'delete'</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    Manage-GitTags -appName &quot;my-app&quot; -method &quot;list&quot;</span>
-<span class="cm">    Manage-GitTags -appName &quot;my-app&quot; -commitTag &quot;v0.3.1&quot; -method &quot;delete&quot;</span>
+<span class="cm">    Manage-GitTags -appName "my-app" -method "list"</span>
+<span class="cm">    Manage-GitTags -appName "my-app" -commitTag "v0.3.1" -method "delete"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span> <span class="p">(</span>
-        <span class="no">[string]</span><span class="nv">$managerPath</span> <span class="p">=</span> <span class="s2">&quot;&lt;path/to/github-management-folder&gt;&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$managerPath</span> <span class="p">=</span> <span class="s2">"&lt;path/to/github-management-folder&gt;"</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$appName</span><span class="p">,</span>
         <span class="no">[string]</span><span class="nv">$commitTag</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;list&quot;</span>
+        <span class="no">[string]</span><span class="nv">$method</span> <span class="p">=</span> <span class="s2">"list"</span>
     <span class="p">)</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;-------------*GITHUB TAG MANAGER*----------------------&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Managing GitHub Tags for repository: $appName&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"-------------*GITHUB TAG MANAGER*----------------------"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Managing GitHub Tags for repository: $appName"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;l&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;list&quot;</span>
-        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">&quot;tag-list.ps1&quot;</span>
-    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;d&quot;</span> <span class="o">-or</span> <span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">&quot;u&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">&quot;delete&quot;</span>
-        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">&quot;tag-delete.ps1&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"l"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">"list"</span>
+        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">"tag-list.ps1"</span>
+    <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"d"</span> <span class="o">-or</span> <span class="nv">$method</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">ToString</span><span class="p">().</span><span class="n">ToLower</span><span class="p">()</span> <span class="o">-eq</span> <span class="s2">"u"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$method</span> <span class="p">=</span> <span class="s2">"delete"</span>
+        <span class="nv">$managerApp</span> <span class="p">=</span> <span class="s2">"tag-delete.ps1"</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Error: Invalid method parameter. Use &#39;list&#39;, &#39;delete&#39;, or &#39;update&#39;.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Error: Invalid method parameter. Use 'list', 'delete', or 'update'."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
@@ -682,20 +685,20 @@
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$managerPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$managerPath</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Directory &#39;$managerPath&#39; does not exist.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Directory '$managerPath' does not exist."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
-    <span class="nv">$scriptPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$managerPath</span> <span class="n">-ChildPath</span> <span class="s2">&quot;$managerApp&quot;</span>
+    <span class="nv">$scriptPath</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$managerPath</span> <span class="n">-ChildPath</span> <span class="s2">"$managerApp"</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="nv">$scriptPath</span><span class="p">)</span> <span class="p">{</span>
         <span class="p">.</span> <span class="nv">$scriptPath</span> <span class="n">-appName</span> <span class="nv">$appName</span> <span class="n">-commitTag</span> <span class="nv">$commitTag</span> <span class="n">-method</span> <span class="nv">$method</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; executed.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Script '$managerApp' executed."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Script &#39;$managerApp&#39; not found.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Script '$managerApp' not found."</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
     <span class="p">}</span>
 
     <span class="nb">Set-Location</span> <span class="n">-Path</span> <span class="nv">$originalDir</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
 <span class="p">}</span>
 
 <span class="c"># --- This function pushes changes to GitHub, makes the repository public for a specified duration, and then reverts it back to private. ---</span>
@@ -714,50 +717,50 @@
 <span class="cm">    The branch to push changes to.</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> msgType</span>
-<span class="cm">    The type of commit message: &#39;message&#39; or &#39;file&#39;.</span>
+<span class="cm">    The type of commit message: 'message' or 'file'.</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> msg</span>
-<span class="cm">    The commit message (used if msgType is &#39;message&#39;).</span>
+<span class="cm">    The commit message (used if msgType is 'message').</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.PARAMETER</span><span class="cm"> file</span>
-<span class="cm">    The file containing the commit message (used if msgType is &#39;file&#39;).</span>
+<span class="cm">    The file containing the commit message (used if msgType is 'file').</span>
 <span class="cm">    </span>
 <span class="cm">    </span><span class="sd">.EXAMPLE</span>
-<span class="cm">    GitPushPublicSleepPrivate -sleep 180 -branch &quot;main&quot; -msgType &quot;message&quot; -msg &quot;Update dependencies&quot;</span>
+<span class="cm">    GitPushPublicSleepPrivate -sleep 180 -branch "main" -msgType "message" -msg "Update dependencies"</span>
 <span class="cm">    #&gt;</span>
     <span class="k">param</span> <span class="p">(</span>
         <span class="no">[int]</span><span class="nv">$sleep</span> <span class="p">=</span> <span class="n">180</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$branch</span> <span class="p">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">&quot;message&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$msg</span> <span class="p">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="no">[string]</span><span class="nv">$file</span> <span class="p">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="no">[string]</span><span class="nv">$branch</span> <span class="p">=</span> <span class="s2">"main"</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">"message"</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$msg</span> <span class="p">=</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$file</span> <span class="p">=</span> <span class="s2">""</span>
     <span class="p">)</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Pushing public sleep private changes to GitHub...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Making repository public...&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Pushing public sleep private changes to GitHub..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Making repository public..."</span>
     <span class="n">gh</span> <span class="n">repo</span> <span class="n">edit</span> <span class="p">-</span><span class="n">-visibility</span> <span class="n">public</span> <span class="p">-</span><span class="n">-accept-visibility-change-consequences</span>
     <span class="n">git</span> <span class="n">add</span> <span class="p">.</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$msgType</span> <span class="o">-or</span> <span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">&quot;message&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$null</span> <span class="o">-eq</span> <span class="nv">$msgType</span> <span class="o">-or</span> <span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">""</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$msgType</span> <span class="p">=</span> <span class="s2">"message"</span>
     <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">&quot;file&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$msgType</span> <span class="o">-eq</span> <span class="s2">"file"</span><span class="p">)</span> <span class="p">{</span>
         <span class="n">git</span> <span class="n">commit</span> <span class="o">-F</span> <span class="nv">$file</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nv">$commitMessage</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">&quot;Enter commit message&quot;</span>
-        <span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">&quot;$commitMessage&quot;</span>
+        <span class="nv">$commitMessage</span> <span class="p">=</span> <span class="nb">Read-Host</span> <span class="s2">"Enter commit message"</span>
+        <span class="n">git</span> <span class="n">commit</span> <span class="n">-m</span> <span class="s2">"$commitMessage"</span>
     <span class="p">}</span>
     <span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="nv">$branch</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Changes pushed to GitHub. Sleeping $sleep seconds to allow deployment...&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Changes pushed to GitHub. Sleeping $sleep seconds to allow deployment..."</span>
     <span class="nv">$sleepEnd</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddSeconds</span><span class="p">(</span><span class="nv">$sleep</span><span class="p">)</span>
     <span class="k">while</span> <span class="p">((</span><span class="nb">Get-Date</span><span class="p">)</span> <span class="o">-lt</span> <span class="nv">$sleepEnd</span><span class="p">)</span> <span class="p">{</span>
         <span class="nv">$remaining</span> <span class="p">=</span> <span class="nv">$sleepEnd</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)</span>
-        <span class="nb">Write-Host</span> <span class="n">-NoNewline</span> <span class="s2">&quot;</span><span class="se">`r</span><span class="s2">Time remaining: </span><span class="p">$(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Ceiling</span><span class="p">(</span><span class="nv">$remaining</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">))</span><span class="s2"> seconds     &quot;</span> <span class="n">-ForegroundColor</span> <span class="n">DarkGray</span>
+        <span class="nb">Write-Host</span> <span class="n">-NoNewline</span> <span class="s2">"</span><span class="se">`r</span><span class="s2">Time remaining: </span><span class="p">$(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Ceiling</span><span class="p">(</span><span class="nv">$remaining</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">))</span><span class="s2"> seconds     "</span> <span class="n">-ForegroundColor</span> <span class="n">DarkGray</span>
         <span class="nb">Start-Sleep</span> <span class="n">-Milliseconds</span> <span class="n">1000</span>
     <span class="p">}</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Finished sleeping for $sleep seconds.&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Making repository private again...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Finished sleeping for $sleep seconds."</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Making repository private again..."</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
     <span class="n">gh</span> <span class="n">repo</span> <span class="n">edit</span> <span class="p">-</span><span class="n">-visibility</span> <span class="n">private</span> <span class="p">-</span><span class="n">-accept-visibility-change-consequences</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"--------------------------------------------------------"</span>
 <span class="p">}</span>
 
 <span class="c"># Export functions</span>
@@ -771,32 +774,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

@@ -1,12 +1,13 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="googlebot" content="noindex, nofollow" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="noindex, nofollow" name="robots" />
+    <meta content="noindex, nofollow" name="googlebot" />
     <title>Assessment — Data Engineering: Docker &amp; Containers</title>
-    <link rel="stylesheet" href="style.css?v=2.3" />
+    <link href="style.css?v=2.3" rel="stylesheet" />
     <style>
       pre {
         background: var(--bg-surface);
@@ -20,9 +21,10 @@
         margin: 1rem 0;
       }
     </style>
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div
       class="page-wrapper protected-content"
       id="content"
@@ -37,10 +39,16 @@
           <a href="level3-competency.html">Competency</a>
           <a href="level4-scenarios.html">Scenarios</a>
           <div class="dropdown-menu">
-            <button class="dropdown-button" style="color: var(--accent)">
-              Assessments &#9660;
+            <button
+              aria-controls="dropdown-panel-1"
+              aria-expanded="false"
+              class="dropdown-button"
+              style="color: var(--accent)"
+              type="button"
+            >
+              Assessments ▼
             </button>
-            <div class="dropdown-content">
+            <div class="dropdown-content" id="dropdown-panel-1">
               <a href="assessment-scenario-1.html"
                 >Scenario 1 (System Design)</a
               >
@@ -52,10 +60,33 @@
               >
               <a href="assessment-iot-edge.html">IoT &amp; Edge Computing</a>
               <div class="dropdown-nested">
-                <a href="assessment-data-engineering.html" class="has-submenu"
+                <a class="has-submenu" href="assessment-data-engineering.html"
                   >Data Engineering</a
                 >
-                <div class="dropdown-nested-content">
+                <button
+                  aria-controls="dropdown-panel-2"
+                  aria-expanded="false"
+                  aria-label="Toggle Data Engineering links"
+                  class="submenu-toggle dropdown-button"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    height="18"
+                    viewbox="0 0 24 24"
+                    width="18"
+                  >
+                    <path
+                      d="m6 9 6 6 6-6"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </button>
+                <div class="dropdown-nested-content" id="dropdown-panel-2">
                   <a href="assessment-de-docker.html"
                     >Docker &amp; Containers</a
                   >
@@ -73,8 +104,15 @@
             </div>
           </div>
           <div class="dropdown-menu">
-            <button class="dropdown-button">Targeted Prep ▼</button>
-            <div class="dropdown-content">
+            <button
+              aria-controls="dropdown-panel-3"
+              aria-expanded="false"
+              class="dropdown-button"
+              type="button"
+            >
+              Targeted Prep ▼
+            </button>
+            <div class="dropdown-content" id="dropdown-panel-3">
               <a href="targeted-preparation-pages/index.html">Prep Hub</a>
               <a href="targeted-preparation-pages/mock-interview.html"
                 >30-Min Mock Interview</a
@@ -91,17 +129,21 @@
           <a href="level5-panel.html">Panel</a>
         </nav>
       </div>
-
-      <div class="breadcrumb" role="navigation" aria-label="Breadcrumb">
-        <a href="hub.html">Hub</a> <span>&rsaquo;</span>
+      <div aria-label="Breadcrumb" class="breadcrumb" role="navigation">
+        <a href="hub.html">Hub</a> <span>›</span>
         <a href="assessment-data-engineering.html">Data Engineering</a>
-        <span>&rsaquo;</span>
+        <span>›</span>
         <div class="breadcrumb-dropdown">
-          <button class="breadcrumb-dropdown-btn">
-            Docker &amp; Containers &#9660;
+          <button
+            aria-controls="dropdown-panel-4"
+            aria-expanded="false"
+            class="breadcrumb-dropdown-btn dropdown-button"
+            type="button"
+          >
+            Docker &amp; Containers ▼
           </button>
-          <div class="breadcrumb-dropdown-content">
-            <a href="assessment-de-docker.html" class="current"
+          <div class="breadcrumb-dropdown-content" id="dropdown-panel-4">
+            <a class="current" href="assessment-de-docker.html"
               >Docker &amp; Containers</a
             >
             <a href="assessment-de-wsl.html">WSL &amp; Linux CLI</a>
@@ -112,42 +154,41 @@
           </div>
         </div>
       </div>
-
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <h1 class="fade-in">Data Engineering — Docker &amp; Containers</h1>
         <p class="fade-in fade-in-d1">
-          Containerised data infrastructure for Dr.&nbsp;Nnene&rsquo;s practical
-          assessment (Thursday 12 March 2026). This module covers how to
+          Containerised data infrastructure for Dr. Nnene’s practical assessment
+          (Thursday 12 March 2026). This module covers how to
           <strong
             >spin up PostGIS, TimescaleDB, Kafka, and ingestion pipelines inside
             Docker</strong
           >
-          &mdash; the fastest path from zero to a working data platform.
+          — the fastest path from zero to a working data platform.
         </p>
-
         <!-- PROGRESS TRACKER -->
         <div
+          aria-label="Preparation progress"
+          data-checklist-storage="de-docker-checklist"
           class="checklist-progress fade-in fade-in-d2"
           role="region"
-          aria-label="Preparation progress"
         >
           <div class="checklist-progress-header">
-            <span>Preparation Progress</span>
+            <span id="preparation-progress-label">Preparation Progress</span>
             <span class="progress-count" id="progressCount">0 / 0</span>
           </div>
           <div class="progress-bar-track">
             <div
+              aria-valuemax="100"
+              aria-valuemin="0"
+              aria-valuenow="0"
               class="progress-bar-fill"
               id="progressBar"
-              style="width: 0%"
               role="progressbar"
-              aria-valuenow="0"
-              aria-valuemin="0"
-              aria-valuemax="100"
+              aria-labelledby="preparation-progress-label"
+              style="width: 0%"
             ></div>
           </div>
         </div>
-
         <!-- CV GROUNDING -->
         <div class="callout info fade-in fade-in-d2">
           <div class="callout-title">
@@ -158,20 +199,20 @@
               <strong>MPI data pipeline (SEAT):</strong> You slashed a 30M-row
               database load from 3 hours to 25 minutes using MPI +
               hyperthreading + batch-chunked memory management. This is your
-              <em>killer</em> evidence for data engineering at scale &mdash;
-              polish the narrative, know the numbers cold.
+              <em>killer</em> evidence for data engineering at scale — polish
+              the narrative, know the numbers cold.
             </li>
             <li>
               <strong>PostgreSQL mastery:</strong> Years of production
               PostgreSQL at SEAT (Django ORM + raw SQL), Ecoride, and
               INNTEGRATE. You understand indexing, query plans, connection
-              pooling, and migration strategies at a level most candidates
-              can&rsquo;t match.
+              pooling, and migration strategies at a level most candidates can’t
+              match.
             </li>
             <li>
               <strong>Event-driven architecture:</strong> RabbitMQ message
               queuing at ComputeMore is architecturally identical to Kafka
-              topic-based streaming &mdash; the pub/sub mental model transfers
+              topic-based streaming — the pub/sub mental model transfers
               directly.
             </li>
             <li>
@@ -182,33 +223,29 @@
             </li>
           </ul>
         </div>
-
         <!-- SPATIAL DATA -->
         <div class="section-card fade-in fade-in-d3">
-          <h2 style="margin-top: 0" id="spatial">
-            &#127758; Spatial Data &amp; PostGIS
+          <h2 id="spatial" style="margin-top: 0">
+            🌎 Spatial Data &amp; PostGIS
           </h2>
           <p>
             Transport planning is inherently spatial. Every vehicle GPS ping,
             every bus stop, every road segment is a geo-object. PostGIS turns
             PostgreSQL into a spatial database engine.
           </p>
-
           <div class="checklist-category">PostGIS Fundamentals</div>
-          <ul class="checklist" role="list" aria-label="PostGIS checklist">
+          <ul aria-label="PostGIS checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-postgis-install"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-postgis-install">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-postgis-install"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-postgis-install">
                     Set up PostgreSQL + PostGIS locally (Docker)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Run:
                     <code
@@ -222,18 +259,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-postgis-geom"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-postgis-geom">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-postgis-geom"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-postgis-geom">
                     Practice: Create spatial tables with POINT &amp; LINESTRING
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Create a <code>vehicle_pings</code> table with a
                     <code>GEOMETRY(Point, 4326)</code> column. Insert 1,000
@@ -247,85 +282,79 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-postgis-queries"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-postgis-queries">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-postgis-queries"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-postgis-queries">
                     Practice 5 essential PostGIS queries
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    1. <code>ST_Distance(a.geom, b.geom)</code> &mdash; distance
+                    1. <code>ST_Distance(a.geom, b.geom)</code> — distance
                     between two points.<br />
                     2.
                     <code
                       >ST_DWithin(geom, ST_MakePoint(18.42, -33.93)::geography,
                       500)</code
                     >
-                    &mdash; find all pings within 500m of a bus stop.<br />
-                    3. <code>ST_Buffer(geom, 0.005)</code> &mdash; create a
-                    geofence around a route.<br />
-                    4. <code>ST_Intersection / ST_Contains</code> &mdash; which
+                    — find all pings within 500m of a bus stop.<br />
+                    3. <code>ST_Buffer(geom, 0.005)</code> — create a geofence
+                    around a route.<br />
+                    4. <code>ST_Intersection / ST_Contains</code> — which
                     vehicles are inside a zone.<br />
-                    5. <code>ST_MakeLine(geom ORDER BY ts)</code> &mdash;
-                    reconstruct a vehicle trajectory from GPS pings.
+                    5. <code>ST_MakeLine(geom ORDER BY ts)</code> — reconstruct
+                    a vehicle trajectory from GPS pings.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-postgis-index"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-postgis-index">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-postgis-index"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-postgis-index">
                     Understand GiST spatial indexing
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >CREATE INDEX idx_pings_geom ON vehicle_pings USING
                       GIST(geom);</code
                     >
-                    &mdash; GiST (Generalized Search Tree) indexes bounding
-                    boxes of geometries for O(log n) spatial lookups. Without
-                    it, every <code>ST_DWithin</code> query does a full table
-                    scan. Know this trade-off &mdash; it parallels your B-tree
-                    indexing knowledge from SEAT PostgreSQL work.
+                    — GiST (Generalized Search Tree) indexes bounding boxes of
+                    geometries for O(log n) spatial lookups. Without it, every
+                    <code>ST_DWithin</code> query does a full table scan. Know
+                    this trade-off — it parallels your B-tree indexing knowledge
+                    from SEAT PostgreSQL work.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-postgis-tutorial"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-postgis-tutorial">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-postgis-tutorial"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
-                    Complete the official PostGIS workshop (Chapters 1&ndash;8)
-                  </div>
+                  <label class="checklist-label" for="de-postgis-tutorial">
+                    Complete the official PostGIS workshop (Chapters 1–8)
+                  </label>
                   <div class="checklist-detail">
                     Go to
                     <a
                       href="https://postgis.net/workshops/postgis-intro/"
-                      target="_blank"
                       rel="noopener"
+                      target="_blank"
                       >postgis.net/workshops/postgis-intro</a
-                    >. Work through Chapters 1&ndash;8 (geometries, spatial
+                    >. Work through Chapters 1–8 (geometries, spatial
                     relationships, spatial joins, indexing). Budget 90 minutes.
                     This is the single highest-ROI preparation activity for the
                     assessment.
@@ -335,33 +364,29 @@
             </li>
           </ul>
         </div>
-
         <!-- DATA INGESTION -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="ingestion">
-            &#128640; Data Ingestion &amp; Message Brokers
+          <h2 id="ingestion" style="margin-top: 0">
+            🚀 Data Ingestion &amp; Message Brokers
           </h2>
           <p>
             High-throughput sensor streams cannot be written directly to a
-            database &mdash; you need a buffer layer.
+            database — you need a buffer layer.
           </p>
-
           <div class="checklist-category">Apache Kafka</div>
-          <ul class="checklist" role="list" aria-label="Kafka checklist">
+          <ul aria-label="Kafka checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kafka-concepts"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kafka-concepts">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kafka-concepts"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kafka-concepts">
                     Study Kafka core concepts (topics, partitions, consumer
                     groups)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>Topics:</strong> Named streams (e.g.,
                     <code>gps-pings</code>, <code>vibration-data</code>).
@@ -369,26 +394,24 @@
                     partitions for parallelism. GPS data can be partitioned by
                     <code>vehicle_id</code> to guarantee ordering per vehicle.
                     <strong>Consumer groups:</strong> Multiple consumers share
-                    the load &mdash; one group writes to TimescaleDB, another
-                    feeds a real-time dashboard. Messages are retained (default
-                    7 days) even after consumption.
+                    the load — one group writes to TimescaleDB, another feeds a
+                    real-time dashboard. Messages are retained (default 7 days)
+                    even after consumption.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kafka-vs-rabbit"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kafka-vs-rabbit">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kafka-vs-rabbit"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kafka-vs-rabbit">
                     Know Kafka vs RabbitMQ trade-offs (you use RabbitMQ)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>RabbitMQ:</strong> Smart broker, dumb consumer.
                     Messages are deleted after ACK. Best for task queues and
@@ -403,18 +426,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kafka-docker"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kafka-docker">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kafka-docker"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kafka-docker">
                     Hands-on: Run Kafka locally with Docker Compose
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Use the Confluent <code>docker-compose.yml</code> (Zookeeper
                     + Kafka + Schema Registry). Create a topic
@@ -427,53 +448,48 @@
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">Stream Processing</div>
           <ul
+            aria-label="Stream processing checklist"
             class="checklist"
             role="list"
-            aria-label="Stream processing checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-stream-concepts"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-stream-concepts">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-stream-concepts"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-stream-concepts">
                     Study stream processing patterns (windowing, aggregation)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>Tumbling windows:</strong> Fixed-size,
                     non-overlapping (e.g., average speed every 60 seconds).
                     <strong>Sliding windows:</strong> Overlapping (e.g., rolling
                     5-minute average).
                     <strong>Session windows:</strong> Activity-based (e.g.,
-                    group GPS pings into &ldquo;trips&rdquo; by detecting &gt;5
-                    min stationary gaps). These are the primitives you&rsquo;ll
-                    need for time-series aggregation at the assessment.
+                    group GPS pings into “trips” by detecting &gt;5 min
+                    stationary gaps). These are the primitives you’ll need for
+                    time-series aggregation at the assessment.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-stream-python"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-stream-python">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-stream-python"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-stream-python">
                     Practice: Python stream processing with Faust or plain Kafka
                     consumer
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write a Kafka consumer that implements a 60-second tumbling
                     window: collect all GPS pings in the window, compute average
@@ -486,33 +502,27 @@
             </li>
           </ul>
         </div>
-
         <!-- TIME-SERIES STORAGE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="timeseries">
-            &#128200; Time-Series Storage
-          </h2>
+          <h2 id="timeseries" style="margin-top: 0">📈 Time-Series Storage</h2>
           <p>
             Standard PostgreSQL chokes on millions of rapid time-stamped inserts
             due to B-tree index bloat. Time-series databases solve this with
             automatic partitioning.
           </p>
-
           <div class="checklist-category">TimescaleDB</div>
-          <ul class="checklist" role="list" aria-label="TimescaleDB checklist">
+          <ul aria-label="TimescaleDB checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-tsdb-concepts"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-tsdb-concepts">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-tsdb-concepts"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-tsdb-concepts">
                     Study TimescaleDB hypertables &amp; chunks
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     TimescaleDB is a PostgreSQL extension.
                     <code
@@ -520,26 +530,23 @@
                     >
                     transparently partitions data into time-based chunks
                     (default 7 days). Queries automatically prune irrelevant
-                    chunks. INSERT rates 10&ndash;100&times; faster than vanilla
-                    PostgreSQL on time-series workloads. You retain full SQL
-                    compatibility.
+                    chunks. INSERT rates 10–100× faster than vanilla PostgreSQL
+                    on time-series workloads. You retain full SQL compatibility.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-tsdb-setup"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-tsdb-setup">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-tsdb-setup"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-tsdb-setup">
                     Hands-on: Set up TimescaleDB &amp; create a hypertable
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >docker run -d --name timescale -p 5433:5432 -e
@@ -555,18 +562,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-tsdb-caggs"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-tsdb-caggs">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-tsdb-caggs"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-tsdb-caggs">
                     Practice: Continuous aggregates for dashboard queries
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Create a continuous aggregate:
                     <code
@@ -574,26 +579,24 @@
                       (timescaledb.continuous) AS SELECT time_bucket('1 hour',
                       time) AS bucket, vehicle_id, avg(speed), max(speed) FROM
                       gps_pings GROUP BY bucket, vehicle_id;</code
-                    >. This pre-computes dashboard queries &mdash; O(1) instead
-                    of scanning millions of rows. Explain this as a CTO-level
+                    >. This pre-computes dashboard queries — O(1) instead of
+                    scanning millions of rows. Explain this as a CTO-level
                     optimization in the assessment.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-tsdb-retention"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-tsdb-retention">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-tsdb-retention"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-tsdb-retention">
                     Study: Data retention policies &amp; compression
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >SELECT add_retention_policy('gps_pings', INTERVAL '90
@@ -603,33 +606,30 @@
                     <code
                       >ALTER TABLE gps_pings SET (timescaledb.compress);</code
                     >
-                    enables columnar compression (typically 10&ndash;20&times;
-                    storage reduction). Hot data stays uncompressed for fast
-                    writes; cold data compresses for cheap storage. Know these
-                    numbers for the assessment.
+                    enables columnar compression (typically 10–20× storage
+                    reduction). Hot data stays uncompressed for fast writes;
+                    cold data compresses for cheap storage. Know these numbers
+                    for the assessment.
                   </div>
                 </div>
               </div>
             </li>
           </ul>
-
           <div class="checklist-category">
             InfluxDB (Alternative – Know the Trade-off)
           </div>
-          <ul class="checklist" role="list" aria-label="InfluxDB checklist">
+          <ul aria-label="InfluxDB checklist" class="checklist" role="list">
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-influx-compare"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-influx-compare">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-influx-compare"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-influx-compare">
                     Study: InfluxDB vs TimescaleDB comparison
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <strong>InfluxDB:</strong> Purpose-built NoSQL TSDB. Own
                     query language (Flux/InfluxQL). Excellent write performance,
@@ -646,44 +646,39 @@
             </li>
           </ul>
         </div>
-
         <!-- DATA PROCESSING WITH PYTHON -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="processing">
-            &#128013; Python Data Processing
+          <h2 id="processing" style="margin-top: 0">
+            🐍 Python Data Processing
           </h2>
           <p>
             Dr. Nnene will likely give you messy, real-world CSVs. Be fluent in
             Pandas for rapid data wrangling.
           </p>
-
           <div class="checklist-category">Pandas &amp; NumPy Fundamentals</div>
           <ul
+            aria-label="Python data processing checklist"
             class="checklist"
             role="list"
-            aria-label="Python data processing checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-pandas-load"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-pandas-load">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-pandas-load"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-pandas-load">
                     Practice: Load, inspect, and clean a messy CSV (15 min
                     drill)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Download a traffic/sensor dataset from Kaggle (search
-                    &ldquo;urban traffic&rdquo; or &ldquo;sensor
-                    telemetry&rdquo;). Practice: <code>df.info()</code>,
-                    <code>df.describe()</code>, <code>df.isnull().sum()</code>,
-                    handle NaNs with
-                    <code>df.fillna(method='ffill')</code> (forward-fill &mdash;
+                    Download a traffic/sensor dataset from Kaggle (search “urban
+                    traffic” or “sensor telemetry”). Practice:
+                    <code>df.info()</code>, <code>df.describe()</code>,
+                    <code>df.isnull().sum()</code>, handle NaNs with
+                    <code>df.fillna(method='ffill')</code> (forward-fill —
                     appropriate for time-series), remove duplicates, parse
                     timestamps. Time yourself. Aim for fluency, not perfection.
                   </div>
@@ -691,88 +686,79 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-pandas-groupby"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-pandas-groupby">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-pandas-groupby"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-pandas-groupby">
                     Practice: GroupBy aggregations and resampling
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code
                       >df.set_index('timestamp').resample('1H').agg({'speed':
                       'mean', 'distance': 'sum'})</code
                     >
-                    &mdash; resample time-series to hourly buckets.
+                    — resample time-series to hourly buckets.
                     <code
                       >df.groupby('vehicle_id')['speed'].agg(['mean', 'max',
                       'std'])</code
                     >
-                    &mdash; per-vehicle statistics. These are the queries
-                    you&rsquo;ll need to produce quickly under assessment
-                    conditions.
+                    — per-vehicle statistics. These are the queries you’ll need
+                    to produce quickly under assessment conditions.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-pandas-anomaly"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-pandas-anomaly">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-pandas-anomaly"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-pandas-anomaly">
                     Practice: Simple anomaly detection (Z-score &amp; IQR)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Compute Z-scores:
                     <code
                       >df['z_speed'] = (df['speed'] - df['speed'].mean()) /
                       df['speed'].std()</code
-                    >. Flag rows where <code>|z| > 3</code>. Or use IQR:
+                    >. Flag rows where <code>|z| &gt; 3</code>. Or use IQR:
                     <code>Q1 = df['speed'].quantile(0.25)</code>,
                     <code>Q3 = df['speed'].quantile(0.75)</code>,
                     <code>IQR = Q3 - Q1</code>, flag
-                    <code>speed < Q1 - 1.5*IQR</code> or
-                    <code>speed > Q3 + 1.5*IQR</code>. Both approaches handle
-                    noisy sensor data &mdash; mention you&rsquo;d apply this at
-                    the edge (MCU) for lighter anomalies and in the pipeline for
+                    <code>speed &lt; Q1 - 1.5*IQR</code> or
+                    <code>speed &gt; Q3 + 1.5*IQR</code>. Both approaches handle
+                    noisy sensor data — mention you’d apply this at the edge
+                    (MCU) for lighter anomalies and in the pipeline for
                     statistical ones.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-pandas-haversine"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-pandas-haversine">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-pandas-haversine"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-pandas-haversine">
                     Code: Haversine distance function from memory
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write the Haversine formula for great-circle distance
                     between two lat/lon points. This will almost certainly
                     appear in a geospatial assessment. Memorise:<br />
-                    <code
-                      >a = sin&sup2;(&Delta;&phi;/2) + cos &phi;1 &middot; cos
-                      &phi;2 &middot; sin&sup2;(&Delta;&lambda;/2)</code
+                    <code>a = sin²(Δφ/2) + cos φ1 · cos φ2 · sin²(Δλ/2)</code
                     ><br />
-                    <code>d = 2R &middot; atan2(&radic;a, &radic;(1-a))</code>
+                    <code>d = 2R · atan2(√a, √(1-a))</code>
                     where R = 6,371 km. Practice implementing this as a
                     vectorised NumPy function.
                   </div>
@@ -780,18 +766,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-pandas-geopandas"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-pandas-geopandas">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-pandas-geopandas"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-pandas-geopandas">
                     Practice: GeoPandas for spatial DataFrame operations
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     <code>import geopandas as gpd</code>. Convert a Pandas
                     DataFrame to a GeoDataFrame:
@@ -809,197 +793,175 @@
             </li>
           </ul>
         </div>
-
         <!-- MPI NARRATIVE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="mpi">
-            &#9889; Your Killer Evidence: MPI Data Pipeline
+          <h2 id="mpi" style="margin-top: 0">
+            ⚡ Your Killer Evidence: MPI Data Pipeline
           </h2>
           <p>
             This is your single most powerful data-engineering story. Polish it
-            until it&rsquo;s razor-sharp.
+            until it’s razor-sharp.
           </p>
-
           <div class="checklist-category">Narrative Preparation</div>
           <ul
+            aria-label="MPI narrative checklist"
             class="checklist"
             role="list"
-            aria-label="MPI narrative checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-mpi-problem"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-mpi-problem">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-mpi-problem"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-mpi-problem">
                     Rehearse: The Problem (30 seconds)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;SEAT&rsquo;s registration system needed to ingest ~30
-                    million rows of student/course data from CSV exports into
+                    “SEAT’s registration system needed to ingest ~30 million
+                    rows of student/course data from CSV exports into
                     PostgreSQL. The single-threaded Python loader took 3 hours,
                     which was unacceptable during registration windows where the
-                    system needed to be live.&rdquo;
+                    system needed to be live.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-mpi-solution"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-mpi-solution">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-mpi-solution"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-mpi-solution">
                     Rehearse: The Solution (60 seconds)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;I engineered a parallel pipeline using MPI (mpi4py)
-                    with hyperthreading. The CSV was chunk-partitioned across N
+                    “I engineered a parallel pipeline using MPI (mpi4py) with
+                    hyperthreading. The CSV was chunk-partitioned across N
                     worker processes. Each worker processed its chunk with
                     batch-optimised INSERTs (COPY protocol where possible,
                     otherwise multi-row VALUES batches of 5,000 rows). Memory
                     was managed via chunked reads (pandas chunksize=50,000) to
                     prevent OOM on the server. Workers committed independently,
-                    and a coordinator process tracked progress.&rdquo;
+                    and a coordinator process tracked progress.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-mpi-result"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-mpi-result">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-mpi-result"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-mpi-result">
                     Rehearse: The Result (30 seconds)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;Load time went from 3 hours to 25 minutes &mdash; a
-                    7.2&times; speedup. More importantly, this meant we could
-                    run the data pipeline multiple times during a registration
-                    cycle for updates, rather than being limited to a single
-                    overnight batch. It changed the operational model.&rdquo;
+                    “Load time went from 3 hours to 25 minutes — a 7.2× speedup.
+                    More importantly, this meant we could run the data pipeline
+                    multiple times during a registration cycle for updates,
+                    rather than being limited to a single overnight batch. It
+                    changed the operational model.”
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-mpi-bridge"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-mpi-bridge">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-mpi-bridge"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-mpi-bridge">
                     Rehearse: The Bridge to IoT (20 seconds)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    &ldquo;The same principles &mdash; partition data,
-                    parallelise ingestion, batch writes, manage memory &mdash;
-                    apply to IoT sensor pipelines. Instead of CSV chunks, the
-                    partitions are Kafka topic partitions. Instead of MPI
-                    workers, they&rsquo;re Kafka consumer group members. The
-                    pattern is identical, just the transport layer
-                    changes.&rdquo;
+                    “The same principles — partition data, parallelise
+                    ingestion, batch writes, manage memory — apply to IoT sensor
+                    pipelines. Instead of CSV chunks, the partitions are Kafka
+                    topic partitions. Instead of MPI workers, they’re Kafka
+                    consumer group members. The pattern is identical, just the
+                    transport layer changes.”
                   </div>
                 </div>
               </div>
             </li>
           </ul>
         </div>
-
         <!-- KAGGLE PRACTICE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="kaggle">
-            &#127942; Kaggle Practice Datasets
-          </h2>
-
+          <h2 id="kaggle" style="margin-top: 0">🏆 Kaggle Practice Datasets</h2>
           <div class="checklist-category">Recommended Datasets</div>
           <ul
+            aria-label="Kaggle practice checklist"
             class="checklist"
             role="list"
-            aria-label="Kaggle practice checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kaggle-traffic"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kaggle-traffic">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kaggle-traffic"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kaggle-traffic">
                     Download &amp; explore a traffic/trajectory dataset
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Search Kaggle for &ldquo;taxi trajectory Porto&rdquo; or
-                    &ldquo;T-Drive Beijing taxi trajectories&rdquo;. These are
-                    real GPS trajectory datasets with millions of points.
-                    Practice loading, cleaning (handle missing coordinates,
-                    out-of-bounds values), computing trip distances (Haversine),
-                    and identifying anomalous trips (suspiciously fast or
-                    looping).
+                    Search Kaggle for “taxi trajectory Porto” or “T-Drive
+                    Beijing taxi trajectories”. These are real GPS trajectory
+                    datasets with millions of points. Practice loading, cleaning
+                    (handle missing coordinates, out-of-bounds values),
+                    computing trip distances (Haversine), and identifying
+                    anomalous trips (suspiciously fast or looping).
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kaggle-sensor"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kaggle-sensor">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kaggle-sensor"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kaggle-sensor">
                     Download &amp; explore a sensor telemetry dataset
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Search Kaggle for &ldquo;predictive maintenance
-                    sensor&rdquo; or &ldquo;IoT sensor readings&rdquo;.
-                    Practice: time-series resampling, detecting sensor drift
-                    (rolling mean diverges from baseline), gap-filling for
-                    dropped readings, and basic anomaly flagging. Write a
-                    mini-report (5 bullet points) summarising findings.
+                    Search Kaggle for “predictive maintenance sensor” or “IoT
+                    sensor readings”. Practice: time-series resampling,
+                    detecting sensor drift (rolling mean diverges from
+                    baseline), gap-filling for dropped readings, and basic
+                    anomaly flagging. Write a mini-report (5 bullet points)
+                    summarising findings.
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-kaggle-visualise"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-kaggle-visualise">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-kaggle-visualise"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-kaggle-visualise">
                     Create 3 publication-quality visualisations
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Using Matplotlib/Seaborn or Plotly: (1) Heatmap of vehicle
                     density on a map grid, (2) Time-series line chart with
@@ -1013,20 +975,19 @@
             </li>
           </ul>
         </div>
-
         <!-- PREPARATION TOOLS -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="tools">
-            &#128295; Preparation Tools &amp; Resources
+          <h2 id="tools" style="margin-top: 0">
+            🔧 Preparation Tools &amp; Resources
           </h2>
           <div class="resource-grid">
             <a
-              href="https://postgis.net/workshops/postgis-intro/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://postgis.net/workshops/postgis-intro/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127758;</div>
+              <div class="rc-icon">🌎</div>
               <div class="rc-title">PostGIS Workshop</div>
               <div class="rc-desc">
                 Official interactive tutorial. Spatial queries, joins, indexing.
@@ -1035,12 +996,12 @@
               <div class="rc-url">postgis.net/workshops/postgis-intro</div>
             </a>
             <a
-              href="https://docs.timescale.com/getting-started/latest/"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://docs.timescale.com/getting-started/latest/"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128200;</div>
+              <div class="rc-icon">📈</div>
               <div class="rc-title">TimescaleDB Getting Started</div>
               <div class="rc-desc">
                 Official quickstart. Hypertables, continuous aggregates,
@@ -1049,27 +1010,26 @@
               <div class="rc-url">docs.timescale.com</div>
             </a>
             <a
-              href="https://www.kaggle.com/datasets"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://www.kaggle.com/datasets"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#127942;</div>
+              <div class="rc-icon">🏆</div>
               <div class="rc-title">Kaggle Datasets</div>
               <div class="rc-desc">
-                Search &ldquo;trajectory data&rdquo;, &ldquo;urban
-                traffic&rdquo;, or &ldquo;sensor telemetry&rdquo;. Real-world
-                messy CSVs for practice.
+                Search “trajectory data”, “urban traffic”, or “sensor
+                telemetry”. Real-world messy CSVs for practice.
               </div>
               <div class="rc-url">kaggle.com/datasets</div>
             </a>
             <a
-              href="https://kafka.apache.org/quickstart"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://kafka.apache.org/quickstart"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128640;</div>
+              <div class="rc-icon">🚀</div>
               <div class="rc-title">Apache Kafka Quickstart</div>
               <div class="rc-desc">
                 Official quickstart for running Kafka locally. Topics,
@@ -1078,12 +1038,12 @@
               <div class="rc-url">kafka.apache.org/quickstart</div>
             </a>
             <a
-              href="https://geopandas.org/en/stable/getting_started.html"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://geopandas.org/en/stable/getting_started.html"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128013;</div>
+              <div class="rc-icon">🐍</div>
               <div class="rc-title">GeoPandas Getting Started</div>
               <div class="rc-desc">
                 Spatial DataFrames in Python. Plot trajectories, spatial joins,
@@ -1092,12 +1052,12 @@
               <div class="rc-url">geopandas.org</div>
             </a>
             <a
-              href="https://pandas.pydata.org/docs/user_guide/timeseries.html"
-              target="_blank"
-              rel="noopener"
               class="resource-card"
+              href="https://pandas.pydata.org/docs/user_guide/timeseries.html"
+              rel="noopener"
+              target="_blank"
             >
-              <div class="rc-icon">&#128202;</div>
+              <div class="rc-icon">📊</div>
               <div class="rc-title">Pandas Time Series Guide</div>
               <div class="rc-desc">
                 Official guide for DatetimeIndex, resampling, rolling windows,
@@ -1107,38 +1067,34 @@
             </a>
           </div>
         </div>
-
         <!-- TIMED EXERCISE -->
         <div class="section-card fade-in">
-          <h2 style="margin-top: 0" id="exercise">
-            &#127919; Timed Practice Exercise (60 min)
+          <h2 id="exercise" style="margin-top: 0">
+            🎯 Timed Practice Exercise (60 min)
           </h2>
           <p>
             Simulate the Thursday assessment. Set a 60-minute timer. Use a
             Jupyter notebook or plain Python scripts.
           </p>
-
           <div class="checklist-category">
             Exercise: Fleet Telemetry Pipeline
           </div>
           <ul
+            aria-label="Practice exercise checklist"
             class="checklist"
             role="list"
-            aria-label="Practice exercise checklist"
           >
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-ex-step1"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-ex-step1">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-ex-step1"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-ex-step1">
                     Step 1: Generate synthetic GPS data (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write a Python script that generates 50,000 GPS pings for 20
                     vehicles over 24 hours. Each ping:
@@ -1146,26 +1102,24 @@
                       >{"vehicle_id": "V-01", "lat": -33.93 + noise, "lon":
                       18.42 + noise, "speed": 40 + noise, "ts":
                       "2026-03-12T08:00:00Z"}</code
-                    >. Add realistic noise (normal distribution, &sigma;=0.001
-                    for coords, &sigma;=5 for speed). Inject 2% anomalies (speed
-                    &gt; 120 km/h or coordinates in the ocean).
+                    >. Add realistic noise (normal distribution, σ=0.001 for
+                    coords, σ=5 for speed). Inject 2% anomalies (speed &gt; 120
+                    km/h or coordinates in the ocean).
                   </div>
                 </div>
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-ex-step2"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-ex-step2">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-ex-step2"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-ex-step2">
                     Step 2: Clean &amp; detect anomalies (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Load the CSV into Pandas. Remove pings with null
                     coordinates. Flag speed anomalies using Z-score. Flag
@@ -1178,20 +1132,18 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-ex-step3"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-ex-step3">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-ex-step3"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-ex-step3">
                     Step 3: Load into TimescaleDB via COPY (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
-                    Create a hypertable. Use <code>psycopg2</code>&rsquo;s
+                    Create a hypertable. Use <code>psycopg2</code>’s
                     <code>copy_expert()</code> or
                     <code>COPY FROM STDIN</code> to bulk-load the cleaned data.
                     Verify row count matches. Create a GiST index on a PostGIS
@@ -1202,18 +1154,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-ex-step4"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-ex-step4">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-ex-step4"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-ex-step4">
                     Step 4: Spatial queries (15 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Write SQL queries: (1) Find all vehicles that passed within
                     200m of UCT Upper Campus (-33.9575, 18.4610) in the last
@@ -1225,18 +1175,16 @@
               </div>
             </li>
             <li>
-              <div
-                class="checklist-item"
-                data-key="de-ex-step5"
-                role="checkbox"
-                aria-checked="false"
-                tabindex="0"
-              >
-                <div class="checklist-checkbox" aria-hidden="true"></div>
+              <div class="checklist-item" data-key="de-ex-step5">
+                <input
+                  class="checklist-checkbox"
+                  type="checkbox"
+                  id="de-ex-step5"
+                />
                 <div class="checklist-text">
-                  <div class="checklist-label">
+                  <label class="checklist-label" for="de-ex-step5">
                     Step 5: Visualise results (10 min)
-                  </div>
+                  </label>
                   <div class="checklist-detail">
                     Produce: (1) A scatter plot of all GPS pings coloured by
                     vehicle on a Cape Town basemap (use
@@ -1249,23 +1197,27 @@
             </li>
           </ul>
         </div>
-
         <!-- TALKING POINTS -->
         <div class="section-card fade-in">
           <h2 style="margin-top: 0">
-            &#128172; Key Talking Points for the Assessment
+            💬 Key Talking Points for the Assessment
           </h2>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
+            <button
+              aria-controls="disclosure-panel-1"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
               How would you handle 10,000 sensor nodes pushing data at 1 Hz to a
               single database?
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-1">
               <p><span class="star-label star-a">Architecture</span></p>
               <p>
-                <strong>You don&rsquo;t write directly to the database.</strong>
-                That&rsquo;s 10,000 INSERT/s &mdash; your PostgreSQL connection
-                pool will be exhausted in seconds.
+                <strong>You don’t write directly to the database.</strong>
+                That’s 10,000 INSERT/s — your PostgreSQL connection pool will be
+                exhausted in seconds.
               </p>
               <p>
                 <strong>Layer 1 (Buffer):</strong> All sensor data goes to
@@ -1293,17 +1245,22 @@
             </div>
           </div>
           <div class="qa-group">
-            <button class="qa-question" onclick="toggleQA(this)">
-              Walk me through how you&rsquo;d query &ldquo;all vehicles within
-              500m of a bus stop in the last 5 minutes&rdquo;.
+            <button
+              aria-controls="disclosure-panel-2"
+              aria-expanded="false"
+              class="qa-question"
+              type="button"
+            >
+              Walk me through how you’d query “all vehicles within 500m of a bus
+              stop in the last 5 minutes”.
             </button>
-            <div class="qa-answer">
+            <div class="qa-answer" id="disclosure-panel-2">
               <p><span class="star-label star-t">Technical</span></p>
               <pre><code>SELECT v.vehicle_id, v.speed, v.time,
        ST_Distance(v.geom::geography, s.geom::geography) AS dist_m
 FROM gps_pings v
 JOIN bus_stops s ON ST_DWithin(v.geom::geography, s.geom::geography, 500)
-WHERE v.time > NOW() - INTERVAL '5 minutes'
+WHERE v.time &gt; NOW() - INTERVAL '5 minutes'
   AND s.stop_name = 'Civic Centre MyCiTi';
 </code></pre>
               <p>
@@ -1317,38 +1274,34 @@ WHERE v.time > NOW() - INTERVAL '5 minutes'
                 <code>::geography</code> ensures <code>ST_DWithin</code> uses
                 metres (geodesic distance), not degrees. Without the cast, 500
                 means 500 degrees, which is nonsensical. This is a common gotcha
-                &mdash; mentioning it proactively shows mastery.
+                — mentioning it proactively shows mastery.
               </p>
             </div>
           </div>
         </div>
-
         <button
+          aria-label="Reset all checklist progress"
           class="checklist-reset-btn"
           id="resetBtn"
-          aria-label="Reset all checklist progress"
         >
           Reset All Progress
         </button>
-
         <div class="page-footer">
           <p>
-            Prepared for Paul Namalomba &middot; CTO Assessment Prep &middot;
-            Dr.&nbsp;Nnene &middot; 12 March 2026
+            Prepared for Paul Namalomba · CTO Assessment Prep · Dr. Nnene · 12
+            March 2026
           </p>
         </div>
       </main>
     </div>
-
     <button
+      aria-label="Back to top"
       class="back-to-top"
       id="btt"
       title="Back to top"
-      aria-label="Back to top"
     >
-      &#8593;
+      ↑
     </button>
-
     <script>
       (function () {
         const H =
@@ -1367,70 +1320,16 @@ WHERE v.time > NOW() - INTERVAL '5 minutes'
           btt.classList.toggle("visible", window.scrollY > 300);
         });
         btt.addEventListener("click", function () {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        const STORAGE_KEY = "de-docker-checklist";
-        const items = document.querySelectorAll(".checklist-item[data-key]");
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-        function updateProgress() {
-          const total = items.length;
-          const checked = document.querySelectorAll(
-            ".checklist-item.checked",
-          ).length;
-          document.getElementById("progressCount").textContent =
-            checked + " / " + total;
-          const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
-          const bar = document.getElementById("progressBar");
-          bar.style.width = pct + "%";
-          bar.setAttribute("aria-valuenow", pct);
-          bar.classList.toggle("complete", pct === 100);
-        }
-
-        items.forEach(function (item) {
-          const key = item.getAttribute("data-key");
-          if (saved[key]) {
-            item.classList.add("checked");
-            item.setAttribute("aria-checked", "true");
-          }
-          item.addEventListener("click", function (e) {
-            if (e.target.tagName === "A") return;
-            item.classList.toggle("checked");
-            const isChecked = item.classList.contains("checked");
-            item.setAttribute("aria-checked", isChecked ? "true" : "false");
-            saved[key] = isChecked;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-            updateProgress();
-          });
-          item.addEventListener("keydown", function (e) {
-            if (e.key === " " || e.key === "Enter") {
-              e.preventDefault();
-              item.click();
-            }
+          window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+              .matches
+              ? "auto"
+              : "smooth",
           });
         });
-
-        updateProgress();
-
-        document
-          .getElementById("resetBtn")
-          .addEventListener("click", function () {
-            if (!confirm("Reset all checklist progress on this page?")) return;
-            items.forEach(function (item) {
-              item.classList.remove("checked");
-              item.setAttribute("aria-checked", "false");
-            });
-            localStorage.removeItem(STORAGE_KEY);
-            updateProgress();
-          });
       })();
-
-      function toggleQA(btn) {
-        btn.classList.toggle("open");
-        var a = btn.nextElementSibling;
-        a.classList.toggle("visible");
-      }
     </script>
+    <script defer src="../../scripts/checklists.js"></script>
   </body>
 </html>

@@ -1,33 +1,37 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
       Python for Machine Learning: Engineering the AI Pipeline - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -36,8 +40,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -181,7 +184,6 @@ pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> 
 pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu118
 </code></pre>
           </div>
-
           <h3 id="windows-path-and-gpu-drivers">
             Windows PATH and GPU Drivers
           </h3>
@@ -217,18 +219,17 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load 1M rows of chaotic CSV telemetry data into RAM</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;sensor_telemetry.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"sensor_telemetry.csv"</span><span class="p">)</span>
 
 <span class="c1"># Feature extraction: Drop missing data and isolate the target variable</span>
 <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;vibration&#39;</span><span class="p">,</span> <span class="s1">&#39;pressure&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Casts to a strict NumPy array</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;failure_status&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'temperature'</span><span class="p">,</span> <span class="s1">'vibration'</span><span class="p">,</span> <span class="s1">'pressure'</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Casts to a strict NumPy array</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'failure_status'</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
 <span class="c1"># Vectorization replaces iterating row by row. This is executed in C, 100x faster than pure Python.</span>
 <span class="n">X_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </code></pre>
           </div>
-
           <h3 id="classical-ml-scikit-learn">Classical ML: Scikit-Learn</h3>
           <p>
             Scikit-Learn implements the standard transformer-estimator
@@ -253,7 +254,6 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
 <span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
 </code></pre>
           </div>
-
           <h3 id="deep-learning-pytorch">Deep Learning: PyTorch</h3>
           <p>
             When the feature complexity outstrips classical trees, PyTorch
@@ -266,7 +266,7 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
 
 <span class="c1"># Enforce hardware acceleration</span>
-<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">'cuda'</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">'cpu'</span><span class="p">)</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SensorNeuralNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -298,7 +298,6 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
     <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>                <span class="c1"># Adjust weights</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="3-compile-time-commands-bytecode-linting">
             3. Compile-time Commands (Bytecode &amp; Linting)
@@ -326,7 +325,6 @@ pip<span class="w"> </span>install<span class="w"> </span>mypy
 mypy<span class="w"> </span>model_pipeline.py
 </code></pre>
           </div>
-
           <hr />
           <h2 id="4-runtime-commands-execution-serving">
             4. Runtime Commands (Execution &amp; Serving)
@@ -345,14 +343,12 @@ nohup<span class="w"> </span>python<span class="w"> </span>train_resnet.py<span 
 watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>nvidia-smi
 </code></pre>
           </div>
-
           <p>For serving the model as an API inference node using FastAPI:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Daemonize the REST endpoint to receive prediction requests</span>
 uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span>--workers<span class="w"> </span><span class="m">4</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="5-debugging-tensor-mismatches-oom-kernels">
             5. Debugging (Tensor Mismatches &amp; OOM Kernels)
@@ -392,10 +388,9 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
 <span class="k">with</span> <span class="n">profiler</span><span class="o">.</span><span class="n">profile</span><span class="p">(</span><span class="n">use_cuda</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">prof</span><span class="p">:</span>
     <span class="n">model</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">prof</span><span class="o">.</span><span class="n">key_averages</span><span class="p">()</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;cuda_time_total&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">prof</span><span class="o">.</span><span class="n">key_averages</span><span class="p">()</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">"cuda_time_total"</span><span class="p">))</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Tracebacks:</strong> Pay heavy attention to whether a
@@ -409,32 +404,11 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

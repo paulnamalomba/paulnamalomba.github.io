@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Clean Architecture & Project Structures — C#, Dart (Flutter) & TypeScript
-      - Paul Namalomba
+      Clean Architecture &amp; Project Structures — C#, Dart (Flutter) &amp;
+      TypeScript - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -552,7 +555,6 @@
 Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 </code></pre>
           </div>
-
           <p>
             The key constraint:
             <strong
@@ -586,7 +588,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
     └── Program.cs           # Entry point and dependency injection
 </code></pre>
           </div>
-
           <p><strong>Why this becomes problematic:</strong></p>
           <ul>
             <li>
@@ -692,7 +693,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 └── EnterpriseSolution.sln
 </code></pre>
           </div>
-
           <h3 id="c-project-references-enforcing-the-dependency-rule">
             C# Project References (Enforcing the Dependency Rule)
           </h3>
@@ -702,62 +702,58 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Project.Domain.csproj — ZERO project references --&gt;</span>
-<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
 </code></pre>
           </div>
-
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Project.Application.csproj — References Domain ONLY --&gt;</span>
-<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Domain\Project.Domain.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"..\Project.Domain\Project.Domain.csproj"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;FluentValidation&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;11.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"FluentValidation"</span><span class="w"> </span><span class="na">Version=</span><span class="s">"11.*"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
 </code></pre>
           </div>
-
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Project.Infrastructure.csproj — References Application &amp; Domain --&gt;</span>
-<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Domain\Project.Domain.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Application\Project.Application.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"..\Project.Domain\Project.Domain.csproj"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"..\Project.Application\Project.Application.csproj"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Microsoft.EntityFrameworkCore&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;8.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Npgsql.EntityFrameworkCore.PostgreSQL&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;8.*&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"Microsoft.EntityFrameworkCore"</span><span class="w"> </span><span class="na">Version=</span><span class="s">"8.*"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"Npgsql.EntityFrameworkCore.PostgreSQL"</span><span class="w"> </span><span class="na">Version=</span><span class="s">"8.*"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
 </code></pre>
           </div>
-
           <div class="codehilite">
             <pre><span></span><code><span class="cm">&lt;!-- Project.Api.csproj — References Application &amp; Infrastructure --&gt;</span>
-<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk.Web&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk.Web"</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Application\Project.Application.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;..\Project.Infrastructure\Project.Infrastructure.csproj&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"..\Project.Application\Project.Application.csproj"</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;ProjectReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"..\Project.Infrastructure\Project.Infrastructure.csproj"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
 </code></pre>
           </div>
-
           <p>
             If a developer in <code>Project.Domain</code> tries to
             <code>using Project.Infrastructure;</code>, the compiler will reject
@@ -787,7 +783,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 └── main.dart
 </code></pre>
           </div>
-
           <p><strong>Why this becomes problematic:</strong></p>
           <ul>
             <li>
@@ -895,7 +890,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 └── main.dart                       # ProviderScope and routing
 </code></pre>
           </div>
-
           <h3 id="dart-dependency-injection-mechanics">
             Dart Dependency Injection Mechanics
           </h3>
@@ -907,7 +901,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// injection_container.dart (using get_it)</span>
-<span class="k">import</span><span class="w"> </span><span class="s1">&#39;package:get_it/get_it.dart&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="s1">'package:get_it/get_it.dart'</span><span class="p">;</span>
 
 <span class="kd">final</span><span class="w"> </span><span class="n">sl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GetIt</span><span class="p">.</span><span class="n">instance</span><span class="p">;</span><span class="w">  </span><span class="c1">// sl = service locator</span>
 
@@ -934,7 +928,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             The Use Case <code>LoginUser</code> receives
             <code>IAuthRepository</code> (an abstraction from the domain layer).
@@ -965,7 +958,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 └── index.ts         # Server setup
 </code></pre>
           </div>
-
           <p><strong>Why this becomes problematic:</strong></p>
           <ul>
             <li>
@@ -1050,7 +1042,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 └── main.ts                          # Application bootstrap
 </code></pre>
           </div>
-
           <h3 id="typescript-di-interface-enforcement">
             TypeScript DI &amp; Interface Enforcement
           </h3>
@@ -1066,11 +1057,11 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// main.ts — Composition Root</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserController</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./presentation/http/controllers/UserController&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./application/use-cases/RegisterUserUseCase&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/repositories/UserRepositoryImpl&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SendGridEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/services/SendGridEmailService&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/database/PostgresConnection&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserController</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./presentation/http/controllers/UserController'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./application/use-cases/RegisterUserUseCase'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./infrastructure/repositories/UserRepositoryImpl'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">SendGridEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./infrastructure/services/SendGridEmailService'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./infrastructure/database/PostgresConnection'</span><span class="p">;</span>
 
 <span class="kd">const</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="p">();</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">userRepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="p">(</span><span class="nx">db</span><span class="p">);</span>
@@ -1079,10 +1070,9 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="kd">const</span><span class="w"> </span><span class="nx">userController</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">UserController</span><span class="p">(</span><span class="nx">registerUser</span><span class="p">);</span>
 
 <span class="c1">// Wire into Express</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/api/users&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">'/api/users'</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">userController</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">));</span>
 </code></pre>
           </div>
-
           <p>
             <strong
               >Option B: <code>tsyringe</code> (decorator-based DI
@@ -1090,23 +1080,22 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             >
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">container</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;tsyringe&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./infrastructure/repositories/UserRepositoryImpl&#39;</span><span class="p">;</span>
+            <pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">container</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'tsyringe'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./domain/interfaces/IUserRepository'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./infrastructure/repositories/UserRepositoryImpl'</span><span class="p">;</span>
 
-<span class="nx">container</span><span class="p">.</span><span class="nx">register</span><span class="o">&lt;</span><span class="nx">IUserRepository</span><span class="o">&gt;</span><span class="p">(</span><span class="s1">&#39;IUserRepository&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useClass</span><span class="o">:</span><span class="w"> </span><span class="kt">UserRepositoryImpl</span><span class="w"> </span><span class="p">});</span>
+<span class="nx">container</span><span class="p">.</span><span class="nx">register</span><span class="o">&lt;</span><span class="nx">IUserRepository</span><span class="o">&gt;</span><span class="p">(</span><span class="s1">'IUserRepository'</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useClass</span><span class="o">:</span><span class="w"> </span><span class="kt">UserRepositoryImpl</span><span class="w"> </span><span class="p">});</span>
 
 <span class="c1">// In RegisterUserUseCase.ts</span>
 <span class="kd">@injectable</span><span class="p">()</span>
 <span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
-<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">&#39;IUserRepository&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">userRepo</span><span class="o">:</span><span class="w"> </span><span class="kt">IUserRepository</span><span class="p">,</span>
-<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">&#39;IEmailService&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">emailService</span><span class="o">:</span><span class="w"> </span><span class="kt">IEmailService</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">'IUserRepository'</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">userRepo</span><span class="o">:</span><span class="w"> </span><span class="kt">IUserRepository</span><span class="p">,</span>
+<span class="w">    </span><span class="kd">@inject</span><span class="p">(</span><span class="s1">'IEmailService'</span><span class="p">)</span><span class="w"> </span><span class="k">private</span><span class="w"> </span><span class="nx">emailService</span><span class="o">:</span><span class="w"> </span><span class="kt">IEmailService</span><span class="p">,</span>
 <span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Both approaches satisfy the Dependency Rule:
             <code>RegisterUserUseCase</code> depends on
@@ -1281,7 +1270,6 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="err">└──────────────────────────────────────────┘</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Key observation:</strong> The Application layer calls
             <code>IUserRepository.save()</code> and
@@ -1306,11 +1294,10 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Domain: Interface</strong></p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// domain/interfaces/IUserRepository.ts</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../entities/User&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../entities/User'</span><span class="p">;</span>
 
 <span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="p">;</span>
@@ -1319,17 +1306,16 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Application: Use Case</strong></p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// application/use-cases/RegisterUserUseCase.ts</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/entities/User&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IEmailService&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IHashService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IHashService&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserRequestDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../dtos/RegisterUserRequestDto&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserResponseDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../dtos/UserResponseDto&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">v4</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">uuidv4</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;uuid&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/entities/User'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/interfaces/IUserRepository'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IEmailService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/interfaces/IEmailService'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IHashService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/interfaces/IHashService'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserRequestDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../dtos/RegisterUserRequestDto'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">UserResponseDto</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../dtos/UserResponseDto'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">v4</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="nx">uuidv4</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'uuid'</span><span class="p">;</span>
 
 <span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kr">constructor</span><span class="p">(</span>
@@ -1342,7 +1328,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="w">    </span><span class="c1">// 1. Check uniqueness</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">userRepo</span><span class="p">.</span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">dto</span><span class="p">.</span><span class="nx">email</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">exists</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Email already registered&#39;</span><span class="p">);</span>
+<span class="w">      </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">'Email already registered'</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">// 2. Hash password</span>
@@ -1363,32 +1349,31 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Infrastructure: Repository Implementation</strong></p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// infrastructure/repositories/UserRepositoryImpl.ts</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/interfaces/IUserRepository&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../domain/entities/User&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Pool</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;pg&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/interfaces/IUserRepository'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../domain/entities/User'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Pool</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'pg'</span><span class="p">;</span>
 
 <span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">UserRepositoryImpl</span><span class="w"> </span><span class="k">implements</span><span class="w"> </span><span class="nx">IUserRepository</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">pool</span><span class="o">:</span><span class="w"> </span><span class="kt">Pool</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 
 <span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">existsByEmail</span><span class="p">(</span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">&#39;SELECT 1 FROM users WHERE email = $1&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">email</span><span class="p">]);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">'SELECT 1 FROM users WHERE email = $1'</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">email</span><span class="p">]);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">rowCount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">save</span><span class="p">(</span><span class="nx">user</span><span class="o">:</span><span class="w"> </span><span class="kt">User</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
-<span class="w">      </span><span class="s1">&#39;INSERT INTO users (id, email, hashed_password, created_at) VALUES ($1, $2, $3, $4)&#39;</span><span class="p">,</span>
+<span class="w">      </span><span class="s1">'INSERT INTO users (id, email, hashed_password, created_at) VALUES ($1, $2, $3, $4)'</span><span class="p">,</span>
 <span class="w">      </span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">hashedPassword</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">createdAt</span><span class="p">],</span>
 <span class="w">    </span><span class="p">);</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nb">Promise</span><span class="o">&lt;</span><span class="nx">User</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM users WHERE id = $1&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">id</span><span class="p">]);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">pool</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s1">'SELECT * FROM users WHERE id = $1'</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="nx">id</span><span class="p">]);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">rows</span><span class="p">[</span><span class="mf">0</span><span class="p">];</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">User</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">email</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">hashed_password</span><span class="p">,</span><span class="w"> </span><span class="nx">row</span><span class="p">.</span><span class="nx">created_at</span><span class="p">);</span>
@@ -1396,12 +1381,11 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Presentation: Controller</strong></p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// presentation/http/controllers/UserController.ts</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">Response</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;express&#39;</span><span class="p">;</span>
-<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;../../../application/use-cases/RegisterUserUseCase&#39;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">Response</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'express'</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">RegisterUserUseCase</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../../../application/use-cases/RegisterUserUseCase'</span><span class="p">;</span>
 
 <span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">UserController</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">registerUser</span><span class="o">:</span><span class="w"> </span><span class="kt">RegisterUserUseCase</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
@@ -1412,17 +1396,16 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 <span class="w">      </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">registerUser</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">dto</span><span class="p">);</span>
 <span class="w">      </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">201</span><span class="p">).</span><span class="nx">json</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">&#39;Email already registered&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s1">'Email already registered'</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">409</span><span class="p">).</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="kt">error.message</span><span class="w"> </span><span class="p">});</span>
 <span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Internal server error&#39;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mf">500</span><span class="p">).</span><span class="nx">json</span><span class="p">({</span><span class="w"> </span><span class="nx">error</span><span class="o">:</span><span class="w"> </span><span class="s1">'Internal server error'</span><span class="w"> </span><span class="p">});</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Notice the controller is <strong>thin</strong>: it parses HTTP,
             delegates to the Use Case, and formats the HTTP response. It
@@ -1608,32 +1591,11 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

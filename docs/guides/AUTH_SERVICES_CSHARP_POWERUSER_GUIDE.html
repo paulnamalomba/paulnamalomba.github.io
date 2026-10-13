@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>AUTH_SERVICES PowerUser Guide (C#) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -250,46 +253,44 @@
 
 <span class="c1">// Add authentication with Azure AD</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddAuthentication</span><span class="p">(</span><span class="n">JwtBearerDefaults</span><span class="p">.</span><span class="n">AuthenticationScheme</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="n">AddMicrosoftIdentityWebApi</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">&quot;AzureAd&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddMicrosoftIdentityWebApi</span><span class="p">(</span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">"AzureAd"</span><span class="p">));</span>
 
 <span class="c1">// Add authorization policies</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddAuthorizationBuilder</span><span class="p">()</span>
-<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">&quot;AdminOnly&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">policy</span><span class="p">.</span><span class="n">RequireRole</span><span class="p">(</span><span class="s">&quot;Admin&quot;</span><span class="p">))</span>
-<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">&quot;RequireMfa&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">policy</span><span class="p">.</span><span class="n">RequireClaim</span><span class="p">(</span><span class="s">&quot;amr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;mfa&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">"AdminOnly"</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">policy</span><span class="p">.</span><span class="n">RequireRole</span><span class="p">(</span><span class="s">"Admin"</span><span class="p">))</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">"RequireMfa"</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">policy</span><span class="p">.</span><span class="n">RequireClaim</span><span class="p">(</span><span class="s">"amr"</span><span class="p">,</span><span class="w"> </span><span class="s">"mfa"</span><span class="p">));</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">builder</span><span class="p">.</span><span class="n">Build</span><span class="p">();</span>
 
 <span class="n">app</span><span class="p">.</span><span class="n">UseAuthentication</span><span class="p">();</span>
 <span class="n">app</span><span class="p">.</span><span class="n">UseAuthorization</span><span class="p">();</span>
 
-<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">&quot;/api/secure&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;Protected resource&quot;</span><span class="p">)</span>
+<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">"/api/secure"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">"Protected resource"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">.</span><span class="n">RequireAuthorization</span><span class="p">();</span>
 
-<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">&quot;/api/admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;Admin only resource&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">.</span><span class="n">RequireAuthorization</span><span class="p">(</span><span class="s">&quot;AdminOnly&quot;</span><span class="p">);</span>
+<span class="n">app</span><span class="p">.</span><span class="n">MapGet</span><span class="p">(</span><span class="s">"/api/admin"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">"Admin only resource"</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="n">RequireAuthorization</span><span class="p">(</span><span class="s">"AdminOnly"</span><span class="p">);</span>
 
 <span class="n">app</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
 </code></pre>
           </div>
-
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// appsettings.json - Azure AD configuration</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;AzureAd&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;Instance&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://login.microsoftonline.com/&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;TenantId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-tenant-id&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;ClientId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-client-id&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;Audience&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api://your-api-id&quot;</span>
+<span class="w">  </span><span class="nt">"AzureAd"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Instance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://login.microsoftonline.com/"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"TenantId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"your-tenant-id"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"ClientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"your-client-id"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Audience"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api://your-api-id"</span>
 <span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;Logging&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;LogLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;Microsoft.Identity&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Information&quot;</span>
+<span class="w">  </span><span class="nt">"Logging"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"LogLevel"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Microsoft.Identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use managed identities or
             KeyVault for client secrets; never hardcode credentials - Implement
@@ -326,13 +327,13 @@
 <span class="w">        </span><span class="n">OnTokenValidated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="c1">// Check token revocation against distributed cache</span>
-<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Principal</span><span class="o">?.</span><span class="n">FindFirst</span><span class="p">(</span><span class="s">&quot;jti&quot;</span><span class="p">)</span><span class="o">?.</span><span class="n">Value</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Principal</span><span class="o">?.</span><span class="n">FindFirst</span><span class="p">(</span><span class="s">"jti"</span><span class="p">)</span><span class="o">?.</span><span class="n">Value</span><span class="p">;</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">RequestServices</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">IDistributedCache</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">revoked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">$&quot;revoked:{tokenId}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">revoked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">$"revoked:{tokenId}"</span><span class="p">);</span>
 
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">revoked</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">&quot;Token has been revoked&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">"Token has been revoked"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="n">OnAuthenticationFailed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=&gt;</span>
@@ -340,7 +341,7 @@
 <span class="w">            </span><span class="c1">// Log authentication failures with security context</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">RequestServices</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">Program</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 <span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">LogWarning</span><span class="p">(</span>
-<span class="w">                </span><span class="s">&quot;Authentication failed: {Exception} | IP: {IP} | Path: {Path}&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">"Authentication failed: {Exception} | IP: {IP} | Path: {Path}"</span><span class="p">,</span>
 <span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">,</span>
 <span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Connection</span><span class="p">.</span><span class="n">RemoteIpAddress</span><span class="p">,</span>
 <span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Path</span>
@@ -351,7 +352,6 @@
 <span class="p">});</span>
 </code></pre>
           </div>
-
           <p><strong>Certificate-Based Authentication</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Mutual TLS authentication with client certificates</span>
@@ -372,14 +372,14 @@
 
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">validationService</span><span class="p">.</span><span class="n">IsTrusted</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">ClientCertificate</span><span class="p">))</span>
 <span class="w">                </span><span class="p">{</span>
-<span class="w">                    </span><span class="n">context</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">&quot;Certificate not trusted&quot;</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">context</span><span class="p">.</span><span class="n">Fail</span><span class="p">(</span><span class="s">"Certificate not trusted"</span><span class="p">);</span>
 <span class="w">                </span><span class="p">}</span>
 
 <span class="w">                </span><span class="c1">// Add certificate thumbprint as claim</span>
 <span class="w">                </span><span class="kt">var</span><span class="w"> </span><span class="n">claims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span>
 <span class="w">                </span><span class="p">{</span>
-<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="nf">Claim</span><span class="p">(</span><span class="s">&quot;cert_thumbprint&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">ClientCertificate</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">),</span>
-<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="nf">Claim</span><span class="p">(</span><span class="s">&quot;cert_subject&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">ClientCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="nf">Claim</span><span class="p">(</span><span class="s">"cert_thumbprint"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">ClientCertificate</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">),</span>
+<span class="w">                    </span><span class="k">new</span><span class="w"> </span><span class="nf">Claim</span><span class="p">(</span><span class="s">"cert_subject"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">ClientCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">)</span>
 <span class="w">                </span><span class="p">};</span>
 
 <span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Principal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ClaimsPrincipal</span><span class="p">(</span>
@@ -406,7 +406,6 @@
 <span class="p">});</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Key Security Measures</strong>: - Use Azure KeyVault or AWS
             Secrets Manager for signing keys; rotate every 90 days - Implement
@@ -446,66 +445,66 @@
 <span class="w">        </span><span class="n">_cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpGet(&quot;login&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpGet("login")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">IActionResult</span><span class="w"> </span><span class="nf">Login</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Generate PKCE code verifier and challenge</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">codeVerifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerateCodeVerifier</span><span class="p">();</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">codeChallenge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GenerateCodeChallenge</span><span class="p">(</span><span class="n">codeVerifier</span><span class="p">);</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;N&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">().</span><span class="n">ToString</span><span class="p">(</span><span class="s">"N"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Store code verifier and state in cache</span>
-<span class="w">        </span><span class="n">_cache</span><span class="p">.</span><span class="n">SetString</span><span class="p">(</span><span class="s">$&quot;verifier:{state}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">codeVerifier</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">_cache</span><span class="p">.</span><span class="n">SetString</span><span class="p">(</span><span class="s">$"verifier:{state}"</span><span class="p">,</span><span class="w"> </span><span class="n">codeVerifier</span><span class="p">,</span><span class="w"> </span>
 <span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">DistributedCacheEntryOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">AbsoluteExpirationRelativeToNow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromMinutes</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">});</span>
 
 <span class="w">        </span><span class="c1">// Build authorization URL</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">authUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;{_config[&quot;</span><span class="n">OAuth</span><span class="p">:</span><span class="n">AuthorizationEndpoint</span><span class="s">&quot;]}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;?response_type=code&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;client_id={_config[&quot;</span><span class="n">OAuth</span><span class="p">:</span><span class="n">ClientId</span><span class="s">&quot;]}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;redirect_uri={Uri.EscapeDataString(_config[&quot;</span><span class="n">OAuth</span><span class="p">:</span><span class="n">RedirectUri</span><span class="s">&quot;])}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;scope={Uri.EscapeDataString(&quot;</span><span class="n">openid</span><span class="w"> </span><span class="n">profile</span><span class="w"> </span><span class="n">email</span><span class="s">&quot;)}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;state={state}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;code_challenge={codeChallenge}&quot;</span><span class="w"> </span><span class="o">+</span>
-<span class="w">            </span><span class="s">$&quot;&amp;code_challenge_method=S256&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">authUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"{_config["</span><span class="n">OAuth</span><span class="p">:</span><span class="n">AuthorizationEndpoint</span><span class="s">"]}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"?response_type=code"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;client_id={_config["</span><span class="n">OAuth</span><span class="p">:</span><span class="n">ClientId</span><span class="s">"]}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;redirect_uri={Uri.EscapeDataString(_config["</span><span class="n">OAuth</span><span class="p">:</span><span class="n">RedirectUri</span><span class="s">"])}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;scope={Uri.EscapeDataString("</span><span class="n">openid</span><span class="w"> </span><span class="n">profile</span><span class="w"> </span><span class="n">email</span><span class="s">")}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;state={state}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;code_challenge={codeChallenge}"</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="s">$"&amp;code_challenge_method=S256"</span><span class="p">;</span>
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Redirect</span><span class="p">(</span><span class="n">authUrl</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpGet(&quot;callback&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpGet("callback")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Callback</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">code</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">state</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">&quot;Missing code or state&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">"Missing code or state"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Retrieve and validate code verifier</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">codeVerifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_cache</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">$&quot;verifier:{state}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">codeVerifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_cache</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">$"verifier:{state}"</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">codeVerifier</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">&quot;Invalid state or expired session&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">BadRequest</span><span class="p">(</span><span class="s">"Invalid state or expired session"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Exchange authorization code for tokens</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_httpClientFactory</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:TokenEndpoint&quot;</span><span class="p">])</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenRequest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:TokenEndpoint"</span><span class="p">])</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormUrlEncodedContent</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="na">[&quot;grant_type&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;authorization_code&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;code&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;redirect_uri&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:RedirectUri&quot;</span><span class="p">],</span>
-<span class="w">                </span><span class="na">[&quot;client_id&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:ClientId&quot;</span><span class="p">],</span>
-<span class="w">                </span><span class="na">[&quot;code_verifier&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">codeVerifier</span>
+<span class="w">                </span><span class="na">["grant_type"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"authorization_code"</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["code"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["redirect_uri"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:RedirectUri"</span><span class="p">],</span>
+<span class="w">                </span><span class="na">["client_id"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:ClientId"</span><span class="p">],</span>
+<span class="w">                </span><span class="na">["code_verifier"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">codeVerifier</span>
 <span class="w">            </span><span class="p">})</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">SendAsync</span><span class="p">(</span><span class="n">tokenRequest</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">StatusCode</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Token exchange failed&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">StatusCode</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">,</span><span class="w"> </span><span class="s">"Token exchange failed"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadFromJsonAsync</span><span class="o">&lt;</span><span class="n">TokenResponse</span><span class="o">&gt;</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Store tokens securely</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="nf">StoreTokensSecurely</span><span class="p">(</span><span class="n">tokenResponse</span><span class="p">);</span>
 
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Authentication successful&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Authentication successful"</span><span class="p">,</span><span class="w"> </span><span class="n">tokenResponse</span><span class="p">.</span><span class="n">AccessToken</span><span class="w"> </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GenerateCodeVerifier</span><span class="p">()</span>
@@ -513,24 +512,24 @@
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
 <span class="w">        </span><span class="n">RandomNumberGenerator</span><span class="p">.</span><span class="n">Fill</span><span class="p">(</span><span class="n">bytes</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">TrimEnd</span><span class="p">(</span><span class="sc">&#39;=&#39;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">&#39;+&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;_&#39;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">.</span><span class="n">TrimEnd</span><span class="p">(</span><span class="sc">'='</span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">'+'</span><span class="p">,</span><span class="w"> </span><span class="sc">'-'</span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">'/'</span><span class="p">,</span><span class="w"> </span><span class="sc">'_'</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="nf">GenerateCodeChallenge</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">codeVerifier</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SHA256</span><span class="p">.</span><span class="n">HashData</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">codeVerifier</span><span class="p">));</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">bytes</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">TrimEnd</span><span class="p">(</span><span class="sc">&#39;=&#39;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">&#39;+&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;-&#39;</span><span class="p">)</span>
-<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">,</span><span class="w"> </span><span class="sc">&#39;_&#39;</span><span class="p">);</span>
+<span class="w">            </span><span class="p">.</span><span class="n">TrimEnd</span><span class="p">(</span><span class="sc">'='</span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">'+'</span><span class="p">,</span><span class="w"> </span><span class="sc">'-'</span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="sc">'/'</span><span class="p">,</span><span class="w"> </span><span class="sc">'_'</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">StoreTokensSecurely</span><span class="p">(</span><span class="n">TokenResponse</span><span class="w"> </span><span class="n">tokens</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Encrypt and store refresh token in database</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="p">.</span><span class="n">FindFirst</span><span class="p">(</span><span class="s">&quot;sub&quot;</span><span class="p">)</span><span class="o">?.</span><span class="n">Value</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">userId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">User</span><span class="p">.</span><span class="n">FindFirst</span><span class="p">(</span><span class="s">"sub"</span><span class="p">)</span><span class="o">?.</span><span class="n">Value</span><span class="p">;</span>
 <span class="w">        </span><span class="c1">// Implementation: Store encrypted refresh token with user ID</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -545,7 +544,6 @@
 <span class="p">);</span>
 </code></pre>
           </div>
-
           <h3
             id="example-2-custom-claims-transformation-and-policy-based-authorization"
           >
@@ -587,7 +585,7 @@
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_roleService</span><span class="p">.</span><span class="n">GetUserPermissionsAsync</span><span class="p">(</span><span class="n">userId</span><span class="p">);</span>
 <span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">permission</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">permissions</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">claimsIdentity</span><span class="p">.</span><span class="n">AddClaim</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Claim</span><span class="p">(</span><span class="s">&quot;permission&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">permission</span><span class="p">));</span>
+<span class="w">            </span><span class="n">claimsIdentity</span><span class="p">.</span><span class="n">AddClaim</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Claim</span><span class="p">(</span><span class="s">"permission"</span><span class="p">,</span><span class="w"> </span><span class="n">permission</span><span class="p">));</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">ClaimsPrincipal</span><span class="p">(</span><span class="n">claimsIdentity</span><span class="p">);</span>
@@ -616,7 +614,7 @@
 <span class="w">        </span><span class="n">AuthorizationHandlerContext</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span>
 <span class="w">        </span><span class="n">PermissionRequirement</span><span class="w"> </span><span class="n">requirement</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">HasClaim</span><span class="p">(</span><span class="s">&quot;permission&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">requirement</span><span class="p">.</span><span class="n">Permission</span><span class="p">))</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">HasClaim</span><span class="p">(</span><span class="s">"permission"</span><span class="p">,</span><span class="w"> </span><span class="n">requirement</span><span class="p">.</span><span class="n">Permission</span><span class="p">))</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">context</span><span class="p">.</span><span class="n">Succeed</span><span class="p">(</span><span class="n">requirement</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
@@ -628,14 +626,14 @@
 <span class="c1">// Register authorization policies</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddSingleton</span><span class="o">&lt;</span><span class="n">IAuthorizationHandler</span><span class="p">,</span><span class="w"> </span><span class="n">PermissionAuthorizationHandler</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddAuthorizationBuilder</span><span class="p">()</span>
-<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">&quot;CanCreateUsers&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>
-<span class="w">        </span><span class="n">policy</span><span class="p">.</span><span class="n">Requirements</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PermissionRequirement</span><span class="p">(</span><span class="s">&quot;users.create&quot;</span><span class="p">)))</span>
-<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">&quot;CanDeleteUsers&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>
-<span class="w">        </span><span class="n">policy</span><span class="p">.</span><span class="n">Requirements</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PermissionRequirement</span><span class="p">(</span><span class="s">&quot;users.delete&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">"CanCreateUsers"</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>
+<span class="w">        </span><span class="n">policy</span><span class="p">.</span><span class="n">Requirements</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PermissionRequirement</span><span class="p">(</span><span class="s">"users.create"</span><span class="p">)))</span>
+<span class="w">    </span><span class="p">.</span><span class="n">AddPolicy</span><span class="p">(</span><span class="s">"CanDeleteUsers"</span><span class="p">,</span><span class="w"> </span><span class="n">policy</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span>
+<span class="w">        </span><span class="n">policy</span><span class="p">.</span><span class="n">Requirements</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">PermissionRequirement</span><span class="p">(</span><span class="s">"users.delete"</span><span class="p">)));</span>
 
 <span class="c1">// Use in controllers</span>
-<span class="na">[Authorize(Policy = &quot;CanCreateUsers&quot;)]</span>
-<span class="na">[HttpPost(&quot;users&quot;)]</span>
+<span class="na">[Authorize(Policy = "CanCreateUsers")]</span>
+<span class="na">[HttpPost("users")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CreateUser</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">UserDto</span><span class="w"> </span><span class="n">user</span><span class="p">)</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="c1">// Implementation</span>
@@ -643,7 +641,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="example-3-scim-20-user-provisioning-implementation">
             Example 3: SCIM 2.0 User Provisioning Implementation
           </h3>
@@ -652,8 +649,8 @@
 <span class="k">using</span><span class="w"> </span><span class="nn">Microsoft.AspNetCore.Mvc</span><span class="p">;</span>
 
 <span class="na">[ApiController]</span>
-<span class="na">[Route(&quot;scim/v2&quot;)]</span>
-<span class="na">[Authorize(Roles = &quot;SCIMClient&quot;)]</span>
+<span class="na">[Route("scim/v2")]</span>
+<span class="na">[Authorize(Roles = "SCIMClient")]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">ScimUsersController</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">ControllerBase</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">IUserProvisioningService</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">;</span>
@@ -663,7 +660,7 @@
 <span class="w">        </span><span class="n">_provisioningService</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">provisioningService</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpGet(&quot;Users&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpGet("Users")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetUsers</span><span class="p">(</span>
 <span class="w">        </span><span class="na">[FromQuery]</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">filter</span><span class="p">,</span><span class="w"> </span>
 <span class="w">        </span><span class="na">[FromQuery]</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">startIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span>
@@ -673,7 +670,7 @@
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="k">new</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">schemas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;urn:ietf:params:scim:api:messages:2.0:ListResponse&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="n">schemas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">"urn:ietf:params:scim:api:messages:2.0:ListResponse"</span><span class="w"> </span><span class="p">},</span>
 <span class="w">            </span><span class="n">totalResults</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">users</span><span class="p">.</span><span class="n">TotalCount</span><span class="p">,</span>
 <span class="w">            </span><span class="n">startIndex</span><span class="p">,</span>
 <span class="w">            </span><span class="n">itemsPerPage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">count</span><span class="p">,</span>
@@ -681,7 +678,7 @@
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpGet(&quot;Users/{id}&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpGet("Users/{id}")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetUser</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">.</span><span class="n">GetUserByIdAsync</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
@@ -690,14 +687,14 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpPost(&quot;Users&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpPost("Users")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">CreateUser</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">ScimUser</span><span class="w"> </span><span class="n">user</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">created</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">.</span><span class="n">CreateUserAsync</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">CreatedAtAction</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">GetUser</span><span class="p">),</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">created</span><span class="p">.</span><span class="n">Id</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="n">created</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpPut(&quot;Users/{id}&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpPut("Users/{id}")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">UpdateUser</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">ScimUser</span><span class="w"> </span><span class="n">user</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">.</span><span class="n">UpdateUserAsync</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p">);</span>
@@ -706,7 +703,7 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="n">updated</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpPatch(&quot;Users/{id}&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpPatch("Users/{id}")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">PatchUser</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="w"> </span><span class="n">ScimPatchRequest</span><span class="w"> </span><span class="n">patch</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">updated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">.</span><span class="n">PatchUserAsync</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">patch</span><span class="p">);</span>
@@ -715,7 +712,7 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">Ok</span><span class="p">(</span><span class="n">updated</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="na">[HttpDelete(&quot;Users/{id}&quot;)]</span>
+<span class="w">    </span><span class="na">[HttpDelete("Users/{id}")]</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="n">IActionResult</span><span class="o">&gt;</span><span class="w"> </span><span class="n">DeleteUser</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">id</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_provisioningService</span><span class="p">.</span><span class="n">DeleteUserAsync</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
@@ -745,7 +742,6 @@
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">ScimPatchOperation</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Op</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Path</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="w"> </span><span class="n">Value</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <h3 id="example-4-token-refresh-and-rotation-strategy">
             Example 4: Token Refresh and Rotation Strategy
           </h3>
@@ -775,34 +771,34 @@
 <span class="w">        </span><span class="c1">// Retrieve stored refresh token</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">refreshToken</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_tokenStore</span><span class="p">.</span><span class="n">GetRefreshTokenAsync</span><span class="p">(</span><span class="n">userId</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">refreshToken</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">&quot;No refresh token found&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">"No refresh token found"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Check if token is still valid</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">refreshToken</span><span class="p">.</span><span class="n">ExpiresAt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">)</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">&quot;Refresh token expired&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">"Refresh token expired"</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Exchange refresh token for new access token</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_httpClientFactory</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:TokenEndpoint&quot;</span><span class="p">])</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:TokenEndpoint"</span><span class="p">])</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormUrlEncodedContent</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="na">[&quot;grant_type&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;refresh_token&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;refresh_token&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">refreshToken</span><span class="p">.</span><span class="n">Token</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;client_id&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:ClientId&quot;</span><span class="p">],</span>
-<span class="w">                </span><span class="na">[&quot;client_secret&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:ClientSecret&quot;</span><span class="p">]</span>
+<span class="w">                </span><span class="na">["grant_type"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"refresh_token"</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["refresh_token"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">refreshToken</span><span class="p">.</span><span class="n">Token</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["client_id"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:ClientId"</span><span class="p">],</span>
+<span class="w">                </span><span class="na">["client_secret"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:ClientSecret"</span><span class="p">]</span>
 <span class="w">            </span><span class="p">})</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">SendAsync</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">response</span><span class="p">.</span><span class="n">IsSuccessStatusCode</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&quot;Token refresh failed for user {UserId}: {StatusCode}&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Token refresh failed for user {UserId}: {StatusCode}"</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                </span><span class="n">userId</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">StatusCode</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">// If refresh token is invalid, revoke and force re-authentication</span>
 <span class="w">            </span><span class="k">await</span><span class="w"> </span><span class="n">_tokenStore</span><span class="p">.</span><span class="n">RevokeRefreshTokenAsync</span><span class="p">(</span><span class="n">userId</span><span class="p">);</span>
-<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">&quot;Token refresh failed&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">InvalidOperationException</span><span class="p">(</span><span class="s">"Token refresh failed"</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">tokenResponse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">ReadFromJsonAsync</span><span class="o">&lt;</span><span class="n">TokenResponse</span><span class="o">&gt;</span><span class="p">();</span>
@@ -818,7 +814,7 @@
 <span class="w">            </span><span class="p">});</span>
 <span class="w">        </span><span class="p">}</span>
 
-<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Token refreshed successfully for user {UserId}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Token refreshed successfully for user {UserId}"</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">tokenResponse</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -827,14 +823,14 @@
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// Revoke token at identity provider</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_httpClientFactory</span><span class="p">.</span><span class="n">CreateClient</span><span class="p">();</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:RevocationEndpoint&quot;</span><span class="p">])</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpRequestMessage</span><span class="p">(</span><span class="n">HttpMethod</span><span class="p">.</span><span class="n">Post</span><span class="p">,</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:RevocationEndpoint"</span><span class="p">])</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">Content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">FormUrlEncodedContent</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="na">[&quot;token&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">token</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;token_type_hint&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;refresh_token&quot;</span><span class="p">,</span>
-<span class="w">                </span><span class="na">[&quot;client_id&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:ClientId&quot;</span><span class="p">],</span>
-<span class="w">                </span><span class="na">[&quot;client_secret&quot;]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">&quot;OAuth:ClientSecret&quot;</span><span class="p">]</span>
+<span class="w">                </span><span class="na">["token"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">token</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["token_type_hint"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"refresh_token"</span><span class="p">,</span>
+<span class="w">                </span><span class="na">["client_id"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:ClientId"</span><span class="p">],</span>
+<span class="w">                </span><span class="na">["client_secret"]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_config</span><span class="p">[</span><span class="s">"OAuth:ClientSecret"</span><span class="p">]</span>
 <span class="w">            </span><span class="p">})</span>
 <span class="w">        </span><span class="p">};</span>
 
@@ -843,7 +839,7 @@
 <span class="w">        </span><span class="c1">// Remove from local store</span>
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_tokenStore</span><span class="p">.</span><span class="n">RevokeRefreshTokenAsync</span><span class="p">(</span><span class="n">userId</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Token revoked for user {UserId}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Token revoked for user {UserId}"</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 
@@ -862,7 +858,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p><strong>Token Validation Failures</strong>:</p>
           <div class="codehilite">
@@ -878,24 +873,24 @@
 <span class="w">            </span><span class="c1">// Log detailed token validation errors</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">SecurityTokenExpiredException</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogWarning</span><span class="p">(</span><span class="s">&quot;Token expired: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;X-Token-Expired&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogWarning</span><span class="p">(</span><span class="s">"Token expired: {Message}"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Response</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"X-Token-Expired"</span><span class="p">,</span><span class="w"> </span><span class="s">"true"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">SecurityTokenInvalidSignatureException</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&quot;Invalid token signature: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Invalid token signature: {Message}"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">SecurityTokenInvalidIssuerException</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&quot;Invalid issuer: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Invalid issuer: {Message}"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">SecurityTokenInvalidAudienceException</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">&quot;Invalid audience: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="s">"Invalid audience: {Message}"</span><span class="p">,</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">else</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Authentication failed&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">context</span><span class="p">.</span><span class="n">Exception</span><span class="p">,</span><span class="w"> </span><span class="s">"Authentication failed"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
@@ -903,15 +898,14 @@
 <span class="w">        </span><span class="n">OnMessageReceived</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=&gt;</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">context</span><span class="p">.</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">RequestServices</span><span class="p">.</span><span class="n">GetRequiredService</span><span class="o">&lt;</span><span class="n">ILogger</span><span class="o">&lt;</span><span class="n">Program</span><span class="o">&gt;&gt;</span><span class="p">();</span>
-<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">&quot;Token received from {Source}&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">Authorization</span><span class="p">.</span><span class="n">FirstOrDefault</span><span class="p">()</span><span class="o">?.</span><span class="n">Substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;none&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">"Token received from {Source}"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                </span><span class="n">context</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">Authorization</span><span class="p">.</span><span class="n">FirstOrDefault</span><span class="p">()</span><span class="o">?.</span><span class="n">Substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">"none"</span><span class="p">);</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">};</span>
 <span class="p">});</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Common Issues</strong>: - <strong>401 Unauthorized</strong>:
             Check token expiration, signature validation, issuer/audience
@@ -935,14 +929,13 @@ dotnet<span class="w"> </span>tool<span class="w"> </span>install<span class="w"
 jwt<span class="w"> </span>decode<span class="w"> </span>&lt;token&gt;
 
 <span class="c1"># Test token validation</span>
-curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer &lt;token&gt;&quot;</span><span class="w"> </span>https://api.example.com/validate
+curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer &lt;token&gt;"</span><span class="w"> </span>https://api.example.com/validate
 
 <span class="c1"># Check certificate validity</span>
 openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certificate.pem<span class="w"> </span>-text<span class="w"> </span>-noout
 openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem<span class="w"> </span>certificate.pem
 </code></pre>
           </div>
-
           <h2 id="performance-and-tuning">Performance and Tuning</h2>
           <p><strong>Token Caching Strategy</strong>:</p>
           <div class="codehilite">
@@ -960,12 +953,12 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="o">&lt;</span><span class="kt">string?</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetAccessTokenAsync</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">userId</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">cacheKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;access_token:{userId}&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">cacheKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"access_token:{userId}"</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">_cache</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="n">cacheKey</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">token</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">&quot;Cache hit for user {UserId}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">"Cache hit for user {UserId}"</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">token</span><span class="p">;</span>
@@ -973,14 +966,14 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="nf">SetAccessTokenAsync</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">userId</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">expiresIn</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">cacheKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;access_token:{userId}&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">cacheKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"access_token:{userId}"</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DistributedCacheEntryOptions</span>
 <span class="w">        </span><span class="p">{</span>
 <span class="w">            </span><span class="n">AbsoluteExpirationRelativeToNow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="n">expiresIn</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">60</span><span class="p">)</span><span class="w"> </span><span class="c1">// 60s buffer</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">await</span><span class="w"> </span><span class="n">_cache</span><span class="p">.</span><span class="n">SetStringAsync</span><span class="p">(</span><span class="n">cacheKey</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="n">options</span><span class="p">);</span>
-<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">&quot;Cached token for user {UserId} with expiry {ExpiresIn}s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">,</span><span class="w"> </span><span class="n">expiresIn</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogDebug</span><span class="p">(</span><span class="s">"Cached token for user {UserId} with expiry {ExpiresIn}s"</span><span class="p">,</span><span class="w"> </span><span class="n">userId</span><span class="p">,</span><span class="w"> </span><span class="n">expiresIn</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 
@@ -1007,7 +1000,6 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Performance Optimizations</strong>: - Cache validated tokens
             in memory for duration of their lifetime; use
@@ -1040,20 +1032,20 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="nf">AuthenticationMetrics</span><span class="p">(</span><span class="n">IMeterFactory</span><span class="w"> </span><span class="n">meterFactory</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">_meter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meterFactory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">&quot;Authentication&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">_authSuccessCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateCounter</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;auth.success&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;count&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">_authFailureCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateCounter</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;auth.failure&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;count&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">_tokenValidationDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateHistogram</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;auth.validation.duration&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ms&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">_tokenRefreshDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateHistogram</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;auth.refresh.duration&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ms&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_meter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meterFactory</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">"Authentication"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_authSuccessCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateCounter</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"auth.success"</span><span class="p">,</span><span class="w"> </span><span class="s">"count"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_authFailureCounter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateCounter</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"auth.failure"</span><span class="p">,</span><span class="w"> </span><span class="s">"count"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_tokenValidationDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateHistogram</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"auth.validation.duration"</span><span class="p">,</span><span class="w"> </span><span class="s">"ms"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_tokenRefreshDuration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_meter</span><span class="p">.</span><span class="n">CreateHistogram</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"auth.refresh.duration"</span><span class="p">,</span><span class="w"> </span><span class="s">"ms"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RecordAuthSuccess</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">provider</span><span class="p">)</span><span class="w"> </span>
-<span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_authSuccessCounter</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;provider&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">));</span>
+<span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_authSuccessCounter</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"provider"</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">));</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RecordAuthFailure</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">provider</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">reason</span><span class="p">)</span><span class="w"> </span>
 <span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_authFailureCounter</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span>
-<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;provider&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">),</span>
-<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;reason&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">));</span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"provider"</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">),</span>
+<span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">KeyValuePair</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object?</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"reason"</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p">));</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RecordTokenValidation</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">milliseconds</span><span class="p">)</span><span class="w"> </span>
 <span class="w">        </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">_tokenValidationDuration</span><span class="p">.</span><span class="n">Record</span><span class="p">(</span><span class="n">milliseconds</span><span class="p">);</span>
@@ -1063,7 +1055,6 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Scaling Considerations</strong>: - Deploy multiple instances
             behind load balancer with sticky sessions if using in-memory cache -
@@ -1169,32 +1160,11 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

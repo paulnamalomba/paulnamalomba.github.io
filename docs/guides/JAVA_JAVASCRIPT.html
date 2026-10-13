@@ -1,33 +1,37 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
       Java vs JavaScript: Runtimes, Execution, and Architecture - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -36,8 +40,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -191,7 +194,6 @@ sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </
 java<span class="w"> </span>-version
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Windows <code>PATH</code></strong
@@ -214,7 +216,6 @@ curl<span class="w"> </span>-o-<span class="w"> </span>https://raw.githubusercon
 nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Windows</strong>: Download the <code>.msi</code> ensuring
@@ -248,7 +249,6 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             <strong>JavaScript (Dynamic Typing):</strong> Variables assume their
             types implicitly based on the data assigned to them, mutating safely
@@ -257,7 +257,7 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">25</span><span class="p">;</span><span class="w">       </span><span class="c1">// Number</span>
-<span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Twenty Five&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Now a String (Completely valid JS)</span>
+<span class="nx">ageContext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Twenty Five"</span><span class="p">;</span><span class="w"> </span><span class="c1">// Now a String (Completely valid JS)</span>
 
 <span class="c1">// Modern architecture relies on TypeScript to retrofit static typing onto JS</span>
 <span class="kd">function</span><span class="w"> </span><span class="nx">calculateAge</span><span class="p">(</span><span class="nx">dob</span><span class="w"> </span><span class="cm">/*: string*/</span><span class="p">)</span><span class="w"> </span><span class="cm">/*: number*/</span><span class="w"> </span><span class="p">{</span>
@@ -265,7 +265,6 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="concurrency-multi-threading-vs-the-event-loop">
             Concurrency: Multi-Threading vs The Event Loop
           </h3>
@@ -281,7 +280,6 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
 <span class="p">});</span>
 </code></pre>
           </div>
-
           <p>
             <strong>JavaScript:</strong> Single-threaded execution. It offsets
             blocking queries to libuv's external OS thread pool, suspending
@@ -292,16 +290,15 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
             <pre><span></span><code><span class="c1">// The primary thread does NOT block during the fetch. </span>
 <span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">fetchUser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">&#39;https://api.db.com/user/123&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="s1">'https://api.db.com/user/123'</span><span class="p">);</span>
 <span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Resolved&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Resolved"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="3-compile-time-commands-javac-vs-transpilation">
             3. Compile-time Commands (Javac vs Transpilation)
@@ -327,7 +324,6 @@ mvn<span class="w"> </span>clean<span class="w"> </span>install
 <span class="c1"># This packages compiled bytecode into a deployable self-contained .jar file.</span>
 </code></pre>
           </div>
-
           <h3 id="javascript-transpilation-bundling">
             JavaScript (Transpilation &amp; Bundling)
           </h3>
@@ -347,7 +343,6 @@ npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </sp
 <span class="c1"># Generates minified, obfuscated `.js` chunks optimized for network transfer.</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="4-runtime-commands-jvm-execution-vs-event-loop">
             4. Runtime Commands (JVM Execution vs Event Loop)
@@ -364,11 +359,10 @@ npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </sp
             allocations.
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="c1"># Deploying the application, capping the JVM&#39;s max allocatable RAM (-Xmx) to 2GB</span>
+            <pre><span></span><code><span class="c1"># Deploying the application, capping the JVM's max allocatable RAM (-Xmx) to 2GB</span>
 java<span class="w"> </span>-Xmx2048m<span class="w"> </span>-jar<span class="w"> </span>myenterprise-app-1.0.jar
 </code></pre>
           </div>
-
           <h3 id="nodejs-execution">Node.js Execution</h3>
           <p>
             Node feeds <code>.js</code> scripts into V8, heavily utilizing the
@@ -383,7 +377,6 @@ pm2<span class="w"> </span>start<span class="w"> </span>server.js<span class="w"
 pm2<span class="w"> </span>save
 </code></pre>
           </div>
-
           <hr />
           <h2 id="5-debugging-nullpointers-vs-undefined">
             5. Debugging (NullPointers vs Undefined)
@@ -413,7 +406,6 @@ pm2<span class="w"> </span>save
 java<span class="w"> </span>-agentlib:jdwp<span class="o">=</span><span class="nv">transport</span><span class="o">=</span>dt_socket,server<span class="o">=</span>y,suspend<span class="o">=</span>n,address<span class="o">=</span><span class="m">5005</span><span class="w"> </span>-jar<span class="w"> </span>app.jar
 </code></pre>
           </div>
-
           <h3 id="javascript-undefined-is-not-a-function">
             JavaScript (<code>undefined is not a function</code>)
           </h3>
@@ -435,7 +427,6 @@ java<span class="w"> </span>-agentlib:jdwp<span class="o">=</span><span class="n
 node<span class="w"> </span>--inspect<span class="w"> </span>index.js
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Tracebacks:</strong> JavaScript stack traces are
@@ -448,32 +439,11 @@ node<span class="w"> </span>--inspect<span class="w"> </span>index.js
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

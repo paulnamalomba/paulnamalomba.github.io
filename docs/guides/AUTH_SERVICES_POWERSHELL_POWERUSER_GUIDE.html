@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>AUTH_SERVICES PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -253,7 +256,7 @@
 <span class="nb">Import-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span><span class="p">.</span><span class="n">Applications</span>
 
 <span class="c"># Connect with delegated permissions (interactive)</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;Application.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;Directory.ReadWrite.All&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"User.ReadWrite.All"</span><span class="p">,</span><span class="s2">"Application.ReadWrite.All"</span><span class="p">,</span><span class="s2">"Directory.ReadWrite.All"</span>
 
 <span class="c"># Connect with application permissions (service principal)</span>
 <span class="nv">$clientId</span> <span class="p">=</span> <span class="nv">$env:AZURE_CLIENT_ID</span>
@@ -267,7 +270,6 @@
 <span class="nb">Get-MgContext</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Scopes</span><span class="p">,</span> <span class="n">Account</span><span class="p">,</span> <span class="n">TenantId</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use managed identities for Azure
             resources instead of storing credentials - Store client secrets in
@@ -292,8 +294,8 @@
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Generate self-signed certificate for service principal (development only)</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="nb">New-SelfSignedCertificate</span> <span class="p">`</span>
-    <span class="n">-Subject</span> <span class="s2">&quot;CN=MyApp-ServicePrincipal&quot;</span> <span class="p">`</span>
-    <span class="n">-CertStoreLocation</span> <span class="s2">&quot;Cert:\CurrentUser\My&quot;</span> <span class="p">`</span>
+    <span class="n">-Subject</span> <span class="s2">"CN=MyApp-ServicePrincipal"</span> <span class="p">`</span>
+    <span class="n">-CertStoreLocation</span> <span class="s2">"Cert:\CurrentUser\My"</span> <span class="p">`</span>
     <span class="n">-KeyExportPolicy</span> <span class="n">Exportable</span> <span class="p">`</span>
     <span class="n">-KeySpec</span> <span class="n">Signature</span> <span class="p">`</span>
     <span class="n">-KeyLength</span> <span class="n">2048</span> <span class="p">`</span>
@@ -302,28 +304,28 @@
     <span class="n">-NotAfter</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddMonths</span><span class="p">(</span><span class="n">12</span><span class="p">)</span>
 
 <span class="c"># Export certificate (public key only)</span>
-<span class="nv">$certPath</span> <span class="p">=</span> <span class="s2">&quot;.\MyApp-ServicePrincipal.cer&quot;</span>
+<span class="nv">$certPath</span> <span class="p">=</span> <span class="s2">".\MyApp-ServicePrincipal.cer"</span>
 <span class="nb">Export-Certificate</span> <span class="n">-Cert</span> <span class="nv">$cert</span> <span class="n">-FilePath</span> <span class="nv">$certPath</span>
 
 <span class="c"># Upload certificate to app registration</span>
-<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">&quot;your-app-id&quot;</span>
+<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">"your-app-id"</span>
 <span class="nv">$certBytes</span> <span class="p">=</span> <span class="no">[System.IO.File]</span><span class="p">::</span><span class="n">ReadAllBytes</span><span class="p">(</span><span class="nv">$certPath</span><span class="p">)</span>
 <span class="nv">$certBase64</span> <span class="p">=</span> <span class="no">[System.Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$certBytes</span><span class="p">)</span>
 
 <span class="nb">Update-MgApplication</span> <span class="n">-ApplicationId</span> <span class="nv">$appId</span> <span class="n">-KeyCredentials</span> <span class="p">@{</span>
-    <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;AsymmetricX509Cert&quot;</span>
-    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">&quot;Verify&quot;</span>
+    <span class="nb">Type </span><span class="p">=</span> <span class="s2">"AsymmetricX509Cert"</span>
+    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">"Verify"</span>
     <span class="n">Key</span> <span class="p">=</span> <span class="nv">$certBase64</span>
 <span class="p">}</span>
 
 <span class="c"># Connect using certificate authentication</span>
-<span class="nv">$tenantId</span> <span class="p">=</span> <span class="s2">&quot;your-tenant-id&quot;</span>
+<span class="nv">$tenantId</span> <span class="p">=</span> <span class="s2">"your-tenant-id"</span>
 <span class="nb">Connect-MgGraph</span> <span class="n">-ClientId</span> <span class="nv">$appId</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span> <span class="n">-CertificateThumbprint</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span>
 
 <span class="c"># Production: Use Azure Key Vault for certificate storage</span>
 <span class="c"># Import certificate from Key Vault</span>
-<span class="nv">$keyVaultName</span> <span class="p">=</span> <span class="s2">&quot;your-keyvault&quot;</span>
-<span class="nv">$certName</span> <span class="p">=</span> <span class="s2">&quot;MyAppCert&quot;</span>
+<span class="nv">$keyVaultName</span> <span class="p">=</span> <span class="s2">"your-keyvault"</span>
+<span class="nv">$certName</span> <span class="p">=</span> <span class="s2">"MyAppCert"</span>
 <span class="nv">$kvCert</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificate</span> <span class="n">-VaultName</span> <span class="nv">$keyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
 
 <span class="c"># Retrieve certificate from local store (imported from Key Vault)</span>
@@ -331,29 +333,28 @@
 <span class="nb">Connect-MgGraph</span> <span class="n">-ClientId</span> <span class="nv">$appId</span> <span class="n">-TenantId</span> <span class="nv">$tenantId</span> <span class="n">-Certificate</span> <span class="nv">$cert</span>
 </code></pre>
           </div>
-
           <p><strong>Conditional Access Policy Automation</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Create conditional access policy requiring MFA for admin roles</span>
 <span class="nv">$policy</span> <span class="p">=</span> <span class="p">@{</span>
-    <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;Require MFA for Admins&quot;</span>
-    <span class="n">State</span> <span class="p">=</span> <span class="s2">&quot;enabled&quot;</span>
+    <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">"Require MFA for Admins"</span>
+    <span class="n">State</span> <span class="p">=</span> <span class="s2">"enabled"</span>
     <span class="n">Conditions</span> <span class="p">=</span> <span class="p">@{</span>
         <span class="n">Users</span> <span class="p">=</span> <span class="p">@{</span>
             <span class="n">IncludeRoles</span> <span class="p">=</span> <span class="p">@(</span>
-                <span class="s2">&quot;62e90394-69f5-4237-9190-012177145e10&quot;</span>  <span class="c"># Global Administrator</span>
-                <span class="s2">&quot;194ae4cb-b126-40b2-bd5b-6091b380977d&quot;</span>  <span class="c"># Security Administrator</span>
+                <span class="s2">"62e90394-69f5-4237-9190-012177145e10"</span>  <span class="c"># Global Administrator</span>
+                <span class="s2">"194ae4cb-b126-40b2-bd5b-6091b380977d"</span>  <span class="c"># Security Administrator</span>
             <span class="p">)</span>
-            <span class="n">ExcludeUsers</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;emergency-access-account@domain.com&quot;</span><span class="p">)</span>
+            <span class="n">ExcludeUsers</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">"emergency-access-account@domain.com"</span><span class="p">)</span>
         <span class="p">}</span>
         <span class="n">Applications</span> <span class="p">=</span> <span class="p">@{</span>
-            <span class="n">IncludeApplications</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;All&quot;</span><span class="p">)</span>
+            <span class="n">IncludeApplications</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">"All"</span><span class="p">)</span>
         <span class="p">}</span>
-        <span class="n">ClientAppTypes</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;browser&quot;</span><span class="p">,</span> <span class="s2">&quot;mobileAppsAndDesktopClients&quot;</span><span class="p">)</span>
+        <span class="n">ClientAppTypes</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">"browser"</span><span class="p">,</span> <span class="s2">"mobileAppsAndDesktopClients"</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="n">GrantControls</span> <span class="p">=</span> <span class="p">@{</span>
-        <span class="n">Operator</span> <span class="p">=</span> <span class="s2">&quot;OR&quot;</span>
-        <span class="n">BuiltInControls</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">&quot;mfa&quot;</span><span class="p">)</span>
+        <span class="n">Operator</span> <span class="p">=</span> <span class="s2">"OR"</span>
+        <span class="n">BuiltInControls</span> <span class="p">=</span> <span class="p">@(</span><span class="s2">"mfa"</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span>
 
@@ -363,7 +364,6 @@
 <span class="nb">Get-MgIdentityConditionalAccessPolicy</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">CreatedDateTime</span>
 </code></pre>
           </div>
-
           <p><strong>Security Monitoring and Audit Logs</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Query sign-in logs for failed authentication attempts</span>
@@ -371,31 +371,30 @@
 <span class="nv">$endDate</span> <span class="p">=</span> <span class="nb">Get-Date</span>
 
 <span class="nv">$failedSignIns</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogSignIn</span> <span class="p">`</span>
-    <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">"status/errorCode ne 0 and createdDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">'yyyy-MM-dd'</span><span class="p">))</span><span class="s2">"</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">100</span> <span class="p">|</span>
     <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ErrorCode&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;FailureReason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'ErrorCode'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'FailureReason'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}},</span>
                   <span class="n">IpAddress</span><span class="p">,</span> <span class="n">Location</span>
 
 <span class="nv">$failedSignIns</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
 
 <span class="c"># Export to CSV for analysis</span>
-<span class="nv">$failedSignIns</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\failed-signins.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+<span class="nv">$failedSignIns</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">".\failed-signins.csv"</span> <span class="n">-NoTypeInformation</span>
 
 <span class="c"># Query directory audit logs for privileged operations</span>
 <span class="nv">$auditLogs</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogDirectoryAudit</span> <span class="p">`</span>
-    <span class="n">-Filter</span> <span class="s2">&quot;activityDisplayName eq &#39;Add member to role&#39; and activityDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">"activityDisplayName eq 'Add member to role' and activityDateTime ge </span><span class="p">$(</span><span class="nv">$startDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">'yyyy-MM-dd'</span><span class="p">))</span><span class="s2">"</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">50</span> <span class="p">|</span>
     <span class="nb">Select-Object</span> <span class="n">ActivityDateTime</span><span class="p">,</span> <span class="n">ActivityDisplayName</span><span class="p">,</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;InitiatedBy&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">InitiatedBy</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;TargetUser&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">TargetResources</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Result&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Result</span><span class="p">}}</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'InitiatedBy'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">InitiatedBy</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'TargetUser'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">TargetResources</span><span class="p">[</span><span class="n">0</span><span class="p">].</span><span class="n">UserPrincipalName</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'Result'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Result</span><span class="p">}}</span>
 
 <span class="nv">$auditLogs</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Key Security Measures</strong>: - Rotate service principal
             secrets/certificates every 90 days; automate with Azure Automation -
@@ -426,10 +425,10 @@
         <span class="no">[string]</span><span class="nv">$CsvPath</span><span class="p">,</span>
 
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
-        <span class="no">[string]</span><span class="nv">$DefaultPassword</span> <span class="p">=</span> <span class="s2">&quot;ChangeMe@123!&quot;</span><span class="p">,</span>
+        <span class="no">[string]</span><span class="nv">$DefaultPassword</span> <span class="p">=</span> <span class="s2">"ChangeMe@123!"</span><span class="p">,</span>
 
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
-        <span class="no">[string]</span><span class="nv">$UsageLocation</span> <span class="p">=</span> <span class="s2">&quot;US&quot;</span>
+        <span class="no">[string]</span><span class="nv">$UsageLocation</span> <span class="p">=</span> <span class="s2">"US"</span>
     <span class="p">)</span>
 
     <span class="c"># Import users from CSV (columns: FirstName, LastName, Email, Department)</span>
@@ -445,11 +444,11 @@
 
             <span class="nv">$newUser</span> <span class="p">=</span> <span class="p">@{</span>
                 <span class="n">AccountEnabled</span> <span class="p">=</span> <span class="nv">$true</span>
-                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">&quot;</span>
+                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">"</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">"</span>
                 <span class="n">GivenName</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span>
                 <span class="n">Surname</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span>
                 <span class="n">UserPrincipalName</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span>
-                <span class="n">MailNickname</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)[</span><span class="n">0</span><span class="p">]</span>
+                <span class="n">MailNickname</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="s1">'@'</span><span class="p">)[</span><span class="n">0</span><span class="p">]</span>
                 <span class="n">PasswordProfile</span> <span class="p">=</span> <span class="nv">$passwordProfile</span>
                 <span class="n">UsageLocation</span> <span class="p">=</span> <span class="nv">$UsageLocation</span>
                 <span class="n">Department</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Department</span>
@@ -457,46 +456,45 @@
 
             <span class="nv">$createdUser</span> <span class="p">=</span> <span class="nb">New-MgUser</span> <span class="n">-BodyParameter</span> <span class="nv">$newUser</span>
 
-            <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created user: </span><span class="p">$(</span><span class="nv">$createdUser</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+            <span class="nb">Write-Host</span> <span class="s2">"✓ Created user: </span><span class="p">$(</span><span class="nv">$createdUser</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 
             <span class="nv">$results</span> <span class="p">+=</span> <span class="no">[PSCustomObject]</span><span class="p">@{</span>
                 <span class="n">Email</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">UserPrincipalName</span>
                 <span class="n">DisplayName</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">DisplayName</span>
                 <span class="n">UserId</span> <span class="p">=</span> <span class="nv">$createdUser</span><span class="p">.</span><span class="n">Id</span>
-                <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Success&quot;</span>
-                <span class="n">Message</span> <span class="p">=</span> <span class="s2">&quot;User created successfully&quot;</span>
+                <span class="n">Status</span> <span class="p">=</span> <span class="s2">"Success"</span>
+                <span class="n">Message</span> <span class="p">=</span> <span class="s2">"User created successfully"</span>
             <span class="p">}</span>
         <span class="p">}</span>
         <span class="k">catch</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Failed to create user: </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+            <span class="nb">Write-Host</span> <span class="s2">"✗ Failed to create user: </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">Email</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
 
             <span class="nv">$results</span> <span class="p">+=</span> <span class="no">[PSCustomObject]</span><span class="p">@{</span>
                 <span class="n">Email</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">Email</span>
-                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">&quot;</span>
+                <span class="n">DisplayName</span> <span class="p">=</span> <span class="s2">"</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">FirstName</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">LastName</span><span class="p">)</span><span class="s2">"</span>
                 <span class="n">UserId</span> <span class="p">=</span> <span class="nv">$null</span>
-                <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Failed&quot;</span>
+                <span class="n">Status</span> <span class="p">=</span> <span class="s2">"Failed"</span>
                 <span class="n">Message</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="c"># Export results</span>
-    <span class="nv">$results</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\user-creation-results.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+    <span class="nv">$results</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">".\user-creation-results.csv"</span> <span class="n">-NoTypeInformation</span>
 
     <span class="c"># Summary</span>
-    <span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Success&quot;</span> <span class="p">}).</span><span class="n">Count</span>
-    <span class="nv">$failCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Failed&quot;</span> <span class="p">}).</span><span class="n">Count</span>
+    <span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">"Success"</span> <span class="p">}).</span><span class="n">Count</span>
+    <span class="nv">$failCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$results</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">"Failed"</span> <span class="p">}).</span><span class="n">Count</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">Summary: $successCount succeeded, $failCount failed&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Results exported to: user-creation-results.csv&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">Summary: $successCount succeeded, $failCount failed"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Results exported to: user-creation-results.csv"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 <span class="p">}</span>
 
 <span class="c"># Usage</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.ReadWrite.All&quot;</span>
-<span class="nb">New-BulkUsers</span> <span class="n">-CsvPath</span> <span class="s2">&quot;.\users.csv&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"User.ReadWrite.All"</span>
+<span class="nb">New-BulkUsers</span> <span class="n">-CsvPath</span> <span class="s2">".\users.csv"</span>
 </code></pre>
           </div>
-
           <h3
             id="example-2-service-principal-creation-and-permission-management"
           >
@@ -510,19 +508,19 @@
         <span class="no">[string]</span><span class="nv">$DisplayName</span><span class="p">,</span>
 
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
-        <span class="no">[string[]]</span><span class="nv">$Permissions</span>  <span class="c"># e.g., &quot;User.Read.All&quot;, &quot;Mail.Send&quot;</span>
+        <span class="no">[string[]]</span><span class="nv">$Permissions</span>  <span class="c"># e.g., "User.Read.All", "Mail.Send"</span>
     <span class="p">)</span>
 
     <span class="c"># Get Microsoft Graph service principal</span>
-    <span class="nv">$graphSp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">&quot;appId eq &#39;00000003-0000-0000-c000-000000000000&#39;&quot;</span>
+    <span class="nv">$graphSp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">"appId eq '00000003-0000-0000-c000-000000000000'"</span>
 
     <span class="c"># Create app registration</span>
     <span class="nv">$app</span> <span class="p">=</span> <span class="nb">New-MgApplication</span> <span class="n">-DisplayName</span> <span class="nv">$DisplayName</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created app registration: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (AppId: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">)&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ Created app registration: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (AppId: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">)"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 
     <span class="c"># Create service principal</span>
     <span class="nv">$sp</span> <span class="p">=</span> <span class="nb">New-MgServicePrincipal</span> <span class="n">-AppId</span> <span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span> <span class="n">-DisplayName</span> <span class="nv">$DisplayName</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Created service principal: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ Created service principal: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 
     <span class="c"># Map permission names to IDs</span>
     <span class="nv">$requiredResourceAccess</span> <span class="p">=</span> <span class="p">@()</span>
@@ -533,12 +531,12 @@
         <span class="k">if</span> <span class="p">(</span><span class="nv">$graphPermission</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$requiredResourceAccess</span> <span class="p">+=</span> <span class="p">@{</span>
                 <span class="n">Id</span> <span class="p">=</span> <span class="nv">$graphPermission</span><span class="p">.</span><span class="n">Id</span>
-                <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;Role&quot;</span>
+                <span class="nb">Type </span><span class="p">=</span> <span class="s2">"Role"</span>
             <span class="p">}</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Added permission: $permission&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+            <span class="nb">Write-Host</span> <span class="s2">"✓ Added permission: $permission"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
         <span class="p">}</span>
         <span class="k">else</span> <span class="p">{</span>
-            <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Permission not found: $permission&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+            <span class="nb">Write-Host</span> <span class="s2">"✗ Permission not found: $permission"</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -549,7 +547,7 @@
     <span class="p">}</span>
 
     <span class="c"># Generate client secret (valid for 1 year)</span>
-    <span class="nv">$secretName</span> <span class="p">=</span> <span class="s2">&quot;Auto-generated-secret&quot;</span>
+    <span class="nv">$secretName</span> <span class="p">=</span> <span class="s2">"Auto-generated-secret"</span>
     <span class="nv">$secretEnd</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddYears</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
 
     <span class="nv">$passwordCred</span> <span class="p">=</span> <span class="nb">Add-MgApplicationPassword</span> <span class="n">-ApplicationId</span> <span class="nv">$app</span><span class="p">.</span><span class="n">Id</span> <span class="n">-PasswordCredential</span> <span class="p">@{</span>
@@ -557,19 +555,19 @@
         <span class="n">EndDateTime</span> <span class="p">=</span> <span class="nv">$secretEnd</span>
     <span class="p">}</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Service Principal Details:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Display Name: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Application ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Object ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Service Principal ID: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Client Secret: </span><span class="p">$(</span><span class="nv">$passwordCred</span><span class="p">.</span><span class="n">SecretText</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;Secret Expires: </span><span class="p">$(</span><span class="nv">$secretEnd</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd HH:mm:ss&#39;</span><span class="p">))</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;========================================&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;⚠️  Save the client secret now! It won&#39;t be shown again.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">⚠️  Admin consent required! Grant permissions in Azure Portal:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/</span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">========================================"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Service Principal Details:"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"========================================"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Display Name: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Application ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Object ID: </span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Service Principal ID: </span><span class="p">$(</span><span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span><span class="p">)</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Client Secret: </span><span class="p">$(</span><span class="nv">$passwordCred</span><span class="p">.</span><span class="n">SecretText</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Secret Expires: </span><span class="p">$(</span><span class="nv">$secretEnd</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s1">'yyyy-MM-dd HH:mm:ss'</span><span class="p">))</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"========================================"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"⚠️  Save the client secret now! It won't be shown again."</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">⚠️  Admin consent required! Grant permissions in Azure Portal:"</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">"https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/</span><span class="p">$(</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
     <span class="k">return</span> <span class="p">@{</span>
         <span class="n">AppId</span> <span class="p">=</span> <span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span>
@@ -581,17 +579,16 @@
 <span class="p">}</span>
 
 <span class="c"># Usage</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Application.ReadWrite.All&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"Application.ReadWrite.All"</span>
 <span class="nv">$sp</span> <span class="p">=</span> <span class="nb">New-ServicePrincipalWithPermissions</span> <span class="p">`</span>
-    <span class="n">-DisplayName</span> <span class="s2">&quot;MyAutomation-ServicePrincipal&quot;</span> <span class="p">`</span>
-    <span class="n">-Permissions</span> <span class="p">@(</span><span class="s2">&quot;User.Read.All&quot;</span><span class="p">,</span> <span class="s2">&quot;Mail.Send&quot;</span><span class="p">,</span> <span class="s2">&quot;Group.Read.All&quot;</span><span class="p">)</span>
+    <span class="n">-DisplayName</span> <span class="s2">"MyAutomation-ServicePrincipal"</span> <span class="p">`</span>
+    <span class="n">-Permissions</span> <span class="p">@(</span><span class="s2">"User.Read.All"</span><span class="p">,</span> <span class="s2">"Mail.Send"</span><span class="p">,</span> <span class="s2">"Group.Read.All"</span><span class="p">)</span>
 
 <span class="c"># Store credentials in environment variables or Key Vault</span>
 <span class="nv">$env:AZURE_CLIENT_ID</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">AppId</span>
 <span class="nv">$env:AZURE_CLIENT_SECRET</span> <span class="p">=</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">ClientSecret</span>
 </code></pre>
           </div>
-
           <h3 id="example-3-certificate-management-and-rotation">
             Example 3: Certificate Management and Rotation
           </h3>
@@ -627,32 +624,32 @@
                     <span class="n">CertThumbprint</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">CustomKeyIdentifier</span>
                     <span class="n">ExpiryDate</span> <span class="p">=</span> <span class="nv">$cert</span><span class="p">.</span><span class="n">EndDateTime</span>
                     <span class="n">DaysRemaining</span> <span class="p">=</span> <span class="nv">$daysUntilExpiry</span>
-                    <span class="n">Status</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$daysUntilExpiry</span> <span class="o">-le</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span> <span class="s2">&quot;EXPIRED&quot;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;EXPIRING&quot;</span> <span class="p">}</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$daysUntilExpiry</span> <span class="o">-le</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span> <span class="s2">"EXPIRED"</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">"EXPIRING"</span> <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="nv">$expiringCerts</span><span class="p">.</span><span class="n">Count</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;✓ No expiring certificates found&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+        <span class="nb">Write-Host</span> <span class="s2">"✓ No expiring certificates found"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
         <span class="k">return</span>
     <span class="p">}</span>
 
     <span class="c"># Display expiring certificates</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">Expiring Certificates:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">Expiring Certificates:"</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
     <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
 
     <span class="c"># Auto-rotate if enabled</span>
     <span class="k">if</span> <span class="p">(</span><span class="nv">$AutoRotate</span> <span class="o">-and</span> <span class="nv">$KeyVaultName</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">🔄 Auto-rotating certificates...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+        <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">🔄 Auto-rotating certificates..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
         <span class="k">foreach</span> <span class="p">(</span><span class="nv">$item</span> <span class="k">in</span> <span class="nv">$expiringCerts</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">try</span> <span class="p">{</span>
                 <span class="c"># Generate new certificate in Key Vault</span>
-                <span class="nv">$certName</span> <span class="p">=</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span> <span class="o">-replace</span> <span class="s1">&#39;[^a-zA-Z0-9-]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="s2">-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd&#39;</span><span class="p">)</span><span class="s2">&quot;</span>
+                <span class="nv">$certName</span> <span class="p">=</span> <span class="s2">"</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span> <span class="o">-replace</span> <span class="s1">'[^a-zA-Z0-9-]'</span><span class="p">,</span><span class="s1">''</span><span class="p">)</span><span class="s2">-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd'</span><span class="p">)</span><span class="s2">"</span>
 
                 <span class="nv">$policy</span> <span class="p">=</span> <span class="nb">New-AzKeyVaultCertificatePolicy</span> <span class="p">`</span>
-                    <span class="n">-SubjectName</span> <span class="s2">&quot;CN=</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="p">`</span>
+                    <span class="n">-SubjectName</span> <span class="s2">"CN=</span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">"</span> <span class="p">`</span>
                     <span class="n">-ValidityInMonths</span> <span class="n">12</span> <span class="p">`</span>
                     <span class="n">-ReuseKeyOnRenewal</span> <span class="p">`</span>
                     <span class="n">-KeyType</span> <span class="n">RSA</span> <span class="p">`</span>
@@ -667,7 +664,7 @@
                 <span class="k">do</span> <span class="p">{</span>
                     <span class="nb">Start-Sleep</span> <span class="n">-Seconds</span> <span class="n">5</span>
                     <span class="nv">$certStatus</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificateOperation</span> <span class="n">-VaultName</span> <span class="nv">$KeyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
-                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$certStatus</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;inProgress&quot;</span><span class="p">)</span>
+                <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$certStatus</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">"inProgress"</span><span class="p">)</span>
 
                 <span class="c"># Get certificate and upload to app registration</span>
                 <span class="nv">$kvCert</span> <span class="p">=</span> <span class="nb">Get-AzKeyVaultCertificate</span> <span class="n">-VaultName</span> <span class="nv">$KeyVaultName</span> <span class="n">-Name</span> <span class="nv">$certName</span>
@@ -675,33 +672,32 @@
                 <span class="nv">$certBase64</span> <span class="p">=</span> <span class="no">[System.Convert]</span><span class="p">::</span><span class="n">ToBase64String</span><span class="p">(</span><span class="nv">$certBytes</span><span class="p">)</span>
 
                 <span class="nb">Update-MgApplication</span> <span class="n">-ApplicationId</span> <span class="nv">$item</span><span class="p">.</span><span class="n">ApplicationObjectId</span> <span class="n">-KeyCredentials</span> <span class="p">@{</span>
-                    <span class="nb">Type </span><span class="p">=</span> <span class="s2">&quot;AsymmetricX509Cert&quot;</span>
-                    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">&quot;Verify&quot;</span>
+                    <span class="nb">Type </span><span class="p">=</span> <span class="s2">"AsymmetricX509Cert"</span>
+                    <span class="n">Usage</span> <span class="p">=</span> <span class="s2">"Verify"</span>
                     <span class="n">Key</span> <span class="p">=</span> <span class="nv">$certBase64</span>
                 <span class="p">}</span>
 
-                <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Rotated certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+                <span class="nb">Write-Host</span> <span class="s2">"✓ Rotated certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
             <span class="p">}</span>
             <span class="k">catch</span> <span class="p">{</span>
-                <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Failed to rotate certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+                <span class="nb">Write-Host</span> <span class="s2">"✗ Failed to rotate certificate for: </span><span class="p">$(</span><span class="nv">$item</span><span class="p">.</span><span class="n">AppName</span><span class="p">)</span><span class="s2"> - </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="c"># Export report</span>
-    <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">&quot;.\expiring-certificates-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd&#39;</span><span class="p">)</span><span class="s2">.csv&quot;</span> <span class="n">-NoTypeInformation</span>
+    <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="s2">".\expiring-certificates-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd'</span><span class="p">)</span><span class="s2">.csv"</span> <span class="n">-NoTypeInformation</span>
 <span class="p">}</span>
 
 <span class="c"># Usage - Check for certificates expiring in next 60 days</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Application.Read.All&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"Application.Read.All"</span>
 <span class="nb">Connect-AzAccount</span>
 <span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">60</span>
 
 <span class="c"># Auto-rotate expiring certificates using Key Vault</span>
-<span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">30</span> <span class="n">-KeyVaultName</span> <span class="s2">&quot;my-keyvault&quot;</span> <span class="n">-AutoRotate</span>
+<span class="nb">Update-ExpiringCertificates</span> <span class="n">-DaysBeforeExpiry</span> <span class="n">30</span> <span class="n">-KeyVaultName</span> <span class="s2">"my-keyvault"</span> <span class="n">-AutoRotate</span>
 </code></pre>
           </div>
-
           <h3 id="example-4-group-based-license-assignment-automation">
             Example 4: Group-Based License Assignment Automation
           </h3>
@@ -713,7 +709,7 @@
         <span class="no">[string]</span><span class="nv">$GroupId</span><span class="p">,</span>
 
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$true</span><span class="p">)]</span>
-        <span class="no">[string]</span><span class="nv">$SkuId</span><span class="p">,</span>  <span class="c"># e.g., &quot;c42b9cae-ea4f-4ab7-9717-81576235ccac&quot; for Office 365 E3</span>
+        <span class="no">[string]</span><span class="nv">$SkuId</span><span class="p">,</span>  <span class="c"># e.g., "c42b9cae-ea4f-4ab7-9717-81576235ccac" for Office 365 E3</span>
 
         <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span><span class="p">=</span><span class="nv">$false</span><span class="p">)]</span>
         <span class="no">[string[]]</span><span class="nv">$DisabledPlans</span> <span class="p">=</span> <span class="p">@()</span>
@@ -736,17 +732,17 @@
         <span class="n">RemoveLicenses</span> <span class="p">=</span> <span class="p">@()</span>
     <span class="p">}</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ License assigned to group: $GroupId&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ License assigned to group: $GroupId"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 
     <span class="c"># Monitor processing status</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">🔄 Monitoring license assignment...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">🔄 Monitoring license assignment..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
     <span class="nv">$members</span> <span class="p">=</span> <span class="nb">Get-MgGroupMember</span> <span class="n">-GroupId</span> <span class="nv">$GroupId</span> <span class="n">-All</span>
     <span class="nv">$totalMembers</span> <span class="p">=</span> <span class="nv">$members</span><span class="p">.</span><span class="n">Count</span>
     <span class="nv">$processedCount</span> <span class="p">=</span> <span class="n">0</span>
 
     <span class="k">foreach</span> <span class="p">(</span><span class="nv">$member</span> <span class="k">in</span> <span class="nv">$members</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-UserId</span> <span class="nv">$member</span><span class="p">.</span><span class="n">Id</span> <span class="n">-Property</span> <span class="s2">&quot;DisplayName,UserPrincipalName,AssignedLicenses,LicenseAssignmentStates&quot;</span>
+        <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-UserId</span> <span class="nv">$member</span><span class="p">.</span><span class="n">Id</span> <span class="n">-Property</span> <span class="s2">"DisplayName,UserPrincipalName,AssignedLicenses,LicenseAssignmentStates"</span>
 
         <span class="nv">$licenseState</span> <span class="p">=</span> <span class="nv">$user</span><span class="p">.</span><span class="n">LicenseAssignmentStates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
             <span class="nv">$_</span><span class="p">.</span><span class="n">SkuId</span> <span class="o">-eq</span> <span class="nv">$SkuId</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">AssignedByGroup</span> <span class="o">-eq</span> <span class="nv">$GroupId</span>
@@ -755,16 +751,16 @@
         <span class="k">if</span> <span class="p">(</span><span class="nv">$licenseState</span><span class="p">)</span> <span class="p">{</span>
             <span class="nv">$processedCount</span><span class="p">++</span>
             <span class="nv">$status</span> <span class="p">=</span> <span class="k">switch</span> <span class="p">(</span><span class="nv">$licenseState</span><span class="p">.</span><span class="n">State</span><span class="p">)</span> <span class="p">{</span>
-                <span class="s2">&quot;Active&quot;</span> <span class="p">{</span> <span class="s2">&quot;✓ Assigned&quot;</span> <span class="p">}</span>
-                <span class="s2">&quot;ActiveWithError&quot;</span> <span class="p">{</span> <span class="s2">&quot;✗ Error&quot;</span> <span class="p">}</span>
-                <span class="k">default</span> <span class="p">{</span> <span class="s2">&quot;⏳ Processing&quot;</span> <span class="p">}</span>
+                <span class="s2">"Active"</span> <span class="p">{</span> <span class="s2">"✓ Assigned"</span> <span class="p">}</span>
+                <span class="s2">"ActiveWithError"</span> <span class="p">{</span> <span class="s2">"✗ Error"</span> <span class="p">}</span>
+                <span class="k">default</span> <span class="p">{</span> <span class="s2">"⏳ Processing"</span> <span class="p">}</span>
             <span class="p">}</span>
 
-            <span class="nb">Write-Host</span> <span class="s2">&quot;$status - </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">)&quot;</span>
+            <span class="nb">Write-Host</span> <span class="s2">"$status - </span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">)</span><span class="s2"> (</span><span class="p">$(</span><span class="nv">$user</span><span class="p">.</span><span class="n">UserPrincipalName</span><span class="p">)</span><span class="s2">)"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">License assignment complete: $processedCount / $totalMembers users processed&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+    <span class="nb">Write-Host</span> <span class="s2">"</span><span class="se">`n</span><span class="s2">License assignment complete: $processedCount / $totalMembers users processed"</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 <span class="p">}</span>
 
 <span class="c"># Get available licenses in tenant</span>
@@ -772,34 +768,33 @@
     <span class="nv">$subscribedSkus</span> <span class="p">=</span> <span class="nb">Get-MgSubscribedSku</span>
 
     <span class="nv">$licenses</span> <span class="p">=</span> <span class="nv">$subscribedSkus</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;LicenseName&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SkuPartNumber</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'LicenseName'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SkuPartNumber</span><span class="p">}},</span>
         <span class="n">SkuId</span><span class="p">,</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;TotalLicenses&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'TotalLicenses'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span><span class="p">}},</span>
         <span class="n">ConsumedUnits</span><span class="p">,</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AvailableLicenses&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">-</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ConsumedUnits</span><span class="p">}}</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'AvailableLicenses'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PrepaidUnits</span><span class="p">.</span><span class="n">Enabled</span> <span class="p">-</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ConsumedUnits</span><span class="p">}}</span>
 
     <span class="nv">$licenses</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
     <span class="k">return</span> <span class="nv">$licenses</span>
 <span class="p">}</span>
 
 <span class="c"># Usage</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;Group.ReadWrite.All&quot;</span><span class="p">,</span><span class="s2">&quot;User.Read.All&quot;</span><span class="p">,</span><span class="s2">&quot;Organization.Read.All&quot;</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"Group.ReadWrite.All"</span><span class="p">,</span><span class="s2">"User.Read.All"</span><span class="p">,</span><span class="s2">"Organization.Read.All"</span>
 
 <span class="c"># List available licenses</span>
 <span class="nb">Get-TenantLicenses</span>
 
 <span class="c"># Assign Office 365 E3 to a group (disable Exchange Online and SharePoint)</span>
-<span class="nv">$groupId</span> <span class="p">=</span> <span class="s2">&quot;your-group-object-id&quot;</span>
-<span class="nv">$e3SkuId</span> <span class="p">=</span> <span class="s2">&quot;c42b9cae-ea4f-4ab7-9717-81576235ccac&quot;</span>  <span class="c"># Office 365 E3</span>
+<span class="nv">$groupId</span> <span class="p">=</span> <span class="s2">"your-group-object-id"</span>
+<span class="nv">$e3SkuId</span> <span class="p">=</span> <span class="s2">"c42b9cae-ea4f-4ab7-9717-81576235ccac"</span>  <span class="c"># Office 365 E3</span>
 <span class="nv">$disabledPlans</span> <span class="p">=</span> <span class="p">@(</span>
-    <span class="s2">&quot;efb87545-963c-4e0d-99df-69c6916d9eb0&quot;</span><span class="p">,</span>  <span class="c"># Exchange Online (Plan 2)</span>
-    <span class="s2">&quot;5dbe027f-2339-4123-9542-606e4d348a72&quot;</span>   <span class="c"># SharePoint Online (Plan 2)</span>
+    <span class="s2">"efb87545-963c-4e0d-99df-69c6916d9eb0"</span><span class="p">,</span>  <span class="c"># Exchange Online (Plan 2)</span>
+    <span class="s2">"5dbe027f-2339-4123-9542-606e4d348a72"</span>   <span class="c"># SharePoint Online (Plan 2)</span>
 <span class="p">)</span>
 
 <span class="nb">Set-GroupBasedLicensing</span> <span class="n">-GroupId</span> <span class="nv">$groupId</span> <span class="n">-SkuId</span> <span class="nv">$e3SkuId</span> <span class="n">-DisabledPlans</span> <span class="nv">$disabledPlans</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p><strong>Authentication and Connection Issues</strong>:</p>
           <div class="codehilite">
@@ -808,7 +803,7 @@
 <span class="nb">Clear-MgContext</span>
 
 <span class="c"># Reconnect with verbose logging</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.Read.All&quot;</span> <span class="n">-Verbose</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"User.Read.All"</span> <span class="n">-Verbose</span>
 
 <span class="c"># Check current context</span>
 <span class="nv">$context</span> <span class="p">=</span> <span class="nb">Get-MgContext</span>
@@ -817,23 +812,22 @@
 <span class="c"># Test Graph API access</span>
 <span class="k">try</span> <span class="p">{</span>
     <span class="nv">$user</span> <span class="p">=</span> <span class="nb">Get-MgUser</span> <span class="n">-Top</span> <span class="n">1</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Graph API connection successful&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ Graph API connection successful"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 <span class="p">}</span>
 <span class="k">catch</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Graph API connection failed: </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✗ Graph API connection failed: </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
 <span class="p">}</span>
 
 <span class="c"># Verify token expiration</span>
 <span class="nv">$tokenExpiry</span> <span class="p">=</span> <span class="nv">$context</span><span class="p">.</span><span class="n">TokenExpiresOn</span>
 <span class="nv">$minutesRemaining</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$tokenExpiry</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">TotalMinutes</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;Token expires in </span><span class="p">$(</span><span class="no">[Math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$minutesRemaining</span><span class="p">,</span> <span class="n">2</span><span class="p">))</span><span class="s2"> minutes&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">"Token expires in </span><span class="p">$(</span><span class="no">[Math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$minutesRemaining</span><span class="p">,</span> <span class="n">2</span><span class="p">))</span><span class="s2"> minutes"</span>
 
 <span class="c"># Force token refresh</span>
 <span class="nb">Disconnect-MgGraph</span>
-<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">&quot;User.Read.All&quot;</span> <span class="n">-ForceRefresh</span>
+<span class="nb">Connect-MgGraph</span> <span class="n">-Scopes</span> <span class="s2">"User.Read.All"</span> <span class="n">-ForceRefresh</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Common Issues</strong>: -
             <strong>Insufficient privileges</strong>: Verify required Graph API
@@ -862,32 +856,31 @@
 <span class="nb">Update-Module</span> <span class="n">Microsoft</span><span class="p">.</span><span class="n">Graph</span> <span class="n">-Force</span>
 
 <span class="c"># Check API permissions for service principal</span>
-<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">&quot;your-app-id&quot;</span>
-<span class="nv">$sp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">&quot;appId eq &#39;$appId&#39;&quot;</span>
+<span class="nv">$appId</span> <span class="p">=</span> <span class="s2">"your-app-id"</span>
+<span class="nv">$sp</span> <span class="p">=</span> <span class="nb">Get-MgServicePrincipal</span> <span class="n">-Filter</span> <span class="s2">"appId eq '$appId'"</span>
 <span class="nb">Get-MgServicePrincipalAppRoleAssignment</span> <span class="n">-ServicePrincipalId</span> <span class="nv">$sp</span><span class="p">.</span><span class="n">Id</span> <span class="p">|</span>
     <span class="nb">Select-Object</span> <span class="n">AppRoleId</span><span class="p">,</span> <span class="n">PrincipalDisplayName</span><span class="p">,</span> <span class="n">ResourceDisplayName</span>
 
 <span class="c"># Test certificate authentication</span>
-<span class="nv">$certThumbprint</span> <span class="p">=</span> <span class="s2">&quot;your-cert-thumbprint&quot;</span>
+<span class="nv">$certThumbprint</span> <span class="p">=</span> <span class="s2">"your-cert-thumbprint"</span>
 <span class="nv">$cert</span> <span class="p">=</span> <span class="nb">Get-ChildItem</span> <span class="n">Cert</span><span class="p">:\</span><span class="n">CurrentUser</span><span class="p">\</span><span class="n">My</span><span class="p">\</span><span class="nv">$certThumbprint</span>
 <span class="k">if</span> <span class="p">(</span><span class="nv">$cert</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Certificate found: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Subject</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;  Expires: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">NotAfter</span><span class="p">)</span><span class="s2">&quot;</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;  Thumbprint: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ Certificate found: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Subject</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"  Expires: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">NotAfter</span><span class="p">)</span><span class="s2">"</span>
+    <span class="nb">Write-Host</span> <span class="s2">"  Thumbprint: </span><span class="p">$(</span><span class="nv">$cert</span><span class="p">.</span><span class="n">Thumbprint</span><span class="p">)</span><span class="s2">"</span>
 <span class="p">}</span>
 <span class="k">else</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✗ Certificate not found&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✗ Certificate not found"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
 <span class="p">}</span>
 
 <span class="c"># Check Azure AD sign-in logs for errors</span>
-<span class="nb">Get-MgAuditLogSignIn</span> <span class="n">-Top</span> <span class="n">10</span> <span class="n">-OrderBy</span> <span class="s2">&quot;createdDateTime desc&quot;</span> <span class="p">|</span>
+<span class="nb">Get-MgAuditLogSignIn</span> <span class="n">-Top</span> <span class="n">10</span> <span class="n">-OrderBy</span> <span class="s2">"createdDateTime desc"</span> <span class="p">|</span>
     <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span> <span class="o">-ne</span> <span class="n">0</span> <span class="p">}</span> <span class="p">|</span>
     <span class="nb">Select-Object</span> <span class="n">CreatedDateTime</span><span class="p">,</span> <span class="n">UserPrincipalName</span><span class="p">,</span> <span class="n">AppDisplayName</span><span class="p">,</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Error&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
-                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Reason&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}}</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'Error'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">ErrorCode</span><span class="p">}},</span>
+                  <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'Reason'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">FailureReason</span><span class="p">}}</span>
 </code></pre>
           </div>
-
           <h2 id="performance-and-tuning">Performance and Tuning</h2>
           <p><strong>Batch Operations and Pagination</strong>:</p>
           <div class="codehilite">
@@ -899,18 +892,18 @@
     <span class="p">)</span>
 
     <span class="nv">$allUsers</span> <span class="p">=</span> <span class="p">@()</span>
-    <span class="nv">$uri</span> <span class="p">=</span> <span class="s2">&quot;https://graph.microsoft.com/v1.0/users?</span><span class="se">`$</span><span class="s2">top=$PageSize&amp;</span><span class="se">`$</span><span class="s2">select=id,displayName,userPrincipalName,mail&quot;</span>
+    <span class="nv">$uri</span> <span class="p">=</span> <span class="s2">"https://graph.microsoft.com/v1.0/users?</span><span class="se">`$</span><span class="s2">top=$PageSize&amp;</span><span class="se">`$</span><span class="s2">select=id,displayName,userPrincipalName,mail"</span>
 
     <span class="k">do</span> <span class="p">{</span>
         <span class="nv">$response</span> <span class="p">=</span> <span class="nb">Invoke-MgGraphRequest</span> <span class="n">-Method</span> <span class="n">GET</span> <span class="n">-Uri</span> <span class="nv">$uri</span>
         <span class="nv">$allUsers</span> <span class="p">+=</span> <span class="nv">$response</span><span class="p">.</span><span class="n">Value</span>
 
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Retrieved </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Retrieved </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
-        <span class="nv">$uri</span> <span class="p">=</span> <span class="nv">$response</span><span class="p">.</span><span class="s1">&#39;@odata.nextLink&#39;</span>
+        <span class="nv">$uri</span> <span class="p">=</span> <span class="nv">$response</span><span class="p">.</span><span class="s1">'@odata.nextLink'</span>
     <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$uri</span><span class="p">)</span>
 
-    <span class="nb">Write-Host</span> <span class="s2">&quot;✓ Total users retrieved: </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+    <span class="nb">Write-Host</span> <span class="s2">"✓ Total users retrieved: </span><span class="p">$(</span><span class="nv">$allUsers</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2">"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
     <span class="k">return</span> <span class="nv">$allUsers</span>
 <span class="p">}</span>
 
@@ -938,7 +931,7 @@
         <span class="nv">$end</span> <span class="p">=</span> <span class="no">[Math]</span><span class="p">::</span><span class="n">Min</span><span class="p">(</span><span class="nv">$start</span> <span class="p">+</span> <span class="nv">$BatchSize</span> <span class="p">-</span> <span class="n">1</span><span class="p">,</span> <span class="nv">$Items</span><span class="p">.</span><span class="n">Count</span> <span class="p">-</span> <span class="n">1</span><span class="p">)</span>
         <span class="nv">$batch</span> <span class="p">=</span> <span class="nv">$Items</span><span class="p">[</span><span class="nv">$start</span><span class="p">..</span><span class="nv">$end</span><span class="p">]</span>
 
-        <span class="nb">Write-Host</span> <span class="s2">&quot;Processing batch </span><span class="p">$(</span><span class="nv">$i</span> <span class="p">+</span> <span class="n">1</span><span class="p">)</span><span class="s2"> of $batches...&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
+        <span class="nb">Write-Host</span> <span class="s2">"Processing batch </span><span class="p">$(</span><span class="nv">$i</span> <span class="p">+</span> <span class="n">1</span><span class="p">)</span><span class="s2"> of $batches..."</span> <span class="n">-ForegroundColor</span> <span class="n">Cyan</span>
 
         <span class="c"># Process batch in parallel</span>
         <span class="nv">$batchResults</span> <span class="p">=</span> <span class="nv">$batch</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="n">-ThrottleLimit</span> <span class="nv">$ThrottleLimit</span> <span class="n">-Parallel</span> <span class="p">{</span>
@@ -950,7 +943,7 @@
                 <span class="no">[PSCustomObject]</span><span class="p">@{</span>
                     <span class="n">Item</span> <span class="p">=</span> <span class="nv">$item</span>
                     <span class="n">Result</span> <span class="p">=</span> <span class="nv">$result</span>
-                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Success&quot;</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">"Success"</span>
                     <span class="n">Error</span> <span class="p">=</span> <span class="nv">$null</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -958,7 +951,7 @@
                 <span class="no">[PSCustomObject]</span><span class="p">@{</span>
                     <span class="n">Item</span> <span class="p">=</span> <span class="nv">$item</span>
                     <span class="n">Result</span> <span class="p">=</span> <span class="nv">$null</span>
-                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">&quot;Failed&quot;</span>
+                    <span class="n">Status</span> <span class="p">=</span> <span class="s2">"Failed"</span>
                     <span class="n">Error</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -977,14 +970,13 @@
 <span class="nv">$users</span> <span class="p">=</span> <span class="nb">Get-AllUsersEfficiently</span>
 <span class="nv">$updates</span> <span class="p">=</span> <span class="nb">Invoke-BatchOperation</span> <span class="n">-Items</span> <span class="nv">$users</span> <span class="n">-BatchSize</span> <span class="n">20</span> <span class="n">-ScriptBlock</span> <span class="p">{</span>
     <span class="k">param</span><span class="p">(</span><span class="nv">$user</span><span class="p">)</span>
-    <span class="nb">Update-MgUser</span> <span class="n">-UserId</span> <span class="nv">$user</span><span class="p">.</span><span class="n">id</span> <span class="n">-Department</span> <span class="s2">&quot;Engineering&quot;</span>
+    <span class="nb">Update-MgUser</span> <span class="n">-UserId</span> <span class="nv">$user</span><span class="p">.</span><span class="n">id</span> <span class="n">-Department</span> <span class="s2">"Engineering"</span>
 <span class="p">}</span>
 
-<span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$updates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">&quot;Success&quot;</span> <span class="p">}).</span><span class="n">Count</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;✓ Updated $successCount users successfully&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+<span class="nv">$successCount</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$updates</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Status</span> <span class="o">-eq</span> <span class="s2">"Success"</span> <span class="p">}).</span><span class="n">Count</span>
+<span class="nb">Write-Host</span> <span class="s2">"✓ Updated $successCount users successfully"</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Performance Optimizations</strong>: - Use
             <code>-Select</code> parameter to retrieve only required properties;
@@ -1013,33 +1005,32 @@
     <span class="nv">$app</span><span class="p">.</span><span class="n">KeyCredentials</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
         <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span> <span class="o">-le</span> <span class="nv">$threshold</span>
     <span class="p">}</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AppName&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">}},</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AppId&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">}},</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;ExpiryDate&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span><span class="p">}},</span>
-        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;DaysRemaining&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={(</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span><span class="p">}}</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'AppName'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'AppId'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$app</span><span class="p">.</span><span class="n">AppId</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'ExpiryDate'</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">'DaysRemaining'</span><span class="p">;</span><span class="n">E</span><span class="p">={(</span><span class="nv">$_</span><span class="p">.</span><span class="n">EndDateTime</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span><span class="p">}}</span>
 <span class="p">}</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nv">$expiringCerts</span><span class="p">)</span> <span class="p">{</span>
     <span class="c"># Send alert (integrate with Azure Monitor, email, Teams, etc.)</span>
     <span class="nv">$expiringCerts</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;⚠️  </span><span class="p">$(</span><span class="nv">$expiringCerts</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> certificates expiring soon!&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nb">Write-Host</span> <span class="s2">"⚠️  </span><span class="p">$(</span><span class="nv">$expiringCerts</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> certificates expiring soon!"</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
 <span class="p">}</span>
 
 <span class="c"># Monitor failed sign-ins (security alerting)</span>
 <span class="nv">$recentFailures</span> <span class="p">=</span> <span class="nb">Get-MgAuditLogSignIn</span> <span class="p">`</span>
-    <span class="n">-Filter</span> <span class="s2">&quot;status/errorCode ne 0 and createdDateTime ge </span><span class="p">$((</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddHours</span><span class="p">(-</span><span class="n">1</span><span class="p">).</span><span class="n">ToString</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-ddTHH:mm:ssZ&#39;</span><span class="p">))</span><span class="s2">&quot;</span> <span class="p">`</span>
+    <span class="n">-Filter</span> <span class="s2">"status/errorCode ne 0 and createdDateTime ge </span><span class="p">$((</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddHours</span><span class="p">(-</span><span class="n">1</span><span class="p">).</span><span class="n">ToString</span><span class="p">(</span><span class="s1">'yyyy-MM-ddTHH:mm:ssZ'</span><span class="p">))</span><span class="s2">"</span> <span class="p">`</span>
     <span class="n">-Top</span> <span class="n">100</span>
 
 <span class="nv">$suspiciousActivity</span> <span class="p">=</span> <span class="nv">$recentFailures</span> <span class="p">|</span> <span class="nb">Group-Object</span> <span class="n">UserPrincipalName</span> <span class="p">|</span>
     <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Count</span> <span class="o">-ge</span> <span class="n">5</span> <span class="p">}</span>  <span class="c"># 5+ failures in 1 hour</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nv">$suspiciousActivity</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">&quot;🚨 Suspicious activity detected for </span><span class="p">$(</span><span class="nv">$suspiciousActivity</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users!&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
+    <span class="nb">Write-Host</span> <span class="s2">"🚨 Suspicious activity detected for </span><span class="p">$(</span><span class="nv">$suspiciousActivity</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> users!"</span> <span class="n">-ForegroundColor</span> <span class="n">Red</span>
     <span class="c"># Implement automated response (e.g., enable conditional access, revoke tokens)</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -1128,32 +1119,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

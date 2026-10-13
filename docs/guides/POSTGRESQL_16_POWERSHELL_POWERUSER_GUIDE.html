@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>POSTGRESQL 16 PowerUser Guide (PowerShell) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -230,15 +233,14 @@
 <span class="na">effective_io_concurrency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">200</span><span class="w">         </span><span class="c1"># For SSD storage</span>
 
 <span class="c1"># Logging</span>
-<span class="na">log_destination</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;stderr&#39;</span>
+<span class="na">log_destination</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'stderr'</span>
 <span class="na">logging_collector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">on</span>
-<span class="na">log_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;log&#39;</span>
-<span class="na">log_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;postgresql-%Y-%m-%d_%H%M%S.log&#39;</span>
-<span class="na">log_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;all&#39;</span>
+<span class="na">log_directory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'log'</span>
+<span class="na">log_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'postgresql-%Y-%m-%d_%H%M%S.log'</span>
+<span class="na">log_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'all'</span>
 <span class="na">log_min_duration_statement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">1000</span><span class="w">      </span><span class="c1"># Log queries &gt; 1 second</span>
 </code></pre>
           </div>
-
           <p><strong>pg_hba.conf</strong> (host-based authentication):</p>
           <div class="codehilite">
             <pre><span></span><code># TYPE  DATABASE  USER      ADDRESS         METHOD
@@ -248,7 +250,6 @@ host    all       all       ::1/128         scram-sha-256
 host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Use connection pooling
             (PgBouncer) for applications with &gt;100 connections - Enable query
@@ -296,7 +297,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </ol>
           <p><strong>Create Secure Application User</strong>:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">&#39;SecurePassword123!&#39;</span><span class="p">;</span>
+            <pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">ROLE</span><span class="w"> </span><span class="n">appuser</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="s1">'SecurePassword123!'</span><span class="p">;</span>
 <span class="k">CREATE</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">OWNER</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="k">GRANT</span><span class="w"> </span><span class="k">CONNECT</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">appdb</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">appuser</span><span class="p">;</span>
 <span class="err">\</span><span class="k">c</span><span class="w"> </span><span class="n">appdb</span>
@@ -305,7 +306,6 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="k">REVOKE</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="k">PUBLIC</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="install-and-configure-postgresql-16">
             Install and Configure PostgreSQL 16
@@ -316,23 +316,23 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Download PostgreSQL 16 installer</span>
-<span class="nv">$installerUrl</span> <span class="p">=</span> <span class="s2">&quot;https://get.enterprisedb.com/postgresql/postgresql-16.1-1-windows-x64.exe&quot;</span>
-<span class="nv">$installerPath</span> <span class="p">=</span> <span class="s2">&quot;$env:TEMP\postgresql-16-installer.exe&quot;</span>
+<span class="nv">$installerUrl</span> <span class="p">=</span> <span class="s2">"https://get.enterprisedb.com/postgresql/postgresql-16.1-1-windows-x64.exe"</span>
+<span class="nv">$installerPath</span> <span class="p">=</span> <span class="s2">"$env:TEMP\postgresql-16-installer.exe"</span>
 <span class="nb">Invoke-WebRequest</span> <span class="n">-Uri</span> <span class="nv">$installerUrl</span> <span class="n">-OutFile</span> <span class="nv">$installerPath</span>
 
 <span class="c"># Install silently (requires admin)</span>
 <span class="nb">Start-Process</span> <span class="n">-FilePath</span> <span class="nv">$installerPath</span> <span class="n">-ArgumentList</span> <span class="p">@(</span>
-    <span class="s1">&#39;--mode&#39;</span><span class="p">,</span> <span class="s1">&#39;unattended&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--superpassword&#39;</span><span class="p">,</span> <span class="s1">&#39;StrongPassword123!&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--serverport&#39;</span><span class="p">,</span> <span class="s1">&#39;5432&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--datadir&#39;</span><span class="p">,</span> <span class="s1">&#39;C:\PostgreSQL\data&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;--servicename&#39;</span><span class="p">,</span> <span class="s1">&#39;postgresql-x64-16&#39;</span>
+    <span class="s1">'--mode'</span><span class="p">,</span> <span class="s1">'unattended'</span><span class="p">,</span>
+    <span class="s1">'--superpassword'</span><span class="p">,</span> <span class="s1">'StrongPassword123!'</span><span class="p">,</span>
+    <span class="s1">'--serverport'</span><span class="p">,</span> <span class="s1">'5432'</span><span class="p">,</span>
+    <span class="s1">'--datadir'</span><span class="p">,</span> <span class="s1">'C:\PostgreSQL\data'</span><span class="p">,</span>
+    <span class="s1">'--servicename'</span><span class="p">,</span> <span class="s1">'postgresql-x64-16'</span>
 <span class="p">)</span> <span class="n">-Wait</span>
 
 <span class="c"># Add to PATH</span>
-<span class="nv">$pgBinPath</span> <span class="p">=</span> <span class="s2">&quot;C:\Program Files\PostgreSQL\16\bin&quot;</span>
-<span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">&quot;PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;$env:PATH;$pgBinPath&quot;</span><span class="p">,</span> <span class="s2">&quot;Machine&quot;</span><span class="p">)</span>
-<span class="nv">$env:PATH</span> <span class="p">+=</span> <span class="s2">&quot;;$pgBinPath&quot;</span>
+<span class="nv">$pgBinPath</span> <span class="p">=</span> <span class="s2">"C:\Program Files\PostgreSQL\16\bin"</span>
+<span class="no">[Environment]</span><span class="p">::</span><span class="n">SetEnvironmentVariable</span><span class="p">(</span><span class="s2">"PATH"</span><span class="p">,</span> <span class="s2">"$env:PATH;$pgBinPath"</span><span class="p">,</span> <span class="s2">"Machine"</span><span class="p">)</span>
+<span class="nv">$env:PATH</span> <span class="p">+=</span> <span class="s2">";$pgBinPath"</span>
 
 <span class="c"># Verify installation</span>
 <span class="n">psql</span> <span class="p">-</span><span class="n">-version</span>
@@ -344,7 +344,6 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="nb">Get-Service</span> <span class="n">postgresql-x64</span><span class="p">-</span><span class="n">16</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">StartType</span>
 </code></pre>
           </div>
-
           <h3 id="database-and-user-management">
             Database and User Management
           </h3>
@@ -354,28 +353,28 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Set password environment variable for non-interactive authentication</span>
-<span class="nv">$env:PGPASSWORD</span> <span class="p">=</span> <span class="s2">&quot;StrongPassword123!&quot;</span>
+<span class="nv">$env:PGPASSWORD</span> <span class="p">=</span> <span class="s2">"StrongPassword123!"</span>
 
 <span class="c"># Connect and create database</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE DATABASE production_db WITH ENCODING &#39;UTF8&#39; LC_COLLATE=&#39;en_US.UTF-8&#39; LC_CTYPE=&#39;en_US.UTF-8&#39;;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE DATABASE production_db WITH ENCODING 'UTF8' LC_COLLATE='en_US.UTF-8' LC_CTYPE='en_US.UTF-8';"</span>
 
 <span class="c"># Create roles</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE ROLE admin_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE ROLE readonly_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE ROLE readwrite_role;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE ROLE admin_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE ROLE readonly_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE ROLE readwrite_role;"</span>
 
 <span class="c"># Create users</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE USER admin_user WITH PASSWORD &#39;AdminPass123!&#39; IN ROLE admin_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE USER app_user WITH PASSWORD &#39;AppPass123!&#39; IN ROLE readwrite_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;CREATE USER report_user WITH PASSWORD &#39;ReportPass123!&#39; IN ROLE readonly_role;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE USER admin_user WITH PASSWORD 'AdminPass123!' IN ROLE admin_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE USER app_user WITH PASSWORD 'AppPass123!' IN ROLE readwrite_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"CREATE USER report_user WITH PASSWORD 'ReportPass123!' IN ROLE readonly_role;"</span>
 
 <span class="c"># Grant database access</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;GRANT ALL PRIVILEGES ON DATABASE production_db TO admin_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readwrite_role;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;GRANT CONNECT ON DATABASE production_db TO readonly_role;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"GRANT ALL PRIVILEGES ON DATABASE production_db TO admin_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"GRANT CONNECT ON DATABASE production_db TO readwrite_role;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"GRANT CONNECT ON DATABASE production_db TO readonly_role;"</span>
 
 <span class="c"># Grant schema permissions</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">GRANT USAGE ON SCHEMA public TO readwrite_role;</span>
 <span class="sh">GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite_role;</span>
 <span class="sh">GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO readwrite_role;</span>
@@ -385,13 +384,12 @@ host    all       all       0.0.0.0/0       scram-sha-256
 
 <span class="sh">ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO readwrite_role;</span>
 <span class="sh">ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readonly_role;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
 <span class="c"># List users and roles</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;\du&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"\du"</span>
 </code></pre>
           </div>
-
           <h3 id="backup-and-restore-operations">
             Backup and Restore Operations
           </h3>
@@ -401,39 +399,38 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Full database dump (plain SQL)</span>
-<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">p</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\production_db_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.sql&quot;</span>
+<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">p</span> <span class="o">-f</span> <span class="s2">"C:\Backups\production_db_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd_HHmmss'</span><span class="p">)</span><span class="s2">.sql"</span>
 
 <span class="c"># Compressed custom format dump (recommended for large databases)</span>
-<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\production_db_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.dump&quot;</span>
+<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">"C:\Backups\production_db_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd_HHmmss'</span><span class="p">)</span><span class="s2">.dump"</span>
 
 <span class="c"># Dump specific schema</span>
-<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-n</span> <span class="n">public</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\public_schema_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.dump&quot;</span>
+<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-n</span> <span class="n">public</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">"C:\Backups\public_schema_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd_HHmmss'</span><span class="p">)</span><span class="s2">.dump"</span>
 
 <span class="c"># Dump specific tables</span>
-<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-t</span> <span class="n">users</span> <span class="n">-t</span> <span class="n">orders</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\specific_tables_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.dump&quot;</span>
+<span class="n">pg_dump</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-t</span> <span class="n">users</span> <span class="n">-t</span> <span class="n">orders</span> <span class="o">-F</span> <span class="n">c</span> <span class="o">-f</span> <span class="s2">"C:\Backups\specific_tables_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd_HHmmss'</span><span class="p">)</span><span class="s2">.dump"</span>
 
 <span class="c"># Dump all databases</span>
-<span class="n">pg_dumpall</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\all_databases_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd_HHmmss&#39;</span><span class="p">)</span><span class="s2">.sql&quot;</span>
+<span class="n">pg_dumpall</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="o">-f</span> <span class="s2">"C:\Backups\all_databases_</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd_HHmmss'</span><span class="p">)</span><span class="s2">.sql"</span>
 
 <span class="c"># Restore from plain SQL dump</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-f</span> <span class="s2">&quot;C:\Backups\production_db_20241204_120000.sql&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-f</span> <span class="s2">"C:\Backups\production_db_20241204_120000.sql"</span>
 
 <span class="c"># Restore from custom format dump</span>
-<span class="n">pg_restore</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="n">-c</span> <span class="p">-</span><span class="n">-if-exists</span> <span class="s2">&quot;C:\Backups\production_db_20241204_120000.dump&quot;</span>
+<span class="n">pg_restore</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="n">-c</span> <span class="p">-</span><span class="n">-if-exists</span> <span class="s2">"C:\Backups\production_db_20241204_120000.dump"</span>
 
 <span class="c"># Parallel restore (faster for large databases)</span>
-<span class="n">pg_restore</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="n">-j</span> <span class="n">4</span> <span class="s2">&quot;C:\Backups\production_db_20241204_120000.dump&quot;</span>
+<span class="n">pg_restore</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-F</span> <span class="n">c</span> <span class="n">-j</span> <span class="n">4</span> <span class="s2">"C:\Backups\production_db_20241204_120000.dump"</span>
 
 <span class="c"># Create scheduled backup task (runs daily at 2 AM)</span>
-<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;PowerShell.exe&quot;</span> <span class="n">-Argument</span> <span class="sh">@&quot;</span>
-<span class="sh">-Command &quot;pg_dump -U postgres -d production_db -F c -f C:\Backups\production_db_`</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">&#39;yyyyMMdd&#39;</span><span class="p">)</span><span class="sh">.dump&quot;</span>
-<span class="sh">&quot;@</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">"PowerShell.exe"</span> <span class="n">-Argument</span> <span class="sh">@"</span>
+<span class="sh">-Command "pg_dump -U postgres -d production_db -F c -f C:\Backups\production_db_`</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s1">'yyyyMMdd'</span><span class="p">)</span><span class="sh">.dump"</span>
+<span class="sh">"@</span>
 <span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="n">2am</span>
-<span class="nv">$principal</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskPrincipal</span> <span class="n">-UserID</span> <span class="s2">&quot;NT AUTHORITY\SYSTEM&quot;</span> <span class="n">-LogonType</span> <span class="n">ServiceAccount</span> <span class="n">-RunLevel</span> <span class="n">Highest</span>
-<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Principal</span> <span class="nv">$principal</span> <span class="n">-TaskName</span> <span class="s2">&quot;PostgreSQL Daily Backup&quot;</span> <span class="n">-Description</span> <span class="s2">&quot;Daily PostgreSQL backup&quot;</span>
+<span class="nv">$principal</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskPrincipal</span> <span class="n">-UserID</span> <span class="s2">"NT AUTHORITY\SYSTEM"</span> <span class="n">-LogonType</span> <span class="n">ServiceAccount</span> <span class="n">-RunLevel</span> <span class="n">Highest</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Principal</span> <span class="nv">$principal</span> <span class="n">-TaskName</span> <span class="s2">"PostgreSQL Daily Backup"</span> <span class="n">-Description</span> <span class="s2">"Daily PostgreSQL backup"</span>
 </code></pre>
           </div>
-
           <h3 id="query-execution-and-analysis">
             Query Execution and Analysis
           </h3>
@@ -443,32 +440,32 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Execute simple query</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;SELECT * FROM users LIMIT 10;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"SELECT * FROM users LIMIT 10;"</span>
 
 <span class="c"># Execute query from file</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-f</span> <span class="s2">&quot;C:\Scripts\queries.sql&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="o">-f</span> <span class="s2">"C:\Scripts\queries.sql"</span>
 
 <span class="c"># Get query execution time</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;\timing&quot;</span> <span class="n">-c</span> <span class="s2">&quot;SELECT COUNT(*) FROM large_table;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"\timing"</span> <span class="n">-c</span> <span class="s2">"SELECT COUNT(*) FROM large_table;"</span>
 
 <span class="c"># Analyze query plan</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;EXPLAIN ANALYZE SELECT * FROM users WHERE email = &#39;user@example.com&#39;;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'user@example.com';"</span>
 
 <span class="c"># Get table sizes</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    schemaname,</span>
 <span class="sh">    tablename,</span>
-<span class="sh">    pg_size_pretty(pg_total_relation_size(schemaname||&#39;.&#39;||tablename)) AS total_size,</span>
-<span class="sh">    pg_size_pretty(pg_relation_size(schemaname||&#39;.&#39;||tablename)) AS table_size,</span>
-<span class="sh">    pg_size_pretty(pg_indexes_size(schemaname||&#39;.&#39;||tablename)) AS indexes_size</span>
+<span class="sh">    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS total_size,</span>
+<span class="sh">    pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) AS table_size,</span>
+<span class="sh">    pg_size_pretty(pg_indexes_size(schemaname||'.'||tablename)) AS indexes_size</span>
 <span class="sh">FROM pg_tables</span>
-<span class="sh">WHERE schemaname = &#39;public&#39;</span>
-<span class="sh">ORDER BY pg_total_relation_size(schemaname||&#39;.&#39;||tablename) DESC;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">WHERE schemaname = 'public'</span>
+<span class="sh">ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;</span>
+<span class="sh">"@</span>
 
 <span class="c"># Get index usage statistics</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    schemaname,</span>
 <span class="sh">    tablename,</span>
@@ -479,10 +476,10 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">    pg_size_pretty(pg_relation_size(indexrelid)) AS index_size</span>
 <span class="sh">FROM pg_stat_user_indexes</span>
 <span class="sh">ORDER BY idx_scan DESC;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
 <span class="c"># Find slow queries (requires pg_stat_statements extension)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    query,</span>
 <span class="sh">    calls,</span>
@@ -492,10 +489,9 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">FROM pg_stat_statements</span>
 <span class="sh">ORDER BY mean_exec_time DESC</span>
 <span class="sh">LIMIT 10;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 </code></pre>
           </div>
-
           <h3 id="index-management-and-optimization">
             Index Management and Optimization
           </h3>
@@ -505,31 +501,31 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Create B-tree index (default)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_users_email ON users(email);&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE INDEX idx_users_email ON users(email);"</span>
 
 <span class="c"># Create unique index</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE UNIQUE INDEX idx_users_username ON users(username);&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE UNIQUE INDEX idx_users_username ON users(username);"</span>
 
 <span class="c"># Create composite index</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);"</span>
 
 <span class="c"># Create partial index (conditional)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_orders_active ON orders(user_id) WHERE status = &#39;active&#39;;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE INDEX idx_orders_active ON orders(user_id) WHERE status = 'active';"</span>
 
 <span class="c"># Create GIN index for JSON columns</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_products_attributes ON products USING GIN(attributes);&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE INDEX idx_products_attributes ON products USING GIN(attributes);"</span>
 
 <span class="c"># Create GiST index for full-text search</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE INDEX idx_articles_search ON articles USING GiST(to_tsvector(&#39;english&#39;, title || &#39; &#39; || content));&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE INDEX idx_articles_search ON articles USING GiST(to_tsvector('english', title || ' ' || content));"</span>
 
 <span class="c"># Rebuild index (remove bloat)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;REINDEX INDEX CONCURRENTLY idx_users_email;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"REINDEX INDEX CONCURRENTLY idx_users_email;"</span>
 
 <span class="c"># Rebuild all indexes on table</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;REINDEX TABLE CONCURRENTLY users;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"REINDEX TABLE CONCURRENTLY users;"</span>
 
 <span class="c"># Get unused indexes</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    schemaname,</span>
 <span class="sh">    tablename,</span>
@@ -538,13 +534,12 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">FROM pg_stat_user_indexes</span>
 <span class="sh">WHERE idx_scan = 0</span>
 <span class="sh">ORDER BY pg_relation_size(indexrelid) DESC;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
 <span class="c"># Drop unused indexes</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;DROP INDEX CONCURRENTLY idx_old_unused_index;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"DROP INDEX CONCURRENTLY idx_old_unused_index;"</span>
 </code></pre>
           </div>
-
           <h3 id="maintenance-operations">Maintenance Operations</h3>
           <p>
             Perform routine maintenance tasks including VACUUM, ANALYZE, and
@@ -552,48 +547,47 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Manual vacuum (non-blocking)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;VACUUM;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"VACUUM;"</span>
 
 <span class="c"># Vacuum specific table</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;VACUUM VERBOSE ANALYZE users;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"VACUUM VERBOSE ANALYZE users;"</span>
 
 <span class="c"># Full vacuum (locks table, reclaims more space)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;VACUUM FULL users;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"VACUUM FULL users;"</span>
 
 <span class="c"># Analyze statistics for query planner</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;ANALYZE;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"ANALYZE;"</span>
 
 <span class="c"># Reindex database</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;REINDEX DATABASE production_db;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"REINDEX DATABASE production_db;"</span>
 
 <span class="c"># Check for bloat</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    schemaname,</span>
 <span class="sh">    tablename,</span>
-<span class="sh">    pg_size_pretty(pg_total_relation_size(schemaname||&#39;.&#39;||tablename)) AS size,</span>
+<span class="sh">    pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size,</span>
 <span class="sh">    n_dead_tup,</span>
 <span class="sh">    n_live_tup,</span>
 <span class="sh">    ROUND(100 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0), 2) AS dead_tuple_percent</span>
 <span class="sh">FROM pg_stat_user_tables</span>
 <span class="sh">WHERE n_dead_tup &gt; 0</span>
 <span class="sh">ORDER BY n_dead_tup DESC;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
 <span class="c"># Enable autovacuum (should be on by default)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;ALTER SYSTEM SET autovacuum = on;&quot;</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;SELECT pg_reload_conf();&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"ALTER SYSTEM SET autovacuum = on;"</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"SELECT pg_reload_conf();"</span>
 
 <span class="c"># Configure autovacuum thresholds for specific table</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">ALTER TABLE users SET (</span>
 <span class="sh">    autovacuum_vacuum_scale_factor = 0.1,</span>
 <span class="sh">    autovacuum_analyze_scale_factor = 0.05</span>
 <span class="sh">);</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Connection Refused</strong>: - <strong>Error</strong>:
@@ -634,7 +628,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
             <strong>Check blocking queries</strong>:
           </p>
           <div class="codehilite">
-            <pre><span></span><code><span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+            <pre><span></span><code><span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    pid,</span>
 <span class="sh">    usename,</span>
@@ -642,10 +636,9 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">    query</span>
 <span class="sh">FROM pg_stat_activity</span>
 <span class="sh">WHERE cardinality(pg_blocking_pids(pid)) &gt; 0;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Kill blocking session</strong>:
@@ -670,7 +663,6 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="na">work_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">16MB</span><span class="w">                   </span><span class="c1"># Per sort/hash operation</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Connection Pooling</strong>: Install PgBouncer for
             connection pooling:
@@ -680,7 +672,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="n">choco</span> <span class="n">install</span> <span class="n">pgbouncer</span>
 
 <span class="c"># Configure pgbouncer.ini</span>
-<span class="sh">@&quot;</span>
+<span class="sh">@"</span>
 <span class="sh">[databases]</span>
 <span class="sh">production_db = host=localhost port=5432 dbname=production_db</span>
 
@@ -692,52 +684,49 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="sh">pool_mode = transaction</span>
 <span class="sh">max_client_conn = 1000</span>
 <span class="sh">default_pool_size = 25</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="s2">&quot;C:\PostgreSQL\pgbouncer\pgbouncer.ini&quot;</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Set-Content</span> <span class="s2">"C:\PostgreSQL\pgbouncer\pgbouncer.ini"</span>
 
 <span class="c"># Start PgBouncer service</span>
 <span class="n">net</span> <span class="nb">start </span><span class="n">pgbouncer</span>
 </code></pre>
           </div>
-
           <p><strong>Query Optimization</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Enable pg_stat_statements extension</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;CREATE EXTENSION IF NOT EXISTS pg_stat_statements;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"CREATE EXTENSION IF NOT EXISTS pg_stat_statements;"</span>
 
 <span class="c"># Add to postgresql.conf</span>
-<span class="sh">@&quot;</span>
-<span class="sh">shared_preload_libraries = &#39;pg_stat_statements&#39;</span>
+<span class="sh">@"</span>
+<span class="sh">shared_preload_libraries = 'pg_stat_statements'</span>
 <span class="sh">pg_stat_statements.max = 10000</span>
 <span class="sh">pg_stat_statements.track = all</span>
-<span class="sh">&quot;@</span> <span class="p">|</span> <span class="nb">Add-Content</span> <span class="s2">&quot;C:\PostgreSQL\data\postgresql.conf&quot;</span>
+<span class="sh">"@</span> <span class="p">|</span> <span class="nb">Add-Content</span> <span class="s2">"C:\PostgreSQL\data\postgresql.conf"</span>
 
 <span class="c"># Restart service</span>
 <span class="nb">Restart-Service</span> <span class="n">postgresql-x64</span><span class="p">-</span><span class="n">16</span>
 </code></pre>
           </div>
-
           <p><strong>Monitoring Commands</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Active connections</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;SELECT count(*) FROM pg_stat_activity;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"SELECT count(*) FROM pg_stat_activity;"</span>
 
 <span class="c"># Database size</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">&quot;SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-c</span> <span class="s2">"SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</span>
 
 <span class="c"># Cache hit ratio (should be &gt;99%)</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="sh">@"</span>
 <span class="sh">SELECT </span>
 <span class="sh">    sum(heap_blks_read) as heap_read,</span>
 <span class="sh">    sum(heap_blks_hit) as heap_hit,</span>
 <span class="sh">    sum(heap_blks_hit) / (sum(heap_blks_hit) + sum(heap_blks_read)) AS cache_hit_ratio</span>
 <span class="sh">FROM pg_statio_user_tables;</span>
-<span class="sh">&quot;@</span>
+<span class="sh">"@</span>
 
 <span class="c"># Transaction rate</span>
-<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">&quot;SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = &#39;production_db&#39;;&quot;</span>
+<span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = 'production_db';"</span>
 </code></pre>
           </div>
-
           <h2 id="references-and-further-reading">
             References and Further Reading
           </h2>
@@ -775,32 +764,11 @@ host    all       all       0.0.0.0/0       scram-sha-256
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

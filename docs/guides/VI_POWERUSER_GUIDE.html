@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>VI/VIM Power User Guide - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -1754,25 +1757,24 @@
           </table>
           <h3 id="common-settings">Common Settings</h3>
           <div class="codehilite">
-            <pre><span></span><code><span class="p">:</span><span class="k">set</span> <span class="k">number</span>              <span class="c">&quot; Show line numbers</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">relativenumber</span>      <span class="c">&quot; Show relative line numbers</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">ignorecase</span>          <span class="c">&quot; Case-insensitive search</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">smartcase</span>           <span class="c">&quot; Case-sensitive if uppercase used</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">hlsearch</span>            <span class="c">&quot; Highlight search results</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">incsearch</span>           <span class="c">&quot; Incremental search</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">expandtab</span>           <span class="c">&quot; Use spaces instead of tabs</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">tabstop</span><span class="p">=</span><span class="m">4</span>           <span class="c">&quot; Tab width</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">shiftwidth</span><span class="p">=</span><span class="m">4</span>        <span class="c">&quot; Indent width</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">autoindent</span>          <span class="c">&quot; Auto-indent new lines</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">smartindent</span>         <span class="c">&quot; Smart auto-indent</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">wrap</span>                <span class="c">&quot; Wrap long lines</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">nowrap</span>              <span class="c">&quot; Don&#39;t wrap lines</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">mouse</span><span class="p">=</span><span class="k">a</span>             <span class="c">&quot; Enable mouse</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>unnamed   <span class="c">&quot; Use system clipboard</span>
-<span class="p">:</span><span class="k">set</span> <span class="nb">syntax</span><span class="p">=</span><span class="k">on</span>           <span class="c">&quot; Enable syntax highlighting</span>
+            <pre><span></span><code><span class="p">:</span><span class="k">set</span> <span class="k">number</span>              <span class="c">" Show line numbers</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">relativenumber</span>      <span class="c">" Show relative line numbers</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">ignorecase</span>          <span class="c">" Case-insensitive search</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">smartcase</span>           <span class="c">" Case-sensitive if uppercase used</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">hlsearch</span>            <span class="c">" Highlight search results</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">incsearch</span>           <span class="c">" Incremental search</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">expandtab</span>           <span class="c">" Use spaces instead of tabs</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">tabstop</span><span class="p">=</span><span class="m">4</span>           <span class="c">" Tab width</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">shiftwidth</span><span class="p">=</span><span class="m">4</span>        <span class="c">" Indent width</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">autoindent</span>          <span class="c">" Auto-indent new lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">smartindent</span>         <span class="c">" Smart auto-indent</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">wrap</span>                <span class="c">" Wrap long lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">nowrap</span>              <span class="c">" Don't wrap lines</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">mouse</span><span class="p">=</span><span class="k">a</span>             <span class="c">" Enable mouse</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">clipboard</span><span class="p">=</span>unnamed   <span class="c">" Use system clipboard</span>
+<span class="p">:</span><span class="k">set</span> <span class="nb">syntax</span><span class="p">=</span><span class="k">on</span>           <span class="c">" Enable syntax highlighting</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="power-user-combinations">Power User Combinations</h2>
           <h3 id="quick-navigation-patterns">Quick Navigation Patterns</h3>
@@ -1787,12 +1789,11 @@
 <span class="o">*</span><span class="w">           </span><span class="o">-</span><span class="w"> </span><span class="n">Search</span><span class="w"> </span><span class="n">word</span><span class="w"> </span><span class="n">under</span><span class="w"> </span><span class="n">cursor</span><span class="p">,</span><span class="w"> </span><span class="n">use</span><span class="w"> </span><span class="n">n</span><span class="o">/</span><span class="n">N</span><span class="w"> </span><span class="kr">to</span><span class="w"> </span><span class="n">navigate</span>
 </code></pre>
           </div>
-
           <h3 id="efficient-editing">Efficient Editing</h3>
           <div class="codehilite">
             <pre><span></span><code>ciw         - Change inner word (cursor anywhere in word)
-ci&quot;         - Change text inside quotes
-ca&quot;         - Change text and quotes
+ci"         - Change text inside quotes
+ca"         - Change text and quotes
 dap         - Delete paragraph
 yap         - Yank paragraph
 &gt;ap         - Indent paragraph
@@ -1800,7 +1801,6 @@ yap         - Yank paragraph
 gqap        - Format/wrap paragraph
 </code></pre>
           </div>
-
           <h3 id="multiple-operations">Multiple Operations</h3>
           <div class="codehilite">
             <pre><span></span><code>d3w         - Delete 3 words
@@ -1811,19 +1811,17 @@ y5k         - Yank current and previous 5 lines
 10i*&lt;Esc&gt;   - Insert 10 asterisks
 </code></pre>
           </div>
-
           <h3 id="complex-commands">Complex Commands</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="err">:</span><span class="o">%</span><span class="n">s</span><span class="o">/</span><span class="err">\</span><span class="n">s</span><span class="err">\</span><span class="o">+</span><span class="err">$</span><span class="o">//</span><span class="n">g</span><span class="w">              </span><span class="o">-</span><span class="w"> </span><span class="n">Remove</span><span class="w"> </span><span class="k">trailing</span><span class="w"> </span><span class="n">whitespace</span>
 <span class="err">:</span><span class="n">g</span><span class="o">/^</span><span class="err">$</span><span class="o">/</span><span class="n">d</span><span class="w">                   </span><span class="o">-</span><span class="w"> </span><span class="k">Delete</span><span class="w"> </span><span class="n">empty</span><span class="w"> </span><span class="n">lines</span>
 <span class="err">:</span><span class="n">g</span><span class="o">/</span><span class="n">pattern</span><span class="o">/</span><span class="n">normal</span><span class="w"> </span><span class="nv">@a</span><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="k">Execute</span><span class="w"> </span><span class="n">macro</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">matching</span><span class="w"> </span><span class="n">lines</span>
 <span class="err">:</span><span class="p">.,</span><span class="o">+</span><span class="mi">5</span><span class="n">s</span><span class="o">/</span><span class="k">old</span><span class="o">/</span><span class="k">new</span><span class="o">/</span><span class="n">g</span><span class="w">          </span><span class="o">-</span><span class="w"> </span><span class="n">Substitute</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">lines</span>
-<span class="err">:</span><span class="s1">&#39;&lt;,&#39;</span><span class="o">&gt;</span><span class="n">normal</span><span class="w"> </span><span class="n">I</span><span class="err">#</span><span class="w">           </span><span class="o">-</span><span class="w"> </span><span class="n">Comment</span><span class="w"> </span><span class="n">visual</span><span class="w"> </span><span class="n">selection</span>
+<span class="err">:</span><span class="s1">'&lt;,'</span><span class="o">&gt;</span><span class="n">normal</span><span class="w"> </span><span class="n">I</span><span class="err">#</span><span class="w">           </span><span class="o">-</span><span class="w"> </span><span class="n">Comment</span><span class="w"> </span><span class="n">visual</span><span class="w"> </span><span class="n">selection</span>
 <span class="err">:</span><span class="o">%</span><span class="err">!</span><span class="n">sort</span><span class="w">                   </span><span class="o">-</span><span class="w"> </span><span class="n">Sort</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="k">file</span>
 <span class="err">:</span><span class="n">r</span><span class="w"> </span><span class="err">!</span><span class="nc">date</span><span class="w">                  </span><span class="o">-</span><span class="w"> </span><span class="k">Insert</span><span class="w"> </span><span class="k">current</span><span class="w"> </span><span class="nc">date</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="cheat-sheet-quick-reference">Cheat Sheet Quick Reference</h2>
           <h3 id="essential-commands">Essential Commands</h3>
@@ -1937,32 +1935,11 @@ y5k         - Yank current and previous 5 lines
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

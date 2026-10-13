@@ -1,31 +1,35 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>DOTNET RabbitMQ PowerUser Guide (C#) - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -34,8 +38,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -205,11 +208,11 @@
           <div class="codehilite">
             <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5672</span><span class="p">,</span>
-<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"guest"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"guest"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/"</span><span class="p">,</span>
 
 <span class="w">    </span><span class="c1">// Connection pooling and timeout settings</span>
 <span class="w">    </span><span class="n">RequestedHeartbeat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span>
@@ -225,13 +228,12 @@
 <span class="w">    </span><span class="n">Ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SslOption</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
-<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.example.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"rabbitmq.example.com"</span><span class="p">,</span>
 <span class="w">        </span><span class="n">AcceptablePolicyErrors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SslPolicyErrors</span><span class="p">.</span><span class="n">RemoteCertificateNameMismatch</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">};</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Best Practices</strong>: - Create one connection per
             application; share across threads - Use one channel per thread;
@@ -281,20 +283,20 @@
           <div class="codehilite">
             <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.production.com&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"rabbitmq.production.com"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">Port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5671</span><span class="p">,</span><span class="w"> </span><span class="c1">// TLS port</span>
-<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;RABBITMQ_USER&quot;</span><span class="p">),</span>
-<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;RABBITMQ_PASSWORD&quot;</span><span class="p">),</span>
-<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/production&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">UserName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"RABBITMQ_USER"</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"RABBITMQ_PASSWORD"</span><span class="p">),</span>
+<span class="w">    </span><span class="n">VirtualHost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/production"</span><span class="p">,</span>
 
 <span class="w">    </span><span class="n">Ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SslOption</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">Enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
-<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;rabbitmq.production.com&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ServerName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"rabbitmq.production.com"</span><span class="p">,</span>
 <span class="w">        </span><span class="n">Version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls12</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Security</span><span class="p">.</span><span class="n">Authentication</span><span class="p">.</span><span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls13</span><span class="p">,</span>
 <span class="w">        </span><span class="n">AcceptablePolicyErrors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SslPolicyErrors</span><span class="p">.</span><span class="n">None</span><span class="p">,</span><span class="w"> </span><span class="c1">// Strict certificate validation</span>
-<span class="w">        </span><span class="n">CertPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/client-cert.pfx&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="n">CertPassphrase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">&quot;CERT_PASSWORD&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="n">CertPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/path/to/client-cert.pfx"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">CertPassphrase</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Environment</span><span class="p">.</span><span class="n">GetEnvironmentVariable</span><span class="p">(</span><span class="s">"CERT_PASSWORD"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">},</span>
 
 <span class="w">    </span><span class="n">AutomaticRecoveryEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
@@ -302,7 +304,6 @@
 <span class="p">};</span>
 </code></pre>
           </div>
-
           <h2 id="examples">Examples</h2>
           <h3 id="basic-message-publishing-and-consuming">
             Basic Message Publishing and Consuming
@@ -320,21 +321,21 @@
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishMessage</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare durable queue (survives broker restart)</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"task_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="k">null</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Hello RabbitMQ!&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Hello RabbitMQ!"</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Publish persistent message</span>
@@ -342,25 +343,25 @@
 <span class="w">        </span><span class="n">properties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"> </span><span class="c1">// Survive broker restart</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">"task_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">properties</span><span class="p">,</span>
 <span class="w">            </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent: {message}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Sent: {message}"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ConsumeMessages</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare queue (idempotent operation)</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"task_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
@@ -370,7 +371,7 @@
 <span class="w">        </span><span class="c1">// Set prefetch count (QoS) - process one message at a time</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Waiting for messages...&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">" [*] Waiting for messages..."</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
 <span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
@@ -378,7 +379,7 @@
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Received: {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Received: {message}"</span><span class="p">);</span>
 
 <span class="w">            </span><span class="k">try</span>
 <span class="w">            </span><span class="p">{</span>
@@ -387,11 +388,11 @@
 
 <span class="w">                </span><span class="c1">// Manual acknowledgement (confirms successful processing)</span>
 <span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [x] Done&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">" [x] Done"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [!] Error: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [!] Error: {ex.Message}"</span><span class="p">);</span>
 <span class="w">                </span><span class="c1">// Reject and requeue message on failure</span>
 <span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicNack</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="n">requeue</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
@@ -399,18 +400,17 @@
 
 <span class="w">        </span><span class="c1">// Start consuming with manual ack</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;task_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"task_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span><span class="w"> </span><span class="c1">// Manual acknowledgement for reliability</span>
 <span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Press [enter] to exit.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Press [enter] to exit."</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="exchange-routing-patterns">Exchange Routing Patterns</h3>
           <p>
             Implement direct, topic, and fanout exchange patterns for flexible
@@ -425,55 +425,55 @@
 <span class="w">    </span><span class="c1">// Direct Exchange: Route based on exact routing key match</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">DirectExchangePublisher</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare direct exchange</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_direct&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_direct"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">severities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;info&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;warning&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">severities</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">"info"</span><span class="p">,</span><span class="w"> </span><span class="s">"warning"</span><span class="p">,</span><span class="w"> </span><span class="s">"error"</span><span class="w"> </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">severity</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">severities</span><span class="p">)</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;Log message with severity: {severity}&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"Log message with severity: {severity}"</span><span class="p">;</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
 
 <span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_direct&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_direct"</span><span class="p">,</span>
 <span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">severity</span><span class="p">,</span>
 <span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
 <span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
 <span class="w">            </span><span class="p">);</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent &#39;{severity}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Sent '{severity}': {message}"</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">// Topic Exchange: Route based on pattern matching (wildcard routing keys)</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">TopicExchangePublisher</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare topic exchange</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_topic"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
 <span class="w">        </span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;kern.critical&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Kernel critical error&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;kern.info&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Kernel info message&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;app.error&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Application error&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;app.debug&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Application debug info&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"kern.critical"</span><span class="p">,</span><span class="w"> </span><span class="s">"Kernel critical error"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"kern.info"</span><span class="p">,</span><span class="w"> </span><span class="s">"Kernel info message"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"app.error"</span><span class="p">,</span><span class="w"> </span><span class="s">"Application error"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"app.debug"</span><span class="p">,</span><span class="w"> </span><span class="s">"Application debug info"</span><span class="w"> </span><span class="p">}</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="p">(</span><span class="n">routingKey</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
@@ -481,25 +481,25 @@
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
 
 <span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_topic"</span><span class="p">,</span>
 <span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">routingKey</span><span class="p">,</span>
 <span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
 <span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
 <span class="w">            </span><span class="p">);</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Sent &#39;{routingKey}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Sent '{routingKey}': {message}"</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">// Topic Exchange Consumer with wildcard binding</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">TopicExchangeConsumer</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">bindingKey</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_topic"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Topic</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
 <span class="w">        </span><span class="p">);</span>
@@ -508,16 +508,16 @@
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">queueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">().</span><span class="n">QueueName</span><span class="p">;</span>
 
 <span class="w">        </span><span class="c1">// Bind with wildcard pattern</span>
-<span class="w">        </span><span class="c1">// &quot;kern.*&quot; matches all kern messages</span>
-<span class="w">        </span><span class="c1">// &quot;*.critical&quot; matches all critical messages</span>
-<span class="w">        </span><span class="c1">// &quot;#&quot; matches all messages</span>
+<span class="w">        </span><span class="c1">// "kern.*" matches all kern messages</span>
+<span class="w">        </span><span class="c1">// "*.critical" matches all critical messages</span>
+<span class="w">        </span><span class="c1">// "#" matches all messages</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueBind</span><span class="p">(</span>
 <span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;logs_topic&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"logs_topic"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">bindingKey</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [*] Waiting for messages matching &#39;{bindingKey}&#39;...&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [*] Waiting for messages matching '{bindingKey}'..."</span><span class="p">);</span>
 
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EventingBasicConsumer</span><span class="p">(</span><span class="n">channel</span><span class="p">);</span>
 <span class="w">        </span><span class="n">consumer</span><span class="p">.</span><span class="n">Received</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span>
@@ -526,7 +526,7 @@
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">routingKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">RoutingKey</span><span class="p">;</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Received &#39;{routingKey}&#39;: {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Received '{routingKey}': {message}"</span><span class="p">);</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span><span class="p">);</span>
@@ -536,34 +536,33 @@
 <span class="w">    </span><span class="c1">// Fanout Exchange: Broadcast to all bound queues (pub/sub pattern)</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">FanoutExchangePublisher</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare fanout exchange</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;notifications&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"notifications"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Fanout</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">false</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;System notification: Server maintenance in 5 minutes&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"System notification: Server maintenance in 5 minutes"</span><span class="p">;</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Routing key is ignored for fanout exchanges</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;notifications&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"notifications"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">,</span>
 <span class="w">            </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span>
 <span class="w">            </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Broadcast: {message}&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Broadcast: {message}"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="aspnet-core-integration-with-dependency-injection">
             ASP.NET Core Integration with Dependency Injection
           </h3>
@@ -583,11 +582,11 @@
 <span class="c1">// Configuration model</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">RabbitMqSettings</span>
 <span class="p">{</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="p">;</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5672</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">UserName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;guest&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">VirtualHost</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">UserName</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"guest"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"guest"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">VirtualHost</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/"</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="c1">// Connection provider (singleton)</span>
@@ -670,18 +669,18 @@
 <span class="w">            </span><span class="c1">// Set persistent delivery mode</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
 <span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-<span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">ContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">ContentType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"application/json"</span><span class="p">;</span>
 <span class="w">            </span><span class="n">properties</span><span class="p">.</span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AmqpTimestamp</span><span class="p">(</span><span class="n">DateTimeOffset</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="n">ToUnixTimeSeconds</span><span class="p">());</span>
 
 <span class="w">            </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">,</span>
 <span class="w">                </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
 <span class="w">                </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">properties</span><span class="p">,</span>
 <span class="w">                </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
 <span class="w">            </span><span class="p">);</span>
 
 <span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span>
-<span class="w">                </span><span class="s">&quot;Published message to queue {Queue}: {Message}&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s">"Published message to queue {Queue}: {Message}"</span><span class="p">,</span>
 <span class="w">                </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">json</span><span class="p">);</span>
 <span class="w">        </span><span class="p">});</span>
 <span class="w">    </span><span class="p">}</span>
@@ -709,7 +708,7 @@
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="n">_channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_connectionProvider</span><span class="p">.</span><span class="n">GetConnection</span><span class="p">().</span><span class="n">CreateModel</span><span class="p">();</span>
 
-<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"orders_queue"</span><span class="p">;</span>
 
 <span class="w">        </span><span class="n">_channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
 <span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span>
@@ -727,7 +726,7 @@
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
 
-<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Received message from {Queue}: {Message}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+<span class="w">            </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Received message from {Queue}: {Message}"</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
 
 <span class="w">            </span><span class="k">try</span>
 <span class="w">            </span><span class="p">{</span>
@@ -740,11 +739,11 @@
 
 <span class="w">                </span><span class="c1">// Acknowledge successful processing</span>
 <span class="w">                </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Message processed successfully&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Message processed successfully"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error processing message&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogError</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span><span class="w"> </span><span class="s">"Error processing message"</span><span class="p">);</span>
 
 <span class="w">                </span><span class="c1">// Reject and requeue on failure</span>
 <span class="w">                </span><span class="n">_channel</span><span class="p">.</span><span class="n">BasicNack</span><span class="p">(</span>
@@ -760,7 +759,7 @@
 <span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">&quot;Consumer service started for queue {Queue}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_logger</span><span class="p">.</span><span class="n">LogInformation</span><span class="p">(</span><span class="s">"Consumer service started for queue {Queue}"</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">);</span>
 
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
@@ -782,7 +781,7 @@
 
 <span class="w">        </span><span class="c1">// Register RabbitMQ services</span>
 <span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">Configure</span><span class="o">&lt;</span><span class="n">RabbitMqSettings</span><span class="o">&gt;</span><span class="p">(</span>
-<span class="w">            </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">&quot;RabbitMq&quot;</span><span class="p">));</span>
+<span class="w">            </span><span class="n">builder</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">GetSection</span><span class="p">(</span><span class="s">"RabbitMq"</span><span class="p">));</span>
 
 <span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddSingleton</span><span class="o">&lt;</span><span class="n">IRabbitMqConnectionProvider</span><span class="p">,</span><span class="w"> </span><span class="n">RabbitMqConnectionProvider</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="w">        </span><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IMessagePublisher</span><span class="p">,</span><span class="w"> </span><span class="n">RabbitMqPublisher</span><span class="o">&gt;</span><span class="p">();</span>
@@ -811,7 +810,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="dead-letter-exchange-and-retry-strategy">
             Dead Letter Exchange and Retry Strategy
           </h3>
@@ -829,20 +827,20 @@
 <span class="p">{</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">SetupQueuesWithDLX</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="w">        </span><span class="c1">// Declare dead letter exchange</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">ExchangeDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"dlx"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="n">ExchangeType</span><span class="p">.</span><span class="n">Direct</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span>
 <span class="w">        </span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Declare dead letter queue</span>
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"failed_messages"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
@@ -850,33 +848,33 @@
 <span class="w">        </span><span class="p">);</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueBind</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed&quot;</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"failed_messages"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">"dlx"</span><span class="p">,</span>
+<span class="w">            </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="s">"failed"</span>
 <span class="w">        </span><span class="p">);</span>
 
 <span class="w">        </span><span class="c1">// Declare main queue with DLX configuration</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">arguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-exchange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dlx&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;failed&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-message-ttl&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">60000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// 60 seconds TTL (optional)</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"x-dead-letter-exchange"</span><span class="p">,</span><span class="w"> </span><span class="s">"dlx"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"x-dead-letter-routing-key"</span><span class="p">,</span><span class="w"> </span><span class="s">"failed"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="w"> </span><span class="s">"x-message-ttl"</span><span class="p">,</span><span class="w"> </span><span class="mi">60000</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// 60 seconds TTL (optional)</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"orders_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
 <span class="w">            </span><span class="n">exclusive</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoDelete</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">arguments</span><span class="p">:</span><span class="w"> </span><span class="n">arguments</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Queues and DLX configured successfully&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Queues and DLX configured successfully"</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ConsumeWithRetryLogic</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
@@ -891,28 +889,28 @@
 <span class="w">            </span><span class="c1">// Get retry count from headers</span>
 <span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">retryCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">null</span><span class="w"> </span><span class="o">&amp;&amp;</span>
-<span class="w">                </span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">&quot;x-retry-count&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">retryObj</span><span class="p">))</span>
+<span class="w">                </span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">"x-retry-count"</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">retryObj</span><span class="p">))</span>
 <span class="w">            </span><span class="p">{</span>
 <span class="w">                </span><span class="n">retryCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToInt32</span><span class="p">(</span><span class="n">retryObj</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Processing (attempt {retryCount + 1}): {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Processing (attempt {retryCount + 1}): {message}"</span><span class="p">);</span>
 
 <span class="w">            </span><span class="k">try</span>
 <span class="w">            </span><span class="p">{</span>
 <span class="w">                </span><span class="c1">// Simulate processing that might fail</span>
 <span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Random</span><span class="p">().</span><span class="n">Next</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
 <span class="w">                </span><span class="p">{</span>
-<span class="w">                    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="s">&quot;Simulated processing error&quot;</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="nf">Exception</span><span class="p">(</span><span class="s">"Simulated processing error"</span><span class="p">);</span>
 <span class="w">                </span><span class="p">}</span>
 
 <span class="w">                </span><span class="c1">// Successful processing</span>
 <span class="w">                </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [x] Message processed successfully&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">" [x] Message processed successfully"</span><span class="p">);</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">            </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span>
 <span class="w">            </span><span class="p">{</span>
-<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [!] Error: {ex.Message}&quot;</span><span class="p">);</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [!] Error: {ex.Message}"</span><span class="p">);</span>
 
 <span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxRetries</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 
@@ -925,19 +923,19 @@
 <span class="w">                    </span><span class="n">retryProperties</span><span class="p">.</span><span class="n">Persistent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
 <span class="w">                    </span><span class="n">retryProperties</span><span class="p">.</span><span class="n">Headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
 <span class="w">                    </span><span class="p">{</span>
-<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-retry-count&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">retryCount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span>
-<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-original-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">RoutingKey</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">"x-retry-count"</span><span class="p">,</span><span class="w"> </span><span class="n">retryCount</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">"x-original-routing-key"</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">RoutingKey</span><span class="w"> </span><span class="p">}</span>
 <span class="w">                    </span><span class="p">};</span>
 
 <span class="w">                    </span><span class="c1">// Publish to retry queue with delay</span>
 <span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryQueueArgs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">object</span><span class="o">&gt;</span>
 <span class="w">                    </span><span class="p">{</span>
-<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-message-ttl&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">delay</span><span class="p">.</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">},</span>
-<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-exchange&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;x-dead-letter-routing-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">"x-message-ttl"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">delay</span><span class="p">.</span><span class="n">TotalMilliseconds</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">"x-dead-letter-exchange"</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="p">{</span><span class="w"> </span><span class="s">"x-dead-letter-routing-key"</span><span class="p">,</span><span class="w"> </span><span class="s">"orders_queue"</span><span class="w"> </span><span class="p">}</span>
 <span class="w">                    </span><span class="p">};</span>
 
-<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryQueueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$&quot;retry_{delay.TotalSeconds}s&quot;</span><span class="p">;</span>
+<span class="w">                    </span><span class="kt">var</span><span class="w"> </span><span class="n">retryQueueName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">$"retry_{delay.TotalSeconds}s"</span><span class="p">;</span>
 <span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span>
 <span class="w">                        </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="n">retryQueueName</span><span class="p">,</span>
 <span class="w">                        </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
@@ -947,7 +945,7 @@
 <span class="w">                    </span><span class="p">);</span>
 
 <span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span>
-<span class="w">                        </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">exchange</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">,</span>
 <span class="w">                        </span><span class="n">routingKey</span><span class="p">:</span><span class="w"> </span><span class="n">retryQueueName</span><span class="p">,</span>
 <span class="w">                        </span><span class="n">basicProperties</span><span class="p">:</span><span class="w"> </span><span class="n">retryProperties</span><span class="p">,</span>
 <span class="w">                        </span><span class="n">body</span><span class="p">:</span><span class="w"> </span><span class="n">body</span>
@@ -955,31 +953,31 @@
 
 <span class="w">                    </span><span class="c1">// Ack original message (moved to retry queue)</span>
 <span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicAck</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">multiple</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Scheduled retry in {delay.TotalSeconds}s (attempt {retryCount + 2}/{maxRetries + 1})&quot;</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Scheduled retry in {delay.TotalSeconds}s (attempt {retryCount + 2}/{maxRetries + 1})"</span><span class="p">);</span>
 <span class="w">                </span><span class="p">}</span>
 <span class="w">                </span><span class="k">else</span>
 <span class="w">                </span><span class="p">{</span>
 <span class="w">                    </span><span class="c1">// Max retries exceeded - send to DLX</span>
 <span class="w">                    </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicReject</span><span class="p">(</span><span class="n">deliveryTag</span><span class="p">:</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">DeliveryTag</span><span class="p">,</span><span class="w"> </span><span class="n">requeue</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
-<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [x] Max retries exceeded. Message sent to dead letter queue.&quot;</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [x] Max retries exceeded. Message sent to dead letter queue."</span><span class="p">);</span>
 <span class="w">                </span><span class="p">}</span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;orders_queue&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"orders_queue"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Waiting for messages. Press [enter] to exit.&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">" [*] Waiting for messages. Press [enter] to exit."</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">// Monitor and process failed messages</span>
 <span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">ProcessDeadLetterQueue</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">factory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConnectionFactory</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">HostName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"localhost"</span><span class="w"> </span><span class="p">};</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">factory</span><span class="p">.</span><span class="n">CreateConnection</span><span class="p">();</span>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
@@ -989,7 +987,7 @@
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
 
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot; [DLQ] Failed message: {message}&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$" [DLQ] Failed message: {message}"</span><span class="p">);</span>
 
 <span class="w">            </span><span class="c1">// Log to monitoring system, alert ops team, store for manual review</span>
 <span class="w">            </span><span class="n">LogFailedMessage</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">ea</span><span class="p">.</span><span class="n">BasicProperties</span><span class="p">.</span><span class="n">Headers</span><span class="p">);</span>
@@ -999,12 +997,12 @@
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicConsume</span><span class="p">(</span>
-<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;failed_messages&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"failed_messages"</span><span class="p">,</span>
 <span class="w">            </span><span class="n">autoAck</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">,</span>
 <span class="w">            </span><span class="n">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">consumer</span>
 <span class="w">        </span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot; [*] Monitoring dead letter queue...&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">" [*] Monitoring dead letter queue..."</span><span class="p">);</span>
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 
@@ -1015,7 +1013,7 @@
 <span class="w">            </span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="p">,</span>
 <span class="w">            </span><span class="n">Headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">headers</span><span class="p">,</span>
-<span class="w">            </span><span class="n">Source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;RabbitMQ Dead Letter Queue&quot;</span>
+<span class="w">            </span><span class="n">Source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"RabbitMQ Dead Letter Queue"</span>
 <span class="w">        </span><span class="p">};</span>
 
 <span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">JsonSerializer</span><span class="p">.</span><span class="n">Serialize</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JsonSerializerOptions</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">WriteIndented</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"> </span><span class="p">}));</span>
@@ -1023,7 +1021,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             <strong>Connection Refused</strong>: - <strong>Error</strong>: "None
@@ -1069,7 +1066,7 @@
 <span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">channel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">CreateModel</span><span class="p">();</span>
 
 <span class="c1">// Durable queue</span>
-<span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;important_queue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+<span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclare</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span><span class="w"> </span><span class="s">"important_queue"</span><span class="p">,</span><span class="w"> </span><span class="n">durable</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
 
 <span class="c1">// Persistent messages</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">CreateBasicProperties</span><span class="p">();</span>
@@ -1085,7 +1082,6 @@
 <span class="p">};</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Common Logs</strong>: - RabbitMQ logs:
             <code>/var/log/rabbitmq/rabbit@hostname.log</code> - Check with:
@@ -1135,7 +1131,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Prefetch (QoS) Configuration</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Low prefetch (1-10) for slow/CPU-intensive consumers</span>
@@ -1148,7 +1143,6 @@
 <span class="n">channel</span><span class="p">.</span><span class="n">BasicQos</span><span class="p">(</span><span class="n">prefetchSize</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">prefetchCount</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="n">global</span><span class="p">:</span><span class="w"> </span><span class="k">false</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <p><strong>Batch Publishing</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">PublishBatch</span><span class="p">(</span><span class="n">IModel</span><span class="w"> </span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
@@ -1159,7 +1153,7 @@
 <span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">TxCommit</span><span class="p">();</span>
@@ -1170,32 +1164,30 @@
 <span class="w">    </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">messages</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">message</span><span class="p">);</span>
-<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">        </span><span class="n">channel</span><span class="p">.</span><span class="n">BasicPublish</span><span class="p">(</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">queueName</span><span class="p">,</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">channel</span><span class="p">.</span><span class="n">WaitForConfirmsOrDie</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span>
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p><strong>Monitoring Metrics</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Get queue message count</span>
-<span class="kt">var</span><span class="w"> </span><span class="n">queueInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclarePassive</span><span class="p">(</span><span class="s">&quot;my_queue&quot;</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Messages: {queueInfo.MessageCount}&quot;</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Consumers: {queueInfo.ConsumerCount}&quot;</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">queueInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">channel</span><span class="p">.</span><span class="n">QueueDeclarePassive</span><span class="p">(</span><span class="s">"my_queue"</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Messages: {queueInfo.MessageCount}"</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$"Consumers: {queueInfo.ConsumerCount}"</span><span class="p">);</span>
 
 <span class="c1">// Use RabbitMQ Management API for detailed metrics</span>
 <span class="kt">var</span><span class="w"> </span><span class="n">httpClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HttpClient</span><span class="p">();</span>
 <span class="n">httpClient</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Authorization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
-<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">&quot;Basic&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">        </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;guest:guest&quot;</span><span class="p">)));</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="nf">AuthenticationHeaderValue</span><span class="p">(</span><span class="s">"Basic"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">Convert</span><span class="p">.</span><span class="n">ToBase64String</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">"guest:guest"</span><span class="p">)));</span>
 
-<span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">httpClient</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">&quot;http://localhost:15672/api/queues&quot;</span><span class="p">);</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">httpClient</span><span class="p">.</span><span class="n">GetStringAsync</span><span class="p">(</span><span class="s">"http://localhost:15672/api/queues"</span><span class="p">);</span>
 <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <p>
             <strong>Performance Recommendations</strong>: -
             <strong>Connections</strong>: 1 per application (shared,
@@ -1248,32 +1240,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>

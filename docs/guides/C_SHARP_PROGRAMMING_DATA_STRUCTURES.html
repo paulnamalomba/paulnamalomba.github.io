@@ -1,34 +1,38 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing."
+      name="description"
     />
-    <meta name="theme-color" content="#f2f0e9" />
+    <meta content="#f2f0e9" name="theme-color" />
     <title>
-      C# Programming — Data Structures, Classes, Coding Style & Language
+      C# Programming — Data Structures, Classes, Coding Style &amp; Language
       Mechanics - Paul Namalomba
     </title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link href="/styles.css" rel="stylesheet" />
+    <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body class="docs-page">
     <a class="skip-link" href="#main">Skip to content</a>
     <header>
       <div class="container">
-        <nav>
+        <nav aria-label="Primary navigation">
           <div class="logo"><a href="/">Paul Namalomba</a></div>
           <button
-            class="hamburger"
-            aria-label="Toggle navigation"
+            aria-controls="site-navigation-1"
             aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="hamburger"
+            type="button"
           >
             <span></span>
             <span></span>
           </button>
-          <ul class="nav-links">
+          <ul class="nav-links" id="site-navigation-1">
             <li><a href="/">Portfolio</a></li>
             <li><a href="/docs/">Knowledge Base</a></li>
             <li><a href="/docs/guides/">All Guides</a></li>
@@ -37,8 +41,7 @@
         </nav>
       </div>
     </header>
-
-    <main id="main" class="container docs-container">
+    <main class="container docs-container" id="main" tabindex="-1">
       <div class="card docs-card">
         <div class="docs-breadcrumb">
           <a href="index.html">← Back to Guides</a>
@@ -405,7 +408,6 @@
 <span class="n">n2</span><span class="p">.</span><span class="n">Value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="c1">// n1.Value is now 7</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="primitive-types-built-in-collections">
             Primitive Types &amp; Built-in Collections
@@ -453,14 +455,13 @@
 <span class="n">jagged</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">};</span>
 </code></pre>
           </div>
-
           <p>
             Notes/tips: - Arrays have <code>Length</code>, not
             <code>Count</code>. - When you need dynamic sizing use
             <code>List&lt;T&gt;</code>.
           </p>
           <h3 id="list-and-generic-collections">
-            List<T> and Generic Collections</T>
+            List<t> and Generic Collections</t>
           </h3>
           <ul>
             <li>
@@ -476,12 +477,11 @@
           <p>Example:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="n">list</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span>
+<span class="n">list</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
 <span class="n">list</span><span class="p">.</span><span class="n">RemoveAt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="k">foreach</span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <p>
             Performance: - <code>List&lt;T&gt;</code> has amortized O(1) append;
             use <code>Capacity</code> property to pre-allocate when size known.
@@ -509,27 +509,26 @@
           <p>Example:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">dict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dictionary</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="n">dict</span><span class="p">[</span><span class="s">&quot;apples&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dict</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">&quot;apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">val</span><span class="p">))</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+<span class="n">dict</span><span class="p">[</span><span class="s">"apples"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dict</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="s">"apples"</span><span class="p">,</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">val</span><span class="p">))</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HashSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">};</span>
 <span class="k">set</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// ignored, already present</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Queue</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="n">q</span><span class="p">.</span><span class="n">Enqueue</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">);</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">Dequeue</span><span class="p">();</span>
+<span class="n">q</span><span class="p">.</span><span class="n">Enqueue</span><span class="p">(</span><span class="s">"a"</span><span class="p">);</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">Dequeue</span><span class="p">();</span>
 
 <span class="kt">var</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">s</span><span class="p">.</span><span class="n">Push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="kt">var</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">Pop</span><span class="p">();</span>
 </code></pre>
           </div>
-
           <p>
             Pitfalls: - <code>Dictionary</code> throws if key not present with
             indexer; use <code>TryGetValue</code>. - Choose good
             <code>Equals</code>/<code>GetHashCode</code> implementations for
             keys.
           </p>
-          <h3 id="span-and-memory-brief">Span<T> and Memory</T> (brief)</h3>
+          <h3 id="span-and-memory-brief">Span<t> and Memory</t> (brief)</h3>
           <ul>
             <li>
               <code>Span&lt;T&gt;</code> — stack-only, non-allocating type for
@@ -549,7 +548,6 @@
 <span class="c1">// operate on buffer without heap allocation</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="advanced-data-structures">Advanced Data Structures</h2>
           <blockquote>
@@ -577,7 +575,6 @@
 <span class="n">ll</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <p>Singly-linked list implementation (simple):</p>
           <div class="codehilite">
             <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">Value</span><span class="p">;</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SinglyNode</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;?</span><span class="w"> </span><span class="n">Next</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
@@ -590,7 +587,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Tips: - Avoid using linked lists for cache-friendly workloads;
             arrays/Lists are often faster due to contiguous memory.
@@ -627,7 +623,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>Traversal: In-order (sorted), pre-order, post-order.</p>
           <p>
             Notes: - Self-balancing trees (AVL, Red-Black) are used in
@@ -668,7 +663,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Pitfalls: - For weighted graphs use Dijkstra/A* algorithms; for
             negative weights use Bellman-Ford.
@@ -697,7 +691,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Note: <code>HashCode.Combine</code> is available to make good
             composite hashes.
@@ -733,7 +726,6 @@
 <span class="k">public</span><span class="w"> </span><span class="k">record</span><span class="w"> </span><span class="nf">User</span><span class="p">(</span><span class="kt">string</span><span class="w"> </span><span class="n">Username</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Email</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <p>
             When to use what: - Use <code>struct</code> for small (&lt;16 bytes
             commonly) and immutable types. - Use <code>record</code> for
@@ -756,7 +748,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Use <code>private set</code> or <code>init</code> to control
             mutability.
@@ -791,16 +782,14 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>Polymorphism example:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">&quot;woof&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+            <pre><span></span><code><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">"..."</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Animal</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Speak</span><span class="p">()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="s">"woof"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
-<span class="n">Animal</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dog</span><span class="p">();</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">Speak</span><span class="p">());</span><span class="w"> </span><span class="c1">// &quot;woof&quot;</span>
+<span class="n">Animal</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Dog</span><span class="p">();</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">Speak</span><span class="p">());</span><span class="w"> </span><span class="c1">// "woof"</span>
 </code></pre>
           </div>
-
           <p>
             Pitfalls: - Avoid deep inheritance hierarchies; prefer composition
             and explicit interfaces. - Virtual methods in constructors are
@@ -828,7 +817,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <h3 id="design-srp-di-solid-summary">
             Design: SRP, DI, SOLID Summary
           </h3>
@@ -854,7 +842,6 @@
             <pre><span></span><code><span class="n">builder</span><span class="p">.</span><span class="n">Services</span><span class="p">.</span><span class="n">AddScoped</span><span class="o">&lt;</span><span class="n">IUserService</span><span class="p">,</span><span class="w"> </span><span class="n">UserService</span><span class="o">&gt;</span><span class="p">();</span>
 </code></pre>
           </div>
-
           <hr />
           <h2 id="modules-namespaces-assemblies">
             Modules, Namespaces &amp; Assemblies
@@ -876,7 +863,6 @@
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Collections.Generic</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <p>
             Notes: - Avoid wildcard imports; prefer explicit naming to reduce
             ambiguity in large projects.
@@ -891,19 +877,18 @@
           </ul>
           <p>Minimal <code>csproj</code> example:</p>
           <div class="codehilite">
-            <pre><span></span><code><span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">&quot;Microsoft.NET.Sdk&quot;</span><span class="nt">&gt;</span>
+            <pre><span></span><code><span class="nt">&lt;Project</span><span class="w"> </span><span class="na">Sdk=</span><span class="s">"Microsoft.NET.Sdk"</span><span class="nt">&gt;</span>
 <span class="w">  </span><span class="nt">&lt;PropertyGroup&gt;</span>
 <span class="w">    </span><span class="nt">&lt;TargetFramework&gt;</span>net8.0<span class="nt">&lt;/TargetFramework&gt;</span>
 <span class="w">    </span><span class="nt">&lt;ImplicitUsings&gt;</span>enable<span class="nt">&lt;/ImplicitUsings&gt;</span>
 <span class="w">    </span><span class="nt">&lt;Nullable&gt;</span>enable<span class="nt">&lt;/Nullable&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/PropertyGroup&gt;</span>
 <span class="w">  </span><span class="nt">&lt;ItemGroup&gt;</span>
-<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">&quot;Newtonsoft.Json&quot;</span><span class="w"> </span><span class="na">Version=</span><span class="s">&quot;13.0.3&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;PackageReference</span><span class="w"> </span><span class="na">Include=</span><span class="s">"Newtonsoft.Json"</span><span class="w"> </span><span class="na">Version=</span><span class="s">"13.0.3"</span><span class="w"> </span><span class="nt">/&gt;</span>
 <span class="w">  </span><span class="nt">&lt;/ItemGroup&gt;</span>
 <span class="nt">&lt;/Project&gt;</span>
 </code></pre>
           </div>
-
           <h3 id="nuget-and-versioning">NuGet and Versioning</h3>
           <ul>
             <li>
@@ -965,7 +950,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>XML documentation</strong>: Use
@@ -975,12 +959,11 @@
           </ul>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">/// &lt;summary&gt;Gets the user by id.&lt;/summary&gt;</span>
-<span class="c1">/// &lt;param name=&quot;id&quot;&gt;User identifier.&lt;/param&gt;</span>
+<span class="c1">/// &lt;param name="id"&gt;User identifier.&lt;/param&gt;</span>
 <span class="c1">/// &lt;returns&gt;User object or null.&lt;/returns&gt;</span>
 <span class="k">public</span><span class="w"> </span><span class="n">User</span><span class="o">?</span><span class="w"> </span><span class="n">GetUser</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
 </code></pre>
           </div>
-
           <ul>
             <li>
               <strong>Comments</strong>: Prefer meaningful code to comments. Use
@@ -1075,7 +1058,6 @@
 <span class="p">}</span>
 </code></pre>
           </div>
-
           <p>
             Debugging tips: - Use conditional breakpoints and tracepoints to
             collect runtime info without stopping. - Use
@@ -1120,10 +1102,9 @@
             <li>Null-safe access:</li>
           </ul>
           <div class="codehilite">
-            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="o">?.</span><span class="n">Profile</span><span class="o">?.</span><span class="n">Name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;(unknown)&quot;</span><span class="p">;</span>
+            <pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">user</span><span class="o">?.</span><span class="n">Profile</span><span class="o">?.</span><span class="n">Name</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">"(unknown)"</span><span class="p">;</span>
 </code></pre>
           </div>
-
           <ul>
             <li>Pattern matching:</li>
           </ul>
@@ -1132,7 +1113,6 @@
 <span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">shape</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">case</span><span class="w"> </span><span class="n">Circle</span><span class="w"> </span><span class="n">c</span><span class="p">:</span><span class="w"> </span><span class="p">...;</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre>
           </div>
-
           <ul>
             <li><code>using</code> declaration (C#8+):</li>
           </ul>
@@ -1140,7 +1120,6 @@
             <pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="nn">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SqlConnection</span><span class="p">(</span><span class="n">connStr</span><span class="p">);</span>
 </code></pre>
           </div>
-
           <h3 id="common-pitfalls-checklist">Common pitfalls checklist</h3>
           <ul>
             <li>
@@ -1196,32 +1175,11 @@
         </article>
       </div>
     </main>
-
     <footer>
       <div class="container footer-inner">
-        <span>&copy; 2026 Paul Namalomba · Field notes from systems work.</span>
-        <a href="/">Back to portfolio &rarr;</a>
+        <span>© 2026 Paul Namalomba · Field notes from systems work.</span>
+        <a href="/">Back to portfolio →</a>
       </div>
     </footer>
-    <script>
-      const hamburger = document.querySelector(".hamburger");
-      const navLinks = document.querySelector(".nav-links");
-      hamburger.addEventListener("click", () => {
-        const expanded = hamburger.getAttribute("aria-expanded") === "true";
-        hamburger.setAttribute("aria-expanded", !expanded);
-        hamburger.classList.toggle("active");
-        navLinks.classList.toggle("open");
-        document.body.classList.toggle("menu-open", !expanded);
-      });
-      // Close menu when a nav link is clicked
-      navLinks.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          hamburger.classList.remove("active");
-          navLinks.classList.remove("open");
-          hamburger.setAttribute("aria-expanded", "false");
-          document.body.classList.remove("menu-open");
-        });
-      });
-    </script>
   </body>
 </html>
