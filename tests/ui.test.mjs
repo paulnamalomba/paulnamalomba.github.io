@@ -35,6 +35,63 @@ async function withPage(options, run) {
   }
 }
 
+test("mesh deformation responds to the keyboard and has a static fallback", async () => {
+  await withPage({}, async (page) => {
+    await page.goto(site.origin + "/");
+    const control = page.getByRole("slider", { name: "Mesh deformation" });
+    await control.waitFor({ state: "visible" });
+    const before = await page.locator("[data-mesh-surface]").innerHTML();
+    await control.focus();
+    await page.keyboard.press("End");
+    assert.equal(await control.inputValue(), "100");
+    assert.equal(
+      await control.getAttribute("aria-valuetext"),
+      "100% deformation",
+    );
+    assert.notEqual(
+      await page.locator("[data-mesh-surface]").innerHTML(),
+      before,
+    );
+  });
+  await withPage({ javaScriptEnabled: false }, async (page) => {
+    await page.goto(site.origin + "/");
+    assert.equal(await page.locator(".mesh-fallback").isVisible(), true);
+    assert.equal(
+      await page
+        .locator(".mesh-fallback")
+        .evaluate((img) => img.complete && img.naturalWidth > 0),
+      true,
+    );
+    assert.equal(await page.getByRole("slider").count(), 0);
+  });
+});
+
+test("gallery controls and keyboard navigation stay synchronized with the images", async () => {
+  await withPage({ reducedMotion: "reduce" }, async (page) => {
+    await page.goto(site.origin + "/");
+    const previous = page.getByRole("button", {
+      name: "Previous Ecoride screenshot",
+    });
+    const next = page.getByRole("button", { name: "Next Ecoride screenshot" });
+    const status = page.locator("[data-gallery-status]");
+    assert.equal(await previous.isDisabled(), true);
+    await next.click();
+    await page.waitForFunction(
+      () =>
+        document.querySelector("[data-gallery-status]").textContent === "2 / 5",
+    );
+    assert.equal(await previous.isEnabled(), true);
+    await page.locator(".project-slides").focus();
+    await page.keyboard.press("ArrowLeft");
+    await page.waitForFunction(
+      () =>
+        document.querySelector("[data-gallery-status]").textContent === "1 / 5",
+    );
+    assert.equal(await status.textContent(), "1 / 5");
+    assert.equal(await previous.isDisabled(), true);
+  });
+});
+
 for (const route of ["/", "/docs/guides/"]) {
   test(`mobile navigation contains focus, closes with Escape, and survives resizing: ${route}`, async () => {
     await withPage({}, async (page) => {

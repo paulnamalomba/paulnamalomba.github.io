@@ -8,11 +8,19 @@
       content="Paul Namalomba is a computational engineer building scientific software, data platforms and production backend systems."
       name="description"
     />
-    <meta content="#f2f0e9" name="theme-color" />
+    <meta content="#F8FAFD" name="theme-color" />
     <title>Paul Namalomba — Computational Engineer</title>
-    <link href="favicon.ico" rel="icon" />
+    <link href="assets/monogram.svg" rel="icon" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="assets/fonts/sora-latin-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link href="style.css" rel="stylesheet" />
     <script defer="" src="scripts/site.js"></script>
+    <script type="module" src="scripts/mesh.mjs"></script>
     <script defer="" src="/scripts/interface.js"></script>
   </head>
   <body>
@@ -20,7 +28,15 @@
     <header class="site-header" data-header="">
       <div class="shell nav-shell">
         <a aria-label="Paul Namalomba, home" class="wordmark" href="#top">
-          <span aria-hidden="true" class="wordmark-mark">PN</span>
+          <svg class="wordmark-mark" aria-hidden="true" viewBox="0 0 36 36">
+            <path
+              d="M5 27V9h10l8 9-8 9H5Zm10-18v18m8-9h8M5 18h18"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linejoin="round"
+            />
+          </svg>
           <span>Paul Namalomba</span>
         </a>
         <button
@@ -43,124 +59,159 @@
           <a href="docs/">Tech Guides</a>
           <a href="#experience">Experience</a>
           <a href="#about">About</a>
-          <a class="nav-contact" href="#contact"
-            >Let's talk <span aria-hidden="true">↗</span></a
-          >
+          <a class="nav-contact" href="#contact">Get in touch</a>
         </nav>
       </div>
     </header>
     <main id="main" tabindex="-1">
-      <section class="hero" id="top">
+      <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="shell hero-grid">
           <div class="hero-copy">
-            <!-- <p class="eyebrow"><span class="status-dot"></span> Computational engineer · Cape Town</p> -->
-            <h1>Computational and Software <em>Engineering</em></h1>
-            <p class="hero-lede">
-              I build scientific computing tools, data-intensive platforms and
-              production backends—turning complex engineering and operational
-              problems into dependable software.
+            <p class="hero-intro">
+              Computational engineer &amp; software architect
             </p>
-            <div aria-label="Professional profiles" class="hero-socials">
-              <a
-                class="social-button social-button-views"
-                href="https://github.com/paulnamalomba?tab=overview"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <img
-                  alt="Paul Namalomba profile views"
-                  src="https://komarev.com/ghpvc/?username=paulnamalomba&amp;color=brightgreen&amp;style=for-the-badge&amp;counter=true"
-                />
-              </a>
-              <a
-                class="social-button social-button-github"
-                href="https://github.com/paulnamalomba"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <svg aria-hidden="true" viewbox="0 0 24 24">
-                  <path
-                    d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2.24c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.78 1.2 1.78 1.2 1.04 1.77 2.72 1.26 3.38.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.16 1.18a10.9 10.9 0 0 1 5.76 0c2.19-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.71 5.39-5.29 5.68.42.36.78 1.06.78 2.14v3.18c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-                <span>GitHub</span>
-              </a>
-              <a
-                class="social-button social-button-linkedin"
-                href="https://www.linkedin.com/in/paul-namalomba"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <svg aria-hidden="true" viewbox="0 0 24 24">
-                  <path
-                    d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V8.98h3.42v1.57h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.41a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.04H3.54V8.98H7.1v11.47Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-                <span>LinkedIn</span>
-              </a>
-            </div>
+            <h1 id="hero-title">
+              Engineering,<br />from first<br />principles.
+            </h1>
+            <p class="hero-lede">
+              I’m Paul. I turn complex engineering problems into dependable
+              software, from scientific computing to the systems people use
+              every day.
+            </p>
             <div class="hero-actions">
-              <a class="button button-dark" href="#work"
-                >Explore selected work <span aria-hidden="true">↓</span></a
-              >
+              <a class="button button-primary" href="#work"
+                >Explore my work
+                <svg aria-hidden="true" viewBox="0 0 20 20">
+                  <path d="M10 3v14m-5-5 5 5 5-5" /></svg
+              ></a>
               <a class="text-link" href="Paul-Namalomba_Curriculum-Vitae.pdf"
-                >View my résumé <span aria-hidden="true">↗</span></a
+                >View résumé <span aria-hidden="true">↗</span></a
               >
+            </div>
+            <div class="hero-person">
+              <img
+                src="assets/responsive/paul-480.webp"
+                alt="Paul Namalomba"
+                width="48"
+                height="48"
+              />
+              <p>
+                Based in Cape Town<br /><span
+                  >Building across southern Africa</span
+                >
+              </p>
             </div>
           </div>
-          <figure class="hero-portrait">
-            <div class="portrait-frame">
+          <figure class="mesh-study" data-mesh-study>
+            <div class="mesh-stage">
               <img
-                alt="Portrait of Paul Namalomba"
-                decoding="async"
+                class="mesh-fallback"
+                src="assets/computational-mesh.svg"
+                alt="Illustrative finite-element mesh of a curved surface"
+                width="620"
+                height="550"
                 fetchpriority="high"
-                height="572"
-                sizes="(max-width: 680px) 86vw, (max-width: 960px) 360px, 30vw"
-                src="assets/responsive/paul-572.webp"
-                srcset="
-                  assets/responsive/paul-480.webp 480w,
-                  assets/responsive/paul-572.webp 572w
-                "
-                width="572"
               />
+              <svg
+                class="mesh-interactive"
+                viewBox="0 0 620 550"
+                role="img"
+                aria-label="Illustrative finite-element mesh of a curved surface"
+              >
+                <g data-mesh-surface></g>
+              </svg>
+              <svg class="mesh-axis" viewBox="0 0 70 70" aria-hidden="true">
+                <g fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M15 48h39M15 48V10M15 48l24-24" />
+                </g>
+                <g fill="currentColor" font-size="11">
+                  <text x="58" y="52">x</text>
+                  <text x="11" y="8">z</text>
+                  <text x="43" y="23">y</text>
+                </g>
+              </svg>
             </div>
             <figcaption>
-              <span>Building across</span>
-              <strong>Research · Enterprise · Infrastructure</strong>
+              <div>
+                <span>A study in deformation</span>
+              </div>
+              <label class="mesh-control"
+                ><span>Drag to reshape</span
+                ><input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="60"
+                  aria-label="Mesh deformation"
+              /></label>
             </figcaption>
           </figure>
         </div>
-        <div aria-label="Selected professional facts" class="shell proof-strip">
-          <div><strong>5+</strong><span>years technical experience</span></div>
-          <div>
-            <strong>6+</strong
-            ><span>major projects as architect and/or engineer</span>
-          </div>
-          <div><strong>750+</strong><span>hours advanced training</span></div>
-          <div><strong>3</strong><span>systems disciplines</span></div>
+        <div
+          class="shell discipline-strip"
+          aria-label="Engineering disciplines"
+        >
+          <a href="#capabilities"
+            ><span class="discipline-symbol" aria-hidden="true">∂</span
+            ><span
+              >Scientific computing<small
+                >From material models to parallel solvers</small
+              ></span
+            ></a
+          >
+          <a href="#capabilities"
+            ><svg
+              class="discipline-symbol"
+              aria-hidden="true"
+              viewBox="0 0 32 32"
+            >
+              <path
+                d="m11 8-8 8 8 8m10-16 8 8-8 8M18 4l-4 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              /></svg
+            ><span
+              >Backend systems<small
+                >From domain architecture to delivery</small
+              ></span
+            ></a
+          >
+          <a href="#capabilities"
+            ><svg
+              class="discipline-symbol"
+              aria-hidden="true"
+              viewBox="0 0 32 32"
+            >
+              <g fill="none" stroke="currentColor" stroke-width="1.6">
+                <ellipse cx="16" cy="7" rx="11" ry="4" />
+                <path d="M5 7v17c0 6 22 6 22 0V7M5 15c0 6 22 6 22 0" />
+              </g></svg
+            ><span
+              >Data engineering<small
+                >From millions of rows to useful systems</small
+              ></span
+            ></a
+          >
         </div>
       </section>
       <section class="section work-section" id="work">
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">01 · Selected work</p>
-              <h2>Complex systems, in diverse fields.</h2>
+              <h2>Selected work.</h2>
             </div>
             <p>
-              Research software, public-facing products and institutional
-              systems selected for technical depth and real-world
-              responsibility.
+              Different domains. The same care for how things work. A selection
+              of research software, production platforms and data systems.
             </p>
           </div>
           <!-- 01 · FEATURED: ECORIDE WITH SLIDING GALLERY -->
           <article class="project-feature project-blue">
             <div class="project-copy">
-              <div class="project-index">01 / 03</div>
-              <p class="project-type">Platform engineering · Mobility</p>
-              <h3>Ecoride ride-sharing platform</h3>
+              <p class="project-type">Mobility platform</p>
+              <h3>Getting people<br />where they need to be.</h3>
+              <p class="project-name">Ecoride ride-sharing platform</p>
               <p>
                 Architecture and backend delivery for a multi-client mobility
                 platform: PostgreSQL domain modelling, secure .NET APIs,
@@ -184,22 +235,9 @@
               <div
                 aria-label="Ecoride screenshot gallery"
                 class="project-slides"
+                role="region"
                 tabindex="0"
               >
-                <!-- <figure class="project-slide">
-                  <img
-                    src="assets/ecoride_01.png"
-                    alt="Ecoride interface screenshot 1"
-                    loading="lazy"
-                  />
-                </figure>
-                <figure class="project-slide">
-                  <img
-                    src="assets/ecoride_02.png"
-                    alt="Ecoride interface screenshot 2"
-                    loading="lazy"
-                  />
-                </figure> -->
                 <figure class="project-slide">
                   <img
                     alt="Ecoride interface screenshot 3"
@@ -281,7 +319,30 @@
                   />
                 </figure>
               </div>
-              <span class="visual-label">Scroll to explore ↔</span>
+              <div class="gallery-caption">
+                <span>Ecoride mobile app</span>
+                <div class="gallery-controls" hidden>
+                  <button
+                    type="button"
+                    data-gallery-previous
+                    aria-label="Previous Ecoride screenshot"
+                  >
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="m12 5-5 5 5 5" />
+                    </svg></button
+                  ><span data-gallery-status role="status" aria-live="polite"
+                    >1 / 5</span
+                  ><button
+                    type="button"
+                    data-gallery-next
+                    aria-label="Next Ecoride screenshot"
+                  >
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="m8 5 5 5-5 5" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
           </article>
           <!-- 02 & 03 · PROJECT PAIR: SESKA + SEAT -->
@@ -302,10 +363,9 @@
                   "
                   width="1118"
                 />
-                <span class="project-index">02 / 03</span>
               </div>
               <div class="project-card-copy">
-                <p class="project-type">Scientific computing · HPC</p>
+                <p class="project-type">Scientific computing</p>
                 <h3>SESKA computational suite</h3>
                 <p>
                   Maintaining and extending an advanced C++ and Fortran
@@ -343,10 +403,9 @@
                   "
                   width="957"
                 />
-                <span class="project-index">03 / 03</span>
               </div>
               <div class="project-card-copy">
-                <p class="project-type">Data engineering · Higher education</p>
+                <p class="project-type">Higher education</p>
                 <h3>SEAT enrolment management system</h3>
                 <p>
                   Database architecture, backend maintenance and large-data
@@ -369,7 +428,7 @@
             </article>
           </div>
           <div class="more-work">
-            <p class="eyebrow">More shipped work</p>
+            <h3 class="more-work-title">More things I’ve built</h3>
             <div class="more-work-grid">
               <a
                 href="https://halfqr.com"
@@ -407,20 +466,18 @@
         <div class="shell">
           <div class="section-heading section-heading-light">
             <div>
-              <p class="eyebrow">02 · Tech Guides</p>
-              <h2>Some of my technical notes.</h2>
+              <h2>Knowledge, shared.</h2>
             </div>
             <p>
-              Practical, implementation-focused field notes on backend
-              architecture, infrastructure, databases and scientific computing.
+              The details behind the work. Practical guides on architecture,
+              infrastructure, databases and scientific computing.
             </p>
           </div>
           <div class="guide-grid">
             <article class="guide-feature">
-              <p class="guide-meta">Data engineering · 18 min read</p>
+              <p class="guide-meta">Data engineering</p>
               <h3>
-                Memory-aware batching, threading &amp; MPI for large database
-                operations
+                Working with millions of rows. Without running out of memory.
               </h3>
               <p>
                 A resource-aware three-stage pipeline for updating millions of
@@ -432,7 +489,7 @@
               >
             </article>
             <article class="guide-card">
-              <p class="guide-meta">Architecture · Field guide</p>
+              <p class="guide-meta">Architecture</p>
               <h3>Clean architecture across C#, Flutter and TypeScript</h3>
               <a
                 aria-label="Read Clean architecture across C#, Flutter and TypeScript"
@@ -441,7 +498,7 @@
               >
             </article>
             <article class="guide-card">
-              <p class="guide-meta">Backend · Comparison</p>
+              <p class="guide-meta">Backend engineering</p>
               <h3>Web APIs and serving: choosing the right framework</h3>
               <a
                 aria-label="Read Web APIs and serving"
@@ -451,7 +508,7 @@
             </article>
           </div>
           <a class="journal-cta" href="docs/">
-            <span>Tap to browse the complete knowledge base</span>
+            <span>Explore the knowledge base</span>
             <strong>40 guides · 11 script collections</strong>
             <b aria-hidden="true">→</b>
           </a>
@@ -460,11 +517,10 @@
       <section class="section experience-section" id="experience">
         <div class="shell experience-grid">
           <div class="experience-intro">
-            <p class="eyebrow">03 · My Experience</p>
-            <h2>Research? Enterprise? Yes.</h2>
+            <h2>Research and production,<br />side by side.</h2>
             <p>
-              A deliberately hybrid practice—scientific rigor from computational
-              mechanics, operational discipline from production platforms.
+              Scientific rigor from computational mechanics. Operational
+              discipline from building and maintaining production systems.
             </p>
             <a class="text-link" href="Paul-Namalomba_Curriculum-Vitae.pdf"
               >Full professional history <span aria-hidden="true">↗</span></a
@@ -535,8 +591,7 @@
         <div class="shell">
           <div class="section-heading">
             <div>
-              <p class="eyebrow">04 · My Capabilities</p>
-              <h2>Backend, frontend, simulation.</h2>
+              <h2>The tools change.<br />The thinking connects.</h2>
             </div>
             <p>
               My range is broad by design: I work from numerical kernels and
@@ -545,7 +600,6 @@
           </div>
           <div class="capability-grid">
             <article>
-              <span>01</span>
               <h3>Computational engineering</h3>
               <p>
                 Finite elements, material models, numerical methods and parallel
@@ -554,7 +608,6 @@
               <small>C++ · Fortran · PETSc · OpenMPI · Slurm</small>
             </article>
             <article>
-              <span>02</span>
               <h3>Backend systems</h3>
               <p>
                 Secure APIs, domain architecture, realtime communication and
@@ -563,7 +616,6 @@
               <small>C#/.NET · Python/Django · REST · SignalR</small>
             </article>
             <article>
-              <span>03</span>
               <h3>Data platforms</h3>
               <p>
                 Relational modelling, ETL, large-volume operations, data quality
@@ -572,7 +624,6 @@
               <small>PostgreSQL · Redis · Kafka · Airflow</small>
             </article>
             <article>
-              <span>04</span>
               <h3>Delivery &amp; infrastructure</h3>
               <p>
                 Cross-platform builds, containers, CI/CD, server configuration
@@ -585,28 +636,27 @@
       </section>
       <section class="section about-section" id="about">
         <div class="shell about-grid">
-          <div class="about-portrait">
+          <figure class="about-portrait">
             <img
-              alt="Paul Namalomba speaking outdoors"
+              alt="Paul Namalomba"
               decoding="async"
-              height="2304"
+              height="572"
               loading="lazy"
-              sizes="(max-width: 960px) calc(100vw - 68px), 550px"
-              src="assets/responsive/paul-header-1440.webp"
+              sizes="(max-width: 680px) calc(100vw - 40px), 420px"
+              src="assets/responsive/paul-572.webp"
               srcset="
-                assets/responsive/paul-header-480.webp   480w,
-                assets/responsive/paul-header-960.webp   960w,
-                assets/responsive/paul-header-1440.webp 1440w
+                assets/responsive/paul-480.webp 480w,
+                assets/responsive/paul-572.webp 572w
               "
-              width="4096"
+              width="572"
             />
-            <div>
-              <span>Based in</span><strong>Cape Town, South Africa</strong>
-            </div>
-          </div>
+            <figcaption>
+              <span>Paul Namalomba</span
+              ><small>Engineer. Researcher. Builder.</small>
+            </figcaption>
+          </figure>
           <div class="about-copy">
-            <p class="eyebrow">05 · More About Me</p>
-            <!-- <h2>I work best where disciplines meet.</h2> -->
+            <h2>An engineer,<br />in more than one sense.</h2>
             <p class="about-lede">
               My background in civil engineering shapes how I build software:
               define the forces, understand failure modes, validate assumptions
@@ -641,8 +691,7 @@
       <section class="contact-section" id="contact">
         <div class="shell contact-grid">
           <div>
-            <p class="eyebrow">Have a demanding system?</p>
-            <!-- <h2>Let's make the difficult part work.</h2> -->
+            <h2>Let’s work on<br />the difficult part.</h2>
             <p>
               I’m open to engineering collaborations, backend and data
               consultancy, scientific-software work and thoughtful product
@@ -653,6 +702,25 @@
               href="mailto:paulkbnamalomba@gmail.com"
               >Start a conversation <span aria-hidden="true">↗</span></a
             >
+          </div>
+          <div class="contact-details">
+            <a href="mailto:paulkbnamalomba@gmail.com"
+              >paulkbnamalomba@gmail.com</a
+            >
+            <p>Cape Town, South Africa</p>
+            <div>
+              <a
+                href="https://github.com/paulnamalomba"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub <span aria-hidden="true">↗</span></a
+              ><a
+                href="https://www.linkedin.com/in/paul-namalomba"
+                target="_blank"
+                rel="noopener noreferrer"
+                >LinkedIn <span aria-hidden="true">↗</span></a
+              >
+            </div>
           </div>
         </div>
       </section>
@@ -668,15 +736,15 @@
             href="https://github.com/paulnamalomba"
             rel="noopener noreferrer"
             target="_blank"
-            >GitHub ↗</a
+            >GitHub</a
           >
           <a
             href="https://www.linkedin.com/in/paul-namalomba"
             rel="noopener noreferrer"
             target="_blank"
-            >LinkedIn ↗</a
+            >LinkedIn</a
           >
-          <a href="docs/">Tech Guides →</a>
+          <a href="docs/">Tech Guides</a>
         </div>
         <p>© <span data-year="">2026</span> Paul Namalomba</p>
       </div>
