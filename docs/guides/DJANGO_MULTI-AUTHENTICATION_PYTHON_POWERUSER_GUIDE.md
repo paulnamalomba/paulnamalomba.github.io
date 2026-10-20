@@ -1,4 +1,4 @@
-# DJANGO Multi-Authentication PowerUser Guide (Python)
+# DJANGO Multi-Authentication PowerUser guide (Python)
 
 **Last updated**: December 09, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,42 +16,42 @@
 
 ## Overview
 
-This guide focuses on implementing robust multi-authentication in Django using Python: combining username/password, OAuth2/OIDC (Google, Azure AD, GitHub), JWT for APIs, and optional SAML and MFA. It shows how to structure settings, authentication backends, URL routing, and views so that you can safely support multiple identity providers in one project.
+This guide focuses on implementing multi-authentication in Django using Python: combining username/password, OAuth2/OIDC (Google, Azure AD, GitHub), JWT for APIs, and optional SAML and MFA. It shows how to structure settings, authentication backends, URL routing, and views so that you can safely support multiple identity providers in one project.
 
 ## Contents
 
-- [DJANGO Multi-Authentication PowerUser Guide (Python)](#django-multi-authentication-poweruser-guide-python)
+- [DJANGO Multi-Authentication PowerUser guide (Python)](#django-multi-authentication-poweruser-guide-python)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-    - [Install and Scaffold Project](#install-and-scaffold-project)
-    - [Core Dependencies](#core-dependencies)
-  - [Key Concepts](#key-concepts)
-    - [Authentication Backends](#authentication-backends)
-    - [Session vs Token Auth](#session-vs-token-auth)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-    - [Settings Layout](#settings-layout)
-    - [Environment Variables](#environment-variables)
-  - [Security Considerations](#security-considerations)
-    - [Password Storage and MFA](#password-storage-and-mfa)
-    - [Token Handling](#token-handling)
+    - [Install and scaffold project](#install-and-scaffold-project)
+    - [Core dependencies](#core-dependencies)
+  - [Key concepts](#key-concepts)
+    - [Authentication backends](#authentication-backends)
+    - [Session vs token auth](#session-vs-token-auth)
+  - [Configuration and best practices](#configuration-and-best-practices)
+    - [Settings layout](#settings-layout)
+    - [Environment variables](#environment-variables)
+  - [Security considerations](#security-considerations)
+    - [Password storage and MFA](#password-storage-and-mfa)
+    - [Token handling](#token-handling)
   - [Examples](#examples)
-    - [Example 1: Base Auth Setup](#example-1-base-auth-setup)
-    - [Example 2: OAuth2/OIDC with Social Login](#example-2-oauth2oidc-with-social-login)
+    - [Example 1: base auth setup](#example-1-base-auth-setup)
+    - [Example 2: OAuth2/OIDC with social login](#example-2-oauth2oidc-with-social-login)
     - [Example 3: JWT for APIs](#example-3-jwt-for-apis)
     - [Example 4: MFA with django-otp](#example-4-mfa-with-django-otp)
   - [Troubleshooting](#troubleshooting)
-    - [Common Configuration Errors](#common-configuration-errors)
-    - [Debugging Tips](#debugging-tips)
-  - [Performance and Tuning](#performance-and-tuning)
-    - [Scaling Auth-heavy APIs](#scaling-auth-heavy-apis)
-  - [References and Further Reading](#references-and-further-reading)
+    - [Common configuration errors](#common-configuration-errors)
+    - [Debugging tips](#debugging-tips)
+  - [Performance and tuning](#performance-and-tuning)
+    - [Scaling auth-heavy APIs](#scaling-auth-heavy-apis)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
 ## Quickstart
 
-### Install and Scaffold Project
+### Install and scaffold project
 
 ```bash
 python -m venv .venv
@@ -63,7 +63,7 @@ django-admin startproject config .
 python manage.py startapp accounts
 ```
 
-### Core Dependencies
+### Core dependencies
 
 For multi-auth, you commonly combine:
 
@@ -77,9 +77,9 @@ pip install \
 
 ---
 
-## Key Concepts
+## Key concepts
 
-### Authentication Backends
+### Authentication backends
 
 In `settings.py`:
 
@@ -93,7 +93,7 @@ AUTHENTICATION_BACKENDS = [
 - Order matters; Django will try backends sequentially.
 - Custom backends can enforce additional constraints (tenant, domain, flags).
 
-### Session vs Token Auth
+### Session vs token auth
 
 - **Session auth**: Browser-centric; server-side session and CSRF protection.
 - **Token/JWT auth**: API-centric; stateless bearer tokens with short lifetimes.
@@ -101,9 +101,9 @@ AUTHENTICATION_BACKENDS = [
 
 ---
 
-## Configuration and Best Practices
+## Configuration and best practices
 
-### Settings Layout
+### Settings layout
 
 A typical production layout:
 
@@ -166,7 +166,7 @@ SIMPLE_JWT = {
 }
 ```
 
-### Environment Variables
+### Environment variables
 
 ```bash
 export DJANGO_SECRET_KEY="<long-random-secret>"
@@ -188,11 +188,11 @@ export JWT_SIGNING_KEY="<jwt-signing-key>"
 
 ---
 
-## Security Considerations
+## Security considerations
 
-### Password Storage and MFA
+### Password storage and MFA
 
-- Always use Django’s built-in password hashing (`PBKDF2` by default) or stronger algorithms (`Argon2`).
+- Always use Django's built-in password hashing (`PBKDF2` by default) or stronger algorithms (`Argon2`).
 - Enforce strong password policies and rate limit login attempts.
 - Use MFA for admin and privileged roles (via `django-otp` or external IdPs).
 
@@ -205,7 +205,7 @@ PASSWORD_HASHERS = [
 ]
 ```
 
-### Token Handling
+### Token handling
 
 - Keep access tokens short-lived; use refresh tokens for continuity.
 - Use HTTPS everywhere; never transmit tokens over HTTP.
@@ -215,7 +215,7 @@ PASSWORD_HASHERS = [
 
 ## Examples
 
-### Example 1: Base Auth Setup
+### Example 1: base auth setup
 
 `accounts/models.py`:
 
@@ -251,7 +251,7 @@ urlpatterns = [
 ]
 ```
 
-### Example 2: OAuth2/OIDC with Social Login
+### Example 2: OAuth2/OIDC with social login
 
 `config/settings/base.py` (allauth configuration):
 
@@ -350,23 +350,23 @@ def sensitive_view(request):
 
 ## Troubleshooting
 
-### Common Configuration Errors
+### Common configuration errors
 
-- **Improper redirect URIs**: Ensure configured redirect URIs at the IdP match Django’s URLs.
+- **Improper redirect URIs**: Ensure configured redirect URIs at the IdP match Django's URLs.
 - **CSRF token missing**: For session-based auth, ensure CSRF middleware and template tags are correctly set up.
 - **JWT not accepted**: Check audience (`aud`) and issuer (`iss`) claims, and that signing keys match.
 
-### Debugging Tips
+### Debugging tips
 
-- Enable Django’s debug toolbar in non-production environments.
+- Enable Django's debug toolbar in non-production environments.
 - Log authentication attempts and failures with enough context (user, provider, IP).
 - Use `python -m http.server` or tools like `httpie` to simulate callback requests.
 
 ---
 
-## Performance and Tuning
+## Performance and tuning
 
-### Scaling Auth-heavy APIs
+### Scaling auth-heavy APIs
 
 - Cache frequently accessed user/permission data in Redis.
 - Use database connection pooling for high login volumes.
@@ -374,7 +374,7 @@ def sensitive_view(request):
 
 ---
 
-## References and Further Reading
+## References and further reading
 
 - Django Authentication: https://docs.djangoproject.com/en/4.2/topics/auth/
 - Django REST Framework: https://www.django-rest-framework.org/

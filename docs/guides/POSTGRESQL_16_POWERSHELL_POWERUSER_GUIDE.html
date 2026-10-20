@@ -9,7 +9,7 @@
       name="description"
     />
     <meta content="#f2f0e9" name="theme-color" />
-    <title>POSTGRESQL 16 PowerUser Guide (PowerShell) - Paul Namalomba</title>
+    <title>POSTGRESQL 16 PowerUser guide (PowerShell) - Paul Namalomba</title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
   </head>
@@ -47,7 +47,7 @@
         </div>
         <article class="docs-content">
           <h1 id="postgresql-16-poweruser-guide-powershell">
-            POSTGRESQL 16 PowerUser Guide (PowerShell)
+            POSTGRESQL 16 PowerUser guide (PowerShell)
           </h1>
           <p>
             <strong>Last updated</strong>: December 04, 2025<br />
@@ -85,7 +85,7 @@
             support for ACID transactions, JSON, full-text search, and
             extensibility. This guide covers installation, configuration,
             performance tuning, and administration using PowerShell on Windows.
-            Power users need to understand connection pooling, query
+            Production considerations include connection pooling, query
             optimization, backup strategies, and replication for production
             deployments.
           </p>
@@ -93,7 +93,7 @@
           <ul>
             <li>
               <a href="#postgresql-16-poweruser-guide-powershell"
-                >POSTGRESQL 16 PowerUser Guide (PowerShell)</a
+                >POSTGRESQL 16 PowerUser guide (PowerShell)</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -113,31 +113,31 @@
               <ul>
                 <li>
                   <a href="#install-and-configure-postgresql-16"
-                    >Install and Configure PostgreSQL 16</a
+                    >Install and configure PostgreSQL 16</a
                   >
                 </li>
                 <li>
                   <a href="#database-and-user-management"
-                    >Database and User Management</a
+                    >Database and user management</a
                   >
                 </li>
                 <li>
                   <a href="#backup-and-restore-operations"
-                    >Backup and Restore Operations</a
+                    >Backup and restore operations</a
                   >
                 </li>
                 <li>
                   <a href="#query-execution-and-analysis"
-                    >Query Execution and Analysis</a
+                    >Query execution and analysis</a
                   >
                 </li>
                 <li>
                   <a href="#index-management-and-optimization"
-                    >Index Management and Optimization</a
+                    >Index management and optimization</a
                   >
                 </li>
                 <li>
-                  <a href="#maintenance-operations">Maintenance Operations</a>
+                  <a href="#maintenance-operations">Maintenance operations</a>
                 </li>
               </ul>
             </li>
@@ -182,7 +182,7 @@
               <code>CREATE DATABASE mydb;</code>
             </li>
           </ol>
-          <h2 id="key-concepts">Key Concepts</h2>
+          <h2 id="key-concepts">Key concepts</h2>
           <ul>
             <li>
               <strong>Cluster</strong>: Collection of databases managed by a
@@ -213,7 +213,7 @@
             </li>
           </ul>
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
           <p><strong>postgresql.conf</strong> (located in data directory):</p>
           <div class="codehilite">
@@ -259,7 +259,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
             queried columns - Set appropriate work_mem per connection (start
             with 4MB)
           </p>
-          <h2 id="security-considerations">Security Considerations</h2>
+          <h2 id="security-considerations">Security considerations</h2>
           <ol>
             <li>
               <strong>Authentication</strong>: Use
@@ -308,7 +308,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
           </div>
           <h2 id="examples">Examples</h2>
           <h3 id="install-and-configure-postgresql-16">
-            Install and Configure PostgreSQL 16
+            Install and configure PostgreSQL 16
           </h3>
           <p>
             Download, install, and perform initial configuration of PostgreSQL
@@ -345,7 +345,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
           <h3 id="database-and-user-management">
-            Database and User Management
+            Database and user management
           </h3>
           <p>
             Create databases, users, and schemas with proper permission grants
@@ -391,7 +391,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
           <h3 id="backup-and-restore-operations">
-            Backup and Restore Operations
+            Backup and restore operations
           </h3>
           <p>
             Perform full database backups, compressed backups, and point-in-time
@@ -432,7 +432,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
           <h3 id="query-execution-and-analysis">
-            Query Execution and Analysis
+            Query execution and analysis
           </h3>
           <p>
             Execute queries, analyze query plans, and monitor query performance
@@ -493,7 +493,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
           <h3 id="index-management-and-optimization">
-            Index Management and Optimization
+            Index management and optimization
           </h3>
           <p>
             Create, analyze, and maintain indexes for optimal query performance
@@ -540,7 +540,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 <span class="n">psql</span> <span class="n">-U</span> <span class="n">postgres</span> <span class="n">-d</span> <span class="n">production_db</span> <span class="n">-c</span> <span class="s2">"DROP INDEX CONCURRENTLY idx_old_unused_index;"</span>
 </code></pre>
           </div>
-          <h3 id="maintenance-operations">Maintenance Operations</h3>
+          <h3 id="maintenance-operations">Maintenance operations</h3>
           <p>
             Perform routine maintenance tasks including VACUUM, ANALYZE, and
             statistics updates for optimal database health.
@@ -653,7 +653,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
             Viewer: Application logs for PostgreSQL service - Connection logs:
             Enable <code>log_connections = on</code> in postgresql.conf
           </p>
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
           <p><strong>Memory Configuration</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># For 16GB RAM system</span>
@@ -728,14 +728,14 @@ host    all       all       0.0.0.0/0       scram-sha-256
 </code></pre>
           </div>
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>
               <a href="https://www.postgresql.org/docs/16/"
                 >PostgreSQL 16 Documentation</a
               >
-              - Official comprehensive documentation
+              - Official documentation
             </li>
             <li>
               <a href="https://wiki.postgresql.org/wiki/Main_Page"

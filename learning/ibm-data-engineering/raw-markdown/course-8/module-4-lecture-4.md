@@ -1,12 +1,12 @@
-# Module 4, Lecture 4: Kafka Streaming Process & Stream Topology
+# Module 4, lecture 4: Kafka streaming process & stream topology
 
-While transporting data from Point A to Point B is a foundational engineering task, real-world systems—whether it’s parsing complex finite element data or handling university enrollments—rarely just _move_ data. They must transform, aggregate, and enhance it in transit.
+Systems that process finite element data or university enrollments need to transform and aggregate records as they move between components. Stream processing performs that work while the data is in transit.
 
 This lecture shifts the focus from "dumb pipes" to smart, real-time computational pipelines using the **Kafka Streams API**.
 
 ---
 
-## 1. The "Ad Hoc" Anti-Pattern
+## 1. The "ad hoc" Anti-Pattern
 
 Before adopting a dedicated stream processing framework, engineers often default to the "Ad Hoc" approach.
 
@@ -18,7 +18,7 @@ Writing bespoke consumer-producer loops for every data transformation works for 
 
 ---
 
-## 2. Enter Kafka Streams API
+## 2. Enter Kafka streams API
 
 The Kafka Streams API is a client library designed specifically to solve the complexities of event-driven data processing.
 
@@ -28,9 +28,9 @@ The Kafka Streams API is a client library designed specifically to solve the com
 
 ---
 
-## 3. Stream Processing Topology (The DAG)
+## 3. Stream processing topology (the DAG)
 
-At its core, the Kafka Streams API abstracts your processing logic into a **computational graph** called a Stream Processing Topology.
+The Kafka Streams API organizes processing logic as a **computational graph** called a Stream Processing Topology.
 
 Mathematically, this topology is a Directed Acyclic Graph (DAG), denoted as $G = (V, E)$, where:
 
@@ -39,13 +39,13 @@ Mathematically, this topology is a Directed Acyclic Graph (DAG), denoted as $G =
 
 There are three primary types of processors in this DAG:
 
-1. **Source Processor:** The entry point. It has no upstream nodes. It acts as an embedded consumer, continuously reading records from one or more Kafka topics and pushing them into the topology.
+1. **Source Processor:** The entry point. It has no upstream nodes. It is an embedded consumer, continuously reading records from one or more Kafka topics and pushing them into the topology.
 2. **Stream Processor:** The intermediary nodes. These apply data transformations—mapping, filtering, formatting, or joining streams together.
-3. **Sink Processor:** The exit point. It has no downstream nodes. It acts as an embedded producer, publishing the final transformed records back into a new Kafka topic.
+3. **Sink Processor:** The exit point. It has no downstream nodes. It is an embedded producer, publishing the final transformed records back into a new Kafka topic.
 
 ---
 
-## 4. Technical Implementation in .NET/C#
+## 4. Technical implementation in .NET/C#
 
 Natively, Kafka Streams is a Java library. However, in the .NET ecosystem, the gold standard for achieving the exact same topological processing is **`Streamiz.Kafka.Net`** (a highly mature, open-source C# port of the Kafka Streams API).
 
@@ -106,7 +106,7 @@ public class WeatherTopologyManager
 
 ---
 
-### Architectural Synthesis
+### Architectural synthesis
 
 By utilizing a Stream Builder topology, you offload the heavy lifting of network I/O, threading models, and fault tolerance to the underlying library. You define the _logic_ of the pipeline, and the API manages the _execution_.
 

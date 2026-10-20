@@ -1,4 +1,4 @@
-# Memory Management and Execution on Windows — C# (.NET)
+# Memory management and execution on Windows — C# (.NET)
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -21,23 +21,23 @@ This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory m
 
 ## Contents
 
-- [Memory Management and Execution on Windows — C# (.NET)](#memory-management-and-execution-on-windows--c-net)
+- [Memory management and execution on Windows — C# (.NET)](#memory-management-and-execution-on-windows--c-net)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Windows — Build \& Run (PowerShell / Command Prompt)](#windows--build--run-powershell--command-prompt)
+  - [Windows — build \& Run (PowerShell / command prompt)](#windows--build--run-powershell--command-prompt)
   - [Overview](#overview-1)
   - [Contents](#contents-1)
-  - [1) Data Structures — Value-Type vs Reference-Type](#1-data-structures--value-type-vs-reference-type)
-  - [2) Storage — Stack vs Heap \& Garbage Collector](#2-storage--stack-vs-heap--garbage-collector)
-  - [3) Copy Semantics — Shallow vs Deep](#3-copy-semantics--shallow-vs-deep)
+  - [1) Data structures — Value-Type vs Reference-Type](#1-data-structures--value-type-vs-reference-type)
+  - [2) Storage — stack vs heap \& garbage collector](#2-storage--stack-vs-heap--garbage-collector)
+  - [3) Copy semantics — shallow vs deep](#3-copy-semantics--shallow-vs-deep)
   - [4) Nullability](#4-nullability)
-  - [Examples — Runnable Snippets](#examples--runnable-snippets)
-  - [Windows/.NET Specific Notes](#windowsnet-specific-notes)
+  - [Examples — runnable snippets](#examples--runnable-snippets)
+  - [Windows/.NET specific notes](#windowsnet-specific-notes)
   - [References](#references)
 
 ---
 
-## Windows — Build & Run (PowerShell / Command Prompt)
+## Windows — build & Run (PowerShell / command prompt)
 
 - Create project and run (dotnet SDK required):
 
@@ -70,7 +70,7 @@ This guide explains how C# and the .NET runtime (CoreCLR/CLR) implement memory m
 
 ---
 
-## 1) Data Structures — Value-Type vs Reference-Type
+## 1) Data structures — Value-Type vs Reference-Type
 
 - Value types: primitives (`int`, `double`), `struct`, `enum`. Stored inline where declared (stack or inside objects). Passed by value by default.
 - Reference types: `class`, `interface`, `delegate`, `object`, arrays — variables hold a reference to the object on the managed heap.
@@ -106,7 +106,7 @@ Notes:
 
 ---
 
-## 2) Storage — Stack vs Heap & Garbage Collector
+## 2) Storage — stack vs heap & garbage collector
 
 - CLR allocates value types on the stack (for local variables) or inline within objects. Reference type instances allocated on managed heap.
 - Garbage Collector: generational (Gen0/Gen1/Gen2), background GC, server GC. GC reclaims unreachable objects; finalizers (`~Type()`) run on separate finalizer thread.
@@ -140,7 +140,7 @@ Tips:
 
 ---
 
-## 3) Copy Semantics — Shallow vs Deep
+## 3) Copy semantics — shallow vs deep
 
 - Assigning reference variables copies the reference (shallow).
 - For deep copy, implement cloning (manual or `ICloneable`) or serialization-based copy.
@@ -191,7 +191,7 @@ Tips:
 
 ---
 
-## Examples — Runnable Snippets
+## Examples — runnable snippets
 
 `Program.cs`:
 
@@ -224,7 +224,7 @@ Run with `dotnet run` in project folder.
 
 ---
 
-## Windows/.NET Specific Notes
+## Windows/.NET specific notes
 
 - Tuning GC settings: `DOTNET_gcServer`, `DOTNET_gcConcurrent` environment variables.
 - Memory dumps: use `dotnet-dump`, `procdump`, `WinDbg` for post-mortem analysis.

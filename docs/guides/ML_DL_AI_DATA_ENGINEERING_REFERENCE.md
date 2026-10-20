@@ -1,14 +1,14 @@
-# Machine Learning, Deep Learning & AI Methods for Data Analysis, Processing & Engineering
+# Machine learning, deep learning & AI methods for data analysis, processing & engineering
 
 <br>
-**Last updated**: March 2, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: March 2, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Language: Python](https://img.shields.io/badge/Language-Python_3.11-3776AB.svg)](https://www.python.org/)
 [![Language: C#](https://img.shields.io/badge/Language-C%23_12-239120.svg)](https://docs.microsoft.com/dotnet/csharp/)
@@ -17,96 +17,96 @@
 
 ## Overview
 
-This document is an exhaustive technical reference cataloguing every significant Machine Learning (ML), Deep Learning (DL), and Artificial Intelligence (AI) method currently utilized in production data analysis, data processing, and data engineering pipelines. Each method is presented with its mathematical foundation, its specific role in data workflows, and its computational complexity profile.
+This reference covers machine learning (ML), deep learning (DL), and artificial intelligence (AI) methods used in data analysis, processing, and engineering pipelines. For each method, it describes the mathematical foundation, its role in data workflows, and computational complexity.
 
-The target reader holds fluency in linear algebra, multivariate calculus, probability theory, and systems architecture. Elementary explanations are intentionally omitted. If a concept here is unfamiliar, consult Bishop (2006), Goodfellow et al. (2016), or Murphy (2022) before proceeding.
+The reference assumes familiarity with linear algebra, multivariate calculus, probability theory, and systems architecture. For background on unfamiliar concepts, see Bishop (2006), Goodfellow et al. (2016), or Murphy (2022).
 
-Phase 1 provides the algorithmic taxonomy. Phase 2 maps these algorithms to the concrete library and framework landscape in **Python** and **C# / .NET**, covering hardware acceleration, API philosophy, and production integration patterns.
+Phase 1 groups the algorithms by method. Phase 2 covers their Python and C# / .NET libraries and frameworks, including hardware acceleration, API design, and production integration.
 
 ## Contents
 
-- [Machine Learning, Deep Learning \& AI Methods for Data Analysis, Processing \& Engineering](#machine-learning-deep-learning--ai-methods-for-data-analysis-processing--engineering)
+- [Machine learning, deep learning \& AI methods for data analysis, processing \& engineering](#machine-learning-deep-learning--ai-methods-for-data-analysis-processing--engineering)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis](#phase-1--comprehensive-taxonomy-of-mldl-methods-in-data-analysis)
-    - [1) Data Preprocessing \& Feature Engineering](#1-data-preprocessing--feature-engineering)
-      - [1.1 Multiple Imputation by Chained Equations (MICE)](#11-multiple-imputation-by-chained-equations-mice)
-      - [1.2 KNN Imputation](#12-knn-imputation)
-      - [1.3 Matrix Completion via Nuclear Norm Minimization](#13-matrix-completion-via-nuclear-norm-minimization)
-      - [1.4 Isolation Forest (Anomaly Detection)](#14-isolation-forest-anomaly-detection)
-      - [1.5 One-Class SVM (Anomaly Detection)](#15-one-class-svm-anomaly-detection)
-      - [1.6 Local Outlier Factor (LOF)](#16-local-outlier-factor-lof)
-      - [1.7 Scaling Transformations](#17-scaling-transformations)
-      - [1.8 Feature Hashing (Hashing Trick)](#18-feature-hashing-hashing-trick)
-      - [1.9 Target Encoding](#19-target-encoding)
-    - [2) Dimensionality Reduction \& Manifold Learning](#2-dimensionality-reduction--manifold-learning)
-      - [2.1 Principal Component Analysis (PCA)](#21-principal-component-analysis-pca)
+  - [Phase 1 — comprehensive taxonomy of ML/DL methods in data analysis](#phase-1--comprehensive-taxonomy-of-mldl-methods-in-data-analysis)
+    - [1) Data preprocessing \& feature engineering](#1-data-preprocessing--feature-engineering)
+      - [1.1 Multiple imputation by chained equations (MICE)](#11-multiple-imputation-by-chained-equations-mice)
+      - [1.2 KNN imputation](#12-knn-imputation)
+      - [1.3 Matrix completion via nuclear norm minimization](#13-matrix-completion-via-nuclear-norm-minimization)
+      - [1.4 Isolation forest (anomaly detection)](#14-isolation-forest-anomaly-detection)
+      - [1.5 One-Class SVM (anomaly detection)](#15-one-class-svm-anomaly-detection)
+      - [1.6 Local outlier factor (LOF)](#16-local-outlier-factor-lof)
+      - [1.7 Scaling transformations](#17-scaling-transformations)
+      - [1.8 Feature hashing (hashing trick)](#18-feature-hashing-hashing-trick)
+      - [1.9 Target encoding](#19-target-encoding)
+    - [2) Dimensionality reduction \& manifold learning](#2-dimensionality-reduction--manifold-learning)
+      - [2.1 Principal component analysis (PCA)](#21-principal-component-analysis-pca)
       - [2.2 Kernel PCA](#22-kernel-pca)
       - [2.3 Sparse PCA](#23-sparse-pca)
-      - [2.4 t-Distributed Stochastic Neighbor Embedding (t-SNE)](#24-t-distributed-stochastic-neighbor-embedding-t-sne)
-      - [2.5 Uniform Manifold Approximation and Projection (UMAP)](#25-uniform-manifold-approximation-and-projection-umap)
-      - [2.6 Autoencoders (Vanilla)](#26-autoencoders-vanilla)
-      - [2.7 Variational Autoencoders (VAE)](#27-variational-autoencoders-vae)
-      - [2.8 Sparse Autoencoders](#28-sparse-autoencoders)
-    - [3) Supervised Learning — Regression \& Classification](#3-supervised-learning--regression--classification)
-      - [3.1 Gradient Boosted Decision Trees — XGBoost](#31-gradient-boosted-decision-trees--xgboost)
+      - [2.4 t-Distributed stochastic Neighbor embedding (t-SNE)](#24-t-distributed-stochastic-neighbor-embedding-t-sne)
+      - [2.5 Uniform manifold approximation and projection (UMAP)](#25-uniform-manifold-approximation-and-projection-umap)
+      - [2.6 Autoencoders (vanilla)](#26-autoencoders-vanilla)
+      - [2.7 Variational autoencoders (VAE)](#27-variational-autoencoders-vae)
+      - [2.8 Sparse autoencoders](#28-sparse-autoencoders)
+    - [3) Supervised learning — regression \& classification](#3-supervised-learning--regression--classification)
+      - [3.1 Gradient boosted decision trees — XGBoost](#31-gradient-boosted-decision-trees--xgboost)
       - [3.2 LightGBM](#32-lightgbm)
       - [3.3 CatBoost](#33-catboost)
-      - [3.4 Support Vector Machines (SVM)](#34-support-vector-machines-svm)
-      - [3.5 Elastic Net (L1 + L2 Regularized Regression)](#35-elastic-net-l1--l2-regularized-regression)
-      - [3.6 Random Forests](#36-random-forests)
-    - [4) Unsupervised Learning — Clustering \& Density Estimation](#4-unsupervised-learning--clustering--density-estimation)
+      - [3.4 Support vector machines (SVM)](#34-support-vector-machines-svm)
+      - [3.5 Elastic Net (L1 + L2 regularized regression)](#35-elastic-net-l1--l2-regularized-regression)
+      - [3.6 Random forests](#36-random-forests)
+    - [4) Unsupervised learning — clustering \& density estimation](#4-unsupervised-learning--clustering--density-estimation)
       - [4.1 DBSCAN](#41-dbscan)
       - [4.2 HDBSCAN](#42-hdbscan)
-      - [4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization](#43-gaussian-mixture-models-gmm--expectation-maximization)
-      - [4.4 Agglomerative Hierarchical Clustering](#44-agglomerative-hierarchical-clustering)
-      - [4.5 Spectral Clustering](#45-spectral-clustering)
-    - [5) Deep Learning for Data](#5-deep-learning-for-data)
-      - [5.1 Feedforward Networks (MLP)](#51-feedforward-networks-mlp)
-      - [5.2 Long Short-Term Memory (LSTM)](#52-long-short-term-memory-lstm)
-      - [5.3 Gated Recurrent Unit (GRU)](#53-gated-recurrent-unit-gru)
-      - [5.4 Convolutional Neural Networks (CNN) on Structured Data](#54-convolutional-neural-networks-cnn-on-structured-data)
-      - [5.5 Attention Mechanisms \& Transformers for Structured Data](#55-attention-mechanisms--transformers-for-structured-data)
-      - [5.6 Temporal Fusion Transformers (TFT)](#56-temporal-fusion-transformers-tft)
-      - [5.7 Neural Ordinary Differential Equations (Neural ODEs)](#57-neural-ordinary-differential-equations-neural-odes)
-    - [6) Generative AI in Data Processing](#6-generative-ai-in-data-processing)
-      - [6.1 Generative Adversarial Networks (GANs)](#61-generative-adversarial-networks-gans)
-      - [6.2 Conditional GANs (CTGAN) for Tabular Data](#62-conditional-gans-ctgan-for-tabular-data)
-      - [6.3 Variational Autoencoders (VAE) for Data Augmentation](#63-variational-autoencoders-vae-for-data-augmentation)
-      - [6.4 Diffusion Models for Tabular Synthesis](#64-diffusion-models-for-tabular-synthesis)
-      - [6.5 SMOTE and Its Neural Successors](#65-smote-and-its-neural-successors)
-  - [Phase 2 — The Production Ecosystem (Python and C#)](#phase-2--the-production-ecosystem-python-and-c)
-    - [7) Python Ecosystem](#7-python-ecosystem)
+      - [4.3 Gaussian mixture models (GMM) — Expectation-Maximization](#43-gaussian-mixture-models-gmm--expectation-maximization)
+      - [4.4 Agglomerative hierarchical clustering](#44-agglomerative-hierarchical-clustering)
+      - [4.5 Spectral clustering](#45-spectral-clustering)
+    - [5) Deep learning for data](#5-deep-learning-for-data)
+      - [5.1 Feedforward networks (MLP)](#51-feedforward-networks-mlp)
+      - [5.2 Long Short-Term memory (LSTM)](#52-long-short-term-memory-lstm)
+      - [5.3 Gated recurrent unit (GRU)](#53-gated-recurrent-unit-gru)
+      - [5.4 Convolutional neural networks (CNN) on structured data](#54-convolutional-neural-networks-cnn-on-structured-data)
+      - [5.5 Attention mechanisms \& transformers for structured data](#55-attention-mechanisms--transformers-for-structured-data)
+      - [5.6 Temporal fusion transformers (TFT)](#56-temporal-fusion-transformers-tft)
+      - [5.7 Neural ordinary differential equations (neural ODEs)](#57-neural-ordinary-differential-equations-neural-odes)
+    - [6) Generative AI in data processing](#6-generative-ai-in-data-processing)
+      - [6.1 Generative adversarial networks (GANs)](#61-generative-adversarial-networks-gans)
+      - [6.2 Conditional GANs (CTGAN) for tabular data](#62-conditional-gans-ctgan-for-tabular-data)
+      - [6.3 Variational autoencoders (VAE) for data augmentation](#63-variational-autoencoders-vae-for-data-augmentation)
+      - [6.4 Diffusion models for tabular synthesis](#64-diffusion-models-for-tabular-synthesis)
+      - [6.5 SMOTE and its neural successors](#65-smote-and-its-neural-successors)
+  - [Phase 2 — the production ecosystem (Python and C#)](#phase-2--the-production-ecosystem-python-and-c)
+    - [7) Python ecosystem](#7-python-ecosystem)
       - [7.1 PyTorch](#71-pytorch)
       - [7.2 TensorFlow / Keras](#72-tensorflow--keras)
       - [7.3 JAX](#73-jax)
       - [7.4 Scikit-Learn](#74-scikit-learn)
-      - [7.5 XGBoost / LightGBM / CatBoost (Native Libraries)](#75-xgboost--lightgbm--catboost-native-libraries)
-      - [7.6 High-Performance Data Backends — Polars \& cuDF](#76-high-performance-data-backends--polars--cudf)
-      - [7.7 Supplementary Ecosystem](#77-supplementary-ecosystem)
-    - [8) C# / .NET Ecosystem](#8-c--net-ecosystem)
+      - [7.5 XGBoost / LightGBM / CatBoost (native libraries)](#75-xgboost--lightgbm--catboost-native-libraries)
+      - [7.6 High-Performance data backends — Polars \& cuDF](#76-high-performance-data-backends--polars--cudf)
+      - [7.7 Supplementary ecosystem](#77-supplementary-ecosystem)
+    - [8) C# / .NET ecosystem](#8-c--net-ecosystem)
       - [8.1 ML.NET](#81-mlnet)
       - [8.2 TorchSharp](#82-torchsharp)
       - [8.3 TensorFlow.NET](#83-tensorflownet)
-      - [8.4 SciSharp Stack](#84-scisharp-stack)
-      - [8.5 Accord.NET (Legacy)](#85-accordnet-legacy)
-      - [8.6 Production Integration Patterns](#86-production-integration-patterns)
-    - [9) Cross-Language Interop \& Serving Architecture](#9-cross-language-interop--serving-architecture)
+      - [8.4 SciSharp stack](#84-scisharp-stack)
+      - [8.5 Accord.NET (legacy)](#85-accordnet-legacy)
+      - [8.6 Production integration patterns](#86-production-integration-patterns)
+    - [9) Cross-Language interop \& serving architecture](#9-cross-language-interop--serving-architecture)
   - [References](#references)
 
 ---
 
-## Phase 1 — Comprehensive Taxonomy of ML/DL Methods in Data Analysis
+## Phase 1 — comprehensive taxonomy of ML/DL methods in data analysis
 
 ---
 
-### 1) Data Preprocessing & Feature Engineering
+### 1) Data preprocessing & feature engineering
 
 The quality of any downstream model is bounded by the quality of the data entering it. The methods in this section address the three cardinal sins of raw data: missingness, contamination (outliers), and scale heterogeneity.
 
 ---
 
-#### 1.1 Multiple Imputation by Chained Equations (MICE)
+#### 1.1 Multiple imputation by chained equations (MICE)
 
 **Theoretical Foundation**
 
@@ -137,7 +137,7 @@ MICE is the default advanced imputation strategy for tabular datasets in which m
 
 ---
 
-#### 1.2 KNN Imputation
+#### 1.2 KNN imputation
 
 **Theoretical Foundation**
 
@@ -174,7 +174,7 @@ KNN imputation does not scale gracefully. For $n > 10^5$, approximate nearest ne
 
 ---
 
-#### 1.3 Matrix Completion via Nuclear Norm Minimization
+#### 1.3 Matrix completion via nuclear norm minimization
 
 **Theoretical Foundation**
 
@@ -204,7 +204,7 @@ Matrix completion is the mathematically principled approach to imputation when t
 
 ---
 
-#### 1.4 Isolation Forest (Anomaly Detection)
+#### 1.4 Isolation forest (anomaly detection)
 
 **Theoretical Foundation**
 
@@ -249,7 +249,7 @@ The subsampling parameter $\psi$ (default 256) decouples training cost from $n$,
 
 ---
 
-#### 1.5 One-Class SVM (Anomaly Detection)
+#### 1.5 One-Class SVM (anomaly detection)
 
 **Theoretical Foundation**
 
@@ -290,7 +290,7 @@ Its fatal weakness: it does not scale. The kernel matrix is $O(n^2)$ in memory. 
 
 ---
 
-#### 1.6 Local Outlier Factor (LOF)
+#### 1.6 Local outlier factor (LOF)
 
 **Theoretical Foundation**
 
@@ -320,7 +320,7 @@ LOF excels at detecting **local** anomalies — points that are outliers relativ
 
 ---
 
-#### 1.7 Scaling Transformations
+#### 1.7 Scaling transformations
 
 **Theoretical Foundation**
 
@@ -351,7 +351,7 @@ All scaling transforms are $O(n)$ time, $O(1)$ to $O(n)$ space (quantile require
 
 ---
 
-#### 1.8 Feature Hashing (Hashing Trick)
+#### 1.8 Feature hashing (hashing trick)
 
 **Theoretical Foundation**
 
@@ -377,7 +377,7 @@ The sign function $\xi$ ensures that the inner product is preserved in expectati
 
 ---
 
-#### 1.9 Target Encoding
+#### 1.9 Target encoding
 
 **Theoretical Foundation**
 
@@ -403,13 +403,13 @@ $O(n)$ time, $O(C)$ space.
 
 ---
 
-### 2) Dimensionality Reduction & Manifold Learning
+### 2) Dimensionality reduction & manifold learning
 
-High-dimensional data is not merely inconvenient — it is pathological. Distances concentrate, volumes explode, and models overfit catastrophically. The methods below compress data into lower-dimensional representations while preserving specific geometric or statistical properties.
+In high-dimensional spaces, distances concentrate, volumes grow rapidly, and models can overfit. The methods below compress data into lower-dimensional representations while preserving specific geometric or statistical properties.
 
 ---
 
-#### 2.1 Principal Component Analysis (PCA)
+#### 2.1 Principal component analysis (PCA)
 
 **Theoretical Foundation**
 
@@ -516,7 +516,7 @@ Solved via coordinate descent or ADMM.
 
 ---
 
-#### 2.4 t-Distributed Stochastic Neighbor Embedding (t-SNE)
+#### 2.4 t-Distributed stochastic Neighbor embedding (t-SNE)
 
 **Theoretical Foundation**
 
@@ -558,7 +558,7 @@ Minimized via gradient descent with momentum. The bandwidth $\sigma_i$ per point
 
 ---
 
-#### 2.5 Uniform Manifold Approximation and Projection (UMAP)
+#### 2.5 Uniform manifold approximation and projection (UMAP)
 
 **Theoretical Foundation**
 
@@ -607,7 +607,7 @@ Applications: scRNA-seq visualization, embedding space exploration, outlier dete
 
 ---
 
-#### 2.6 Autoencoders (Vanilla)
+#### 2.6 Autoencoders (vanilla)
 
 **Theoretical Foundation**
 
@@ -640,7 +640,7 @@ Depends on architecture. For a single hidden layer of width $h$:
 
 ---
 
-#### 2.7 Variational Autoencoders (VAE)
+#### 2.7 Variational autoencoders (VAE)
 
 **Theoretical Foundation**
 
@@ -664,7 +664,7 @@ $$
 
 - Generative modeling: sampling $\mathbf{z} \sim \mathcal{N}(0, I)$ and decoding produces novel data points
 - Disentangled representation learning ($\beta$-VAE penalizes the KL term more heavily)
-- Semi-supervised learning: partially labeled data leverages both reconstruction and classification losses
+- Semi-supervised learning: partially labeled data uses both reconstruction and classification losses
 - Data augmentation for imbalanced datasets (generate minority-class synthetic samples by conditioning the latent space)
 
 **Algorithmic Complexity**
@@ -673,7 +673,7 @@ Same as vanilla autoencoder + cost of sampling and KL computation ($O(d)$ per sa
 
 ---
 
-#### 2.8 Sparse Autoencoders
+#### 2.8 Sparse autoencoders
 
 **Theoretical Foundation**
 
@@ -703,11 +703,11 @@ Same as vanilla autoencoder. The sparsity penalty adds $O(n \cdot d)$ per epoch 
 
 ---
 
-### 3) Supervised Learning — Regression & Classification
+### 3) Supervised learning — regression & classification
 
 ---
 
-#### 3.1 Gradient Boosted Decision Trees — XGBoost
+#### 3.1 Gradient boosted decision trees — XGBoost
 
 **Theoretical Foundation**
 
@@ -777,7 +777,7 @@ where $A$ is the top-$a$ set and $B$ is the random subsample of the complement.
 
 LightGBM dominates when:
 
-- $n$ is very large ($> 10^6$) — GOSS dramatically reduces per-iteration cost
+- $n$ is very large ($> 10^6$) — GOSS reduces per-iteration cost
 - $p$ is high with sparsity (NLP feature counts, one-hot explosions) — EFB compresses effectively
 - Training time is a constraint (2-10x faster than XGBoost on equivalent configurations)
 - Native categorical feature support (optimal split finding without one-hot encoding)
@@ -815,7 +815,7 @@ CatBoost is the correct choice when:
 
 - Categorical features are abundant and high-cardinality (no manual encoding needed)
 - Prediction shift is a concern (small datasets, few boosting rounds)
-- Inference latency matters (oblivious trees are extremely cache-friendly)
+- Inference latency matters (oblivious trees are cache-friendly)
 - Production deployment targets CPUs (CatBoost's SIMD inference is among the fastest)
 
 **Algorithmic Complexity**
@@ -827,7 +827,7 @@ CatBoost is the correct choice when:
 
 ---
 
-#### 3.4 Support Vector Machines (SVM)
+#### 3.4 Support vector machines (SVM)
 
 **Theoretical Foundation**
 
@@ -861,7 +861,7 @@ $$
 - Text classification with TF-IDF features (linear SVM is competitive with deep models)
 - Bioinformatics (protein classification, gene expression analysis)
 
-SVMs are not used in modern large-scale data engineering. They are mathematically elegant and practically deprecated for $n > 10^5$. The kernel matrix doesn't fit in memory, and tree ensembles match or exceed accuracy on tabular data.
+Kernel SVMs can become impractical for large datasets, particularly for $n > 10^5$, because the kernel matrix may exceed available memory. Tree ensembles offer an alternative for tabular data with comparable or better accuracy.
 
 **Algorithmic Complexity**
 
@@ -873,7 +873,7 @@ SVMs are not used in modern large-scale data engineering. They are mathematicall
 
 ---
 
-#### 3.5 Elastic Net (L1 + L2 Regularized Regression)
+#### 3.5 Elastic Net (L1 + L2 regularized regression)
 
 **Theoretical Foundation**
 
@@ -911,7 +911,7 @@ where $S(z, \gamma) = \text{sign}(z) \cdot \max(|z| - \gamma, 0)$ is the soft-th
 
 ---
 
-#### 3.6 Random Forests
+#### 3.6 Random forests
 
 **Theoretical Foundation**
 
@@ -949,7 +949,7 @@ where $\bar{\rho}$ is the average correlation between trees and $s$ is the avera
 
 ---
 
-### 4) Unsupervised Learning — Clustering & Density Estimation
+### 4) Unsupervised learning — clustering & density estimation
 
 ---
 
@@ -1003,7 +1003,7 @@ HDBSCAN (Campello et al., 2013) extends DBSCAN by eliminating the $\epsilon$ par
 
 HDBSCAN is the correct default choice for density-based clustering in production:
 
-- Handles varying-density clusters (fundamentally fixes DBSCAN's weakness)
+- Handles varying-density clusters (addresses DBSCAN's difficulty with varying density)
 - Provides cluster membership probabilities (soft assignment)
 - The condensed tree is a rich multi-scale representation of data structure
 - Robust to noise — noisy points are explicitly identified, not forced into clusters
@@ -1021,7 +1021,7 @@ Applications: customer segmentation, document clustering, spatial event detectio
 
 ---
 
-#### 4.3 Gaussian Mixture Models (GMM) — Expectation-Maximization
+#### 4.3 Gaussian mixture models (GMM) — Expectation-Maximization
 
 **Theoretical Foundation**
 
@@ -1077,7 +1077,7 @@ where $k$ is the number of free parameters: $k = K \cdot p + K \cdot p(p+1)/2 + 
 
 ---
 
-#### 4.4 Agglomerative Hierarchical Clustering
+#### 4.4 Agglomerative hierarchical clustering
 
 **Theoretical Foundation**
 
@@ -1108,7 +1108,7 @@ Ward's method is equivalent to merging the pair that minimizes the increase in t
 
 ---
 
-#### 4.5 Spectral Clustering
+#### 4.5 Spectral clustering
 
 **Theoretical Foundation**
 
@@ -1139,11 +1139,11 @@ For large $n$: use sparse affinity (KNN graph), then `scipy.sparse.linalg.eigsh`
 
 ---
 
-### 5) Deep Learning for Data
+### 5) Deep learning for data
 
 ---
 
-#### 5.1 Feedforward Networks (MLP)
+#### 5.1 Feedforward networks (MLP)
 
 **Theoretical Foundation**
 
@@ -1194,7 +1194,7 @@ For layer widths $[p, h_1, h_2, \ldots, h_L, c]$:
 
 ---
 
-#### 5.2 Long Short-Term Memory (LSTM)
+#### 5.2 Long Short-Term memory (LSTM)
 
 **Theoretical Foundation**
 
@@ -1235,7 +1235,7 @@ Note: For most time-series tasks, Transformers and temporal CNNs have overtaken 
 
 ---
 
-#### 5.3 Gated Recurrent Unit (GRU)
+#### 5.3 Gated recurrent unit (GRU)
 
 **Theoretical Foundation**
 
@@ -1263,7 +1263,7 @@ Same asymptotic as LSTM but with a smaller constant factor (3 gates vs. 4).
 
 ---
 
-#### 5.4 Convolutional Neural Networks (CNN) on Structured Data
+#### 5.4 Convolutional neural networks (CNN) on structured data
 
 **Theoretical Foundation**
 
@@ -1301,7 +1301,7 @@ For input size $n$, $c_{\text{in}}$ channels, filter size $k$, $c_{\text{out}}$ 
 
 ---
 
-#### 5.5 Attention Mechanisms & Transformers for Structured Data
+#### 5.5 Attention mechanisms & transformers for structured data
 
 **Theoretical Foundation**
 
@@ -1351,7 +1351,7 @@ For long sequences: linear attention variants (Performer, Linformer) reduce to $
 
 ---
 
-#### 5.6 Temporal Fusion Transformers (TFT)
+#### 5.6 Temporal fusion transformers (TFT)
 
 **Theoretical Foundation**
 
@@ -1387,7 +1387,7 @@ $$
 
 ---
 
-#### 5.7 Neural Ordinary Differential Equations (Neural ODEs)
+#### 5.7 Neural ordinary differential equations (neural ODEs)
 
 **Theoretical Foundation**
 
@@ -1419,17 +1419,17 @@ Memory cost is $O(1)$ in depth (only the final state and adjoint are stored, not
 | Forward (adaptive solver, $S$ steps) | $O(S \cdot \text{cost}(f_\theta))$ | $O(\text{params})$ (adjoint: constant in depth) |
 | Backward (adjoint method)            | $O(S \cdot \text{cost}(f_\theta))$ | $O(\text{params})$                              |
 
-$S$ is adaptive — stiff dynamics or tight tolerances increase $S$ dramatically. This makes training time hard to predict, which is exactly the kind of thing that delights no one in production.
+$S$ is adaptive — stiff dynamics or tight tolerances increase $S$ substantially. This makes training time hard to predict, which is exactly the kind of thing that delights no one in production.
 
 ---
 
-### 6) Generative AI in Data Processing
+### 6) Generative AI in data processing
 
 Generative models in data engineering serve a specific, pragmatic purpose: manufacturing data that doesn't exist or augmenting data that is pathologically imbalanced. This is not about generating art — it is about generating rows.
 
 ---
 
-#### 6.1 Generative Adversarial Networks (GANs)
+#### 6.1 Generative adversarial networks (GANs)
 
 **Theoretical Foundation**
 
@@ -1473,7 +1473,7 @@ enforcing the Lipschitz constraint via gradient penalty (WGAN-GP) or spectral no
 
 ---
 
-#### 6.2 Conditional GANs (CTGAN) for Tabular Data
+#### 6.2 Conditional GANs (CTGAN) for tabular data
 
 **Theoretical Foundation**
 
@@ -1504,7 +1504,7 @@ Same as standard GAN with additional overhead for VGM fitting ($O(n \cdot K_{\te
 
 ---
 
-#### 6.3 Variational Autoencoders (VAE) for Data Augmentation
+#### 6.3 Variational autoencoders (VAE) for data augmentation
 
 **Theoretical Foundation**
 
@@ -1529,7 +1529,7 @@ Same as Section 2.7. Augmentation adds $O(m \cdot d)$ for sampling $m$ new point
 
 ---
 
-#### 6.4 Diffusion Models for Tabular Synthesis
+#### 6.4 Diffusion models for tabular synthesis
 
 **Theoretical Foundation**
 
@@ -1573,7 +1573,7 @@ Sampling is the bottleneck — $T = 1000$ denoising steps is standard. DDIM redu
 
 ---
 
-#### 6.5 SMOTE and Its Neural Successors
+#### 6.5 SMOTE and its neural successors
 
 **Theoretical Foundation**
 
@@ -1607,13 +1607,13 @@ Neural successors replace linear interpolation with learned latent-space interpo
 
 ---
 
-## Phase 2 — The Production Ecosystem (Python and C#)
+## Phase 2 — the production ecosystem (Python and C#)
 
 Theory is nonnegotiable. But theory without a framework is a whiteboard exercise. This section maps the Phase 1 taxonomy to the concrete libraries that make production deployment possible.
 
 ---
 
-### 7) Python Ecosystem
+### 7) Python ecosystem
 
 Python's dominance is infrastructure, not linguistic merit. It is a thin orchestration layer atop C/C++/CUDA kernels. The following frameworks represent the load-bearing walls of that infrastructure.
 
@@ -1712,7 +1712,7 @@ class TabularTransformer(nn.Module):
 
 JAX arrays are **immutable**. There is no in-place mutation. This functional purity enables aggressive compiler optimizations but requires a paradigm shift for imperative programmers.
 
-Frameworks built on JAX: **Flax** (neural networks), **Optax** (optimizers), **Haiku** (DeepMind), **Equinox** (Pythonic modules).
+Frameworks built on JAX: Flax (neural networks), Optax (optimizers), Haiku (DeepMind), Equinox (Pythonic modules).
 
 **Hardware Acceleration**:
 
@@ -1787,7 +1787,7 @@ labels = pipeline.fit_predict(X_raw)  # -1 = anomaly, 1 = normal
 
 ---
 
-#### 7.5 XGBoost / LightGBM / CatBoost (Native Libraries)
+#### 7.5 XGBoost / LightGBM / CatBoost (native libraries)
 
 Each provides both a native API and a Scikit-Learn compatible wrapper.
 
@@ -1822,7 +1822,7 @@ model.fit(X_train, y_train, eval_set=(X_val, y_val), early_stopping_rounds=50)
 
 ---
 
-#### 7.6 High-Performance Data Backends — Polars & cuDF
+#### 7.6 High-Performance data backends — Polars & cuDF
 
 **Polars**
 
@@ -1859,7 +1859,7 @@ result = (
 
 ---
 
-#### 7.7 Supplementary Ecosystem
+#### 7.7 Supplementary ecosystem
 
 | Library                             | Purpose                                                       | Phase 1 Coverage       |
 | ----------------------------------- | ------------------------------------------------------------- | ---------------------- |
@@ -1879,7 +1879,7 @@ result = (
 
 ---
 
-### 8) C# / .NET Ecosystem
+### 8) C# / .NET ecosystem
 
 The .NET ecosystem for ML is smaller, younger, and frankly less glamorous than Python's. But it fills a critical niche: embedding ML directly into high-performance backend services without the latency, operational complexity, and dependency nightmares of cross-language serving.
 
@@ -2002,7 +2002,7 @@ var criterion = CrossEntropyLoss();
 
 ---
 
-#### 8.4 SciSharp Stack
+#### 8.4 SciSharp stack
 
 The SciSharp organization provides .NET ports of the core Python numerical stack:
 
@@ -2036,9 +2036,9 @@ var Z = centered.Multiply(svd.VT.SubMatrix(0, d, 0, svd.VT.ColumnCount).Transpos
 
 ---
 
-#### 8.5 Accord.NET (Legacy)
+#### 8.5 Accord.NET (legacy)
 
-**Status**: Effectively archived. Last significant update was pre-.NET Core. Included for completeness as it was historically the only comprehensive ML library for .NET.
+**Status**: Effectively archived. Last significant update was pre-.NET Core. Included for completeness as it was an early ML library for .NET with broad algorithm coverage.
 
 **Capabilities**: Full implementations of SVM, decision trees, random forests, neural networks, KNN, PCA, K-Means, GMM, naive Bayes, HMMs, image processing, and statistical tests — all in pure C# with no native dependencies.
 
@@ -2046,7 +2046,7 @@ var Z = centered.Multiply(svd.VT.SubMatrix(0, d, 0, svd.VT.ColumnCount).Transpos
 
 ---
 
-#### 8.6 Production Integration Patterns
+#### 8.6 Production integration patterns
 
 The core value proposition of the .NET ML ecosystem is **in-process inference** — no HTTP boundary, no serialization overhead, no Python process to babysit.
 
@@ -2122,7 +2122,7 @@ This pattern is common in enterprises where data science teams operate in Python
 
 ---
 
-### 9) Cross-Language Interop & Serving Architecture
+### 9) Cross-Language interop & serving architecture
 
 | Serving Method                       | Latency | Complexity | Language Agnostic               |
 | ------------------------------------ | ------- | ---------- | ------------------------------- |

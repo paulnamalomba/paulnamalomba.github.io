@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      DJANGO Multi-Authentication PowerUser Guide (Bash) - Paul Namalomba
+      DJANGO Multi-Authentication PowerUser guide (Bash) - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <article class="docs-content">
           <h1 id="django-multi-authentication-poweruser-guide-bash">
-            DJANGO Multi-Authentication PowerUser Guide (Bash)
+            DJANGO Multi-Authentication PowerUser guide (Bash)
           </h1>
           <p>
             <strong>Last updated</strong>: December 09, 2025<br />
@@ -93,7 +93,7 @@
           <ul>
             <li>
               <a href="#django-multi-authentication-poweruser-guide-bash"
-                >DJANGO Multi-Authentication PowerUser Guide (Bash)</a
+                >DJANGO Multi-Authentication PowerUser guide (Bash)</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -101,34 +101,34 @@
             <li>
               <a href="#quickstart">Quickstart</a>
               <ul>
-                <li><a href="#system-preparation">System Preparation</a></li>
-                <li><a href="#project-bootstrap">Project Bootstrap</a></li>
+                <li><a href="#system-preparation">System preparation</a></li>
+                <li><a href="#project-bootstrap">Project bootstrap</a></li>
               </ul>
             </li>
             <li>
-              <a href="#key-concepts">Key Concepts</a>
+              <a href="#key-concepts">Key concepts</a>
               <ul>
-                <li><a href="#process-layout">Process Layout</a></li>
+                <li><a href="#process-layout">Process layout</a></li>
                 <li>
-                  <a href="#separation-of-concerns">Separation of Concerns</a>
+                  <a href="#separation-of-concerns">Separation of concerns</a>
                 </li>
               </ul>
             </li>
             <li>
               <a href="#configuration-and-best-practices"
-                >Configuration and Best Practices</a
+                >Configuration and best practices</a
               >
               <ul>
-                <li><a href="#environment-files">Environment Files</a></li>
+                <li><a href="#environment-files">Environment files</a></li>
                 <li><a href="#systemd-and-nginx">systemd and Nginx</a></li>
               </ul>
             </li>
             <li>
-              <a href="#security-considerations">Security Considerations</a>
+              <a href="#security-considerations">Security considerations</a>
               <ul>
                 <li>
                   <a href="#permissions-and-ownership"
-                    >Permissions and Ownership</a
+                    >Permissions and ownership</a
                   >
                 </li>
                 <li><a href="#tls-and-hsts">TLS and HSTS</a></li>
@@ -139,12 +139,12 @@
               <ul>
                 <li>
                   <a href="#example-1-bootstrap-django-project"
-                    >Example 1: Bootstrap Django Project</a
+                    >Example 1: bootstrap Django project</a
                   >
                 </li>
                 <li>
                   <a href="#example-2-configure-systemd-service"
-                    >Example 2: Configure systemd Service</a
+                    >Example 2: configure systemd service</a
                   >
                 </li>
                 <li>
@@ -154,7 +154,7 @@
                 </li>
                 <li>
                   <a href="#example-4-auth-diagnostics-script"
-                    >Example 4: Auth Diagnostics Script</a
+                    >Example 4: auth diagnostics script</a
                   >
                 </li>
               </ul>
@@ -164,18 +164,18 @@
               <ul>
                 <li>
                   <a href="#common-deployment-issues"
-                    >Common Deployment Issues</a
+                    >Common deployment issues</a
                   >
                 </li>
-                <li><a href="#log-inspection">Log Inspection</a></li>
+                <li><a href="#log-inspection">Log inspection</a></li>
               </ul>
             </li>
             <li>
-              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <a href="#performance-and-tuning">Performance and tuning</a>
               <ul>
                 <li>
                   <a href="#gunicorn-and-nginx-tuning"
-                    >Gunicorn and Nginx Tuning</a
+                    >Gunicorn and Nginx tuning</a
                   >
                 </li>
               </ul>
@@ -188,7 +188,7 @@
           </ul>
           <hr />
           <h2 id="quickstart">Quickstart</h2>
-          <h3 id="system-preparation">System Preparation</h3>
+          <h3 id="system-preparation">System preparation</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Update packages</span>
 sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y
@@ -197,7 +197,7 @@ sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </
 sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>python3-venv<span class="w"> </span>python3-pip<span class="w"> </span>git<span class="w"> </span>nginx<span class="w"> </span>certbot<span class="w"> </span>python3-certbot-nginx
 </code></pre>
           </div>
-          <h3 id="project-bootstrap">Project Bootstrap</h3>
+          <h3 id="project-bootstrap">Project bootstrap</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="nv">PROJECT_ROOT</span><span class="o">=</span>/opt/django-multi-auth
 sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$PROJECT_ROOT</span><span class="s2">"</span>
@@ -218,8 +218,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<spa
 </code></pre>
           </div>
           <hr />
-          <h2 id="key-concepts">Key Concepts</h2>
-          <h3 id="process-layout">Process Layout</h3>
+          <h2 id="key-concepts">Key concepts</h2>
+          <h3 id="process-layout">Process layout</h3>
           <ul>
             <li>
               <strong>Gunicorn/Uvicorn</strong>: WSGI/ASGI server hosting
@@ -234,7 +234,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<spa
               forwarding HTTP to Gunicorn.
             </li>
           </ul>
-          <h3 id="separation-of-concerns">Separation of Concerns</h3>
+          <h3 id="separation-of-concerns">Separation of concerns</h3>
           <ul>
             <li>
               Keep Django settings free of environment-specific paths and
@@ -251,9 +251,9 @@ python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<spa
           </ul>
           <hr />
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
-          <h3 id="environment-files">Environment Files</h3>
+          <h3 id="environment-files">Environment files</h3>
           <p><code>/etc/django/django-multi-auth.env</code>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>config.settings.production
@@ -328,8 +328,8 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="
 </code></pre>
           </div>
           <hr />
-          <h2 id="security-considerations">Security Considerations</h2>
-          <h3 id="permissions-and-ownership">Permissions and Ownership</h3>
+          <h2 id="security-considerations">Security considerations</h2>
+          <h3 id="permissions-and-ownership">Permissions and ownership</h3>
           <ul>
             <li>
               Run Django under a non-privileged user (e.g.
@@ -355,7 +355,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>reload<span class="
           <hr />
           <h2 id="examples">Examples</h2>
           <h3 id="example-1-bootstrap-django-project">
-            Example 1: Bootstrap Django Project
+            Example 1: bootstrap Django project
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
@@ -385,7 +385,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<spa
 </code></pre>
           </div>
           <h3 id="example-2-configure-systemd-service">
-            Example 2: Configure systemd Service
+            Example 2: configure systemd service
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
@@ -449,7 +449,7 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w
 </code></pre>
           </div>
           <h3 id="example-4-auth-diagnostics-script">
-            Example 4: Auth Diagnostics Script
+            Example 4: auth diagnostics script
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
@@ -475,7 +475,7 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w
           </div>
           <hr />
           <h2 id="troubleshooting">Troubleshooting</h2>
-          <h3 id="common-deployment-issues">Common Deployment Issues</h3>
+          <h3 id="common-deployment-issues">Common deployment issues</h3>
           <ul>
             <li>
               <strong>502 Bad Gateway</strong>: Gunicorn not running or socket
@@ -491,7 +491,7 @@ sudo<span class="w"> </span>certbot<span class="w"> </span>--nginx<span class="w
               or hostname.
             </li>
           </ul>
-          <h3 id="log-inspection">Log Inspection</h3>
+          <h3 id="log-inspection">Log inspection</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Django app logs</span>
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>django-multi-auth<span class="w"> </span>-f
@@ -501,8 +501,8 @@ sudo<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </spa
 </code></pre>
           </div>
           <hr />
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
-          <h3 id="gunicorn-and-nginx-tuning">Gunicorn and Nginx Tuning</h3>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
+          <h3 id="gunicorn-and-nginx-tuning">Gunicorn and Nginx tuning</h3>
           <ul>
             <li>
               Set Gunicorn workers to <code>(2 * CPU) + 1</code> as a starting
@@ -517,7 +517,7 @@ sudo<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </spa
           </ul>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>

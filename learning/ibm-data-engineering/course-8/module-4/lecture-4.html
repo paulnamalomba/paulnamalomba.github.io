@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Lecture 4: Kafka Streaming Process &amp; Stream Topology</title>
+    <title>Lecture 4: Kafka streaming process &amp; stream topology</title>
     <!-- CSS -->
     <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
@@ -120,16 +120,14 @@
         <a href="index.html">Module 4</a> <span>›</span>
         Lecture 4
       </div>
-      <h1 class="fade-in">Kafka Streaming Process &amp; Stream Topology</h1>
+      <h1 class="fade-in">Kafka streaming process &amp; stream topology</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 4, Lecture 4
       </p>
       <p class="fade-in fade-in-d2">
-        While transporting data from Point A to Point B is a foundational
-        engineering task, real-world systems—whether it’s parsing complex finite
-        element data or handling university enrollments—rarely just
-        <em>move</em> data. They must transform, aggregate, and enhance it in
-        transit.
+        Systems that process finite element data or university enrollments need
+        to transform and aggregate records as they move between components.
+        Stream processing performs that work while the data is in transit.
       </p>
       <p class="fade-in fade-in-d2">
         This lecture shifts the focus from "dumb pipes" to smart, real-time
@@ -137,7 +135,7 @@
       </p>
       <hr />
       <div class="section-card fade-in fade-in-d2">
-        <h2>1. The "Ad Hoc" Anti-Pattern</h2>
+        <h2>1. The "ad hoc" Anti-Pattern</h2>
         <p>
           Before adopting a dedicated stream processing framework, engineers
           often default to the "Ad Hoc" approach.
@@ -167,7 +165,7 @@
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d3">
-        <h2>2. Enter Kafka Streams API</h2>
+        <h2>2. Enter Kafka streams API</h2>
         <p>
           The Kafka Streams API is a client library designed specifically to
           solve the complexities of event-driven data processing.
@@ -192,10 +190,10 @@
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d4">
-        <h2>3. Stream Processing Topology (The DAG)</h2>
+        <h2>3. Stream processing topology (the DAG)</h2>
         <p>
-          At its core, the Kafka Streams API abstracts your processing logic
-          into a <strong>computational graph</strong> called a Stream Processing
+          The Kafka Streams API organizes processing logic as a
+          <strong>computational graph</strong> called a Stream Processing
           Topology.
         </p>
         <p>
@@ -216,9 +214,9 @@
         <ol>
           <li>
             <strong>Source Processor:</strong> The entry point. It has no
-            upstream nodes. It acts as an embedded consumer, continuously
-            reading records from one or more Kafka topics and pushing them into
-            the topology.
+            upstream nodes. It is an embedded consumer, continuously reading
+            records from one or more Kafka topics and pushing them into the
+            topology.
           </li>
           <li>
             <strong>Stream Processor:</strong> The intermediary nodes. These
@@ -227,14 +225,14 @@
           </li>
           <li>
             <strong>Sink Processor:</strong> The exit point. It has no
-            downstream nodes. It acts as an embedded producer, publishing the
-            final transformed records back into a new Kafka topic.
+            downstream nodes. It is an embedded producer, publishing the final
+            transformed records back into a new Kafka topic.
           </li>
         </ol>
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d5">
-        <h2>4. Technical Implementation in .NET/C</h2>
+        <h2>4. Technical implementation in .NET/C</h2>
         <p>
           Natively, Kafka Streams is a Java library. However, in the .NET
           ecosystem, the gold standard for achieving the exact same topological
@@ -297,7 +295,7 @@ public class WeatherTopologyManager
 
 </code></pre>
         <hr />
-        <h3>Architectural Synthesis</h3>
+        <h3>Architectural synthesis</h3>
         <p>
           By utilizing a Stream Builder topology, you offload the heavy lifting
           of network I/O, threading models, and fault tolerance to the

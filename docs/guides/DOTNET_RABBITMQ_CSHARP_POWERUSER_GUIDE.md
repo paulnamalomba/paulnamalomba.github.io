@@ -1,4 +1,4 @@
-# DOTNET RabbitMQ PowerUser Guide (C#)
+# DOTNET RabbitMQ PowerUser guide (C#)
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,25 +16,25 @@
 
 ## Overview
 
-RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol for asynchronous communication between distributed systems. This guide covers connection management, queue/exchange configuration, message publishing/consuming, acknowledgements, prefetch settings, and TLS security using the official .NET client library. Power users need to understand durability, routing patterns, dead-letter queues, and high-availability strategies for production message-driven architectures.
+RabbitMQ is a message broker implementing AMQP 0-9-1 protocol for asynchronous communication between distributed systems. This guide covers connection management, queue/exchange configuration, message publishing/consuming, acknowledgements, prefetch settings, and TLS security using the official .NET client library. Production considerations include durability, routing patterns, dead-letter queues, and high-availability strategies for production message-driven architectures.
 
 ## Contents
 
-- [DOTNET RabbitMQ PowerUser Guide (C#)](#dotnet-rabbitmq-poweruser-guide-c)
+- [DOTNET RabbitMQ PowerUser guide (C#)](#dotnet-rabbitmq-poweruser-guide-c)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Basic Message Publishing and Consuming](#basic-message-publishing-and-consuming)
-    - [Exchange Routing Patterns](#exchange-routing-patterns)
-    - [ASP.NET Core Integration with Dependency Injection](#aspnet-core-integration-with-dependency-injection)
-    - [Dead Letter Exchange and Retry Strategy](#dead-letter-exchange-and-retry-strategy)
+    - [Basic message publishing and consuming](#basic-message-publishing-and-consuming)
+    - [Exchange routing patterns](#exchange-routing-patterns)
+    - [ASP.NET Core integration with dependency injection](#aspnet-core-integration-with-dependency-injection)
+    - [Dead letter exchange and retry strategy](#dead-letter-exchange-and-retry-strategy)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -46,7 +46,7 @@ RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol for asynchr
 4. **Consume message**: Create consumer, bind to queue, process messages with manual acknowledgement
 5. **Enable durability**: Set durable flags on queues and persistent delivery mode on messages
 
-## Key Concepts
+## Key concepts
 
 - **Connection**: Long-lived TCP connection to RabbitMQ broker; expensive to create, should be reused across application
 - **Channel**: Lightweight virtual connection multiplexed over a single TCP connection; used for all AMQP operations
@@ -56,7 +56,7 @@ RabbitMQ is a robust message broker implementing AMQP 0-9-1 protocol for asynchr
 - **Acknowledgement (Ack)**: Consumer confirms message processing; manual ack provides at-least-once delivery guarantee
 - **Prefetch (QoS)**: Limits number of unacknowledged messages per consumer; prevents overwhelming slow consumers
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **Connection Factory Configuration**:
 
@@ -100,7 +100,7 @@ var factory = new ConnectionFactory
 - Enable automatic recovery for connection failures
 - Set heartbeat interval to detect network failures quickly
 
-## Security Considerations
+## Security considerations
 
 1. **Authentication**: Use strong credentials; avoid default `guest/guest` in production; integrate with LDAP or OAuth
 2. **TLS Encryption**: Enable SSL/TLS for all connections; use valid certificates; disable weak cipher suites
@@ -138,7 +138,7 @@ var factory = new ConnectionFactory
 
 ## Examples
 
-### Basic Message Publishing and Consuming
+### Basic message publishing and consuming
 
 Create durable queues, publish messages with persistence, and consume with manual acknowledgements for reliable delivery.
 
@@ -241,7 +241,7 @@ public class BasicMessagingExample
 }
 ```
 
-### Exchange Routing Patterns
+### Exchange routing patterns
 
 Implement direct, topic, and fanout exchange patterns for flexible message routing across multiple consumers.
 
@@ -392,7 +392,7 @@ public class ExchangeRoutingExample
 }
 ```
 
-### ASP.NET Core Integration with Dependency Injection
+### ASP.NET Core integration with dependency injection
 
 Implement RabbitMQ producer and consumer services with proper connection management and graceful shutdown in ASP.NET Core.
 
@@ -636,7 +636,7 @@ public interface IOrderService
 }
 ```
 
-### Dead Letter Exchange and Retry Strategy
+### Dead letter exchange and retry strategy
 
 Implement dead letter queues for handling failed messages with automatic retry logic and exponential backoff.
 
@@ -905,7 +905,7 @@ consumer.Received += (model, ea) =>
 - Check with: `rabbitmqctl log_tail`
 - Management UI: `http://localhost:15672` (default guest/guest)
 
-## Performance and Tuning
+## Performance and tuning
 
 **Connection and Channel Pooling**:
 
@@ -1019,7 +1019,7 @@ Console.WriteLine(response);
 - **Durability**: Trade-off with throughput; use transient queues for non-critical data
 - **Clustering**: Use mirrored queues for HA; avoid clustering across WANs
 
-## References and Further Reading
+## References and further reading
 
 - [RabbitMQ .NET Client Documentation](https://www.rabbitmq.com/dotnet.html) - Official .NET client library guide
 - [RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html) - Step-by-step tutorials covering all patterns

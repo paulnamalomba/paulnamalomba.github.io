@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Web APIs and Serving — Architectural Comparison (Flask vs Django vs
+      Web APIs and serving — architectural comparison (Flask vs Django vs
       Express vs ASP.NET Core) - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
@@ -52,7 +52,7 @@
           <h1
             id="web-apis-and-serving-architectural-comparison-flask-vs-django-vs-express-vs-aspnet-core"
           >
-            Web APIs and Serving — Architectural Comparison (Flask vs Django vs
+            Web APIs and serving — architectural comparison (Flask vs Django vs
             Express vs ASP.NET Core)
           </h1>
           <p>
@@ -92,20 +92,18 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            This guide is a <strong>framework-agnostic</strong> set of notes for
-            choosing and operating backend web frameworks. It focuses on the
-            architectural trade-offs that matter most in real systems:
-            <strong>security defaults</strong>,
-            <strong>performance characteristics</strong>,
-            <strong>operational maturity</strong>, and
-            <strong>how hard it is to keep the codebase clean at scale</strong>.
+            This guide is a framework-agnostic set of notes for choosing and
+            operating backend web frameworks. It focuses on the architectural
+            trade-offs that matter most in real systems: security defaults,
+            performance characteristics, operational maturity, and how hard it
+            is to keep the codebase clean at scale.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a
                 href="#web-apis-and-serving-architectural-comparison-flask-vs-django-vs-express-vs-aspnet-core"
-                >Web APIs and Serving — Architectural Comparison (Flask vs
+                >Web APIs and serving — architectural comparison (Flask vs
                 Django vs Express vs ASP.NET Core)</a
               >
             </li>
@@ -114,19 +112,19 @@
             <li><a href="#executive-summary">Executive Summary</a></li>
             <li>
               <a href="#technical-comparison-matrix"
-                >Technical Comparison Matrix</a
+                >Technical comparison matrix</a
               >
               <ul>
                 <li>
                   <a href="#practical-addendum-what-the-matrix-doesnt-show"
-                    >Practical Addendum (What the Matrix Doesn’t Show)</a
+                    >Practical addendum (what the matrix doesn't show)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#architectural-considerations"
-                >Architectural Considerations</a
+                >Architectural considerations</a
               >
               <ul>
                 <li><a href="#flask">Flask</a></li>
@@ -137,27 +135,27 @@
             </li>
             <li>
               <a href="#operational-reality-check-often-ignored"
-                >Operational Reality Check (Often Ignored)</a
+                >Operational reality check (often ignored)</a
               >
               <ul>
                 <li>
                   <a href="#1-configuration-and-secrets"
-                    >1) Configuration and Secrets</a
+                    >1) Configuration and secrets</a
                   >
                 </li>
                 <li><a href="#2-observability">2) Observability</a></li>
                 <li>
-                  <a href="#3-deployment-posture">3) Deployment Posture</a>
+                  <a href="#3-deployment-posture">3) Deployment posture</a>
                 </li>
-                <li><a href="#4-security-defaults">4) Security Defaults</a></li>
+                <li><a href="#4-security-defaults">4) Security defaults</a></li>
               </ul>
             </li>
             <li>
               <a href="#serving-patterns-rest-grpc-graphql-websockets"
-                >Serving Patterns (REST, gRPC, GraphQL, WebSockets)</a
+                >Serving patterns (REST, gRPC, GraphQL, WebSockets)</a
               >
               <ul>
-                <li><a href="#rest-most-common">REST (Most Common)</a></li>
+                <li><a href="#rest-most-common">REST (most common)</a></li>
                 <li>
                   <a href="#grpc-service-to-service"
                     >gRPC (Service-to-Service)</a
@@ -165,12 +163,12 @@
                 </li>
                 <li>
                   <a href="#graphql-client-driven-data"
-                    >GraphQL (Client-driven data)</a
+                    >GraphQL (client-driven data)</a
                   >
                 </li>
                 <li>
                   <a href="#websockets-sse-real-time"
-                    >WebSockets / SSE (Real-time)</a
+                    >WebSockets / SSE (real-time)</a
                   >
                 </li>
               </ul>
@@ -192,7 +190,7 @@
             </li>
           </ul>
           <hr />
-          <h2 id="executive-summary">Executive Summary</h2>
+          <h2 id="executive-summary">Executive summary</h2>
           <p>
             Selecting a backend framework is largely an exercise in choosing
             your preferred flavor of technical debt. Flask offers absolute
@@ -204,7 +202,7 @@
             of C#.
           </p>
           <hr />
-          <h2 id="technical-comparison-matrix">Technical Comparison Matrix</h2>
+          <h2 id="technical-comparison-matrix">Technical comparison matrix</h2>
           <table>
             <thead>
               <tr>
@@ -334,7 +332,7 @@
             </tbody>
           </table>
           <h3 id="practical-addendum-what-the-matrix-doesnt-show">
-            Practical Addendum (What the Matrix Doesn’t Show)
+            Practical addendum (what the matrix doesn't show)
           </h3>
           <table>
             <thead>
@@ -401,7 +399,7 @@
               </tr>
               <tr>
                 <td style="text-align: left">
-                  <strong>“Time-to-production”</strong>
+                  <strong>"Time-to-production"</strong>
                 </td>
                 <td style="text-align: left">Fast for small APIs</td>
                 <td style="text-align: left">Very fast for CRUD apps</td>
@@ -414,17 +412,16 @@
           </table>
           <hr />
           <h2 id="architectural-considerations">
-            Architectural Considerations
+            Architectural considerations
           </h2>
           <h3 id="flask">Flask</h3>
           <p>
             Flask provides the bare minimum required to route an HTTP request to
-            a Python function. It is exceptionally lightweight, making it a
-            favorite for wrapping computational or machine learning scripts into
-            an API. However, for large applications, the lack of built-in
-            structure means you must architect the entire application layer
-            yourself, which can lead to inconsistencies if best practices are
-            not strictly enforced.
+            a Python function. Its small core is useful for exposing
+            computational or machine learning scripts through an API. However,
+            for large applications, the lack of built-in structure means you
+            must architect the entire application layer yourself, which can lead
+            to inconsistencies if best practices are not strictly enforced.
           </p>
           <p><strong>What to do if Flask is your choice:</strong></p>
           <ul>
@@ -440,7 +437,7 @@
             </li>
             <li>
               Treat authentication/authorization as first-class requirements
-              (not “later”).
+              (not "later").
             </li>
             <li>
               Prefer ASGI (when appropriate) if you expect high concurrency or
@@ -472,7 +469,7 @@
               <code>select_related/prefetch_related</code> early.
             </li>
             <li>
-              Separate “domain logic” from views/serializers so the codebase can
+              Separate "domain logic" from views/serializers so the codebase can
               survive rewrites.
             </li>
           </ul>
@@ -481,7 +478,7 @@
             Node.js thrives in environments with high concurrent connections and
             heavy I/O operations, such as chat applications or real-time
             dashboards. Because it shares the same language as the frontend, it
-            allows for seamless full-stack TypeScript integration. However, its
+            allows for full-stack TypeScript integration. However, its
             single-threaded nature makes it a poor choice for CPU-heavy
             computational tasks, as a complex mathematical operation will block
             the entire event loop.
@@ -504,14 +501,11 @@
           </ul>
           <h3 id="aspnet-core">ASP.NET Core</h3>
           <p>
-            ASP.NET Core is a compiled, highly optimized framework that
-            regularly tops performance benchmarks. Having successfully shed its
-            legacy Windows-only reputation, it is now a cross-platform
-            powerhouse. It enforces strong architectural patterns (like
-            Dependency Injection and Interface-driven development) out of the
-            box. The learning curve is steep, but it produces highly
-            maintainable, strongly-typed codebases ideal for large engineering
-            teams.
+            ASP.NET Core is a compiled, cross-platform framework that performs
+            well in benchmarks. It supports dependency injection and
+            interface-based architecture out of the box. Its learning curve is
+            steep, but strong typing and architectural conventions help large
+            engineering teams maintain their codebases.
           </p>
           <p><strong>What to do if ASP.NET Core is your choice:</strong></p>
           <ul>
@@ -524,7 +518,7 @@
               to avoid thread pool starvation.
             </li>
             <li>
-              Use middleware intentionally; avoid “global magic” that makes
+              Use middleware intentionally; avoid "global magic" that makes
               request behavior unclear.
             </li>
             <li>
@@ -534,13 +528,13 @@
           </ul>
           <hr />
           <h2 id="operational-reality-check-often-ignored">
-            Operational Reality Check (Often Ignored)
+            Operational reality check (often ignored)
           </h2>
           <p>
-            Most “framework choice debates” forget that production systems fail
+            Most "framework choice debates" forget that production systems fail
             operationally, not academically.
           </p>
-          <h3 id="1-configuration-and-secrets">1) Configuration and Secrets</h3>
+          <h3 id="1-configuration-and-secrets">1) Configuration and secrets</h3>
           <ul>
             <li>
               <strong>Local vs prod parity</strong> matters more than framework:
@@ -563,7 +557,7 @@
               than one service)
             </li>
           </ul>
-          <h3 id="3-deployment-posture">3) Deployment Posture</h3>
+          <h3 id="3-deployment-posture">3) Deployment posture</h3>
           <ul>
             <li>
               <strong>Python</strong>: WSGI/ASGI servers + process managers +
@@ -578,20 +572,20 @@
               hosting models and health checks.
             </li>
           </ul>
-          <h3 id="4-security-defaults">4) Security Defaults</h3>
+          <h3 id="4-security-defaults">4) Security defaults</h3>
           <ul>
             <li>Strong defaults are real engineering value.</li>
             <li>
-              If your framework doesn’t provide them, you must budget the time
+              If your framework doesn't provide them, you must budget the time
               to implement them (auth, CSRF strategy, rate limiting, input
               validation, CORS).
             </li>
           </ul>
           <hr />
           <h2 id="serving-patterns-rest-grpc-graphql-websockets">
-            Serving Patterns (REST, gRPC, GraphQL, WebSockets)
+            Serving patterns (REST, gRPC, GraphQL, WebSockets)
           </h2>
-          <h3 id="rest-most-common">REST (Most Common)</h3>
+          <h3 id="rest-most-common">REST (most common)</h3>
           <ul>
             <li>Best when your domain fits resources and CRUD.</li>
             <li>
@@ -607,7 +601,7 @@
             </li>
             <li>Costs: more tooling, less browser-native friendliness.</li>
           </ul>
-          <h3 id="graphql-client-driven-data">GraphQL (Client-driven data)</h3>
+          <h3 id="graphql-client-driven-data">GraphQL (client-driven data)</h3>
           <ul>
             <li>
               Great when clients need flexible shapes and you want to avoid
@@ -615,7 +609,7 @@
             </li>
             <li>Risk: N+1 at the resolver layer if not carefully optimized.</li>
           </ul>
-          <h3 id="websockets-sse-real-time">WebSockets / SSE (Real-time)</h3>
+          <h3 id="websockets-sse-real-time">WebSockets / SSE (real-time)</h3>
           <ul>
             <li>Node shines here due to its event loop model.</li>
             <li>ASP.NET Core also has mature real-time options.</li>
@@ -626,7 +620,7 @@
           </ul>
           <hr />
           <h2 id="when-each-framework-wins-decision-heuristics">
-            When Each Framework Wins (Decision Heuristics)
+            When each framework wins (decision heuristics)
           </h2>
           <p>Use these as default heuristics (not religious truth):</p>
           <ul>
@@ -653,14 +647,14 @@
           <p>Two meta-rules:</p>
           <ol>
             <li>
-              Choose the framework that makes the “wrong thing” hardest for your
+              Choose the framework that makes the "wrong thing" hardest for your
               team.
             </li>
             <li>Prioritize operational maturity over micro-optimizations.</li>
           </ol>
           <hr />
           <h2 id="how-to-avoid-spaghetti-framework-agnostic-rules">
-            How to Avoid Spaghetti (Framework-Agnostic Rules)
+            How to avoid spaghetti (Framework-Agnostic rules)
           </h2>
           <ol>
             <li>
@@ -672,7 +666,7 @@
               same parsing rules in 10 places.
             </li>
             <li>
-              <strong>Enforce boundaries</strong>: controllers don’t talk
+              <strong>Enforce boundaries</strong>: controllers don't talk
               directly to the database.
             </li>
             <li>
@@ -690,7 +684,7 @@
           </ol>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>Flask Documentation: https://flask.palletsprojects.com/</li>

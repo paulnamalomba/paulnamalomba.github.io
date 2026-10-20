@@ -10,8 +10,8 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Memory-Aware Batching, Threading &amp; MPI Chunking for Large Database
-      Operations - Paul Namalomba
+      Memory-Aware batching, threading &amp; MPI chunking for large database
+      operations - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -52,8 +52,8 @@
           <h1
             id="memory-aware-batching-threading-mpi-chunking-for-large-database-operations"
           >
-            Memory-Aware Batching, Threading &amp; MPI Chunking for Large
-            Database Operations
+            Memory-Aware batching, threading &amp; MPI chunking for large
+            database operations
           </h1>
           <p>
             <br />
@@ -99,28 +99,19 @@
           </p>
           <h2 id="context">Context</h2>
           <p>
-            We innovated this idea at database-level for our platform (SEAT)
-            backend. That platform is written in Python with the Django
-            framework, and uses PostgreSQL as the database engine. We had to
-            perform bulk updates on tables with millions of rows, and found that
-            naive/server-native/pessimistic approaches either exhausted RAM,
-            underutilised the CPU, or saturated server disk I/O leading to quite
-            frankly, insane performance inefficiencies that trickle down into
-            affecting platform availability and uptime. This guide distills our
-            solution into a general-purpose algorithm that can be applied in any
-            language or database context. With examples given in both Python and
-            C++, and a detailed numerical breakdown of how the algorithm adapts
-            to different RAM profiles and data sizes, this guide is a practical
-            resource for developers facing similar challenges with large
-            database operations. The three-stage pipeline we present —
-            <em
-              >Memory-Aware Batching → Thread-Level Buffering → MPI Core-Level
-              Chunking</em
-            >
-            — is designed to dynamically adapt to available system resources,
-            ensuring efficient processing without overwhelming the server.
+            We developed this approach while working on the SEAT backend, which
+            uses Python, Django, and PostgreSQL. Bulk updates across millions of
+            rows exhausted RAM, left CPU capacity unused, or saturated disk I/O.
+            Those bottlenecks affected platform availability and uptime.
           </p>
-          <h2 id="foundational-assumptions">Foundational Assumptions</h2>
+          <p>
+            The pipeline has three stages: memory-aware batching, thread-level
+            buffering, and MPI core-level chunking. Each stage adjusts its
+            workload to the available resources. The numerical examples show how
+            batch and chunk sizes change with RAM and data volume. The Python
+            implementation is included; a C++ implementation is planned.
+          </p>
+          <h2 id="foundational-assumptions">Foundational assumptions</h2>
           <p>
             The algorithm presented here is a self-tuning algorithm with respect
             to the host machine characteristics: it reads total
@@ -165,26 +156,25 @@
           </table>
           <p>
             Each scenario is evaluated against three theoretical RAM profiles:
-            <strong>24 GB</strong>, <strong>8 GB</strong>, and
-            <strong>4 GB</strong>.
+            24 GB, 8 GB, and 4 GB.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a
                 href="#memory-aware-batching-threading-mpi-chunking-for-large-database-operations"
-                >Memory-Aware Batching, Threading \&amp; MPI Chunking for Large
-                Database Operations</a
+                >Memory-Aware batching, threading \&amp; MPI chunking for large
+                database operations</a
               >
             </li>
             <li><a href="#context">Context</a></li>
             <li>
-              <a href="#foundational-assumptions">Foundational Assumptions</a>
+              <a href="#foundational-assumptions">Foundational assumptions</a>
             </li>
             <li><a href="#contents">Contents</a></li>
             <li>
               <a href="#1-problem-statement-hardware-model"
-                >1) Problem Statement \&amp; Hardware Model</a
+                >1) Problem statement \&amp; hardware model</a
               >
             </li>
             <li>
@@ -214,28 +204,28 @@
             </li>
             <li>
               <a href="#7-worked-scenarios-numerical-breakdown"
-                >7) Worked Scenarios — Numerical Breakdown</a
+                >7) Worked scenarios — numerical breakdown</a
               >
               <ul>
                 <li>
                   <a
                     href="#scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows"
-                    >Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152
+                    >Scenario A — heavy update (10 GB / 5 KB rows → 2 097 152
                     rows)</a
                   >
                 </li>
                 <li>
                   <a
                     href="#scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows"
-                    >Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286
+                    >Scenario B — moderate update (3 GB / 20 KB rows → 157 286
                     rows)</a
                   >
                 </li>
                 <li>
                   <a
                     href="#discussion-why-does-total-io-time-converge-across-all-ram-sizes"
-                    >Discussion — Why Does Total I/O Time Converge Across All
-                    RAM Sizes?</a
+                    >Discussion — why does total I/O time converge across all
+                    RAM sizes?</a
                   >
                 </li>
               </ul>
@@ -247,14 +237,14 @@
             </li>
             <li>
               <a href="#9-performance-notes-pitfalls"
-                >9) Performance Notes \&amp; Pitfalls</a
+                >9) Performance notes \&amp; pitfalls</a
               >
             </li>
             <li><a href="#references">References</a></li>
           </ul>
           <hr />
           <h2 id="1-problem-statement-hardware-model">
-            1) Problem Statement &amp; Hardware Model
+            1) Problem statement &amp; hardware model
           </h2>
           <p>
             You have a database with <code>N</code> rows, each of size
@@ -312,7 +302,7 @@
           </div>
           <p>This is the ceiling the algorithm must never exceed.</p>
           <hr />
-          <h2 id="2-the-three-stage-pipeline">2) The Three-Stage Pipeline</h2>
+          <h2 id="2-the-three-stage-pipeline">2) The Three-Stage pipeline</h2>
           <div class="codehilite">
             <pre><span></span><code>┌─────────────────────────────────────────────────────────────────────┐
 │                        DATA SOURCE  (D bytes)                       │
@@ -374,7 +364,7 @@
           </table>
           <hr />
           <h2 id="3-stage-1-memory-aware-batch-sizing-algorithm">
-            3) Stage 1 — Memory-Aware Batch Sizing Algorithm
+            3) Stage 1 — Memory-Aware batch sizing algorithm
           </h2>
           <p>
             The batcher answers one question:
@@ -411,7 +401,7 @@ OUTPUT: batch_size (bytes), rows_per_batch, num_batches
           </p>
           <hr />
           <h2 id="4-stage-2-thread-level-buffer-partitioning">
-            4) Stage 2 — Thread-Level Buffer Partitioning
+            4) Stage 2 — Thread-Level buffer partitioning
           </h2>
           <p>
             Once a batch is loaded into RAM, it is subdivided into
@@ -470,7 +460,7 @@ OUTPUT: thread_buffer_size, rows_per_thread
           </p>
           <hr />
           <h2 id="5-stage-3-mpi-core-level-chunking">
-            5) Stage 3 — MPI Core-Level Chunking
+            5) Stage 3 — MPI Core-Level chunking
           </h2>
           <p>
             Each thread buffer is further decomposed into <code>C</code> chunks,
@@ -516,7 +506,7 @@ OUTPUT: thread_buffer_size, rows_per_thread
           </p>
           <hr />
           <h2 id="6-disk-io-constraint-nvme-throughput-gate">
-            6) Disk I/O Constraint — NVMe Throughput Gate
+            6) Disk I/O constraint — NVMe throughput gate
           </h2>
           <p>
             Even with unlimited RAM and cores, the disk is the final bottleneck.
@@ -574,7 +564,7 @@ if compute_time &lt; IO_time_estimate:
           </p>
           <hr />
           <h2 id="7-worked-scenarios-numerical-breakdown">
-            7) Worked Scenarios — Numerical Breakdown
+            7) Worked scenarios — numerical breakdown
           </h2>
           <p>
             Assumptions for all scenarios: - <code>RAM_os</code> = 1.5 GB
@@ -584,7 +574,7 @@ if compute_time &lt; IO_time_estimate:
             <code>thread_buffer_size</code> = 50 MB
           </p>
           <h3 id="scenario-a-heavy-update-10-gb-5-kb-rows-2-097-152-rows">
-            Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)
+            Scenario A — heavy update (10 GB / 5 KB rows → 2 097 152 rows)
           </h3>
           <table>
             <thead>
@@ -680,7 +670,7 @@ if compute_time &lt; IO_time_estimate:
             equaliser.
           </p>
           <h3 id="scenario-b-moderate-update-3-gb-20-kb-rows-157-286-rows">
-            Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)
+            Scenario B — moderate update (3 GB / 20 KB rows → 157 286 rows)
           </h3>
           <table>
             <thead>
@@ -737,7 +727,7 @@ if compute_time &lt; IO_time_estimate:
           <h3
             id="discussion-why-does-total-io-time-converge-across-all-ram-sizes"
           >
-            Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?
+            Discussion — why does total I/O time converge across all RAM sizes?
           </h3>
           <p>
             This is the most important insight in the entire guide. Notice that
@@ -881,7 +871,7 @@ if compute_time &lt; IO_time_estimate:
           </p>
           <hr />
           <h2 id="8-python-reference-implementation">
-            8) Python Reference Implementation
+            8) Python reference implementation
           </h2>
           <p>
             A minimal, platform-agnostic implementation demonstrating the
@@ -1230,7 +1220,7 @@ Notes:
 - The `process_chunk` function is the integration point — plug in your database driver calls there. -->
           <hr />
           <h2 id="9-performance-notes-pitfalls">
-            9) Performance Notes &amp; Pitfalls
+            9) Performance notes &amp; pitfalls
           </h2>
           <p>
             <strong>RAM management:</strong> - Always measure, never assume.
@@ -1281,11 +1271,11 @@ Notes:
             <code>COPY</code> (PostgreSQL) or
             <code>LOAD DATA INFILE</code> (MySQL) for bulk inserts — orders of
             magnitude faster than row-by-row <code>INSERT</code>. - Wrap each
-            batch in a single transaction. Committing per-row is
-            catastrophically slow. - Disable indexes and constraints during bulk
-            loads, rebuild afterwards. - Use <code>UNLOGGED</code> tables
-            (PostgreSQL) for intermediate staging if crash-safety is not
-            required during the load.
+            batch in a single transaction. Committing each row adds transaction
+            overhead. - Disable indexes and constraints during bulk loads,
+            rebuild afterwards. - Use <code>UNLOGGED</code> tables (PostgreSQL)
+            for intermediate staging if crash-safety is not required during the
+            load.
           </p>
           <hr />
           <h2 id="references">References</h2>

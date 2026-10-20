@@ -1,4 +1,4 @@
-# DOTNET BCrypt PowerUser Guide (C#)
+# DOTNET BCrypt PowerUser guide (C#)
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,25 +16,25 @@
 
 ## Overview
 
-BCrypt.Net-Next is a robust password hashing library for .NET implementing the OpenBSD bcrypt algorithm with adaptive cost factors for future-proof security. This guide covers password hashing, verification, work factor selection, salt generation, and secure defaults for authentication systems. Power users need to understand computational cost tuning, hash format compatibility, and migration strategies for production applications.
+BCrypt.Net-Next is a password hashing library for .NET implementing the OpenBSD bcrypt algorithm with adaptive cost factors that can be increased as hardware improves. This guide covers password hashing, verification, work factor selection, salt generation, and secure defaults for authentication systems. Production considerations include computational cost tuning, hash format compatibility, and migration strategies for production applications.
 
 ## Contents
 
-- [DOTNET BCrypt PowerUser Guide (C#)](#dotnet-bcrypt-poweruser-guide-c)
+- [DOTNET BCrypt PowerUser guide (C#)](#dotnet-bcrypt-poweruser-guide-c)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Basic Password Hashing and Verification](#basic-password-hashing-and-verification)
-    - [Custom Work Factor and Enhanced Entropy](#custom-work-factor-and-enhanced-entropy)
-    - [ASP.NET Core Authentication Implementation](#aspnet-core-authentication-implementation)
-    - [Password Migration and Rehashing Strategy](#password-migration-and-rehashing-strategy)
+    - [Basic password hashing and verification](#basic-password-hashing-and-verification)
+    - [Custom work factor and enhanced entropy](#custom-work-factor-and-enhanced-entropy)
+    - [ASP.NET Core authentication implementation](#aspnet-core-authentication-implementation)
+    - [Password migration and rehashing strategy](#password-migration-and-rehashing-strategy)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -45,7 +45,7 @@ BCrypt.Net-Next is a robust password hashing library for .NET implementing the O
 3. **Verify password**: `bool isValid = BCrypt.Net.BCrypt.Verify("password123", hash);`
 4. **Use in ASP.NET Core**: Add to dependency injection and use in user registration/login endpoints
 
-## Key Concepts
+## Key concepts
 
 - **Work Factor (Cost)**: Number of hashing rounds (2^cost); default is 11, recommended range 10-12 for production; higher values increase security but slow down hashing
 - **Salt**: Random data automatically generated and embedded in hash output; prevents rainbow table attacks and ensures identical passwords produce different hashes
@@ -54,7 +54,7 @@ BCrypt.Net-Next is a robust password hashing library for .NET implementing the O
 - **Verification**: Constant-time comparison prevents timing attacks; always use `Verify()` method instead of string comparison
 - **Hash Revision**: `$2a$` is standard; `$2b$` fixes rare edge cases; `$2y$` is PHP-specific; stick with `$2a$` or `$2b$` for interoperability
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **ASP.NET Core Dependency Injection Setup**:
 
@@ -94,7 +94,7 @@ public class BcryptPasswordHasher : IPasswordHasher
 - Store hashes in NVARCHAR(60) or VARCHAR(60) database columns
 - Implement password complexity requirements before hashing
 
-## Security Considerations
+## Security considerations
 
 1. **Work Factor Selection**: Balance security and performance; benchmark on production hardware to ensure <250ms hashing time
 2. **Timing Attacks**: Always use `BCrypt.Verify()` which implements constant-time comparison; never compare hash strings directly
@@ -158,7 +158,7 @@ public class UserService
 
 ## Examples
 
-### Basic Password Hashing and Verification
+### Basic password hashing and verification
 
 Hash user passwords during registration and verify them during login with automatic salt generation.
 
@@ -191,7 +191,7 @@ public class PasswordExample
 }
 ```
 
-### Custom Work Factor and Enhanced Entropy
+### Custom work factor and enhanced entropy
 
 Configure work factors for different security requirements and handle long passwords with enhanced entropy mode.
 
@@ -233,7 +233,7 @@ public class AdvancedHashingExample
 }
 ```
 
-### ASP.NET Core Authentication Implementation
+### ASP.NET core authentication implementation
 
 Implement complete user authentication with registration, login, and password change functionality in ASP.NET Core.
 
@@ -370,7 +370,7 @@ public record LoginRequest(string Email, string Password);
 public record ChangePasswordRequest(Guid UserId, string CurrentPassword, string NewPassword);
 ```
 
-### Password Migration and Rehashing Strategy
+### Password migration and rehashing strategy
 
 Migrate existing password hashes to updated work factors without forcing password resets for active users.
 
@@ -539,7 +539,7 @@ public class User
 }
 ```
 
-## Performance and Tuning
+## Performance and tuning
 
 **Work Factor Benchmarking**:
 
@@ -649,7 +649,7 @@ public class OptimizedPasswordService
 - **High-security systems**: 13-14 (~440-880ms)
 - **Offline/batch processing**: 15+ (multiple seconds)
 
-## References and Further Reading
+## References and further reading
 
 - [BCrypt.Net-Next GitHub Repository](https://github.com/BcryptNet/bcrypt.net) - Official library source code and documentation
 - [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) - Industry best practices for password hashing

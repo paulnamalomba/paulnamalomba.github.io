@@ -1,40 +1,40 @@
-# IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul
+# IoT sensors deep dive: Analog-to-Digital, protocols, and backhaul
 
 <br>
-**Last updated**: February 26, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: February 26, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Hardware](https://img.shields.io/badge/Hardware-Edge_Compute-orange.svg)](https://learn.microsoft.com/en-us/azure/iot-edge/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-This guide details the end-to-end architecture of Internet of Things (IoT) sensors, spanning from raw hardware data acquisition to cloud-based ETL pipelines. It covers the crucial mechanics of Analog-to-Digital Conversion (ADC), network telemetry protocols (MQTT vs. HTTP), internet backhaul strategies, and large-scale data tunneling.
+This guide follows IoT sensor data through hardware acquisition, network transport, and cloud ETL pipelines. It covers analog-to-digital conversion (ADC), MQTT and HTTP telemetry, internet backhaul, and large-scale data tunneling.
 
 ## Contents
 
-- [IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul](#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul)
+- [IoT sensors deep dive: Analog-to-Digital, protocols, and backhaul](#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul)
   - [Overview](#overview)
   - [Contents](#contents)
   - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
-    - [Linux (Debian/Ubuntu) Strategy](#linux-debianubuntu-strategy)
-    - [Windows Strategy](#windows-strategy)
-  - [2. Writing Basic Code/Scripts (ADC \& Telemetry)](#2-writing-basic-codescripts-adc--telemetry)
-    - [Analog-to-Digital Conversion (ADC)](#analog-to-digital-conversion-adc)
-    - [Network Protocols: MQTT vs. HTTP](#network-protocols-mqtt-vs-http)
-  - [3. Compile-time Commands (Firmware Generation)](#3-compile-time-commands-firmware-generation)
-  - [4. Runtime Commands (Daemonization \& ETL Backhaul)](#4-runtime-commands-daemonization--etl-backhaul)
-    - [Internet Backhaul](#internet-backhaul)
-    - [Tunneling Data Streams into ETL Pipelines](#tunneling-data-streams-into-etl-pipelines)
-  - [5. Debugging (Radio Silence \& Data Loss)](#5-debugging-radio-silence--data-loss)
-    - [Edge Debugging](#edge-debugging)
-    - [Backhaul Debugging](#backhaul-debugging)
+    - [Linux (Debian/Ubuntu) strategy](#linux-debianubuntu-strategy)
+    - [Windows strategy](#windows-strategy)
+  - [2. Writing basic Code/scripts (ADC \& telemetry)](#2-writing-basic-codescripts-adc--telemetry)
+    - [Analog-to-Digital conversion (ADC)](#analog-to-digital-conversion-adc)
+    - [Network protocols: MQTT vs. HTTP](#network-protocols-mqtt-vs-http)
+  - [3. Compile-time commands (firmware generation)](#3-compile-time-commands-firmware-generation)
+  - [4. Runtime commands (daemonization \& ETL backhaul)](#4-runtime-commands-daemonization--etl-backhaul)
+    - [Internet backhaul](#internet-backhaul)
+    - [Tunneling data streams into ETL pipelines](#tunneling-data-streams-into-etl-pipelines)
+  - [5. Debugging (radio silence \& data loss)](#5-debugging-radio-silence--data-loss)
+    - [Edge debugging](#edge-debugging)
+    - [Backhaul debugging](#backhaul-debugging)
 
 ---
 
@@ -42,7 +42,7 @@ This guide details the end-to-end architecture of Internet of Things (IoT) senso
 
 Setting up an IoT development environment requires configuring toolchains capable of cross-compiling code for embedded architectures (ARM, ESP32, AVR).
 
-### Linux (Debian/Ubuntu) Strategy
+### Linux (Debian/Ubuntu) strategy
 
 Linux provides the most predictable environment for embedded toolchains and serial communication.
 
@@ -57,7 +57,7 @@ sudo usermod -a -G dialout $USER
 pip3 install pyserial platformio
 ```
 
-### Windows Strategy
+### Windows strategy
 
 Windows development requires strict path management and driver installations (usually CP210x or CH340 for USB-to-UART bridges). Toolchains are best managed via PlatformIO within VS Code to bypass native environment pathing nightmares.
 
@@ -68,11 +68,11 @@ Windows development requires strict path management and driver installations (us
 
 ---
 
-## 2. Writing Basic Code/Scripts (ADC & Telemetry)
+## 2. Writing basic Code/scripts (ADC & telemetry)
 
 The code lifecycle of an edge sensor dictates reading raw analog voltage, converting it to a discrete digital value via an ADC, synthesizing a payload, and pushing it out via a network protocol like MQTT or HTTP.
 
-### Analog-to-Digital Conversion (ADC)
+### Analog-to-Digital conversion (ADC)
 
 An ADC maps continuous voltage variations to discrete integer values based on its bit resolution (e.g., a 12-bit ADC provides 4096 discrete steps).
 
@@ -101,7 +101,7 @@ void loop() {
 }
 ```
 
-### Network Protocols: MQTT vs. HTTP
+### Network protocols: MQTT vs. HTTP
 
 While HTTP requires significant overhead via headers and establishing new TCP sockets per request, **MQTT is the industry standard for IoT**. MQTT maintains a persistent, lightweight TCP connection to a broker, publishing tiny packets asynchronously on defined "topics."
 
@@ -133,7 +133,7 @@ client.loop_start()
 
 ---
 
-## 3. Compile-time Commands (Firmware Generation)
+## 3. Compile-time commands (firmware generation)
 
 Microcontrollers do not possess a runtime engine capable of interpreting raw source code. The code must be compiled, linked, and assembled into a `.bin` or `.hex` binary payload specific to the target silicon architecture.
 
@@ -154,13 +154,13 @@ _Pre-execution analysis:_ The compiler performs strict static typing and memory 
 
 ---
 
-## 4. Runtime Commands (Daemonization & ETL Backhaul)
+## 4. Runtime commands (daemonization & ETL backhaul)
 
 While the edge devices execute firmware continuously in an infinite `loop()`, the receiving end—the telemetry backhaul—must daemonize its ingestion services to catch the datastream without interruption.
 
-### Internet Backhaul
+### Internet backhaul
 
-Managing massive volumes of telemetry from edge gateways requires queueing systems. Services like Mosquitto (MQTT Broker) must run reliably under the system supervisor.
+Managing large volumes of telemetry from edge gateways requires queueing systems. Services like Mosquitto (MQTT Broker) must run reliably under the system supervisor.
 
 ```bash
 # Enable the MQTT broker daemon on Ubuntu
@@ -171,7 +171,7 @@ sudo systemctl start mosquitto
 netstat -tulpn | grep 1883
 ```
 
-### Tunneling Data Streams into ETL Pipelines
+### Tunneling data streams into ETL pipelines
 
 Once telemetry reaches the broker, a subscriber daemon immediately extracts, transforms, and loads (ETL) it into a timeseries database (like TimescaleDB or InfluxDB).
 
@@ -185,11 +185,11 @@ nohup python3 /opt/telemetry/ingestion_worker.py > /var/log/iot/ingestion.log 2>
 
 ---
 
-## 5. Debugging (Radio Silence & Data Loss)
+## 5. Debugging (radio silence & data loss)
 
 Because hardware fails without throwing stack traces to a terminal, debugging IoT infrastructure relies heavily on signal persistence tools and log aggregation. Nothing builds character quite like deciphering why an I2C bus locked up purely because a pull-up resistor was rated 1k Ohm instead of 4.7k Ohm.
 
-### Edge Debugging
+### Edge debugging
 
 - **Serial Monitors:** Hooking a USB cable directly to the UART bridge is your primary window into the microcontroller.
   ```bash
@@ -197,7 +197,7 @@ Because hardware fails without throwing stack traces to a terminal, debugging Io
   ```
 - **Common Pitfalls:** Ground loops introducing analog noise to the ADC, resulting in erratic sensor readings. Always tie sensor grounds directly to the microcontroller logic ground.
 
-### Backhaul Debugging
+### Backhaul debugging
 
 - **Topic Snooping:** Subscribe to the wildcard topic `#` to verify data is actually hitting the network layer.
   ```bash

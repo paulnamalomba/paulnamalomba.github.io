@@ -9,7 +9,7 @@
       name="description"
     />
     <meta content="#f2f0e9" name="theme-color" />
-    <title>Git + GitHub CLI (gh) PowerUser Guide - Paul Namalomba</title>
+    <title>Git + GitHub CLI (gh) PowerUser guide - Paul Namalomba</title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
   </head>
@@ -47,23 +47,23 @@
         </div>
         <article class="docs-content">
           <h1 id="git-github-cli-gh-poweruser-guide">
-            Git + GitHub CLI (gh) PowerUser Guide
+            Git + GitHub CLI (gh) PowerUser guide
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: March 01, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: March 01, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -87,23 +87,21 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            This guide is a practical deep dive into <strong>Git</strong> (core
-            version control) and
-            <strong>GitHub CLI (<code>gh</code>)</strong> (GitHub automation
-            from the terminal). It covers repository creation/deletion, local
-            and remote repo management, authentication (HTTPS/PAT, SSH, and
+            This guide is a practical deep dive into Git (core version control)
+            and GitHub CLI (<code>gh</code>) (GitHub automation from the
+            terminal). It covers repository creation/deletion, local and remote
+            repo management, authentication (HTTPS/PAT, SSH, and
             <code>gh</code>), professional collaboration workflows (feature
             branches, PRs, rebase strategies), recovery techniques
-            (<code>reflog</code>, resets, revert), and
-            <strong>CLI-driven deployments</strong> (Git push deployments,
-            remote servers via bare repos/hooks, and GitHub Actions triggered
-            and operated via <code>gh</code>).
+            (<code>reflog</code>, resets, revert), and CLI-driven deployments
+            (Git push deployments, remote servers via bare repos/hooks, and
+            GitHub Actions triggered and operated via <code>gh</code>).
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#git-github-cli-gh-poweruser-guide"
-                >Git + GitHub CLI (gh) PowerUser Guide</a
+                >Git + GitHub CLI (gh) PowerUser guide</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -122,7 +120,7 @@
             </li>
             <li>
               <a href="#2-identity-config-and-safety-defaults"
-                >2. Identity, Config, and Safety Defaults</a
+                >2. Identity, config, and safety defaults</a
               >
               <ul>
                 <li>
@@ -152,7 +150,7 @@
               <ul>
                 <li>
                   <a href="#31-git-over-https-pat-credential-manager"
-                    >3.1 Git over HTTPS (PAT) + Credential Manager</a
+                    >3.1 Git over HTTPS (PAT) + credential manager</a
                   >
                 </li>
                 <li>
@@ -169,7 +167,7 @@
             </li>
             <li>
               <a href="#4-repository-lifecycle-create-clone-delete-archive"
-                >4. Repository Lifecycle (Create, Clone, Delete, Archive)</a
+                >4. Repository lifecycle (create, clone, delete, archive)</a
               >
               <ul>
                 <li>
@@ -192,14 +190,14 @@
                 </li>
                 <li>
                   <a href="#45-archive-vs-delete-be-deliberate"
-                    >4.5 Archive vs Delete (be deliberate)</a
+                    >4.5 Archive vs delete (be deliberate)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#5-daily-git-workflow-addcommitlogdiff"
-                >5. Daily Git Workflow (Add/Commit/Log/Diff)</a
+                >5. Daily Git workflow (add/commit/log/diff)</a
               >
               <ul>
                 <li><a href="#51-inspect-state">5.1 Inspect state</a></li>
@@ -221,7 +219,7 @@
             </li>
             <li>
               <a href="#6-branching-and-integration-merge-rebase-cherry-pick"
-                >6. Branching and Integration (Merge, Rebase, Cherry-pick)</a
+                >6. Branching and integration (merge, rebase, cherry-pick)</a
               >
               <ul>
                 <li><a href="#61-branch-basics">6.1 Branch basics</a></li>
@@ -249,7 +247,7 @@
             </li>
             <li>
               <a href="#7-undo-recovery-and-forensics-restore-reset-reflog"
-                >7. Undo, Recovery, and Forensics (Restore, Reset, Reflog)</a
+                >7. Undo, recovery, and forensics (restore, reset, reflog)</a
               >
               <ul>
                 <li>
@@ -292,18 +290,18 @@
             <li>
               <a
                 href="#8-remotes-and-collaboration-fetchpullpush-forks-upstream"
-                >8. Remotes and Collaboration (Fetch/Pull/Push, Forks,
-                Upstream)</a
+                >8. Remotes and collaboration (fetch/pull/push, forks,
+                upstream)</a
               >
               <ul>
                 <li><a href="#81-remotes">8.1 Remotes</a></li>
-                <li><a href="#82-fetch-vs-pull">8.2 Fetch vs Pull</a></li>
+                <li><a href="#82-fetch-vs-pull">8.2 Fetch vs pull</a></li>
                 <li><a href="#83-fork-workflow">8.3 Fork workflow</a></li>
               </ul>
             </li>
             <li>
               <a href="#9-tags-releases-and-versioning"
-                >9. Tags, Releases, and Versioning</a
+                >9. Tags, releases, and versioning</a
               >
               <ul>
                 <li><a href="#91-tags">9.1 Tags</a></li>
@@ -315,8 +313,8 @@
             <li>
               <a
                 href="#10-advanced-git-worktrees-submodules-sparse-checkout-bisect"
-                >10. Advanced Git (Worktrees, Submodules, Sparse Checkout,
-                Bisect)</a
+                >10. Advanced Git (worktrees, submodules, sparse checkout,
+                bisect)</a
               >
               <ul>
                 <li>
@@ -358,12 +356,12 @@
             </li>
             <li>
               <a href="#11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow"
-                >11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api,
+                >11. GitHub CLI (gh) deep dive (repo, pr, issue, api,
                 workflow)</a
               >
               <ul>
                 <li><a href="#111-repo-operations">11.1 Repo operations</a></li>
-                <li><a href="#112-pull-requests">11.2 Pull Requests</a></li>
+                <li><a href="#112-pull-requests">11.2 Pull requests</a></li>
                 <li><a href="#113-issues">11.3 Issues</a></li>
                 <li>
                   <a href="#114-workflows-and-runs-github-actions"
@@ -390,8 +388,8 @@
             <li>
               <a
                 href="#12-cli-driven-deployment-git-push-remote-hooks-github-actions"
-                >12. CLI-Driven Deployment (Git Push, Remote Hooks, GitHub
-                Actions)</a
+                >12. CLI-Driven deployment (Git push, remote hooks, GitHub
+                actions)</a
               >
               <ul>
                 <li>
@@ -419,7 +417,7 @@
             </li>
             <li>
               <a href="#13-security-and-governance"
-                >13. Security and Governance</a
+                >13. Security and governance</a
               >
               <ul>
                 <li>
@@ -446,7 +444,7 @@
                 <li><a href="#detached-head">Detached HEAD</a></li>
                 <li>
                   <a href="#non-fast-forward-push-rejected"
-                    >“non-fast-forward” push rejected</a
+                    >"non-fast-forward" push rejected</a
                   >
                 </li>
                 <li>
@@ -547,7 +545,7 @@ gh<span class="w"> </span>--version
           </div>
           <hr />
           <h2 id="2-identity-config-and-safety-defaults">
-            2. Identity, Config, and Safety Defaults
+            2. Identity, config, and safety defaults
           </h2>
           <h3 id="set-user-identity-global">Set user identity (global)</h3>
           <div class="codehilite">
@@ -629,7 +627,7 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
             </li>
           </ul>
           <h3 id="31-git-over-https-pat-credential-manager">
-            3.1 Git over HTTPS (PAT) + Credential Manager
+            3.1 Git over HTTPS (PAT) + credential manager
           </h3>
           <p>
             GitHub no longer supports password auth for Git operations. Use: -
@@ -742,7 +740,7 @@ gh<span class="w"> </span>config<span class="w"> </span><span class="nb">set</sp
           </div>
           <hr />
           <h2 id="4-repository-lifecycle-create-clone-delete-archive">
-            4. Repository Lifecycle (Create, Clone, Delete, Archive)
+            4. Repository lifecycle (create, clone, delete, archive)
           </h2>
           <h3 id="41-create-a-local-repo">4.1 Create a local repo</h3>
           <div class="codehilite">
@@ -788,7 +786,7 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
 </code></pre>
           </div>
           <h3 id="45-archive-vs-delete-be-deliberate">
-            4.5 Archive vs Delete (be deliberate)
+            4.5 Archive vs delete (be deliberate)
           </h3>
           <p><strong>Archive (reversible, safer)</strong></p>
           <div class="codehilite">
@@ -809,7 +807,7 @@ gh<span class="w"> </span>repo<span class="w"> </span>create<span class="w"> </s
           </div>
           <hr />
           <h2 id="5-daily-git-workflow-addcommitlogdiff">
-            5. Daily Git Workflow (Add/Commit/Log/Diff)
+            5. Daily Git workflow (add/commit/log/diff)
           </h2>
           <h3 id="51-inspect-state">5.1 Inspect state</h3>
           <div class="codehilite">
@@ -894,7 +892,7 @@ git<span class="w"> </span>diff<span class="w"> </span>main..feature-branch
           </div>
           <hr />
           <h2 id="6-branching-and-integration-merge-rebase-cherry-pick">
-            6. Branching and Integration (Merge, Rebase, Cherry-pick)
+            6. Branching and integration (merge, rebase, cherry-pick)
           </h2>
           <h3 id="61-branch-basics">6.1 Branch basics</h3>
           <div class="codehilite">
@@ -958,7 +956,7 @@ git<span class="w"> </span>rebase<span class="w"> </span>origin/main
           </div>
           <p>
             <code>--force-with-lease</code> is safer than
-            <code>--force</code> because it refuses to overwrite someone else’s
+            <code>--force</code> because it refuses to overwrite someone else's
             new pushes.
           </p>
           <h3 id="64-cherry-pick-copy-a-commit">
@@ -991,7 +989,7 @@ git<span class="w"> </span>rebase<span class="w"> </span>--continue
           </div>
           <hr />
           <h2 id="7-undo-recovery-and-forensics-restore-reset-reflog">
-            7. Undo, Recovery, and Forensics (Restore, Reset, Reflog)
+            7. Undo, recovery, and forensics (restore, reset, reflog)
           </h2>
           <p>
             These are the commands that differentiate beginners from
@@ -1045,7 +1043,7 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
           </div>
           <h3 id="74-reflog-time-machine">7.4 Reflog (time machine)</h3>
           <p>
-            If you “lost” commits after a reset/rebase, reflog usually saves
+            If you "lost" commits after a reset/rebase, reflog usually saves
             you:
           </p>
           <div class="codehilite">
@@ -1101,7 +1099,7 @@ git<span class="w"> </span>stash<span class="w"> </span>pop
           </div>
           <hr />
           <h2 id="8-remotes-and-collaboration-fetchpullpush-forks-upstream">
-            8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)
+            8. Remotes and collaboration (fetch/pull/push, forks, upstream)
           </h2>
           <h3 id="81-remotes">8.1 Remotes</h3>
           <div class="codehilite">
@@ -1129,7 +1127,7 @@ git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w">
             <pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>--prune
 </code></pre>
           </div>
-          <h3 id="82-fetch-vs-pull">8.2 Fetch vs Pull</h3>
+          <h3 id="82-fetch-vs-pull">8.2 Fetch vs pull</h3>
           <ul>
             <li>
               <code>git fetch</code>: update your view of the remote; does not
@@ -1168,7 +1166,7 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
           </div>
           <hr />
           <h2 id="9-tags-releases-and-versioning">
-            9. Tags, Releases, and Versioning
+            9. Tags, releases, and versioning
           </h2>
           <h3 id="91-tags">9.1 Tags</h3>
           <p>Lightweight tag:</p>
@@ -1216,7 +1214,7 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
           </div>
           <hr />
           <h2 id="10-advanced-git-worktrees-submodules-sparse-checkout-bisect">
-            10. Advanced Git (Worktrees, Submodules, Sparse Checkout, Bisect)
+            10. Advanced Git (worktrees, submodules, sparse checkout, bisect)
           </h2>
           <h3 id="101-worktrees-multiple-branches-one-clone">
             10.1 Worktrees (multiple branches, one clone)
@@ -1324,7 +1322,7 @@ git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </sp
           </div>
           <hr />
           <h2 id="11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow">
-            11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)
+            11. GitHub CLI (gh) deep dive (repo, pr, issue, api, workflow)
           </h2>
           <h3 id="111-repo-operations">11.1 Repo operations</h3>
           <div class="codehilite">
@@ -1337,7 +1335,7 @@ gh<span class="w"> </span>repo<span class="w"> </span>list<span class="w"> </spa
 gh<span class="w"> </span>repo<span class="w"> </span>sync<span class="w"> </span>OWNER/FORK_REPO<span class="w"> </span><span class="c1"># sync a fork from upstream (default branch)</span>
 </code></pre>
           </div>
-          <h3 id="112-pull-requests">11.2 Pull Requests</h3>
+          <h3 id="112-pull-requests">11.2 Pull requests</h3>
           <div class="codehilite">
             <pre><span></span><code>gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span><span class="c1"># create PR from current branch</span>
 
@@ -1438,7 +1436,7 @@ gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span
             11.6 <code>gh api</code> (advanced automation)
           </h3>
           <p>
-            When <code>gh</code> doesn’t have a subcommand,
+            When <code>gh</code> doesn't have a subcommand,
             <code>gh api</code> gives you raw GitHub API access.
           </p>
           <p>Example: list repo webhooks:</p>
@@ -1467,7 +1465,7 @@ gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span
           <h2
             id="12-cli-driven-deployment-git-push-remote-hooks-github-actions"
           >
-            12. CLI-Driven Deployment (Git Push, Remote Hooks, GitHub Actions)
+            12. CLI-Driven deployment (Git push, remote hooks, GitHub Actions)
           </h2>
           <p>Deployment is usually one of these patterns:</p>
           <ol>
@@ -1599,7 +1597,7 @@ git<span class="w"> </span>push<span class="w"> </span>production<span class="w"
 </code></pre>
           </div>
           <hr />
-          <h2 id="13-security-and-governance">13. Security and Governance</h2>
+          <h2 id="13-security-and-governance">13. Security and governance</h2>
           <h3 id="avoid-committing-secrets">Avoid committing secrets</h3>
           <ul>
             <li>Add secrets to <code>.gitignore</code></li>
@@ -1638,7 +1636,7 @@ git<span class="w"> </span>commit<span class="w"> </span>-S<span class="w"> </sp
 </code></pre>
           </div>
           <p>
-            To get the “Verified” badge on GitHub, add the same public key under
+            To get the "Verified" badge on GitHub, add the same public key under
             GitHub Settings → SSH and GPG keys.
           </p>
           <h3 id="least-privilege">Least privilege</h3>
@@ -1677,9 +1675,9 @@ gh<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre>
           </div>
           <h3 id="non-fast-forward-push-rejected">
-            “non-fast-forward” push rejected
+            "non-fast-forward" push rejected
           </h3>
-          <p>You’re behind the remote:</p>
+          <p>You're behind the remote:</p>
           <div class="codehilite">
             <pre><span></span><code>git<span class="w"> </span>fetch<span class="w"> </span>origin
 git<span class="w"> </span>rebase<span class="w"> </span>origin/main
@@ -1701,7 +1699,7 @@ git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> <
           </div>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>Git documentation: https://git-scm.com/docs</li>

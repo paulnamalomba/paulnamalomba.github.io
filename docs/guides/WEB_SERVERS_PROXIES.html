@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Web Servers &amp; Proxies: Apache2, Nginx, and ngrok - Paul Namalomba
+      Web servers &amp; proxies: apache2, Nginx, and ngrok - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,23 +49,23 @@
         </div>
         <article class="docs-content">
           <h1 id="web-servers-proxies-apache2-nginx-and-ngrok">
-            Web Servers &amp; Proxies: Apache2, Nginx, and ngrok
+            Web servers &amp; proxies: apache2, Nginx, and ngrok
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: February 26, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: February 26, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -82,19 +82,18 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            A robust application exists exclusively at localhost until
-            explicitly routed through a web server or reverse proxy. This guide
-            addresses the foundational configuration syntax necessary for
-            architecting robust Virtual Hosts (<code>.conf</code> files),
-            routing localized traffic securely outside complex firewalls via
-            ngrok, and managing the fundamental daemonization of web traffic
-            controllers on Unix systems.
+            This guide covers exposing local applications through web servers
+            and reverse proxies. It explains virtual host configuration (<code
+              >.conf</code
+            >
+            files), forwarding local traffic through ngrok tunnels, and managing
+            web server daemons on Unix systems.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#web-servers-proxies-apache2-nginx-and-ngrok"
-                >Web Servers \&amp; Proxies: Apache2, Nginx, and ngrok</a
+                >Web servers \&amp; proxies: apache2, Nginx, and ngrok</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -106,70 +105,70 @@
               <ul>
                 <li>
                   <a href="#linux-environment-architecture"
-                    >Linux Environment Architecture</a
+                    >Linux environment architecture</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#2-writing-basic-codescripts-virtual-hosts-proxies"
-                >2. Writing Basic Code/Scripts (Virtual Hosts \&amp; Proxies)</a
+                >2. Writing basic Code/scripts (virtual hosts \&amp; proxies)</a
               >
               <ul>
                 <li>
                   <a href="#nginx-the-reverse-proxy"
-                    >Nginx: The Reverse Proxy</a
+                    >Nginx: the reverse proxy</a
                   >
                 </li>
                 <li>
                   <a href="#apache2-directory-virtual-hosting"
-                    >Apache2: Directory Virtual Hosting</a
+                    >Apache2: directory virtual hosting</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#3-compile-time-commands-syntax-verification"
-                >3. Compile-time Commands (Syntax Verification)</a
+                >3. Compile-time commands (syntax verification)</a
               >
               <ul>
-                <li><a href="#nginx-syntax-tester">Nginx Syntax Tester</a></li>
+                <li><a href="#nginx-syntax-tester">Nginx syntax tester</a></li>
                 <li>
-                  <a href="#apache2-syntax-tester">Apache2 Syntax Tester</a>
+                  <a href="#apache2-syntax-tester">Apache2 syntax tester</a>
                 </li>
               </ul>
             </li>
             <li>
               <a href="#4-runtime-commands-daemonization-ngrok"
-                >4. Runtime Commands (Daemonization \&amp; ngrok)</a
+                >4. Runtime commands (daemonization \&amp; ngrok)</a
               >
               <ul>
                 <li>
                   <a href="#service-management-nginx-apache"
-                    >Service Management (Nginx / Apache)</a
+                    >Service management (Nginx / Apache)</a
                   >
                 </li>
                 <li>
                   <a
                     href="#ngrok-tunneling-local-environments-to-the-public-web"
-                    >Ngrok: Tunneling Local Environments to the Public Web</a
+                    >Ngrok: tunneling local environments to the public web</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#5-debugging-502-bad-gateway-port-conflicts"
-                >5. Debugging (502 Bad Gateway \&amp; Port Conflicts)</a
+                >5. Debugging (502 bad gateway \&amp; port conflicts)</a
               >
               <ul>
                 <li>
                   <a href="#the-infamous-502-bad-gateway"
-                    >The Infamous 502 Bad Gateway</a
+                    >The infamous 502 bad gateway</a
                   >
                 </li>
                 <li>
                   <a href="#binding-tcp-port-conflicts"
-                    >Binding TCP Port Conflicts</a
+                    >Binding TCP port conflicts</a
                   >
                 </li>
               </ul>
@@ -183,7 +182,7 @@
             Production-grade web servers are primarily hosted on Unix variants.
           </p>
           <h3 id="linux-environment-architecture">
-            Linux Environment Architecture
+            Linux environment architecture
           </h3>
           <p>
             Nginx and Apache distribute their configurations across globally
@@ -211,7 +210,7 @@ ngrok<span class="w"> </span>config<span class="w"> </span>add-authtoken<span cl
           </p>
           <hr />
           <h2 id="2-writing-basic-codescripts-virtual-hosts-proxies">
-            2. Writing Basic Code/Scripts (Virtual Hosts &amp; Proxies)
+            2. Writing basic Code/scripts (virtual hosts &amp; proxies)
           </h2>
           <p>
             Web server configurations act strictly as traffic controllers. They
@@ -219,12 +218,11 @@ ngrok<span class="w"> </span>config<span class="w"> </span>add-authtoken<span cl
             domains to local unprivileged ports (Reverse Proxying) or serving
             static HTML/CSS files directly from disk.
           </p>
-          <h3 id="nginx-the-reverse-proxy">Nginx: The Reverse Proxy</h3>
+          <h3 id="nginx-the-reverse-proxy">Nginx: the reverse proxy</h3>
           <p>
-            Nginx dominates the industry via its extremely fast asynchronous
-            event-driven architecture. The standard syntax for heavily routing
-            public HTTP traffic on port 80 to a deeply nested Node.js or .NET
-            API running internally on port <code>5000</code>.
+            Nginx uses an asynchronous, event-driven architecture. The following
+            configuration routes public HTTP traffic on port 80 to a Node.js or
+            .NET API listening on port <code>5000</code>.
           </p>
           <p>
             <em
@@ -261,7 +259,7 @@ ngrok<span class="w"> </span>config<span class="w"> </span>add-authtoken<span cl
 </code></pre>
           </div>
           <h3 id="apache2-directory-virtual-hosting">
-            Apache2: Directory Virtual Hosting
+            Apache2: directory virtual hosting
           </h3>
           <p>
             Apache's process-driven architecture handles heavy
@@ -293,15 +291,15 @@ ngrok<span class="w"> </span>config<span class="w"> </span>add-authtoken<span cl
           </div>
           <hr />
           <h2 id="3-compile-time-commands-syntax-verification">
-            3. Compile-time Commands (Syntax Verification)
+            3. Compile-time commands (syntax verification)
           </h2>
           <p>
-            Neither server compiles into binary code, but both demand strict
-            preliminary configuration checks. Failing to verify configuration
-            syntax before restarting a daemon <em>will</em> result in
-            catastrophic downtime for all virtual hosts on the machine.
+            These commands check server configuration syntax; they do not
+            compile binary code. Check the configuration before restarting a
+            daemon. An invalid configuration can prevent the daemon from
+            starting and take its virtual hosts offline.
           </p>
-          <h3 id="nginx-syntax-tester">Nginx Syntax Tester</h3>
+          <h3 id="nginx-syntax-tester">Nginx syntax tester</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Symlink your configuration to enabled</span>
 sudo<span class="w"> </span>ln<span class="w"> </span>-s<span class="w"> </span>/etc/nginx/sites-available/api.example.com.conf<span class="w"> </span>/etc/nginx/sites-enabled/
@@ -314,7 +312,7 @@ sudo<span class="w"> </span>nginx<span class="w"> </span>-t
 <span class="c1"># nginx: configuration file /etc/nginx/nginx.conf test is successful</span>
 </code></pre>
           </div>
-          <h3 id="apache2-syntax-tester">Apache2 Syntax Tester</h3>
+          <h3 id="apache2-syntax-tester">Apache2 syntax tester</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Enable the site module natively</span>
 sudo<span class="w"> </span>a2ensite<span class="w"> </span>app.example.com.conf
@@ -325,14 +323,14 @@ sudo<span class="w"> </span>apache2ctl<span class="w"> </span>configtest
           </div>
           <hr />
           <h2 id="4-runtime-commands-daemonization-ngrok">
-            4. Runtime Commands (Daemonization &amp; ngrok)
+            4. Runtime commands (daemonization &amp; ngrok)
           </h2>
           <p>
-            Execution strictly involves signaling the system supervisor
+            Execution involves signaling the system supervisor
             (<code>systemd</code>) to reload the configuration into memory.
           </p>
           <h3 id="service-management-nginx-apache">
-            Service Management (Nginx / Apache)
+            Service management (Nginx / Apache)
           </h3>
           <p>
             Reloading gracefully switches configurations without dropping active
@@ -348,7 +346,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
 </code></pre>
           </div>
           <h3 id="ngrok-tunneling-local-environments-to-the-public-web">
-            Ngrok: Tunneling Local Environments to the Public Web
+            Ngrok: tunneling local environments to the public web
           </h3>
           <p>
             Exposing local Webhooks (Stripe, GitHub) or demonstrating APIs to
@@ -373,7 +371,7 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
           </p>
           <hr />
           <h2 id="5-debugging-502-bad-gateway-port-conflicts">
-            5. Debugging (502 Bad Gateway &amp; Port Conflicts)
+            5. Debugging (502 bad gateway &amp; port conflicts)
           </h2>
           <p>
             Reverse proxies orchestrating web traffic introduce significant
@@ -382,7 +380,7 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
             codebase.
           </p>
           <h3 id="the-infamous-502-bad-gateway">
-            The Infamous 502 Bad Gateway
+            The infamous 502 bad gateway
           </h3>
           <p>
             If Nginx returns a <code>502</code>, the Nginx daemon correctly
@@ -399,11 +397,11 @@ ngrok<span class="w"> </span>http<span class="w"> </span><span class="m">5000</s
               upstream"</code
             >
           </p>
-          <h3 id="binding-tcp-port-conflicts">Binding TCP Port Conflicts</h3>
+          <h3 id="binding-tcp-port-conflicts">Binding TCP port conflicts</h3>
           <p>
             You cannot run Apache2 and Nginx concurrently on port 80 or 443
             without nested reverse proxying. Attempting to start the second
-            service triggers a catastrophic binding failure. *
+            service triggers a port binding failure. *
             <strong>The Fix:</strong> Identify which daemon stole your ports
             natively via the kernel networking tables.
             <code

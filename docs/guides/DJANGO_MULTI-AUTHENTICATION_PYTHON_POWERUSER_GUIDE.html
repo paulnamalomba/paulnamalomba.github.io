@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      DJANGO Multi-Authentication PowerUser Guide (Python) - Paul Namalomba
+      DJANGO Multi-Authentication PowerUser guide (Python) - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <article class="docs-content">
           <h1 id="django-multi-authentication-poweruser-guide-python">
-            DJANGO Multi-Authentication PowerUser Guide (Python)
+            DJANGO Multi-Authentication PowerUser guide (Python)
           </h1>
           <p>
             <strong>Last updated</strong>: December 09, 2025<br />
@@ -83,18 +83,18 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            This guide focuses on implementing robust multi-authentication in
-            Django using Python: combining username/password, OAuth2/OIDC
-            (Google, Azure AD, GitHub), JWT for APIs, and optional SAML and MFA.
-            It shows how to structure settings, authentication backends, URL
-            routing, and views so that you can safely support multiple identity
-            providers in one project.
+            This guide focuses on implementing multi-authentication in Django
+            using Python: combining username/password, OAuth2/OIDC (Google,
+            Azure AD, GitHub), JWT for APIs, and optional SAML and MFA. It shows
+            how to structure settings, authentication backends, URL routing, and
+            views so that you can safely support multiple identity providers in
+            one project.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#django-multi-authentication-poweruser-guide-python"
-                >DJANGO Multi-Authentication PowerUser Guide (Python)</a
+                >DJANGO Multi-Authentication PowerUser guide (Python)</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -104,43 +104,43 @@
               <ul>
                 <li>
                   <a href="#install-and-scaffold-project"
-                    >Install and Scaffold Project</a
+                    >Install and scaffold project</a
                   >
                 </li>
-                <li><a href="#core-dependencies">Core Dependencies</a></li>
+                <li><a href="#core-dependencies">Core dependencies</a></li>
               </ul>
             </li>
             <li>
-              <a href="#key-concepts">Key Concepts</a>
+              <a href="#key-concepts">Key concepts</a>
               <ul>
                 <li>
-                  <a href="#authentication-backends">Authentication Backends</a>
+                  <a href="#authentication-backends">Authentication backends</a>
                 </li>
                 <li>
-                  <a href="#session-vs-token-auth">Session vs Token Auth</a>
+                  <a href="#session-vs-token-auth">Session vs token auth</a>
                 </li>
               </ul>
             </li>
             <li>
               <a href="#configuration-and-best-practices"
-                >Configuration and Best Practices</a
+                >Configuration and best practices</a
               >
               <ul>
-                <li><a href="#settings-layout">Settings Layout</a></li>
+                <li><a href="#settings-layout">Settings layout</a></li>
                 <li>
-                  <a href="#environment-variables">Environment Variables</a>
+                  <a href="#environment-variables">Environment variables</a>
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#security-considerations">Security Considerations</a>
+              <a href="#security-considerations">Security considerations</a>
               <ul>
                 <li>
                   <a href="#password-storage-and-mfa"
-                    >Password Storage and MFA</a
+                    >Password storage and MFA</a
                   >
                 </li>
-                <li><a href="#token-handling">Token Handling</a></li>
+                <li><a href="#token-handling">Token handling</a></li>
               </ul>
             </li>
             <li>
@@ -148,12 +148,12 @@
               <ul>
                 <li>
                   <a href="#example-1-base-auth-setup"
-                    >Example 1: Base Auth Setup</a
+                    >Example 1: base auth setup</a
                   >
                 </li>
                 <li>
                   <a href="#example-2-oauth2oidc-with-social-login"
-                    >Example 2: OAuth2/OIDC with Social Login</a
+                    >Example 2: OAuth2/OIDC with social login</a
                   >
                 </li>
                 <li>
@@ -171,17 +171,17 @@
               <ul>
                 <li>
                   <a href="#common-configuration-errors"
-                    >Common Configuration Errors</a
+                    >Common configuration errors</a
                   >
                 </li>
-                <li><a href="#debugging-tips">Debugging Tips</a></li>
+                <li><a href="#debugging-tips">Debugging tips</a></li>
               </ul>
             </li>
             <li>
-              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <a href="#performance-and-tuning">Performance and tuning</a>
               <ul>
                 <li>
-                  <a href="#scaling-auth-heavy-apis">Scaling Auth-heavy APIs</a>
+                  <a href="#scaling-auth-heavy-apis">Scaling auth-heavy APIs</a>
                 </li>
               </ul>
             </li>
@@ -194,7 +194,7 @@
           <hr />
           <h2 id="quickstart">Quickstart</h2>
           <h3 id="install-and-scaffold-project">
-            Install and Scaffold Project
+            Install and scaffold project
           </h3>
           <div class="codehilite">
             <pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
@@ -206,7 +206,7 @@ django-admin<span class="w"> </span>startproject<span class="w"> </span>config<s
 python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span class="w"> </span>accounts
 </code></pre>
           </div>
-          <h3 id="core-dependencies">Core Dependencies</h3>
+          <h3 id="core-dependencies">Core dependencies</h3>
           <p>For multi-auth, you commonly combine:</p>
           <div class="codehilite">
             <pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
@@ -217,8 +217,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
 </code></pre>
           </div>
           <hr />
-          <h2 id="key-concepts">Key Concepts</h2>
-          <h3 id="authentication-backends">Authentication Backends</h3>
+          <h2 id="key-concepts">Key concepts</h2>
+          <h3 id="authentication-backends">Authentication backends</h3>
           <p>In <code>settings.py</code>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="n">AUTHENTICATION_BACKENDS</span> <span class="o">=</span> <span class="p">[</span>
@@ -234,7 +234,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
               domain, flags).
             </li>
           </ul>
-          <h3 id="session-vs-token-auth">Session vs Token Auth</h3>
+          <h3 id="session-vs-token-auth">Session vs token auth</h3>
           <ul>
             <li>
               <strong>Session auth</strong>: Browser-centric; server-side
@@ -251,9 +251,9 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
           </ul>
           <hr />
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
-          <h3 id="settings-layout">Settings Layout</h3>
+          <h3 id="settings-layout">Settings layout</h3>
           <p>A typical production layout:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># config/settings/base.py</span>
@@ -313,7 +313,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
 <span class="p">}</span>
 </code></pre>
           </div>
-          <h3 id="environment-variables">Environment Variables</h3>
+          <h3 id="environment-variables">Environment variables</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">DJANGO_SECRET_KEY</span><span class="o">=</span><span class="s2">"&lt;long-random-secret&gt;"</span>
 <span class="nb">export</span><span class="w"> </span><span class="nv">DJANGO_DEBUG</span><span class="o">=</span><span class="s2">"False"</span>
@@ -333,11 +333,11 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
 </code></pre>
           </div>
           <hr />
-          <h2 id="security-considerations">Security Considerations</h2>
-          <h3 id="password-storage-and-mfa">Password Storage and MFA</h3>
+          <h2 id="security-considerations">Security considerations</h2>
+          <h3 id="password-storage-and-mfa">Password storage and MFA</h3>
           <ul>
             <li>
-              Always use Django’s built-in password hashing (<code>PBKDF2</code>
+              Always use Django's built-in password hashing (<code>PBKDF2</code>
               by default) or stronger algorithms (<code>Argon2</code>).
             </li>
             <li>
@@ -356,7 +356,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
 <span class="p">]</span>
 </code></pre>
           </div>
-          <h3 id="token-handling">Token Handling</h3>
+          <h3 id="token-handling">Token handling</h3>
           <ul>
             <li>
               Keep access tokens short-lived; use refresh tokens for continuity.
@@ -369,7 +369,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
           </ul>
           <hr />
           <h2 id="examples">Examples</h2>
-          <h3 id="example-1-base-auth-setup">Example 1: Base Auth Setup</h3>
+          <h3 id="example-1-base-auth-setup">Example 1: base auth setup</h3>
           <p><code>accounts/models.py</code>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractUser</span>
@@ -402,7 +402,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
 </code></pre>
           </div>
           <h3 id="example-2-oauth2oidc-with-social-login">
-            Example 2: OAuth2/OIDC with Social Login
+            Example 2: OAuth2/OIDC with social login
           </h3>
           <p><code>config/settings/base.py</code> (allauth configuration):</p>
           <div class="codehilite">
@@ -493,11 +493,11 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
           </div>
           <hr />
           <h2 id="troubleshooting">Troubleshooting</h2>
-          <h3 id="common-configuration-errors">Common Configuration Errors</h3>
+          <h3 id="common-configuration-errors">Common configuration errors</h3>
           <ul>
             <li>
               <strong>Improper redirect URIs</strong>: Ensure configured
-              redirect URIs at the IdP match Django’s URLs.
+              redirect URIs at the IdP match Django's URLs.
             </li>
             <li>
               <strong>CSRF token missing</strong>: For session-based auth,
@@ -509,10 +509,10 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
               signing keys match.
             </li>
           </ul>
-          <h3 id="debugging-tips">Debugging Tips</h3>
+          <h3 id="debugging-tips">Debugging tips</h3>
           <ul>
             <li>
-              Enable Django’s debug toolbar in non-production environments.
+              Enable Django's debug toolbar in non-production environments.
             </li>
             <li>
               Log authentication attempts and failures with enough context
@@ -524,8 +524,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
             </li>
           </ul>
           <hr />
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
-          <h3 id="scaling-auth-heavy-apis">Scaling Auth-heavy APIs</h3>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
+          <h3 id="scaling-auth-heavy-apis">Scaling auth-heavy APIs</h3>
           <ul>
             <li>Cache frequently accessed user/permission data in Redis.</li>
             <li>Use database connection pooling for high login volumes.</li>
@@ -536,7 +536,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span cla
           </ul>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>

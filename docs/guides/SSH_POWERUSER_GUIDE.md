@@ -1,4 +1,4 @@
-# SSH PowerUser Guide (PowerShell & Bash)
+# SSH PowerUser guide (PowerShell & Bash)
 
 **Last updated**: April 22, 2026<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -24,32 +24,32 @@ It is intentionally explicit about one point that often gets mangled in low-qual
 
 ## Contents
 
-- [SSH PowerUser Guide (PowerShell \& Bash)](#ssh-poweruser-guide-powershell--bash)
+- [SSH PowerUser guide (PowerShell \& Bash)](#ssh-poweruser-guide-powershell--bash)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-    - [1. What OpenSSH Components You Actually Need](#1-what-openssh-components-you-actually-need)
-    - [2. Install and Verify SSH on Windows and Linux](#2-install-and-verify-ssh-on-windows-and-linux)
-    - [3. Generate Modern Keys Correctly](#3-generate-modern-keys-correctly)
-    - [4. Install Public Keys for Passwordless Login](#4-install-public-keys-for-passwordless-login)
-    - [5. SSH Config Files That Remove Repetition Safely](#5-ssh-config-files-that-remove-repetition-safely)
-    - [6. Server-Side SSH Hardening](#6-server-side-ssh-hardening)
-    - [7. File Transfer with `scp` and `sftp`](#7-file-transfer-with-scp-and-sftp)
-    - [8. Advanced SSH Capabilities](#8-advanced-ssh-capabilities)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+    - [1. What OpenSSH components you actually need](#1-what-openssh-components-you-actually-need)
+    - [2. Install and verify SSH on Windows and Linux](#2-install-and-verify-ssh-on-windows-and-linux)
+    - [3. Generate modern keys correctly](#3-generate-modern-keys-correctly)
+    - [4. Install public keys for passwordless login](#4-install-public-keys-for-passwordless-login)
+    - [5. SSH config files that remove repetition safely](#5-ssh-config-files-that-remove-repetition-safely)
+    - [6. Server-Side SSH hardening](#6-server-side-ssh-hardening)
+    - [7. File transfer with `scp` and `sftp`](#7-file-transfer-with-scp-and-sftp)
+    - [8. Advanced SSH capabilities](#8-advanced-ssh-capabilities)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Example 1: Install OpenSSH on Windows](#example-1-install-openssh-on-windows)
-    - [Example 2: Install OpenSSH on Linux](#example-2-install-openssh-on-linux)
-    - [Example 3: Generate a Key and Load It into `ssh-agent`](#example-3-generate-a-key-and-load-it-into-ssh-agent)
-    - [Example 4: Install Your Public Key on a Remote Linux Host](#example-4-install-your-public-key-on-a-remote-linux-host)
-    - [Example 5: Build a Clean SSH Config](#example-5-build-a-clean-ssh-config)
-    - [Example 6: Upload and Download Files](#example-6-upload-and-download-files)
-    - [Example 7: Use a Jump Host and Port Forwarding](#example-7-use-a-jump-host-and-port-forwarding)
+    - [Example 1: install OpenSSH on Windows](#example-1-install-openssh-on-windows)
+    - [Example 2: install OpenSSH on Linux](#example-2-install-openssh-on-linux)
+    - [Example 3: generate a key and load it into `ssh-agent`](#example-3-generate-a-key-and-load-it-into-ssh-agent)
+    - [Example 4: install your public key on a remote Linux host](#example-4-install-your-public-key-on-a-remote-linux-host)
+    - [Example 5: build a clean SSH config](#example-5-build-a-clean-ssh-config)
+    - [Example 6: upload and download files](#example-6-upload-and-download-files)
+    - [Example 7: use a jump host and port forwarding](#example-7-use-a-jump-host-and-port-forwarding)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -62,7 +62,7 @@ It is intentionally explicit about one point that often gets mangled in low-qual
 5. Create a host alias in the SSH config so you only type `ssh myserver` instead of repeating host, user, port, and key flags.
 6. Once key login works, disable password authentication on servers that should not accept it.
 
-## Key Concepts
+## Key concepts
 
 - **OpenSSH client**: Provides `ssh`, `scp`, `sftp`, `ssh-keygen`, `ssh-agent`, and `ssh-add`.
 - **OpenSSH server**: Provides `sshd`, which accepts inbound SSH sessions.
@@ -78,9 +78,9 @@ It is intentionally explicit about one point that often gets mangled in low-qual
 - **Remote port forward**: Exposes a local service on the remote machine.
 - **Dynamic port forward**: Creates a SOCKS proxy over SSH.
 
-## Configuration and Best Practices
+## Configuration and best practices
 
-### 1. What OpenSSH Components You Actually Need
+### 1. What OpenSSH components you actually need
 
 There are two separate SSH roles and they should not be confused:
 
@@ -108,7 +108,7 @@ Useful file locations:
 | Admin authorized keys on Windows server | `C:\ProgramData\ssh\administrators_authorized_keys` may be used by default | Not applicable                                            |
 | Server config                           | `C:\ProgramData\ssh\sshd_config`                                           | `/etc/ssh/sshd_config` or `/etc/ssh/sshd_config.d/*.conf` |
 
-### 2. Install and Verify SSH on Windows and Linux
+### 2. Install and verify SSH on Windows and Linux
 
 On modern Windows 10/11 and Windows Server, OpenSSH is normally installed via Windows optional capabilities. PowerShell is the cleanest way to manage it.
 
@@ -133,7 +133,7 @@ On Linux, useful checks are:
 - `ss -tlnp | grep ':22'`
 - `ssh -V`
 
-### 3. Generate Modern Keys Correctly
+### 3. Generate modern keys correctly
 
 Prefer `ed25519` unless you have a legacy interoperability requirement.
 
@@ -157,7 +157,7 @@ Example naming patterns:
 - `id_ed25519_work` for a work-specific identity
 - `id_ed25519_backup` for backup automation
 
-### 4. Install Public Keys for Passwordless Login
+### 4. Install public keys for passwordless login
 
 The correct passwordless pattern is:
 
@@ -183,7 +183,7 @@ Windows server nuance:
 - that block often redirects key lookup to `C:\ProgramData\ssh\administrators_authorized_keys`
 - if your per-user `authorized_keys` file seems ignored, this is one of the first places to check
 
-### 5. SSH Config Files That Remove Repetition Safely
+### 5. SSH config files that remove repetition safely
 
 The SSH config file is where quality-of-life improvements live.
 
@@ -221,7 +221,7 @@ Bad uses of the config:
 - globally enabling agent forwarding
 - using a single wildcard block that silently affects every host on every network
 
-### 6. Server-Side SSH Hardening
+### 6. Server-Side SSH hardening
 
 Once key-based access is verified, harden the server.
 
@@ -253,7 +253,7 @@ Typical validation commands:
 - Linux: `sudo sshd -t`
 - Windows: `sshd -t`
 
-### 7. File Transfer with `scp` and `sftp`
+### 7. File transfer with `scp` and `sftp`
 
 `scp` and `sftp` ride on SSH and inherit the same config, identities, and host aliases.
 
@@ -269,7 +269,7 @@ Key habits:
 - if you use a host alias in the config, use that alias in `scp` and `sftp` too
 - custom ports use `-P` for `scp` and `-o Port=` or config entries for `sftp`
 
-### 8. Advanced SSH Capabilities
+### 8. Advanced SSH capabilities
 
 Once the basics are stable, SSH becomes a secure transport toolkit rather than just a remote shell.
 
@@ -280,14 +280,14 @@ Important advanced patterns:
 - **Remote forwarding**: `ssh -R 8080:127.0.0.1:8080 host`
 - **Dynamic forwarding**: `ssh -D 1080 host`
 - **Agent forwarding**: `ssh -A host`, use only when necessary and trusted
-- **Connection multiplexing**: powerful on Unix-like Bash clients via `ControlMaster` and `ControlPersist`
+- **Connection multiplexing**: available on Unix-like Bash clients via `ControlMaster` and `ControlPersist`
 
 Important accuracy note:
 
 - connection multiplexing is a Unix-centric OpenSSH optimization used heavily on Linux, macOS, and WSL clients
 - it is not a core day-to-day Windows PowerShell workflow, so do not build your main Windows setup around it unless you have verified the environment supports it cleanly
 
-## Security Considerations
+## Security considerations
 
 1. **Do not disable host-key verification globally**: `StrictHostKeyChecking no` plus `UserKnownHostsFile /dev/null` is a short-lived lab shortcut, not a production habit.
 2. **Do not try to automate plaintext passwords with config files**: OpenSSH is designed around keys, agents, and host aliases for a reason.
@@ -300,7 +300,7 @@ Important accuracy note:
 
 ## Examples
 
-### Example 1: Install OpenSSH on Windows
+### Example 1: install OpenSSH on Windows
 
 Use PowerShell as Administrator.
 
@@ -337,7 +337,7 @@ New-NetFirewallRule -Name 'OpenSSH-Server-In-TCP' `
   -LocalPort 22
 ```
 
-### Example 2: Install OpenSSH on Linux
+### Example 2: install OpenSSH on Linux
 
 Debian or Ubuntu style:
 
@@ -362,7 +362,7 @@ sudo systemctl status sshd --no-pager
 ss -tlnp | grep ':22'
 ```
 
-### Example 3: Generate a Key and Load It into `ssh-agent`
+### Example 3: generate a key and load it into `ssh-agent`
 
 PowerShell:
 
@@ -398,7 +398,7 @@ icacls "$HOME\.ssh" /inheritance:r /grant:r "$env:USERNAME:(OI)(CI)F" /grant:r "
 icacls "$HOME\.ssh\id_ed25519_work" /inheritance:r /grant:r "$env:USERNAME:R" /grant:r "SYSTEM:R"
 ```
 
-### Example 4: Install Your Public Key on a Remote Linux Host
+### Example 4: install your public key on a remote Linux host
 
 Bash with `ssh-copy-id`:
 
@@ -425,7 +425,7 @@ chmod 600 ~/.ssh/authorized_keys
 chown -R "$USER":"$USER" ~/.ssh
 ```
 
-### Example 5: Build a Clean SSH Config
+### Example 5: build a clean SSH config
 
 PowerShell path:
 
@@ -480,7 +480,7 @@ sftp app-prod
 ssh -T git-work
 ```
 
-### Example 6: Upload and Download Files
+### Example 6: upload and download files
 
 PowerShell upload to Linux host:
 
@@ -526,7 +526,7 @@ Custom SSH port example:
 scp -P 2222 ./backup.tar.gz admin@example.com:/srv/backups/
 ```
 
-### Example 7: Use a Jump Host and Port Forwarding
+### Example 7: use a jump host and port forwarding
 
 One-off jump host connection:
 
@@ -595,7 +595,7 @@ sudo sshd -t
 ss -tlnp | grep ':22'
 ```
 
-## Performance and Tuning
+## Performance and tuning
 
 - Use host aliases so repetitive workflows stay readable and consistent.
 - Use `ssh-agent` for human workflows instead of unencrypted private keys or no-passphrase habits.
@@ -614,7 +614,7 @@ Host slow-link
     ServerAliveInterval 30
 ```
 
-## References and Further Reading
+## References and further reading
 
 - OpenSSH manuals: <https://www.openssh.com/manual.html>
 - Microsoft OpenSSH for Windows documentation: <https://learn.microsoft.com/windows-server/administration/openssh/openssh-overview>

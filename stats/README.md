@@ -1,4 +1,4 @@
-# GitHub Stats Generation
+# GitHub stats generation
 
 This directory contains GitHub statistics generated automatically by GitHub Actions.
 
@@ -8,7 +8,7 @@ This directory contains GitHub statistics generated automatically by GitHub Acti
 - `top-languages.svg` - Top programming languages by repository count
 - `cache.json` - Cached API responses (1-hour TTL to respect rate limits)
 
-## How It Works
+## How it works
 
 1. **GitHub Action** (`.github/workflows/generate-stats.yml`) runs daily at midnight UTC
 2. **Python script** (`scripts/generate_stats.py`) fetches data from GitHub API
@@ -16,13 +16,13 @@ This directory contains GitHub statistics generated automatically by GitHub Acti
 4. **Auto-commit** pushes updated SVGs back to the repository
 5. **README** displays the SVGs via raw GitHub URLs
 
-## Rate Limiting
+## Rate limiting
 
 - Uses `GITHUB_TOKEN` for authenticated API calls (5,000 requests/hour)
 - Implements 1-hour cache to minimize API calls
 - Falls back to cached data if rate limit is reached
 
-## Manual Update
+## Manual update
 
 To manually trigger stats generation:
 
@@ -30,7 +30,7 @@ To manually trigger stats generation:
 2. Select **Generate GitHub Stats** workflow
 3. Click **Run workflow**
 
-## Local Testing
+## Local testing
 
 ```bash
 # Install dependencies

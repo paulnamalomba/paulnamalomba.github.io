@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Language Runtimes: Memory, Architectures, and Execution - Paul Namalomba
+      Language runtimes: memory, architectures, and execution - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <article class="docs-content">
           <h1 id="language-runtimes-memory-architectures-and-execution">
-            Language Runtimes: Memory, Architectures, and Execution
+            Language runtimes: memory, architectures, and execution
           </h1>
           <p>
             <br />
@@ -87,18 +87,16 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            A language's execution environment fundamentally dictates its memory
-            management and deployment constraints. This guide directly contrasts
-            the raw, bare-metal memory control of C++ Native Binaries against
-            the Managed Garbage Collection (GC) of the C# .NET Common Language
-            Runtime (CLR), and the interpreted Global Interpreter Lock (GIL)
-            limitations of the Python Virtual Machine.
+            A language's runtime determines how it manages memory and how
+            applications are deployed. This guide compares native C++ binaries,
+            garbage collection in the C# .NET Common Language Runtime (CLR), and
+            Python's interpreter and Global Interpreter Lock (GIL).
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#language-runtimes-memory-architectures-and-execution"
-                >Language Runtimes: Memory, Architectures, and Execution</a
+                >Language runtimes: memory, architectures, and execution</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -109,86 +107,86 @@
               >
               <ul>
                 <li>
-                  <a href="#c-native-compilation">C++ (Native Compilation)</a>
+                  <a href="#c-native-compilation">C++ (native compilation)</a>
                 </li>
                 <li>
-                  <a href="#c-net-managed-runtime">C# .NET (Managed Runtime)</a>
+                  <a href="#c-net-managed-runtime">C# .NET (managed runtime)</a>
                 </li>
                 <li>
                   <a href="#python-interpreted-virtual-machine"
-                    >Python (Interpreted Virtual Machine)</a
+                    >Python (interpreted virtual machine)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#2-writing-basic-codescripts-memory-operations"
-                >2. Writing Basic Code/Scripts (Memory Operations)</a
+                >2. Writing basic Code/scripts (memory operations)</a
               >
               <ul>
                 <li>
                   <a href="#c-manual-memory-management"
-                    >C++: Manual Memory Management</a
+                    >C++: manual memory management</a
                   >
                 </li>
                 <li>
                   <a href="#c-net-garbage-collected-gc"
-                    >C# .NET: Garbage Collected (GC)</a
+                    >C# .NET: garbage collected (GC)</a
                   >
                 </li>
                 <li>
                   <a href="#python-reference-counting-the-gil"
-                    >Python: Reference Counting \&amp; The GIL</a
+                    >Python: reference counting \&amp; the GIL</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#3-compile-time-commands-compilers-vs-vms"
-                >3. Compile-time Commands (Compilers vs VMs)</a
+                >3. Compile-time commands (compilers vs VMs)</a
               >
               <ul>
-                <li><a href="#c-native-binaries">C++: Native Binaries</a></li>
+                <li><a href="#c-native-binaries">C++: native binaries</a></li>
                 <li>
                   <a href="#c-net-intermediate-language-il"
-                    >C# .NET: Intermediate Language (IL)</a
+                    >C# .NET: intermediate language (IL)</a
                   >
                 </li>
                 <li>
                   <a href="#python-bytecode-caching"
-                    >Python: Bytecode caching</a
+                    >Python: bytecode caching</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#4-runtime-commands-execution-contexts"
-                >4. Runtime Commands (Execution Contexts)</a
+                >4. Runtime commands (execution contexts)</a
               >
               <ul>
-                <li><a href="#c-native-execution">C++ Native Execution</a></li>
-                <li><a href="#net-core-runtime">.NET Core Runtime</a></li>
+                <li><a href="#c-native-execution">C++ native execution</a></li>
+                <li><a href="#net-core-runtime">.NET Core runtime</a></li>
                 <li><a href="#python-vm">Python VM</a></li>
               </ul>
             </li>
             <li>
               <a href="#5-debugging-segfaults-vs-overflows"
-                >5. Debugging (Segfaults vs Overflows)</a
+                >5. Debugging (segfaults vs overflows)</a
               >
               <ul>
                 <li>
                   <a href="#c-the-segmentation-fault"
-                    >C++: The Segmentation Fault</a
+                    >C++: the segmentation fault</a
                   >
                 </li>
                 <li>
                   <a href="#c-stackoverflows-gc-pauses"
-                    >C#: StackOverflows \&amp; GC Pauses</a
+                    >C#: StackOverflows \&amp; GC pauses</a
                   >
                 </li>
                 <li>
                   <a href="#python-the-resource-bottleneck"
-                    >Python: The Resource Bottleneck</a
+                    >Python: the resource bottleneck</a
                   >
                 </li>
               </ul>
@@ -202,7 +200,7 @@
             Setting up an environment depends heavily on how close to the
             hardware the language operates.
           </p>
-          <h3 id="c-native-compilation">C++ (Native Compilation)</h3>
+          <h3 id="c-native-compilation">C++ (native compilation)</h3>
           <p>C++ compilers generate raw machine code.</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Linux: Install the GNU Compiler Collection (GCC) and Make</span>
@@ -220,7 +218,7 @@ sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> <
               the binary will crash instantly at launch.
             </li>
           </ul>
-          <h3 id="c-net-managed-runtime">C# .NET (Managed Runtime)</h3>
+          <h3 id="c-net-managed-runtime">C# .NET (managed runtime)</h3>
           <p>
             C# compiles to Intermediate Language (IL) targeting the .NET Core /
             8/9+ cross-platform runtime.
@@ -231,7 +229,7 @@ dotnet<span class="w"> </span>--version
 </code></pre>
           </div>
           <h3 id="python-interpreted-virtual-machine">
-            Python (Interpreted Virtual Machine)
+            Python (interpreted virtual machine)
           </h3>
           <p>
             Python requires an interpreter to read source code line-by-line via
@@ -244,18 +242,18 @@ python3<span class="w"> </span>--version
           </div>
           <hr />
           <h2 id="2-writing-basic-codescripts-memory-operations">
-            2. Writing Basic Code/Scripts (Memory Operations)
+            2. Writing basic Code/scripts (memory operations)
           </h2>
           <p>
             The foundational difference between these languages is who holds
             responsibility for cleaning up heap memory after a function
             completes.
           </p>
-          <h3 id="c-manual-memory-management">C++: Manual Memory Management</h3>
+          <h3 id="c-manual-memory-management">C++: manual memory management</h3>
           <p>
             In C++, invoking the <code>new</code> keyword reserves physical RAM
             bytes. It is entirely the developer's responsibility to delete those
-            bytes. Failure yields the infamous memory leak.
+            bytes. Failing to release the allocation causes a memory leak.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
@@ -280,7 +278,7 @@ python3<span class="w"> </span>--version
             >
           </p>
           <h3 id="c-net-garbage-collected-gc">
-            C# .NET: Garbage Collected (GC)
+            C# .NET: garbage collected (GC)
           </h3>
           <p>
             C# .NET abstracts raw memory. The CLR allocates objects inside
@@ -301,17 +299,17 @@ python3<span class="w"> </span>--version
 </code></pre>
           </div>
           <h3 id="python-reference-counting-the-gil">
-            Python: Reference Counting &amp; The GIL
+            Python: reference counting &amp; the GIL
           </h3>
           <p>
-            Python acts as an elegant C-wrapper. Memory is handled automatically
+            CPython exposes a C-based runtime. Memory is handled automatically
             via Reference Counting. When a variable's reference count drops to
             0, Python instantly frees it.
           </p>
           <p>
-            <em>Crucially</em>, Python is hindered by the Global Interpreter
-            Lock (GIL), a mutex preventing multiple OS threads from executing
-            Python bytecodes concurrently, forcing multithreading to behave
+            Python execution is constrained by the Global Interpreter Lock
+            (GIL), a mutex preventing multiple OS threads from executing Python
+            bytecodes concurrently, forcing multithreading to behave
             sequentially on a single CPU core.
           </p>
           <div class="codehilite">
@@ -323,12 +321,12 @@ python3<span class="w"> </span>--version
           </div>
           <hr />
           <h2 id="3-compile-time-commands-compilers-vs-vms">
-            3. Compile-time Commands (Compilers vs VMs)
+            3. Compile-time commands (compilers vs VMs)
           </h2>
           <p>
             The build phase prepares the code for its specific runtime context.
           </p>
-          <h3 id="c-native-binaries">C++: Native Binaries</h3>
+          <h3 id="c-native-binaries">C++: native binaries</h3>
           <p>
             C++ directly translates source text into Assembly and finally Binary
             Machine Code targeted strictly for the physical CPU architecture
@@ -346,7 +344,7 @@ g++<span class="w"> </span>-O3<span class="w"> </span>-o<span class="w"> </span>
             >
           </p>
           <h3 id="c-net-intermediate-language-il">
-            C# .NET: Intermediate Language (IL)
+            C# .NET: intermediate language (IL)
           </h3>
           <p>
             C# translates source into a generic bytecode known as MSIL. This is
@@ -363,7 +361,7 @@ dotnet<span class="w"> </span>build<span class="w"> </span>--configuration<span 
               (JIT) compiles the IL into native machine code.</em
             >
           </p>
-          <h3 id="python-bytecode-caching">Python: Bytecode caching</h3>
+          <h3 id="python-bytecode-caching">Python: bytecode caching</h3>
           <p>
             Python uses an interpreter. It skips explicit compilation entirely,
             though it automatically generates <code>.pyc</code> bytecode caches
@@ -376,13 +374,13 @@ python3<span class="w"> </span>my_script.py
           </div>
           <hr />
           <h2 id="4-runtime-commands-execution-contexts">
-            4. Runtime Commands (Execution Contexts)
+            4. Runtime commands (execution contexts)
           </h2>
           <p>
             How these programs are daemonized dictates their scaling
             capabilities.
           </p>
-          <h3 id="c-native-execution">C++ Native Execution</h3>
+          <h3 id="c-native-execution">C++ native execution</h3>
           <p>
             The binary runs directly against the OS Kernel. Interaction is
             blistering fast but highly unforgiving.
@@ -392,7 +390,7 @@ python3<span class="w"> </span>my_script.py
 ./server_binary<span class="w"> </span><span class="p">&amp;</span>
 </code></pre>
           </div>
-          <h3 id="net-core-runtime">.NET Core Runtime</h3>
+          <h3 id="net-core-runtime">.NET Core runtime</h3>
           <p>
             The <code>dotnet</code> executable creates the CLR environment,
             loads the application <code>.dll</code>, tracks garbage collection
@@ -405,10 +403,10 @@ dotnet<span class="w"> </span>run<span class="w"> </span>--project<span class="w
           </div>
           <h3 id="python-vm">Python VM</h3>
           <p>
-            The python interpreter boots, reserves a massive RAM block, locks
-            the GIL, and incrementally interprets logic. For heavy CPU tasks,
-            true parallelism requires Multi-processing (spawning entirely
-            separate physical Python interpreters) rather than multi-threading.
+            The python interpreter boots, allocates memory, locks the GIL, and
+            incrementally interprets logic. For heavy CPU tasks, true
+            parallelism requires Multi-processing (spawning separate Python
+            interpreters) rather than multi-threading.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Using Gunicorn to spawn multiple distinct Python process workers </span>
@@ -417,27 +415,23 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
           </div>
           <hr />
           <h2 id="5-debugging-segfaults-vs-overflows">
-            5. Debugging (Segfaults vs Overflows)
+            5. Debugging (segfaults vs overflows)
           </h2>
-          <p>
-            Each architecture's failure mode strictly reflects its memory
-            design.
-          </p>
-          <h3 id="c-the-segmentation-fault">C++: The Segmentation Fault</h3>
+          <p>Each architecture's failure mode reflects its memory design.</p>
+          <h3 id="c-the-segmentation-fault">C++: the segmentation fault</h3>
           <p>
             Attempting to read or write memory you haven't explicitly asked the
             OS for invokes a Kernel panic, crashing the process immediately. *
             <strong>The Tools:</strong> <code>gdb</code> (GNU Debugger) and
-            <code>valgrind</code>. Valgrind acts as a virtual CPU, tracking
-            every single memory allocation to pinpoint exactly which line leaked
-            bytes.
+            <code>valgrind</code>. Valgrind tracks memory allocations through a
+            virtual CPU to locate memory leaks.
           </p>
           <div class="codehilite">
             <pre><span></span><code>valgrind<span class="w"> </span>--leak-check<span class="o">=</span>full<span class="w"> </span>./server_binary
 </code></pre>
           </div>
           <h3 id="c-stackoverflows-gc-pauses">
-            C#: StackOverflows &amp; GC Pauses
+            C#: StackOverflows &amp; GC pauses
           </h3>
           <p>
             While memory leaks are rare, keeping a reference to an object in a
@@ -451,13 +445,13 @@ gunicorn<span class="w"> </span>app:main<span class="w"> </span>-w<span class="w
             Tools to analyze Gen2 Garbage Collection pauses.
           </p>
           <h3 id="python-the-resource-bottleneck">
-            Python: The Resource Bottleneck
+            Python: the resource bottleneck
           </h3>
           <p>
             Python rarely crashes the OS (because standard memory violations are
             caught safely by the interpreter). The danger lies in loading a
-            massive pandas DataFrame that exceeds RAM, prompting the OS OOM (Out
-            Of Memory) Killer to brutally terminate the
+            large pandas DataFrame that exceeds RAM, prompting the OS OOM (Out
+            Of Memory) Killer to terminate the
             <code>python3</code> process. *
             <strong>The Tools:</strong> Utilizing <code>cProfile</code> to
             determine exactly which line is trapping the GIL and blocking event

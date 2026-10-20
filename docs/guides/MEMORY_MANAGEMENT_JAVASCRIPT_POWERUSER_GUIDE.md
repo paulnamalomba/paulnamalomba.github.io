@@ -1,4 +1,4 @@
-# Memory Management and Execution on Windows — JavaScript (Node.js)
+# Memory management and execution on Windows — JavaScript (Node.js)
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -21,23 +21,23 @@ This guide explains how JavaScript handles memory and execution semantics on Win
 
 ## Contents
 
-- [Memory Management and Execution on Windows — JavaScript (Node.js)](#memory-management-and-execution-on-windows--javascript-nodejs)
+- [Memory management and execution on Windows — JavaScript (Node.js)](#memory-management-and-execution-on-windows--javascript-nodejs)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Windows — Run (PowerShell / Command Prompt)](#windows--run-powershell--command-prompt)
+  - [Windows — Run (PowerShell / command prompt)](#windows--run-powershell--command-prompt)
   - [Overview](#overview-1)
   - [Contents](#contents-1)
-  - [1) Data Structures — Primitive vs Object](#1-data-structures--primitive-vs-object)
-  - [2) Storage — V8 Heap \& Stack](#2-storage--v8-heap--stack)
-  - [3) Copy Semantics — Shallow vs Deep](#3-copy-semantics--shallow-vs-deep)
+  - [1) Data structures — primitive vs object](#1-data-structures--primitive-vs-object)
+  - [2) Storage — V8 heap \& stack](#2-storage--v8-heap--stack)
+  - [3) Copy semantics — shallow vs deep](#3-copy-semantics--shallow-vs-deep)
   - [4) Nullability — `undefined` vs `null`](#4-nullability--undefined-vs-null)
-  - [Examples — Runnable Snippets](#examples--runnable-snippets)
-  - [Windows / Node.js Specific Notes](#windows--nodejs-specific-notes)
+  - [Examples — runnable snippets](#examples--runnable-snippets)
+  - [Windows / Node.js specific notes](#windows--nodejs-specific-notes)
   - [References](#references)
 
 ---
 
-## Windows — Run (PowerShell / Command Prompt)
+## Windows — Run (PowerShell / command prompt)
 
 - Install Node.js and run `main.js`:
 
@@ -66,7 +66,7 @@ This guide explains how JavaScript (Node.js V8 engine) handles memory and execut
 
 ---
 
-## 1) Data Structures — Primitive vs Object
+## 1) Data structures — primitive vs object
 
 - Primitives: `number`, `string`, `boolean`, `null`, `undefined`, `symbol`, `bigint` — stored by value.
 - Objects: `Object`, `Array`, `Function` — stored as references on the V8 heap.
@@ -89,7 +89,7 @@ Notes:
 
 ---
 
-## 2) Storage — V8 Heap & Stack
+## 2) Storage — V8 heap & stack
 
 - Primitive values may be stored on the stack or in registers for performance.
 - Objects are allocated on the V8 heap, which is garbage-collected (Mark-and-Sweep, generational).
@@ -102,7 +102,7 @@ Windows/Node specifics:
 
 ---
 
-## 3) Copy Semantics — Shallow vs Deep
+## 3) Copy semantics — shallow vs deep
 
 - Assignment: primitives copied by value; objects copied by reference.
 - Shallow copy: `Object.assign({}, obj)` or spread `{...obj}` duplicates top-level properties. Nested objects still shared.
@@ -147,7 +147,7 @@ Best practices:
 
 ---
 
-## Examples — Runnable Snippets
+## Examples — runnable snippets
 
 `main.js`:
 
@@ -182,7 +182,7 @@ Run with `node main.js`.
 
 ---
 
-## Windows / Node.js Specific Notes
+## Windows / Node.js specific notes
 
 - Increase memory: `node --max-old-space-size=4096 main.js` (MB) for large data workloads.
 - Use `--trace-gc` and `--inspect` for GC and profiler diagnostics.

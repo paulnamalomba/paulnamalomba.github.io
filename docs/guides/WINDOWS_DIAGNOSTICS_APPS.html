@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Windows Application Diagnostics PowerUser Guide - Paul Namalomba
+      Windows application diagnostics PowerUser guide - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <article class="docs-content">
           <h1 id="windows-application-diagnostics-poweruser-guide">
-            Windows Application Diagnostics PowerUser Guide
+            Windows application diagnostics PowerUser guide
           </h1>
           <p>
             <strong>Last updated</strong>: March 30, 2026<br />
@@ -81,76 +81,73 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            When an application decides to take a collective vow of silence
-            across an entire lab, it is rarely a coincidence. Software is rarely
-            that maliciously organized without an underlying systemic
-            cause—usually a pushed update, an aggressive Endpoint Detection and
-            Response (EDR) policy, or a severed dependency.
+            When an application stops launching across a lab, look for a shared
+            cause: a recent update, an Endpoint Detection and Response (EDR)
+            policy, or a missing dependency.
           </p>
           <p>
-            Here is a comprehensive, system-level guide to diagnosing
-            application startup failures on Windows 10 and 11 environments,
-            structured to help you trace the failure from the surface GUI down
-            to the bare-metal system calls.
+            This guide traces application startup failures on Windows 10 and 11,
+            starting with GUI symptoms and logs and continuing to system-call
+            tracing.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#windows-application-diagnostics-poweruser-guide"
-                >Windows Application Diagnostics PowerUser Guide</a
+                >Windows application diagnostics PowerUser guide</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#contents">Contents</a></li>
             <li>
               <a href="#phase-1-graphical-user-interface-gui-methods"
-                >Phase 1: Graphical User Interface (GUI) Methods</a
+                >Phase 1: graphical user interface (GUI) methods</a
               >
               <ul>
                 <li>
                   <a href="#1-the-event-viewer-eventvwrmsc"
-                    >1. The Event Viewer (<code>eventvwr.msc</code>)</a
+                    >1. The event viewer (<code>eventvwr.msc</code>)</a
                   >
                 </li>
                 <li>
                   <a href="#2-reliability-monitor-perfmon-rel"
-                    >2. Reliability Monitor (<code>perfmon /rel</code>)</a
+                    >2. Reliability monitor (<code>perfmon /rel</code>)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#phase-2-command-line-methods-powershell-cmd"
-                >Phase 2: Command-Line Methods (PowerShell \&amp; CMD)</a
+                >Phase 2: Command-Line methods (PowerShell \&amp; CMD)</a
               >
               <ul>
                 <li>
                   <a href="#1-powershell-versions-51-and-75"
-                    >1. PowerShell (Versions 5.1 and 7.5+)</a
+                    >1. PowerShell (versions 5.1 and 7.5+)</a
                   >
                 </li>
                 <li>
-                  <a href="#2-command-prompt-cmd">2. Command Prompt (CMD)</a>
+                  <a href="#2-command-prompt-cmd">2. Command prompt (CMD)</a>
                 </li>
               </ul>
             </li>
             <li>
               <a href="#phase-3-system-level-diagnostics"
-                >Phase 3: System-Level Diagnostics</a
+                >Phase 3: System-Level diagnostics</a
               >
               <ul>
                 <li>
                   <a href="#1-sysinternals-process-monitor-procmon"
-                    >1. Sysinternals Process Monitor (Procmon)</a
+                    >1. Sysinternals process monitor (Procmon)</a
                   >
                 </li>
                 <li>
                   <a href="#2-advanced-checking-for-silent-edrantivirus-kills"
-                    >2. Advanced: Checking for Silent EDR/Antivirus Kills</a
+                    >2. Advanced: checking for silent EDR/antivirus kills</a
                   >
                 </li>
                 <li>
-                  <a href="#3-dependency-walking">3. Dependency Walking</a>
+                  <a href="#3-dependency-walking">3. Dependency walking</a>
                 </li>
               </ul>
             </li>
@@ -158,14 +155,14 @@
           </ul>
           <hr />
           <h2 id="phase-1-graphical-user-interface-gui-methods">
-            Phase 1: Graphical User Interface (GUI) Methods
+            Phase 1: graphical user interface (GUI) methods
           </h2>
           <p>
             For quick, visual correlation of failures, the built-in Windows
             diagnostic GUIs are the first port of call.
           </p>
           <h3 id="1-the-event-viewer-eventvwrmsc">
-            1. The Event Viewer (<code>eventvwr.msc</code>)
+            1. The event viewer (<code>eventvwr.msc</code>)
           </h3>
           <p>
             The Event Viewer remains the canonical source for application
@@ -196,8 +193,8 @@
                   bucket data).
                 </li>
                 <li>
-                  <code>Event ID 1026</code>: .NET Runtime Error (Crucial if the
-                  application is built on the .NET framework).
+                  <code>Event ID 1026</code>: .NET Runtime Error (Relevant if
+                  the application is built on the .NET framework).
                 </li>
               </ul>
             </li>
@@ -209,7 +206,7 @@
             </li>
           </ul>
           <h3 id="2-reliability-monitor-perfmon-rel">
-            2. Reliability Monitor (<code>perfmon /rel</code>)
+            2. Reliability monitor (<code>perfmon /rel</code>)
           </h3>
           <p>
             Reliability Monitor aggregates Event Viewer data into a timeline.
@@ -232,7 +229,7 @@
           </ul>
           <hr />
           <h2 id="phase-2-command-line-methods-powershell-cmd">
-            Phase 2: Command-Line Methods (PowerShell &amp; CMD)
+            Phase 2: Command-Line methods (PowerShell &amp; CMD)
           </h2>
           <p>
             For querying multiple lab machines remotely or scripting the
@@ -240,7 +237,7 @@
             clicking through the Event Viewer.
           </p>
           <h3 id="1-powershell-versions-51-and-75">
-            1. PowerShell (Versions 5.1 and 7.5+)
+            1. PowerShell (versions 5.1 and 7.5+)
           </h3>
           <p>
             The modern standard for event log querying in PowerShell is
@@ -275,7 +272,7 @@
             <pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="s2">"Microsoft-Windows-AppLocker/EXE and DLL"</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">LevelDisplayName</span> <span class="o">-eq</span> <span class="s2">"Error"</span><span class="p">}</span>
 </code></pre>
           </div>
-          <h3 id="2-command-prompt-cmd">2. Command Prompt (CMD)</h3>
+          <h3 id="2-command-prompt-cmd">2. Command prompt (CMD)</h3>
           <p>
             If PowerShell is restricted or unavailable,
             <code>wevtutil</code> (Windows Events Command Line Utility) is the
@@ -292,17 +289,17 @@
           </div>
           <hr />
           <h2 id="phase-3-system-level-diagnostics">
-            Phase 3: System-Level Diagnostics
+            Phase 3: System-Level diagnostics
           </h2>
           <p>
             When the Event Logs offer nothing but an unhelpful
             <code>0xc0000005</code> (Access Violation) or are entirely empty,
             the application is likely dying during early initialization before
-            it can write to the OS logs. This requires bringing out the heavy
-            telemetry.
+            it can write to the OS logs. Use system-call tracing to inspect the
+            initialization failure.
           </p>
           <h3 id="1-sysinternals-process-monitor-procmon">
-            1. Sysinternals Process Monitor (Procmon)
+            1. Sysinternals process monitor (Procmon)
           </h3>
           <p>
             Process Monitor captures real-time file system, Registry, and
@@ -316,8 +313,8 @@
               Sysinternals. Run as Administrator.
             </li>
             <li>
-              <strong>Filtering (Crucial):</strong> Procmon captures tens of
-              thousands of events per second. You must filter it immediately.
+              <strong>Filtering:</strong> Procmon captures tens of thousands of
+              events per second. You must filter it immediately.
               <ul>
                 <li>
                   Go to <strong>Filter</strong> &gt; <strong>Filter...</strong>
@@ -353,7 +350,7 @@
             </li>
           </ul>
           <h3 id="2-advanced-checking-for-silent-edrantivirus-kills">
-            2. Advanced: Checking for Silent EDR/Antivirus Kills
+            2. Advanced: checking for silent EDR/antivirus kills
           </h3>
           <p>
             Modern EDRs (CrowdStrike, SentinelOne, Microsoft Defender for
@@ -375,7 +372,7 @@
               taken).
             </li>
           </ul>
-          <h3 id="3-dependency-walking">3. Dependency Walking</h3>
+          <h3 id="3-dependency-walking">3. Dependency walking</h3>
           <p>
             If the application relies on specific runtime libraries (C++
             Redistributables, specific .NET framework versions) that were
@@ -387,7 +384,7 @@
             in red.
           </p>
           <hr />
-          <h2 id="lab-wide-outages">Lab-Wide Outages</h2>
+          <h2 id="lab-wide-outages">Lab-Wide outages</h2>
           <p>
             Because this is happening on <em>every</em> computer simultaneously,
             you can safely deprioritize local corruption (like a bad sector on a
@@ -401,12 +398,7 @@
             (<code>\\lab-server\app-configs\</code>) that has had its
             permissions altered. 3. <strong>Group Policy Updates:</strong> A
             newly pushed GPO has restricted execution policies or revoked read
-            access to a vital registry key.
-          </p>
-          <p>
-            Would you like me to provide a script that can remotely pull and
-            aggregate these specific event logs from a list of the lab computers
-            to pinpoint exactly when the failures began across the network?
+            access to a required registry key.
           </p>
         </article>
       </div>

@@ -1,4 +1,4 @@
-# DJANGO Multi-Authentication PowerUser Guide (PowerShell)
+# DJANGO Multi-Authentication PowerUser guide (PowerShell)
 
 **Last updated**: December 09, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -20,32 +20,32 @@ This guide targets PowerShell power users who operate and automate Django applic
 
 ## Contents
 
-- [DJANGO Multi-Authentication PowerUser Guide (PowerShell)](#django-multi-authentication-poweruser-guide-powershell)
+- [DJANGO Multi-Authentication PowerUser guide (PowerShell)](#django-multi-authentication-poweruser-guide-powershell)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
     - [Prerequisites](#prerequisites)
-    - [Core Automation Workflow](#core-automation-workflow)
-  - [Key Concepts](#key-concepts)
-    - [Authentication Layers](#authentication-layers)
-    - [Identity Providers](#identity-providers)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-    - [Environment and Secrets](#environment-and-secrets)
-    - [Reverse Proxy and TLS](#reverse-proxy-and-tls)
-  - [Security Considerations](#security-considerations)
-    - [Secrets and Certificates](#secrets-and-certificates)
-    - [Audit and Compliance](#audit-and-compliance)
+    - [Core automation workflow](#core-automation-workflow)
+  - [Key concepts](#key-concepts)
+    - [Authentication layers](#authentication-layers)
+    - [Identity providers](#identity-providers)
+  - [Configuration and best practices](#configuration-and-best-practices)
+    - [Environment and secrets](#environment-and-secrets)
+    - [Reverse proxy and TLS](#reverse-proxy-and-tls)
+  - [Security considerations](#security-considerations)
+    - [Secrets and certificates](#secrets-and-certificates)
+    - [Audit and compliance](#audit-and-compliance)
   - [Examples](#examples)
-    - [Example 1: Provision Django Environment](#example-1-provision-django-environment)
-    - [Example 2: Configure Environment for Multi-Auth](#example-2-configure-environment-for-multi-auth)
-    - [Example 3: Automate TLS with Certbot on WSL](#example-3-automate-tls-with-certbot-on-wsl)
-    - [Example 4: End-to-End Auth Health Check](#example-4-end-to-end-auth-health-check)
+    - [Example 1: provision Django environment](#example-1-provision-django-environment)
+    - [Example 2: configure environment for Multi-Auth](#example-2-configure-environment-for-multi-auth)
+    - [Example 3: automate TLS with Certbot on WSL](#example-3-automate-tls-with-certbot-on-wsl)
+    - [Example 4: End-to-End auth health check](#example-4-end-to-end-auth-health-check)
   - [Troubleshooting](#troubleshooting)
-    - [Common Operational Issues](#common-operational-issues)
-    - [Diagnostic Commands](#diagnostic-commands)
-  - [Performance and Tuning](#performance-and-tuning)
-    - [Scaling and Observability](#scaling-and-observability)
-  - [References and Further Reading](#references-and-further-reading)
+    - [Common operational issues](#common-operational-issues)
+    - [Diagnostic commands](#diagnostic-commands)
+  - [Performance and tuning](#performance-and-tuning)
+    - [Scaling and observability](#scaling-and-observability)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -59,7 +59,7 @@ This guide targets PowerShell power users who operate and automate Django applic
 - Optional: WSL2 with an Ubuntu distribution for Linux-native tooling (Certbot, Nginx)
 - Administrative privileges for service and firewall configuration
 
-### Core Automation Workflow
+### Core automation workflow
 
 1. **Clone the Django project** (with multi-auth already wired in):
 
@@ -100,27 +100,27 @@ python manage.py runserver 0.0.0.0:8000
 
 ---
 
-## Key Concepts
+## Key concepts
 
-### Authentication Layers
+### Authentication layers
 
 - **Django Auth Backend**: Core authentication system (`AUTHENTICATION_BACKENDS`) that supports multiple authenticators (model backend, remote user, social auth, custom backends).
 - **Session vs Token Auth**: Traditional Django session cookies vs stateless token-based auth (JWT/OAuth2) used by APIs.
 - **Multi-Provider Auth**: Supporting username/password plus one or more providers (Google, Microsoft, GitHub, corporate IdP) simultaneously.
 - **MFA/2FA**: Additional factor (TOTP, hardware keys, SMS) enforced at login or sensitive operations.
 
-### Identity Providers
+### Identity providers
 
 - **OAuth2/OIDC**: Standard protocols used by providers like Azure AD, Auth0, Okta, Google; Django typically integrates via libraries (e.g. `django-allauth`, `python-social-auth`).
 - **SAML**: XML-based protocol commonly used in enterprise SSO; may be integrated via `python3-saml` or similar libraries.
-- **Internal Users**: Users stored in Django’s database, often used for fallback or service accounts.
+- **Internal Users**: Users stored in Django's database, often used for fallback or service accounts.
 - **Service Accounts**: Non-human accounts used for automation/integration; should be tightly scoped and audited.
 
 ---
 
-## Configuration and Best Practices
+## Configuration and best practices
 
-### Environment and Secrets
+### Environment and secrets
 
 Store all authentication-related configuration in environment variables or secret stores, not in source code:
 
@@ -153,7 +153,7 @@ Best practices:
 - Keep provider configuration (client IDs, endpoints, scopes) in `.env` files that are never committed.
 - Script environment provisioning for consistency across machines.
 
-### Reverse Proxy and TLS
+### Reverse proxy and TLS
 
 Even on Windows, production Django deployments commonly run behind a reverse proxy (Nginx, Apache, IIS, or Azure App Service). Use PowerShell to manage configuration and certificates:
 
@@ -176,13 +176,13 @@ Best practices:
 - Terminate TLS at the reverse proxy and forward traffic to Django over HTTP on localhost.
 - Enforce `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`, and `CSRF_COOKIE_SECURE` in Django settings.
 - Use HSTS headers at the proxy level.
-- Automate certificate renewal (Let’s Encrypt via WSL/Certbot or a corporate PKI).
+- Automate certificate renewal (Let's Encrypt via WSL/Certbot or a corporate PKI).
 
 ---
 
-## Security Considerations
+## Security considerations
 
-### Secrets and Certificates
+### Secrets and certificates
 
 - Use strong, randomly generated `SECRET_KEY` values per environment.
 - Restrict who can read environment configuration files and credentials.
@@ -197,7 +197,7 @@ Get-ChildItem Cert:\CurrentUser\My | Select-Object `
     Sort-Object NotAfter
 ```
 
-### Audit and Compliance
+### Audit and compliance
 
 - Enable structured logging for authentication events (login success/failure, provider used, IP address).
 - Forward logs to a SIEM (Azure Monitor, Splunk, ELK) using agents or log shipping scripts.
@@ -207,7 +207,7 @@ Get-ChildItem Cert:\CurrentUser\My | Select-Object `
 
 ## Examples
 
-### Example 1: Provision Django Environment
+### Example 1: provision Django environment
 
 ```powershell
 param(
@@ -233,7 +233,7 @@ python manage.py migrate
 python manage.py collectstatic --noinput
 ```
 
-### Example 2: Configure Environment for Multi-Auth
+### Example 2: configure environment for Multi-Auth
 
 ```powershell
 function Set-DjangoMultiAuthEnvironment {
@@ -269,7 +269,7 @@ function Set-DjangoMultiAuthEnvironment {
 Set-DjangoMultiAuthEnvironment -Environment "staging"
 ```
 
-### Example 3: Automate TLS with Certbot on WSL
+### Example 3: automate TLS with Certbot on WSL
 
 ```powershell
 # Run Certbot inside WSL to obtain/renew certificates
@@ -288,7 +288,7 @@ wsl.exe "sudo cat $linuxKeyPath"  | Out-File "C:\temp\$domain-key.pem"  -Encodin
 # Import into Windows store or use with reverse proxy
 ```
 
-### Example 4: End-to-End Auth Health Check
+### Example 4: End-to-End auth health check
 
 ```powershell
 function Test-DjangoAuthHealth {
@@ -324,14 +324,14 @@ Test-DjangoAuthHealth -BaseUrl "https://django-app.example.com"
 
 ## Troubleshooting
 
-### Common Operational Issues
+### Common operational issues
 
 - **502/504 from reverse proxy**: Django gunicorn/uvicorn process not running or port mismatch.
 - **TLS handshake errors**: Certificate not trusted, hostname mismatch, or expired certificate.
 - **Login loop**: Incorrect redirect URIs configured at the identity provider.
 - **Provider-specific failures**: Client ID/secret mismatch or missing scopes.
 
-### Diagnostic Commands
+### Diagnostic commands
 
 ```powershell
 # Check listening ports
@@ -346,9 +346,9 @@ Get-Content .\logs\django-auth.log -Wait -Tail 50
 
 ---
 
-## Performance and Tuning
+## Performance and tuning
 
-### Scaling and Observability
+### Scaling and observability
 
 - Use a process manager (e.g. `supervisord`, `systemd` via WSL, or Windows services) for Django workers.
 - Scale horizontally with multiple worker processes behind a reverse proxy.
@@ -357,7 +357,7 @@ Get-Content .\logs\django-auth.log -Wait -Tail 50
 
 ---
 
-## References and Further Reading
+## References and further reading
 
 - Django Authentication: https://docs.djangoproject.com/en/4.2/topics/auth/
 - Django Deployment Checklist: https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/

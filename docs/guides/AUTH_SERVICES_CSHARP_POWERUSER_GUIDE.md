@@ -1,4 +1,4 @@
-# AUTH_SERVICES PowerUser Guide (C#)
+# AUTH_SERVICES PowerUser guide (C#)
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,7 +16,7 @@
 
 ## Overview
 
-Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols (OAuth2, OIDC, SAML) for securing distributed systems at scale. This guide covers implementation patterns in C# for integrating with identity providers, token validation, claim-based authorization, SCIM provisioning, certificate-based authentication, and audit logging. Power users need to understand token lifecycle management, refresh strategies, key rotation, HSM/KeyVault integration, and high-availability architectures for production authentication infrastructure.
+Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols (OAuth2, OIDC, SAML) for securing distributed systems at scale. This guide covers implementation patterns in C# for integrating with identity providers, token validation, claim-based authorization, SCIM provisioning, certificate-based authentication, and audit logging. Production considerations include token lifecycle management, refresh strategies, key rotation, HSM/KeyVault integration, and high-availability architectures for production authentication infrastructure.
 
 ## Contents
 
@@ -24,17 +24,17 @@ Enterprise authentication services provide centralized identity management, sing
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstarts](#quickstarts)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Example 1: OAuth 2.0 Authorization Code Flow with PKCE](#example-1-oauth-20-authorization-code-flow-with-pkce)
-    - [Example 2: Custom Claims Transformation and Policy-Based Authorization](#example-2-custom-claims-transformation-and-policy-based-authorization)
-    - [Example 3: SCIM 2.0 User Provisioning Implementation](#example-3-scim-20-user-provisioning-implementation)
-    - [Example 4: Token Refresh and Rotation Strategy](#example-4-token-refresh-and-rotation-strategy)
+    - [Example 1: OAuth 2.0 authorization Code flow with PKCE](#example-1-oauth-20-authorization-code-flow-with-pkce)
+    - [Example 2: custom claims transformation and Policy-Based authorization](#example-2-custom-claims-transformation-and-policy-based-authorization)
+    - [Example 3: SCIM 2.0 user provisioning implementation](#example-3-scim-20-user-provisioning-implementation)
+    - [Example 4: token refresh and rotation strategy](#example-4-token-refresh-and-rotation-strategy)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -47,7 +47,7 @@ Enterprise authentication services provide centralized identity management, sing
 5. **Validate tokens**: Use built-in token validation with issuer, audience, and signing key verification
 6. **Extract claims**: Access `User.Claims` in controllers for user identity, roles, and permissions
 
-## Key Concepts
+## Key concepts
 
 - **Identity Provider (IdP)**: Centralized service that authenticates users and issues tokens (Azure AD, Okta, Auth0, Keycloak, Ping Identity)
 - **OAuth 2.0**: Authorization framework enabling third-party applications to obtain limited access to resources; uses authorization code, client credentials, refresh token flows
@@ -61,7 +61,7 @@ Enterprise authentication services provide centralized identity management, sing
 - **Token Revocation**: Process of invalidating tokens before expiration; requires centralized token store or distributed cache for validation
 - **Certificate-Based Authentication**: Uses X.509 certificates for mutual TLS authentication; common in B2B scenarios and high-security environments
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 ```csharp
 // Program.cs - ASP.NET Core minimal API with Azure AD authentication
@@ -123,7 +123,7 @@ app.Run();
 - Store refresh tokens encrypted in database; rotate on each use
 - Use PKCE (Proof Key for Code Exchange) for public clients (SPAs, mobile)
 
-## Security Considerations
+## Security considerations
 
 **Token Security**:
 
@@ -242,7 +242,7 @@ builder.WebHost.ConfigureKestrel(options =>
 
 ## Examples
 
-### Example 1: OAuth 2.0 Authorization Code Flow with PKCE
+### Example 1: OAuth 2.0 authorization Code flow with PKCE
 
 ```csharp
 // OAuth2 client implementation with PKCE
@@ -363,7 +363,7 @@ public record TokenResponse(
 );
 ```
 
-### Example 2: Custom Claims Transformation and Policy-Based Authorization
+### Example 2: custom claims transformation and Policy-Based authorization
 
 ```csharp
 // Claims transformation service
@@ -456,7 +456,7 @@ public async Task<IActionResult> CreateUser([FromBody] UserDto user)
 }
 ```
 
-### Example 3: SCIM 2.0 User Provisioning Implementation
+### Example 3: SCIM 2.0 user provisioning implementation
 
 ```csharp
 // SCIM user provisioning controller
@@ -556,7 +556,7 @@ public record ScimPatchRequest(
 public record ScimPatchOperation(string Op, string Path, object Value);
 ```
 
-### Example 4: Token Refresh and Rotation Strategy
+### Example 4: token refresh and rotation strategy
 
 ```csharp
 // Token refresh service with rotation
@@ -746,7 +746,7 @@ openssl x509 -in certificate.pem -text -noout
 openssl verify -CAfile ca-bundle.pem certificate.pem
 ```
 
-## Performance and Tuning
+## Performance and tuning
 
 **Token Caching Strategy**:
 
@@ -874,7 +874,7 @@ public class AuthenticationMetrics
 - Implement background token refresh for long-running processes to avoid synchronous delays
 - Monitor IdP rate limits and implement backoff/retry strategies
 
-## References and Further Reading
+## References and further reading
 
 **Official Documentation**:
 

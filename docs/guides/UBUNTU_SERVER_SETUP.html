@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and
+      Ubuntu server 24.04 LTS on bare metal: SSD-Only install, networking, and
       SSH - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
@@ -52,24 +52,24 @@
           <h1
             id="ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh"
           >
-            Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking,
+            Ubuntu server 24.04 LTS on bare metal: SSD-Only install, networking,
             and SSH
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: April 05, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: April 05, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -112,8 +112,8 @@
             <li>
               <a
                 href="#ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh"
-                >Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install,
-                Networking, and SSH</a
+                >Ubuntu server 24.04 LTS on bare metal: SSD-Only install,
+                networking, and SSH</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -124,129 +124,129 @@
                 <li><a href="#prerequisites">Prerequisites</a></li>
                 <li>
                   <a href="#recommended-deployment-order"
-                    >Recommended Deployment Order</a
+                    >Recommended deployment order</a
                   >
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#key-concepts">Key Concepts</a>
+              <a href="#key-concepts">Key concepts</a>
               <ul>
                 <li>
                   <a href="#storage-strategy-for-this-machine"
-                    >Storage Strategy for This Machine</a
+                    >Storage strategy for this machine</a
                   >
                 </li>
                 <li>
                   <a href="#uefi-gpt-and-bootloader-placement"
-                    >UEFI, GPT, and Bootloader Placement</a
+                    >UEFI, GPT, and bootloader placement</a
                   >
                 </li>
                 <li>
                   <a href="#networking-model-on-ubuntu-server-2404"
-                    >Networking Model on Ubuntu Server 24.04</a
+                    >Networking model on Ubuntu server 24.04</a
                   >
                 </li>
                 <li>
                   <a href="#ssh-reception-vs-ssh-emission"
-                    >SSH Reception vs SSH Emission</a
+                    >SSH reception vs SSH emission</a
                   >
                 </li>
                 <li>
                   <a href="#nvidia-considerations-on-a-headless-server"
-                    >NVIDIA Considerations on a Headless Server</a
+                    >NVIDIA considerations on a headless server</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#configuration-and-best-practices"
-                >Configuration and Best Practices</a
+                >Configuration and best practices</a
               >
               <ul>
                 <li>
                   <a href="#1-pre-install-safety-and-data-preservation"
-                    >1. Pre-Install Safety and Data Preservation</a
+                    >1. Pre-Install safety and data preservation</a
                   >
                 </li>
                 <li>
                   <a href="#2-biosuefi-firmware-preparation"
-                    >2. BIOS/UEFI Firmware Preparation</a
+                    >2. BIOS/UEFI firmware preparation</a
                   >
                 </li>
                 <li>
                   <a href="#3-build-the-ubuntu-server-installer-usb"
-                    >3. Build the Ubuntu Server Installer USB</a
+                    >3. Build the Ubuntu server installer USB</a
                   >
                 </li>
                 <li>
                   <a href="#4-identify-the-correct-ssd-and-protect-the-hdd"
-                    >4. Identify the Correct SSD and Protect the HDD</a
+                    >4. Identify the correct SSD and protect the HDD</a
                   >
                 </li>
                 <li>
                   <a href="#5-install-ubuntu-server-onto-the-ssd-only"
-                    >5. Install Ubuntu Server onto the SSD Only</a
+                    >5. Install Ubuntu server onto the SSD only</a
                   >
                 </li>
                 <li>
                   <a href="#6-first-boot-os-baseline"
-                    >6. First Boot OS Baseline</a
+                    >6. First Boot OS baseline</a
                   >
                 </li>
                 <li>
                   <a href="#7-networking-setup-with-netplan"
-                    >7. Networking Setup with Netplan</a
+                    >7. Networking setup with Netplan</a
                   >
                 </li>
                 <li>
                   <a href="#dhcp-with-router-reservation"
-                    >DHCP with Router Reservation</a
+                    >DHCP with router reservation</a
                   >
                 </li>
                 <li>
                   <a href="#static-address-in-netplan"
-                    >Static Address in Netplan</a
+                    >Static address in Netplan</a
                   >
                 </li>
                 <li>
                   <a href="#8-ssh-server-setup-and-hardening"
-                    >8. SSH Server Setup and Hardening</a
+                    >8. SSH server setup and hardening</a
                   >
                 </li>
                 <li>
                   <a href="#9-ssh-client-setup-for-outbound-connections"
-                    >9. SSH Client Setup for Outbound Connections</a
+                    >9. SSH client setup for outbound connections</a
                   >
                 </li>
                 <li>
                   <a href="#10-access-the-preserved-hdd-safely-after-install"
-                    >10. Access the Preserved HDD Safely After Install</a
+                    >10. Access the preserved HDD safely after install</a
                   >
                 </li>
                 <li>
                   <a href="#11-optional-nvidia-driver-and-cuda-preparation"
-                    >11. Optional NVIDIA Driver and CUDA Preparation</a
+                    >11. Optional NVIDIA driver and CUDA preparation</a
                   >
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#security-considerations">Security Considerations</a>
+              <a href="#security-considerations">Security considerations</a>
               <ul>
                 <li>
                   <a href="#physical-and-firmware-security"
-                    >Physical and Firmware Security</a
+                    >Physical and firmware security</a
                   >
                 </li>
                 <li>
                   <a href="#os-and-service-hardening"
-                    >OS and Service Hardening</a
+                    >OS and service hardening</a
                   >
                 </li>
                 <li>
                   <a href="#network-exposure-strategy"
-                    >Network Exposure Strategy</a
+                    >Network exposure strategy</a
                   >
                 </li>
               </ul>
@@ -256,28 +256,28 @@
               <ul>
                 <li>
                   <a href="#example-1-disk-inventory-before-installation"
-                    >Example 1: Disk Inventory Before Installation</a
+                    >Example 1: disk inventory before installation</a
                   >
                 </li>
                 <li>
                   <a href="#example-2-static-netplan-configuration"
-                    >Example 2: Static Netplan Configuration</a
+                    >Example 2: static Netplan configuration</a
                   >
                 </li>
                 <li>
                   <a href="#example-3-ssh-hardening-drop-in"
-                    >Example 3: SSH Hardening Drop-In</a
+                    >Example 3: SSH hardening Drop-In</a
                   >
                 </li>
                 <li>
                   <a href="#example-4-mount-the-preserved-hdd-read-only-first"
-                    >Example 4: Mount the Preserved HDD Read-Only First</a
+                    >Example 4: mount the preserved HDD Read-Only first</a
                   >
                 </li>
                 <li>
                   <a
                     href="#example-5-install-nvidia-drivers-on-a-headless-server"
-                    >Example 5: Install NVIDIA Drivers on a Headless Server</a
+                    >Example 5: install NVIDIA drivers on a headless server</a
                   >
                 </li>
               </ul>
@@ -287,13 +287,13 @@
               <ul>
                 <li>
                   <a href="#installer-and-boot-problems"
-                    >Installer and Boot Problems</a
+                    >Installer and Boot problems</a
                   >
                 </li>
                 <li>
                   <a
                     href="#problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd"
-                    >Problem: The installer sees both disks and you are not sure
+                    >Problem: the installer sees both disks and you are not sure
                     which one is the SSD</a
                   >
                 </li>
@@ -307,51 +307,51 @@
                 <li>
                   <a
                     href="#problem-firmware-says-no-bootable-device-after-installation"
-                    >Problem: Firmware says no bootable device after
+                    >Problem: firmware says no bootable device after
                     installation</a
                   >
                 </li>
-                <li><a href="#networking-problems">Networking Problems</a></li>
+                <li><a href="#networking-problems">Networking problems</a></li>
                 <li>
                   <a href="#problem-network-is-down-after-editing-netplan"
-                    >Problem: Network is down after editing Netplan</a
+                    >Problem: network is down after editing Netplan</a
                   >
                 </li>
                 <li>
                   <a href="#problem-the-host-can-ping-ips-but-not-domain-names"
-                    >Problem: The host can ping IPs but not domain names</a
+                    >Problem: the host can ping IPs but not domain names</a
                   >
                 </li>
                 <li>
                   <a href="#problem-link-is-unstable-or-slow"
-                    >Problem: Link is unstable or slow</a
+                    >Problem: link is unstable or slow</a
                   >
                 </li>
-                <li><a href="#ssh-problems">SSH Problems</a></li>
+                <li><a href="#ssh-problems">SSH problems</a></li>
                 <li>
                   <a href="#problem-connection-refused-on-port-22"
-                    >Problem: Connection refused on port 22</a
+                    >Problem: connection refused on port 22</a
                   >
                 </li>
                 <li>
                   <a href="#problem-permission-denied-publickey"
-                    >Problem: Permission denied (publickey)</a
+                    >Problem: permission denied (publickey)</a
                   >
                 </li>
                 <li>
                   <a href="#problem-you-locked-yourself-out-after-hardening-ssh"
-                    >Problem: You locked yourself out after hardening SSH</a
+                    >Problem: you locked yourself out after hardening SSH</a
                   >
                 </li>
                 <li>
                   <a href="#disk-and-filesystem-problems"
-                    >Disk and Filesystem Problems</a
+                    >Disk and filesystem problems</a
                   >
                 </li>
                 <li>
                   <a
                     href="#problem-preserved-ntfs-partition-will-not-mount-read-write"
-                    >Problem: Preserved NTFS partition will not mount
+                    >Problem: preserved NTFS partition will not mount
                     read-write</a
                   >
                 </li>
@@ -363,44 +363,44 @@
                 <li>
                   <a
                     href="#problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd"
-                    >Problem: Root filesystem is unexpectedly full on a 128 GB
+                    >Problem: root filesystem is unexpectedly full on a 128 GB
                     SSD</a
                   >
                 </li>
                 <li>
                   <a href="#nvidia-and-secure-boot-problems"
-                    >NVIDIA and Secure Boot Problems</a
+                    >NVIDIA and secure Boot problems</a
                   >
                 </li>
                 <li>
                   <a href="#problem-driver-installed-but-nvidia-smi-fails"
-                    >Problem: Driver installed but
+                    >Problem: driver installed but
                     <code>nvidia-smi</code> fails</a
                   >
                 </li>
                 <li>
                   <a
                     href="#problem-black-screen-or-unstable-console-after-gpu-driver-changes"
-                    >Problem: Black screen or unstable console after GPU driver
+                    >Problem: black screen or unstable console after GPU driver
                     changes</a
                   >
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <a href="#performance-and-tuning">Performance and tuning</a>
               <ul>
                 <li>
-                  <a href="#storage-and-ssd-hygiene">Storage and SSD Hygiene</a>
+                  <a href="#storage-and-ssd-hygiene">Storage and SSD hygiene</a>
                 </li>
                 <li>
                   <a href="#memory-swap-and-logging"
-                    >Memory, Swap, and Logging</a
+                    >Memory, swap, and logging</a
                   >
                 </li>
                 <li>
                   <a href="#network-stability-and-throughput"
-                    >Network Stability and Throughput</a
+                    >Network stability and throughput</a
                   >
                 </li>
               </ul>
@@ -437,7 +437,7 @@
             </li>
           </ul>
           <h3 id="recommended-deployment-order">
-            Recommended Deployment Order
+            Recommended deployment order
           </h3>
           <ol>
             <li>Back up anything needed from the SSD.</li>
@@ -468,9 +468,9 @@
             </li>
           </ol>
           <hr />
-          <h2 id="key-concepts">Key Concepts</h2>
+          <h2 id="key-concepts">Key concepts</h2>
           <h3 id="storage-strategy-for-this-machine">
-            Storage Strategy for This Machine
+            Storage strategy for this machine
           </h3>
           <p>
             Your machine has a relatively small SSD by server standards, so the
@@ -492,7 +492,7 @@
             reintroduce Windows later without having destroyed the HDD contents.
           </p>
           <h3 id="uefi-gpt-and-bootloader-placement">
-            UEFI, GPT, and Bootloader Placement
+            UEFI, GPT, and bootloader placement
           </h3>
           <p>
             On modern hardware, Ubuntu Server should be installed in UEFI mode
@@ -516,7 +516,7 @@
             removed or later repurposed.
           </p>
           <h3 id="networking-model-on-ubuntu-server-2404">
-            Networking Model on Ubuntu Server 24.04
+            Networking model on Ubuntu server 24.04
           </h3>
           <p>
             Ubuntu Server 24.04 uses Netplan as the declarative network
@@ -544,7 +544,7 @@
             </li>
           </ul>
           <h3 id="ssh-reception-vs-ssh-emission">
-            SSH Reception vs SSH Emission
+            SSH reception vs SSH emission
           </h3>
           <p>The machine plays two separate SSH roles:</p>
           <ul>
@@ -570,7 +570,7 @@
             </li>
           </ul>
           <h3 id="nvidia-considerations-on-a-headless-server">
-            NVIDIA Considerations on a Headless Server
+            NVIDIA considerations on a headless server
           </h3>
           <p>
             An RTX 1650 is not required for a normal server install. If you only
@@ -593,10 +593,10 @@
           </p>
           <hr />
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
           <h3 id="1-pre-install-safety-and-data-preservation">
-            1. Pre-Install Safety and Data Preservation
+            1. Pre-Install safety and data preservation
           </h3>
           <p>
             Before booting the installer, decide what is allowed to be
@@ -639,7 +639,7 @@
             table.
           </p>
           <h3 id="2-biosuefi-firmware-preparation">
-            2. BIOS/UEFI Firmware Preparation
+            2. BIOS/UEFI firmware preparation
           </h3>
           <p>
             Before installation, enter firmware setup and verify the following:
@@ -686,7 +686,7 @@
             and an OS install in the same maintenance window unless necessary.
           </p>
           <h3 id="3-build-the-ubuntu-server-installer-usb">
-            3. Build the Ubuntu Server Installer USB
+            3. Build the Ubuntu server installer USB
           </h3>
           <p>On Windows, use a reliable tool such as Rufus or balenaEtcher.</p>
           <p>Recommended settings for Rufus:</p>
@@ -713,7 +713,7 @@
             Canonical.
           </p>
           <h3 id="4-identify-the-correct-ssd-and-protect-the-hdd">
-            4. Identify the Correct SSD and Protect the HDD
+            4. Identify the correct SSD and protect the HDD
           </h3>
           <p>
             From the installer shell or a live environment, inventory disks
@@ -755,7 +755,7 @@ sudo<span class="w"> </span>smartctl<span class="w"> </span>-i<span class="w"> <
             before proceeding.
           </p>
           <h3 id="5-install-ubuntu-server-onto-the-ssd-only">
-            5. Install Ubuntu Server onto the SSD Only
+            5. Install Ubuntu server onto the SSD only
           </h3>
           <p>
             The Ubuntu Server ISO uses the Subiquity installer. During storage
@@ -864,7 +864,7 @@ sudo<span class="w"> </span>smartctl<span class="w"> </span>-i<span class="w"> <
               understand what keys are being imported.
             </li>
           </ul>
-          <h3 id="6-first-boot-os-baseline">6. First Boot OS Baseline</h3>
+          <h3 id="6-first-boot-os-baseline">6. First Boot OS baseline</h3>
           <p>
             After the first successful boot, establish a clean baseline before
             doing workload-specific changes.
@@ -927,7 +927,7 @@ journalctl<span class="w"> </span>-p<span class="w"> </span><span class="m">3</s
 </code></pre>
           </div>
           <h3 id="7-networking-setup-with-netplan">
-            7. Networking Setup with Netplan
+            7. Networking setup with Netplan
           </h3>
           <p>
             Use Ethernet for the initial build unless you have a compelling
@@ -955,7 +955,7 @@ lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span
           </div>
           <p>Choose one of the following strategies.</p>
           <h4 id="dhcp-with-router-reservation">
-            DHCP with Router Reservation
+            DHCP with router reservation
           </h4>
           <p>
             This is often the best operational compromise for a home lab or
@@ -968,7 +968,7 @@ lspci<span class="w"> </span>-nnk<span class="w"> </span><span class="p">|</span
             </li>
             <li>The server stays simple while still getting a stable IP.</li>
           </ul>
-          <h4 id="static-address-in-netplan">Static Address in Netplan</h4>
+          <h4 id="static-address-in-netplan">Static address in Netplan</h4>
           <p>
             Use this when the machine is infrastructure and its IP must remain
             defined at the host layer.
@@ -1033,7 +1033,7 @@ ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><s
             interchangeable.
           </p>
           <h3 id="8-ssh-server-setup-and-hardening">
-            8. SSH Server Setup and Hardening
+            8. SSH server setup and hardening
           </h3>
           <p>Inbound SSH is how the machine becomes operationally useful.</p>
           <p>
@@ -1108,7 +1108,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
             until you have opened and verified a second session successfully.
           </p>
           <h3 id="9-ssh-client-setup-for-outbound-connections">
-            9. SSH Client Setup for Outbound Connections
+            9. SSH client setup for outbound connections
           </h3>
           <p>
             If this server must reach GitHub, internal Git servers, backup
@@ -1160,7 +1160,7 @@ ssh-keyscan<span class="w"> </span>-H<span class="w"> </span>github.com<span cla
             outgoing traffic unless you change the default policy.
           </p>
           <h3 id="10-access-the-preserved-hdd-safely-after-install">
-            10. Access the Preserved HDD Safely After Install
+            10. Access the preserved HDD safely after install
           </h3>
           <p>
             Do not immediately auto-mount preserved disks read-write. First
@@ -1213,7 +1213,7 @@ findmnt
 </code></pre>
           </div>
           <h3 id="11-optional-nvidia-driver-and-cuda-preparation">
-            11. Optional NVIDIA Driver and CUDA Preparation
+            11. Optional NVIDIA driver and CUDA preparation
           </h3>
           <p>Only do this after networking and SSH are stable.</p>
           <p>Inspect GPU state:</p>
@@ -1241,9 +1241,9 @@ lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>gre
             Secure Boot is one of the first things to investigate.
           </p>
           <hr />
-          <h2 id="security-considerations">Security Considerations</h2>
+          <h2 id="security-considerations">Security considerations</h2>
           <h3 id="physical-and-firmware-security">
-            Physical and Firmware Security
+            Physical and firmware security
           </h3>
           <ul>
             <li>
@@ -1277,7 +1277,7 @@ lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>gre
               encryption on single-node edge servers.
             </li>
           </ul>
-          <h3 id="os-and-service-hardening">OS and Service Hardening</h3>
+          <h3 id="os-and-service-hardening">OS and service hardening</h3>
           <ul>
             <li>
               Keep the system patched with <code>unattended-upgrades</code> or
@@ -1308,7 +1308,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>--failed
 sudo<span class="w"> </span>journalctl<span class="w"> </span>-p<span class="w"> </span>warning<span class="w"> </span>-b
 </code></pre>
           </div>
-          <h3 id="network-exposure-strategy">Network Exposure Strategy</h3>
+          <h3 id="network-exposure-strategy">Network exposure strategy</h3>
           <p>
             Do not expose the host to the public internet until the following
             are true:
@@ -1334,7 +1334,7 @@ sudo<span class="w"> </span>journalctl<span class="w"> </span>-p<span class="w">
           <hr />
           <h2 id="examples">Examples</h2>
           <h3 id="example-1-disk-inventory-before-installation">
-            Example 1: Disk Inventory Before Installation
+            Example 1: disk inventory before installation
           </h3>
           <div class="codehilite">
             <pre><span></span><code>lsblk<span class="w"> </span>-e7<span class="w"> </span>-o<span class="w"> </span>NAME,SIZE,TYPE,FSTYPE,MODEL,SERIAL,MOUNTPOINT
@@ -1352,7 +1352,7 @@ ls<span class="w"> </span>-l<span class="w"> </span>/dev/disk/by-id/
             </li>
           </ul>
           <h3 id="example-2-static-netplan-configuration">
-            Example 2: Static Netplan Configuration
+            Example 2: static Netplan configuration
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="nt">network</span><span class="p">:</span>
@@ -1383,7 +1383,7 @@ resolvectl<span class="w"> </span>status
 </code></pre>
           </div>
           <h3 id="example-3-ssh-hardening-drop-in">
-            Example 3: SSH Hardening Drop-In
+            Example 3: SSH hardening Drop-In
           </h3>
           <div class="codehilite">
             <pre><span></span><code># /etc/ssh/sshd_config.d/10-hardening.conf
@@ -1405,7 +1405,7 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
 </code></pre>
           </div>
           <h3 id="example-4-mount-the-preserved-hdd-read-only-first">
-            Example 4: Mount the Preserved HDD Read-Only First
+            Example 4: mount the preserved HDD Read-Only first
           </h3>
           <div class="codehilite">
             <pre><span></span><code>lsblk<span class="w"> </span>-f
@@ -1419,7 +1419,7 @@ findmnt<span class="w"> </span>/mnt/preserved-hdd
             persistent <code>fstab</code> entry is appropriate.
           </p>
           <h3 id="example-5-install-nvidia-drivers-on-a-headless-server">
-            Example 5: Install NVIDIA Drivers on a Headless Server
+            Example 5: install NVIDIA drivers on a headless server
           </h3>
           <div class="codehilite">
             <pre><span></span><code>ubuntu-drivers<span class="w"> </span>devices
@@ -1439,11 +1439,11 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
           </div>
           <hr />
           <h2 id="troubleshooting">Troubleshooting</h2>
-          <h3 id="installer-and-boot-problems">Installer and Boot Problems</h3>
+          <h3 id="installer-and-boot-problems">Installer and Boot problems</h3>
           <h4
             id="problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd"
           >
-            Problem: The installer sees both disks and you are not sure which
+            Problem: the installer sees both disks and you are not sure which
             one is the SSD
           </h4>
           <ul>
@@ -1474,7 +1474,7 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
             </li>
           </ul>
           <h4 id="problem-firmware-says-no-bootable-device-after-installation">
-            Problem: Firmware says no bootable device after installation
+            Problem: firmware says no bootable device after installation
           </h4>
           <ul>
             <li>
@@ -1487,9 +1487,9 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
               recreate boot entries.
             </li>
           </ul>
-          <h3 id="networking-problems">Networking Problems</h3>
+          <h3 id="networking-problems">Networking problems</h3>
           <h4 id="problem-network-is-down-after-editing-netplan">
-            Problem: Network is down after editing Netplan
+            Problem: network is down after editing Netplan
           </h4>
           <ul>
             <li>YAML indentation errors are common.</li>
@@ -1507,7 +1507,7 @@ resolvectl<span class="w"> </span>status
 </code></pre>
           </div>
           <h4 id="problem-the-host-can-ping-ips-but-not-domain-names">
-            Problem: The host can ping IPs but not domain names
+            Problem: the host can ping IPs but not domain names
           </h4>
           <ul>
             <li>Routing is working; DNS is not.</li>
@@ -1521,7 +1521,7 @@ resolvectl<span class="w"> </span>status
             </li>
           </ul>
           <h4 id="problem-link-is-unstable-or-slow">
-            Problem: Link is unstable or slow
+            Problem: link is unstable or slow
           </h4>
           <ul>
             <li>Inspect duplex and negotiated speed:</li>
@@ -1534,9 +1534,9 @@ resolvectl<span class="w"> </span>status
             <li>Replace bad cables before blaming Linux.</li>
             <li>Check NIC driver binding with <code>lspci -nnk</code>.</li>
           </ul>
-          <h3 id="ssh-problems">SSH Problems</h3>
+          <h3 id="ssh-problems">SSH problems</h3>
           <h4 id="problem-connection-refused-on-port-22">
-            Problem: Connection refused on port 22
+            Problem: connection refused on port 22
           </h4>
           <ul>
             <li>The service may not be installed or running.</li>
@@ -1550,7 +1550,7 @@ sudo<span class="w"> </span>ufw<span class="w"> </span>status<span class="w"> </
 </code></pre>
           </div>
           <h4 id="problem-permission-denied-publickey">
-            Problem: Permission denied (publickey)
+            Problem: permission denied (publickey)
           </h4>
           <ul>
             <li>The wrong key may be offered.</li>
@@ -1571,7 +1571,7 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
 </code></pre>
           </div>
           <h4 id="problem-you-locked-yourself-out-after-hardening-ssh">
-            Problem: You locked yourself out after hardening SSH
+            Problem: you locked yourself out after hardening SSH
           </h4>
           <ul>
             <li>This is why a second tested session matters.</li>
@@ -1581,10 +1581,10 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
             </li>
           </ul>
           <h3 id="disk-and-filesystem-problems">
-            Disk and Filesystem Problems
+            Disk and filesystem problems
           </h3>
           <h4 id="problem-preserved-ntfs-partition-will-not-mount-read-write">
-            Problem: Preserved NTFS partition will not mount read-write
+            Problem: preserved NTFS partition will not mount read-write
           </h4>
           <ul>
             <li>
@@ -1609,7 +1609,7 @@ chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~
             <li>Test with <code>sudo mount -a</code> before rebooting.</li>
           </ul>
           <h4 id="problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd">
-            Problem: Root filesystem is unexpectedly full on a 128 GB SSD
+            Problem: root filesystem is unexpectedly full on a 128 GB SSD
           </h4>
           <ul>
             <li>
@@ -1624,10 +1624,10 @@ sudo<span class="w"> </span>journalctl<span class="w"> </span>--disk-usage
 </code></pre>
           </div>
           <h3 id="nvidia-and-secure-boot-problems">
-            NVIDIA and Secure Boot Problems
+            NVIDIA and secure Boot problems
           </h3>
           <h4 id="problem-driver-installed-but-nvidia-smi-fails">
-            Problem: Driver installed but <code>nvidia-smi</code> fails
+            Problem: driver installed but <code>nvidia-smi</code> fails
           </h4>
           <ul>
             <li>Kernel module may not be loaded.</li>
@@ -1643,7 +1643,7 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
           <h4
             id="problem-black-screen-or-unstable-console-after-gpu-driver-changes"
           >
-            Problem: Black screen or unstable console after GPU driver changes
+            Problem: black screen or unstable console after GPU driver changes
           </h4>
           <ul>
             <li>Prefer doing NVIDIA work only after you have SSH access.</li>
@@ -1657,8 +1657,8 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
             </li>
           </ul>
           <hr />
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
-          <h3 id="storage-and-ssd-hygiene">Storage and SSD Hygiene</h3>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
+          <h3 id="storage-and-ssd-hygiene">Storage and SSD hygiene</h3>
           <ul>
             <li>Ensure TRIM is active:</li>
           </ul>
@@ -1683,7 +1683,7 @@ journalctl<span class="w"> </span>-k<span class="w"> </span>-b<span class="w"> <
               correctly.
             </li>
           </ul>
-          <h3 id="memory-swap-and-logging">Memory, Swap, and Logging</h3>
+          <h3 id="memory-swap-and-logging">Memory, swap, and logging</h3>
           <p>
             With 16 GB RAM, Ubuntu's default swapfile behavior is usually
             sufficient.
@@ -1707,7 +1707,7 @@ grep<span class="w"> </span>-R<span class="w"> </span><span class="s2">"^SystemM
             <code>journald</code> retention.
           </p>
           <h3 id="network-stability-and-throughput">
-            Network Stability and Throughput
+            Network stability and throughput
           </h3>
           <ul>
             <li>Prefer wired Ethernet over Wi-Fi for a physical server.</li>
@@ -1728,7 +1728,7 @@ iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;target-host&gt;
           </div>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>

@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul - Paul
+      IoT sensors deep dive: Analog-to-Digital, protocols, and backhaul - Paul
       Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
@@ -52,23 +52,23 @@
           <h1
             id="iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul"
           >
-            IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and Backhaul
+            IoT sensors deep dive: Analog-to-Digital, protocols, and backhaul
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: February 26, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: February 26, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -85,20 +85,18 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            This guide details the end-to-end architecture of Internet of Things
-            (IoT) sensors, spanning from raw hardware data acquisition to
-            cloud-based ETL pipelines. It covers the crucial mechanics of
-            Analog-to-Digital Conversion (ADC), network telemetry protocols
-            (MQTT vs. HTTP), internet backhaul strategies, and large-scale data
-            tunneling.
+            This guide follows IoT sensor data through hardware acquisition,
+            network transport, and cloud ETL pipelines. It covers
+            analog-to-digital conversion (ADC), MQTT and HTTP telemetry,
+            internet backhaul, and large-scale data tunneling.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a
                 href="#iot-sensors-deep-dive-analog-to-digital-protocols-and-backhaul"
-                >IoT Sensors Deep Dive: Analog-to-Digital, Protocols, and
-                Backhaul</a
+                >IoT sensors deep dive: Analog-to-Digital, protocols, and
+                backhaul</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -110,25 +108,25 @@
               <ul>
                 <li>
                   <a href="#linux-debianubuntu-strategy"
-                    >Linux (Debian/Ubuntu) Strategy</a
+                    >Linux (Debian/Ubuntu) strategy</a
                   >
                 </li>
-                <li><a href="#windows-strategy">Windows Strategy</a></li>
+                <li><a href="#windows-strategy">Windows strategy</a></li>
               </ul>
             </li>
             <li>
               <a href="#2-writing-basic-codescripts-adc-telemetry"
-                >2. Writing Basic Code/Scripts (ADC \&amp; Telemetry)</a
+                >2. Writing basic Code/scripts (ADC \&amp; telemetry)</a
               >
               <ul>
                 <li>
                   <a href="#analog-to-digital-conversion-adc"
-                    >Analog-to-Digital Conversion (ADC)</a
+                    >Analog-to-Digital conversion (ADC)</a
                   >
                 </li>
                 <li>
                   <a href="#network-protocols-mqtt-vs-http"
-                    >Network Protocols: MQTT vs. HTTP</a
+                    >Network protocols: MQTT vs. HTTP</a
                   >
                 </li>
               </ul>
@@ -140,24 +138,24 @@
             </li>
             <li>
               <a href="#4-runtime-commands-daemonization-etl-backhaul"
-                >4. Runtime Commands (Daemonization \&amp; ETL Backhaul)</a
+                >4. Runtime commands (daemonization \&amp; ETL backhaul)</a
               >
               <ul>
-                <li><a href="#internet-backhaul">Internet Backhaul</a></li>
+                <li><a href="#internet-backhaul">Internet backhaul</a></li>
                 <li>
                   <a href="#tunneling-data-streams-into-etl-pipelines"
-                    >Tunneling Data Streams into ETL Pipelines</a
+                    >Tunneling data streams into ETL pipelines</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#5-debugging-radio-silence-data-loss"
-                >5. Debugging (Radio Silence \&amp; Data Loss)</a
+                >5. Debugging (radio silence \&amp; data loss)</a
               >
               <ul>
-                <li><a href="#edge-debugging">Edge Debugging</a></li>
-                <li><a href="#backhaul-debugging">Backhaul Debugging</a></li>
+                <li><a href="#edge-debugging">Edge debugging</a></li>
+                <li><a href="#backhaul-debugging">Backhaul debugging</a></li>
               </ul>
             </li>
           </ul>
@@ -171,7 +169,7 @@
             architectures (ARM, ESP32, AVR).
           </p>
           <h3 id="linux-debianubuntu-strategy">
-            Linux (Debian/Ubuntu) Strategy
+            Linux (Debian/Ubuntu) strategy
           </h3>
           <p>
             Linux provides the most predictable environment for embedded
@@ -188,7 +186,7 @@ sudo<span class="w"> </span>usermod<span class="w"> </span>-a<span class="w"> </
 pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>platformio
 </code></pre>
           </div>
-          <h3 id="windows-strategy">Windows Strategy</h3>
+          <h3 id="windows-strategy">Windows strategy</h3>
           <p>
             Windows development requires strict path management and driver
             installations (usually CP210x or CH340 for USB-to-UART bridges).
@@ -206,7 +204,7 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
           </p>
           <hr />
           <h2 id="2-writing-basic-codescripts-adc-telemetry">
-            2. Writing Basic Code/Scripts (ADC &amp; Telemetry)
+            2. Writing basic Code/scripts (ADC &amp; telemetry)
           </h2>
           <p>
             The code lifecycle of an edge sensor dictates reading raw analog
@@ -215,7 +213,7 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
             like MQTT or HTTP.
           </p>
           <h3 id="analog-to-digital-conversion-adc">
-            Analog-to-Digital Conversion (ADC)
+            Analog-to-Digital conversion (ADC)
           </h3>
           <p>
             An ADC maps continuous voltage variations to discrete integer values
@@ -248,7 +246,7 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
 </code></pre>
           </div>
           <h3 id="network-protocols-mqtt-vs-http">
-            Network Protocols: MQTT vs. HTTP
+            Network protocols: MQTT vs. HTTP
           </h3>
           <p>
             While HTTP requires significant overhead via headers and
@@ -285,7 +283,7 @@ pip3<span class="w"> </span>install<span class="w"> </span>pyserial<span class="
           </div>
           <hr />
           <h2 id="3-compile-time-commands-firmware-generation">
-            3. Compile-time Commands (Firmware Generation)
+            3. Compile-time commands (firmware generation)
           </h2>
           <p>
             Microcontrollers do not possess a runtime engine capable of
@@ -317,7 +315,7 @@ pio<span class="w"> </span>run<span class="w"> </span>--target<span class="w"> <
           </p>
           <hr />
           <h2 id="4-runtime-commands-daemonization-etl-backhaul">
-            4. Runtime Commands (Daemonization &amp; ETL Backhaul)
+            4. Runtime commands (daemonization &amp; ETL backhaul)
           </h2>
           <p>
             While the edge devices execute firmware continuously in an infinite
@@ -325,9 +323,9 @@ pio<span class="w"> </span>run<span class="w"> </span>--target<span class="w"> <
             daemonize its ingestion services to catch the datastream without
             interruption.
           </p>
-          <h3 id="internet-backhaul">Internet Backhaul</h3>
+          <h3 id="internet-backhaul">Internet backhaul</h3>
           <p>
-            Managing massive volumes of telemetry from edge gateways requires
+            Managing large volumes of telemetry from edge gateways requires
             queueing systems. Services like Mosquitto (MQTT Broker) must run
             reliably under the system supervisor.
           </p>
@@ -341,7 +339,7 @@ netstat<span class="w"> </span>-tulpn<span class="w"> </span><span class="p">|</
 </code></pre>
           </div>
           <h3 id="tunneling-data-streams-into-etl-pipelines">
-            Tunneling Data Streams into ETL Pipelines
+            Tunneling data streams into ETL pipelines
           </h3>
           <p>
             Once telemetry reaches the broker, a subscriber daemon immediately
@@ -358,7 +356,7 @@ nohup<span class="w"> </span>python3<span class="w"> </span>/opt/telemetry/inges
           </div>
           <hr />
           <h2 id="5-debugging-radio-silence-data-loss">
-            5. Debugging (Radio Silence &amp; Data Loss)
+            5. Debugging (radio silence &amp; data loss)
           </h2>
           <p>
             Because hardware fails without throwing stack traces to a terminal,
@@ -367,7 +365,7 @@ nohup<span class="w"> </span>python3<span class="w"> </span>/opt/telemetry/inges
             deciphering why an I2C bus locked up purely because a pull-up
             resistor was rated 1k Ohm instead of 4.7k Ohm.
           </p>
-          <h3 id="edge-debugging">Edge Debugging</h3>
+          <h3 id="edge-debugging">Edge debugging</h3>
           <ul>
             <li>
               <strong>Serial Monitors:</strong> Hooking a USB cable directly to
@@ -380,7 +378,7 @@ nohup<span class="w"> </span>python3<span class="w"> </span>/opt/telemetry/inges
               sensor grounds directly to the microcontroller logic ground.
             </li>
           </ul>
-          <h3 id="backhaul-debugging">Backhaul Debugging</h3>
+          <h3 id="backhaul-debugging">Backhaul debugging</h3>
           <ul>
             <li>
               <strong>Topic Snooping:</strong> Subscribe to the wildcard topic

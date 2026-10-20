@@ -133,7 +133,7 @@ def guide_metadata(filename: str, content: str) -> dict[str, str]:
         label = "Systems engineering"
 
     # Prefer the first substantive paragraph after Overview/Context, without badges or metadata.
-    summary = "Implementation notes, trade-offs and production-minded patterns from hands-on systems work."
+    summary = "Implementation notes and trade-offs from building and maintaining systems."
     section = re.search(r"^##\s+(?:Overview|Context)\s*$([\s\S]+?)(?=^##\s|\Z)", content, re.MULTILINE | re.IGNORECASE)
     if section:
         for paragraph in re.split(r"\n\s*\n", section.group(1)):
@@ -294,7 +294,7 @@ def build_guides(guides_dir: str) -> None:
             <div class="container docs-hero-grid">
                 <div><p class="eyebrow">Paul Namalomba · Technical field notes</p><h1>Notes for systems that need to <em>work.</em></h1></div>
                 <div class="docs-hero-copy">
-                    <p>Production-minded guides on backend architecture, data infrastructure, scientific computing and the tools around them.</p>
+                    <p>Practical guides to backend architecture, data infrastructure, scientific computing, and the tools used in that work.</p>
                     <div class="docs-stats"><div><strong>{len(guides)}</strong><span>In-depth guides</span></div><div><strong>4</strong><span>Engineering domains</span></div></div>
                 </div>
             </div>
@@ -313,7 +313,7 @@ def build_guides(guides_dir: str) -> None:
         </section>
         <section class="docs-library">
             <div class="container">
-                <div class="library-heading"><div><p class="eyebrow">Start here</p><h2>Featured field notes</h2></div><p>Built from applied work, not abstract checklists.</p></div>
+                <div class="library-heading"><div><p class="eyebrow">Start here</p><h2>Featured field notes</h2></div><p>Based on implementation and maintenance work.</p></div>
                 <div class="featured-guides">{featured_cards}</div>
                 <div class="library-heading"><div><p class="eyebrow">Full library</p><h2>Explore every guide</h2></div><p data-result-count>{len(guides)} guides</p></div>
                 <div class="guide-grid">{cards}</div>
@@ -342,15 +342,15 @@ def build_docs_index(docs_dir: str) -> None:
             <div class="container docs-hero-grid">
                 <div><p class="eyebrow">Knowledge base · Paul Namalomba</p><h1>Field notes from building <em>real systems.</em></h1></div>
                 <div class="docs-hero-copy">
-                    <p>Implementation guides, architecture comparisons and reusable scripts shaped by backend, data and computational engineering work.</p>
+                    <p>Implementation guides, architecture comparisons, and reusable scripts from my backend, data, and computational engineering work.</p>
                     <div class="docs-stats"><div><strong>40</strong><span>Technical guides</span></div><div><strong>11</strong><span>Script collections</span></div></div>
                 </div>
             </div>
         </section>
         <section class="knowledge-paths">
             <div class="container path-grid">
-                <a class="path-card" href="/docs/guides/"><small>Read & understand</small><h2>Technical guides</h2><p>Deep, practical notes on architecture, databases, infrastructure, performance and scientific software.</p><b>Browse all 40 guides &rarr;</b></a>
-                <a class="path-card" href="/docs/system-scripts/"><small>Use & adapt</small><h2>System scripts</h2><p>Production-minded PowerShell utilities for navigation, files, environments, scheduling and maintenance.</p><b>Explore 11 collections &rarr;</b></a>
+                <a class="path-card" href="/docs/guides/"><small>Read & understand</small><h2>Technical guides</h2><p>Technical notes on architecture, databases, infrastructure, performance, and scientific software.</p><b>Browse all 40 guides &rarr;</b></a>
+                <a class="path-card" href="/docs/system-scripts/"><small>Use & adapt</small><h2>System scripts</h2><p>PowerShell utilities for navigation, file operations, environments, scheduling, and maintenance.</p><b>Explore 11 collections &rarr;</b></a>
             </div>
         </section>
         <section class="docs-library">

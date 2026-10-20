@@ -1,10 +1,10 @@
-# Module 1, Lecture 4: Data Marts Overview
+# Module 1, lecture 4: data marts overview
 
-An enterprise data warehouse serves the strategic needs of the entire organization. But not every team needs—or should have—access to the full breadth of that data. Data marts solve this by carving off focused, tactical slices of the warehouse, purpose-built for specific business functions. They are the mechanism by which analytical infrastructure becomes operationally useful to individual teams.
+An enterprise data warehouse serves the whole organization. Individual teams need access to narrower sets of data. Data marts provide those subsets for specific business functions.
 
 ---
 
-## 1. Defining the Data Mart
+## 1. Defining the data mart
 
 A **data mart** is an isolated part of the larger enterprise data warehouse that is specifically built to serve a particular business function, purpose, or community of users.
 
@@ -18,9 +18,9 @@ Data marts are designed to provide specific, timely support for making **tactica
 
 ---
 
-## 2. Structural Design: Star and Snowflake Schemas
+## 2. Structural design: star and Snowflake schemas
 
-The typical structure of a data mart is a **relational database** organized using a **star schema** or, more commonly, a **snowflake schema**:
+The typical structure of a data mart is a relational database organized using a star schema or, more commonly, a snowflake schema:
 
 - **Fact Table (Central):** Contains the business metrics relevant to a specific business process (e.g., revenue, units sold, transaction counts).
 - **Dimension Tables (Surrounding):** Provide contextual hierarchies for the facts—time, geography, product category, customer segment—enabling multidimensional analysis.
@@ -39,9 +39,9 @@ In a snowflake schema, dimension tables are further normalized into sub-dimensio
 
 ---
 
-## 3. Data Marts vs. Transactional Databases vs. Data Warehouses
+## 3. Data marts vs. Transactional databases vs. Data warehouses
 
-### 3.1 Data Marts and Databases Compared
+### 3.1 Data marts and databases compared
 
 | Characteristic       | Data Mart (OLAP)                                 | Transactional Database (OLTP)                          |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------ |
@@ -50,7 +50,7 @@ In a snowflake schema, dimension tables are further normalized into sub-dimensio
 | **Data Quality**     | Validated, transformed, and cleaned              | Raw, uncleaned data                                    |
 | **Historical Depth** | Accumulates historical data for trend analysis   | May not retain older data                              |
 
-### 3.2 Data Marts and Data Warehouses Compared
+### 3.2 Data marts and data warehouses compared
 
 | Characteristic  | Data Mart                                      | Data Warehouse                                      |
 | --------------- | ---------------------------------------------- | --------------------------------------------------- |
@@ -60,25 +60,25 @@ In a snowflake schema, dimension tables are further normalized into sub-dimensio
 
 ---
 
-## 4. The Three Types of Data Marts
+## 4. The three types of data marts
 
 The classification of data marts depends on their relationship with the enterprise data warehouse and their data sources.
 
-### 4.1 Dependent Data Marts
+### 4.1 Dependent data marts
 
 Dependent data marts draw their data **exclusively from the enterprise data warehouse**. Because the warehouse has already cleaned and transformed the data, these marts benefit from:
 
 - **Simpler ETL pipelines** — no transformation logic required at the mart level
 - **Inherited security** — the warehouse's governance and access controls cascade down
 
-### 4.2 Independent Data Marts
+### 4.2 Independent data marts
 
 Independent data marts **bypass the data warehouse entirely**, sourcing data directly from internal operational systems or external vendors. This independence comes with additional requirements:
 
 - **Custom ETL pipelines** — full extract, transform, and load logic must be built to handle raw source data
 - **Separate security measures** — the mart cannot rely on the warehouse's security posture
 
-### 4.3 Hybrid Data Marts
+### 4.3 Hybrid data marts
 
 Hybrid data marts **partially depend** on the enterprise data warehouse, combining warehouse data with inputs from operational systems and external sources. They occupy the middle ground between dependent and independent marts.
 
@@ -99,7 +99,7 @@ graph LR
 
 ---
 
-## 5. The Purpose of a Data Mart
+## 5. The purpose of a data mart
 
 Regardless of type, every data mart exists to:
 
@@ -109,5 +109,3 @@ Regardless of type, every data mart exists to:
 - **Ensure secure access and control** over domain-specific data
 
 ---
-
-Would you like to explore how star and snowflake schemas are physically modelled in SQL, or should we move into examining specific data warehouse platforms like IBM Db2 Warehouse and how they support data mart development?

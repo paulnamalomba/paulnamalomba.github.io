@@ -1,12 +1,12 @@
-# Module 1, Lecture 6: Data Lakes Overview
+# Module 1, lecture 6: data lakes overview
 
-A data warehouse enforces structure at write time—every record must conform to a pre-defined schema before it enters the system. This rigour is a strength for BI workloads but becomes a bottleneck when an organization generates vast volumes of heterogeneous data whose analytical use cases are not yet defined. Data lakes invert this contract: store everything in its native format first, and impose structure later when the use case demands it.
+A data warehouse enforces a predefined schema when data is written. This suits BI workloads, but it can delay ingestion of heterogeneous data whose analytical uses are not yet known. A data lake stores data in its native format and applies structure when it is read for a particular use.
 
 ---
 
-## 1. Defining the Data Lake
+## 1. Defining the data lake
 
-A **data lake** is a storage repository that can hold large amounts of **structured**, **semi-structured**, and **unstructured** data in their native format, classified and tagged with metadata. Each data element is assigned a unique identifier and tagged with metatags for downstream use.
+A data lake is a storage repository that can hold large amounts of structured, semi-structured, and unstructured data in their native format, classified and tagged with metadata. Each data element is assigned a unique identifier and tagged with metatags for downstream use.
 
 Key distinctions from a data warehouse:
 
@@ -25,9 +25,9 @@ A data lake is also a **reference architecture** that is independent of any spec
 
 ---
 
-## 2. Benefits of a Data Lake
+## 2. Benefits of a data lake
 
-### 2.1 Universal Data Type Support
+### 2.1 Universal data type support
 
 Data lakes can store all data types without format conversion:
 
@@ -35,21 +35,21 @@ Data lakes can store all data types without format conversion:
 - **Semi-structured data** — JSON, XML, CSV, log files
 - **Structured data** — rows and columns from relational databases
 
-### 2.2 Scalable Storage Capacity
+### 2.2 Scalable storage capacity
 
 Data lakes scale from terabytes to petabytes, accommodating the exponential growth of organizational data without capacity-related redesign.
 
-### 2.3 Time Savings
+### 2.3 Time savings
 
 By retaining data in its original format, data lakes eliminate the upfront time investment required to define structures, create schemas, and transform data before loading—an overhead that is mandatory in traditional data warehousing.
 
-### 2.4 Flexible Data Reuse
+### 2.4 Flexible data reuse
 
 The ability to access data in its original format enables fast, flexible reuse across a wide range of **current and future use cases**—from exploratory analysis to machine learning feature engineering.
 
 ---
 
-## 3. Data Lake Vendor Landscape
+## 3. Data lake vendor landscape
 
 Technologies, platforms, and reference architectures for data lakes are offered by:
 
@@ -63,9 +63,9 @@ Technologies, platforms, and reference architectures for data lakes are offered 
 
 ---
 
-## 4. Data Lakes vs. Data Warehouses
+## 4. Data lakes vs. Data warehouses
 
-Data lakes were designed in response to the limitations of data warehouses. Most organizations require **both**, as they serve fundamentally different needs.
+Data lakes were designed in response to the limitations of data warehouses. Most organizations require **both**, as they serve different needs.
 
 | Dimension         | Data Lake                                                                               | Data Warehouse                                               |
 | ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
@@ -77,7 +77,7 @@ Data lakes were designed in response to the limitations of data warehouses. Most
 
 ---
 
-## 5. The Data Lake as a Staging Layer
+## 5. The data lake as a staging layer
 
 Data lakes are frequently used as a **self-serve staging area** for a variety of downstream use cases:
 
@@ -85,8 +85,6 @@ Data lakes are frequently used as a **self-serve staging area** for a variety of
 - Advanced analytics and exploratory data science
 - Data transformation pipelines feeding enterprise data warehouses and data marts
 
-This positioning makes the data lake a complementary—not competing—component in a modern data architecture.
+A data lake can complement a data warehouse in the same architecture.
 
 ---
-
-Would you like to explore how data lake governance prevents the descent into a data swamp, or should we examine the emerging data lakehouse architecture that attempts to merge the best of both data lakes and data warehouses?

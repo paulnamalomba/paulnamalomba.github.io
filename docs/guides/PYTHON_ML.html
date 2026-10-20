@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Python for Machine Learning: Engineering the AI Pipeline - Paul Namalomba
+      Python for machine learning: engineering the AI pipeline - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,23 +49,23 @@
         </div>
         <article class="docs-content">
           <h1 id="python-for-machine-learning-engineering-the-ai-pipeline">
-            Python for Machine Learning: Engineering the AI Pipeline
+            Python for machine learning: engineering the AI pipeline
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: February 26, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: February 26, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -82,18 +82,16 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            Python's dominance in Machine Learning stems not from its inherent
-            execution speed, but from its role as an elegant API wrapping highly
-            optimized C/C++ libraries. This guide bypasses generic Python syntax
-            and focuses exclusively on constructing, vectorizing, and deploying
-            real-world AI pipelines using NumPy, Pandas, Scikit-Learn, and
+            Python exposes optimized C/C++ libraries through APIs suited to
+            machine learning work. This guide covers constructing, vectorizing,
+            and deploying AI pipelines with NumPy, Pandas, Scikit-Learn, and
             PyTorch.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#python-for-machine-learning-engineering-the-ai-pipeline"
-                >Python for Machine Learning: Engineering the AI Pipeline</a
+                >Python for machine learning: engineering the AI pipeline</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -105,24 +103,24 @@
               <ul>
                 <li>
                   <a href="#dependency-environment-management"
-                    >Dependency \&amp; Environment Management</a
+                    >Dependency \&amp; environment management</a
                   >
                 </li>
                 <li>
                   <a href="#windows-path-and-gpu-drivers"
-                    >Windows PATH and GPU Drivers</a
+                    >Windows PATH and GPU drivers</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#2-writing-basic-codescripts-core-ml-frameworks"
-                >2. Writing Basic Code/Scripts (Core ML Frameworks)</a
+                >2. Writing basic Code/scripts (core ML frameworks)</a
               >
               <ul>
                 <li>
                   <a href="#data-manipulation-numpy-pandas"
-                    >Data Manipulation: NumPy \&amp; Pandas</a
+                    >Data manipulation: NumPy \&amp; Pandas</a
                   >
                 </li>
                 <li>
@@ -131,26 +129,26 @@
                   >
                 </li>
                 <li>
-                  <a href="#deep-learning-pytorch">Deep Learning: PyTorch</a>
+                  <a href="#deep-learning-pytorch">Deep learning: PyTorch</a>
                 </li>
               </ul>
             </li>
             <li>
               <a href="#3-compile-time-commands-bytecode-linting"
-                >3. Compile-time Commands (Bytecode \&amp; Linting)</a
+                >3. Compile-time commands (bytecode \&amp; linting)</a
               >
             </li>
             <li>
               <a href="#4-runtime-commands-execution-serving"
-                >4. Runtime Commands (Execution \&amp; Serving)</a
+                >4. Runtime commands (execution \&amp; serving)</a
               >
             </li>
             <li>
               <a href="#5-debugging-tensor-mismatches-oom-kernels"
-                >5. Debugging (Tensor Mismatches \&amp; OOM Kernels)</a
+                >5. Debugging (tensor mismatches \&amp; OOM kernels)</a
               >
               <ul>
-                <li><a href="#common-pitfalls">Common Pitfalls</a></li>
+                <li><a href="#common-pitfalls">Common pitfalls</a></li>
                 <li><a href="#profiling">Profiling</a></li>
               </ul>
             </li>
@@ -160,11 +158,11 @@
             1. Configuration (Windows &amp; Linux)
           </h2>
           <p>
-            Machine Learning development requires strict isolation of massive,
-            often conflicting dependency graphs (e.g., CUDA toolkits).
+            Machine Learning development requires isolation of large, often
+            conflicting dependency graphs (e.g., CUDA toolkits).
           </p>
           <h3 id="dependency-environment-management">
-            Dependency &amp; Environment Management
+            Dependency &amp; environment management
           </h3>
           <p>
             Never install ML packages globally. Always use <code>venv</code> or
@@ -185,7 +183,7 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
 </code></pre>
           </div>
           <h3 id="windows-path-and-gpu-drivers">
-            Windows PATH and GPU Drivers
+            Windows PATH and GPU drivers
           </h3>
           <p>
             On Windows, ensuring CUDA functionality dictates installing the
@@ -199,20 +197,19 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
           </p>
           <hr />
           <h2 id="2-writing-basic-codescripts-core-ml-frameworks">
-            2. Writing Basic Code/Scripts (Core ML Frameworks)
+            2. Writing basic Code/scripts (core ML frameworks)
           </h2>
           <p>
-            Writing efficient ML Python means completely abandoning standard
-            explicit <code>for</code>-loops in favor of vectorized operations
-            executed asynchronously in C block memory.
+            Use vectorized operations backed by C libraries for array
+            calculations that would otherwise require Python
+            <code>for</code>-loops.
           </p>
           <h3 id="data-manipulation-numpy-pandas">
-            Data Manipulation: NumPy &amp; Pandas
+            Data manipulation: NumPy &amp; Pandas
           </h3>
           <p>
-            Data streams enter as raw text. Pandas organizes this chaos into
-            tabular DataFrames, while NumPy underlying it handles strict
-            contiguous memory arrays.
+            Pandas loads text data into tabular DataFrames, while NumPy provides
+            the underlying numerical arrays.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -234,8 +231,8 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
           <p>
             Scikit-Learn implements the standard transformer-estimator
             <code>fit()</code>, <code>transform()</code>, and
-            <code>predict()</code> API, rendering algorithm swapping heavily
-            standardized.
+            <code>predict()</code> API, so algorithms can share a common calling
+            interface.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
@@ -254,7 +251,7 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
 <span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">predictions</span><span class="p">))</span>
 </code></pre>
           </div>
-          <h3 id="deep-learning-pytorch">Deep Learning: PyTorch</h3>
+          <h3 id="deep-learning-pytorch">Deep learning: PyTorch</h3>
           <p>
             When the feature complexity outstrips classical trees, PyTorch
             tensors take over, shifting linear algebra calculations natively to
@@ -300,19 +297,18 @@ pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> 
           </div>
           <hr />
           <h2 id="3-compile-time-commands-bytecode-linting">
-            3. Compile-time Commands (Bytecode &amp; Linting)
+            3. Compile-time commands (bytecode &amp; linting)
           </h2>
           <p>
             Python is interpreted, so it skips the traditional C++/Java linkage
             compilation phase. However, pre-execution bytecode caching (<code
               >.pyc</code
             >
-            files in <code>__pycache__</code>) dramatically speeds up subsequent
-            imports.
+            files in <code>__pycache__</code>) speeds up subsequent imports.
           </p>
           <p>
             For production integrity, strict syntax checking and type hinting
-            (via <code>mypy</code> or <code>ruff</code>) are paramount before
+            (via <code>mypy</code> or <code>ruff</code>) are needed before
             serving an inference model.
           </p>
           <div class="codehilite">
@@ -327,13 +323,13 @@ mypy<span class="w"> </span>model_pipeline.py
           </div>
           <hr />
           <h2 id="4-runtime-commands-execution-serving">
-            4. Runtime Commands (Execution &amp; Serving)
+            4. Runtime commands (execution &amp; serving)
           </h2>
           <p>
-            Model training is a massive blocking script, usually orchestrated by
-            <code>nohup</code> or a workload manager. Once serialized to disk
-            (e.g., <code>model.pt</code>), inference occurs via high-performance
-            ASGI servers bridging to the model.
+            Model training is a long-running blocking script, usually
+            orchestrated by <code>nohup</code> or a workload manager. Once
+            serialized to disk (e.g., <code>model.pt</code>), inference occurs
+            via high-performance ASGI servers bridging to the model.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># Training Execution (Server) - Detaches the process to survive SSH drops</span>
@@ -351,14 +347,14 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
           </div>
           <hr />
           <h2 id="5-debugging-tensor-mismatches-oom-kernels">
-            5. Debugging (Tensor Mismatches &amp; OOM Kernels)
+            5. Debugging (tensor mismatches &amp; OOM kernels)
           </h2>
           <p>
             Debugging ML pipelines is an exercise in matrix algebra alignment
             and managing physical VRAM limits. Nothing destroys morale faster
             than a training loop crashing on epoch 99.
           </p>
-          <h3 id="common-pitfalls">Common Pitfalls</h3>
+          <h3 id="common-pitfalls">Common pitfalls</h3>
           <ul>
             <li>
               <strong>Shape Mismatches:</strong> Trying to multiply a
@@ -393,10 +389,9 @@ uvicorn<span class="w"> </span>inference_server:app<span class="w"> </span>--hos
           </div>
           <ul>
             <li>
-              <strong>Tracebacks:</strong> Pay heavy attention to whether a
-              tensor is on CPU or GPU. You cannot perform operations if one
-              tensor acts locally and the other sits in physical GPU memory.
-              PyTorch throws the infamous
+              <strong>Tracebacks:</strong> Check whether a tensor is on CPU or
+              GPU. You cannot perform operations if one tensor acts locally and
+              the other sits in physical GPU memory. PyTorch throws
               <code>Expected all tensors to be on the same device.</code> Fix
               with <code>.to(device)</code>.
             </li>

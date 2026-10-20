@@ -1,7 +1,8 @@
-# Paul Namalomba - Computational Engineer, Full-Stack Software Developer & Materials Scientist
+# Paul Namalomba - computational engineer, full-stack software developer & materials scientist
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/paul-namalomba)
 [![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/paulnamalomba)
+[![ResearchGate](https://img.shields.io/badge/-ResearchGate-00CCBB?style=flat-square&logo=researchgate&logoColor=white)](https://www.researchgate.net/profile/Paul-Namalomba)
 [![Resume (CV)](<https://img.shields.io/badge/-Resume--(CV)-4B0082?style=flat-square&logo=adobeacrobatreader&logoColor=white>)](./Paul-Namalomba_Curriculum-Vitae.pdf)
 [![Email](https://img.shields.io/badge/-Email-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:kabwenzenamalomba@gmail.com)
 
@@ -12,38 +13,42 @@
 ## Contents
 
 - [Contents](#contents)
-- [About Me!](#about-me)
-- [Current Focus!](#current-focus)
-- [Professional Experience](#professional-experience)
-- [Technical Skills](#technical-skills)
-- [Featured Projects](#featured-projects)
-- [Personal Projects](#personal-projects)
-- [📊 GitHub Statistics](#-github-statistics)
-- [Technical Expertise Areas](#technical-expertise-areas)
-- [Current Learning & Development](#current-learning--development)
+- [About me!](#about-me)
+- [Current focus!](#current-focus)
+- [Professional experience](#professional-experience)
+- [Technical skills](#technical-skills)
+- [Featured projects](#featured-projects)
+- [Personal projects](#personal-projects)
+- [GitHub statistics](#-github-statistics)
+- [Technical expertise areas](#technical-expertise-areas)
+- [Current learning & development](#current-learning--development)
 
 ---
 
-## About Me!
+## About me!
 
-I'm a passionate Computational Engineer & Full-Stack Software Developer with expertise in Finite Element Analysis R&D for Civil Engineering applications; Data Engineering, Backend and API Development (REST and Custom APIs) for educational systems and a ride-sharing application --- I have extensive experience with **multiple** Backend Languages and Frameworks (.NET, C#, C++, Python), and with **CI/CD tools** such as GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel, Cloud Deplyment with Google Cloud Run, Azure Virtual Machines and Netlify. have experience with **High-Performance Computing (HPC)**, having developed and optimized scientific computing software using **PETSc**, **OpenMPI**, **MUMPS**, **ScaLAPACK**, and other HPC libraries for parallel processing of large-scale simulations. As I am currently.
+I'm a computational engineer and full-stack software developer. My work includes finite element analysis R&D for civil engineering, data engineering, and backend development with REST and custom APIs for educational systems and a ride-sharing application. I use .NET, C#, C++, and Python, with CI/CD and deployment tools including GitHub Actions, Bitbucket Pipelines, Docker Compose, Vercel, Google Cloud Run, Azure Virtual Machines, and Netlify.
 
-I currently am working for a startup called ComputeMore Africa as a **Lead Backend Developer & Chief Innovation Officer** on contract basis, building and maintaining robust C# .NET backend services and APIs for their ride-sharing mobile application, with full Google Maps API integration, JWT authentication, and real-time ride tracking using SignalR. Also working as **SESKA Computational Engineer** at University of Cape Town concurrent with my PhD study (in Computational and Applied Mechanics) where I develop advanced material analysis software and as **SEAT Backend Developer** at University of Cape Town on contract basis, building and maintaining robust Django + PostgreSQL applications for educational enrollment systems.
+For high-performance computing (HPC), I develop and optimize scientific software with PETSc, OpenMPI, MUMPS, ScaLAPACK, and other libraries for parallel simulation.
+
+I work on contract at ComputeMore Africa as Lead Backend Developer & Chief Innovation Officer. I build and maintain C# .NET services and APIs for its ride-sharing application, including Google Maps API integration, JWT authentication, and real-time ride tracking with SignalR.
+
+At the University of Cape Town, I work as a SESKA Computational Engineer alongside my PhD in Computational and Applied Mechanics, developing material analysis software. I also work on contract as a SEAT Backend Developer, maintaining Django and PostgreSQL applications for educational enrollment systems.
 
 ---
 
-## Current Focus!
+## Current focus!
 
 - **Backend Development**: Building scalable _Django_ applications with _PostgreSQL_ databases. Building _Python_ apps and modules for data processing and analysis. Building _RESTful APIs_ for data access and integration with _C#_.
 - **Computational Engineering & Materials Engineering**: Developing finite element analysis tools with C++ for advanced materials testing - implementing computational mechanics, solid mechanics, finite element methods, and high-performance computing techniques.
-- **Data Engineering**: Creating robust pipelines for scientific data processing and analysis, ensuring data integrity and performance. Database design, management, and optimization.
+- **Data Engineering**: Building scientific data pipelines with attention to data integrity and performance, including database design, management, and optimization.
 - **Machine Learning & Data Science**: Implementing _machine learning_-based clustering algorithms, outlier detection, and regression analysis for scientific data. Implementing **computer vision** for data analytics, and visualization using _Google Generative AI_ and _OpenAI_ APIs.
 
 ---
 
-## Professional Experience
+## Professional experience
 
-### **Chief Innovation Officer & Lead Backend Engineer - ComputeMore Africa Technologies**
+### Chief innovation officer & lead backend engineer - ComputeMore Africa technologies
 
 _Current Position_ (<span style="color:green">[**Oct 2025 - present**]</span>)
 
@@ -52,25 +57,25 @@ _Current Position_ (<span style="color:green">[**Oct 2025 - present**]</span>)
 - API docs served with Swagger UI, with COMPLETE test coverage and documentation
 - Implemented JWT authentication and role-based access control
 - Database schema design and optimization for ride and user data
-- Collaborated with front-end developers for seamless integration
+- Worked with front-end developers to integrate the backend APIs
 
 **Referees:** Mr. Thanthwe Kalonga (Managing Director, ComputeMore Africa) <br>
 **Key Technologies**: C#, .NET 8/9, .NET ASP and EF Core, PostgreSQL, REST APIs, JWT, Swagger, Git, Docker CI/CD
 
-### **SESKA Computational Engineer**
+### SESKA computational engineer
 
 _Current Position_ (Concurrent with PhD studies <span style="color:green">[**September 2023 - Present**]</span>)
 
 - Develop advanced material analysis software in **C++** and **Fortran** for engineering applications
 - Create algorithms for LVDT (Linear Variable Differential Transformer) sensor data processing
-- Implement sophisticated data filtering and segmentation techniques using high-performance computing libraries
-- **Unique Windows Port**: Successfully ported SESKA software to Windows using **MinGW64** - a challenging and fairly unique implementation leveraging PETSc on Windows
+- Implement data filtering and segmentation using high-performance computing libraries
+- **Unique Windows Port**: Ported SESKA to Windows using MinGW64, including PETSc integration
 - **CI/CD Management**: Handle all continuous integration and deployment pipelines on **Bitbucket**
 - Build visualization pipelines for materials testing analysis
 
 **Key Technologies**: C++, Fortran, PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64, Bitbucket CI/CD
 
-### **SEAT Backend Developer | SEAT Backend Development Consultant**
+### SEAT backend developer | SEAT backend development consultant
 
 _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 - July 2025, Nov 2025 - Feb 2026**]</span>)
 
@@ -85,9 +90,9 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 
 ---
 
-## Technical Skills
+## Technical skills
 
-### **System Architecture and Operating Systems**
+### System architecture and operating systems
 
 ![Windows](https://img.shields.io/badge/-Windows-0078D6?style=flat-square&logo=windows&logoColor=white)
 ![Cygwin64](https://img.shields.io/badge/-Cygwin-40E0D0?style=flat-square&logo=windows&logoColor=white)
@@ -96,7 +101,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![MinGW64](https://img.shields.io/badge/-MinGW64-54A0FF?style=flat-square)
 ![MSYS2](https://img.shields.io/badge/-MSYS2-1E90FF?style=flat-square&logo=windows&logoColor=white)
 
-### **System Scripting & Markup Languages**
+### System scripting & markup languages
 
 ![Windows Batch](https://img.shields.io/badge/-Windows%20Batch-0078D6?style=flat-square&logo=windows&logoColor=white)
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
@@ -105,7 +110,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![YAML](https://img.shields.io/badge/-YAML-000000?style=flat-square&logo=yaml&logoColor=white)
 ![Swagger](https://img.shields.io/badge/-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)
 
-### **Back-end Programming Languages**
+### Back-end programming languages
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![C++](https://img.shields.io/badge/-C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
@@ -115,7 +120,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![Fortran](https://img.shields.io/badge/-Fortran-734F96?style=flat-square&logo=fortran&logoColor=white)
 ![SQL](https://img.shields.io/badge/-SQL-336791?style=flat-square&logo=postgresql&logoColor=white)
 
-### **Front-end and Web Development Languages**
+### Front-end and web development languages
 
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
@@ -124,7 +129,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
 
-### **Frameworks & Libraries**
+### Frameworks & libraries
 
 <!-- ![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F61?style=flat-square&logo=tensorflow&logoColor=white) -->
 
@@ -144,7 +149,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
 ![Requests](https://img.shields.io/badge/-Requests-0052CC?style=flat-square&logo=python&logoColor=white)
 
-### **APIs, Protocols and Endpoints**
+### APIs, protocols and endpoints
 
 ![REST API](https://img.shields.io/badge/-REST%20API-FF6C37?style=flat-square&logo=rest-api&logoColor=white)
 ![HTTP](https://img.shields.io/badge/-HTTP-E34F26?style=flat-square&logo=http&logoColor=white)
@@ -155,7 +160,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![Google Maps](https://img.shields.io/badge/-Google%20Maps-4285F4?style=flat-square&logo=googlemaps&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/-OpenAI-412991?style=flat-square&logo=openai&logoColor=white)
 
-### **HPC, Parallel Computing & Scientific Computing**
+### HPC, parallel computing & scientific computing
 
 ![PETSc](https://img.shields.io/badge/-PETSc-FF6B6B?style=flat-square)
 ![OpenMPI](https://img.shields.io/badge/-OpenMPI-4ECDC4?style=flat-square)
@@ -166,7 +171,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![METIS](https://img.shields.io/badge/-METIS-FF9FF3?style=flat-square)
 ![ParMETIS](https://img.shields.io/badge/-ParMETIS-FF9FF3?style=flat-square)
 
-### **Databases & Tools**
+### Databases & tools
 
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
 ![pgAdmin](https://img.shields.io/badge/-pgAdmin-336791?style=flat-square&logo=postgresql&logoColor=white)
@@ -174,7 +179,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 ![Apache Kafka](https://img.shields.io/badge/-Apache%20Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
 
-### **Containerization, Integration & Deployment**
+### Containerization, integration & deployment
 
 ![Git](https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
@@ -183,7 +188,7 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 ![Vercel](https://img.shields.io/badge/-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![Netlify](https://img.shields.io/badge/-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)
 
-### **Specializations**
+### Specializations
 
 - **High-Performance Computing**: C++/Fortran development with PETSc, OpenMPI, parallel computing
 - **Cross-Platform Development**: Unique Windows porting expertise using MinGW64 for scientific software
@@ -198,9 +203,9 @@ _Current Position_ (<span style="color:green">[**Dec 2021 - Jan 2022, Nov 2024 -
 
 ---
 
-## Featured Projects
+## Featured projects
 
-### **Ecoride Ride-Sharing App (Android + iOS + Admin Dashboard + Web Services)**
+### Ecoride Ride-Sharing app (android + iOS + admin dashboard + web services)
 
 _Professional Project - Backend & API Development, Flutter Apps for Android and iOS_
 C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL database design and RESTful API implementation.
@@ -223,10 +228,10 @@ C# .NET-based backend services for a ride-sharing mobile application. PostgreSQL
 **Database Architecture and APIs**: PostgreSQL, REST APIs, HTTP/HTTPS, TLS/SSL, Swagger, JWT, SignalR<br>
 **Demo Video**: [Ecoride Rider & Driver Apps v 1.0.03](https://youtu.be/8YTFLHxE1Is)
 
-### **SESKA Finite Element Analysis Software**
+### SESKA finite element analysis software
 
 _Professional Project - SESKA_
-A sophisticated finite element analysis software written in C++ and Fortran for advanced materials testing and computational mechanics applications.
+Finite element analysis software written in C++ and Fortran for advanced materials testing and computational mechanics.
 
 **Key Features:**
 
@@ -239,9 +244,9 @@ A sophisticated finite element analysis software written in C++ and Fortran for 
 
 **Technical Achievements:**
 
-- **Unique Windows Port**: Challenging implementation leveraging PETSc on Windows with MinGW64
+- **Unique Windows Port**: PETSc integration on Windows with MinGW64
 - **Full-Stack Development**: Complete pipeline from scientific research to programming to computational optimization
-- **CI/CD Management**: Comprehensive version control and deployment on Bitbucket
+- **CI/CD Management**: Version control and deployment on Bitbucket
 - **Library Integration**: Advanced use of OpenMPI, PETSc, MUMPS, ScaLAPACK for parallel computation
 
 **Architecture & Technologies:** Windows, Linux, Cygwin64<br>
@@ -249,7 +254,7 @@ A sophisticated finite element analysis software written in C++ and Fortran for 
 **HPC Libraries**: PETSc, OpenMPI, OpenBLAS, ScaLAPACK, MUMPS, METIS, MinGW64 <br>
 **Frameworks & Tools**: MSVC++, Bitbucket CI/CD<br>
 
-### **SEAT Enrollment Management System**
+### SEAT enrollment management system
 
 _Professional Project - Backend Development_
 Django-based web application for managing student enrollment and academic data.
@@ -269,9 +274,9 @@ Django-based web application for managing student enrollment and academic data.
 
 ---
 
-## Personal Projects
+## Personal projects
 
-### **[Smart Lame Parameter Calculator](https://github.com/paulnamalomba/SmartLameParameters)**
+### [Smart Lame parameter Calculator](https://github.com/paulnamalomba/SmartLameParameters)
 
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
@@ -279,7 +284,7 @@ Django-based web application for managing student enrollment and academic data.
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
 ![Vercel](https://img.shields.io/badge/-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 
-A production-ready React web application that **smartly cross-calculates linear isotropic material parameters** from any two independent inputs. Deployed at [www.smartlameparameters.space](https://www.smartlameparameters.space).
+A production-ready React web application that calculates linear isotropic material parameters from any two independent inputs. Deployed at [www.smartlameparameters.space](https://www.smartlameparameters.space).
 
 **Features:**
 
@@ -292,14 +297,14 @@ A production-ready React web application that **smartly cross-calculates linear 
 - **Permalink generation** for sharing calculations
 - **Fully accessible** with ARIA attributes and keyboard navigation
 - **Responsive design** with modern UI/UX
-- **100% TypeScript** with comprehensive type safety
+- 100% TypeScript with type checking
 - **80%+ test coverage** with Jest and React Testing Library
 
 **Front-End Technologies**: TypeScript, React, Vite, Tailwind CSS<br>
 **Testing**: Jest, React Testing Library<br>
 **Deployment**: Vercel, GitHub Actions CI/CD, Netlify<br>
 
-### **[MSE AI Agents - AI-Driven Data Collection and Analysis for Stock Market Investment](https://github.com/paulnamalomba/mse-ai-agents)**
+### [MSE AI agents - AI-Driven data collection and analysis for stock market Investment](https://github.com/paulnamalomba/mse-ai-agents)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Google Generative AI](https://img.shields.io/badge/-Google%20Generative%20AI-4285F4?style=flat-square&logo=google&logoColor=white)
@@ -307,18 +312,18 @@ A production-ready React web application that **smartly cross-calculates linear 
 ![Multimodal AI](https://img.shields.io/badge/-Multimodal%20AI-FF6F61?style=flat-square)
 ![BeautifulSoup](https://img.shields.io/badge/-BeautifulSoup-FF6F61?style=flat-square&logo=beautifulsoup&logoColor=white)
 
-AI-powered data collection and analysis toolkit for stock market investment research using Google Generative AI and OpenAI APIs. Organised to maximise data insights for investment decision-making. Aiming to give the user an interactive AI assistant and DASHBOARD for stock market data analysis.
+AI-powered data collection and analysis toolkit for stock market investment research using Google Generative AI and OpenAI APIs. The project aims to provide an interactive AI assistant and dashboard for examining stock market data.
 
 **Features:**
 
 - **Data Collection**: Automated retrieval of stock market data from `mse.co.mw` - Malawi Stock Exchange, one of the top 3 best performing stock exchanges in Africa to USD.
-- **Auto-Rate Adjusted Data Scraping**: Intelligent scraping that adjusts for current request rates to avoid server overload primarily.
+- **Auto-Rate Adjusted Data Scraping**: Scraping that adjusts to current request rates to avoid overloading the server.
 - **Automated Data Analysis**: In-depth analysis using advanced statistical and machine learning techniques
-- **Interactive Dashboard**: User-friendly interface for visualizing and interacting with data insights
-- **AI Integration**: Leveraging Google Gemini and OpenAI for enhanced data interpretation and recommendations
-- **Investment Insights**: Tailored insights to support informed investment decisions
+- **Interactive Dashboard**: An interface for visualizing and exploring the data
+- **AI Integration**: Using Google Gemini and OpenAI to interpret data and generate recommendations
+- **Investment Insights**: Analysis to support investment research
 
-### **[Datashadric - Data Science Toolkit](https://github.com/paulnamalomba/datashadric)**
+### [Datashadric - data science Toolkit](https://github.com/paulnamalomba/datashadric)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![PyPI](https://img.shields.io/badge/-PyPI-3775A9?style=flat-square&logo=pypi&logoColor=white)
@@ -327,7 +332,7 @@ AI-powered data collection and analysis toolkit for stock market investment rese
 ![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557C?style=flat-square&logo=matplotlib&logoColor=white)
 ![Seaborn](https://img.shields.io/badge/-Seaborn-4C72B0?style=flat-square)
 
-A comprehensive Python package for data science, machine learning, statistical analysis, and visualization. Modularly organized for easy use and pip installation.
+A modular Python package for data science, machine learning, statistical analysis, and visualization, available through pip.
 
 **Features:**
 
@@ -342,7 +347,7 @@ A comprehensive Python package for data science, machine learning, statistical a
 
 ---
 
-### **[IP Masquerade - Privacy Proxy Server](https://github.com/paulnamalomba/IP-Masquerade)**
+### [IP Masquerade - privacy proxy Server](https://github.com/paulnamalomba/IP-Masquerade)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/-Flask-000000?style=flat-square&logo=flask&logoColor=white)
@@ -366,7 +371,7 @@ A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web
 
 ---
 
-### **[basketPredictor - Stochastic and Regression-Based Predictor](https://github.com/paulnamalomba/basketPredictor)**
+### [basketPredictor - stochastic and Regression-Based Predictor](https://github.com/paulnamalomba/basketPredictor)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas)
@@ -374,7 +379,7 @@ A flexible HTTP/HTTPS proxy server built with Python and Flask for anonymous web
 ![Requests](https://img.shields.io/badge/-Requests-0052CC?style=flat-square&logo=python&logoColor=white)
 ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 
-Data science project combining **web scraping**, **regression analysis**, and **visualization** for NBA basketball game prediction.
+Data science project combining web scraping, regression analysis, and visualization for NBA basketball game prediction.
 
 **Features:**
 
@@ -388,7 +393,7 @@ Data science project combining **web scraping**, **regression analysis**, and **
 
 ---
 
-### **[Sequential PDF Merger](https://github.com/paulnamalomba/sequential-pdf-merger)**
+### [Sequential PDF Merger](https://github.com/paulnamalomba/sequential-pdf-merger)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/-Tkinter-FF6F61?style=flat-square)
@@ -396,7 +401,7 @@ Data science project combining **web scraping**, **regression analysis**, and **
 ![PyPDF2](https://img.shields.io/badge/-PyPDF2-FF6F61?style=flat-square)
 ![OCR](https://img.shields.io/badge/-OCR-FF6F61?style=flat-square)
 
-A sophisticated **PDF processing tool** with **GUI interface** for merging multiple PDF files with advanced sorting and organization features.
+A PDF merging tool with a graphical interface, file sorting, and document organization.
 
 **Features:**
 
@@ -410,7 +415,7 @@ A sophisticated **PDF processing tool** with **GUI interface** for merging multi
 
 ---
 
-### **[A3 to A4 Converter](https://github.com/paulnamalomba/a3toa4-converter)**
+### [A3 to A4 Converter](https://github.com/paulnamalomba/a3toa4-converter)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/-Tkinter-FF6F61?style=flat-square)
@@ -431,13 +436,13 @@ Automated **document processing tool** for converting scanned A3 pages to A4 for
 
 ---
 
-### **[System Management Scripts](https://github.com/paulnamalomba/system-management_scripts)**
+### [System management Scripts](https://github.com/paulnamalomba/system-management_scripts)
 
 ![PowerShell](https://img.shields.io/badge/-PowerShell-5391FE?style=flat-square&logo=powershell&logoColor=white)
 ![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
 ![Windows Batch](https://img.shields.io/badge/-Windows%20Batch-0078D6?style=flat-square&logo=windows&logoColor=white)
 
-Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** system administration and management.
+Collection of automation scripts for Linux, Windows, and MSYS64 system administration and management.
 
 **Features:**
 
@@ -451,14 +456,14 @@ Collection of **automation scripts** for **Linux**, **Windows**, and **MSYS64** 
 **Related Guides:**
 You can find my guides and scripts regarding system management and automation in the following categories:
 
-1. **Technical Documentation**: Comprehensive power user guides for backend engineers, platform engineers, security engineers, and SREs covering enterprise-level technologies. DIRECT LINK: [Technical Documentation Repository](https://paulnamalomba.github.io/docs/guides/)
+1. **Technical Documentation**: Power user guides for backend engineers, platform engineers, security engineers, and SREs covering enterprise-level technologies. DIRECT LINK: [Technical Documentation Repository](https://paulnamalomba.github.io/docs/guides/)
 2. **Automation Scripts**: Production-ready PowerShell scripts for Windows system management, file operations, GitHub workflows, and development automation. DIRECT LINK: [Automation Scripts Repository](https://paulnamalomba.github.io/docs/system-scripts/)
 
 All guides follow a consistent template with quickstart instructions, key concepts, configuration best practices, security considerations, detailed examples, troubleshooting tips, and performance tuning recommendations.
 
 ---
 
-### **[Simultaneous Equations Solver](https://github.com/paulnamalomba/simple-simutaneous-equations)**
+### [Simultaneous equations Solver](https://github.com/paulnamalomba/simple-simutaneous-equations)
 
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 ![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy)
@@ -477,7 +482,9 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## 📊 GitHub Statistics
+<a id="-github-statistics"></a>
+
+## GitHub statistics
 
 [![GitHub Streak](https://streak-stats.demolab.com/?user=paulnamalomba&theme=dark&hide_border=true)](https://github.com/paulnamalomba)
 [![Paul's GitHub stats](https://github-readme-stats.vercel.app/api?username=paulnamalomba&show_icons=true&theme=dark&hide_border=true&count_private=true)](https://github.com/paulnamalomba)
@@ -486,30 +493,30 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## Technical Expertise Areas
+## Technical expertise areas
 
-### **Computational Science**
+### Computational science
 
 - Materials testing and analysis
 - Scientific data processing
 - Statistical analysis and modeling
 - Algorithm development for engineering applications
 
-### **Data Engineering**
+### Data engineering
 
 - ETL pipeline design and implementation
 - Data validation and quality assurance
 - Database design and optimization
 - Real-time data processing systems
 
-### **Software Development**
+### Software development
 
 - Full-stack web development
 - API design and implementation
 - Database architecture
 - System integration and automation
 
-### **Machine Learning & AI**
+### Machine learning & AI
 
 - Clustering algorithms (K-means, DBSCAN)
 - Outlier detection methods
@@ -602,7 +609,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## Current Learning & Development
+## Current learning & development
 
 - Advanced machine learning techniques for materials science (Google Gemma Visual Data Analysis and Exploration)
 - Cloud computing platforms (AWS, Azure, Google Cloud, Cloudflare)
@@ -613,7 +620,7 @@ Educational **mathematical tool** for solving systems of **simultaneous equation
 
 ---
 
-## Let's Connect
+## Let's connect
 
 I'm always interested in discussing new opportunities, collaboration on interesting projects, or sharing knowledge about computational science and software development.
 
@@ -628,14 +635,15 @@ I'm always interested in discussing new opportunities, collaboration on interest
 
 ---
 
-## Additional Resources
+## Additional resources
 
-- **[Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience - showcasing my skills, certifications and referees!
-- **[GitHub Profile](https://github.com/paulnamalomba)** - Explore all my projects and contributions, perhaps even collaborate on something new!
-- **[LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional network and updates, and also as a professional instant messaging platform...
+- **[Download My Resume (CV)](./Paul-Namalomba_Curriculum-Vitae.pdf)** - Complete professional background and experience, including skills, certifications, and referees.
+- **[GitHub Profile](https://github.com/paulnamalomba)** - Projects, contributions, and opportunities to collaborate.
+- **[LinkedIn](https://linkedin.com/in/paul-namalomba)** - Professional updates and direct messages.
+- **[ResearchGate](https://www.researchgate.net/profile/Paul-Namalomba)** - Research profile and publications.
 
 ---
 
-_"Combining computational science with practical software engineering to solve real-world problems and drive digital innovation."_
+I combine computational science and software engineering in my research and application development.
 
 <!-- ![Profile Views](https://komarev.com/ghpvc/?username=paulnamalomba&color=brightgreen&style=flat-square) -->

@@ -1,4 +1,4 @@
-# REDIS PowerUser Guide (PowerShell)
+# REDIS PowerUser guide (PowerShell)
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,27 +16,27 @@
 
 ## Overview
 
-Redis is an in-memory data structure store used as a database, cache, message broker, and streaming engine. This guide covers installation, data structures, persistence, clustering, and performance optimization using PowerShell on Windows. Power users need to understand memory management, eviction policies, replication, and pub/sub patterns for production deployments.
+Redis is an in-memory data structure store used as a database, cache, message broker, and streaming engine. This guide covers installation, data structures, persistence, clustering, and performance optimization using PowerShell on Windows. Production considerations include memory management, eviction policies, replication, and pub/sub patterns for production deployments.
 
 ## Contents
 
-- [REDIS PowerUser Guide (PowerShell)](#redis-poweruser-guide-powershell)
+- [REDIS PowerUser guide (PowerShell)](#redis-poweruser-guide-powershell)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Install and Configure Redis on Windows](#install-and-configure-redis-on-windows)
-    - [Basic Data Operations](#basic-data-operations)
-    - [Pub/Sub Messaging Pattern](#pubsub-messaging-pattern)
-    - [Pipelining and Transactions](#pipelining-and-transactions)
-    - [Backup and Persistence](#backup-and-persistence)
-    - [Monitoring and Statistics](#monitoring-and-statistics)
+    - [Install and configure Redis on Windows](#install-and-configure-redis-on-windows)
+    - [Basic data operations](#basic-data-operations)
+    - [Pub/sub messaging pattern](#pubsub-messaging-pattern)
+    - [Pipelining and transactions](#pipelining-and-transactions)
+    - [Backup and persistence](#backup-and-persistence)
+    - [Monitoring and statistics](#monitoring-and-statistics)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -49,7 +49,7 @@ Redis is an in-memory data structure store used as a database, cache, message br
 5. **Set a key**: `redis-cli SET mykey "Hello Redis"`
 6. **Get a key**: `redis-cli GET mykey`
 
-## Key Concepts
+## Key concepts
 
 - **In-Memory Storage**: All data stored in RAM for sub-millisecond latency; optional persistence to disk
 - **Data Structures**: Strings, Lists, Sets, Sorted Sets, Hashes, Bitmaps, HyperLogLogs, Streams
@@ -58,7 +58,7 @@ Redis is an in-memory data structure store used as a database, cache, message br
 - **Pub/Sub**: Publish/subscribe messaging pattern for real-time event distribution
 - **Transactions**: MULTI/EXEC commands for atomic execution of command batches
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **redis.windows.conf** (located in installation directory):
 
@@ -101,7 +101,7 @@ requirepass StrongPassword123!
 - Use pipelining for batch operations
 - Monitor memory usage and fragmentation ratio
 
-## Security Considerations
+## Security considerations
 
 1. **Authentication**: Always set `requirepass` in production; use strong passwords
 2. **Network Binding**: Bind to localhost (`127.0.0.1`) or specific interfaces; never `0.0.0.0` without firewall
@@ -122,7 +122,7 @@ rename-command SHUTDOWN "SHUTDOWN_5c4e1d3f"
 
 ## Examples
 
-### Install and Configure Redis on Windows
+### Install and configure Redis on Windows
 
 Download, install, and configure Redis as a Windows service with basic security settings.
 
@@ -171,7 +171,7 @@ Get-Service Redis | Select-Object Name, Status, StartType
 redis-cli -a StrongPassword123! ping
 ```
 
-### Basic Data Operations
+### Basic data operations
 
 Perform CRUD operations with different Redis data structures using redis-cli.
 
@@ -219,7 +219,7 @@ redis-cli TTL session:token
 redis-cli KEYS "user:*"  # Use SCAN in production
 ```
 
-### Pub/Sub Messaging Pattern
+### Pub/sub messaging pattern
 
 Implement publish/subscribe messaging for real-time event distribution across applications.
 
@@ -257,7 +257,7 @@ redis-cli UNSUBSCRIBE news
 redis-cli PUNSUBSCRIBE "event:*"
 ```
 
-### Pipelining and Transactions
+### Pipelining and transactions
 
 Use pipelining for batch operations and transactions for atomic command execution.
 
@@ -295,7 +295,7 @@ EXEC
 EOF
 ```
 
-### Backup and Persistence
+### Backup and persistence
 
 Configure and manage RDB snapshots and AOF files for data durability.
 
@@ -353,7 +353,7 @@ $trigger = New-ScheduledTaskTrigger -Daily -At 2am
 Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "Redis Daily Backup" -Description "Daily Redis backup"
 ```
 
-### Monitoring and Statistics
+### Monitoring and statistics
 
 Monitor Redis performance, memory usage, and client connections.
 
@@ -457,7 +457,7 @@ Set-Content -Path "C:\Scripts\redis-monitor.ps1" -Value $script
 - Windows Event Viewer: Application logs
 - Monitor commands: Use `redis-cli MONITOR` sparingly (impacts performance)
 
-## Performance and Tuning
+## Performance and tuning
 
 **Memory Optimization**:
 
@@ -521,9 +521,9 @@ redis-benchmark -a StrongPassword123! -t set,get -n 100000 -q
 redis-cli -a StrongPassword123! INFO stats | Select-String "keyspace_hits|keyspace_misses"
 ```
 
-## References and Further Reading
+## References and further reading
 
-- [Redis Documentation](https://redis.io/docs/) - Official comprehensive Redis documentation
+- [Redis Documentation](https://redis.io/docs/) - Official Redis documentation
 - [Redis Commands Reference](https://redis.io/commands) - Complete command reference with examples
 - [Redis Best Practices](https://redis.io/topics/best-practices) - Official best practices guide
 - [StackExchange.Redis](https://stackexchange.github.io/StackExchange.Redis/) - Popular .NET Redis client

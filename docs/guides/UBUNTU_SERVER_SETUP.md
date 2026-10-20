@@ -1,14 +1,14 @@
-# Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH
+# Ubuntu server 24.04 LTS on bare metal: SSD-Only install, networking, and SSH
 
 <br>
-**Last updated**: April 05, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: April 05, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![OS](https://img.shields.io/badge/Ubuntu-24.04_LTS-E95420.svg)](https://ubuntu.com/server)
 [![Form Factor](https://img.shields.io/badge/Deployment-Bare_Metal-gray.svg)](https://ubuntu.com/download/server)
@@ -22,67 +22,67 @@ The emphasis is not only on getting the machine to boot, but on getting the plat
 
 ## Contents
 
-- [Ubuntu Server 24.04 LTS on Bare Metal: SSD-Only Install, Networking, and SSH](#ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh)
+- [Ubuntu server 24.04 LTS on bare metal: SSD-Only install, networking, and SSH](#ubuntu-server-2404-lts-on-bare-metal-ssd-only-install-networking-and-ssh)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
     - [Prerequisites](#prerequisites)
-    - [Recommended Deployment Order](#recommended-deployment-order)
-  - [Key Concepts](#key-concepts)
-    - [Storage Strategy for This Machine](#storage-strategy-for-this-machine)
-    - [UEFI, GPT, and Bootloader Placement](#uefi-gpt-and-bootloader-placement)
-    - [Networking Model on Ubuntu Server 24.04](#networking-model-on-ubuntu-server-2404)
-    - [SSH Reception vs SSH Emission](#ssh-reception-vs-ssh-emission)
-    - [NVIDIA Considerations on a Headless Server](#nvidia-considerations-on-a-headless-server)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-    - [1. Pre-Install Safety and Data Preservation](#1-pre-install-safety-and-data-preservation)
-    - [2. BIOS/UEFI Firmware Preparation](#2-biosuefi-firmware-preparation)
-    - [3. Build the Ubuntu Server Installer USB](#3-build-the-ubuntu-server-installer-usb)
-    - [4. Identify the Correct SSD and Protect the HDD](#4-identify-the-correct-ssd-and-protect-the-hdd)
-    - [5. Install Ubuntu Server onto the SSD Only](#5-install-ubuntu-server-onto-the-ssd-only)
-    - [6. First Boot OS Baseline](#6-first-boot-os-baseline)
-    - [7. Networking Setup with Netplan](#7-networking-setup-with-netplan)
-      - [DHCP with Router Reservation](#dhcp-with-router-reservation)
-      - [Static Address in Netplan](#static-address-in-netplan)
-    - [8. SSH Server Setup and Hardening](#8-ssh-server-setup-and-hardening)
-    - [9. SSH Client Setup for Outbound Connections](#9-ssh-client-setup-for-outbound-connections)
-    - [10. Access the Preserved HDD Safely After Install](#10-access-the-preserved-hdd-safely-after-install)
-    - [11. Optional NVIDIA Driver and CUDA Preparation](#11-optional-nvidia-driver-and-cuda-preparation)
-  - [Security Considerations](#security-considerations)
-    - [Physical and Firmware Security](#physical-and-firmware-security)
-    - [OS and Service Hardening](#os-and-service-hardening)
-    - [Network Exposure Strategy](#network-exposure-strategy)
+    - [Recommended deployment order](#recommended-deployment-order)
+  - [Key concepts](#key-concepts)
+    - [Storage strategy for this machine](#storage-strategy-for-this-machine)
+    - [UEFI, GPT, and bootloader placement](#uefi-gpt-and-bootloader-placement)
+    - [Networking model on Ubuntu server 24.04](#networking-model-on-ubuntu-server-2404)
+    - [SSH reception vs SSH emission](#ssh-reception-vs-ssh-emission)
+    - [NVIDIA considerations on a headless server](#nvidia-considerations-on-a-headless-server)
+  - [Configuration and best practices](#configuration-and-best-practices)
+    - [1. Pre-Install safety and data preservation](#1-pre-install-safety-and-data-preservation)
+    - [2. BIOS/UEFI firmware preparation](#2-biosuefi-firmware-preparation)
+    - [3. Build the Ubuntu server installer USB](#3-build-the-ubuntu-server-installer-usb)
+    - [4. Identify the correct SSD and protect the HDD](#4-identify-the-correct-ssd-and-protect-the-hdd)
+    - [5. Install Ubuntu server onto the SSD only](#5-install-ubuntu-server-onto-the-ssd-only)
+    - [6. First Boot OS baseline](#6-first-boot-os-baseline)
+    - [7. Networking setup with Netplan](#7-networking-setup-with-netplan)
+      - [DHCP with router reservation](#dhcp-with-router-reservation)
+      - [Static address in Netplan](#static-address-in-netplan)
+    - [8. SSH server setup and hardening](#8-ssh-server-setup-and-hardening)
+    - [9. SSH client setup for outbound connections](#9-ssh-client-setup-for-outbound-connections)
+    - [10. Access the preserved HDD safely after install](#10-access-the-preserved-hdd-safely-after-install)
+    - [11. Optional NVIDIA driver and CUDA preparation](#11-optional-nvidia-driver-and-cuda-preparation)
+  - [Security considerations](#security-considerations)
+    - [Physical and firmware security](#physical-and-firmware-security)
+    - [OS and service hardening](#os-and-service-hardening)
+    - [Network exposure strategy](#network-exposure-strategy)
   - [Examples](#examples)
-    - [Example 1: Disk Inventory Before Installation](#example-1-disk-inventory-before-installation)
-    - [Example 2: Static Netplan Configuration](#example-2-static-netplan-configuration)
-    - [Example 3: SSH Hardening Drop-In](#example-3-ssh-hardening-drop-in)
-    - [Example 4: Mount the Preserved HDD Read-Only First](#example-4-mount-the-preserved-hdd-read-only-first)
-    - [Example 5: Install NVIDIA Drivers on a Headless Server](#example-5-install-nvidia-drivers-on-a-headless-server)
+    - [Example 1: disk inventory before installation](#example-1-disk-inventory-before-installation)
+    - [Example 2: static Netplan configuration](#example-2-static-netplan-configuration)
+    - [Example 3: SSH hardening Drop-In](#example-3-ssh-hardening-drop-in)
+    - [Example 4: mount the preserved HDD Read-Only first](#example-4-mount-the-preserved-hdd-read-only-first)
+    - [Example 5: install NVIDIA drivers on a headless server](#example-5-install-nvidia-drivers-on-a-headless-server)
   - [Troubleshooting](#troubleshooting)
-    - [Installer and Boot Problems](#installer-and-boot-problems)
-      - [Problem: The installer sees both disks and you are not sure which one is the SSD](#problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd)
+    - [Installer and Boot problems](#installer-and-boot-problems)
+      - [Problem: the installer sees both disks and you are not sure which one is the SSD](#problem-the-installer-sees-both-disks-and-you-are-not-sure-which-one-is-the-ssd)
       - [Problem: Ubuntu installs, but the system only boots when the HDD is attached](#problem-ubuntu-installs-but-the-system-only-boots-when-the-hdd-is-attached)
-      - [Problem: Firmware says no bootable device after installation](#problem-firmware-says-no-bootable-device-after-installation)
-    - [Networking Problems](#networking-problems)
-      - [Problem: Network is down after editing Netplan](#problem-network-is-down-after-editing-netplan)
-      - [Problem: The host can ping IPs but not domain names](#problem-the-host-can-ping-ips-but-not-domain-names)
-      - [Problem: Link is unstable or slow](#problem-link-is-unstable-or-slow)
-    - [SSH Problems](#ssh-problems)
-      - [Problem: Connection refused on port 22](#problem-connection-refused-on-port-22)
-      - [Problem: Permission denied (publickey)](#problem-permission-denied-publickey)
-      - [Problem: You locked yourself out after hardening SSH](#problem-you-locked-yourself-out-after-hardening-ssh)
-    - [Disk and Filesystem Problems](#disk-and-filesystem-problems)
-      - [Problem: Preserved NTFS partition will not mount read-write](#problem-preserved-ntfs-partition-will-not-mount-read-write)
+      - [Problem: firmware says no bootable device after installation](#problem-firmware-says-no-bootable-device-after-installation)
+    - [Networking problems](#networking-problems)
+      - [Problem: network is down after editing Netplan](#problem-network-is-down-after-editing-netplan)
+      - [Problem: the host can ping IPs but not domain names](#problem-the-host-can-ping-ips-but-not-domain-names)
+      - [Problem: link is unstable or slow](#problem-link-is-unstable-or-slow)
+    - [SSH problems](#ssh-problems)
+      - [Problem: connection refused on port 22](#problem-connection-refused-on-port-22)
+      - [Problem: permission denied (publickey)](#problem-permission-denied-publickey)
+      - [Problem: you locked yourself out after hardening SSH](#problem-you-locked-yourself-out-after-hardening-ssh)
+    - [Disk and filesystem problems](#disk-and-filesystem-problems)
+      - [Problem: preserved NTFS partition will not mount read-write](#problem-preserved-ntfs-partition-will-not-mount-read-write)
       - [Problem: HDD auto-mount breaks boot](#problem-hdd-auto-mount-breaks-boot)
-      - [Problem: Root filesystem is unexpectedly full on a 128 GB SSD](#problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd)
-    - [NVIDIA and Secure Boot Problems](#nvidia-and-secure-boot-problems)
-      - [Problem: Driver installed but `nvidia-smi` fails](#problem-driver-installed-but-nvidia-smi-fails)
-      - [Problem: Black screen or unstable console after GPU driver changes](#problem-black-screen-or-unstable-console-after-gpu-driver-changes)
-  - [Performance and Tuning](#performance-and-tuning)
-    - [Storage and SSD Hygiene](#storage-and-ssd-hygiene)
-    - [Memory, Swap, and Logging](#memory-swap-and-logging)
-    - [Network Stability and Throughput](#network-stability-and-throughput)
-  - [References and Further Reading](#references-and-further-reading)
+      - [Problem: root filesystem is unexpectedly full on a 128 GB SSD](#problem-root-filesystem-is-unexpectedly-full-on-a-128-gb-ssd)
+    - [NVIDIA and secure Boot problems](#nvidia-and-secure-boot-problems)
+      - [Problem: driver installed but `nvidia-smi` fails](#problem-driver-installed-but-nvidia-smi-fails)
+      - [Problem: black screen or unstable console after GPU driver changes](#problem-black-screen-or-unstable-console-after-gpu-driver-changes)
+  - [Performance and tuning](#performance-and-tuning)
+    - [Storage and SSD hygiene](#storage-and-ssd-hygiene)
+    - [Memory, swap, and logging](#memory-swap-and-logging)
+    - [Network stability and throughput](#network-stability-and-throughput)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -98,7 +98,7 @@ The emphasis is not only on getting the machine to boot, but on getting the plat
 - Basic router/switch access if you want a DHCP reservation or a known static IP
 - Ethernet connection strongly preferred for the initial deployment
 
-### Recommended Deployment Order
+### Recommended deployment order
 
 1. Back up anything needed from the SSD.
 2. Record the exact SSD and HDD model/size so you do not format the wrong device.
@@ -112,9 +112,9 @@ The emphasis is not only on getting the machine to boot, but on getting the plat
 
 ---
 
-## Key Concepts
+## Key concepts
 
-### Storage Strategy for This Machine
+### Storage strategy for this machine
 
 Your machine has a relatively small SSD by server standards, so the correct design is to keep the operating system, packages, logs, and active services on the SSD while leaving the HDD untouched until you explicitly decide how to use it later.
 
@@ -125,7 +125,7 @@ For this specific scenario, the most defensible approach is:
 
 This keeps the operating system clean and makes it possible to reintroduce Windows later without having destroyed the HDD contents.
 
-### UEFI, GPT, and Bootloader Placement
+### UEFI, GPT, and bootloader placement
 
 On modern hardware, Ubuntu Server should be installed in UEFI mode using a GPT partition table.
 
@@ -137,7 +137,7 @@ The critical operational detail is this: do not let the installer place the boot
 
 That way, the machine can boot from the SSD even if the HDD is removed or later repurposed.
 
-### Networking Model on Ubuntu Server 24.04
+### Networking model on Ubuntu server 24.04
 
 Ubuntu Server 24.04 uses Netplan as the declarative network configuration layer. On server installs, the backend renderer is commonly `systemd-networkd`.
 
@@ -153,7 +153,7 @@ Typical patterns are:
 - DHCP reservation on the router for stable addressing with minimal host complexity
 - Static addressing in Netplan for infrastructure roles where the IP must be explicit and self-contained
 
-### SSH Reception vs SSH Emission
+### SSH reception vs SSH emission
 
 The machine plays two separate SSH roles:
 
@@ -165,7 +165,7 @@ These two roles have different requirements:
 - Inbound SSH requires `openssh-server`, firewall allowance, and hardened `sshd` policy
 - Outbound SSH requires `openssh-client`, proper key management, sane `~/.ssh/config`, and controlled trust of remote host keys
 
-### NVIDIA Considerations on a Headless Server
+### NVIDIA considerations on a headless server
 
 An RTX 1650 is not required for a normal server install. If you only need a stable headless server, do not install NVIDIA proprietary drivers on day one unless you actually need CUDA, GPU compute, transcoding, or model inference.
 
@@ -179,9 +179,9 @@ If GPU functionality is required later, install and validate it after the base s
 
 ---
 
-## Configuration and Best Practices
+## Configuration and best practices
 
-### 1. Pre-Install Safety and Data Preservation
+### 1. Pre-Install safety and data preservation
 
 Before booting the installer, decide what is allowed to be destroyed.
 
@@ -200,7 +200,7 @@ Operational best practices:
 
 If the current machine boots Windows from the SSD and also has Ubuntu-related data on the HDD, that is acceptable. The SSD can be repurposed while preserving the HDD. The installer must be prevented from reusing the HDD EFI partition or overwriting its partition table.
 
-### 2. BIOS/UEFI Firmware Preparation
+### 2. BIOS/UEFI firmware preparation
 
 Before installation, enter firmware setup and verify the following:
 
@@ -218,7 +218,7 @@ Recommended policy decisions:
 
 Update firmware if the vendor provides a stable BIOS update that improves storage or UEFI behavior, but do not combine a BIOS flash and an OS install in the same maintenance window unless necessary.
 
-### 3. Build the Ubuntu Server Installer USB
+### 3. Build the Ubuntu server installer USB
 
 On Windows, use a reliable tool such as Rufus or balenaEtcher.
 
@@ -238,7 +238,7 @@ Get-FileHash .\ubuntu-24.04-live-server-amd64.iso -Algorithm SHA256
 
 Compare the SHA256 output against the checksum published by Canonical.
 
-### 4. Identify the Correct SSD and Protect the HDD
+### 4. Identify the correct SSD and protect the HDD
 
 From the installer shell or a live environment, inventory disks before touching storage.
 
@@ -274,7 +274,7 @@ What you are looking for:
 
 If the installer UI shows multiple disks and you are not 100% certain which one is the SSD, stop and re-identify the hardware before proceeding.
 
-### 5. Install Ubuntu Server onto the SSD Only
+### 5. Install Ubuntu server onto the SSD only
 
 The Ubuntu Server ISO uses the Subiquity installer. During storage configuration, choose the path that gives you full control over the SSD.
 
@@ -318,7 +318,7 @@ User creation guidance:
 - Use a strong password even if you intend to disable password SSH later.
 - If you already have a trusted SSH public key, you can import it during setup, but only do this if you control the source and understand what keys are being imported.
 
-### 6. First Boot OS Baseline
+### 6. First Boot OS baseline
 
 After the first successful boot, establish a clean baseline before doing workload-specific changes.
 
@@ -383,7 +383,7 @@ systemctl --failed
 journalctl -p 3 -xb
 ```
 
-### 7. Networking Setup with Netplan
+### 7. Networking setup with Netplan
 
 Use Ethernet for the initial build unless you have a compelling reason to run a headless server over Wi-Fi.
 
@@ -409,7 +409,7 @@ or
 
 Choose one of the following strategies.
 
-#### DHCP with Router Reservation
+#### DHCP with router reservation
 
 This is often the best operational compromise for a home lab or small office server.
 
@@ -417,7 +417,7 @@ This is often the best operational compromise for a home lab or small office ser
 - Reserve a fixed address in the router using the NIC MAC address.
 - The server stays simple while still getting a stable IP.
 
-#### Static Address in Netplan
+#### Static address in Netplan
 
 Use this when the machine is infrastructure and its IP must remain defined at the host layer.
 
@@ -466,7 +466,7 @@ Netplan best practices:
 
 If you have multiple interfaces, bind configuration to the intended NIC carefully. Interface names such as `enp3s0`, `eno1`, or `enx<mac>` are not interchangeable.
 
-### 8. SSH Server Setup and Hardening
+### 8. SSH server setup and hardening
 
 Inbound SSH is how the machine becomes operationally useful.
 
@@ -539,7 +539,7 @@ sudo systemctl status ssh --no-pager
 
 Critical operational rule: do not close your current SSH session until you have opened and verified a second session successfully.
 
-### 9. SSH Client Setup for Outbound Connections
+### 9. SSH client setup for outbound connections
 
 If this server must reach GitHub, internal Git servers, backup machines, or cluster nodes, configure outbound SSH properly.
 
@@ -590,7 +590,7 @@ ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
 If outbound policy is tightened via firewall, explicitly allow egress TCP 22 to required destinations. By default, UFW permits outgoing traffic unless you change the default policy.
 
-### 10. Access the Preserved HDD Safely After Install
+### 10. Access the preserved HDD safely after install
 
 Do not immediately auto-mount preserved disks read-write. First verify what is on them.
 
@@ -640,7 +640,7 @@ sudo mount -a
 findmnt
 ```
 
-### 11. Optional NVIDIA Driver and CUDA Preparation
+### 11. Optional NVIDIA driver and CUDA preparation
 
 Only do this after networking and SSH are stable.
 
@@ -669,9 +669,9 @@ If Secure Boot is enabled, Ubuntu may require Machine Owner Key enrollment for t
 
 ---
 
-## Security Considerations
+## Security considerations
 
-### Physical and Firmware Security
+### Physical and firmware security
 
 - Set a firmware password if the server is in a shared physical environment.
 - Disable unused boot options if practical.
@@ -684,7 +684,7 @@ On full-disk encryption:
 - For a headless server without IPMI/iDRAC/iLO/KVM, LUKS adds reboot-time operational complexity.
 - If uptime and unattended recovery matter more than physical-at-rest protection, many operators choose no root-disk encryption on single-node edge servers.
 
-### OS and Service Hardening
+### OS and service hardening
 
 - Keep the system patched with `unattended-upgrades` or disciplined maintenance windows.
 - Use SSH keys, not passwords, for administration.
@@ -705,7 +705,7 @@ sudo systemctl --failed
 sudo journalctl -p warning -b
 ```
 
-### Network Exposure Strategy
+### Network exposure strategy
 
 Do not expose the host to the public internet until the following are true:
 
@@ -727,7 +727,7 @@ If the server is internet-facing, also plan for:
 
 ## Examples
 
-### Example 1: Disk Inventory Before Installation
+### Example 1: disk inventory before installation
 
 ```bash
 lsblk -e7 -o NAME,SIZE,TYPE,FSTYPE,MODEL,SERIAL,MOUNTPOINT
@@ -741,7 +741,7 @@ Interpretation pattern:
 - confirm which device is the HDD to preserve
 - confirm whether any existing EFI partition sits on the HDD so you do not accidentally reuse it
 
-### Example 2: Static Netplan Configuration
+### Example 2: static Netplan configuration
 
 ```yaml
 network:
@@ -772,7 +772,7 @@ ip route
 resolvectl status
 ```
 
-### Example 3: SSH Hardening Drop-In
+### Example 3: SSH hardening Drop-In
 
 ```text
 # /etc/ssh/sshd_config.d/10-hardening.conf
@@ -794,7 +794,7 @@ sudo sshd -t
 sudo systemctl restart ssh
 ```
 
-### Example 4: Mount the Preserved HDD Read-Only First
+### Example 4: mount the preserved HDD Read-Only first
 
 ```bash
 lsblk -f
@@ -805,7 +805,7 @@ findmnt /mnt/preserved-hdd
 
 If the data looks correct and healthy, then decide whether a persistent `fstab` entry is appropriate.
 
-### Example 5: Install NVIDIA Drivers on a Headless Server
+### Example 5: install NVIDIA drivers on a headless server
 
 ```bash
 ubuntu-drivers devices
@@ -825,9 +825,9 @@ journalctl -k -b | grep -Ei 'nvidia|nouveau|secure'
 
 ## Troubleshooting
 
-### Installer and Boot Problems
+### Installer and Boot problems
 
-#### Problem: The installer sees both disks and you are not sure which one is the SSD
+#### Problem: the installer sees both disks and you are not sure which one is the SSD
 
 - Stop before modifying storage.
 - Use `lsblk`, `fdisk -l`, and `/dev/disk/by-id/` to identify model and capacity.
@@ -840,16 +840,16 @@ journalctl -k -b | grep -Ei 'nvidia|nouveau|secure'
 - Corrective action usually means creating an ESP on the SSD and reinstalling GRUB for the SSD boot path.
 - Check boot entries with `efibootmgr -v` after recovery.
 
-#### Problem: Firmware says no bootable device after installation
+#### Problem: firmware says no bootable device after installation
 
 - Verify the installer was booted in UEFI mode, not legacy mode.
 - Confirm the SSD contains a FAT32 EFI System Partition.
 - Check whether the firmware boot order points to the SSD.
 - Use `efibootmgr -v` from rescue mode to inspect or recreate boot entries.
 
-### Networking Problems
+### Networking problems
 
-#### Problem: Network is down after editing Netplan
+#### Problem: network is down after editing Netplan
 
 - YAML indentation errors are common.
 - Interface name may be wrong.
@@ -865,13 +865,13 @@ ip route
 resolvectl status
 ```
 
-#### Problem: The host can ping IPs but not domain names
+#### Problem: the host can ping IPs but not domain names
 
 - Routing is working; DNS is not.
 - Review the `nameservers` block and `resolvectl status`.
 - Test with a known resolver such as `1.1.1.1` or your router DNS.
 
-#### Problem: Link is unstable or slow
+#### Problem: link is unstable or slow
 
 - Inspect duplex and negotiated speed:
 
@@ -882,9 +882,9 @@ sudo ethtool enp3s0
 - Replace bad cables before blaming Linux.
 - Check NIC driver binding with `lspci -nnk`.
 
-### SSH Problems
+### SSH problems
 
-#### Problem: Connection refused on port 22
+#### Problem: connection refused on port 22
 
 - The service may not be installed or running.
 - Firewall may be blocking it.
@@ -896,7 +896,7 @@ sudo ss -tlnp | grep ':22'
 sudo ufw status verbose
 ```
 
-#### Problem: Permission denied (publickey)
+#### Problem: permission denied (publickey)
 
 - The wrong key may be offered.
 - `authorized_keys` permissions may be wrong.
@@ -914,15 +914,15 @@ chmod 700 ~/.ssh
 chmod 600 ~/.ssh/authorized_keys
 ```
 
-#### Problem: You locked yourself out after hardening SSH
+#### Problem: you locked yourself out after hardening SSH
 
 - This is why a second tested session matters.
 - Revert the last drop-in from local console access.
 - Always run `sshd -t` before restarting the service.
 
-### Disk and Filesystem Problems
+### Disk and filesystem problems
 
-#### Problem: Preserved NTFS partition will not mount read-write
+#### Problem: preserved NTFS partition will not mount read-write
 
 - Windows Fast Startup or hibernation likely left the filesystem dirty.
 - Mount read-only first.
@@ -934,7 +934,7 @@ chmod 600 ~/.ssh/authorized_keys
 - Add `nofail` and preferably `x-systemd.automount`.
 - Test with `sudo mount -a` before rebooting.
 
-#### Problem: Root filesystem is unexpectedly full on a 128 GB SSD
+#### Problem: root filesystem is unexpectedly full on a 128 GB SSD
 
 - Check logs, package cache, container images, and backup artifacts.
 - Investigate with:
@@ -945,9 +945,9 @@ sudo du -xh / | sort -h | tail -n 30
 sudo journalctl --disk-usage
 ```
 
-### NVIDIA and Secure Boot Problems
+### NVIDIA and secure Boot problems
 
-#### Problem: Driver installed but `nvidia-smi` fails
+#### Problem: driver installed but `nvidia-smi` fails
 
 - Kernel module may not be loaded.
 - Secure Boot may have blocked it.
@@ -959,7 +959,7 @@ mokutil --sb-state
 journalctl -k -b | grep -Ei 'nvidia|nouveau|secure'
 ```
 
-#### Problem: Black screen or unstable console after GPU driver changes
+#### Problem: black screen or unstable console after GPU driver changes
 
 - Prefer doing NVIDIA work only after you have SSH access.
 - Keep a recovery plan through GRUB advanced options or installer rescue mode.
@@ -967,9 +967,9 @@ journalctl -k -b | grep -Ei 'nvidia|nouveau|secure'
 
 ---
 
-## Performance and Tuning
+## Performance and tuning
 
-### Storage and SSD Hygiene
+### Storage and SSD hygiene
 
 - Ensure TRIM is active:
 
@@ -986,7 +986,7 @@ sudo systemctl enable --now fstrim.timer
 - Use SSD space intentionally; 128 GB disappears quickly once logs, containers, and datasets accumulate.
 - Keep the HDD for bulk data once you have validated and mounted it correctly.
 
-### Memory, Swap, and Logging
+### Memory, swap, and logging
 
 With 16 GB RAM, Ubuntu's default swapfile behavior is usually sufficient.
 
@@ -1007,7 +1007,7 @@ grep -R "^SystemMaxUse" /etc/systemd/journald.conf /etc/systemd/journald.conf.d 
 
 If local logs are consuming too much SSD space, tune `journald` retention.
 
-### Network Stability and Throughput
+### Network stability and throughput
 
 - Prefer wired Ethernet over Wi-Fi for a physical server.
 - Reserve the IP on the router if you want stable addressing without host-side static config complexity.
@@ -1023,7 +1023,7 @@ iperf3 -c <target-host>
 
 ---
 
-## References and Further Reading
+## References and further reading
 
 - Canonical Ubuntu Server documentation: <https://documentation.ubuntu.com/server/>
 - Ubuntu installation guide and Subiquity installer docs: <https://canonical-subiquity.readthedocs-hosted.com/>

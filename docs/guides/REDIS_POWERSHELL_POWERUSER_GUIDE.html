@@ -9,7 +9,7 @@
       name="description"
     />
     <meta content="#f2f0e9" name="theme-color" />
-    <title>REDIS PowerUser Guide (PowerShell) - Paul Namalomba</title>
+    <title>REDIS PowerUser guide (PowerShell) - Paul Namalomba</title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
   </head>
@@ -47,7 +47,7 @@
         </div>
         <article class="docs-content">
           <h1 id="redis-poweruser-guide-powershell">
-            REDIS PowerUser Guide (PowerShell)
+            REDIS PowerUser guide (PowerShell)
           </h1>
           <p>
             <strong>Last updated</strong>: December 04, 2025<br />
@@ -82,15 +82,15 @@
             Redis is an in-memory data structure store used as a database,
             cache, message broker, and streaming engine. This guide covers
             installation, data structures, persistence, clustering, and
-            performance optimization using PowerShell on Windows. Power users
-            need to understand memory management, eviction policies,
+            performance optimization using PowerShell on Windows. Production
+            considerations include memory management, eviction policies,
             replication, and pub/sub patterns for production deployments.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#redis-poweruser-guide-powershell"
-                >REDIS PowerUser Guide (PowerShell)</a
+                >REDIS PowerUser guide (PowerShell)</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -110,28 +110,28 @@
               <ul>
                 <li>
                   <a href="#install-and-configure-redis-on-windows"
-                    >Install and Configure Redis on Windows</a
+                    >Install and configure Redis on Windows</a
                   >
                 </li>
                 <li>
-                  <a href="#basic-data-operations">Basic Data Operations</a>
+                  <a href="#basic-data-operations">Basic data operations</a>
                 </li>
                 <li>
                   <a href="#pubsub-messaging-pattern"
-                    >Pub/Sub Messaging Pattern</a
+                    >Pub/sub messaging pattern</a
                   >
                 </li>
                 <li>
                   <a href="#pipelining-and-transactions"
-                    >Pipelining and Transactions</a
+                    >Pipelining and transactions</a
                   >
                 </li>
                 <li>
-                  <a href="#backup-and-persistence">Backup and Persistence</a>
+                  <a href="#backup-and-persistence">Backup and persistence</a>
                 </li>
                 <li>
                   <a href="#monitoring-and-statistics"
-                    >Monitoring and Statistics</a
+                    >Monitoring and statistics</a
                   >
                 </li>
               </ul>
@@ -174,7 +174,7 @@
               <strong>Get a key</strong>: <code>redis-cli GET mykey</code>
             </li>
           </ol>
-          <h2 id="key-concepts">Key Concepts</h2>
+          <h2 id="key-concepts">Key concepts</h2>
           <ul>
             <li>
               <strong>In-Memory Storage</strong>: All data stored in RAM for
@@ -202,7 +202,7 @@
             </li>
           </ul>
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
           <p>
             <strong>redis.windows.conf</strong> (located in installation
@@ -245,7 +245,7 @@
             Implement connection pooling in applications - Use pipelining for
             batch operations - Monitor memory usage and fragmentation ratio
           </p>
-          <h2 id="security-considerations">Security Considerations</h2>
+          <h2 id="security-considerations">Security considerations</h2>
           <ol>
             <li>
               <strong>Authentication</strong>: Always set
@@ -287,7 +287,7 @@
           </div>
           <h2 id="examples">Examples</h2>
           <h3 id="install-and-configure-redis-on-windows">
-            Install and Configure Redis on Windows
+            Install and configure Redis on Windows
           </h3>
           <p>
             Download, install, and configure Redis as a Windows service with
@@ -338,7 +338,7 @@
 <span class="n">redis-cli</span> <span class="n">-a</span> <span class="n">StrongPassword123</span><span class="p">!</span> <span class="n">ping</span>
 </code></pre>
           </div>
-          <h3 id="basic-data-operations">Basic Data Operations</h3>
+          <h3 id="basic-data-operations">Basic data operations</h3>
           <p>
             Perform CRUD operations with different Redis data structures using
             redis-cli.
@@ -387,7 +387,7 @@
 <span class="n">redis-cli</span> <span class="n">KEYS</span> <span class="s2">"user:*"</span>  <span class="c"># Use SCAN in production</span>
 </code></pre>
           </div>
-          <h3 id="pubsub-messaging-pattern">Pub/Sub Messaging Pattern</h3>
+          <h3 id="pubsub-messaging-pattern">Pub/sub messaging pattern</h3>
           <p>
             Implement publish/subscribe messaging for real-time event
             distribution across applications.
@@ -426,7 +426,7 @@
 <span class="n">redis-cli</span> <span class="n">PUNSUBSCRIBE</span> <span class="s2">"event:*"</span>
 </code></pre>
           </div>
-          <h3 id="pipelining-and-transactions">Pipelining and Transactions</h3>
+          <h3 id="pipelining-and-transactions">Pipelining and transactions</h3>
           <p>
             Use pipelining for batch operations and transactions for atomic
             command execution.
@@ -465,7 +465,7 @@
 <span class="n">EOF</span>
 </code></pre>
           </div>
-          <h3 id="backup-and-persistence">Backup and Persistence</h3>
+          <h3 id="backup-and-persistence">Backup and persistence</h3>
           <p>
             Configure and manage RDB snapshots and AOF files for data
             durability.
@@ -524,7 +524,7 @@
 <span class="nb">Register-ScheduledTask</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-TaskName</span> <span class="s2">"Redis Daily Backup"</span> <span class="n">-Description</span> <span class="s2">"Daily Redis backup"</span>
 </code></pre>
           </div>
-          <h3 id="monitoring-and-statistics">Monitoring and Statistics</h3>
+          <h3 id="monitoring-and-statistics">Monitoring and statistics</h3>
           <p>
             Monitor Redis performance, memory usage, and client connections.
           </p>
@@ -633,7 +633,7 @@
             Viewer: Application logs - Monitor commands: Use
             <code>redis-cli MONITOR</code> sparingly (impacts performance)
           </p>
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
           <p><strong>Memory Optimization</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1"># redis.windows.conf</span>
@@ -696,12 +696,12 @@
 </code></pre>
           </div>
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>
               <a href="https://redis.io/docs/">Redis Documentation</a> -
-              Official comprehensive Redis documentation
+              Official Redis documentation
             </li>
             <li>
               <a href="https://redis.io/commands">Redis Commands Reference</a> -

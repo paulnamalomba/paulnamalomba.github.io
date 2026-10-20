@@ -1,4 +1,4 @@
-# Docker PowerUser Guide (PowerShell)
+# Docker PowerUser guide (PowerShell)
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,26 +16,26 @@
 
 ## Overview
 
-Docker is a containerization platform enabling consistent application deployment across environments using lightweight, portable containers. This guide covers installation, image management, container orchestration, Docker Compose, networking, volume management, and security using PowerShell 7+ on Windows. Power users need to understand multi-stage builds, resource limits, health checks, and production deployment patterns for Windows container workloads.
+Docker is a containerization platform enabling consistent application deployment across environments using lightweight, portable containers. This guide covers installation, image management, container orchestration, Docker Compose, networking, volume management, and security using PowerShell 7+ on Windows. Production considerations include multi-stage builds, resource limits, health checks, and production deployment patterns for Windows container workloads.
 
 ## Contents
 
-- [Docker PowerUser Guide (PowerShell)](#docker-poweruser-guide-powershell)
+- [Docker PowerUser guide (PowerShell)](#docker-poweruser-guide-powershell)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Container Lifecycle Management](#container-lifecycle-management)
-    - [Building and Managing Images](#building-and-managing-images)
-    - [Docker Compose Multi-Container Applications](#docker-compose-multi-container-applications)
-    - [Volume and Network Management](#volume-and-network-management)
-    - [System Monitoring and Cleanup](#system-monitoring-and-cleanup)
+    - [Container lifecycle management](#container-lifecycle-management)
+    - [Building and managing images](#building-and-managing-images)
+    - [Docker Compose Multi-Container applications](#docker-compose-multi-container-applications)
+    - [Volume and network management](#volume-and-network-management)
+    - [System monitoring and cleanup](#system-monitoring-and-cleanup)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -48,7 +48,7 @@ Docker is a containerization platform enabling consistent application deployment
 5. **Stop container**: `docker stop webserver`
 6. **Remove container**: `docker rm webserver`
 
-## Key Concepts
+## Key concepts
 
 - **Image**: Read-only template containing application code, runtime, libraries, and dependencies; built from Dockerfile layers
 - **Container**: Running instance of an image with isolated filesystem, networking, and process space; ephemeral by default
@@ -58,7 +58,7 @@ Docker is a containerization platform enabling consistent application deployment
 - **Dockerfile**: Text file with instructions to build Docker images; supports multi-stage builds for optimized image sizes
 - **Docker Compose**: Tool for defining and running multi-container applications using YAML configuration files
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **Docker Desktop Settings (Windows)**:
 
@@ -102,7 +102,7 @@ function dexec { param($container) docker exec -it $container powershell }
 - Set resource limits (CPU, memory) to prevent resource exhaustion
 - Use Docker Compose for multi-container applications
 
-## Security Considerations
+## Security considerations
 
 1. **Image Security**: Scan images for vulnerabilities with `docker scan <image>` or third-party tools like Trivy
 2. **Least Privilege**: Run containers with minimal permissions; avoid `--privileged` flag unless absolutely necessary
@@ -139,9 +139,9 @@ docker service create --name db --secret db_password postgres:15
 
 ## Examples
 
-### Container Lifecycle Management
+### Container lifecycle management
 
-Manage container creation, execution, monitoring, and cleanup with comprehensive PowerShell commands.
+Manage container creation, execution, monitoring, and cleanup with PowerShell commands.
 
 ```powershell
 # Pull image from Docker Hub
@@ -211,7 +211,7 @@ docker cp webserver:/etc/nginx/nginx.conf ./nginx.conf
 docker cp ./index.html webserver:/usr/share/nginx/html/
 ```
 
-### Building and Managing Images
+### Building and managing images
 
 Create optimized Docker images with multi-stage builds, tagging strategies, and registry operations.
 
@@ -302,7 +302,7 @@ docker buildx create --use
 docker buildx build --platform linux/amd64,linux/arm64 -t myapp:1.0.0 --push .
 ```
 
-### Docker Compose Multi-Container Applications
+### Docker Compose Multi-Container applications
 
 Orchestrate complex multi-container applications with Docker Compose including databases, caching, and web services.
 
@@ -461,7 +461,7 @@ docker-compose config --quiet
 docker-compose pull
 ```
 
-### Volume and Network Management
+### Volume and network management
 
 Manage persistent data storage and container networking with Docker volumes and custom network configurations.
 
@@ -564,7 +564,7 @@ docker network prune
 docker network rm app_network
 ```
 
-### System Monitoring and Cleanup
+### System monitoring and cleanup
 
 Monitor Docker system resources, clean up unused resources, and maintain optimal Docker environment.
 
@@ -704,7 +704,7 @@ docker run --rm -v myvolume:/data alpine ls -la /data
 icacls "C:\path\to\folder" /grant "Everyone:(OI)(CI)F" /T
 ```
 
-## Performance and Tuning
+## Performance and tuning
 
 **Docker Desktop Resource Allocation**:
 
@@ -809,9 +809,9 @@ while ($true) {
 }
 ```
 
-## References and Further Reading
+## References and further reading
 
-- [Docker Documentation](https://docs.docker.com/) - Official comprehensive Docker documentation
+- [Docker Documentation](https://docs.docker.com/) - Official Docker documentation
 - [Docker Hub](https://hub.docker.com/) - Public registry with official and community images
 - [Docker Compose Documentation](https://docs.docker.com/compose/) - Multi-container application orchestration
 - [Best Practices for Writing Dockerfiles](https://docs.docker.com/develop/dev-best-practices/) - Official optimization guide

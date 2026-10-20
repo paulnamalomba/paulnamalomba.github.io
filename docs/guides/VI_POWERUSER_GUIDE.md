@@ -1,4 +1,4 @@
-# VI/VIM Power User Guide
+# VI/VIM power user guide
 
 **Last updated**: December 12, 2025
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,69 +16,69 @@
 
 ## Overview
 
-This guide provides a comprehensive overview of Vi/Vim text editors, focusing on advanced navigation, editing techniques, and customization options. It is designed for power users who want to enhance their productivity and efficiency while working with text files in Vi/Vim.
+This Vi/Vim guide covers advanced navigation, editing commands, and customization for working efficiently with text files.
 
 # Contents
 
-- [VI/VIM Power User Guide](#vivim-power-user-guide)
+- [VI/VIM power user guide](#vivim-power-user-guide)
   - [Overview](#overview)
 - [Contents](#contents)
-  - [Mode System](#mode-system)
-  - [Basic Navigation](#basic-navigation)
-    - [Character Movement](#character-movement)
-    - [Word Movement](#word-movement)
-    - [Line Movement](#line-movement)
-  - [Advanced Navigation](#advanced-navigation)
-    - [Screen Movement](#screen-movement)
+  - [Mode system](#mode-system)
+  - [Basic navigation](#basic-navigation)
+    - [Character movement](#character-movement)
+    - [Word movement](#word-movement)
+    - [Line movement](#line-movement)
+  - [Advanced navigation](#advanced-navigation)
+    - [Screen movement](#screen-movement)
     - [Scrolling](#scrolling)
-    - [File Movement](#file-movement)
-    - [Jump Commands](#jump-commands)
+    - [File movement](#file-movement)
+    - [Jump commands](#jump-commands)
     - [Marks](#marks)
   - [Searching](#searching)
-    - [Basic Search](#basic-search)
-    - [Search Options](#search-options)
-  - [Editing Commands](#editing-commands)
-    - [Insert Mode](#insert-mode)
-    - [Delete Commands](#delete-commands)
-    - [Copy (Yank) Commands](#copy-yank-commands)
-    - [Paste Commands](#paste-commands)
-    - [Undo/Redo](#undoredo)
-  - [Visual Mode](#visual-mode)
-    - [Entering Visual Mode](#entering-visual-mode)
-    - [Visual Mode Operations](#visual-mode-operations)
-  - [Text Objects](#text-objects)
-    - [Inner vs Around](#inner-vs-around)
-    - [Paired Objects](#paired-objects)
-  - [Command-Line Mode (Ex Commands)](#command-line-mode-ex-commands)
-    - [File Operations](#file-operations)
-    - [Line Numbers and Ranges](#line-numbers-and-ranges)
-    - [Search and Replace](#search-and-replace)
-    - [Multiple Files](#multiple-files)
-    - [Windows (Splits)](#windows-splits)
+    - [Basic search](#basic-search)
+    - [Search options](#search-options)
+  - [Editing commands](#editing-commands)
+    - [Insert mode](#insert-mode)
+    - [Delete commands](#delete-commands)
+    - [Copy (yank) commands](#copy-yank-commands)
+    - [Paste commands](#paste-commands)
+    - [Undo/redo](#undoredo)
+  - [Visual mode](#visual-mode)
+    - [Entering Visual mode](#entering-visual-mode)
+    - [Visual mode operations](#visual-mode-operations)
+  - [Text objects](#text-objects)
+    - [Inner vs around](#inner-vs-around)
+    - [Paired objects](#paired-objects)
+  - [Command-Line mode (ex commands)](#command-line-mode-ex-commands)
+    - [File operations](#file-operations)
+    - [Line numbers and ranges](#line-numbers-and-ranges)
+    - [Search and replace](#search-and-replace)
+    - [Multiple files](#multiple-files)
+    - [Windows (splits)](#windows-splits)
     - [Tabs](#tabs)
-  - [Advanced Features](#advanced-features)
+  - [Advanced features](#advanced-features)
     - [Macros](#macros)
     - [Registers](#registers)
     - [Folding](#folding)
     - [Indentation](#indentation)
-    - [Case Manipulation](#case-manipulation)
-    - [Increment/Decrement Numbers](#incrementdecrement-numbers)
+    - [Case manipulation](#case-manipulation)
+    - [Increment/decrement numbers](#incrementdecrement-numbers)
   - [Configuration](#configuration)
     - [Settings](#settings)
-    - [Common Settings](#common-settings)
-  - [Power User Combinations](#power-user-combinations)
-    - [Quick Navigation Patterns](#quick-navigation-patterns)
-    - [Efficient Editing](#efficient-editing)
-    - [Multiple Operations](#multiple-operations)
-    - [Complex Commands](#complex-commands)
-  - [Cheat Sheet Quick Reference](#cheat-sheet-quick-reference)
-    - [Essential Commands](#essential-commands)
-    - [Speed Tips](#speed-tips)
-  - [Help System](#help-system)
+    - [Common settings](#common-settings)
+  - [Power user combinations](#power-user-combinations)
+    - [Quick navigation patterns](#quick-navigation-patterns)
+    - [Efficient editing](#efficient-editing)
+    - [Multiple operations](#multiple-operations)
+    - [Complex commands](#complex-commands)
+  - [Cheat sheet quick reference](#cheat-sheet-quick-reference)
+    - [Essential commands](#essential-commands)
+    - [Speed tips](#speed-tips)
+  - [Help system](#help-system)
 
 ---
 
-## Mode System
+## Mode system
 
 Vi/Vim operates in different modes:
 
@@ -91,9 +91,9 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ---
 
-## Basic Navigation
+## Basic navigation
 
-### Character Movement
+### Character movement
 
 | Command    | Action                   |
 | ---------- | ------------------------ |
@@ -103,7 +103,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `l`        | Move right one character |
 | Arrow keys | Also work for movement   |
 
-### Word Movement
+### Word movement
 
 | Command | Action                                                    |
 | ------- | --------------------------------------------------------- |
@@ -116,7 +116,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `ge`    | Move backward to end of previous word                     |
 | `gE`    | Move backward to end of previous WORD                     |
 
-### Line Movement
+### Line movement
 
 | Command   | Action                                                 |
 | --------- | ------------------------------------------------------ |
@@ -135,9 +135,9 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ---
 
-## Advanced Navigation
+## Advanced navigation
 
-### Screen Movement
+### Screen movement
 
 | Command | Action                                  |
 | ------- | --------------------------------------- |
@@ -159,7 +159,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `Ctrl-e` | Scroll down one line (cursor stays)        |
 | `Ctrl-y` | Scroll up one line (cursor stays)          |
 
-### File Movement
+### File movement
 
 | Command | Action                       |
 | ------- | ---------------------------- |
@@ -171,7 +171,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `50%`   | Go to 50% through file       |
 | `1G`    | Go to first line             |
 
-### Jump Commands
+### Jump commands
 
 | Command  | Action                                        |
 | -------- | --------------------------------------------- |
@@ -202,7 +202,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ## Searching
 
-### Basic Search
+### Basic search
 
 | Command    | Action                                        |
 | ---------- | --------------------------------------------- |
@@ -215,7 +215,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `g*`       | Search forward for partial word under cursor  |
 | `g#`       | Search backward for partial word under cursor |
 
-### Search Options
+### Search options
 
 | Command          | Action                                      |
 | ---------------- | ------------------------------------------- |
@@ -229,9 +229,9 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ---
 
-## Editing Commands
+## Editing commands
 
-### Insert Mode
+### Insert mode
 
 | Command | Action                                        |
 | ------- | --------------------------------------------- |
@@ -251,7 +251,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `ci(`   | Change text inside parentheses                |
 | `cit`   | Change text inside HTML/XML tag               |
 
-### Delete Commands
+### Delete commands
 
 | Command    | Action                                  |
 | ---------- | --------------------------------------- |
@@ -273,7 +273,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `da"`      | Delete around quotes (including quotes) |
 | `dap`      | Delete around paragraph                 |
 
-### Copy (Yank) Commands
+### Copy (yank) commands
 
 | Command | Action                    |
 | ------- | ------------------------- |
@@ -288,7 +288,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `yi"`   | Yank inside quotes        |
 | `yap`   | Yank around paragraph     |
 
-### Paste Commands
+### Paste commands
 
 | Command | Action                                  |
 | ------- | --------------------------------------- |
@@ -298,7 +298,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `gP`    | Paste before and move cursor            |
 | `]p`    | Paste and adjust indentation            |
 
-### Undo/Redo
+### Undo/redo
 
 | Command  | Action                   |
 | -------- | ------------------------ |
@@ -310,9 +310,9 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ---
 
-## Visual Mode
+## Visual mode
 
-### Entering Visual Mode
+### Entering Visual mode
 
 | Command  | Action                           |
 | -------- | -------------------------------- |
@@ -321,7 +321,7 @@ Press `Esc` to return to Normal Mode from any other mode.
 | `Ctrl-v` | Enter block-wise visual mode     |
 | `gv`     | Reselect last visual selection   |
 
-### Visual Mode Operations
+### Visual mode operations
 
 | Command | Action                            |
 | ------- | --------------------------------- |
@@ -340,11 +340,11 @@ Press `Esc` to return to Normal Mode from any other mode.
 
 ---
 
-## Text Objects
+## Text objects
 
 Text objects work with operator commands (d, c, y, etc.)
 
-### Inner vs Around
+### Inner vs around
 
 | Command | Action                            |
 | ------- | --------------------------------- |
@@ -357,7 +357,7 @@ Text objects work with operator commands (d, c, y, etc.)
 | `ip`    | Inner paragraph                   |
 | `ap`    | Around paragraph                  |
 
-### Paired Objects
+### Paired objects
 
 | Command              | Action                |
 | -------------------- | --------------------- |
@@ -380,11 +380,11 @@ Text objects work with operator commands (d, c, y, etc.)
 
 ---
 
-## Command-Line Mode (Ex Commands)
+## Command-Line mode (ex commands)
 
 Enter with `:` from Normal mode
 
-### File Operations
+### File operations
 
 | Command            | Action                                |
 | ------------------ | ------------------------------------- |
@@ -402,7 +402,7 @@ Enter with `:` from Normal mode
 | `:r filename`      | Read file and insert below cursor     |
 | `:r !command`      | Read command output and insert        |
 
-### Line Numbers and Ranges
+### Line numbers and ranges
 
 | Command     | Action                     |
 | ----------- | -------------------------- |
@@ -418,7 +418,7 @@ Enter with `:` from Normal mode
 | `:1,50`     | Lines 1 to 50              |
 | `:'a,'b`    | From mark a to mark b      |
 
-### Search and Replace
+### Search and replace
 
 | Command                           | Action                              |
 | --------------------------------- | ----------------------------------- |
@@ -434,7 +434,7 @@ Enter with `:` from Normal mode
 | `:g/pattern/m$`                   | Move matching lines to end          |
 | `:g/pattern/t$`                   | Copy matching lines to end          |
 
-### Multiple Files
+### Multiple files
 
 | Command             | Action                            |
 | ------------------- | --------------------------------- |
@@ -447,7 +447,7 @@ Enter with `:` from Normal mode
 | `:ball`             | Open all buffers in windows       |
 | `:e#`               | Switch to alternate file          |
 
-### Windows (Splits)
+### Windows (splits)
 
 | Command          | Action                              |
 | ---------------- | ----------------------------------- |
@@ -483,7 +483,7 @@ Enter with `:` from Normal mode
 
 ---
 
-## Advanced Features
+## Advanced features
 
 ### Macros
 
@@ -541,7 +541,7 @@ Enter with `:` from Normal mode
 | `=ap`   | Auto-indent paragraph            |
 | `==`    | Auto-indent current line         |
 
-### Case Manipulation
+### Case manipulation
 
 | Command | Action                   |
 | ------- | ------------------------ |
@@ -554,7 +554,7 @@ Enter with `:` from Normal mode
 | `gUiw`  | Uppercase inner word     |
 | `guiw`  | Lowercase inner word     |
 
-### Increment/Decrement Numbers
+### Increment/decrement numbers
 
 | Command    | Action                           |
 | ---------- | -------------------------------- |
@@ -579,7 +579,7 @@ Enter with `:` from Normal mode
 | `:set option=value`  | Set option value       |
 | `:set option+=value` | Append to option       |
 
-### Common Settings
+### Common settings
 
 ```vim
 :set number              " Show line numbers
@@ -602,9 +602,9 @@ Enter with `:` from Normal mode
 
 ---
 
-## Power User Combinations
+## Power user combinations
 
-### Quick Navigation Patterns
+### Quick navigation patterns
 
 ```
 5j          - Move down 5 lines
@@ -617,7 +617,7 @@ Enter with `:` from Normal mode
 *           - Search word under cursor, use n/N to navigate
 ```
 
-### Efficient Editing
+### Efficient editing
 
 ```
 ciw         - Change inner word (cursor anywhere in word)
@@ -630,7 +630,7 @@ yap         - Yank paragraph
 gqap        - Format/wrap paragraph
 ```
 
-### Multiple Operations
+### Multiple operations
 
 ```
 d3w         - Delete 3 words
@@ -641,7 +641,7 @@ y5k         - Yank current and previous 5 lines
 10i*<Esc>   - Insert 10 asterisks
 ```
 
-### Complex Commands
+### Complex commands
 
 ```
 :%s/\s\+$//g              - Remove trailing whitespace
@@ -655,9 +655,9 @@ y5k         - Yank current and previous 5 lines
 
 ---
 
-## Cheat Sheet Quick Reference
+## Cheat sheet quick reference
 
-### Essential Commands
+### Essential commands
 
 - **Exit**: `:q` (quit), `:wq` (save and quit), `:q!` (force quit)
 - **Save**: `:w` (write)
@@ -674,7 +674,7 @@ y5k         - Yank current and previous 5 lines
 - **Insert mode**: `i`
 - **Exit insert mode**: `Esc`
 
-### Speed Tips
+### Speed tips
 
 1. Use relative line numbers (`:set rnu`) for quick jumps
 2. Use `*` to search word under cursor
@@ -689,7 +689,7 @@ y5k         - Yank current and previous 5 lines
 
 ---
 
-## Help System
+## Help system
 
 | Command          | Action                             |
 | ---------------- | ---------------------------------- |

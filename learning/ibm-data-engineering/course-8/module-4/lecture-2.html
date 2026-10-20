@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Lecture 2: Distributed Event Streaming Platform Components</title>
+    <title>Lecture 2: distributed event streaming platform components</title>
     <!-- CSS -->
     <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
@@ -120,12 +120,12 @@
         <a href="index.html">Module 4</a> <span>›</span>
         Lecture 2
       </div>
-      <h1 class="fade-in">Distributed Event Streaming Platform Components</h1>
+      <h1 class="fade-in">Distributed event streaming platform components</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 4, Lecture 2
       </p>
       <div class="section-card fade-in fade-in-d2">
-        <h2>1. The Anatomy of an Event</h2>
+        <h2>1. The anatomy of an event</h2>
         <p>
           In system architecture, an <strong>event</strong> is an immutable
           record indicating that "something worth noticing has happened." More
@@ -137,7 +137,7 @@
           changed), they are ideal for distributed systems where state must be
           reconstructed or audited.
         </p>
-        <h3>1.1 Common Event Formats</h3>
+        <h3>1.1 Common event formats</h3>
         <p>
           Events can range from simple scalar values to complex nested
           structures. Modern data engineering typically categorizes them into
@@ -167,10 +167,9 @@ public record CarGpsEvent(string CarId, GpsState Coordinates);
 
 </code></pre>
         <p>
-          <strong>C. Key-Value with Timestamp (Time-Series)</strong> The most
-          robust and common format in streaming. It injects temporal context,
-          allowing systems to handle out-of-order delivery, windowing, and
-          time-series analysis.
+          <strong>C. Key-Value with Timestamp (Time-Series)</strong> Timestamped
+          events add the temporal context needed for out-of-order delivery,
+          windowing, and time-series analysis.
         </p>
         <pre><code class="language-csharp">// Example: Blood pressure reading with temporal context.
 public record BloodPressureMeasurement(int Systolic, int Diastolic);
@@ -184,7 +183,7 @@ public record PatientVitalsEvent(
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d3">
-        <h2>2. The "N-to-N" Integration Problem</h2>
+        <h2>2. The "N-to-N" integration problem</h2>
         <p>
           Event streaming is the continuous transportation of these events from
           a source (sensors, databases, applications) to a destination (data
@@ -196,7 +195,7 @@ public record PatientVitalsEvent(
           FTP, JDBC). As the system scales, this results in an unmaintainable
           "spaghetti" architecture.
         </p>
-        <h3>Architectural Comparison</h3>
+        <h3>Architectural comparison</h3>
         <div class="mermaid-container">
           <pre class="mermaid">
 graph TD
@@ -227,13 +226,13 @@ graph TD
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d4">
-        <h2>3. Event Streaming Platform (ESP) Architecture</h2>
+        <h2>3. Event streaming platform (ESP) architecture</h2>
         <p>
-          An ESP acts as a highly scalable, fault-tolerant middle layer. It
-          decouples the producers of data from the consumers, providing a
-          unified interface for event-based ETL.
+          An ESP is a scalable, fault-tolerant layer between data producers and
+          consumers. It decouples them and provides an interface for event-based
+          ETL.
         </p>
-        <h3>3.1 Core Components of an ESP</h3>
+        <h3>3.1 Core components of an ESP</h3>
         <table>
           <thead>
             <tr>
@@ -245,7 +244,7 @@ graph TD
           <tbody>
             <tr>
               <td><strong>Event Broker</strong></td>
-              <td>The central nervous system of the ESP.</td>
+              <td>The message-routing component of the ESP.</td>
               <td>
                 Handles the ingestion, processing, and routing of data streams.
               </td>
@@ -268,7 +267,7 @@ graph TD
             </tr>
           </tbody>
         </table>
-        <h3>3.2 Deep Dive: The Event Broker</h3>
+        <h3>3.2 Deep dive: the event broker</h3>
         <p>
           The Event Broker is the engine of the platform and is generally
           divided into three sub-routines:
@@ -321,7 +320,7 @@ sequenceDiagram
 
 </pre>
         </div>
-        <h3>3.3 C# Conceptual Implementation of a Broker Interface</h3>
+        <h3>3.3 C# conceptual implementation of a broker interface</h3>
         <p>
           To understand how these components interact programmatically, consider
           this abstracted C# interface defining a basic broker's contract:
@@ -348,7 +347,7 @@ namespace StreamingPlatform.Core
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d5">
-        <h2>4. The Industry Landscape</h2>
+        <h2>4. The industry landscape</h2>
         <p>
           While the architectural principles remain consistent, various tools
           have been developed to handle ESP requirements, each with specific
@@ -356,9 +355,8 @@ namespace StreamingPlatform.Core
         </p>
         <ul>
           <li>
-            <strong>Apache Kafka:</strong> The industry standard. An
-            open-source, distributed commit log known for massive throughput and
-            fault tolerance.
+            <strong>Apache Kafka:</strong> An open-source distributed commit log
+            designed for high throughput and fault tolerance.
           </li>
           <li>
             <strong>Amazon Kinesis:</strong> AWS's fully managed real-time
@@ -370,7 +368,7 @@ namespace StreamingPlatform.Core
             with Kafka).
           </li>
           <li>
-            <strong>Azure Event Hubs:</strong> Microsoft’s fully managed,
+            <strong>Azure Event Hubs:</strong> Microsoft's fully managed,
             Kafka-compatible data streaming platform.
           </li>
           <li>
@@ -379,10 +377,8 @@ namespace StreamingPlatform.Core
           </li>
         </ul>
         <p>
-          Here is a highly technical, expanded breakdown of Module 4, Lecture 1:
-          "Distributed Event Streaming Platform Components." This lecture
-          transitions from traditional batch ETL to the paradigm of continuous,
-          asynchronous data flow.
+          This lecture examines distributed event-streaming components and the
+          shift from batch ETL to continuous, asynchronous data flow.
         </p>
         <hr />
       </div>

@@ -3,15 +3,15 @@ layout: default
 title: Documentation
 ---
 
-# Technical Documentation
+# Technical documentation
 
-Comprehensive power user guides for developers and system administrators covering databases, containers, messaging, security, and development tools.
+Power user guides for developers and system administrators covering databases, containers, messaging, security, and development tools.
 
 [Browse All Guides →](guides/) · [System Scripts →](system-scripts/) · [Guide Home →](guide-home/)
 
-## Power User Guides
+## Power user guides
 
-### Enterprise Authentication & Identity
+### Enterprise authentication & identity
 
 - **[AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.md](guides/AUTH_SERVICES_CSHARP_POWERUSER_GUIDE.md)**  
   OAuth 2.0, OIDC, SAML, JWT implementation in C#; ASP.NET Core authentication; SCIM provisioning; token lifecycle management
@@ -19,7 +19,7 @@ Comprehensive power user guides for developers and system administrators coverin
 - **[AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md](guides/AUTH_SERVICES_POWERSHELL_POWERUSER_GUIDE.md)**  
   Azure AD management with Microsoft Graph; service principal automation; conditional access policies; certificate-based auth
 
-### Django Development
+### Django development
 
 - **[DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_POWERSHELL_POWERUSER_GUIDE.md)**  
   Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
@@ -30,7 +30,7 @@ Comprehensive power user guides for developers and system administrators coverin
 - **[DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md](guides/DJANGO_MULTI-AUTHENTICATION_BASH_POWERUSER_GUIDE.md)**  
   Implementing authentication in Django applications; OAuth2 and JWT integration; user management; security best practices; setting up multi-factor authentication in Django; integrating with third-party MFA providers; enhancing application security
 
-### .NET Development
+### .NET development
 
 - **[DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md](guides/DOTNET_BCRYPT_CSHARP_POWERUSER_GUIDE.md)**  
   Password hashing with BCrypt.Net-Next; secure authentication patterns; work factor tuning; ASP.NET Core integration
@@ -54,7 +54,7 @@ Comprehensive power user guides for developers and system administrators coverin
 - **[REDIS_POWERSHELL_POWERUSER_GUIDE.md](guides/REDIS_POWERSHELL_POWERUSER_GUIDE.md)**  
   Redis in-memory caching; data structures; persistence; clustering; PowerShell client integration
 
-### Security & Networking
+### Security & networking
 
 - **[SSL_TLS_BASH_POWERUSER_GUIDE.md](guides/SSL_TLS_BASH_POWERUSER_GUIDE.md)**  
   Certificate management on Linux; OpenSSL operations; certificate authorities; TLS configuration
@@ -62,14 +62,14 @@ Comprehensive power user guides for developers and system administrators coverin
 - **[SSL_TLS_POWERSHELL_POWERUSER_GUIDE.md](guides/SSL_TLS_POWERSHELL_POWERUSER_GUIDE.md)**  
   Certificate management on Windows; PKI infrastructure; automated certificate rotation; IIS configuration
 
-### Development Tools
+### Development tools
 
 - **[VI_POWERUSER_GUIDE.md](guides/VI_POWERUSER_GUIDE.md)**  
   Vi/Vim text editor mastery; navigation; editing commands; macros; configuration
 
 ---
 
-## Guide Categories
+## Guide categories
 
 **By Technology Stack:**
 

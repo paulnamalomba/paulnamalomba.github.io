@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Lecture 3: Building Event Streaming Pipelines Using Kafka</title>
+    <title>Lecture 3: building event streaming pipelines using Kafka</title>
     <!-- CSS -->
     <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
@@ -120,12 +120,12 @@
         <a href="index.html">Module 4</a> <span>›</span>
         Lecture 3
       </div>
-      <h1 class="fade-in">Building Event Streaming Pipelines Using Kafka</h1>
+      <h1 class="fade-in">Building event streaming pipelines using Kafka</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 4, Lecture 3
       </p>
       <div class="section-card fade-in fade-in-d2">
-        <h2>1. The Core Cluster Topology: Brokers and KRaft</h2>
+        <h2>1. The core cluster topology: brokers and KRaft</h2>
         <p>
           At the hardware and network level, a Kafka environment is not a
           monolithic application; it is a distributed cluster of
@@ -161,7 +161,7 @@ graph TD
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d3">
-        <h2>2. Data Organization: Topics, Partitions, and Replicas</h2>
+        <h2>2. Data organization: topics, partitions, and replicas</h2>
         <p>
           Kafka organizes data into logical containers called
           <strong>Topics</strong>. You can conceptualize a topic as an
@@ -170,8 +170,8 @@ graph TD
           <code>gps_topic</code>).
         </p>
         <p>
-          To achieve massive throughput and fault tolerance, topics are
-          physically divided:
+          Topics are divided into partitions to distribute load and support
+          fault tolerance:
         </p>
         <ul>
           <li>
@@ -185,7 +185,7 @@ graph TD
             to the replica on Broker 1.
           </li>
         </ul>
-        <h3>CLI Topic Management</h3>
+        <h3>CLI topic management</h3>
         <p>Kafka provides shell scripts to manage this infrastructure.</p>
         <pre><code class="language-bash"># Create a topic with explicit partitioning and fault tolerance
 kafka-topics.sh --create --topic log_topic --partitions 2 --replication-factor 2 --bootstrap-server localhost:9092
@@ -200,14 +200,14 @@ kafka-topics.sh --describe --topic log_topic --bootstrap-server localhost:9092
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d4">
-        <h2>3. Ingestion: Kafka Producers</h2>
+        <h2>3. Ingestion: Kafka producers</h2>
         <p>
           <strong>Producers</strong> are client applications that push event
           payloads into Kafka topics. Kafka guarantees that messages sent to a
           <em>specific partition</em> by a <em>single producer</em> will be
           appended in the exact order they were sent.
         </p>
-        <h3>The Role of Partition Keys</h3>
+        <h3>The role of partition keys</h3>
         <p>
           By default, if a producer sends an event without a key, Kafka uses a
           round-robin strategy to balance the load across all partitions.
@@ -216,7 +216,7 @@ kafka-topics.sh --describe --topic log_topic --bootstrap-server localhost:9092
           hashes the key to ensure that all events with the same key strictly
           route to the same partition.
         </p>
-        <h3>CLI Producer Examples</h3>
+        <h3>CLI producer examples</h3>
         <pre><code class="language-bash"># Producing without keys (Round-robin distribution)
 kafka-console-producer.sh --topic log_topic --bootstrap-server localhost:9092
 &gt; log1
@@ -229,9 +229,9 @@ kafka-console-producer.sh --topic user_topic --property parse.key=true --propert
 &gt; user1,logout website
 
 </code></pre>
-        <h3>C# Producer Implementation with Keys</h3>
+        <h3>C# producer implementation with keys</h3>
         <p>
-          To implement this programmatically in a robust backend, we use
+          The following backend implementation uses
           <code>Confluent.Kafka</code>.
         </p>
         <pre><code class="language-csharp">using System;
@@ -261,7 +261,7 @@ public class UserActivityProducer
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d5">
-        <h2>4. Extraction: Kafka Consumers</h2>
+        <h2>4. Extraction: Kafka consumers</h2>
         <p>
           <strong>Consumers</strong> are client applications that subscribe to
           topics. Because Kafka stores events durably on disk, producers and
@@ -280,7 +280,7 @@ public class UserActivityProducer
             a short retention policy).
           </li>
         </ul>
-        <h3>CLI Consumer Examples</h3>
+        <h3>CLI consumer examples</h3>
         <pre><code class="language-bash"># Read only new incoming events
 kafka-console-consumer.sh --topic log_topic --bootstrap-server localhost:9092
 
@@ -288,7 +288,7 @@ kafka-console-consumer.sh --topic log_topic --bootstrap-server localhost:9092
 kafka-console-consumer.sh --topic log_topic --from-beginning --bootstrap-server localhost:9092
 
 </code></pre>
-        <h3>C# Consumer Implementation (Playback Mode)</h3>
+        <h3>C# consumer implementation (playback mode)</h3>
         <p>
           Here is how to configure a C# consumer to act like the
           <code>--from-beginning</code> flag if no previous offset state exists.
@@ -323,7 +323,7 @@ public class UserActivityConsumer
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d5">
-        <h2>5. End-to-End Architecture: The Social Weather Pipeline</h2>
+        <h2>5. End-to-End architecture: the social weather pipeline</h2>
         <p>
           To synthesize these concepts, the lecture details a pipeline
           correlating extreme weather with social media sentiment.

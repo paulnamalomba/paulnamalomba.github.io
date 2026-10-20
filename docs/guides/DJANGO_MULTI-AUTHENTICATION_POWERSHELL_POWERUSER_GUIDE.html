@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      DJANGO Multi-Authentication PowerUser Guide (PowerShell) - Paul Namalomba
+      DJANGO Multi-Authentication PowerUser guide (PowerShell) - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,7 +49,7 @@
         </div>
         <article class="docs-content">
           <h1 id="django-multi-authentication-poweruser-guide-powershell">
-            DJANGO Multi-Authentication PowerUser Guide (PowerShell)
+            DJANGO Multi-Authentication PowerUser guide (PowerShell)
           </h1>
           <p>
             <strong>Last updated</strong>: December 09, 2025<br />
@@ -95,7 +95,7 @@
           <ul>
             <li>
               <a href="#django-multi-authentication-poweruser-guide-powershell"
-                >DJANGO Multi-Authentication PowerUser Guide (PowerShell)</a
+                >DJANGO Multi-Authentication PowerUser guide (PowerShell)</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -106,43 +106,43 @@
                 <li><a href="#prerequisites">Prerequisites</a></li>
                 <li>
                   <a href="#core-automation-workflow"
-                    >Core Automation Workflow</a
+                    >Core automation workflow</a
                   >
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#key-concepts">Key Concepts</a>
+              <a href="#key-concepts">Key concepts</a>
               <ul>
                 <li>
-                  <a href="#authentication-layers">Authentication Layers</a>
+                  <a href="#authentication-layers">Authentication layers</a>
                 </li>
-                <li><a href="#identity-providers">Identity Providers</a></li>
+                <li><a href="#identity-providers">Identity providers</a></li>
               </ul>
             </li>
             <li>
               <a href="#configuration-and-best-practices"
-                >Configuration and Best Practices</a
+                >Configuration and best practices</a
               >
               <ul>
                 <li>
-                  <a href="#environment-and-secrets">Environment and Secrets</a>
+                  <a href="#environment-and-secrets">Environment and secrets</a>
                 </li>
                 <li>
-                  <a href="#reverse-proxy-and-tls">Reverse Proxy and TLS</a>
+                  <a href="#reverse-proxy-and-tls">Reverse proxy and TLS</a>
                 </li>
               </ul>
             </li>
             <li>
-              <a href="#security-considerations">Security Considerations</a>
+              <a href="#security-considerations">Security considerations</a>
               <ul>
                 <li>
                   <a href="#secrets-and-certificates"
-                    >Secrets and Certificates</a
+                    >Secrets and certificates</a
                   >
                 </li>
                 <li>
-                  <a href="#audit-and-compliance">Audit and Compliance</a>
+                  <a href="#audit-and-compliance">Audit and compliance</a>
                 </li>
               </ul>
             </li>
@@ -151,22 +151,22 @@
               <ul>
                 <li>
                   <a href="#example-1-provision-django-environment"
-                    >Example 1: Provision Django Environment</a
+                    >Example 1: provision Django environment</a
                   >
                 </li>
                 <li>
                   <a href="#example-2-configure-environment-for-multi-auth"
-                    >Example 2: Configure Environment for Multi-Auth</a
+                    >Example 2: configure environment for Multi-Auth</a
                   >
                 </li>
                 <li>
                   <a href="#example-3-automate-tls-with-certbot-on-wsl"
-                    >Example 3: Automate TLS with Certbot on WSL</a
+                    >Example 3: automate TLS with Certbot on WSL</a
                   >
                 </li>
                 <li>
                   <a href="#example-4-end-to-end-auth-health-check"
-                    >Example 4: End-to-End Auth Health Check</a
+                    >Example 4: End-to-End auth health check</a
                   >
                 </li>
               </ul>
@@ -176,18 +176,18 @@
               <ul>
                 <li>
                   <a href="#common-operational-issues"
-                    >Common Operational Issues</a
+                    >Common operational issues</a
                   >
                 </li>
-                <li><a href="#diagnostic-commands">Diagnostic Commands</a></li>
+                <li><a href="#diagnostic-commands">Diagnostic commands</a></li>
               </ul>
             </li>
             <li>
-              <a href="#performance-and-tuning">Performance and Tuning</a>
+              <a href="#performance-and-tuning">Performance and tuning</a>
               <ul>
                 <li>
                   <a href="#scaling-and-observability"
-                    >Scaling and Observability</a
+                    >Scaling and observability</a
                   >
                 </li>
               </ul>
@@ -213,7 +213,7 @@
               Administrative privileges for service and firewall configuration
             </li>
           </ul>
-          <h3 id="core-automation-workflow">Core Automation Workflow</h3>
+          <h3 id="core-automation-workflow">Core automation workflow</h3>
           <ol>
             <li>
               <strong>Clone the Django project</strong> (with multi-auth already
@@ -260,8 +260,8 @@
 </code></pre>
           </div>
           <hr />
-          <h2 id="key-concepts">Key Concepts</h2>
-          <h3 id="authentication-layers">Authentication Layers</h3>
+          <h2 id="key-concepts">Key concepts</h2>
+          <h3 id="authentication-layers">Authentication layers</h3>
           <ul>
             <li>
               <strong>Django Auth Backend</strong>: Core authentication system
@@ -283,7 +283,7 @@
               SMS) enforced at login or sensitive operations.
             </li>
           </ul>
-          <h3 id="identity-providers">Identity Providers</h3>
+          <h3 id="identity-providers">Identity providers</h3>
           <ul>
             <li>
               <strong>OAuth2/OIDC</strong>: Standard protocols used by providers
@@ -297,7 +297,7 @@
               similar libraries.
             </li>
             <li>
-              <strong>Internal Users</strong>: Users stored in Django’s
+              <strong>Internal Users</strong>: Users stored in Django's
               database, often used for fallback or service accounts.
             </li>
             <li>
@@ -307,9 +307,9 @@
           </ul>
           <hr />
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
-          <h3 id="environment-and-secrets">Environment and Secrets</h3>
+          <h3 id="environment-and-secrets">Environment and secrets</h3>
           <p>
             Store all authentication-related configuration in environment
             variables or secret stores, not in source code:
@@ -355,7 +355,7 @@
               Script environment provisioning for consistency across machines.
             </li>
           </ul>
-          <h3 id="reverse-proxy-and-tls">Reverse Proxy and TLS</h3>
+          <h3 id="reverse-proxy-and-tls">Reverse proxy and TLS</h3>
           <p>
             Even on Windows, production Django deployments commonly run behind a
             reverse proxy (Nginx, Apache, IIS, or Azure App Service). Use
@@ -388,13 +388,13 @@
             </li>
             <li>Use HSTS headers at the proxy level.</li>
             <li>
-              Automate certificate renewal (Let’s Encrypt via WSL/Certbot or a
+              Automate certificate renewal (Let's Encrypt via WSL/Certbot or a
               corporate PKI).
             </li>
           </ul>
           <hr />
-          <h2 id="security-considerations">Security Considerations</h2>
-          <h3 id="secrets-and-certificates">Secrets and Certificates</h3>
+          <h2 id="security-considerations">Security considerations</h2>
+          <h3 id="secrets-and-certificates">Secrets and certificates</h3>
           <ul>
             <li>
               Use strong, randomly generated <code>SECRET_KEY</code> values per
@@ -417,7 +417,7 @@
     <span class="nb">Sort-Object</span> <span class="n">NotAfter</span>
 </code></pre>
           </div>
-          <h3 id="audit-and-compliance">Audit and Compliance</h3>
+          <h3 id="audit-and-compliance">Audit and compliance</h3>
           <ul>
             <li>
               Enable structured logging for authentication events (login
@@ -435,7 +435,7 @@
           <hr />
           <h2 id="examples">Examples</h2>
           <h3 id="example-1-provision-django-environment">
-            Example 1: Provision Django Environment
+            Example 1: provision Django environment
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="k">param</span><span class="p">(</span>
@@ -462,7 +462,7 @@
 </code></pre>
           </div>
           <h3 id="example-2-configure-environment-for-multi-auth">
-            Example 2: Configure Environment for Multi-Auth
+            Example 2: configure environment for Multi-Auth
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="k">function</span> <span class="nb">Set-DjangoMultiAuthEnvironment</span> <span class="p">{</span>
@@ -499,7 +499,7 @@
 </code></pre>
           </div>
           <h3 id="example-3-automate-tls-with-certbot-on-wsl">
-            Example 3: Automate TLS with Certbot on WSL
+            Example 3: automate TLS with Certbot on WSL
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Run Certbot inside WSL to obtain/renew certificates</span>
@@ -519,7 +519,7 @@
 </code></pre>
           </div>
           <h3 id="example-4-end-to-end-auth-health-check">
-            Example 4: End-to-End Auth Health Check
+            Example 4: End-to-End auth health check
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="k">function</span> <span class="nb">Test-DjangoAuthHealth</span> <span class="p">{</span>
@@ -553,7 +553,7 @@
           </div>
           <hr />
           <h2 id="troubleshooting">Troubleshooting</h2>
-          <h3 id="common-operational-issues">Common Operational Issues</h3>
+          <h3 id="common-operational-issues">Common operational issues</h3>
           <ul>
             <li>
               <strong>502/504 from reverse proxy</strong>: Django
@@ -572,7 +572,7 @@
               mismatch or missing scopes.
             </li>
           </ul>
-          <h3 id="diagnostic-commands">Diagnostic Commands</h3>
+          <h3 id="diagnostic-commands">Diagnostic commands</h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c"># Check listening ports</span>
 <span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="n">8000</span><span class="p">,</span><span class="n">443</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">LocalAddress</span><span class="p">,</span> <span class="n">LocalPort</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">OwningProcess</span>
@@ -585,8 +585,8 @@
 </code></pre>
           </div>
           <hr />
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
-          <h3 id="scaling-and-observability">Scaling and Observability</h3>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
+          <h3 id="scaling-and-observability">Scaling and observability</h3>
           <ul>
             <li>
               Use a process manager (e.g. <code>supervisord</code>,
@@ -605,7 +605,7 @@
           </ul>
           <hr />
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <ul>
             <li>

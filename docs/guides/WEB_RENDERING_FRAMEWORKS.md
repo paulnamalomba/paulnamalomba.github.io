@@ -1,4 +1,4 @@
-# Web Rendering Frameworks (2026) — React Alternatives
+# Web rendering frameworks (2026) — React alternatives
 
 **Last updated**: March 02, 2026<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -28,38 +28,38 @@ This guide summarizes the most viable React alternatives and what architectural 
 
 ## Contents
 
-- [Web Rendering Frameworks (2026) — React Alternatives](#web-rendering-frameworks-2026--react-alternatives)
+- [Web rendering frameworks (2026) — React alternatives](#web-rendering-frameworks-2026--react-alternatives)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Executive Summary](#executive-summary)
-  - [Top React Alternatives (2026)](#top-react-alternatives-2026)
+  - [Executive summary](#executive-summary)
+  - [Top React alternatives (2026)](#top-react-alternatives-2026)
     - [1) Vue.js](#1-vuejs)
     - [2) Angular](#2-angular)
     - [3) Svelte / SvelteKit](#3-svelte--sveltekit)
     - [4) SolidJS](#4-solidjs)
     - [5) Qwik](#5-qwik)
-  - [Comparison Matrix](#comparison-matrix)
+  - [Comparison matrix](#comparison-matrix)
     - [Notes on the matrix](#notes-on-the-matrix)
-  - [Rendering Models: CSR vs SSR vs SSG](#rendering-models-csr-vs-ssr-vs-ssg)
-  - [Decision Heuristics](#decision-heuristics)
-  - [Practical Guardrails (Avoiding Frontend Spaghetti)](#practical-guardrails-avoiding-frontend-spaghetti)
+  - [Rendering models: CSR vs SSR vs SSG](#rendering-models-csr-vs-ssr-vs-ssg)
+  - [Decision heuristics](#decision-heuristics)
+  - [Practical guardrails (avoiding frontend spaghetti)](#practical-guardrails-avoiding-frontend-spaghetti)
   - [References](#references)
 
 ---
 
-## Executive Summary
+## Executive summary
 
-If you’re looking for alternatives to React.js in 2026, there are several strong options depending on your priorities — such as performance, learning curve, ecosystem, or rendering model.
+If you're looking for alternatives to React.js in 2026, there are several strong options depending on your priorities — such as performance, learning curve, ecosystem, or rendering model.
 
 - **Vue** is approachable and productive with a clean component model.
-- **Angular** is the “enterprise framework”: structured, opinionated, and consistent.
+- **Angular** is the "enterprise framework": structured, opinionated, and consistent.
 - **Svelte/SvelteKit** compiles away much runtime overhead; great performance and DX.
 - **SolidJS** keeps JSX ergonomics but uses fine-grained reactivity (no virtual DOM).
 - **Qwik** pushes ultra-fast startup via resumability and minimal hydration.
 
 ---
 
-## Top React Alternatives (2026)
+## Top React alternatives (2026)
 
 ### 1) Vue.js
 
@@ -88,7 +88,7 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 **Cons**
 
 - Steeper learning curve.
-- Higher framework “gravity” (more concepts + more conventions).
+- Higher framework "gravity" (more concepts + more conventions).
 
 ### 3) Svelte / SvelteKit
 
@@ -113,7 +113,7 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 
 - Fine-grained reactivity (no virtual DOM).
 - JSX support similar to React.
-- Extremely fast updates.
+- Fast updates.
 
 **Cons**
 
@@ -134,7 +134,7 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 
 ---
 
-## Comparison Matrix
+## Comparison matrix
 
 | Feature                    | Vue                | Angular                 | SvelteKit                  | SolidJS                 | Qwik                |
 | :------------------------- | :----------------- | :---------------------- | :------------------------- | :---------------------- | :------------------ |
@@ -147,7 +147,7 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 
 ### Notes on the matrix
 
-- **Vue + Nuxt** often maps closest to “React + Next.js” style stacks.
+- **Vue + Nuxt** often maps closest to "React + Next.js" style stacks.
 - **Angular** tends to excel when your organization values predictable structure over flexibility.
 - **SvelteKit** is a strong general-purpose choice for modern SSR/SSG.
 - **SolidJS** is compelling if you like JSX but want fine-grained updates.
@@ -155,7 +155,7 @@ If you’re looking for alternatives to React.js in 2026, there are several stro
 
 ---
 
-## Rendering Models: CSR vs SSR vs SSG
+## Rendering models: CSR vs SSR vs SSG
 
 Your framework choice often matters less than your rendering strategy:
 
@@ -175,7 +175,7 @@ If your app is mostly content and marketing pages, SSR/SSG maturity will dominat
 
 ---
 
-## Decision Heuristics
+## Decision heuristics
 
 Use this as a practical recommendation set:
 
@@ -183,19 +183,19 @@ Use this as a practical recommendation set:
 - If you want **full enterprise structure** → Angular.
 - If you want **high performance with low runtime overhead** → Svelte/SvelteKit.
 - If you want **React-like syntax but faster updates** → SolidJS.
-- If you want **cutting-edge startup performance** → Qwik.
+- If you want **fast startup** → Qwik.
 
 Two meta-rules:
 
-1. Choose the framework that makes the “wrong thing” hardest for your team.
+1. Choose the framework that makes the "wrong thing" hardest for your team.
 2. Choose based on your expected operational reality (SSR, caching, SEO, scale), not Twitter benchmarks.
 
 ---
 
-## Practical Guardrails (Avoiding Frontend Spaghetti)
+## Practical guardrails (avoiding frontend spaghetti)
 
 1. **Define folder boundaries early:** UI components vs routes/pages vs domain logic.
-2. **Centralize state and side effects:** don’t fetch data in 30 components.
+2. **Centralize state and side effects:** don't fetch data in 30 components.
 3. **Strong typing helps at scale:** prefer TypeScript for large apps.
 4. **Standardize forms and validation:** forms are where complexity hides.
 5. **Prefer composition over inheritance:** keep components small and composable.

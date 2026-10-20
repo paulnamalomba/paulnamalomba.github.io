@@ -1,4 +1,4 @@
-# POSTGRESQL 16 PowerUser Guide (PowerShell)
+# POSTGRESQL 16 PowerUser guide (PowerShell)
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,27 +16,27 @@
 
 ## Overview
 
-PostgreSQL 16 is an advanced open-source relational database with support for ACID transactions, JSON, full-text search, and extensibility. This guide covers installation, configuration, performance tuning, and administration using PowerShell on Windows. Power users need to understand connection pooling, query optimization, backup strategies, and replication for production deployments.
+PostgreSQL 16 is an advanced open-source relational database with support for ACID transactions, JSON, full-text search, and extensibility. This guide covers installation, configuration, performance tuning, and administration using PowerShell on Windows. Production considerations include connection pooling, query optimization, backup strategies, and replication for production deployments.
 
 ## Contents
 
-- [POSTGRESQL 16 PowerUser Guide (PowerShell)](#postgresql-16-poweruser-guide-powershell)
+- [POSTGRESQL 16 PowerUser guide (PowerShell)](#postgresql-16-poweruser-guide-powershell)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Install and Configure PostgreSQL 16](#install-and-configure-postgresql-16)
-    - [Database and User Management](#database-and-user-management)
-    - [Backup and Restore Operations](#backup-and-restore-operations)
-    - [Query Execution and Analysis](#query-execution-and-analysis)
-    - [Index Management and Optimization](#index-management-and-optimization)
-    - [Maintenance Operations](#maintenance-operations)
+    - [Install and configure PostgreSQL 16](#install-and-configure-postgresql-16)
+    - [Database and user management](#database-and-user-management)
+    - [Backup and restore operations](#backup-and-restore-operations)
+    - [Query execution and analysis](#query-execution-and-analysis)
+    - [Index management and optimization](#index-management-and-optimization)
+    - [Maintenance operations](#maintenance-operations)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -49,7 +49,7 @@ PostgreSQL 16 is an advanced open-source relational database with support for AC
 5. **Connect**: `psql -U postgres -d postgres`
 6. **Create database**: `CREATE DATABASE mydb;`
 
-## Key Concepts
+## Key concepts
 
 - **Cluster**: Collection of databases managed by a single PostgreSQL server instance
 - **MVCC (Multi-Version Concurrency Control)**: Allows concurrent reads/writes without locking; each transaction sees a consistent snapshot
@@ -58,7 +58,7 @@ PostgreSQL 16 is an advanced open-source relational database with support for AC
 - **Indexes**: B-tree (default), Hash, GiST, GIN, BRIN for optimizing query performance
 - **Schemas**: Namespaces within a database for organizing tables and objects; default schema is `public`
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **postgresql.conf** (located in data directory):
 
@@ -106,7 +106,7 @@ host    all       all       0.0.0.0/0       scram-sha-256
 - Create indexes on foreign keys and frequently queried columns
 - Set appropriate work_mem per connection (start with 4MB)
 
-## Security Considerations
+## Security considerations
 
 1. **Authentication**: Use `scram-sha-256` password encryption; avoid `trust` and `md5` methods
 2. **SSL/TLS**: Enforce encrypted connections in production; generate certificates and set `ssl = on`
@@ -130,7 +130,7 @@ REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 
 ## Examples
 
-### Install and Configure PostgreSQL 16
+### Install and configure PostgreSQL 16
 
 Download, install, and perform initial configuration of PostgreSQL 16 on Windows with service setup and data directory initialization.
 
@@ -164,7 +164,7 @@ Start-Service postgresql-x64-16
 Get-Service postgresql-x64-16 | Select-Object Name, Status, StartType
 ```
 
-### Database and User Management
+### Database and user management
 
 Create databases, users, and schemas with proper permission grants and role management.
 
@@ -207,7 +207,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readonly_rol
 psql -U postgres -c "\du"
 ```
 
-### Backup and Restore Operations
+### Backup and restore operations
 
 Perform full database backups, compressed backups, and point-in-time recovery setup with automated scheduling.
 
@@ -245,7 +245,7 @@ $principal = New-ScheduledTaskPrincipal -UserID "NT AUTHORITY\SYSTEM" -LogonType
 Register-ScheduledTask -Action $action -Trigger $trigger -Principal $principal -TaskName "PostgreSQL Daily Backup" -Description "Daily PostgreSQL backup"
 ```
 
-### Query Execution and Analysis
+### Query execution and analysis
 
 Execute queries, analyze query plans, and monitor query performance with explain plans and timing.
 
@@ -303,7 +303,7 @@ LIMIT 10;
 "@
 ```
 
-### Index Management and Optimization
+### Index management and optimization
 
 Create, analyze, and maintain indexes for optimal query performance with different index types.
 
@@ -348,7 +348,7 @@ ORDER BY pg_relation_size(indexrelid) DESC;
 psql -U postgres -d production_db -c "DROP INDEX CONCURRENTLY idx_old_unused_index;"
 ```
 
-### Maintenance Operations
+### Maintenance operations
 
 Perform routine maintenance tasks including VACUUM, ANALYZE, and statistics updates for optimal database health.
 
@@ -443,7 +443,7 @@ WHERE cardinality(pg_blocking_pids(pid)) > 0;
 - Windows Event Viewer: Application logs for PostgreSQL service
 - Connection logs: Enable `log_connections = on` in postgresql.conf
 
-## Performance and Tuning
+## Performance and tuning
 
 **Memory Configuration**:
 
@@ -520,9 +520,9 @@ FROM pg_statio_user_tables;
 psql -U postgres -d production_db -c "SELECT xact_commit + xact_rollback AS total_transactions FROM pg_stat_database WHERE datname = 'production_db';"
 ```
 
-## References and Further Reading
+## References and further reading
 
-- [PostgreSQL 16 Documentation](https://www.postgresql.org/docs/16/) - Official comprehensive documentation
+- [PostgreSQL 16 Documentation](https://www.postgresql.org/docs/16/) - Official documentation
 - [PostgreSQL Wiki](https://wiki.postgresql.org/wiki/Main_Page) - Community wiki with tutorials and best practices
 - [pgAdmin 4](https://www.pgadmin.org/) - Web-based PostgreSQL administration tool
 - [PostgreSQL Performance Tuning](https://wiki.postgresql.org/wiki/Performance_Optimization) - Performance optimization guide

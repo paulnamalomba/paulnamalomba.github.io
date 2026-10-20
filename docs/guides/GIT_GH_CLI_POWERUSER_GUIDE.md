@@ -1,14 +1,14 @@
-# Git + GitHub CLI (gh) PowerUser Guide
+# Git + GitHub CLI (gh) PowerUser guide
 
 <br>
-**Last updated**: March 01, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: March 01, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 
 [![CLI](https://img.shields.io/badge/SCM-Git-1f425f.svg)](https://git-scm.com/docs)
@@ -17,33 +17,33 @@
 
 ## Overview
 
-This guide is a practical deep dive into **Git** (core version control) and **GitHub CLI (`gh`)** (GitHub automation from the terminal). It covers repository creation/deletion, local and remote repo management, authentication (HTTPS/PAT, SSH, and `gh`), professional collaboration workflows (feature branches, PRs, rebase strategies), recovery techniques (`reflog`, resets, revert), and **CLI-driven deployments** (Git push deployments, remote servers via bare repos/hooks, and GitHub Actions triggered and operated via `gh`).
+This guide is a practical deep dive into Git (core version control) and GitHub CLI (`gh`) (GitHub automation from the terminal). It covers repository creation/deletion, local and remote repo management, authentication (HTTPS/PAT, SSH, and `gh`), professional collaboration workflows (feature branches, PRs, rebase strategies), recovery techniques (`reflog`, resets, revert), and CLI-driven deployments (Git push deployments, remote servers via bare repos/hooks, and GitHub Actions triggered and operated via `gh`).
 
 ## Contents
 
-- [Git + GitHub CLI (gh) PowerUser Guide](#git--github-cli-gh-poweruser-guide)
+- [Git + GitHub CLI (gh) PowerUser guide](#git--github-cli-gh-poweruser-guide)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
   - [1. Installation (Windows, Linux, macOS)](#1-installation-windows-linux-macos)
     - [Git](#git)
     - [GitHub CLI (`gh`)](#github-cli-gh)
-  - [2. Identity, Config, and Safety Defaults](#2-identity-config-and-safety-defaults)
+  - [2. Identity, config, and safety defaults](#2-identity-config-and-safety-defaults)
     - [Set user identity (global)](#set-user-identity-global)
     - [Useful global defaults](#useful-global-defaults)
     - [Line endings (Windows vs Linux)](#line-endings-windows-vs-linux)
     - [Quality-of-life aliases (optional)](#quality-of-life-aliases-optional)
   - [3. Authentication (Git HTTPS/PAT, SSH, and gh)](#3-authentication-git-httpspat-ssh-and-gh)
-    - [3.1 Git over HTTPS (PAT) + Credential Manager](#31-git-over-https-pat--credential-manager)
+    - [3.1 Git over HTTPS (PAT) + credential manager](#31-git-over-https-pat--credential-manager)
     - [3.2 Git over SSH (recommended for power users)](#32-git-over-ssh-recommended-for-power-users)
     - [3.3 GitHub CLI authentication](#33-github-cli-authentication)
-  - [4. Repository Lifecycle (Create, Clone, Delete, Archive)](#4-repository-lifecycle-create-clone-delete-archive)
+  - [4. Repository lifecycle (create, clone, delete, archive)](#4-repository-lifecycle-create-clone-delete-archive)
     - [4.1 Create a local repo](#41-create-a-local-repo)
     - [4.2 Clone an existing repo](#42-clone-an-existing-repo)
     - [4.3 Create a GitHub repo from the terminal (gh)](#43-create-a-github-repo-from-the-terminal-gh)
     - [4.4 Rename a GitHub repo (gh)](#44-rename-a-github-repo-gh)
-    - [4.5 Archive vs Delete (be deliberate)](#45-archive-vs-delete-be-deliberate)
-  - [5. Daily Git Workflow (Add/Commit/Log/Diff)](#5-daily-git-workflow-addcommitlogdiff)
+    - [4.5 Archive vs delete (be deliberate)](#45-archive-vs-delete-be-deliberate)
+  - [5. Daily Git workflow (add/commit/log/diff)](#5-daily-git-workflow-addcommitlogdiff)
     - [5.1 Inspect state](#51-inspect-state)
     - [5.2 Stage changes](#52-stage-changes)
     - [5.3 Commit](#53-commit)
@@ -51,13 +51,13 @@ This guide is a practical deep dive into **Git** (core version control) and **Gi
     - [5.5 Compare changes](#55-compare-changes)
     - [5.6 File operations (tracked content)](#56-file-operations-tracked-content)
     - [5.7 Ignore rules (.gitignore) and debugging ignores](#57-ignore-rules-gitignore-and-debugging-ignores)
-  - [6. Branching and Integration (Merge, Rebase, Cherry-pick)](#6-branching-and-integration-merge-rebase-cherry-pick)
+  - [6. Branching and integration (merge, rebase, cherry-pick)](#6-branching-and-integration-merge-rebase-cherry-pick)
     - [6.1 Branch basics](#61-branch-basics)
     - [6.2 Merge (preserves branch topology)](#62-merge-preserves-branch-topology)
     - [6.3 Rebase (rewrites history; keep it disciplined)](#63-rebase-rewrites-history-keep-it-disciplined)
     - [6.4 Cherry-pick (copy a commit)](#64-cherry-pick-copy-a-commit)
     - [6.5 Resolve conflicts efficiently](#65-resolve-conflicts-efficiently)
-  - [7. Undo, Recovery, and Forensics (Restore, Reset, Reflog)](#7-undo-recovery-and-forensics-restore-reset-reflog)
+  - [7. Undo, recovery, and forensics (restore, reset, reflog)](#7-undo-recovery-and-forensics-restore-reset-reflog)
     - [7.1 Discard local file edits](#71-discard-local-file-edits)
     - [7.2 Reset (moves branch pointer; can be destructive)](#72-reset-moves-branch-pointer-can-be-destructive)
     - [7.3 Revert (safe for shared branches)](#73-revert-safe-for-shared-branches)
@@ -65,14 +65,14 @@ This guide is a practical deep dive into **Git** (core version control) and **Gi
     - [7.5 Investigate who changed what](#75-investigate-who-changed-what)
     - [7.6 Stash (parking local changes)](#76-stash-parking-local-changes)
     - [7.7 Clean (remove untracked files/directories)](#77-clean-remove-untracked-filesdirectories)
-  - [8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)](#8-remotes-and-collaboration-fetchpullpush-forks-upstream)
+  - [8. Remotes and collaboration (fetch/pull/push, forks, upstream)](#8-remotes-and-collaboration-fetchpullpush-forks-upstream)
     - [8.1 Remotes](#81-remotes)
-    - [8.2 Fetch vs Pull](#82-fetch-vs-pull)
+    - [8.2 Fetch vs pull](#82-fetch-vs-pull)
     - [8.3 Fork workflow](#83-fork-workflow)
-  - [9. Tags, Releases, and Versioning](#9-tags-releases-and-versioning)
+  - [9. Tags, releases, and versioning](#9-tags-releases-and-versioning)
     - [9.1 Tags](#91-tags)
     - [9.2 GitHub releases (gh)](#92-github-releases-gh)
-  - [10. Advanced Git (Worktrees, Submodules, Sparse Checkout, Bisect)](#10-advanced-git-worktrees-submodules-sparse-checkout-bisect)
+  - [10. Advanced Git (worktrees, submodules, sparse checkout, bisect)](#10-advanced-git-worktrees-submodules-sparse-checkout-bisect)
     - [10.1 Worktrees (multiple branches, one clone)](#101-worktrees-multiple-branches-one-clone)
     - [10.2 Submodules (use only if necessary)](#102-submodules-use-only-if-necessary)
     - [10.3 Sparse checkout (huge monorepos)](#103-sparse-checkout-huge-monorepos)
@@ -80,29 +80,29 @@ This guide is a practical deep dive into **Git** (core version control) and **Gi
     - [10.5 Rewrite history (danger zone)](#105-rewrite-history-danger-zone)
     - [10.6 Hooks (local automation)](#106-hooks-local-automation)
     - [10.7 Git LFS (large files)](#107-git-lfs-large-files)
-  - [11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)](#11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow)
+  - [11. GitHub CLI (gh) deep dive (repo, pr, issue, api, workflow)](#11-github-cli-gh-deep-dive-repo-pr-issue-api-workflow)
     - [11.1 Repo operations](#111-repo-operations)
-    - [11.2 Pull Requests](#112-pull-requests)
+    - [11.2 Pull requests](#112-pull-requests)
     - [11.3 Issues](#113-issues)
     - [11.4 Workflows and runs (GitHub Actions)](#114-workflows-and-runs-github-actions)
     - [11.5 Secrets and variables (for CI/CD)](#115-secrets-and-variables-for-cicd)
     - [11.6 `gh api` (advanced automation)](#116-gh-api-advanced-automation)
     - [11.7 Aliases and extensions](#117-aliases-and-extensions)
-  - [12. CLI-Driven Deployment (Git Push, Remote Hooks, GitHub Actions)](#12-cli-driven-deployment-git-push-remote-hooks-github-actions)
+  - [12. CLI-Driven deployment (Git push, remote hooks, GitHub Actions)](#12-cli-driven-deployment-git-push-remote-hooks-github-actions)
     - [12.1 Push-to-deploy via GitHub Actions (operate with gh)](#121-push-to-deploy-via-github-actions-operate-with-gh)
     - [12.2 Tag-driven releases and deployments](#122-tag-driven-releases-and-deployments)
     - [12.3 Remote server deployment using a bare repo + hook](#123-remote-server-deployment-using-a-bare-repo--hook)
     - [12.4 Remote deployment key management (GitHub + servers)](#124-remote-deployment-key-management-github--servers)
-  - [13. Security and Governance](#13-security-and-governance)
+  - [13. Security and governance](#13-security-and-governance)
     - [Avoid committing secrets](#avoid-committing-secrets)
     - [Signed commits (optional)](#signed-commits-optional)
     - [Least privilege](#least-privilege)
   - [14. Troubleshooting](#14-troubleshooting)
     - [Credentials keep failing](#credentials-keep-failing)
     - [Detached HEAD](#detached-head)
-    - [“non-fast-forward” push rejected](#non-fast-forward-push-rejected)
+    - ["non-fast-forward" push rejected](#non-fast-forward-push-rejected)
     - [Accidental `git reset --hard`](#accidental-git-reset---hard)
-  - [References and Further Reading](#references-and-further-reading)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -188,7 +188,7 @@ gh --version
 
 ---
 
-## 2. Identity, Config, and Safety Defaults
+## 2. Identity, config, and safety defaults
 
 ### Set user identity (global)
 
@@ -262,7 +262,7 @@ You have two separate concepts:
 - **Git transport auth** (push/pull): HTTPS (PAT) or SSH
 - **GitHub API auth** (issues, PRs, actions): `gh auth`
 
-### 3.1 Git over HTTPS (PAT) + Credential Manager
+### 3.1 Git over HTTPS (PAT) + credential manager
 
 GitHub no longer supports password auth for Git operations. Use:
 
@@ -386,7 +386,7 @@ gh config set git_protocol https
 
 ---
 
-## 4. Repository Lifecycle (Create, Clone, Delete, Archive)
+## 4. Repository lifecycle (create, clone, delete, archive)
 
 ### 4.1 Create a local repo
 
@@ -437,7 +437,7 @@ Create from a template repo:
 gh repo create OWNER/new-from-template --private --template OWNER/TEMPLATE_REPO --clone
 ```
 
-### 4.5 Archive vs Delete (be deliberate)
+### 4.5 Archive vs delete (be deliberate)
 
 **Archive (reversible, safer)**
 
@@ -462,7 +462,7 @@ gh repo delete OWNER/REPO --confirm
 
 ---
 
-## 5. Daily Git Workflow (Add/Commit/Log/Diff)
+## 5. Daily Git workflow (add/commit/log/diff)
 
 ### 5.1 Inspect state
 
@@ -551,7 +551,7 @@ git check-ignore -v path/to/file
 
 ---
 
-## 6. Branching and Integration (Merge, Rebase, Cherry-pick)
+## 6. Branching and integration (merge, rebase, cherry-pick)
 
 ### 6.1 Branch basics
 
@@ -612,7 +612,7 @@ If you already pushed and you rebase, you will need a force push:
 git push --force-with-lease
 ```
 
-`--force-with-lease` is safer than `--force` because it refuses to overwrite someone else’s new pushes.
+`--force-with-lease` is safer than `--force` because it refuses to overwrite someone else's new pushes.
 
 ### 6.4 Cherry-pick (copy a commit)
 
@@ -644,7 +644,7 @@ git rebase --abort
 
 ---
 
-## 7. Undo, Recovery, and Forensics (Restore, Reset, Reflog)
+## 7. Undo, recovery, and forensics (restore, reset, reflog)
 
 These are the commands that differentiate beginners from professionals.
 
@@ -693,7 +693,7 @@ git revert <commit_sha>
 
 ### 7.4 Reflog (time machine)
 
-If you “lost” commits after a reset/rebase, reflog usually saves you:
+If you "lost" commits after a reset/rebase, reflog usually saves you:
 
 ```bash
 git reflog
@@ -750,7 +750,7 @@ git clean -fd
 
 ---
 
-## 8. Remotes and Collaboration (Fetch/Pull/Push, Forks, Upstream)
+## 8. Remotes and collaboration (fetch/pull/push, forks, upstream)
 
 ### 8.1 Remotes
 
@@ -782,7 +782,7 @@ Prune deleted remote branches:
 git fetch --prune
 ```
 
-### 8.2 Fetch vs Pull
+### 8.2 Fetch vs pull
 
 - `git fetch`: update your view of the remote; does not change your working files
 - `git pull`: fetch + integrate (merge or rebase depending on config)
@@ -816,7 +816,7 @@ git push origin main # update your fork's main branch
 
 ---
 
-## 9. Tags, Releases, and Versioning
+## 9. Tags, releases, and versioning
 
 ### 9.1 Tags
 
@@ -874,7 +874,7 @@ gh release download v1.2.3
 
 ---
 
-## 10. Advanced Git (Worktrees, Submodules, Sparse Checkout, Bisect)
+## 10. Advanced Git (worktrees, submodules, sparse checkout, bisect)
 
 ### 10.1 Worktrees (multiple branches, one clone)
 
@@ -970,7 +970,7 @@ git commit -m "Configure Git LFS"
 
 ---
 
-## 11. GitHub CLI (gh) Deep Dive (repo, pr, issue, api, workflow)
+## 11. GitHub CLI (gh) deep dive (repo, pr, issue, api, workflow)
 
 ### 11.1 Repo operations
 
@@ -984,7 +984,7 @@ gh repo list --limit 50 # list your repos
 gh repo sync OWNER/FORK_REPO # sync a fork from upstream (default branch)
 ```
 
-### 11.2 Pull Requests
+### 11.2 Pull requests
 
 ```bash
 gh pr create # create PR from current branch
@@ -1095,7 +1095,7 @@ gh variable list
 
 ### 11.6 `gh api` (advanced automation)
 
-When `gh` doesn’t have a subcommand, `gh api` gives you raw GitHub API access.
+When `gh` doesn't have a subcommand, `gh api` gives you raw GitHub API access.
 
 Example: list repo webhooks:
 
@@ -1126,7 +1126,7 @@ gh extension list
 
 ---
 
-## 12. CLI-Driven Deployment (Git Push, Remote Hooks, GitHub Actions)
+## 12. CLI-Driven deployment (Git push, remote hooks, GitHub Actions)
 
 Deployment is usually one of these patterns:
 
@@ -1257,7 +1257,7 @@ printf "%s" "ssh-private-key-material" | gh secret set DEPLOY_SSH_KEY
 
 ---
 
-## 13. Security and Governance
+## 13. Security and governance
 
 ### Avoid committing secrets
 
@@ -1299,7 +1299,7 @@ git config --global commit.gpgsign true
 git commit -S -m "Signed commit"
 ```
 
-To get the “Verified” badge on GitHub, add the same public key under GitHub Settings → SSH and GPG keys.
+To get the "Verified" badge on GitHub, add the same public key under GitHub Settings → SSH and GPG keys.
 
 ### Least privilege
 
@@ -1330,9 +1330,9 @@ You checked out a commit directly. Create a branch to keep work:
 git switch -c fix/detached
 ```
 
-### “non-fast-forward” push rejected
+### "non-fast-forward" push rejected
 
-You’re behind the remote:
+You're behind the remote:
 
 ```bash
 git fetch origin
@@ -1355,7 +1355,7 @@ git reset --hard <sha>
 
 ---
 
-## References and Further Reading
+## References and further reading
 
 - Git documentation: https://git-scm.com/docs
 - Pro Git book (free): https://git-scm.com/book/en/v2

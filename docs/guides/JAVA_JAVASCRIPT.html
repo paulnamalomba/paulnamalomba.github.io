@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Java vs JavaScript: Runtimes, Execution, and Architecture - Paul Namalomba
+      Java vs JavaScript: runtimes, execution, and architecture - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
@@ -49,23 +49,23 @@
         </div>
         <article class="docs-content">
           <h1 id="java-vs-javascript-runtimes-execution-and-architecture">
-            Java vs JavaScript: Runtimes, Execution, and Architecture
+            Java vs JavaScript: runtimes, execution, and architecture
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: February 26, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: February 26, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -82,20 +82,19 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            Despite sharing a substring in their names, Java and JavaScript
-            possess fundamentally opposing architectures. Java is strictly
-            typed, deeply object-oriented, and compiles down to portable
-            bytecode executed natively by the JVM. JavaScript is dynamic,
-            prototype-based, and runs inside Event-Loop driven Just-In-Time
-            (JIT) engines like V8 (Node.js/Browsers). This guide breaks down the
-            divergence in their compile-time behaviors, typing paradigms, and
-            asynchronous mechanisms.
+            Java and JavaScript have different execution models. Java uses
+            static typing and an object-oriented model, compiling to bytecode
+            that runs on the JVM. JavaScript is dynamically typed and
+            prototype-based; engines such as V8 use just-in-time (JIT)
+            compilation, with event loops coordinating asynchronous work in
+            Node.js and browsers. This guide compares compilation, typing, and
+            asynchronous execution.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a href="#java-vs-javascript-runtimes-execution-and-architecture"
-                >Java vs JavaScript: Runtimes, Execution, and Architecture</a
+                >Java vs JavaScript: runtimes, execution, and architecture</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
@@ -106,62 +105,62 @@
               >
               <ul>
                 <li>
-                  <a href="#java-jdk-installation">Java (JDK Installation)</a>
+                  <a href="#java-jdk-installation">Java (JDK installation)</a>
                 </li>
                 <li>
                   <a href="#javascript-nodejs-npm"
-                    >JavaScript (Node.js \&amp; NPM)</a
+                    >JavaScript (node.js \&amp; NPM)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#2-writing-basic-codescripts-typing-async-handling"
-                >2. Writing Basic Code/Scripts (Typing \&amp; Async Handling)</a
+                >2. Writing basic Code/scripts (typing \&amp; async handling)</a
               >
               <ul>
-                <li><a href="#typing-mechanisms">Typing Mechanisms</a></li>
+                <li><a href="#typing-mechanisms">Typing mechanisms</a></li>
                 <li>
                   <a href="#concurrency-multi-threading-vs-the-event-loop"
-                    >Concurrency: Multi-Threading vs The Event Loop</a
+                    >Concurrency: Multi-Threading vs the event loop</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#3-compile-time-commands-javac-vs-transpilation"
-                >3. Compile-time Commands (Javac vs Transpilation)</a
+                >3. Compile-time commands (javac vs transpilation)</a
               >
               <ul>
                 <li>
                   <a href="#java-bytecode-compilation"
-                    >Java (Bytecode Compilation)</a
+                    >Java (bytecode compilation)</a
                   >
                 </li>
                 <li>
                   <a href="#javascript-transpilation-bundling"
-                    >JavaScript (Transpilation \&amp; Bundling)</a
+                    >JavaScript (transpilation \&amp; bundling)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#4-runtime-commands-jvm-execution-vs-event-loop"
-                >4. Runtime Commands (JVM Execution vs Event Loop)</a
+                >4. Runtime commands (JVM execution vs event loop)</a
               >
               <ul>
-                <li><a href="#java-execution">Java Execution</a></li>
-                <li><a href="#nodejs-execution">Node.js Execution</a></li>
+                <li><a href="#java-execution">Java execution</a></li>
+                <li><a href="#nodejs-execution">Node.js execution</a></li>
               </ul>
             </li>
             <li>
               <a href="#5-debugging-nullpointers-vs-undefined"
-                >5. Debugging (NullPointers vs Undefined)</a
+                >5. Debugging (NullPointers vs undefined)</a
               >
               <ul>
                 <li>
                   <a href="#java-the-nullpointerexception"
-                    >Java (The NullPointerException)</a
+                    >Java (the NullPointerException)</a
                   >
                 </li>
                 <li>
@@ -180,7 +179,7 @@
             Setting up an environment for these languages requires managing
             drastically different tooling ecosystems.
           </p>
-          <h3 id="java-jdk-installation">Java (JDK Installation)</h3>
+          <h3 id="java-jdk-installation">Java (JDK installation)</h3>
           <p>
             Java requires a Development Kit (JDK) containing
             <code>javac</code> (the compiler) and <code>java</code> (the
@@ -204,7 +203,7 @@ java<span class="w"> </span>-version
               Gradle) will fail silently.
             </li>
           </ul>
-          <h3 id="javascript-nodejs-npm">JavaScript (Node.js &amp; NPM)</h3>
+          <h3 id="javascript-nodejs-npm">JavaScript (node.js &amp; NPM)</h3>
           <p>
             JavaScript natively lives inside the browser environment, but
             server-side Javascript executes over Node.js.
@@ -226,13 +225,13 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
           </ul>
           <hr />
           <h2 id="2-writing-basic-codescripts-typing-async-handling">
-            2. Writing Basic Code/Scripts (Typing &amp; Async Handling)
+            2. Writing basic Code/scripts (typing &amp; async handling)
           </h2>
           <p>
             The syntax differences highlight Java's strictness versus
             JavaScript's flexibility and event-driven concurrency model.
           </p>
-          <h3 id="typing-mechanisms">Typing Mechanisms</h3>
+          <h3 id="typing-mechanisms">Typing mechanisms</h3>
           <p>
             <strong>Java (Static Typing):</strong> Memory footprints for
             variables are explicitly allocated before runtime. If a variable is
@@ -266,12 +265,12 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
 </code></pre>
           </div>
           <h3 id="concurrency-multi-threading-vs-the-event-loop">
-            Concurrency: Multi-Threading vs The Event Loop
+            Concurrency: Multi-Threading vs the event loop
           </h3>
           <p>
-            <strong>Java:</strong> Deeply integrates real multithreading. It
-            spawns independent OS-level physical threads executing parallel
-            logic (or virtual threads via Project Loom).
+            <strong>Java:</strong> Supports multithreading. It spawns
+            independent OS threads executing parallel logic (or virtual threads
+            via Project Loom).
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// CompletableFuture offloads task to an internal thread pool</span>
@@ -301,13 +300,13 @@ nvm<span class="w"> </span>install<span class="w"> </span><span class="m">20</sp
           </div>
           <hr />
           <h2 id="3-compile-time-commands-javac-vs-transpilation">
-            3. Compile-time Commands (Javac vs Transpilation)
+            3. Compile-time commands (javac vs transpilation)
           </h2>
           <p>
             Both languages impose processing phases prior to server deployment,
-            but the output formats have entirely divergent purposes.
+            but the output formats have different purposes.
           </p>
-          <h3 id="java-bytecode-compilation">Java (Bytecode Compilation)</h3>
+          <h3 id="java-bytecode-compilation">Java (bytecode compilation)</h3>
           <p>
             Java source code (<code>.java</code>) is strongly statically
             analyzed, compiled by <code>javac</code>, and converted into
@@ -325,7 +324,7 @@ mvn<span class="w"> </span>clean<span class="w"> </span>install
 </code></pre>
           </div>
           <h3 id="javascript-transpilation-bundling">
-            JavaScript (Transpilation &amp; Bundling)
+            JavaScript (transpilation &amp; bundling)
           </h3>
           <p>
             JavaScript itself does not strictly "compile." However, modern
@@ -345,13 +344,13 @@ npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </sp
           </div>
           <hr />
           <h2 id="4-runtime-commands-jvm-execution-vs-event-loop">
-            4. Runtime Commands (JVM Execution vs Event Loop)
+            4. Runtime commands (JVM execution vs event loop)
           </h2>
           <p>
             How code hits the processor dictates memory management and server
             architecture.
           </p>
-          <h3 id="java-execution">Java Execution</h3>
+          <h3 id="java-execution">Java execution</h3>
           <p>
             The JVM takes the <code>.jar</code> bytecode snippet, dynamically
             allocates heap memory, manages internal OS thread synchronization,
@@ -363,7 +362,7 @@ npm<span class="w"> </span>run<span class="w"> </span>build<span class="w"> </sp
 java<span class="w"> </span>-Xmx2048m<span class="w"> </span>-jar<span class="w"> </span>myenterprise-app-1.0.jar
 </code></pre>
           </div>
-          <h3 id="nodejs-execution">Node.js Execution</h3>
+          <h3 id="nodejs-execution">Node.js execution</h3>
           <p>
             Node feeds <code>.js</code> scripts into V8, heavily utilizing the
             non-blocking Node Event Loop. For scaling, Node requires spawning
@@ -379,14 +378,14 @@ pm2<span class="w"> </span>save
           </div>
           <hr />
           <h2 id="5-debugging-nullpointers-vs-undefined">
-            5. Debugging (NullPointers vs Undefined)
+            5. Debugging (NullPointers vs undefined)
           </h2>
           <p>
             Because Java fails at compile-time and Javascript mutates at
             runtime, their failure modes require distinct inspection strategies.
           </p>
           <h3 id="java-the-nullpointerexception">
-            Java (The NullPointerException)
+            Java (the NullPointerException)
           </h3>
           <ul>
             <li>
@@ -395,10 +394,9 @@ pm2<span class="w"> </span>save
               invoke a method on an object memory reference pointing to nothing.
             </li>
             <li>
-              <strong>The Tools:</strong> Deep stack traces dumping all loaded
-              frames, and leveraging the Java Debug Wire Protocol (JDWP). You
-              can physically connect IntelliJ to a remote spinning Linux JVM
-              memory structure.
+              <strong>The Tools:</strong> Inspect stack traces and use the Java
+              Debug Wire Protocol (JDWP) to attach IntelliJ to a JVM running on
+              a remote Linux host.
             </li>
           </ul>
           <div class="codehilite">
@@ -429,11 +427,11 @@ node<span class="w"> </span>--inspect<span class="w"> </span>index.js
           </div>
           <ul>
             <li>
-              <strong>Tracebacks:</strong> JavaScript stack traces are
-              fundamentally shallower because asynchronous callbacks wipe the
-              callstack hierarchy when deferred to the Event Loop. Leverage
-              <code>async/await</code> rigorously over raw
-              <code>.then()</code> promises to preserve native trace depth.
+              <strong>Tracebacks:</strong> JavaScript stack traces are shallower
+              because asynchronous callbacks wipe the callstack hierarchy when
+              deferred to the Event Loop. Use <code>async/await</code> instead
+              of raw <code>.then()</code> promises to preserve native trace
+              depth.
             </li>
           </ul>
         </article>

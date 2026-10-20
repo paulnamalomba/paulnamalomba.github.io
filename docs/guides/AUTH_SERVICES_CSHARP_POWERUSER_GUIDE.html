@@ -9,7 +9,7 @@
       name="description"
     />
     <meta content="#f2f0e9" name="theme-color" />
-    <title>AUTH_SERVICES PowerUser Guide (C#) - Paul Namalomba</title>
+    <title>AUTH_SERVICES PowerUser guide (C#) - Paul Namalomba</title>
     <link href="/styles.css" rel="stylesheet" />
     <script defer="" src="/scripts/interface.js"></script>
   </head>
@@ -47,7 +47,7 @@
         </div>
         <article class="docs-content">
           <h1 id="auth_services-poweruser-guide-c">
-            AUTH_SERVICES PowerUser Guide (C#)
+            AUTH_SERVICES PowerUser guide (C#)
           </h1>
           <p>
             <strong>Last updated</strong>: December 05, 2025<br />
@@ -85,10 +85,11 @@
             distributed systems at scale. This guide covers implementation
             patterns in C# for integrating with identity providers, token
             validation, claim-based authorization, SCIM provisioning,
-            certificate-based authentication, and audit logging. Power users
-            need to understand token lifecycle management, refresh strategies,
-            key rotation, HSM/KeyVault integration, and high-availability
-            architectures for production authentication infrastructure.
+            certificate-based authentication, and audit logging. Production
+            considerations include token lifecycle management, refresh
+            strategies, key rotation, HSM/KeyVault integration, and
+            high-availability architectures for production authentication
+            infrastructure.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
@@ -115,24 +116,24 @@
                 <li>
                   <a
                     href="#example-1-oauth-20-authorization-code-flow-with-pkce"
-                    >Example 1: OAuth 2.0 Authorization Code Flow with PKCE</a
+                    >Example 1: OAuth 2.0 authorization Code flow with PKCE</a
                   >
                 </li>
                 <li>
                   <a
                     href="#example-2-custom-claims-transformation-and-policy-based-authorization"
-                    >Example 2: Custom Claims Transformation and Policy-Based
-                    Authorization</a
+                    >Example 2: custom claims transformation and Policy-Based
+                    authorization</a
                   >
                 </li>
                 <li>
                   <a href="#example-3-scim-20-user-provisioning-implementation"
-                    >Example 3: SCIM 2.0 User Provisioning Implementation</a
+                    >Example 3: SCIM 2.0 user provisioning implementation</a
                   >
                 </li>
                 <li>
                   <a href="#example-4-token-refresh-and-rotation-strategy"
-                    >Example 4: Token Refresh and Rotation Strategy</a
+                    >Example 4: token refresh and rotation strategy</a
                   >
                 </li>
               </ul>
@@ -183,7 +184,7 @@
               and permissions
             </li>
           </ol>
-          <h2 id="key-concepts">Key Concepts</h2>
+          <h2 id="key-concepts">Key concepts</h2>
           <ul>
             <li>
               <strong>Identity Provider (IdP)</strong>: Centralized service that
@@ -242,7 +243,7 @@
             </li>
           </ul>
           <h2 id="configuration-and-best-practices">
-            Configuration and Best Practices
+            Configuration and best practices
           </h2>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Program.cs - ASP.NET Core minimal API with Azure AD authentication</span>
@@ -305,7 +306,7 @@
             refresh tokens encrypted in database; rotate on each use - Use PKCE
             (Proof Key for Code Exchange) for public clients (SPAs, mobile)
           </p>
-          <h2 id="security-considerations">Security Considerations</h2>
+          <h2 id="security-considerations">Security considerations</h2>
           <p><strong>Token Security</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Custom token validation with additional security checks</span>
@@ -423,7 +424,7 @@
           </p>
           <h2 id="examples">Examples</h2>
           <h3 id="example-1-oauth-20-authorization-code-flow-with-pkce">
-            Example 1: OAuth 2.0 Authorization Code Flow with PKCE
+            Example 1: OAuth 2.0 authorization Code flow with PKCE
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// OAuth2 client implementation with PKCE</span>
@@ -547,8 +548,8 @@
           <h3
             id="example-2-custom-claims-transformation-and-policy-based-authorization"
           >
-            Example 2: Custom Claims Transformation and Policy-Based
-            Authorization
+            Example 2: custom claims transformation and Policy-Based
+            authorization
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Claims transformation service</span>
@@ -642,7 +643,7 @@
 </code></pre>
           </div>
           <h3 id="example-3-scim-20-user-provisioning-implementation">
-            Example 3: SCIM 2.0 User Provisioning Implementation
+            Example 3: SCIM 2.0 user provisioning implementation
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// SCIM user provisioning controller</span>
@@ -743,7 +744,7 @@
 </code></pre>
           </div>
           <h3 id="example-4-token-refresh-and-rotation-strategy">
-            Example 4: Token Refresh and Rotation Strategy
+            Example 4: token refresh and rotation strategy
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Token refresh service with rotation</span>
@@ -936,7 +937,7 @@ openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> <
 openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class="w"> </span>ca-bundle.pem<span class="w"> </span>certificate.pem
 </code></pre>
           </div>
-          <h2 id="performance-and-tuning">Performance and Tuning</h2>
+          <h2 id="performance-and-tuning">Performance and tuning</h2>
           <p><strong>Token Caching Strategy</strong>:</p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// Implement distributed token cache with Redis</span>
@@ -1068,7 +1069,7 @@ openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class=
             implement backoff/retry strategies
           </p>
           <h2 id="references-and-further-reading">
-            References and Further Reading
+            References and further reading
           </h2>
           <p>
             <strong>Official Documentation</strong>: -

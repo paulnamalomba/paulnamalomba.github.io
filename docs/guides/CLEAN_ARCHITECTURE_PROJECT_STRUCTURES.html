@@ -10,7 +10,7 @@
     />
     <meta content="#f2f0e9" name="theme-color" />
     <title>
-      Clean Architecture &amp; Project Structures — C#, Dart (Flutter) &amp;
+      Clean architecture &amp; project structures — C#, Dart (Flutter) &amp;
       TypeScript - Paul Namalomba
     </title>
     <link href="/styles.css" rel="stylesheet" />
@@ -52,24 +52,24 @@
           <h1
             id="clean-architecture-project-structures-c-dart-flutter-typescript"
           >
-            Clean Architecture &amp; Project Structures — C#, Dart (Flutter)
+            Clean architecture &amp; project structures — C#, Dart (Flutter)
             &amp; TypeScript
           </h1>
           <p>
             <br />
-            <strong>Last updated</strong>: March 04, 2026<br />
-            <strong>Author</strong>:
-            <a href="https://github.com/paulnamalomba">Paul Namalomba</a><br />
+            Last updated: March 04, 2026<br />
+            Author: <a href="https://github.com/paulnamalomba">Paul Namalomba</a
+            ><br />
             - SESKA Computational Engineer<br />
             - SEAT Backend Developer<br />
             - Software Developer<br />
             - PhD Candidate (Civil Engineering Spec. Computational and Applied
             Mechanics)<br />
-            <strong>Contact</strong>:
+            Contact:
             <a href="mailto:kabwenzenamalomba@gmail.com"
               >kabwenzenamalomba@gmail.com</a
             ><br />
-            <strong>Website</strong>:
+            Website:
             <a href="https://paulnamalomba.github.io">paulnamalomba.github.io</a
             ><br />
             <br />
@@ -94,40 +94,36 @@
           </p>
           <h2 id="overview">Overview</h2>
           <p>
-            Architecting software is a battle between the convenience of
-            framework defaults and the necessary rigor of enterprise
-            maintainability. The "typical" structures are optimized for getting
-            a "Hello World" running in five minutes. Clean Architecture is
-            optimized for surviving five years of shifting business requirements
-            without rewriting the entire codebase.
+            Framework defaults make it quick to start a project. As business
+            requirements change, their convenience can make dependencies harder
+            to manage. Clean Architecture organizes those dependencies so that
+            changes to frameworks or infrastructure do not require rewriting the
+            application.
           </p>
           <p>
-            This guide provides a detailed breakdown of typical,
-            framework-default project structures versus their production-grade
-            Clean Architecture counterparts for <strong>C# (.NET)</strong>,
-            <strong>Dart (Flutter)</strong>, and
-            <strong>TypeScript (Node.js)</strong>. It includes a glossary of
-            fundamental architectural terms, concrete folder structures,
-            comparison tables, a full data-flow walkthrough, and practical
-            guidance on when (and when not) to apply Clean Architecture.
+            This guide compares framework-default structures with Clean
+            Architecture in C# (.NET), Dart (Flutter), and TypeScript (Node.js).
+            It includes architectural terminology, folder structures, comparison
+            tables, a data-flow walkthrough, and guidance on when Clean
+            Architecture is useful.
           </p>
           <h2 id="contents">Contents</h2>
           <ul>
             <li>
               <a
                 href="#clean-architecture-project-structures-c-dart-flutter-typescript"
-                >Clean Architecture \&amp; Project Structures — C#, Dart
+                >Clean architecture \&amp; project structures — C#, Dart
                 (Flutter) \&amp; TypeScript</a
               >
             </li>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#contents">Contents</a></li>
             <li>
-              <a href="#architectural-glossary">Architectural Glossary</a>
+              <a href="#architectural-glossary">Architectural glossary</a>
               <ul>
-                <li><a href="#layer-terms">Layer Terms</a></li>
-                <li><a href="#component-terms">Component Terms</a></li>
-                <li><a href="#principle-terms">Principle Terms</a></li>
+                <li><a href="#layer-terms">Layer terms</a></li>
+                <li><a href="#component-terms">Component terms</a></li>
+                <li><a href="#principle-terms">Principle terms</a></li>
               </ul>
             </li>
             <li>
@@ -136,65 +132,65 @@
               >
             </li>
             <li>
-              <a href="#1-c-net-web-api">1. C# (.NET Web API)</a>
+              <a href="#1-c-net-web-api">1. C# (.NET web API)</a>
               <ul>
                 <li>
                   <a href="#typical-structure-single-project-monolith"
-                    >Typical Structure (Single Project Monolith)</a
+                    >Typical structure (single project monolith)</a
                   >
                 </li>
                 <li>
                   <a href="#clean-architecture-structure-multi-project-solution"
-                    >Clean Architecture Structure (Multi-Project Solution)</a
+                    >Clean architecture structure (Multi-Project solution)</a
                   >
                 </li>
                 <li>
                   <a href="#c-project-references-enforcing-the-dependency-rule"
-                    >C# Project References (Enforcing the Dependency Rule)</a
+                    >C# project references (enforcing the dependency rule)</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#2-dart-flutter-for-iosandroid"
-                >2. Dart (Flutter for iOS/Android)</a
+                >2. Dart (Flutter for iOS/android)</a
               >
               <ul>
                 <li>
                   <a href="#typical-structure-folder-by-type"
-                    >Typical Structure (Folder-by-Type)</a
+                    >Typical structure (Folder-by-Type)</a
                   >
                 </li>
                 <li>
                   <a href="#clean-architecture-structure-feature-first"
-                    >Clean Architecture Structure (Feature-First)</a
+                    >Clean architecture structure (Feature-First)</a
                   >
                 </li>
                 <li>
                   <a href="#dart-dependency-injection-mechanics"
-                    >Dart Dependency Injection Mechanics</a
+                    >Dart dependency injection mechanics</a
                   >
                 </li>
               </ul>
             </li>
             <li>
               <a href="#3-typescript-nodejs-backend"
-                >3. TypeScript (Node.js Backend)</a
+                >3. TypeScript (node.js backend)</a
               >
               <ul>
                 <li>
                   <a href="#typical-structure-expressjs-default"
-                    >Typical Structure (Express.js Default)</a
+                    >Typical structure (express.js default)</a
                   >
                 </li>
                 <li>
                   <a href="#clean-architecture-structure"
-                    >Clean Architecture Structure</a
+                    >Clean architecture structure</a
                   >
                 </li>
                 <li>
                   <a href="#typescript-di-interface-enforcement"
-                    >TypeScript DI \&amp; Interface Enforcement</a
+                    >TypeScript DI \&amp; interface enforcement</a
                   >
                 </li>
               </ul>
@@ -206,17 +202,17 @@
             </li>
             <li>
               <a href="#data-flow-walkthrough-user-registration"
-                >Data Flow Walkthrough: User Registration</a
+                >Data flow walkthrough: user registration</a
               >
               <ul>
                 <li>
                   <a href="#step-by-step-from-http-to-database-and-back"
-                    >Step-by-Step: From HTTP to Database and Back</a
+                    >Step-by-Step: from HTTP to database and back</a
                   >
                 </li>
                 <li>
                   <a href="#concrete-code-example-typescript"
-                    >Concrete Code Example (TypeScript)</a
+                    >Concrete Code example (TypeScript)</a
                   >
                 </li>
               </ul>
@@ -229,18 +225,18 @@
             <li><a href="#common-pitfalls">Common Pitfalls</a></li>
             <li>
               <a href="#references-further-reading"
-                >References \&amp; Further Reading</a
+                >References \&amp; further reading</a
               >
             </li>
           </ul>
           <hr />
-          <h2 id="architectural-glossary">Architectural Glossary</h2>
+          <h2 id="architectural-glossary">Architectural glossary</h2>
           <p>
             Before dissecting folder structures, it is critical to establish
             precise definitions. These terms appear throughout Clean
             Architecture literature and are often misused or conflated.
           </p>
-          <h3 id="layer-terms">Layer Terms</h3>
+          <h3 id="layer-terms">Layer terms</h3>
           <table>
             <thead>
               <tr>
@@ -315,7 +311,7 @@
               </tr>
             </tbody>
           </table>
-          <h3 id="component-terms">Component Terms</h3>
+          <h3 id="component-terms">Component terms</h3>
           <table>
             <thead>
               <tr>
@@ -439,7 +435,7 @@
               </tr>
             </tbody>
           </table>
-          <h3 id="principle-terms">Principle Terms</h3>
+          <h3 id="principle-terms">Principle terms</h3>
           <table>
             <thead>
               <tr>
@@ -523,7 +519,7 @@
           </table>
           <hr />
           <h2 id="the-core-idea-the-dependency-rule">
-            The Core Idea: The Dependency Rule
+            The core idea: the dependency rule
           </h2>
           <p>
             Clean Architecture, as formalized by Robert C. Martin (Uncle Bob),
@@ -566,7 +562,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             without modifying a single line of business logic.
           </p>
           <hr />
-          <h2 id="1-c-net-web-api">1. C# (.NET Web API)</h2>
+          <h2 id="1-c-net-web-api">1. C# (.NET web API)</h2>
           <p>
             The .NET ecosystem is heavily opinionated out of the box. The
             default scaffold (<code>dotnet new webapi</code>) produces a single
@@ -576,7 +572,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             with evolving requirements.
           </p>
           <h3 id="typical-structure-single-project-monolith">
-            Typical Structure (Single Project Monolith)
+            Typical structure (single project monolith)
           </h3>
           <div class="codehilite">
             <pre><span></span><code>Solution_Name/
@@ -614,7 +610,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             </li>
           </ul>
           <h3 id="clean-architecture-structure-multi-project-solution">
-            Clean Architecture Structure (Multi-Project Solution)
+            Clean architecture structure (Multi-Project solution)
           </h3>
           <p>
             In production C#, the solution is split into distinct
@@ -694,7 +690,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 </code></pre>
           </div>
           <h3 id="c-project-references-enforcing-the-dependency-rule">
-            C# Project References (Enforcing the Dependency Rule)
+            C# project references (enforcing the dependency rule)
           </h3>
           <p>
             The <code>.csproj</code> files enforce the Dependency Rule at
@@ -757,12 +753,11 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           <p>
             If a developer in <code>Project.Domain</code> tries to
             <code>using Project.Infrastructure;</code>, the compiler will reject
-            it. The dependency rule is structurally enforced, not merely
-            documented.
+            it. The project structure enforces the dependency rule.
           </p>
           <hr />
           <h2 id="2-dart-flutter-for-iosandroid">
-            2. Dart (Flutter for iOS/Android)
+            2. Dart (Flutter for iOS/android)
           </h2>
           <p>
             Flutter is inherently a UI toolkit. It provides zero architectural
@@ -772,7 +767,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             and business logic coexist in the same file.
           </p>
           <h3 id="typical-structure-folder-by-type">
-            Typical Structure (Folder-by-Type)
+            Typical structure (Folder-by-Type)
           </h3>
           <div class="codehilite">
             <pre><span></span><code>lib/
@@ -808,7 +803,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             </li>
           </ul>
           <h3 id="clean-architecture-structure-feature-first">
-            Clean Architecture Structure (Feature-First)
+            Clean architecture structure (Feature-First)
           </h3>
           <p>
             For highly scalable mobile applications, a feature-first Clean
@@ -891,13 +886,13 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 </code></pre>
           </div>
           <h3 id="dart-dependency-injection-mechanics">
-            Dart Dependency Injection Mechanics
+            Dart dependency injection mechanics
           </h3>
           <p>
             Flutter does not have a built-in DI container. The community
             standard is <code>get_it</code> (a service locator) combined with
             <code>injectable</code> (code generation). Alternatively, Riverpod's
-            <code>Provider</code> system serves as a functional DI mechanism.
+            <code>Provider</code> system provides functional DI.
           </p>
           <div class="codehilite">
             <pre><span></span><code><span class="c1">// injection_container.dart (using get_it)</span>
@@ -937,17 +932,17 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <hr />
           <h2 id="3-typescript-nodejs-backend">
-            3. TypeScript (Node.js Backend)
+            3. TypeScript (node.js backend)
           </h2>
           <p>
             TypeScript brings type safety to JavaScript, but Node.js frameworks
             (particularly Express) are notoriously unopinionated. Without
-            deliberate structure, developers build massive, untyped route
-            handlers that parse JSON, validate inputs, execute business rules,
-            and query the database in a single function.
+            deliberate structure, developers build large, untyped route handlers
+            that parse JSON, validate inputs, execute business rules, and query
+            the database in a single function.
           </p>
           <h3 id="typical-structure-expressjs-default">
-            Typical Structure (Express.js Default)
+            Typical structure (express.js default)
           </h3>
           <div class="codehilite">
             <pre><span></span><code>src/
@@ -980,12 +975,12 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             </li>
           </ul>
           <h3 id="clean-architecture-structure">
-            Clean Architecture Structure
+            Clean architecture structure
           </h3>
           <p>
-            TypeScript excels at Clean Architecture because of its robust
-            interface support (<code>interface</code>,
-            <code>abstract class</code>), enabling strict Dependency Injection.
+            TypeScript uses <code>interface</code> and
+            <code>abstract class</code> to define contracts for dependency
+            injection in Clean Architecture.
           </p>
           <div class="codehilite">
             <pre><span></span><code>src/
@@ -1043,7 +1038,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
 </code></pre>
           </div>
           <h3 id="typescript-di-interface-enforcement">
-            TypeScript DI &amp; Interface Enforcement
+            TypeScript DI &amp; interface enforcement
           </h3>
           <p>
             TypeScript interfaces are erased at runtime, so DI requires either a
@@ -1104,7 +1099,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <hr />
           <h2 id="comparison-matrix-typical-vs-clean">
-            Comparison Matrix: Typical vs Clean
+            Comparison matrix: typical vs clean
           </h2>
           <table>
             <thead>
@@ -1222,7 +1217,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </table>
           <hr />
           <h2 id="data-flow-walkthrough-user-registration">
-            Data Flow Walkthrough: User Registration
+            Data flow walkthrough: user registration
           </h2>
           <p>
             To make Clean Architecture concrete, this section traces a single
@@ -1230,7 +1225,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             layer, from the HTTP request to the database write and back.
           </p>
           <h3 id="step-by-step-from-http-to-database-and-back">
-            Step-by-Step: From HTTP to Database and Back
+            Step-by-Step: from HTTP to database and back
           </h3>
           <div class="codehilite">
             <pre><span></span><code><span class="n">Client</span><span class="w"> </span><span class="p">(</span><span class="n">HTTP</span><span class="w"> </span><span class="n">POST</span><span class="w"> </span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">users</span><span class="p">)</span>
@@ -1279,7 +1274,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             <code>console.log()</code>. That is the entire point.
           </p>
           <h3 id="concrete-code-example-typescript">
-            Concrete Code Example (TypeScript)
+            Concrete Code example (TypeScript)
           </h3>
           <p><strong>Domain: Entity</strong></p>
           <div class="codehilite">
@@ -1413,7 +1408,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </p>
           <hr />
           <h2 id="when-to-use-clean-architecture-and-when-not-to">
-            When to Use Clean Architecture (and When Not To)
+            When to use clean architecture (and when not to)
           </h2>
           <p>
             Clean Architecture is not universally appropriate. Over-engineering
@@ -1470,7 +1465,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
             cost increases exponentially with codebase size.
           </p>
           <hr />
-          <h2 id="common-pitfalls">Common Pitfalls</h2>
+          <h2 id="common-pitfalls">Common pitfalls</h2>
           <ol>
             <li>
               <p>
@@ -1539,7 +1534,7 @@ Arrows point INWARD. Outer layers depend on inner layers. Never the reverse.
           </ol>
           <hr />
           <h2 id="references-further-reading">
-            References &amp; Further Reading
+            References &amp; further reading
           </h2>
           <ul>
             <li>

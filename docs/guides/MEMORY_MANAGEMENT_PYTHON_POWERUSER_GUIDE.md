@@ -1,4 +1,4 @@
-# Memory Management and Execution on Windows — Python (CPython)
+# Memory management and execution on Windows — Python (CPython)
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -21,23 +21,23 @@ This guide explains how Python (CPython on Windows) handles key memory and execu
 
 ## Contents
 
-- [Memory Management and Execution on Windows — Python (CPython)](#memory-management-and-execution-on-windows--python-cpython)
+- [Memory management and execution on Windows — Python (CPython)](#memory-management-and-execution-on-windows--python-cpython)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Windows — Run (PowerShell / Command Prompt)](#windows--run-powershell--command-prompt)
+  - [Windows — Run (PowerShell / command prompt)](#windows--run-powershell--command-prompt)
   - [Overview](#overview-1)
   - [Contents](#contents-1)
-  - [1) Data Structures — "Value" vs "Reference" in Python](#1-data-structures--value-vs-reference-in-python)
-  - [2) Storage — Heap, Object Layout, and CPython Internals](#2-storage--heap-object-layout-and-cpython-internals)
-  - [3) Copy Semantics — Shallow vs Deep Copy](#3-copy-semantics--shallow-vs-deep-copy)
-  - [4) Nullability — `None` and Safe Usage](#4-nullability--none-and-safe-usage)
-  - [Examples — Runnable Snippets](#examples--runnable-snippets)
-  - [Windows / CPython Specific Notes](#windows--cpython-specific-notes)
+  - [1) Data structures — "value" vs "reference" in Python](#1-data-structures--value-vs-reference-in-python)
+  - [2) Storage — heap, object layout, and CPython internals](#2-storage--heap-object-layout-and-cpython-internals)
+  - [3) Copy semantics — shallow vs deep copy](#3-copy-semantics--shallow-vs-deep-copy)
+  - [4) Nullability — `None` and safe usage](#4-nullability--none-and-safe-usage)
+  - [Examples — runnable snippets](#examples--runnable-snippets)
+  - [Windows / CPython specific notes](#windows--cpython-specific-notes)
   - [References](#references)
 
 ---
 
-## Windows — Run (PowerShell / Command Prompt)
+## Windows — Run (PowerShell / command prompt)
 
 - Run `main.py` with your installed Python interpreter:
 
@@ -70,7 +70,7 @@ Python (CPython) provides high-level memory management with automatic memory all
 
 ---
 
-## 1) Data Structures — "Value" vs "Reference" in Python
+## 1) Data structures — "value" vs "reference" in Python
 
 - In Python, _everything is an object_. Names (variables) are labels bound to object references.
 - Immutable types (e.g., `int`, `str`, `tuple`) behave like values semantically — operations produce new objects. Mutable types (`list`, `dict`, `set`) allow in-place changes.
@@ -95,7 +95,7 @@ Notes:
 
 ---
 
-## 2) Storage — Heap, Object Layout, and CPython Internals
+## 2) Storage — heap, object layout, and CPython internals
 
 - CPython allocates objects on the heap. The interpreter uses a small-object allocator (`pymalloc`) optimized for small objects.
 - Each object has a header including reference count and a pointer to type object (`PyObject_HEAD`).
@@ -112,7 +112,7 @@ Windows specifics:
 
 ---
 
-## 3) Copy Semantics — Shallow vs Deep Copy
+## 3) Copy semantics — shallow vs deep copy
 
 - Assignment copies references (no object duplication).
 - `copy.copy()` performs a shallow copy: top-level container duplicated, inner references copied.
@@ -137,7 +137,7 @@ Tips:
 
 ---
 
-## 4) Nullability — `None` and Safe Usage
+## 4) Nullability — `None` and safe usage
 
 - `None` is the singleton null value in Python. Any variable can be set to `None`.
 - Use `is None` / `is not None` for checks.
@@ -165,7 +165,7 @@ def append_to(element, to=None):
 
 ---
 
-## Examples — Runnable Snippets
+## Examples — runnable snippets
 
 `main.py`:
 
@@ -199,7 +199,7 @@ Run with `python main.py` or `py -3 main.py` on Windows.
 
 ---
 
-## Windows / CPython Specific Notes
+## Windows / CPython specific notes
 
 - Use `py` launcher to select Python version on Windows.
 - CPython's GIL (Global Interpreter Lock) affects multi-threaded CPU-bound programs; prefer multiprocessing for CPU work.

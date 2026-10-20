@@ -1,4 +1,4 @@
-# Service and Process Management Guide: Bash vs. PowerShell
+# Service and process management guide: Bash vs. PowerShell
 
 **Last updated**: December 18, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -20,41 +20,41 @@ This guide provides a comparative technical reference for managing system servic
 
 ## Contents
 
-- [Service and Process Management Guide: Bash vs. PowerShell](#service-and-process-management-guide-bash-vs-powershell)
+- [Service and process management guide: Bash vs. PowerShell](#service-and-process-management-guide-bash-vs-powershell)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Part 1: System Services Management](#part-1-system-services-management)
+  - [Part 1: system services management](#part-1-system-services-management)
     - [1.1 Linux: Systemd (`systemctl`)](#11-linux-systemd-systemctl)
-      - [**Basic Service Control**](#basic-service-control)
-      - [**Boot Management**](#boot-management)
-      - [**Logging (Journalctl)**](#logging-journalctl)
-    - [1.2 Windows: PowerShell Service Cmdlets](#12-windows-powershell-service-cmdlets)
-      - [**Basic Service Control**](#basic-service-control-1)
-      - [**Boot Management (Startup Types)**](#boot-management-startup-types)
-  - [Part 2: Process Control \& Supervisor](#part-2-process-control--supervisor)
-    - [2.1 Linux: Supervisor (`supervisorctl`)](#21-linux-supervisor-supervisorctl)
-      - [**Key Commands**](#key-commands)
-    - [2.2 Windows: PowerShell Process Management](#22-windows-powershell-process-management)
-      - [**Native Process Cmdlets**](#native-process-cmdlets)
-      - [**Advanced Inspection (WMI/CIM)**](#advanced-inspection-wmicim)
-      - [**Architectural Equivalents to Supervisor**](#architectural-equivalents-to-supervisor)
-  - [Part 3: Service Configuration \& Dependencies](#part-3-service-configuration--dependencies)
-    - [3.1 Linux: Systemd Unit Files](#31-linux-systemd-unit-files)
-      - [**Anatomy of a Unit File**](#anatomy-of-a-unit-file)
-    - [3.2 Windows: Service Dependencies \& Recovery](#32-windows-service-dependencies--recovery)
-      - [**Managing Dependencies**](#managing-dependencies)
-      - [**Service Recovery (Auto-Restart)**](#service-recovery-auto-restart)
-  - [Part 4: Background Jobs \& Process Priority](#part-4-background-jobs--process-priority)
-    - [4.1 Linux: Job Control \& Nice](#41-linux-job-control--nice)
-      - [**Shell Job Control**](#shell-job-control)
-      - [**Process Priority (Nice)**](#process-priority-nice)
-    - [4.2 Windows: PowerShell Jobs \& Priority](#42-windows-powershell-jobs--priority)
-      - [**PowerShell Jobs**](#powershell-jobs)
-      - [**Process Priority**](#process-priority)
+      - [Basic service control](#basic-service-control)
+      - [Boot management](#boot-management)
+      - [Logging (journalctl)](#logging-journalctl)
+    - [1.2 Windows: PowerShell service cmdlets](#12-windows-powershell-service-cmdlets)
+      - [Basic service control](#basic-service-control-1)
+      - [Boot management (startup types)](#boot-management-startup-types)
+  - [Part 2: process control \& supervisor](#part-2-process-control--supervisor)
+    - [2.1 Linux: supervisor (`supervisorctl`)](#21-linux-supervisor-supervisorctl)
+      - [Key commands](#key-commands)
+    - [2.2 Windows: PowerShell process management](#22-windows-powershell-process-management)
+      - [Native process cmdlets](#native-process-cmdlets)
+      - [Advanced inspection (WMI/CIM)](#advanced-inspection-wmicim)
+      - [Architectural equivalents to supervisor](#architectural-equivalents-to-supervisor)
+  - [Part 3: service configuration \& dependencies](#part-3-service-configuration--dependencies)
+    - [3.1 Linux: Systemd unit files](#31-linux-systemd-unit-files)
+      - [Anatomy of a unit file](#anatomy-of-a-unit-file)
+    - [3.2 Windows: service dependencies \& recovery](#32-windows-service-dependencies--recovery)
+      - [Managing dependencies](#managing-dependencies)
+      - [Service recovery (Auto-Restart)](#service-recovery-auto-restart)
+  - [Part 4: background jobs \& process priority](#part-4-background-jobs--process-priority)
+    - [4.1 Linux: job control \& nice](#41-linux-job-control--nice)
+      - [Shell job control](#shell-job-control)
+      - [Process priority (nice)](#process-priority-nice)
+    - [4.2 Windows: PowerShell jobs \& priority](#42-windows-powershell-jobs--priority)
+      - [PowerShell jobs](#powershell-jobs)
+      - [Process priority](#process-priority)
 
 ---
 
-## Part 1: System Services Management
+## Part 1: system services management
 
 This section covers the management of background services (daemons in Linux, Services in Windows).
 
@@ -62,7 +62,7 @@ This section covers the management of background services (daemons in Linux, Ser
 
 `systemd` is the init system and service manager for most modern Linux distributions. `systemctl` is the primary command-line utility for introspection and control.
 
-#### **Basic Service Control**
+#### Basic service control
 
 The generic syntax is `sudo systemctl [command] [service_name]`.
 
@@ -87,7 +87,7 @@ The generic syntax is `sudo systemctl [command] [service_name]`.
   systemctl status nginx
   ```
 
-#### **Boot Management**
+#### Boot management
 
 Controls whether a service launches automatically when the OS boots.
 
@@ -104,7 +104,7 @@ Controls whether a service launches automatically when the OS boots.
   systemctl is-enabled nginx
   ```
 
-#### **Logging (Journalctl)**
+#### Logging (journalctl)
 
 `systemd` uses a binary logger called the journal.
 
@@ -116,11 +116,11 @@ Controls whether a service launches automatically when the OS boots.
 
 ---
 
-### 1.2 Windows: PowerShell Service Cmdlets
+### 1.2 Windows: PowerShell service cmdlets
 
 PowerShell uses the `*-Service` noun for service management.
 
-#### **Basic Service Control**
+#### Basic service control
 
 - **Get Service Status:**
   ```powershell
@@ -145,7 +145,7 @@ PowerShell uses the `*-Service` noun for service management.
   Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.Name -like 'W*' }
   ```
 
-#### **Boot Management (Startup Types)**
+#### Boot management (startup types)
 
 Windows uses "Startup Types" (Automatic, Manual, Disabled) rather than just enable/disable flags.
 
@@ -164,15 +164,15 @@ Windows uses "Startup Types" (Automatic, Manual, Disabled) rather than just enab
 
 ---
 
-## Part 2: Process Control & Supervisor
+## Part 2: process control & supervisor
 
 This section compares the Linux `supervisor` tool (process control system) with Windows process management.
 
-### 2.1 Linux: Supervisor (`supervisorctl`)
+### 2.1 Linux: supervisor (`supervisorctl`)
 
 Supervisor is a client/server system that allows its users to monitor and control a number of processes on UNIX-like operating systems. It is often used to keep applications running (respawning them if they crash).
 
-#### **Key Commands**
+#### Key commands
 
 - **Enter Interactive Shell:**
   ```bash
@@ -206,11 +206,11 @@ Supervisor is a client/server system that allows its users to monitor and contro
 
 ---
 
-### 2.2 Windows: PowerShell Process Management
+### 2.2 Windows: PowerShell process management
 
 **Note:** Windows does not have a built-in 1:1 equivalent to Supervisor for _process grouping_ and _automatic respawning_ without external tools. Native PowerShell commands interact directly with the OS process table.
 
-#### **Native Process Cmdlets**
+#### Native process cmdlets
 
 - **List Processes:**
   ```powershell
@@ -234,7 +234,7 @@ Supervisor is a client/server system that allows its users to monitor and contro
   Start-Process -FilePath "C:\Path\To\App.exe" -ArgumentList "-config config.json"
   ```
 
-#### **Advanced Inspection (WMI/CIM)**
+#### Advanced inspection (WMI/CIM)
 
 `Get-Process` does not show the full command line arguments by default. You need WMI or CIM for this.
 
@@ -243,7 +243,7 @@ Supervisor is a client/server system that allows its users to monitor and contro
   Get-CimInstance Win32_Process | Select-Object ProcessId, Name, CommandLine | Format-List
   ```
 
-#### **Architectural Equivalents to Supervisor**
+#### Architectural equivalents to supervisor
 
 To achieve "keep-alive" functionality (respawning apps if they crash) on Windows, you typically wrap the executable as a Windows Service.
 
@@ -265,15 +265,15 @@ To achieve "keep-alive" functionality (respawning apps if they crash) on Windows
 
 ---
 
-## Part 3: Service Configuration & Dependencies
+## Part 3: service configuration & dependencies
 
-Understanding how services are defined and how they relate to one another is crucial for system stability.
+Service definitions and dependencies determine startup order and affect system stability.
 
-### 3.1 Linux: Systemd Unit Files
+### 3.1 Linux: Systemd unit files
 
 In Systemd, services are defined in `.service` files (Unit files), typically located in `/etc/systemd/system/`.
 
-#### **Anatomy of a Unit File**
+#### Anatomy of a unit file
 
 A basic service file (`/etc/systemd/system/myapp.service`) looks like this:
 
@@ -299,11 +299,11 @@ WantedBy=multi-user.target               # Enable for standard multi-user runlev
   sudo systemctl daemon-reload
   ```
 
-### 3.2 Windows: Service Dependencies & Recovery
+### 3.2 Windows: service dependencies & recovery
 
 Windows services store configuration in the Registry. While `Set-Service` covers basics, `sc.exe` (Service Control) or WMI is often needed for advanced configuration.
 
-#### **Managing Dependencies**
+#### Managing dependencies
 
 - **View Dependencies (PowerShell):**
   ```powershell
@@ -314,7 +314,7 @@ Windows services store configuration in the Registry. While `Set-Service` covers
   Get-Service -Name LanmanWorkstation -RequiredServices
   ```
 
-#### **Service Recovery (Auto-Restart)**
+#### Service recovery (Auto-Restart)
 
 Configuring a service to restart automatically upon failure is common. PowerShell's `Set-Service` doesn't expose recovery options directly; use `sc.exe` (legacy but effective) or CIM.
 
@@ -326,13 +326,13 @@ Configuring a service to restart automatically upon failure is common. PowerShel
 
 ---
 
-## Part 4: Background Jobs & Process Priority
+## Part 4: background jobs & process priority
 
 Managing ad-hoc background tasks and system resource allocation.
 
-### 4.1 Linux: Job Control & Nice
+### 4.1 Linux: job control & nice
 
-#### **Shell Job Control**
+#### Shell job control
 
 Bash allows running commands in the background of the current shell session.
 
@@ -349,7 +349,7 @@ Bash allows running commands in the background of the current shell session.
   fg %1
   ```
 
-#### **Process Priority (Nice)**
+#### Process priority (nice)
 
 - **Start with lower priority:** (Higher nice value = lower priority, range -20 to 19)
   ```bash
@@ -360,9 +360,9 @@ Bash allows running commands in the background of the current shell session.
   renice -n 10 -p 1234
   ```
 
-### 4.2 Windows: PowerShell Jobs & Priority
+### 4.2 Windows: PowerShell jobs & priority
 
-#### **PowerShell Jobs**
+#### PowerShell jobs
 
 PowerShell jobs run in a separate process (wsmprovhost.exe), allowing the main console to remain responsive.
 
@@ -379,7 +379,7 @@ PowerShell jobs run in a separate process (wsmprovhost.exe), allowing the main c
   Receive-Job -Job $job
   ```
 
-#### **Process Priority**
+#### Process priority
 
 You can adjust the `PriorityClass` of a process object.
 
