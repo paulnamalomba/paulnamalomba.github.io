@@ -234,10 +234,10 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
-  min-height: 44px;
-  padding: 0.85rem 1.25rem;
-  border-radius: 12px;
+  gap: 0.65rem;
+  min-height: 32px;
+  padding: 0.65rem 1.05rem;
+  border-radius: 8px;
   text-decoration: none;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -324,27 +324,24 @@ h1 {
 .mesh-study figcaption span {
   font-size: 0.75rem;
 }
-.mesh-control {
-  display: none;
-  width: 132px;
-  flex: none;
-}
-.mesh-control span {
+.mesh-hint {
   color: var(--muted);
+  display: none;
+  text-align: right;
 }
-.mesh-control input {
-  display: block;
-  width: 100%;
-  height: 32px;
-  margin: 0;
-  accent-color: var(--blue);
-  cursor: ew-resize;
+.mesh-interactive {
+  touch-action: none;
+  cursor: crosshair;
+}
+.mesh-interactive:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -4px;
 }
 .is-interactive .mesh-fallback {
   display: none;
 }
 .is-interactive .mesh-interactive,
-.is-interactive .mesh-control {
+.is-interactive .mesh-hint {
   display: block;
 }
 .discipline-strip {
@@ -999,11 +996,8 @@ h1 {
     flex-wrap: wrap;
     padding: 1.2rem;
   }
-  .mesh-control {
-    width: 100%;
-  }
-  .mesh-control input {
-    max-width: 200px;
+  .mesh-hint {
+    text-align: left;
   }
   .discipline-strip {
     gap: 1.5rem;
@@ -1226,8 +1220,8 @@ h1 {
     flex-wrap: nowrap;
     padding: 0.5rem 1.1rem 1.2rem;
   }
-  .mesh-control {
-    width: 112px;
+  .mesh-hint {
+    max-width: 15ch;
   }
   .mesh-study figcaption span {
     font-size: 0.75rem;

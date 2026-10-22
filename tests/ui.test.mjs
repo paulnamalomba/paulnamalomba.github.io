@@ -35,22 +35,29 @@ async function withPage(options, run) {
   }
 }
 
-test("mesh deformation responds to the keyboard and has a static fallback", async () => {
+test("mesh supports direct deformation, zoom, and a static fallback", async () => {
   await withPage({}, async (page) => {
     await page.goto(site.origin + "/");
-    const control = page.getByRole("slider", { name: "Mesh deformation" });
-    await control.waitFor({ state: "visible" });
+    const mesh = page.locator(".mesh-interactive");
+    await mesh.waitFor({ state: "visible" });
     const before = await page.locator("[data-mesh-surface]").innerHTML();
-    await control.focus();
-    await page.keyboard.press("End");
-    assert.equal(await control.inputValue(), "100");
-    assert.equal(
-      await control.getAttribute("aria-valuetext"),
-      "100% deformation",
-    );
-    assert.notEqual(
-      await page.locator("[data-mesh-surface]").innerHTML(),
+    await page.locator("[data-mesh-surface] polygon").first().click();
+    await page.waitForFunction(
+      (previous) =>
+        document.querySelector("[data-mesh-surface]").innerHTML !== previous,
       before,
+    );
+    await mesh.focus();
+    await page.keyboard.press("+");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("[data-mesh-surface]")
+        .getAttribute("transform")
+        ?.includes("scale(1.15)"),
+    );
+    assert.match(
+      await page.locator("[data-mesh-surface]").getAttribute("transform"),
+      /scale\(1\.15\)/,
     );
   });
   await withPage({ javaScriptEnabled: false }, async (page) => {
@@ -62,7 +69,6 @@ test("mesh deformation responds to the keyboard and has a static fallback", asyn
         .evaluate((img) => img.complete && img.naturalWidth > 0),
       true,
     );
-    assert.equal(await page.getByRole("slider").count(), 0);
   });
 });
 
