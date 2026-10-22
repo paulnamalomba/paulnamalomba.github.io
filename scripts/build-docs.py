@@ -89,7 +89,7 @@ def page_shell(title: str, body: str, extra_css: str = "") -> str:
     <meta name="description" content="Practical technical guides by Paul Namalomba on backend engineering, data systems, infrastructure and scientific computing.">
     <meta name="theme-color" content="#f2f0e9">
     <title>{title} - Paul Namalomba</title>
-    <link rel="stylesheet" href="/styles.css">{style_block}
+    <link rel="stylesheet" href="/docs-styles.css">{style_block}
 </head>
 <body class="docs-page">
 {NAV_HTML}
