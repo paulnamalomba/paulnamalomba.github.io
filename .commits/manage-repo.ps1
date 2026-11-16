@@ -58,15 +58,28 @@ function Write-Error {
 # Get available versions from .commits directory
 function Get-AvailableVersions {
     $commitsDir = Join-Path $PSScriptRoot "."
-    $txtFiles = Get-ChildItem -Path $commitsDir -Filter "*.txt" | Where-Object { $_.Name -match '\d+.*\.txt$' }
+    # Markdown notes are current; historical .txt notes remain readable.
+    $noteFiles = Get-ChildItem -Path $commitsDir -File | Where-Object { $_.Name -match '^\d+.*\.(md|txt)$' }
     
     $versions = @()
-    foreach ($file in $txtFiles) {
+    foreach ($file in $noteFiles) {
         $versionName = $file.BaseName
         $versions += $versionName
     }
     
-    return $versions | Sort-Object
+    return $versions | Sort-Object -Unique { try { [version]$_ } catch { [version]"0.0" } }, { $_ }
+}
+
+# Resolve the note file for a version or tag (v1.0.12 -> 1.0.12.md, falling back to .txt)
+function Get-NoteFile {
+    param([string]$VersionNumber)
+    
+    $baseName = $VersionNumber -replace '^v(?=\d)', ''
+    foreach ($candidate in @("$baseName.md", "$baseName.txt", "$VersionNumber.md", "$VersionNumber.txt")) {
+        $path = Join-Path $PSScriptRoot $candidate
+        if (Test-Path $path) { return $path }
+    }
+    return (Join-Path $PSScriptRoot "$baseName.md")
 }
 
 # Display available versions
@@ -78,12 +91,12 @@ function Show-AvailableVersions {
     
     if ($versions.Count -eq 0) {
         Write-Warning "No version files found in .commits/ directory"
-        Write-Info "Expected format: *.txt (e.g., 0.1.0-alpha.txt)"
+        Write-Info "Expected format: *.md (e.g., 1.0.12.md); historical *.txt notes are also read"
         return $false
     }
     
     foreach ($version in $versions) {
-        $filePath = Join-Path $PSScriptRoot "$version.txt"
+        $filePath = Get-NoteFile -VersionNumber $version
         $fileInfo = Get-Item $filePath
         Write-Host "  📦 $version" -ForegroundColor Yellow
         Write-Host "     Created: $($fileInfo.CreationTime)" -ForegroundColor DarkGray
@@ -98,7 +111,7 @@ function Show-AvailableVersions {
 function Test-VersionExists {
     param([string]$VersionNumber)
     
-    $versionFile = Join-Path $PSScriptRoot "$VersionNumber.txt"
+    $versionFile = Get-NoteFile -VersionNumber $VersionNumber
     
     if (-not (Test-Path $versionFile)) {
         Write-Error "Version file not found: $versionFile"
@@ -151,7 +164,7 @@ function Invoke-GitAdd {
 function Invoke-GitCommit {
     param([string]$VersionNumber)
     
-    $commitMessageFile = Join-Path $PSScriptRoot "$VersionNumber.txt"
+    $commitMessageFile = Get-NoteFile -VersionNumber $VersionNumber
     
     Write-Info "Committing with message from: $commitMessageFile"
     
@@ -200,8 +213,8 @@ function Invoke-GitTag {
     }
     
     # Create annotated tag with message from file
-    $tagMessageFile = Join-Path $PSScriptRoot "$VersionNumber.txt"
-    git tag -a $VersionNumber -F $tagMessageFile
+    $tagMessageFile = Get-NoteFile -VersionNumber $VersionNumber
+    git tag -a $VersionNumber --cleanup=verbatim -F $tagMessageFile
     
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Tag $VersionNumber created successfully"
@@ -249,7 +262,7 @@ function Invoke-GitRelease {
             return $false
         }
     }
-    $releaseMessageFile = Join-Path $PSScriptRoot "$VersionNumber.txt"
+    $releaseMessageFile = Get-NoteFile -VersionNumber $VersionNumber
     gh release create "$VersionNumber" --title "$VersionNumber" --notes-file $releaseMessageFile --target $Branch
     
     if ($LASTEXITCODE -eq 0) {
@@ -315,7 +328,7 @@ function Invoke-Release {
     # Confirm
     Write-Warning "This will:"
     Write-Host "  1. Stage all changes (git add .)" -ForegroundColor Yellow
-    Write-Host "  2. Commit with message from .commits/$VersionNumber.txt" -ForegroundColor Yellow
+    Write-Host "  2. Commit with message from .commits/$(Split-Path (Get-NoteFile -VersionNumber $VersionNumber) -Leaf)" -ForegroundColor Yellow
     Write-Host "  3. Create tag $VersionNumber" -ForegroundColor Yellow
     Write-Host "  4. Push to $Remote/$Branch" -ForegroundColor Yellow
     Write-Host "  5. Push tag $VersionNumber to $Remote" -ForegroundColor Yellow
@@ -416,7 +429,7 @@ switch ($Action.ToLower()) {
         Write-Host "  status     - Show git status"
         Write-Host "  release    - Complete release workflow (add, commit, push, tag)"
         Write-Host "  add        - Stage all changes (git add .)"
-        Write-Host "  commit     - Commit with version message (git commit -F .commits/VERSION.txt)"
+        Write-Host "  commit     - Commit with version message (git commit -F .commits/VERSION.md)"
         Write-Host "  tag        - Create and push tag"
         Write-Host "  push       - Push to remote branch"
         Write-Host "  help       - Show this help message"
