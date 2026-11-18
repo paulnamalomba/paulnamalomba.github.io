@@ -1,37 +1,37 @@
-# Distributed Event Streaming Platform Components
+# Distributed event streaming platform components
 
 <br>
-**Last updated**: February 28, 2025<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: February 28, 2025<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Framework](https://img.shields.io/badge/Enterprise-Auth_Services-blue.svg)](https://learn.microsoft.com/en-us/azure/active-directory/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-this document serves to ddescribe the instantiation of prudoducer consumer archetecture for Apache Kafka, which is a distributed message/streaming platform.
+This guide explains how to implement producer-consumer architectures with Apache Kafka, a distributed messaging and event-streaming platform.
 
 ## Contents
 
-- [Distributed Event Streaming Platform Components](#distributed-event-streaming-platform-components)
+- [Distributed event streaming platform components](#distributed-event-streaming-platform-components)
   - [Overview](#overview)
   - [Contents](#contents)
     - [1. Prerequisites](#1-prerequisites)
-    - [2. The Producer: Fire and Forget (or Acknowledge)](#2-the-producer-fire-and-forget-or-acknowledge)
-    - [3. The Consumer: The Infinite Polling Loop](#3-the-consumer-the-infinite-polling-loop)
-    - [Architectural Considerations for the Pipeline](#architectural-considerations-for-the-pipeline)
+    - [2. The producer: fire and forget (or acknowledge)](#2-the-producer-fire-and-forget-or-acknowledge)
+    - [3. The consumer: the infinite polling loop](#3-the-consumer-the-infinite-polling-loop)
+    - [Architectural considerations for the pipeline](#architectural-considerations-for-the-pipeline)
 
 ---
 
 ### 1. Prerequisites
 
-#Implementing a robust event streaming layer in C# relies almost exclusively on the `Confluent.Kafka` library. It is a highly optimized .NET wrapper around the native C `librdkafka` library, meaning it delivers the raw throughput required for high-volume backend systems while exposing a clean, asynchronous C# API.
+The C# examples use `Confluent.Kafka`, a .NET wrapper around the native C `librdkafka` library. It exposes an asynchronous C# API for high-throughput event streaming.
 
 First, you need the NuGet package.
 
@@ -51,7 +51,7 @@ public record EnrollmentEvent(string StudentId, string CourseCode, DateTimeOffse
 
 ---
 
-### 2. The Producer: Fire and Forget (or Acknowledge)
+### 2. The producer: fire and forget (or acknowledge)
 
 The Producer's job is to serialize the event and route it to the correct Kafka broker and topic. For critical backend pipelines, we use `ProduceAsync` to ensure we receive a delivery acknowledgment (an offset) from the broker without blocking the calling thread.
 
@@ -107,7 +107,7 @@ public class KafkaEventProducer
 
 ---
 
-### 3. The Consumer: The Infinite Polling Loop
+### 3. The consumer: the infinite polling loop
 
 Unlike HTTP endpoints that passively wait for requests, Kafka Consumers actively poll the broker for new data. They are designed to run continuously in a background service.
 
@@ -170,7 +170,7 @@ public class KafkaEventConsumer
 
 ---
 
-### Architectural Considerations for the Pipeline
+### Architectural considerations for the pipeline
 
 - **Partitioning Keys:** In the producer code, `evt.StudentId` is explicitly set as the `Key`. Kafka guarantees order _only_ within a specific partition. By keying on the `StudentId`, you ensure that all events for a specific student go to the same partition and are processed sequentially.
 - **Idempotency:** A dry reality of distributed systems is that the network will eventually lie to you. The producer might send a message, the broker might save it, but the acknowledgment fails. The producer will retry, resulting in a duplicate. Your downstream database logic must be idempotent (e.g., using `UPSERT` statements) to handle this gracefully.

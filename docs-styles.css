@@ -2,7 +2,7 @@
 
 :root {
   --paper-2: var(--paper-deep);
-  --shell: min(1180px, calc(100vw - 48px));
+  --shell: min(1280px, calc(100% - 96px));
 }
 
 * {
@@ -16,9 +16,9 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: "Sora", "Segoe UI", sans-serif;
+  font-size: 0.9375rem;
   line-height: 1.65;
-  overflow-x: hidden;
 }
 body.menu-open {
   overflow: hidden;
@@ -69,11 +69,11 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color-mix(in srgb, var(--paper) 93%, transparent);
-  backdrop-filter: blur(14px);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
 }
 nav {
-  min-height: 72px;
+  min-height: 90px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,21 +84,18 @@ nav {
   gap: 0.7rem;
   color: var(--ink);
   text-decoration: none;
-  font-weight: 780;
+  font-weight: 500;
   letter-spacing: -0.02em;
 }
 .logo a::before {
-  content: "PN";
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  color: var(--paper);
-  background: var(--ink);
-  font-size: 0.875rem;
-  letter-spacing: 0.06em;
+  content: "";
+  display: block;
+  width: 36px;
+  height: 36px;
+  background: var(--blue);
+  mask: url("assets/monogram.svg") center / contain no-repeat;
 }
+
 .nav-links {
   display: flex;
   gap: 1.8rem;
@@ -111,7 +108,7 @@ nav {
   color: var(--ink);
   text-decoration: none;
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 .nav-links a:hover,
 .nav-links a[aria-current="page"] {
@@ -148,9 +145,9 @@ nav {
 .eyebrow {
   margin: 0 0 1.25rem;
   font-size: 0.875rem;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
 }
 .docs-hero-grid {
   display: grid;
@@ -164,14 +161,16 @@ nav {
 .docs-hero h1 {
   margin: 0;
   max-width: 840px;
-  font-size: clamp(3.7rem, 7.4vw, 6rem);
-  line-height: 0.9;
+  font-size: clamp(3.1rem, 6vw, 5rem);
+  line-height: 1.08;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .docs-hero h1 em {
-  color: var(--teal);
-  font-family: Georgia, serif;
-  font-weight: 400;
+  color: inherit;
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
 }
 .docs-hero-copy p {
   margin: 0 0 1.5rem;
@@ -200,8 +199,8 @@ nav {
 .docs-stats span {
   color: var(--muted);
   font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .docs-toolbar {
@@ -236,7 +235,7 @@ nav {
 }
 .search-wrap input:focus {
   border-color: var(--teal);
-  box-shadow: 0 0 0 3px rgba(7, 133, 125, 0.12);
+  box-shadow: 0 0 0 3px rgba(33, 77, 222, 0.15);
 }
 .filter-list {
   display: flex;
@@ -253,9 +252,9 @@ nav {
   cursor: pointer;
   box-shadow: none;
   font-size: 0.875rem;
-  font-weight: 750;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
   transition:
     background-color 0.16s,
     border-color 0.16s,
@@ -286,8 +285,9 @@ nav {
 }
 .library-heading h2 {
   margin: 0;
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: 1;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.2;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .library-heading p {
@@ -306,26 +306,28 @@ nav {
   padding: 1.7rem;
   display: flex;
   flex-direction: column;
-  background: var(--teal-dark);
-  color: white;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 12px;
   text-decoration: none;
 }
 .featured-guide:first-child {
-  background: var(--acid);
-  color: var(--ink);
+  background: var(--blue);
+  color: white;
 }
 .featured-guide small {
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
+  text-transform: none;
+  letter-spacing: 0;
   font-size: 0.875rem;
-  font-weight: 800;
+  font-weight: 500;
   opacity: 0.72;
 }
 .featured-guide h2,
 .featured-guide h3 {
   margin: auto 0 1rem;
   font-size: clamp(1.6rem, 2.6vw, 2.8rem);
-  line-height: 1.04;
+  line-height: 1.22;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .featured-guide p {
@@ -341,17 +343,16 @@ nav {
 .guide-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line);
+  gap: 1rem;
 }
 .guide-card {
   min-height: 285px;
   padding: 1.35rem;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--white);
 }
 .guide-card[hidden] {
   display: none;
@@ -359,14 +360,15 @@ nav {
 .guide-card .guide-category {
   color: var(--teal-dark);
   font-size: 0.875rem;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
 }
 .guide-card h3 {
   margin: auto 0 0.9rem;
   font-size: 1.3rem;
-  line-height: 1.08;
+  line-height: 1.3;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .guide-card p {
@@ -388,7 +390,7 @@ nav {
   color: var(--ink);
   text-decoration: none;
   font-size: 0.875rem;
-  font-weight: 780;
+  font-weight: 500;
 }
 .empty-state {
   display: none;
@@ -402,9 +404,9 @@ nav {
 }
 
 .knowledge-paths {
-  padding: 5rem 0;
-  background: var(--ink);
-  color: white;
+  padding: 4rem 0;
+  background: var(--paper-deep);
+  color: var(--ink);
 }
 .path-grid {
   display: grid;
@@ -412,32 +414,36 @@ nav {
   gap: 1rem;
 }
 .path-card {
-  min-height: 320px;
+  min-height: 300px;
   padding: 2rem;
-  border: 1px solid #444a47;
+  border: 0;
+  border-radius: 12px;
+  background: var(--white);
   display: flex;
   flex-direction: column;
-  color: white;
+  color: var(--ink);
   text-decoration: none;
 }
 .path-card:nth-child(2) {
   background: var(--blue);
   border-color: var(--blue);
+  color: white;
 }
 .path-card small {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: none;
+  letter-spacing: 0;
   font-size: 0.875rem;
 }
 .path-card h2 {
   margin: auto 0 0.8rem;
-  font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 0.95;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.15;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .path-card p {
   margin: 0 0 1.5rem;
-  color: #bac2be;
+  color: var(--muted);
   max-width: 500px;
 }
 .path-card:nth-child(2) p {
@@ -505,20 +511,21 @@ nav {
 .docs-breadcrumb a {
   color: var(--teal-dark);
   text-decoration: none;
-  font-weight: 750;
+  font-weight: 500;
 }
 .docs-content {
   background: var(--white);
   border: 1px solid var(--line);
   padding: clamp(1.25rem, 5vw, 4.5rem);
-  box-shadow: 0 20px 50px rgba(18, 23, 21, 0.06);
+  border-radius: 12px;
 }
 .docs-content > h1:first-child {
   margin-top: 0;
   padding-bottom: 1.4rem;
   border-bottom: 4px solid var(--teal);
   font-size: clamp(2.4rem, 5vw, 4.5rem);
-  line-height: 0.98;
+  line-height: 1.15;
+  font-weight: 500;
   letter-spacing: -0.035em;
 }
 .docs-content h2 {
@@ -537,7 +544,7 @@ nav {
 }
 .docs-content p,
 .docs-content li {
-  color: #303936;
+  color: var(--ink-soft);
 }
 .docs-content a {
   overflow-wrap: anywhere;
@@ -546,7 +553,7 @@ nav {
   max-width: 100%;
   overflow: auto;
   padding: 1rem;
-  background: #151a18;
+  background: var(--ink);
   color: #eef2ef;
   border-left: 4px solid var(--teal);
   font-size: 0.875rem;
@@ -601,7 +608,7 @@ footer {
 }
 .footer-inner a {
   text-decoration: none;
-  font-weight: 750;
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
@@ -740,7 +747,7 @@ input {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.8125rem;
 }
 .filter-button {
   font-size: 0.875rem;
@@ -809,7 +816,7 @@ input {
 /* Pygments tokens share the code block's dark surface. */
 .docs-content .codehilite {
   color: #eef2ef;
-  background: #151a18;
+  background: var(--ink);
 }
 .docs-content .codehilite span {
   color: inherit;

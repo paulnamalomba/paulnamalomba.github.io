@@ -12,7 +12,7 @@ The primary audience is prospective clients and engineering collaborators. They
 need to understand Paul Namalomba's expertise, examine relevant work, and decide
 whether to start a conversation about an engineering problem or collaboration.
 
-## Product Purpose
+## Product purpose
 
 This is Paul Namalomba's personal portfolio and technical resource library. It
 demonstrates computational engineering, scientific software, backend/API
@@ -29,7 +29,7 @@ production software and data systems. Its evidence spans research software,
 mobility platforms, and institutional enrolment systems rather than presenting
 these disciplines as unrelated skills.
 
-## Operating Context
+## Operating context
 
 - Visitors explore selected work, experience, capabilities, and professional
   background from `index.html`.
@@ -41,7 +41,7 @@ these disciplines as unrelated skills.
   `learning/ibm-data-engineering/`, interview preparation at
   `interviews/uct-cto/`, and research slides at `presentations/africomp7/`.
 
-## Capabilities and Constraints
+## Capabilities and constraints
 
 - The confirmed platform is a static HTML/CSS/JavaScript website hosted on GitHub
   Pages. Preserve compatibility with static hosting and existing public routes.
@@ -70,14 +70,14 @@ these disciplines as unrelated skills.
   professional history. Current employment and education status also require
   confirmation when updated.
 
-## Brand Commitments
+## Brand commitments
 
 Preserve the identity and name Paul Namalomba, the names of real projects, and
 the accuracy of professional and technical content. Existing portfolio copy uses
 first-person descriptions and concrete engineering terminology. Initialization
 does not establish a new visual direction.
 
-## Evidence on Hand
+## Evidence on hand
 
 - `index.html` and `README.md` contain project descriptions, professional
   experience, capabilities, and resource links. They are published source
@@ -96,7 +96,7 @@ Existing claims and metrics are source content, not independently verified
 evidence. Do not invent client endorsements, outcomes, certifications, or
 performance figures to strengthen the portfolio.
 
-## Product Principles
+## Product principles
 
 1. Help prospective collaborators assess fit through relevant work and evidence.
 2. Connect scientific computing, backend systems, and data engineering through

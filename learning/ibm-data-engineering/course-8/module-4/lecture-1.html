@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Lecture 1: Apache Kafka Overview &amp; Architecture</title>
+    <title>Lecture 1: Apache Kafka overview &amp; architecture</title>
     <!-- CSS -->
     <link href="../../style.css" rel="stylesheet" />
     <!-- Highlight.js for Syntax Highlighting -->
@@ -120,7 +120,7 @@
         <a href="index.html">Module 4</a> <span>›</span>
         Lecture 1
       </div>
-      <h1 class="fade-in">Apache Kafka Overview &amp; Architecture</h1>
+      <h1 class="fade-in">Apache Kafka overview &amp; architecture</h1>
       <p class="fade-in fade-in-d1" style="font-size: 1.05rem">
         Module 4, Lecture 1
       </p>
@@ -132,17 +132,16 @@
       </p>
       <hr />
       <div class="section-card fade-in fade-in-d2">
-        <h2>1. The Operational Scope of Kafka</h2>
+        <h2>1. The operational scope of Kafka</h2>
         <p>
-          Originally engineered at LinkedIn to handle massive volumes of user
-          activity telemetry (page views, keystrokes), Kafka has evolved into
-          the central nervous system for enterprise data architectures.
+          LinkedIn developed Kafka to handle large volumes of user activity
+          data, including page views and keystrokes. It is now used to move
+          event streams between enterprise systems.
         </p>
         <p>
-          When evaluating infrastructure for a backend system—whether it's
-          tracking thousands of concurrent student session states or aggregating
-          real-time computational metrics from a distributed solver—Kafka is
-          deployed for:
+          Kafka can track thousands of concurrent student session states or
+          aggregate real-time computational metrics from a distributed solver.
+          Backend applications use it for:
         </p>
         <ul>
           <li>
@@ -151,10 +150,10 @@
             centralized, immutable repository.
           </li>
           <li>
-            <strong>Event Sourcing &amp; Transactions:</strong> Serving as the
-            backbone for fintech applications where every state change (e.g., a
-            payment execution) must be securely ordered, audited, and strictly
-            compliant with governance regulations.
+            <strong>Event Sourcing &amp; Transactions:</strong> Recording
+            fintech state changes where each change (e.g., a payment execution)
+            must be securely ordered, audited, and strictly compliant with
+            governance regulations.
           </li>
           <li>
             <strong>Real-Time Analytics:</strong> Feeding data into
@@ -165,13 +164,13 @@
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d3">
-        <h2>2. Core Architectural Paradigms</h2>
+        <h2>2. Core architectural paradigms</h2>
         <p>
           Kafka is a distributed, real-time system built on a strictly decoupled
           client-server architecture communicating via a custom TCP-based
           protocol.
         </p>
-        <h3>2.1 The Broker Cluster</h3>
+        <h3>2.1 The broker cluster</h3>
         <p>
           A Kafka deployment is never a single server; it is a cluster of
           independent nodes called <strong>Brokers</strong>.
@@ -194,7 +193,7 @@
             at their own processing speed.
           </li>
         </ul>
-        <h3>2.2 The Consensus Protocol Shift: ZooKeeper to KRaft</h3>
+        <h3>2.2 The consensus protocol shift: ZooKeeper to KRaft</h3>
         <p>
           Historically, managing the metadata, leader election, and health of a
           distributed Kafka cluster required an entirely separate distributed
@@ -233,12 +232,11 @@ graph TD
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d4">
-        <h2>3. Infrastructure as Code: C# Admin API</h2>
+        <h2>3. Infrastructure as Code: C# admin API</h2>
         <p>
-          Kafka provides a rich ecosystem of clients (Java, C/C++, Python, Go,
-          and REST APIs). For a robust backend environment, you interact with
-          Kafka not just to produce/consume messages, but to dynamically manage
-          the infrastructure itself.
+          Kafka has clients for Java, C/C++, Python, Go, and REST APIs. These
+          clients can produce and consume messages; administrative APIs also let
+          backend applications manage the cluster.
         </p>
         <p>
           Using the <code>Confluent.Kafka</code> library, here is how you
@@ -300,7 +298,7 @@ public class KafkaInfrastructureManager
         <hr />
       </div>
       <div class="section-card fade-in fade-in-d5">
-        <h2>4. Managed ESP Providers</h2>
+        <h2>4. Managed ESP providers</h2>
         <p>
           Running a distributed consensus protocol requires rigorous tuning of
           JVM heaps, OS page caches, and network I/O. For teams focused on
@@ -327,9 +325,9 @@ public class KafkaInfrastructureManager
             <tr>
               <td><strong>Amazon MSK</strong></td>
               <td>
-                (Managed Streaming for Apache Kafka). Deeply integrated into the
-                AWS ecosystem, offering simplified provisioning while retaining
-                raw access to the underlying cluster configurations.
+                (Managed Streaming for Apache Kafka). Integrated with AWS
+                services, offering simplified provisioning while retaining raw
+                access to the underlying cluster configurations.
               </td>
             </tr>
             <tr>
@@ -342,12 +340,6 @@ public class KafkaInfrastructureManager
             </tr>
           </tbody>
         </table>
-        <p>
-          Would you like to explore the specific replication mathematics Kafka
-          uses to guarantee zero data loss across brokers, or should we map out
-          how to integrate the C# <code>AdminClient</code> into an automated
-          CI/CD pipeline?
-        </p>
       </div>
       <div class="page-footer fade-in fade-in-d5">
         <p>Prepared by Paul Namalomba · IBM Data Engineering</p>

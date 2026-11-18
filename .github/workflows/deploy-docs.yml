@@ -21,12 +21,6 @@ jobs:
         with:
           path: main-repo
 
-      - name: Checkout guides and system scripts
-        uses: actions/checkout@v4
-        with:
-          repository: paulnamalomba/system-management_scripts
-          path: system-management_scripts
-
       - name: Set up Pages
         uses: actions/configure-pages@v4
 
@@ -41,7 +35,7 @@ jobs:
       - name: Build documentation with shared templates
         working-directory: main-repo
         run: |
-          python scripts/build-docs.py --system-management-scripts ../system-management_scripts
+          python scripts/build-docs.py --no-sync
           touch .nojekyll
 
       - name: Upload artifact

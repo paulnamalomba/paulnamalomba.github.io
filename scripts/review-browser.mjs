@@ -11,6 +11,8 @@ export async function startLocalSite() {
     ".html": "text/html; charset=utf-8",
     ".css": "text/css",
     ".js": "text/javascript",
+    ".mjs": "text/javascript",
+    ".woff2": "font/woff2",
     ".svg": "image/svg+xml",
     ".png": "image/png",
     ".jpg": "image/jpeg",

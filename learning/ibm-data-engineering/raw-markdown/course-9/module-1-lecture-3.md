@@ -1,10 +1,10 @@
-# Module 1, Lecture 3: Selecting a Data Warehouse System
+# Module 1, lecture 3: selecting a data warehouse system
 
-Deploying a data warehouse is not a reversible afternoon decision. The choice ripples through data pipelines, BI tooling, staffing, and budgets for years. Rigorous evaluation against well-defined criteria is the only path to a defensible selection.
+A warehouse choice affects data pipelines, BI tools, staffing, and budgets for years. Evaluate those costs and requirements before choosing a platform.
 
 ---
 
-## 1. Evaluation Criteria Overview
+## 1. Evaluation criteria overview
 
 Organizations assess data warehouse systems across five primary dimensions:
 
@@ -14,21 +14,21 @@ Organizations assess data warehouse systems across five primary dimensions:
 4. **Support Considerations**
 5. **Cost**
 
-Each dimension carries trade-offs that must be weighed against the organization's specific operational context and strategic trajectory.
+Weigh these trade-offs against the organization's operating requirements and plans.
 
 ---
 
-## 2. Features and Capabilities
+## 2. Features and capabilities
 
-### 2.1 Deployment Location
+### 2.1 Deployment location
 
-Data warehouses can exist **on-premises**, **on appliances**, and **across one or more cloud locations**. The location decision is driven by a balance of competing demands:
+Data warehouses can exist on-premises, on appliances, and across one or more cloud locations. The location decision is driven by a balance of competing demands:
 
 - **Security-first organizations** may mandate an on-premises solution to retain full physical control over data.
 - **Multi-location businesses** dealing with data privacy regulations such as **CCPA** or **GDPR** need either on-premises or geo-specific data warehouse placements.
-- Every organization ultimately balances security and privacy requirements against the need for speed in delivering profit-producing business insights.
+- Each organization balances security and privacy requirements against the need for speed in delivering profit-producing business insights.
 
-### 2.2 Architecture and Structure
+### 2.2 Architecture and structure
 
 Key architectural questions an organization must resolve:
 
@@ -38,22 +38,22 @@ Key architectural questions an organization must resolve:
 - What **data types** does the organization ingest? Organizations analyzing **dark data** or planning to work with **semi-structured and unstructured data** need a system that supports these formats natively.
 - Does the organization process **big data** requiring both **batch and streaming** ingestion?
 
-### 2.3 Implementation Capabilities
+### 2.3 Implementation capabilities
 
-Critical implementation-adjacent features include:
+Implementation requirements include:
 
 - **Data governance** frameworks
 - **Data migration** tooling
 - **Data transformation** capabilities
 - The ability to **optimize and re-optimize** system performance as analytical needs evolve
 
-### 2.4 Security and User Management
+### 2.4 Security and user management
 
-With the increasing adoption of **zero-trust security policies**—driven by expensive data breaches—robust user management and validation programs are mandatory. Additionally, automated **notifications and reports** are essential to catch and mitigate errors before minor issues escalate into major problems.
+Zero-trust security policies require user management and validation. Automated notifications and reports help teams detect errors and respond before they spread.
 
 ---
 
-## 3. Ease of Use and Skills
+## 3. Ease of use and skills
 
 The sophistication of a data warehouse platform is irrelevant if the team cannot operate it effectively. Key considerations:
 
@@ -63,18 +63,18 @@ The sophistication of a data warehouse platform is irrelevant if the team cannot
 
 ---
 
-## 4. Support Considerations
+## 4. Support considerations
 
 Support planning is frequently underestimated and can become both frustrating and expensive if neglected:
 
 - **Single-vendor accountability:** Using one vendor as a single, highly accountable source can save time, money, and frustration.
 - **Service Level Agreements (SLAs):** Verify SLA coverage for uptime, security, scalability, and other system-critical concerns.
 - **Support channels and hours:** Validate availability via phone, email, chat, and text.
-- **Self-service and community:** Does the vendor offer self-service solutions and maintain an active, rich user community?
+- **Self-service and community:** Does the vendor offer self-service solutions and maintain an active user community?
 
 ---
 
-## 5. Total Cost of Ownership (TCO)
+## 5. Total cost of ownership (TCO)
 
 Evaluating only the initial price tag is a common and costly mistake. The **Total Cost of Ownership (TCO)** across the system's operational lifetime includes:
 
@@ -88,15 +88,13 @@ Evaluating only the initial price tag is a common and costly mistake. The **Tota
 
 ---
 
-## 6. On-Premises vs. Public Cloud: The Decision Framework
+## 6. On-Premises vs. Public Cloud: the decision framework
 
 The decision between on-premises and public cloud deployment reduces to a trade-off between **control** and **economics**:
 
 - **On-premises** may be mandatory for organizations with strict data security and privacy requirements that preclude data leaving their physical infrastructure.
-- **Public cloud** offers economies of scale—powerful compute, scalable storage, and flexible price-for-performance options—that are difficult to replicate in-house.
+- **Public cloud** offers economies of scale—compute capacity, scalable storage, and flexible price-for-performance options—that are difficult to replicate in-house.
 
-Most organizations will find their optimal solution somewhere on the spectrum between these two poles, potentially leveraging hybrid configurations.
+Some organizations combine these approaches in a hybrid configuration.
 
 ---
-
-Would you like to build a weighted scoring matrix for evaluating warehouse vendors against these criteria, or should we move into data mart architectures and how they relate to the enterprise data warehouse?

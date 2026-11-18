@@ -1,4 +1,4 @@
-# SSL/TLS PowerUser Guide (Bash)
+# SSL/TLS PowerUser guide (Bash)
 
 **Last updated**: December 04, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,28 +16,28 @@
 
 ## Overview
 
-SSL/TLS provides encrypted communication channels for secure data transmission. This guide covers certificate generation, management, and verification using Bash and OpenSSL on Linux systems. Power users need to understand certificate lifecycle management, cipher suite configuration, and security best practices for production deployments.
+SSL/TLS provides encrypted communication channels for secure data transmission. This guide covers certificate generation, management, and verification using Bash and OpenSSL on Linux systems. Production considerations include certificate lifecycle management, cipher suite configuration, and security best practices for production deployments.
 
 ## Contents
 
-- [SSL/TLS PowerUser Guide (Bash)](#ssltls-poweruser-guide-bash)
+- [SSL/TLS PowerUser guide (Bash)](#ssltls-poweruser-guide-bash)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Generate Self-Signed Certificate with SAN](#generate-self-signed-certificate-with-san)
-    - [Create Certificate Signing Request (CSR) for Production](#create-certificate-signing-request-csr-for-production)
-    - [Convert Certificate Formats and Bundle](#convert-certificate-formats-and-bundle)
-    - [Test TLS Connection and Cipher Suites](#test-tls-connection-and-cipher-suites)
-    - [Verify Certificate Chain and Revocation](#verify-certificate-chain-and-revocation)
-    - [Automate Certificate Renewal with Let's Encrypt](#automate-certificate-renewal-with-lets-encrypt)
-    - [Monitor Certificate Expiration](#monitor-certificate-expiration)
+    - [Generate Self-Signed certificate with SAN](#generate-self-signed-certificate-with-san)
+    - [Create certificate signing request (CSR) for production](#create-certificate-signing-request-csr-for-production)
+    - [Convert certificate formats and bundle](#convert-certificate-formats-and-bundle)
+    - [Test TLS connection and cipher suites](#test-tls-connection-and-cipher-suites)
+    - [Verify certificate chain and revocation](#verify-certificate-chain-and-revocation)
+    - [Automate certificate renewal with let's encrypt](#automate-certificate-renewal-with-lets-encrypt)
+    - [Monitor certificate expiration](#monitor-certificate-expiration)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -50,7 +50,7 @@ SSL/TLS provides encrypted communication channels for secure data transmission. 
 5. **Test TLS connection**: `openssl s_client -connect example.com:443 -showcerts`
 6. **Convert formats**: `openssl pkcs12 -export -out certificate.pfx -inkey key.pem -in cert.pem`
 
-## Key Concepts
+## Key concepts
 
 - **Certificate Authority (CA)**: Trusted entity that issues digital certificates; root CAs are pre-installed in `/etc/ssl/certs/` or `/etc/pki/tls/certs/`
 - **Private/Public Key Pair**: Asymmetric cryptography foundation; private key signs/decrypts, public key verifies/encrypts
@@ -59,7 +59,7 @@ SSL/TLS provides encrypted communication channels for secure data transmission. 
 - **Cipher Suites**: Combination of key exchange, authentication, encryption, and MAC algorithms negotiated during TLS handshake
 - **TLS Versions**: Use TLS 1.2+ exclusively; TLS 1.0/1.1 and SSL 2.0/3.0 are deprecated and insecure
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **OpenSSL Configuration File** (`/etc/ssl/openssl.cnf` or `~/.openssl.cnf`):
 
@@ -97,7 +97,7 @@ IP.1 = 192.168.1.100
 - Use Hardware Security Modules (HSMs) for production CA keys
 - Implement certificate rotation 30 days before expiration
 
-## Security Considerations
+## Security considerations
 
 1. **Private Key Protection**: Store keys in `/etc/ssl/private/` with 600 permissions; never commit to version control
 2. **Certificate Pinning**: Pin certificates in applications to prevent MITM attacks with rogue CAs
@@ -121,7 +121,7 @@ ssl_stapling_verify on;
 
 ## Examples
 
-### Generate Self-Signed Certificate with SAN
+### Generate Self-Signed certificate with SAN
 
 Generate a self-signed certificate with Subject Alternative Names for local development, valid for one year with 4096-bit RSA key.
 
@@ -169,7 +169,7 @@ chmod 644 certificate.crt
 openssl x509 -in certificate.crt -text -noout | grep -A2 "Subject Alternative Name"
 ```
 
-### Create Certificate Signing Request (CSR) for Production
+### Create certificate signing request (CSR) for production
 
 Create a CSR for submission to a Certificate Authority with proper organizational details and multiple SANs for production domain.
 
@@ -216,7 +216,7 @@ openssl req -in production.csr -noout -text | grep -E "Subject:|DNS:"
 echo "CSR generated successfully. Submit production.csr to your CA."
 ```
 
-### Convert Certificate Formats and Bundle
+### Convert certificate formats and bundle
 
 Convert between PEM and PFX formats, create certificate bundles with intermediate CAs, and set password protection for distribution.
 
@@ -249,7 +249,7 @@ openssl crl2pkcs7 -nocrl -certfile full-chain.pem | \
     openssl pkcs7 -print_certs -noout
 ```
 
-### Test TLS Connection and Cipher Suites
+### Test TLS connection and cipher suites
 
 Test TLS connectivity, enumerate supported cipher suites, and verify certificate chain for a remote server.
 
@@ -284,7 +284,7 @@ echo | openssl s_client -connect example.com:443 \
     -cipher ECDHE-RSA-AES256-GCM-SHA384 -servername example.com
 ```
 
-### Verify Certificate Chain and Revocation
+### Verify certificate chain and revocation
 
 Verify certificate chain against CA bundle, check OCSP revocation status, and validate certificate properties.
 
@@ -316,7 +316,7 @@ echo "SHA256 Fingerprint: $fingerprint"
 openssl verify -show_chain -CAfile ca-bundle.pem certificate.crt
 ```
 
-### Automate Certificate Renewal with Let's Encrypt
+### Automate certificate renewal with let's encrypt
 
 Automate certificate issuance and renewal using Certbot for Let's Encrypt, with post-renewal hooks for service reloads.
 
@@ -353,7 +353,7 @@ sudo certbot certificates
 sudo certbot revoke --cert-path /etc/letsencrypt/live/example.com/cert.pem
 ```
 
-### Monitor Certificate Expiration
+### Monitor certificate expiration
 
 Create automated monitoring script to check certificate expiration dates and send alerts for certificates expiring within 30 days.
 
@@ -438,7 +438,7 @@ check_remote "example.com" 443
 - **Error**: Nginx can't read certificate
   - **Fix**: Ensure nginx user has read permissions: `sudo chmod 644 /path/to/cert.crt`
 
-## Performance and Tuning
+## Performance and tuning
 
 **Key Size vs Performance**:
 
@@ -489,10 +489,10 @@ ss -tan | grep ':443' | wc -l
 watch -n 1 'ss -tan | grep ":443.*ESTABLISHED" | wc -l'
 ```
 
-## References and Further Reading
+## References and further reading
 
 - [OpenSSL Documentation](https://www.openssl.org/docs/) - Official OpenSSL command reference and library documentation
 - [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/) - Generate secure TLS configs for web servers and apps
-- [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - Comprehensive TLS/SSL server configuration analysis
+- [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - TLS/SSL server configuration analysis
 - [RFC 8446 - TLS 1.3](https://datatracker.ietf.org/doc/html/rfc8446) - Latest TLS protocol specification
 - [Let's Encrypt Documentation](https://letsencrypt.org/docs/) - Free, automated certificate authority documentation

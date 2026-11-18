@@ -1,4 +1,4 @@
-# AUTH_SERVICES PowerUser Guide (PowerShell)
+# AUTH_SERVICES PowerUser guide (PowerShell)
 
 **Last updated**: December 05, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,7 +16,7 @@
 
 ## Overview
 
-Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols for securing distributed systems at scale. This guide covers operational tasks using PowerShell 7+ on Windows for managing Azure AD, Active Directory Federation Services (AD FS), certificate authorities, token lifecycle automation, user provisioning via Microsoft Graph API, and security auditing. Power users need to understand certificate management, service principal automation, conditional access policies, and high-availability monitoring for production authentication infrastructure.
+Enterprise authentication services provide centralized identity management, single sign-on (SSO), multi-factor authentication (MFA), and federated identity protocols for securing distributed systems at scale. This guide covers operational tasks using PowerShell 7+ on Windows for managing Azure AD, Active Directory Federation Services (AD FS), certificate authorities, token lifecycle automation, user provisioning via Microsoft Graph API, and security auditing. Production considerations include certificate management, service principal automation, conditional access policies, and high-availability monitoring for production authentication infrastructure.
 
 ## Contents
 
@@ -24,17 +24,17 @@ Enterprise authentication services provide centralized identity management, sing
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Example 1: Automated User Provisioning with Microsoft Graph API](#example-1-automated-user-provisioning-with-microsoft-graph-api)
-    - [Example 2: Service Principal Creation and Permission Management](#example-2-service-principal-creation-and-permission-management)
-    - [Example 3: Certificate Management and Rotation](#example-3-certificate-management-and-rotation)
-    - [Example 4: Group-Based License Assignment Automation](#example-4-group-based-license-assignment-automation)
+    - [Example 1: automated user provisioning with Microsoft Graph API](#example-1-automated-user-provisioning-with-microsoft-graph-api)
+    - [Example 2: service principal creation and permission management](#example-2-service-principal-creation-and-permission-management)
+    - [Example 3: certificate management and rotation](#example-3-certificate-management-and-rotation)
+    - [Example 4: Group-Based license assignment automation](#example-4-group-based-license-assignment-automation)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -47,7 +47,7 @@ Enterprise authentication services provide centralized identity management, sing
 5. **Generate certificate**: `New-SelfSignedCertificate -Subject "CN=MyAppCert" -CertStoreLocation Cert:\CurrentUser\My`
 6. **Export certificate**: `Export-Certificate -Cert $cert -FilePath .\cert.cer`
 
-## Key Concepts
+## Key concepts
 
 - **Azure Active Directory (Azure AD)**: Cloud-based identity and access management service providing authentication, authorization, and SSO for Microsoft 365 and Azure resources
 - **Service Principal**: Identity for applications and services in Azure AD; used for authentication and authorization in automated workflows
@@ -60,7 +60,7 @@ Enterprise authentication services provide centralized identity management, sing
 - **Token Lifetime**: Configurable duration for access tokens (default 1 hour) and refresh tokens (default 90 days); can be customized per application or tenant-wide
 - **Emergency Access Accounts**: Break-glass accounts with highest privileges, excluded from conditional access policies, used only in emergencies
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 ```powershell
 # Install and import Microsoft Graph PowerShell SDK
@@ -97,7 +97,7 @@ Get-MgContext | Select-Object Scopes, Account, TenantId
 - Enable audit logging for all authentication events; export logs to SIEM/Log Analytics
 - Implement monitoring and alerts for failed sign-ins, suspicious activities, and certificate expiration
 
-## Security Considerations
+## Security considerations
 
 **Certificate-Based Service Principal Authentication**:
 
@@ -222,7 +222,7 @@ $auditLogs | Format-Table -AutoSize
 
 ## Examples
 
-### Example 1: Automated User Provisioning with Microsoft Graph API
+### Example 1: automated user provisioning with Microsoft Graph API
 
 ```powershell
 # Function to create bulk users from CSV
@@ -302,7 +302,7 @@ Connect-MgGraph -Scopes "User.ReadWrite.All"
 New-BulkUsers -CsvPath ".\users.csv"
 ```
 
-### Example 2: Service Principal Creation and Permission Management
+### Example 2: service principal creation and permission management
 
 ```powershell
 # Function to create service principal with Graph API permissions
@@ -393,7 +393,7 @@ $env:AZURE_CLIENT_ID = $sp.AppId
 $env:AZURE_CLIENT_SECRET = $sp.ClientSecret
 ```
 
-### Example 3: Certificate Management and Rotation
+### Example 3: certificate management and rotation
 
 ```powershell
 # Function to monitor and rotate expiring certificates
@@ -501,7 +501,7 @@ Update-ExpiringCertificates -DaysBeforeExpiry 60
 Update-ExpiringCertificates -DaysBeforeExpiry 30 -KeyVaultName "my-keyvault" -AutoRotate
 ```
 
-### Example 4: Group-Based License Assignment Automation
+### Example 4: Group-Based license assignment automation
 
 ```powershell
 # Function to assign licenses based on group membership
@@ -677,7 +677,7 @@ Get-MgAuditLogSignIn -Top 10 -OrderBy "createdDateTime desc" |
                   @{N='Reason';E={$_.Status.FailureReason}}
 ```
 
-## Performance and Tuning
+## Performance and tuning
 
 **Batch Operations and Pagination**:
 
@@ -826,7 +826,7 @@ if ($suspiciousActivity) {
 }
 ```
 
-## References and Further Reading
+## References and further reading
 
 **Official Documentation**:
 

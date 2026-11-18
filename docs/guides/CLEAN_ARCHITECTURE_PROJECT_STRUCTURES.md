@@ -1,14 +1,14 @@
-# Clean Architecture & Project Structures — C#, Dart (Flutter) & TypeScript
+# Clean architecture & project structures — C#, Dart (Flutter) & TypeScript
 
 <br>
-**Last updated**: March 04, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: March 04, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20Architecture-blue.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
@@ -17,47 +17,47 @@
 
 ## Overview
 
-Architecting software is a battle between the convenience of framework defaults and the necessary rigor of enterprise maintainability. The "typical" structures are optimized for getting a "Hello World" running in five minutes. Clean Architecture is optimized for surviving five years of shifting business requirements without rewriting the entire codebase.
+Framework defaults make it quick to start a project. As business requirements change, their convenience can make dependencies harder to manage. Clean Architecture organizes those dependencies so that changes to frameworks or infrastructure do not require rewriting the application.
 
-This guide provides a detailed breakdown of typical, framework-default project structures versus their production-grade Clean Architecture counterparts for **C# (.NET)**, **Dart (Flutter)**, and **TypeScript (Node.js)**. It includes a glossary of fundamental architectural terms, concrete folder structures, comparison tables, a full data-flow walkthrough, and practical guidance on when (and when not) to apply Clean Architecture.
+This guide compares framework-default structures with Clean Architecture in C# (.NET), Dart (Flutter), and TypeScript (Node.js). It includes architectural terminology, folder structures, comparison tables, a data-flow walkthrough, and guidance on when Clean Architecture is useful.
 
 ## Contents
 
-- [Clean Architecture \& Project Structures — C#, Dart (Flutter) \& TypeScript](#clean-architecture--project-structures--c-dart-flutter--typescript)
+- [Clean architecture \& project structures — C#, Dart (Flutter) \& TypeScript](#clean-architecture--project-structures--c-dart-flutter--typescript)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Architectural Glossary](#architectural-glossary)
-    - [Layer Terms](#layer-terms)
-    - [Component Terms](#component-terms)
-    - [Principle Terms](#principle-terms)
-  - [The Core Idea: The Dependency Rule](#the-core-idea-the-dependency-rule)
-  - [1. C# (.NET Web API)](#1-c-net-web-api)
-    - [Typical Structure (Single Project Monolith)](#typical-structure-single-project-monolith)
-    - [Clean Architecture Structure (Multi-Project Solution)](#clean-architecture-structure-multi-project-solution)
-    - [C# Project References (Enforcing the Dependency Rule)](#c-project-references-enforcing-the-dependency-rule)
-  - [2. Dart (Flutter for iOS/Android)](#2-dart-flutter-for-iosandroid)
-    - [Typical Structure (Folder-by-Type)](#typical-structure-folder-by-type)
-    - [Clean Architecture Structure (Feature-First)](#clean-architecture-structure-feature-first)
-    - [Dart Dependency Injection Mechanics](#dart-dependency-injection-mechanics)
-  - [3. TypeScript (Node.js Backend)](#3-typescript-nodejs-backend)
-    - [Typical Structure (Express.js Default)](#typical-structure-expressjs-default)
-    - [Clean Architecture Structure](#clean-architecture-structure)
-    - [TypeScript DI \& Interface Enforcement](#typescript-di--interface-enforcement)
-  - [Comparison Matrix: Typical vs Clean](#comparison-matrix-typical-vs-clean)
-  - [Data Flow Walkthrough: User Registration](#data-flow-walkthrough-user-registration)
-    - [Step-by-Step: From HTTP to Database and Back](#step-by-step-from-http-to-database-and-back)
-    - [Concrete Code Example (TypeScript)](#concrete-code-example-typescript)
-  - [When to Use Clean Architecture (and When Not To)](#when-to-use-clean-architecture-and-when-not-to)
-  - [Common Pitfalls](#common-pitfalls)
-  - [References \& Further Reading](#references--further-reading)
+  - [Architectural glossary](#architectural-glossary)
+    - [Layer terms](#layer-terms)
+    - [Component terms](#component-terms)
+    - [Principle terms](#principle-terms)
+  - [The core idea: the dependency rule](#the-core-idea-the-dependency-rule)
+  - [1. C# (.NET web API)](#1-c-net-web-api)
+    - [Typical structure (single project monolith)](#typical-structure-single-project-monolith)
+    - [Clean architecture structure (Multi-Project solution)](#clean-architecture-structure-multi-project-solution)
+    - [C# project references (enforcing the dependency rule)](#c-project-references-enforcing-the-dependency-rule)
+  - [2. Dart (Flutter for iOS/android)](#2-dart-flutter-for-iosandroid)
+    - [Typical structure (Folder-by-Type)](#typical-structure-folder-by-type)
+    - [Clean architecture structure (Feature-First)](#clean-architecture-structure-feature-first)
+    - [Dart dependency injection mechanics](#dart-dependency-injection-mechanics)
+  - [3. TypeScript (node.js backend)](#3-typescript-nodejs-backend)
+    - [Typical structure (express.js default)](#typical-structure-expressjs-default)
+    - [Clean architecture structure](#clean-architecture-structure)
+    - [TypeScript DI \& interface enforcement](#typescript-di--interface-enforcement)
+  - [Comparison matrix: typical vs clean](#comparison-matrix-typical-vs-clean)
+  - [Data flow walkthrough: user registration](#data-flow-walkthrough-user-registration)
+    - [Step-by-Step: from HTTP to database and back](#step-by-step-from-http-to-database-and-back)
+    - [Concrete Code example (TypeScript)](#concrete-code-example-typescript)
+  - [When to use clean architecture (and when not to)](#when-to-use-clean-architecture-and-when-not-to)
+  - [Common pitfalls](#common-pitfalls)
+  - [References \& further reading](#references--further-reading)
 
 ---
 
-## Architectural Glossary
+## Architectural glossary
 
 Before dissecting folder structures, it is critical to establish precise definitions. These terms appear throughout Clean Architecture literature and are often misused or conflated.
 
-### Layer Terms
+### Layer terms
 
 | Term               | Definition                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -67,7 +67,7 @@ Before dissecting folder structures, it is critical to establish precise definit
 | **Presentation**   | The delivery mechanism. The outermost layer that adapts user input into something the Application layer understands and formats Application output for the user. For a backend API, this is your HTTP controllers, middleware, and route definitions. For Flutter, this is your Widgets, Pages, and state management (Bloc, Riverpod). This layer calls Application Use Cases but never touches Infrastructure directly.                       |
 | **Core**           | A cross-cutting shared module containing utilities, constants, error/failure classes, and networking primitives (HTTP clients, interceptors) used across all features. In Flutter Clean Architecture, `core/` often holds the `Failure` base class, theme data, and the configured `Dio` client. In backend apps, this might hold shared value objects or extension methods. Not a formal Clean Architecture layer, but a practical necessity. |
 
-### Component Terms
+### Component terms
 
 | Term                                 | Definition                                                                                                                                                                                                                                                                                                                                                                     |
 | :----------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -81,7 +81,7 @@ Before dissecting folder structures, it is critical to establish precise definit
 | **Middleware**                       | A pipeline component that intercepts requests before they reach a controller or responses before they leave the server. Common middleware includes authentication (JWT validation), logging, CORS enforcement, rate limiting, and global error handling. Middleware lives in the Presentation layer.                                                                           |
 | **Validator**                        | A component that enforces input correctness rules before a Use Case executes. Validators live in the Application layer and use libraries like FluentValidation (C#), `class-validator` (TypeScript), or `dartz`/`fpdart` (Dart) to reject malformed requests early.                                                                                                            |
 
-### Principle Terms
+### Principle terms
 
 | Term                                                | Definition                                                                                                                                                                                                                                                                                                                                                                                                            |
 | :-------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -93,7 +93,7 @@ Before dissecting folder structures, it is critical to establish precise definit
 
 ---
 
-## The Core Idea: The Dependency Rule
+## The core idea: the dependency rule
 
 Clean Architecture, as formalized by Robert C. Martin (Uncle Bob), is not a folder structure — it is a **dependency rule** enforced by project boundaries, package imports, or module references.
 
@@ -125,11 +125,11 @@ The key constraint: **inner layers define interfaces; outer layers implement the
 
 ---
 
-## 1. C# (.NET Web API)
+## 1. C# (.NET web API)
 
 The .NET ecosystem is heavily opinionated out of the box. The default scaffold (`dotnet new webapi`) produces a single project assembly, which converges toward a monolithic MVC pattern. This is fine for small microservices with single responsibilities but quickly turns into a tightly coupled mess for enterprise systems with evolving requirements.
 
-### Typical Structure (Single Project Monolith)
+### Typical structure (single project monolith)
 
 ```text
 Solution_Name/
@@ -148,7 +148,7 @@ Solution_Name/
 - **Services are a dumping ground.** `UserService` starts as a clean abstraction but accumulates 40 methods covering creation, authentication, password resets, profile management, and report generation.
 - **Testing is painful.** Unit testing a controller that directly calls `DbContext` requires mocking the entire database layer.
 
-### Clean Architecture Structure (Multi-Project Solution)
+### Clean architecture structure (Multi-Project solution)
 
 In production C#, the solution is split into distinct **Class Libraries** (separate `.csproj` projects) to enforce dependency rules via assembly references. The compiler itself prevents inner layers from referencing outer layers.
 
@@ -222,7 +222,7 @@ EnterpriseSolution/
 └── EnterpriseSolution.sln
 ```
 
-### C# Project References (Enforcing the Dependency Rule)
+### C# project references (enforcing the dependency rule)
 
 The `.csproj` files enforce the Dependency Rule at compile time:
 
@@ -280,15 +280,15 @@ The `.csproj` files enforce the Dependency Rule at compile time:
 </Project>
 ```
 
-If a developer in `Project.Domain` tries to `using Project.Infrastructure;`, the compiler will reject it. The dependency rule is structurally enforced, not merely documented.
+If a developer in `Project.Domain` tries to `using Project.Infrastructure;`, the compiler will reject it. The project structure enforces the dependency rule.
 
 ---
 
-## 2. Dart (Flutter for iOS/Android)
+## 2. Dart (Flutter for iOS/android)
 
 Flutter is inherently a UI toolkit. It provides zero architectural guidance out of the box, which means that without deliberate structure, codebases gravitate toward the "God Widget" anti-pattern — where UI rendering, state management, HTTP calls, JSON parsing, and business logic coexist in the same file.
 
-### Typical Structure (Folder-by-Type)
+### Typical structure (Folder-by-Type)
 
 ```text
 lib/
@@ -305,7 +305,7 @@ lib/
 - **Implicit coupling.** Without layer boundaries, a screen widget directly calls an HTTP service, which directly deserializes into a model that is also used as UI state. Changing the API response format forces changes in the UI layer.
 - **Testing is ad hoc.** No clear seam for mocking exists because there are no interfaces — just concrete classes passed around by type.
 
-### Clean Architecture Structure (Feature-First)
+### Clean architecture structure (Feature-First)
 
 For highly scalable mobile applications, a feature-first Clean Architecture is preferred. Each feature (Authentication, Ride Tracking, Payments) contains its own isolated Clean Architecture layers.
 
@@ -383,9 +383,9 @@ lib/
 └── main.dart                       # ProviderScope and routing
 ```
 
-### Dart Dependency Injection Mechanics
+### Dart dependency injection mechanics
 
-Flutter does not have a built-in DI container. The community standard is `get_it` (a service locator) combined with `injectable` (code generation). Alternatively, Riverpod's `Provider` system serves as a functional DI mechanism.
+Flutter does not have a built-in DI container. The community standard is `get_it` (a service locator) combined with `injectable` (code generation). Alternatively, Riverpod's `Provider` system provides functional DI.
 
 ```dart
 // injection_container.dart (using get_it)
@@ -420,11 +420,11 @@ The Use Case `LoginUser` receives `IAuthRepository` (an abstraction from the dom
 
 ---
 
-## 3. TypeScript (Node.js Backend)
+## 3. TypeScript (node.js backend)
 
-TypeScript brings type safety to JavaScript, but Node.js frameworks (particularly Express) are notoriously unopinionated. Without deliberate structure, developers build massive, untyped route handlers that parse JSON, validate inputs, execute business rules, and query the database in a single function.
+TypeScript brings type safety to JavaScript, but Node.js frameworks (particularly Express) are notoriously unopinionated. Without deliberate structure, developers build large, untyped route handlers that parse JSON, validate inputs, execute business rules, and query the database in a single function.
 
-### Typical Structure (Express.js Default)
+### Typical structure (express.js default)
 
 ```text
 src/
@@ -441,9 +441,9 @@ src/
 - **Framework lock-in.** Business logic scattered across Express route handlers means migrating to Fastify, Hono, or a GraphQL resolver requires rewriting business rules alongside transport code.
 - **Untestable.** Testing a controller requires spinning up Express, mocking `req`/`res` objects, and seeding a database — integration testing disguised as unit testing.
 
-### Clean Architecture Structure
+### Clean architecture structure
 
-TypeScript excels at Clean Architecture because of its robust interface support (`interface`, `abstract class`), enabling strict Dependency Injection.
+TypeScript uses `interface` and `abstract class` to define contracts for dependency injection in Clean Architecture.
 
 ```text
 src/
@@ -500,7 +500,7 @@ src/
 └── main.ts                          # Application bootstrap
 ```
 
-### TypeScript DI & Interface Enforcement
+### TypeScript DI & interface enforcement
 
 TypeScript interfaces are erased at runtime, so DI requires either a container library or manual wiring. Common approaches:
 
@@ -549,7 +549,7 @@ Both approaches satisfy the Dependency Rule: `RegisterUserUseCase` depends on `I
 
 ---
 
-## Comparison Matrix: Typical vs Clean
+## Comparison matrix: typical vs clean
 
 | Dimension                   | Typical (Framework Default)                                      | Clean Architecture                                                            |
 | :-------------------------- | :--------------------------------------------------------------- | :---------------------------------------------------------------------------- |
@@ -566,11 +566,11 @@ Both approaches satisfy the Dependency Rule: `RegisterUserUseCase` depends on `I
 
 ---
 
-## Data Flow Walkthrough: User Registration
+## Data flow walkthrough: user registration
 
 To make Clean Architecture concrete, this section traces a single operation — **registering a new user** — through every layer, from the HTTP request to the database write and back.
 
-### Step-by-Step: From HTTP to Database and Back
+### Step-by-Step: from HTTP to database and back
 
 ```
 Client (HTTP POST /api/users)
@@ -612,7 +612,7 @@ Client (HTTP POST /api/users)
 
 **Key observation:** The Application layer calls `IUserRepository.save()` and `IEmailService.sendWelcome()`. It has no idea whether the repository is backed by PostgreSQL, MongoDB, or a file. It has no idea whether the email service uses SendGrid, Mailgun, or `console.log()`. That is the entire point.
 
-### Concrete Code Example (TypeScript)
+### Concrete Code example (TypeScript)
 
 **Domain: Entity**
 
@@ -757,7 +757,7 @@ Notice the controller is **thin**: it parses HTTP, delegates to the Use Case, an
 
 ---
 
-## When to Use Clean Architecture (and When Not To)
+## When to use clean architecture (and when not to)
 
 Clean Architecture is not universally appropriate. Over-engineering a weekend project with four layers and a DI container is as harmful as under-engineering a five-year enterprise product with a single-file Express handler.
 
@@ -782,7 +782,7 @@ Many teams start with the typical structure for speed, then refactor toward Clea
 
 ---
 
-## Common Pitfalls
+## Common pitfalls
 
 1. **Premature Abstraction.** Creating `IUserRepository`, `UserRepositoryImpl`, `UserRepositoryImplFactory`, and `UserRepositoryImplFactoryProvider` for a CRUD app with three endpoints is not Clean Architecture — it is ceremony. Abstractions should be introduced at the point of genuine need.
 
@@ -798,7 +798,7 @@ Many teams start with the typical structure for speed, then refactor toward Clea
 
 ---
 
-## References & Further Reading
+## References & further reading
 
 - Robert C. Martin, _Clean Architecture: A Craftsman's Guide to Software Structure and Design_ (2017)
 - Robert C. Martin, [The Clean Architecture (blog post)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)

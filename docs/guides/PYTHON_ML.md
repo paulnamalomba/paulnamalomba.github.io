@@ -1,47 +1,47 @@
-# Python for Machine Learning: Engineering the AI Pipeline
+# Python for machine learning: engineering the AI pipeline
 
 <br>
-**Last updated**: February 26, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: February 26, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Language](https://img.shields.io/badge/Language-Python_3.11-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-Python's dominance in Machine Learning stems not from its inherent execution speed, but from its role as an elegant API wrapping highly optimized C/C++ libraries. This guide bypasses generic Python syntax and focuses exclusively on constructing, vectorizing, and deploying real-world AI pipelines using NumPy, Pandas, Scikit-Learn, and PyTorch.
+Python exposes optimized C/C++ libraries through APIs suited to machine learning work. This guide covers constructing, vectorizing, and deploying AI pipelines with NumPy, Pandas, Scikit-Learn, and PyTorch.
 
 ## Contents
 
-- [Python for Machine Learning: Engineering the AI Pipeline](#python-for-machine-learning-engineering-the-ai-pipeline)
+- [Python for machine learning: engineering the AI pipeline](#python-for-machine-learning-engineering-the-ai-pipeline)
   - [Overview](#overview)
   - [Contents](#contents)
   - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
-    - [Dependency \& Environment Management](#dependency--environment-management)
-    - [Windows PATH and GPU Drivers](#windows-path-and-gpu-drivers)
-  - [2. Writing Basic Code/Scripts (Core ML Frameworks)](#2-writing-basic-codescripts-core-ml-frameworks)
-    - [Data Manipulation: NumPy \& Pandas](#data-manipulation-numpy--pandas)
+    - [Dependency \& environment management](#dependency--environment-management)
+    - [Windows PATH and GPU drivers](#windows-path-and-gpu-drivers)
+  - [2. Writing basic Code/scripts (core ML frameworks)](#2-writing-basic-codescripts-core-ml-frameworks)
+    - [Data manipulation: NumPy \& Pandas](#data-manipulation-numpy--pandas)
     - [Classical ML: Scikit-Learn](#classical-ml-scikit-learn)
-    - [Deep Learning: PyTorch](#deep-learning-pytorch)
-  - [3. Compile-time Commands (Bytecode \& Linting)](#3-compile-time-commands-bytecode--linting)
-  - [4. Runtime Commands (Execution \& Serving)](#4-runtime-commands-execution--serving)
-  - [5. Debugging (Tensor Mismatches \& OOM Kernels)](#5-debugging-tensor-mismatches--oom-kernels)
-    - [Common Pitfalls](#common-pitfalls)
+    - [Deep learning: PyTorch](#deep-learning-pytorch)
+  - [3. Compile-time commands (bytecode \& linting)](#3-compile-time-commands-bytecode--linting)
+  - [4. Runtime commands (execution \& serving)](#4-runtime-commands-execution--serving)
+  - [5. Debugging (tensor mismatches \& OOM kernels)](#5-debugging-tensor-mismatches--oom-kernels)
+    - [Common pitfalls](#common-pitfalls)
     - [Profiling](#profiling)
 
 ---
 
 ## 1. Configuration (Windows & Linux)
 
-Machine Learning development requires strict isolation of massive, often conflicting dependency graphs (e.g., CUDA toolkits).
+Machine Learning development requires isolation of large, often conflicting dependency graphs (e.g., CUDA toolkits).
 
-### Dependency & Environment Management
+### Dependency & environment management
 
 Never install ML packages globally. Always use `venv` or `conda`.
 
@@ -59,19 +59,19 @@ pip install numpy pandas scikit-learn jupyterlab
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
-### Windows PATH and GPU Drivers
+### Windows PATH and GPU drivers
 
 On Windows, ensuring CUDA functionality dictates installing the NVIDIA CUDA Toolkit. The environment variable `PATH` must explicitly contain `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin` or Python will default to crawling on the CPU.
 
 ---
 
-## 2. Writing Basic Code/Scripts (Core ML Frameworks)
+## 2. Writing basic Code/scripts (core ML frameworks)
 
-Writing efficient ML Python means completely abandoning standard explicit `for`-loops in favor of vectorized operations executed asynchronously in C block memory.
+Use vectorized operations backed by C libraries for array calculations that would otherwise require Python `for`-loops.
 
-### Data Manipulation: NumPy & Pandas
+### Data manipulation: NumPy & Pandas
 
-Data streams enter as raw text. Pandas organizes this chaos into tabular DataFrames, while NumPy underlying it handles strict contiguous memory arrays.
+Pandas loads text data into tabular DataFrames, while NumPy provides the underlying numerical arrays.
 
 ```python
 import numpy as np
@@ -91,7 +91,7 @@ X_normalized = (X - np.mean(X, axis=0)) / np.std(X, axis=0)
 
 ### Classical ML: Scikit-Learn
 
-Scikit-Learn implements the standard transformer-estimator `fit()`, `transform()`, and `predict()` API, rendering algorithm swapping heavily standardized.
+Scikit-Learn implements the standard transformer-estimator `fit()`, `transform()`, and `predict()` API, so algorithms can share a common calling interface.
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -110,7 +110,7 @@ predictions = model.predict(X_test)
 print(classification_report(y_test, predictions))
 ```
 
-### Deep Learning: PyTorch
+### Deep learning: PyTorch
 
 When the feature complexity outstrips classical trees, PyTorch tensors take over, shifting linear algebra calculations natively to the GPU (CUDA).
 
@@ -154,11 +154,11 @@ for epoch in range(100):
 
 ---
 
-## 3. Compile-time Commands (Bytecode & Linting)
+## 3. Compile-time commands (bytecode & linting)
 
-Python is interpreted, so it skips the traditional C++/Java linkage compilation phase. However, pre-execution bytecode caching (`.pyc` files in `__pycache__`) dramatically speeds up subsequent imports.
+Python is interpreted, so it skips the traditional C++/Java linkage compilation phase. However, pre-execution bytecode caching (`.pyc` files in `__pycache__`) speeds up subsequent imports.
 
-For production integrity, strict syntax checking and type hinting (via `mypy` or `ruff`) are paramount before serving an inference model.
+For production integrity, strict syntax checking and type hinting (via `mypy` or `ruff`) are needed before serving an inference model.
 
 ```bash
 # Enforce PEP8 and catch syntax anomalies
@@ -172,9 +172,9 @@ mypy model_pipeline.py
 
 ---
 
-## 4. Runtime Commands (Execution & Serving)
+## 4. Runtime commands (execution & serving)
 
-Model training is a massive blocking script, usually orchestrated by `nohup` or a workload manager. Once serialized to disk (e.g., `model.pt`), inference occurs via high-performance ASGI servers bridging to the model.
+Model training is a long-running blocking script, usually orchestrated by `nohup` or a workload manager. Once serialized to disk (e.g., `model.pt`), inference occurs via high-performance ASGI servers bridging to the model.
 
 ```bash
 # Training Execution (Server) - Detaches the process to survive SSH drops
@@ -193,11 +193,11 @@ uvicorn inference_server:app --host 0.0.0.0 --port 8000 --workers 4
 
 ---
 
-## 5. Debugging (Tensor Mismatches & OOM Kernels)
+## 5. Debugging (tensor mismatches & OOM kernels)
 
 Debugging ML pipelines is an exercise in matrix algebra alignment and managing physical VRAM limits. Nothing destroys morale faster than a training loop crashing on epoch 99.
 
-### Common Pitfalls
+### Common pitfalls
 
 - **Shape Mismatches:** Trying to multiply a `[32, 64]` tensor by a `[128, 64]` tensor dynamically. PyTorch throws `RuntimeError: mat1 and mat2 shapes cannot be multiplied`. Fix this by applying `.view()`, `.unsqueeze()`, or explicitly verifying dimensions with `.shape`.
 - **CUDA Out of Memory (OOM):** Loading too large a batch size into your GPU. PyTorch will panic. You must either reduce `batch_size` or utilize mixed-precision training (`torch.cuda.amp`).
@@ -215,4 +215,4 @@ with profiler.profile(use_cuda=True) as prof:
 print(prof.key_averages().table(sort_by="cuda_time_total"))
 ```
 
-- **Tracebacks:** Pay heavy attention to whether a tensor is on CPU or GPU. You cannot perform operations if one tensor acts locally and the other sits in physical GPU memory. PyTorch throws the infamous `Expected all tensors to be on the same device.` Fix with `.to(device)`.
+- **Tracebacks:** Check whether a tensor is on CPU or GPU. You cannot perform operations if one tensor acts locally and the other sits in physical GPU memory. PyTorch throws `Expected all tensors to be on the same device.` Fix with `.to(device)`.

@@ -1,4 +1,4 @@
-# C# Programming — Data Structures, Classes, Coding Style & Language Mechanics
+# C# programming — data structures, classes, coding style & language mechanics
 
 **Last updated**: December 13, 2025  
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -16,55 +16,55 @@
 
 ## Overview
 
-This guide is a comprehensive reference for C# developers covering language fundamentals, data structures (built-in and advanced), classes/objects/modules, coding style, and practical language mechanics. Designed to match the style of existing guides, it provides clear examples, code snippets, tables for comparison, tips, and pitfalls for each major topic.
+This C# reference covers language fundamentals, built-in and advanced data structures, classes, objects, modules, coding style, and language mechanics. Each topic includes examples, code snippets, comparison tables, practical advice, and pitfalls.
 
 Use this guide as a reference when designing APIs, choosing data structures, writing idiomatic C#, or preparing for production deployment across .NET platforms.
 
 ## Contents
 
-- [C# Programming — Data Structures, Classes, Coding Style \& Language Mechanics](#c-programming--data-structures-classes-coding-style--language-mechanics)
+- [C# programming — data structures, classes, coding style \& language mechanics](#c-programming--data-structures-classes-coding-style--language-mechanics)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [C# Fundamentals](#c-fundamentals)
-    - [Compilation \& Runtime](#compilation--runtime)
-    - [CLR, JIT \& Memory Management](#clr-jit--memory-management)
-    - [Type System (Value vs Reference)](#type-system-value-vs-reference)
-  - [Primitive Types \& Built-in Collections](#primitive-types--built-in-collections)
-    - [Primitive Types (short summary)](#primitive-types-short-summary)
+  - [C# fundamentals](#c-fundamentals)
+    - [Compilation \& runtime](#compilation--runtime)
+    - [CLR, JIT \& memory management](#clr-jit--memory-management)
+    - [Type system (value vs reference)](#type-system-value-vs-reference)
+  - [Primitive types \& built-in collections](#primitive-types--built-in-collections)
+    - [Primitive types (short summary)](#primitive-types-short-summary)
     - [Arrays](#arrays)
     - [List and Generic Collections](#list-and-generic-collections)
-    - [Dictionary, HashSet, Queue, Stack](#dictionary-hashset-queue-stack)
+    - [Dictionary, HashSet, queue, stack](#dictionary-hashset-queue-stack)
     - [Span and Memory (brief)](#span-and-memory-brief)
-  - [Advanced Data Structures](#advanced-data-structures)
-    - [Linked Lists](#linked-lists)
-    - [Trees and Binary Trees](#trees-and-binary-trees)
-    - [Graphs (Adjacency lists/matrices)](#graphs-adjacency-listsmatrices)
-    - [Hash Tables \& Collision Strategies](#hash-tables--collision-strategies)
-  - [Classes, Objects \& OOP](#classes-objects--oop)
-    - [Classes, Structs, Records](#classes-structs-records)
-    - [Constructors, Properties, Auto-properties](#constructors-properties-auto-properties)
-    - [Inheritance, Interfaces \& Polymorphism](#inheritance-interfaces--polymorphism)
-    - [Encapsulation \& Access Modifiers](#encapsulation--access-modifiers)
-    - [Design: SRP, DI, SOLID Summary](#design-srp-di-solid-summary)
-  - [Modules, Namespaces \& Assemblies](#modules-namespaces--assemblies)
+  - [Advanced data structures](#advanced-data-structures)
+    - [Linked lists](#linked-lists)
+    - [Trees and binary trees](#trees-and-binary-trees)
+    - [Graphs (adjacency lists/matrices)](#graphs-adjacency-listsmatrices)
+    - [Hash tables \& collision strategies](#hash-tables--collision-strategies)
+  - [Classes, objects \& OOP](#classes-objects--oop)
+    - [Classes, structs, records](#classes-structs-records)
+    - [Constructors, properties, auto-properties](#constructors-properties-auto-properties)
+    - [Inheritance, interfaces \& polymorphism](#inheritance-interfaces--polymorphism)
+    - [Encapsulation \& access modifiers](#encapsulation--access-modifiers)
+    - [Design: SRP, DI, SOLID summary](#design-srp-di-solid-summary)
+  - [Modules, namespaces \& assemblies](#modules-namespaces--assemblies)
     - [Namespaces \& `using`](#namespaces--using)
     - [Assemblies \& `csproj`](#assemblies--csproj)
-    - [NuGet and Versioning](#nuget-and-versioning)
-  - [Coding Style \& Conventions](#coding-style--conventions)
-    - [Naming, Indentation, Braces, XML docs](#naming-indentation-braces-xml-docs)
+    - [NuGet and versioning](#nuget-and-versioning)
+  - [Coding style \& conventions](#coding-style--conventions)
+    - [Naming, indentation, braces, XML docs](#naming-indentation-braces-xml-docs)
     - [Best practices for readability, maintainability \& performance](#best-practices-for-readability-maintainability--performance)
-  - [Testing, Debugging \& Tooling](#testing-debugging--tooling)
-  - [C# in the Modern .NET Ecosystem](#c-in-the-modern-net-ecosystem)
-  - [Appendices — Cheatsheets \& Common Patterns](#appendices--cheatsheets--common-patterns)
+  - [Testing, debugging \& tooling](#testing-debugging--tooling)
+  - [C# in the modern .NET ecosystem](#c-in-the-modern-net-ecosystem)
+  - [Appendices — cheatsheets \& common patterns](#appendices--cheatsheets--common-patterns)
     - [Common language idioms](#common-language-idioms)
     - [Common pitfalls checklist](#common-pitfalls-checklist)
-  - [References \& Further Reading](#references--further-reading)
+  - [References \& further reading](#references--further-reading)
 
 ---
 
-## C# Fundamentals
+## C# fundamentals
 
-### Compilation & Runtime
+### Compilation & runtime
 
 - C# source (.cs) files are compiled by the C# compiler (`csc` or Roslyn) into Common Intermediate Language (CIL) contained in assemblies (`.dll` or `.exe`).
 - Assemblies are metadata-rich and include manifest, type metadata, and IL code.
@@ -83,7 +83,7 @@ Notes:
 - Roslyn provides compiler-as-a-service APIs used by analyzers and IDE tooling.
 - Ahead-of-Time (AOT) compilation and ReadyToRun options exist for performance-sensitive scenarios.
 
-### CLR, JIT & Memory Management
+### CLR, JIT & memory management
 
 - CLR responsibilities: type safety, memory management, security, threading, exception handling and interop.
 - JIT compiles IL to native machine code per method; Tiered JIT and AOT (PublishTrimmed, Native AOT) are available in modern .NET.
@@ -96,7 +96,7 @@ Memory tips:
 - Prefer pooling (`ArrayPool<T>`) for frequently allocated buffers.
 - Use `Span<T>`, `Memory<T>` to work with slices without allocations for high-performance workloads.
 
-### Type System (Value vs Reference)
+### Type system (value vs reference)
 
 | Aspect         |                          Value Types | Reference Types                                        |
 | -------------- | -----------------------------------: | ------------------------------------------------------ |
@@ -126,9 +126,9 @@ n2.Value = 7; // n1.Value is now 7
 
 ---
 
-## Primitive Types & Built-in Collections
+## Primitive types & built-in collections
 
-### Primitive Types (short summary)
+### Primitive types (short summary)
 
 - Integral: `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`
 - Floating point: `float`, `double`, `decimal` (decimal for financial high-precision)
@@ -161,7 +161,7 @@ Notes/tips:
 - Arrays have `Length`, not `Count`.
 - When you need dynamic sizing use `List<T>`.
 
-### List<T> and Generic Collections
+### List<T> and generic collections
 
 - `List<T>` is the go-to dynamic array, it resizes automatically.
 - `IList<T>`, `IReadOnlyList<T>` interfaces provide abstraction.
@@ -179,7 +179,7 @@ Performance:
 
 - `List<T>` has amortized O(1) append; use `Capacity` property to pre-allocate when size known.
 
-### Dictionary, HashSet, Queue, Stack
+### Dictionary, HashSet, queue, stack
 
 - `Dictionary<TKey, TValue>`: hash table mapping keys to values; O(1) average lookup.
 - `HashSet<T>`: unique collection based on hashing.
@@ -224,11 +224,11 @@ Span<byte> buffer = stackalloc byte[256]; // stack memory
 
 ---
 
-## Advanced Data Structures
+## Advanced data structures
 
 > This section focuses on building blocks beyond the standard collections: when to implement them and how to use them in C#.
 
-### Linked Lists
+### Linked lists
 
 - `LinkedList<T>` exists in BCL; implements a doubly-linked list.
 - Use when frequent insertions/removals in middle of sequence are required and you have references to nodes.
@@ -259,7 +259,7 @@ Tips:
 
 - Avoid using linked lists for cache-friendly workloads; arrays/Lists are often faster due to contiguous memory.
 
-### Trees and Binary Trees
+### Trees and binary trees
 
 - Trees are hierarchical structures. Binary trees have up to two children per node.
 - Use trees for sorted data, prefix structures (tries), expression parsing, and hierarchical relationships.
@@ -293,7 +293,7 @@ Notes:
 - Self-balancing trees (AVL, Red-Black) are used in production for predictable performance.
 - `SortedSet<T>` and `SortedDictionary<TKey,TValue>` implement tree-based collections in BCL.
 
-### Graphs (Adjacency lists/matrices)
+### Graphs (adjacency lists/matrices)
 
 - Graphs represent nodes (vertices) and edges (connections). Use adjacency lists for sparse graphs and adjacency matrix for dense graphs.
 
@@ -324,7 +324,7 @@ Pitfalls:
 
 - For weighted graphs use Dijkstra/A* algorithms; for negative weights use Bellman-Ford.
 
-### Hash Tables & Collision Strategies
+### Hash tables & collision strategies
 
 - `Dictionary<TKey,TValue>` is a hash table using buckets; collisions handled via chaining.
 - Key design: implement `GetHashCode()` and `Equals()` correctly for custom types.
@@ -345,9 +345,9 @@ Note: `HashCode.Combine` is available to make good composite hashes.
 
 ---
 
-## Classes, Objects & OOP
+## Classes, objects & OOP
 
-### Classes, Structs, Records
+### Classes, structs, records
 
 - `class` — reference type with identity. Suitable for most domain objects, heavy state, and polymorphism.
 - `struct` — value type, stack-allocated (or inlined). Prefer for small immutable types.
@@ -372,7 +372,7 @@ When to use what:
 - Use `struct` for small (<16 bytes commonly) and immutable types.
 - Use `record` for DTOs/immutable data carriers where value equality is desired.
 
-### Constructors, Properties, Auto-properties
+### Constructors, properties, auto-properties
 
 ```csharp
 public class Config
@@ -390,7 +390,7 @@ public class Config
 
 Use `private set` or `init` to control mutability.
 
-### Inheritance, Interfaces & Polymorphism
+### Inheritance, interfaces & polymorphism
 
 - `:` syntax for inheritance and interface implementation.
 - Prefer interfaces for abstractions and loose coupling.
@@ -427,7 +427,7 @@ Pitfalls:
 - Avoid deep inheritance hierarchies; prefer composition and explicit interfaces.
 - Virtual methods in constructors are dangerous (override called before derived constructor runs).
 
-### Encapsulation & Access Modifiers
+### Encapsulation & access modifiers
 
 Modifiers: `public`, `internal`, `protected`, `private`, `protected internal`, `private protected`.
 
@@ -447,7 +447,7 @@ public class BankAccount
 }
 ```
 
-### Design: SRP, DI, SOLID Summary
+### Design: SRP, DI, SOLID summary
 
 - SRP: single responsibility per class.
 - Dependency Injection: prefer constructor injection, use `IServiceCollection` registration for ASP.NET or `HostBuilder` for generic hosts.
@@ -466,7 +466,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 ---
 
-## Modules, Namespaces & Assemblies
+## Modules, namespaces & assemblies
 
 ### Namespaces & `using`
 
@@ -503,18 +503,18 @@ Minimal `csproj` example:
 </Project>
 ```
 
-### NuGet and Versioning
+### NuGet and versioning
 
 - Publish libraries to NuGet for reuse. SemVer recommended: `Major.Minor.Patch`.
 - Strong-name assemblies only when required for GAC or strict signing requirements.
 
 ---
 
-## Coding Style & Conventions
+## Coding style & conventions
 
 This section aligns with .NET/C# community and Microsoft conventions and adds practical rules used in production.
 
-### Naming, Indentation, Braces, XML docs
+### Naming, indentation, braces, XML docs
 
 - **Naming**:
   - Types (classes, structs, enums, interfaces): `PascalCase` (e.g., `UserRepository`).
@@ -567,7 +567,7 @@ Performance-specific:
 
 ---
 
-## Testing, Debugging & Tooling
+## Testing, debugging & tooling
 
 - Unit testing: `xUnit`, `NUnit`, `MSTest`. Mocking: `Moq`, `NSubstitute`.
 - Integration testing: use `WebApplicationFactory<TEntryPoint>` for ASP.NET Core integration tests.
@@ -595,7 +595,7 @@ Debugging tips:
 
 ---
 
-## C# in the Modern .NET Ecosystem
+## C# in the modern .NET ecosystem
 
 - .NET is cross-platform and first-class on Windows, macOS, Linux. Use `dotnet` CLI for multi-platform builds.
 - Use ASP.NET Core for web APIs, Blazor for client/web UIs, MAUI for native cross-platform GUI, and worker services for background processing.
@@ -613,7 +613,7 @@ Deployment patterns:
 
 ---
 
-## Appendices — Cheatsheets & Common Patterns
+## Appendices — cheatsheets & common patterns
 
 ### Common language idioms
 
@@ -644,7 +644,7 @@ using var conn = new SqlConnection(connStr);
 
 ---
 
-## References & Further Reading
+## References & further reading
 
 - Microsoft docs: [C# Guide](https://learn.microsoft.com/dotnet/csharp/), [CLR overview](https://learn.microsoft.com/dotnet/standard/clr)
 - .NET performance: [High-performance .NET](https://learn.microsoft.com/dotnet/standard/performance/)

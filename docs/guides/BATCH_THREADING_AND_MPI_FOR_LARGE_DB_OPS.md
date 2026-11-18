@@ -1,14 +1,14 @@
-# Memory-Aware Batching, Threading & MPI Chunking for Large Database Operations
+# Memory-Aware batching, threading & MPI chunking for large database operations
 
 <br>
-**Last updated**: February 16, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: February 16, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Language: Python](https://img.shields.io/badge/Language-Python-3776AB.svg)](https://www.python.org/)
 <!-- [![Language: C++](https://img.shields.io/badge/Language-C%2B%2B-blue.svg)](https://learn.microsoft.com/cpp) -->
@@ -19,11 +19,13 @@
 
 ## Context
 
-We innovated this idea at database-level for our platform (SEAT) backend. That platform is written in Python with the Django framework, and uses PostgreSQL as the database engine. We had to perform bulk updates on tables with millions of rows, and found that naive/server-native/pessimistic approaches either exhausted RAM, underutilised the CPU, or saturated server disk I/O leading to quite frankly, insane performance inefficiencies that trickle down into affecting platform availability and uptime. This guide distills our solution into a general-purpose algorithm that can be applied in any language or database context. With examples given in both Python and C++, and a detailed numerical breakdown of how the algorithm adapts to different RAM profiles and data sizes, this guide is a practical resource for developers facing similar challenges with large database operations. The three-stage pipeline we present — _Memory-Aware Batching → Thread-Level Buffering → MPI Core-Level Chunking_ — is designed to dynamically adapt to available system resources, ensuring efficient processing without overwhelming the server.
+We developed this approach while working on the SEAT backend, which uses Python, Django, and PostgreSQL. Bulk updates across millions of rows exhausted RAM, left CPU capacity unused, or saturated disk I/O. Those bottlenecks affected platform availability and uptime.
 
-## Foundational Assumptions
+The pipeline has three stages: memory-aware batching, thread-level buffering, and MPI core-level chunking. Each stage adjusts its workload to the available resources. The numerical examples show how batch and chunk sizes change with RAM and data volume. The Python implementation is included; a C++ implementation is planned.
 
-The algorithm presented here is a self-tuning algorithm with respect to the host machine characteristics: it reads total **available physical RAM**, reserves a **10% safety overhead**, **partitions the remaining budget into lightweight thread buffers**, and then **distributes each buffer's workload across logical cores via MPI scatter/gather**. We assume disk I/O throughput is that of a PCIe Gen 4 NVMe at ~5.5 GB/s maximum. This is factored into the algorithm so that neither the storage subsystem nor the memory subsystem becomes the bottleneck.
+## Foundational assumptions
+
+The algorithm presented here is a self-tuning algorithm with respect to the host machine characteristics: it reads total available physical RAM, reserves a 10% safety overhead, partitions the remaining budget into lightweight thread buffers, and then distributes each buffer's workload across logical cores via MPI scatter/gather. We assume disk I/O throughput is that of a PCIe Gen 4 NVMe at ~5.5 GB/s maximum. This is factored into the algorithm so that neither the storage subsystem nor the memory subsystem becomes the bottleneck.
 
 Two real-world scenarios are analysed in detail:
 
@@ -32,31 +34,31 @@ Two real-world scenarios are analysed in detail:
 | **A** — Heavy update    | 10 GB      | 5 KB     | 2 097 152 rows |
 | **B** — Moderate update | 3 GB       | 20 KB    | 157 286 rows   |
 
-Each scenario is evaluated against three theoretical RAM profiles: **24 GB**, **8 GB**, and **4 GB**.
+Each scenario is evaluated against three theoretical RAM profiles: 24 GB, 8 GB, and 4 GB.
 
 ## Contents
 
-- [Memory-Aware Batching, Threading \& MPI Chunking for Large Database Operations](#memory-aware-batching-threading--mpi-chunking-for-large-database-operations)
+- [Memory-Aware batching, threading \& MPI chunking for large database operations](#memory-aware-batching-threading--mpi-chunking-for-large-database-operations)
   - [Context](#context)
-  - [Foundational Assumptions](#foundational-assumptions)
+  - [Foundational assumptions](#foundational-assumptions)
   - [Contents](#contents)
-  - [1) Problem Statement \& Hardware Model](#1-problem-statement--hardware-model)
-  - [2) The Three-Stage Pipeline](#2-the-three-stage-pipeline)
-  - [3) Stage 1 — Memory-Aware Batch Sizing Algorithm](#3-stage-1--memory-aware-batch-sizing-algorithm)
-  - [4) Stage 2 — Thread-Level Buffer Partitioning](#4-stage-2--thread-level-buffer-partitioning)
-  - [5) Stage 3 — MPI Core-Level Chunking](#5-stage-3--mpi-core-level-chunking)
-  - [6) Disk I/O Constraint — NVMe Throughput Gate](#6-disk-io-constraint--nvme-throughput-gate)
-  - [7) Worked Scenarios — Numerical Breakdown](#7-worked-scenarios--numerical-breakdown)
-    - [Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)](#scenario-a--heavy-update-10-gb--5-kb-rows--2-097-152-rows)
-    - [Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)](#scenario-b--moderate-update-3-gb--20-kb-rows--157-286-rows)
-    - [Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?](#discussion--why-does-total-io-time-converge-across-all-ram-sizes)
-  - [8) Python Reference Implementation](#8-python-reference-implementation)
-  - [9) Performance Notes \& Pitfalls](#9-performance-notes--pitfalls)
+  - [1) Problem statement \& hardware model](#1-problem-statement--hardware-model)
+  - [2) The Three-Stage pipeline](#2-the-three-stage-pipeline)
+  - [3) Stage 1 — Memory-Aware batch sizing algorithm](#3-stage-1--memory-aware-batch-sizing-algorithm)
+  - [4) Stage 2 — Thread-Level buffer partitioning](#4-stage-2--thread-level-buffer-partitioning)
+  - [5) Stage 3 — MPI Core-Level chunking](#5-stage-3--mpi-core-level-chunking)
+  - [6) Disk I/O constraint — NVMe throughput gate](#6-disk-io-constraint--nvme-throughput-gate)
+  - [7) Worked scenarios — numerical breakdown](#7-worked-scenarios--numerical-breakdown)
+    - [Scenario A — heavy update (10 GB / 5 KB rows → 2 097 152 rows)](#scenario-a--heavy-update-10-gb--5-kb-rows--2-097-152-rows)
+    - [Scenario B — moderate update (3 GB / 20 KB rows → 157 286 rows)](#scenario-b--moderate-update-3-gb--20-kb-rows--157-286-rows)
+    - [Discussion — why does total I/O time converge across all RAM sizes?](#discussion--why-does-total-io-time-converge-across-all-ram-sizes)
+  - [8) Python reference implementation](#8-python-reference-implementation)
+  - [9) Performance notes \& pitfalls](#9-performance-notes--pitfalls)
   - [References](#references)
 
 ---
 
-## 1) Problem Statement & Hardware Model
+## 1) Problem statement & hardware model
 
 You have a database with `N` rows, each of size `R` bytes, requiring a bulk update of total size `D = N × R`. The machine has:
 
@@ -79,7 +81,7 @@ This is the ceiling the algorithm must never exceed.
 
 ---
 
-## 2) The Three-Stage Pipeline
+## 2) The Three-Stage pipeline
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -123,7 +125,7 @@ Each stage enforces a different resource constraint:
 
 ---
 
-## 3) Stage 1 — Memory-Aware Batch Sizing Algorithm
+## 3) Stage 1 — Memory-Aware batch sizing algorithm
 
 The batcher answers one question: _how many rows can I hold in RAM at once without exceeding the usable budget?_
 
@@ -149,7 +151,7 @@ Notes:
 
 ---
 
-## 4) Stage 2 — Thread-Level Buffer Partitioning
+## 4) Stage 2 — Thread-Level buffer partitioning
 
 Once a batch is loaded into RAM, it is subdivided into `T` independent thread buffers. Each thread operates on a non-overlapping slice of the batch.
 
@@ -182,7 +184,7 @@ Notes:
 
 ---
 
-## 5) Stage 3 — MPI Core-Level Chunking
+## 5) Stage 3 — MPI Core-Level chunking
 
 Each thread buffer is further decomposed into `C` chunks, one per logical core, distributed via MPI `Scatter` / `Gather` (or in a shared-memory context, via OpenMP work-sharing).
 
@@ -216,7 +218,7 @@ Notes:
 
 ---
 
-## 6) Disk I/O Constraint — NVMe Throughput Gate
+## 6) Disk I/O constraint — NVMe throughput gate
 
 Even with unlimited RAM and cores, the disk is the final bottleneck. A PCIe Gen 4 NVMe SSD delivers:
 
@@ -241,7 +243,7 @@ In practice, the database engine's write-ahead log (WAL) and `fsync` latency nat
 
 ---
 
-## 7) Worked Scenarios — Numerical Breakdown
+## 7) Worked scenarios — numerical breakdown
 
 Assumptions for all scenarios:
 
@@ -251,7 +253,7 @@ Assumptions for all scenarios:
 - `T` = 8 threads (1 thread per core, CPU-bound model)
 - `thread_buffer_size` = 50 MB
 
-### Scenario A — Heavy Update (10 GB / 5 KB rows → 2 097 152 rows)
+### Scenario A — heavy update (10 GB / 5 KB rows → 2 097 152 rows)
 
 | Machine   | RAM_total | RAM_usable                   | batch_size           | rows/batch      | num_batches | thread_buf | chunk/core |
 | --------- | --------- | ---------------------------- | -------------------- | --------------- | ----------- | ---------- | ---------- |
@@ -287,7 +289,7 @@ I/O check (worst case, random writes at ~2 GB/s):
 
 All converge to roughly the same total I/O time — the disk is the equaliser.
 
-### Scenario B — Moderate Update (3 GB / 20 KB rows → 157 286 rows)
+### Scenario B — moderate update (3 GB / 20 KB rows → 157 286 rows)
 
 | Machine   | RAM_total | RAM_usable | batch_size | rows/batch    | num_batches | thread_buf | chunk/core |
 | --------- | --------- | ---------- | ---------- | ------------- | ----------- | ---------- | ---------- |
@@ -301,7 +303,7 @@ Observations:
 - Only the 4 GB machine needs 2 batches.
 - Larger row sizes (20 KB) mean fewer rows and lower ORM overhead per row.
 
-### Discussion — Why Does Total I/O Time Converge Across All RAM Sizes?
+### Discussion — why does total I/O time converge across all RAM sizes?
 
 This is the most important insight in the entire guide. Notice that whether we use 24 GB, 8 GB, or 4 GB of RAM — and whether we use variable or fixed buffer sizes — the total wall-clock time for disk writes always lands at roughly **5 seconds** for Scenario A. This is not a coincidence. It is a mathematical inevitability. So you do not have to have a MEGA RAM machine to achieve good performance on large database operations. The algorithm adapts to the RAM you have, and the disk I/O time converges to the same value, based on smart batching and parallelism. The key would actually be a faster SSD and faster RAM, perhaps faster PostgreSQL configuration such as dedicated RAM pool (e.g. WAL settings, checkpoint intervals) to reduce the I/O bottleneck.
 
@@ -359,7 +361,7 @@ These savings total perhaps **50–200 ms** across the entire 10 GB operation �
 
 ---
 
-## 8) Python Reference Implementation
+## 8) Python reference implementation
 
 A minimal, platform-agnostic implementation demonstrating the three-stage algorithm. Uses `psutil` for RAM detection and `multiprocessing` for core-level parallelism (substituting for MPI in single-node deployments).
 
@@ -560,7 +562,7 @@ Notes:
 
 <!-- ---
 
-## 9) C++ Reference Implementation
+## 9) C++ reference implementation
 
 A minimal C++ implementation using MPI for core-level distribution. Compile with an MPI-aware compiler (`mpicxx`).
 
@@ -702,7 +704,7 @@ Notes:
 
 ---
 
-## 9) Performance Notes & Pitfalls
+## 9) Performance notes & pitfalls
 
 **RAM management:**
 
@@ -734,7 +736,7 @@ Notes:
 **Database-specific tips:**
 
 - Use `COPY` (PostgreSQL) or `LOAD DATA INFILE` (MySQL) for bulk inserts — orders of magnitude faster than row-by-row `INSERT`.
-- Wrap each batch in a single transaction. Committing per-row is catastrophically slow.
+- Wrap each batch in a single transaction. Committing each row adds transaction overhead.
 - Disable indexes and constraints during bulk loads, rebuild afterwards.
 - Use `UNLOGGED` tables (PostgreSQL) for intermediate staging if crash-safety is not required during the load.
 

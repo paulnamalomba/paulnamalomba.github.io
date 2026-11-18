@@ -1,4 +1,4 @@
-# Memory Management and Execution on Windows — C++ (MSVC)
+# Memory management and execution on Windows — C++ (MSVC)
 
 **Last updated**: December 13, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -21,23 +21,23 @@ This guide explains how C++ (MSVC on Windows) handles key memory and execution c
 
 ## Contents
 
-- [Memory Management and Execution on Windows — C++ (MSVC)](#memory-management-and-execution-on-windows--c-msvc)
+- [Memory management and execution on Windows — C++ (MSVC)](#memory-management-and-execution-on-windows--c-msvc)
   - [Overview](#overview)
   - [Contents](#contents)
-  - [Windows — Compile \& Run (Developer Command Prompt / PowerShell)](#windows--compile--run-developer-command-prompt--powershell)
+  - [Windows — compile \& Run (developer command prompt / PowerShell)](#windows--compile--run-developer-command-prompt--powershell)
   - [Overview](#overview-1)
   - [Contents](#contents-1)
-  - [1) Data Structures — Value-Type vs Reference-Type](#1-data-structures--value-type-vs-reference-type)
-  - [2) Storage — Stack vs Heap](#2-storage--stack-vs-heap)
-  - [3) Copy Semantics — Shallow vs Deep \& Move Semantics](#3-copy-semantics--shallow-vs-deep--move-semantics)
+  - [1) Data structures — Value-Type vs Reference-Type](#1-data-structures--value-type-vs-reference-type)
+  - [2) Storage — stack vs heap](#2-storage--stack-vs-heap)
+  - [3) Copy semantics — shallow vs deep \& move semantics](#3-copy-semantics--shallow-vs-deep--move-semantics)
   - [4) Nullability](#4-nullability)
-  - [Examples — Small Runnable Snippets](#examples--small-runnable-snippets)
-  - [Windows / MSVC Specific Notes and Pitfalls](#windows--msvc-specific-notes-and-pitfalls)
+  - [Examples — small runnable snippets](#examples--small-runnable-snippets)
+  - [Windows / MSVC specific notes and pitfalls](#windows--msvc-specific-notes-and-pitfalls)
   - [References](#references)
 
 ---
 
-## Windows — Compile & Run (Developer Command Prompt / PowerShell)
+## Windows — compile & Run (developer command prompt / PowerShell)
 
 Notes: Use the "Developer Command Prompt for VS" (recommended) which sets up MSVC environment variables. If using PowerShell, run the `vcvarsall.bat` script from your Visual Studio installation first.
 
@@ -78,7 +78,7 @@ This guide explains how C++ (MSVC on Windows) handles key memory and execution c
 
 ---
 
-## 1) Data Structures — Value-Type vs Reference-Type
+## 1) Data structures — Value-Type vs Reference-Type
 
 C++ does not have a single runtime-managed split of "value vs reference" like some managed languages. Instead:
 
@@ -111,7 +111,7 @@ Notes/Tips:
 
 ---
 
-## 2) Storage — Stack vs Heap
+## 2) Storage — stack vs heap
 
 Where objects live depends on how they are created:
 
@@ -141,7 +141,7 @@ Pitfalls:
 
 ---
 
-## 3) Copy Semantics — Shallow vs Deep & Move Semantics
+## 3) Copy semantics — shallow vs deep & move semantics
 
 C++ copy semantics are controlled by copy constructor and assignment operator. By default the compiler-generated copy is a member-wise copy (shallow copy of fields).
 
@@ -208,7 +208,7 @@ Pitfalls:
 
 ---
 
-## Examples — Small Runnable Snippets
+## Examples — small runnable snippets
 
 `main.cpp`:
 
@@ -246,7 +246,7 @@ Compile & run with MSVC as described earlier.
 
 ---
 
-## Windows / MSVC Specific Notes and Pitfalls
+## Windows / MSVC specific notes and pitfalls
 
 - Stack size: default thread stack ~1MB. Use `/F` linker option to change stack size if needed.
 - Heap performance: Windows has low-fragmentation heap options; CRT debug heap introduces overhead — test release builds for performance.

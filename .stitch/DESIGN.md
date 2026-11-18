@@ -1,4 +1,4 @@
-# Paul Namalomba Portfolio Design System
+# Paul Namalomba portfolio design system
 
 ## Product intent
 
@@ -10,7 +10,7 @@ The main portfolio and Tech Guides are in scope. Interview preparation, assessme
 
 - Editorial engineering: rigorous, calm, clear and slightly tactile.
 - Confident typography and generous negative space instead of decorative effects.
-- Project evidence before exhaustive skills.
+- Show project work before listing skills.
 - A publication-like Tech Guides experience, distinct from a generic documentation directory.
 - Inspired by strong contemporary portfolio information architecture, without copying the Nuxt portfolio template.
 
@@ -57,7 +57,7 @@ Use teal for identity and editorial emphasis, blue for selected product work, an
 7. About and education.
 8. Direct contact call to action. Do not publish referee contact details.
 
-## Tech Guides structure
+## Tech guides structure
 
 - Knowledge-base home with two clear paths: Technical Guides and System Scripts.
 - All Guides page with search, category filters, three featured guides and a responsive guide grid.

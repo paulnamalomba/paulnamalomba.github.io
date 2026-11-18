@@ -1,41 +1,41 @@
-# Web Servers & Proxies: Apache2, Nginx, and ngrok
+# Web servers & proxies: apache2, Nginx, and ngrok
 
 <br>
-**Last updated**: February 26, 2026<br>
-**Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
+Last updated: February 26, 2026<br>
+Author: [Paul Namalomba](https://github.com/paulnamalomba)<br>
   - SESKA Computational Engineer<br>
   - SEAT Backend Developer<br>
   - Software Developer<br>
   - PhD Candidate (Civil Engineering Spec. Computational and Applied Mechanics)<br>
-**Contact**: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
-**Website**: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
+Contact: [kabwenzenamalomba@gmail.com](mailto:kabwenzenamalomba@gmail.com)<br>
+Website: [paulnamalomba.github.io](https://paulnamalomba.github.io)<br>
 <br>
 [![Nginx](https://img.shields.io/badge/Server-Nginx-green.svg)](https://nginx.org/)
 [![Apache](https://img.shields.io/badge/Server-Apache2-red.svg)](https://httpd.apache.org/)
 
 ## Overview
 
-A robust application exists exclusively at localhost until explicitly routed through a web server or reverse proxy. This guide addresses the foundational configuration syntax necessary for architecting robust Virtual Hosts (`.conf` files), routing localized traffic securely outside complex firewalls via ngrok, and managing the fundamental daemonization of web traffic controllers on Unix systems.
+This guide covers exposing local applications through web servers and reverse proxies. It explains virtual host configuration (`.conf` files), forwarding local traffic through ngrok tunnels, and managing web server daemons on Unix systems.
 
 ## Contents
 
-- [Web Servers \& Proxies: Apache2, Nginx, and ngrok](#web-servers--proxies-apache2-nginx-and-ngrok)
+- [Web servers \& proxies: apache2, Nginx, and ngrok](#web-servers--proxies-apache2-nginx-and-ngrok)
   - [Overview](#overview)
   - [Contents](#contents)
   - [1. Configuration (Windows \& Linux)](#1-configuration-windows--linux)
-    - [Linux Environment Architecture](#linux-environment-architecture)
-  - [2. Writing Basic Code/Scripts (Virtual Hosts \& Proxies)](#2-writing-basic-codescripts-virtual-hosts--proxies)
-    - [Nginx: The Reverse Proxy](#nginx-the-reverse-proxy)
-    - [Apache2: Directory Virtual Hosting](#apache2-directory-virtual-hosting)
-  - [3. Compile-time Commands (Syntax Verification)](#3-compile-time-commands-syntax-verification)
-    - [Nginx Syntax Tester](#nginx-syntax-tester)
-    - [Apache2 Syntax Tester](#apache2-syntax-tester)
-  - [4. Runtime Commands (Daemonization \& ngrok)](#4-runtime-commands-daemonization--ngrok)
-    - [Service Management (Nginx / Apache)](#service-management-nginx--apache)
-    - [Ngrok: Tunneling Local Environments to the Public Web](#ngrok-tunneling-local-environments-to-the-public-web)
-  - [5. Debugging (502 Bad Gateway \& Port Conflicts)](#5-debugging-502-bad-gateway--port-conflicts)
-    - [The Infamous 502 Bad Gateway](#the-infamous-502-bad-gateway)
-    - [Binding TCP Port Conflicts](#binding-tcp-port-conflicts)
+    - [Linux environment architecture](#linux-environment-architecture)
+  - [2. Writing basic Code/scripts (virtual hosts \& proxies)](#2-writing-basic-codescripts-virtual-hosts--proxies)
+    - [Nginx: the reverse proxy](#nginx-the-reverse-proxy)
+    - [Apache2: directory virtual hosting](#apache2-directory-virtual-hosting)
+  - [3. Compile-time commands (syntax verification)](#3-compile-time-commands-syntax-verification)
+    - [Nginx syntax tester](#nginx-syntax-tester)
+    - [Apache2 syntax tester](#apache2-syntax-tester)
+  - [4. Runtime commands (daemonization \& ngrok)](#4-runtime-commands-daemonization--ngrok)
+    - [Service management (Nginx / Apache)](#service-management-nginx--apache)
+    - [Ngrok: tunneling local environments to the public web](#ngrok-tunneling-local-environments-to-the-public-web)
+  - [5. Debugging (502 bad gateway \& port conflicts)](#5-debugging-502-bad-gateway--port-conflicts)
+    - [The infamous 502 bad gateway](#the-infamous-502-bad-gateway)
+    - [Binding TCP port conflicts](#binding-tcp-port-conflicts)
 
 ---
 
@@ -43,7 +43,7 @@ A robust application exists exclusively at localhost until explicitly routed thr
 
 Production-grade web servers are primarily hosted on Unix variants.
 
-### Linux Environment Architecture
+### Linux environment architecture
 
 Nginx and Apache distribute their configurations across globally recognized directories (`/etc/nginx` and `/etc/apache2`).
 
@@ -65,13 +65,13 @@ Configurations are explicitly delineated between `sites-available` (staging) and
 
 ---
 
-## 2. Writing Basic Code/Scripts (Virtual Hosts & Proxies)
+## 2. Writing basic Code/scripts (virtual hosts & proxies)
 
 Web server configurations act strictly as traffic controllers. They rarely execute application code directly, instead mapping public domains to local unprivileged ports (Reverse Proxying) or serving static HTML/CSS files directly from disk.
 
-### Nginx: The Reverse Proxy
+### Nginx: the reverse proxy
 
-Nginx dominates the industry via its extremely fast asynchronous event-driven architecture. The standard syntax for heavily routing public HTTP traffic on port 80 to a deeply nested Node.js or .NET API running internally on port `5000`.
+Nginx uses an asynchronous, event-driven architecture. The following configuration routes public HTTP traffic on port 80 to a Node.js or .NET API listening on port `5000`.
 
 _Create `/etc/nginx/sites-available/api.example.com.conf`:_
 
@@ -103,7 +103,7 @@ server {
 }
 ```
 
-### Apache2: Directory Virtual Hosting
+### Apache2: directory virtual hosting
 
 Apache's process-driven architecture handles heavy `.htaccess` runtime overriding, preferred heavily by complex PHP applications (like WordPress).
 
@@ -127,11 +127,11 @@ _Create `/etc/apache2/sites-available/app.example.com.conf`:_
 
 ---
 
-## 3. Compile-time Commands (Syntax Verification)
+## 3. Compile-time commands (syntax verification)
 
-Neither server compiles into binary code, but both demand strict preliminary configuration checks. Failing to verify configuration syntax before restarting a daemon _will_ result in catastrophic downtime for all virtual hosts on the machine.
+These commands check server configuration syntax; they do not compile binary code. Check the configuration before restarting a daemon. An invalid configuration can prevent the daemon from starting and take its virtual hosts offline.
 
-### Nginx Syntax Tester
+### Nginx syntax tester
 
 ```bash
 # Symlink your configuration to enabled
@@ -145,7 +145,7 @@ sudo nginx -t
 # nginx: configuration file /etc/nginx/nginx.conf test is successful
 ```
 
-### Apache2 Syntax Tester
+### Apache2 syntax tester
 
 ```bash
 # Enable the site module natively
@@ -157,11 +157,11 @@ sudo apache2ctl configtest
 
 ---
 
-## 4. Runtime Commands (Daemonization & ngrok)
+## 4. Runtime commands (daemonization & ngrok)
 
-Execution strictly involves signaling the system supervisor (`systemd`) to reload the configuration into memory.
+Execution involves signaling the system supervisor (`systemd`) to reload the configuration into memory.
 
-### Service Management (Nginx / Apache)
+### Service management (Nginx / Apache)
 
 Reloading gracefully switches configurations without dropping active client connections.
 
@@ -174,7 +174,7 @@ sudo systemctl reload apache2
 sudo systemctl restart nginx
 ```
 
-### Ngrok: Tunneling Local Environments to the Public Web
+### Ngrok: tunneling local environments to the public web
 
 Exposing local Webhooks (Stripe, GitHub) or demonstrating APIs to remote teams requires bypassing NAT routers. `ngrok` establishes an aggressive persistent outward tunnel to remote infrastructure, mapping their public URL directly back to your local port.
 
@@ -190,11 +190,11 @@ _Note for APIs:_ Ensure the backend strictly accepts `Host: localhost` overrides
 
 ---
 
-## 5. Debugging (502 Bad Gateway & Port Conflicts)
+## 5. Debugging (502 bad gateway & port conflicts)
 
 Reverse proxies orchestrating web traffic introduce significant complexity. Understanding the standard error codes quickly isolates whether the problem sits at the network layer or the application codebase.
 
-### The Infamous 502 Bad Gateway
+### The infamous 502 bad gateway
 
 If Nginx returns a `502`, the Nginx daemon correctly caught the public internet request, attempted to `proxy_pass` it to your internal application at `localhost:5000`, and hit a literal wall.
 
@@ -205,9 +205,9 @@ If Nginx returns a `502`, the Nginx daemon correctly caught the public internet 
   # Expected trace: "connect() failed (111: Connection refused) while connecting to upstream"
   ```
 
-### Binding TCP Port Conflicts
+### Binding TCP port conflicts
 
-You cannot run Apache2 and Nginx concurrently on port 80 or 443 without nested reverse proxying. Attempting to start the second service triggers a catastrophic binding failure.
+You cannot run Apache2 and Nginx concurrently on port 80 or 443 without nested reverse proxying. Attempting to start the second service triggers a port binding failure.
 
 - **The Fix:** Identify which daemon stole your ports natively via the kernel networking tables.
   ```bash

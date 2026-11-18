@@ -1,4 +1,4 @@
-# DJANGO Multi-Authentication PowerUser Guide (Bash)
+# DJANGO Multi-Authentication PowerUser guide (Bash)
 
 **Last updated**: December 09, 2025<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -20,38 +20,38 @@ This guide focuses on Linux and Bash workflows for deploying and operating Djang
 
 ## Contents
 
-- [DJANGO Multi-Authentication PowerUser Guide (Bash)](#django-multi-authentication-poweruser-guide-bash)
+- [DJANGO Multi-Authentication PowerUser guide (Bash)](#django-multi-authentication-poweruser-guide-bash)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-    - [System Preparation](#system-preparation)
-    - [Project Bootstrap](#project-bootstrap)
-  - [Key Concepts](#key-concepts)
-    - [Process Layout](#process-layout)
-    - [Separation of Concerns](#separation-of-concerns)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-    - [Environment Files](#environment-files)
+    - [System preparation](#system-preparation)
+    - [Project bootstrap](#project-bootstrap)
+  - [Key concepts](#key-concepts)
+    - [Process layout](#process-layout)
+    - [Separation of concerns](#separation-of-concerns)
+  - [Configuration and best practices](#configuration-and-best-practices)
+    - [Environment files](#environment-files)
     - [systemd and Nginx](#systemd-and-nginx)
-  - [Security Considerations](#security-considerations)
-    - [Permissions and Ownership](#permissions-and-ownership)
+  - [Security considerations](#security-considerations)
+    - [Permissions and ownership](#permissions-and-ownership)
     - [TLS and HSTS](#tls-and-hsts)
   - [Examples](#examples)
-    - [Example 1: Bootstrap Django Project](#example-1-bootstrap-django-project)
-    - [Example 2: Configure systemd Service](#example-2-configure-systemd-service)
+    - [Example 1: bootstrap Django project](#example-1-bootstrap-django-project)
+    - [Example 2: configure systemd service](#example-2-configure-systemd-service)
     - [Example 3: Nginx and Certbot](#example-3-nginx-and-certbot)
-    - [Example 4: Auth Diagnostics Script](#example-4-auth-diagnostics-script)
+    - [Example 4: auth diagnostics script](#example-4-auth-diagnostics-script)
   - [Troubleshooting](#troubleshooting)
-    - [Common Deployment Issues](#common-deployment-issues)
-    - [Log Inspection](#log-inspection)
-  - [Performance and Tuning](#performance-and-tuning)
-    - [Gunicorn and Nginx Tuning](#gunicorn-and-nginx-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+    - [Common deployment issues](#common-deployment-issues)
+    - [Log inspection](#log-inspection)
+  - [Performance and tuning](#performance-and-tuning)
+    - [Gunicorn and Nginx tuning](#gunicorn-and-nginx-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
 ## Quickstart
 
-### System Preparation
+### System preparation
 
 ```bash
 # Update packages
@@ -61,7 +61,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y python3 python3-venv python3-pip git nginx certbot python3-certbot-nginx
 ```
 
-### Project Bootstrap
+### Project bootstrap
 
 ```bash
 PROJECT_ROOT=/opt/django-multi-auth
@@ -84,15 +84,15 @@ python manage.py collectstatic --noinput
 
 ---
 
-## Key Concepts
+## Key concepts
 
-### Process Layout
+### Process layout
 
 - **Gunicorn/Uvicorn**: WSGI/ASGI server hosting Django.
 - **systemd Service**: Manages Django process, restarts on failure, runs under restricted user.
 - **Nginx**: Reverse proxy terminating TLS and forwarding HTTP to Gunicorn.
 
-### Separation of Concerns
+### Separation of concerns
 
 - Keep Django settings free of environment-specific paths and secrets.
 - Use `/etc/django/<project>.env` for environment variables.
@@ -100,9 +100,9 @@ python manage.py collectstatic --noinput
 
 ---
 
-## Configuration and Best Practices
+## Configuration and best practices
 
-### Environment Files
+### Environment files
 
 `/etc/django/django-multi-auth.env`:
 
@@ -180,9 +180,9 @@ sudo systemctl reload nginx
 
 ---
 
-## Security Considerations
+## Security considerations
 
-### Permissions and Ownership
+### Permissions and ownership
 
 - Run Django under a non-privileged user (e.g. `www-data`).
 - Ensure project files are readable by the app user, writable only where necessary (media, logs).
@@ -206,7 +206,7 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 
 ## Examples
 
-### Example 1: Bootstrap Django Project
+### Example 1: bootstrap Django project
 
 ```bash
 #!/usr/bin/env bash
@@ -235,7 +235,7 @@ python manage.py migrate
 python manage.py collectstatic --noinput
 ```
 
-### Example 2: Configure systemd Service
+### Example 2: configure systemd service
 
 ```bash
 #!/usr/bin/env bash
@@ -299,7 +299,7 @@ sudo systemctl reload nginx
 sudo certbot --nginx -d "$DOMAIN" --redirect --agree-tos -m admin@$DOMAIN
 ```
 
-### Example 4: Auth Diagnostics Script
+### Example 4: auth diagnostics script
 
 ```bash
 #!/usr/bin/env bash
@@ -327,13 +327,13 @@ done
 
 ## Troubleshooting
 
-### Common Deployment Issues
+### Common deployment issues
 
 - **502 Bad Gateway**: Gunicorn not running or socket path mismatch.
 - **404 on static files**: Nginx `alias` directive or `collectstatic` not configured.
 - **TLS handshake errors**: Incorrect certificate chain or hostname.
 
-### Log Inspection
+### Log inspection
 
 ```bash
 # Django app logs
@@ -345,9 +345,9 @@ sudo tail -f /var/log/nginx/access.log /var/log/nginx/error.log
 
 ---
 
-## Performance and Tuning
+## Performance and tuning
 
-### Gunicorn and Nginx Tuning
+### Gunicorn and Nginx tuning
 
 - Set Gunicorn workers to `(2 * CPU) + 1` as a starting point.
 - Use `--max-requests` and `--max-requests-jitter` to mitigate memory leaks.
@@ -356,7 +356,7 @@ sudo tail -f /var/log/nginx/access.log /var/log/nginx/error.log
 
 ---
 
-## References and Further Reading
+## References and further reading
 
 - Django Deployment: https://docs.djangoproject.com/en/4.2/howto/deployment/
 - Gunicorn: https://docs.gunicorn.org/en/stable/

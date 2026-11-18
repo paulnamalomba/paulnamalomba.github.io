@@ -1,4 +1,4 @@
-# Responsive Web Design Testing PowerUser Guide (PowerShell & HTML)
+# Responsive web design testing PowerUser guide (PowerShell & HTML)
 
 **Last updated**: February 19, 2026<br>
 **Author**: [Paul Namalomba](https://github.com/paulnamalomba)<br>
@@ -17,28 +17,28 @@
 
 ## Overview
 
-Responsive web design testing ensures that HTML/CSS sites render correctly across all viewport sizes — from 320px mobile screens to 2560px desktop monitors. This guide covers serving sites locally with Python's built-in HTTP server, using Chrome/Edge/Firefox DevTools for device emulation, building custom HTML-based overflow debuggers, and automating viewport regression testing. Power users need to understand viewport meta tags, CSS media query breakpoints, overflow detection strategies, and local-first testing workflows to catch layout issues **before** deploying to production (e.g., GitHub Pages, Vercel, Netlify).
+Responsive web design testing ensures that HTML/CSS sites render correctly across all viewport sizes — from 320px mobile screens to 2560px desktop monitors. This guide covers serving sites locally with Python's built-in HTTP server, using Chrome/Edge/Firefox DevTools for device emulation, building custom HTML-based overflow debuggers, and automating viewport regression testing. Production considerations include viewport meta tags, CSS media query breakpoints, overflow detection strategies, and local-first testing workflows to catch layout issues **before** deploying to production (e.g., GitHub Pages, Vercel, Netlify).
 
 ## Contents
 
-- [Responsive Web Design Testing PowerUser Guide (PowerShell \& HTML)](#responsive-web-design-testing-poweruser-guide-powershell--html)
+- [Responsive web design testing PowerUser guide (PowerShell \& HTML)](#responsive-web-design-testing-poweruser-guide-powershell--html)
   - [Overview](#overview)
   - [Contents](#contents)
   - [Quickstart](#quickstart)
-  - [Key Concepts](#key-concepts)
-  - [Configuration and Best Practices](#configuration-and-best-practices)
-  - [Security Considerations](#security-considerations)
+  - [Key concepts](#key-concepts)
+  - [Configuration and best practices](#configuration-and-best-practices)
+  - [Security considerations](#security-considerations)
   - [Examples](#examples)
-    - [Serve a Static Site Locally with Python](#serve-a-static-site-locally-with-python)
-    - [Chrome/Edge DevTools Device Emulation](#chromeedge-devtools-device-emulation)
-    - [Firefox Responsive Design Mode](#firefox-responsive-design-mode)
-    - [Build a Custom HTML Overflow Debugger](#build-a-custom-html-overflow-debugger)
-    - [JavaScript Console Overflow Detection Snippet](#javascript-console-overflow-detection-snippet)
-    - [CSS Diagnostic Overlay for Development](#css-diagnostic-overlay-for-development)
-    - [Automated Viewport Screenshot Testing with Playwright](#automated-viewport-screenshot-testing-with-playwright)
+    - [Serve a static site locally with Python](#serve-a-static-site-locally-with-python)
+    - [Chrome/Edge DevTools device emulation](#chromeedge-devtools-device-emulation)
+    - [Firefox responsive design mode](#firefox-responsive-design-mode)
+    - [Build a custom HTML overflow debugger](#build-a-custom-html-overflow-debugger)
+    - [JavaScript console overflow detection snippet](#javascript-console-overflow-detection-snippet)
+    - [CSS diagnostic overlay for development](#css-diagnostic-overlay-for-development)
+    - [Automated viewport screenshot testing with Playwright](#automated-viewport-screenshot-testing-with-playwright)
   - [Troubleshooting](#troubleshooting)
-  - [Performance and Tuning](#performance-and-tuning)
-  - [References and Further Reading](#references-and-further-reading)
+  - [Performance and tuning](#performance-and-tuning)
+  - [References and further reading](#references-and-further-reading)
 
 ---
 
@@ -51,7 +51,7 @@ Responsive web design testing ensures that HTML/CSS sites render correctly acros
 5. **Inspect overflow**: Right-click any element → Inspect → check if `scrollWidth > clientWidth`
 6. **Fix and reload**: Edit CSS, save, reload the browser — changes are instant (no deploy needed)
 
-## Key Concepts
+## Key concepts
 
 - **Viewport**: The visible area of the web page in the browser; controlled by `<meta name="viewport">` tag
 - **Media Query**: CSS `@media` rule that applies styles conditionally based on viewport width, height, orientation, or resolution
@@ -64,7 +64,7 @@ Responsive web design testing ensures that HTML/CSS sites render correctly acros
 - **Box Model**: CSS layout model where `box-sizing: border-box` includes padding and border in width calculations, preventing overflow
 - **Responsive Unit**: CSS units that scale with viewport — `vw`, `vh`, `%`, `rem`, `em` — vs fixed units like `px`
 
-## Configuration and Best Practices
+## Configuration and best practices
 
 **Viewport Meta Tag** (required in every HTML `<head>`):
 
@@ -195,7 +195,7 @@ python -m http.server 3000
 - Always add `overflow-wrap: break-word` to card-like containers with user-generated or dynamic content
 - Keep the Python local server running during development to get instant feedback
 
-## Security Considerations
+## Security considerations
 
 1. **Local Server Binding**: Bind to `127.0.0.1` (default) in untrusted networks; only use `0.0.0.0` on trusted LANs when testing from a phone
 2. **Port Exposure**: Python's HTTP server has no authentication; never expose port 8080 to the public internet
@@ -207,7 +207,7 @@ python -m http.server 3000
 
 ## Examples
 
-### Serve a Static Site Locally with Python
+### Serve a static site locally with Python
 
 Launch a local HTTP server to preview your site exactly as it will appear when deployed, without waiting for CI/CD pipelines or GitHub Pages builds.
 
@@ -268,7 +268,7 @@ function Start-WebServer {
 # Start-WebServer -LAN -OpenBrowser -Port 5500  → full options
 ```
 
-### Chrome/Edge DevTools Device Emulation
+### Chrome/Edge DevTools device emulation
 
 Use the built-in device emulation in Chromium-based browsers (Chrome, Edge, Brave) to simulate mobile viewports, DPR, touch events, and network throttling.
 
@@ -334,7 +334,7 @@ KEYBOARD SHORTCUTS:
    - "Old iPhone SE": 320×568, DPR 2
 ```
 
-### Firefox Responsive Design Mode
+### Firefox responsive design mode
 
 Firefox has a built-in responsive design mode that is independent of DevTools and offers unique features like network throttling and touch simulation.
 
@@ -357,7 +357,7 @@ KEYBOARD SHORTCUTS:
 - Ctrl+Shift+K    → Open Web Console
 ```
 
-### Build a Custom HTML Overflow Debugger
+### Build a custom HTML overflow debugger
 
 Create a self-contained HTML file that loads your site in a resizable iframe and programmatically scans every DOM element for overflow. This is the most reliable method for finding the exact CSS selectors causing horizontal scroll on mobile.
 
@@ -657,7 +657,7 @@ Remove-Item debug-overflow.html
 Add-Content .gitignore "`ndebug-overflow.html"
 ```
 
-### JavaScript Console Overflow Detection Snippet
+### JavaScript console overflow detection snippet
 
 Paste this directly into the browser console (F12 → Console) when viewing your site in device mode. No extra files needed.
 
@@ -724,7 +724,7 @@ Paste this directly into the browser console (F12 → Console) when viewing your
 6. The element is highlighted on the page — inspect its CSS to find the cause
 ```
 
-### CSS Diagnostic Overlay for Development
+### CSS diagnostic overlay for development
 
 Add a temporary CSS file that outlines every element with a coloured border, making overflow visually obvious without any JavaScript.
 
@@ -783,7 +783,7 @@ body::after {
 Remove-Item debug.css
 ```
 
-### Automated Viewport Screenshot Testing with Playwright
+### Automated viewport screenshot testing with Playwright
 
 Use Microsoft Playwright to programmatically capture screenshots at multiple viewport sizes. This is useful for regression testing — run it after every CSS change to verify nothing breaks.
 
@@ -939,7 +939,7 @@ explorer.exe .\screenshots
 | Phone can't access local server     | Server bound to 127.0.0.1 only                    | Use `--bind 0.0.0.0` and connect via LAN IP                                                                                                                    |
 | Playwright screenshots are blank    | Page not fully loaded                             | Use `wait_until="networkidle"` or add `await page.wait_for_timeout(2000)`                                                                                      |
 
-## Performance and Tuning
+## Performance and tuning
 
 **Python HTTP Server Alternatives** (for faster local serving):
 
@@ -1019,12 +1019,12 @@ for url in urls:
     await page.close()
 ```
 
-## References and Further Reading
+## References and further reading
 
 - [Chrome DevTools Device Mode](https://developer.chrome.com/docs/devtools/device-mode/) - Official Chromium device emulation documentation
-- [Firefox Responsive Design Mode](https://firefox-source-docs.mozilla.org/devtools-user/responsive_design_mode/) - Mozilla responsive testing documentation
+- [Firefox responsive design mode](https://firefox-source-docs.mozilla.org/devtools-user/responsive_design_mode/) - Mozilla responsive testing documentation
 - [Python http.server](https://docs.python.org/3/library/http.server.html) - Python standard library HTTP server reference
-- [MDN Responsive Design](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design) - Comprehensive responsive web design guide
+- [MDN Responsive Design](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design) - Responsive web design guide
 - [CSS Media Queries Level 4](https://www.w3.org/TR/mediaqueries-4/) - W3C specification for media queries
 - [Playwright Documentation](https://playwright.dev/python/docs/intro) - Microsoft Playwright for Python — automated browser testing
 - [Google Lighthouse](https://developer.chrome.com/docs/lighthouse/) - Automated auditing for performance, accessibility, and responsive design
